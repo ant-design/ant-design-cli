@@ -113,6 +113,95 @@ function checkDuplicateInstall(cwd: string): CheckResult {
   };
 }
 
+function checkThemeConfig(cwd: string): CheckResult {
+  // Check for common theme config files
+  const configFiles = [
+    'theme.config.ts',
+    'theme.config.js',
+    '.antd.theme.json',
+  ];
+  const pkgPath = join(cwd, 'package.json');
+  const pkg = readJson(pkgPath);
+
+  // Check if antd theme is configured in package.json
+  const hasThemeInPkg = pkg?.antd?.theme || pkg?.theme;
+
+  // Check for ConfigProvider usage that might indicate theme config
+  const antdPkg = readJson(join(cwd, 'node_modules', 'antd', 'package.json'));
+  const antdMajor = antdPkg ? parseInt(antdPkg.version.split('.')[0], 10) : 0;
+
+  // v5+ uses CSS-in-JS tokens, v4 uses Less variables
+  if (antdMajor >= 5) {
+    // Check for old Less variable customization (should not exist in v5+)
+    const lessOverrides = join(cwd, 'theme', 'antd.less');
+    const modifyVars = pkg?.theme;
+    if (existsSync(lessOverrides) || modifyVars) {
+      return {
+        name: 'theme-config',
+        status: 'warn',
+        severity: 'warning',
+        message: 'Found Less-based theme customization, but antd v5+ uses Design Tokens',
+        suggestion: 'Migrate Less variables to ConfigProvider theme tokens. See https://ant.design/docs/react/migrate-less-variables',
+      };
+    }
+  }
+
+  return {
+    name: 'theme-config',
+    status: 'pass',
+    message: 'No theme configuration issues detected',
+  };
+}
+
+function checkBabelPlugins(cwd: string): CheckResult {
+  const pkg = readJson(join(cwd, 'package.json'));
+  const antdPkg = readJson(join(cwd, 'node_modules', 'antd', 'package.json'));
+  const antdMajor = antdPkg ? parseInt(antdPkg.version.split('.')[0], 10) : 0;
+
+  // Check for babel-plugin-import (not needed in v5+)
+  const babelRcPath = join(cwd, '.babelrc');
+  const babelConfigPath = join(cwd, 'babel.config.js');
+  const babelConfigJsonPath = join(cwd, 'babel.config.json');
+
+  let hasBabelPluginImport = false;
+
+  for (const configPath of [babelRcPath, babelConfigPath, babelConfigJsonPath]) {
+    if (existsSync(configPath)) {
+      try {
+        const content = readFileSync(configPath, 'utf-8');
+        if (content.includes('babel-plugin-import') || content.includes('import, { libraryName')) {
+          hasBabelPluginImport = true;
+          break;
+        }
+      } catch { /* ignore */ }
+    }
+  }
+
+  // Also check package.json babel config
+  if (pkg?.babel) {
+    const babelStr = JSON.stringify(pkg.babel);
+    if (babelStr.includes('babel-plugin-import')) {
+      hasBabelPluginImport = true;
+    }
+  }
+
+  if (hasBabelPluginImport && antdMajor >= 5) {
+    return {
+      name: 'babel-plugin',
+      status: 'warn',
+      severity: 'warning',
+      message: 'babel-plugin-import is configured but not needed for antd v5+',
+      suggestion: 'antd v5+ supports tree-shaking natively. Remove babel-plugin-import for antd to reduce build complexity.',
+    };
+  }
+
+  return {
+    name: 'babel-plugin',
+    status: 'pass',
+    message: 'No problematic Babel/webpack antd plugins detected',
+  };
+}
+
 function checkCssInJs(cwd: string): CheckResult {
   const cssinjs = existsSync(join(cwd, 'node_modules', '@ant-design', 'cssinjs', 'package.json'));
   if (!cssinjs) {
@@ -143,6 +232,8 @@ export function registerDoctorCommand(program: Command): void {
         checkAntdInstalled(cwd),
         checkReactCompat(cwd),
         checkDuplicateInstall(cwd),
+        checkThemeConfig(cwd),
+        checkBabelPlugins(cwd),
         checkCssInJs(cwd),
       ];
 

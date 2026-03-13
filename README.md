@@ -7,7 +7,7 @@ CLI tool for querying antd knowledge and analyzing antd usage in projects. Desig
 - **Agent-First** — Structured JSON output designed for Code Agents (Claude Code, Cursor, Copilot) to parse and act on directly
 - **Offline-First** — Local metadata cache with on-demand fetch, no network required for cached queries
 - **Multi-Version** — Full support for antd v4 / v5 / v6+, with cross-version API diffing and migration guides
-- **Complete Knowledge** — Components, props, tokens, demos, semantic structure, changelog, and bundle size in one place
+- **Complete Knowledge** — Components, props, tokens, demos, semantic structure, and changelog in one place
 - **Project-Aware** — Auto-detects your antd version, scans usage, lints best practices, and diagnoses configuration issues
 - **Auto-Fix Migration** — `antd migrate --apply` runs codemods with dry-run safety, git stash backup, and before/after diffs
 
@@ -71,33 +71,25 @@ antd search "virtual scroll"
 antd search "form validation" --format json
 ```
 
-#### `antd structure <Component>`
+#### `antd semantic <Component>`
 
 Query the semantic customization structure (`classNames` and `styles` keys).
 
 ```bash
-antd structure Table
-antd structure Table --format json
+antd semantic Table
+antd semantic Table --format json
 ```
 
 #### `antd changelog [version]`
 
-Query changelog entries.
+Query changelog entries and compare API differences between versions.
 
 ```bash
 antd changelog 6.3.0               # exact version
 antd changelog 5.10.0..5.20.0      # version range
+antd changelog diff 4.24.0 5.0.0   # API diff between versions
+antd changelog diff 4.24.0 5.0.0 Select  # component-specific diff
 antd changelog --format json
-```
-
-#### `antd diff <v1> <v2> [Component]`
-
-Compare API differences between two versions.
-
-```bash
-antd diff 4.24.0 5.0.0             # all breaking changes
-antd diff 4.24.0 5.0.0 Select      # component-specific changes
-antd diff 5.0.0 6.0.0 --format json
 ```
 
 ### Project Analysis
@@ -133,15 +125,6 @@ antd lint --only a11y               # only check accessibility
 antd lint --only performance        # only check performance
 antd lint --only best-practice      # only check best practices
 antd lint --format json
-```
-
-#### `antd bundle-impact <Component>`
-
-Analyze bundle size impact of importing a component.
-
-```bash
-antd bundle-impact Table
-antd bundle-impact DatePicker --format json
 ```
 
 #### `antd migrate <from> <to>`

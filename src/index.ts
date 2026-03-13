@@ -9,7 +9,6 @@ import { registerChangelogCommand } from './commands/diff.js';
 import { registerDoctorCommand } from './commands/doctor.js';
 import { registerUsageCommand } from './commands/usage.js';
 import { registerLintCommand } from './commands/lint.js';
-import { registerBundleImpactCommand } from './commands/bundle-impact.js';
 import { registerMigrateCommand } from './commands/migrate.js';
 
 const CLI_VERSION = '0.1.0';
@@ -41,7 +40,6 @@ registerChangelogCommand(program);
 registerDoctorCommand(program);
 registerUsageCommand(program);
 registerLintCommand(program);
-registerBundleImpactCommand(program);
 registerMigrateCommand(program);
 
 // Handle -V before subcommand dispatch

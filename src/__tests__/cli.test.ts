@@ -143,19 +143,6 @@ describe('CLI e2e', () => {
     expect(out).toContain('5.22.0');
   });
 
-  it('should show bundle impact', () => {
-    const out = run('bundle-impact', 'Table');
-    expect(out).toContain('156.8 kB');
-    expect(out).toContain('rc-table');
-  });
-
-  it('should show bundle impact as JSON', () => {
-    const out = run('bundle-impact', 'Button', '--format', 'json');
-    const data = JSON.parse(out);
-    expect(data.component).toBe('Button');
-    expect(data.size.gzip).toBeDefined();
-  });
-
   it('should show migration guide', () => {
     const out = run('migrate', '4', '5');
     expect(out).toContain('Migration Guide');

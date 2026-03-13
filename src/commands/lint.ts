@@ -125,6 +125,102 @@ function lintFile(
     }
   }
 
+  // Check accessibility
+  if (!only || only === 'a11y') {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+
+      // Check for Image without alt
+      if (importedComponents.includes('Image') && /<Image\b/.test(line) && !/alt\s*=/.test(line)) {
+        // Look ahead a few lines for alt prop
+        const nearby = lines.slice(i, Math.min(i + 5, lines.length)).join(' ');
+        if (!/alt\s*=/.test(nearby)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'a11y',
+            severity: 'warning',
+            message: 'Image component is missing `alt` prop for accessibility',
+          });
+        }
+      }
+
+      // Check for Icon used as button without aria-label
+      if (/<\w+Icon\b/.test(line) && /onClick\s*=/.test(line) && !/aria-label\s*=/.test(line)) {
+        const nearby = lines.slice(i, Math.min(i + 3, lines.length)).join(' ');
+        if (!/aria-label\s*=/.test(nearby)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'a11y',
+            severity: 'warning',
+            message: 'Clickable icon should have `aria-label` for screen readers',
+          });
+        }
+      }
+
+      // Check for Form.Item without label or aria-label
+      if (/Form\.Item\b/.test(line) && !/label\s*=/.test(line) && !/aria-label\s*=/.test(line) && !/noStyle/.test(line)) {
+        const nearby = lines.slice(i, Math.min(i + 5, lines.length)).join(' ');
+        if (!/label\s*=/.test(nearby) && !/aria-label\s*=/.test(nearby) && !/noStyle/.test(nearby)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'a11y',
+            severity: 'warning',
+            message: 'Form.Item should have a `label` prop for accessibility',
+          });
+        }
+      }
+    }
+  }
+
+  // Check performance
+  if (!only || only === 'performance') {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+
+      // Check for Table without rowKey
+      if (importedComponents.includes('Table') && /<Table\b/.test(line)) {
+        const nearby = lines.slice(i, Math.min(i + 10, lines.length)).join(' ');
+        if (!/rowKey\s*=/.test(nearby)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'performance',
+            severity: 'warning',
+            message: 'Table should have explicit `rowKey` prop for optimal rendering performance',
+          });
+        }
+      }
+
+      // Check for Select/TreeSelect with large option set but no virtual
+      if ((importedComponents.includes('Select') || importedComponents.includes('TreeSelect')) && /<(?:Select|TreeSelect)\b/.test(line)) {
+        const nearby = lines.slice(i, Math.min(i + 10, lines.length)).join(' ');
+        if (/virtual\s*=\s*\{?\s*false/.test(nearby)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'performance',
+            severity: 'warning',
+            message: 'Disabling `virtual` scroll on Select may cause performance issues with large datasets',
+          });
+        }
+      }
+
+      // Check for wildcard antd import
+      if (/import\s+antd\b/.test(line) || /import\s+\*\s+as\s+\w+\s+from\s+['"]antd['"]/.test(line)) {
+        issues.push({
+          file: filePath,
+          line: i + 1,
+          rule: 'performance',
+          severity: 'error',
+          message: 'Avoid wildcard import from antd. Use named imports: `import { Button } from \'antd\'`',
+        });
+      }
+    }
+  }
+
   return issues;
 }
 
