@@ -210,8 +210,11 @@ export function registerChangelogCommand(program: Command): void {
       const isChangelogMode = !v2 || (v1 && v1.includes('..'));
 
       if (isChangelogMode) {
-        // Changelog mode
-        const versionInfo = detectVersion(opts.version);
+        // Changelog mode — infer major version from the version argument if not explicitly overridden
+        // For ranges like "6.1.0..6.3.0", extract the left-hand version to determine major
+        const v1ForDetect = v1?.includes('..') ? v1.split('..')[0] : v1;
+        const versionForDetect = opts.version ?? (v1ForDetect && /^\d+\.\d+\.\d+$/.test(v1ForDetect) ? v1ForDetect : undefined);
+        const versionInfo = detectVersion(versionForDetect);
         const store = loadMetadata(versionInfo.majorVersion);
         const changelog = store.changelog || [];
 

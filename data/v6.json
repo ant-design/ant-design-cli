@@ -1,5 +1,5 @@
 {
-  "version": "6.0.0",
+  "version": "6.3.2",
   "majorVersion": "v6",
   "components": [
     {
@@ -11,21 +11,111 @@
       "whenToUse": "A button means an operation (or a series of operations). Clicking a button will trigger corresponding business logic.",
       "whenToUseZh": "标记了一个（或封装一组）操作命令，响应用户点击行为，触发相应的业务逻辑。",
       "props": [
-        { "name": "block", "type": "boolean", "default": "false", "description": "Option to fit button width to its parent width", "since": "1.0.0" },
-        { "name": "classNames", "type": "Record<SemanticDOM, string>", "default": "-", "description": "Semantic DOM class", "since": "5.4.0" },
-        { "name": "color", "type": "default | primary | danger", "default": "default", "description": "Set button color", "since": "5.21.0" },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "Disabled state of button", "since": "1.0.0" },
-        { "name": "href", "type": "string", "default": "-", "description": "Redirect url of link button", "since": "1.0.0" },
-        { "name": "htmlType", "type": "submit | reset | button", "default": "button", "description": "Set the original html type of button", "since": "1.0.0" },
-        { "name": "icon", "type": "ReactNode", "default": "-", "description": "Set the icon component of button", "since": "1.0.0" },
-        { "name": "iconPosition", "type": "start | end", "default": "start", "description": "Set the icon position of button", "since": "5.17.0" },
-        { "name": "loading", "type": "boolean | { delay: number }", "default": "false", "description": "Set the loading status of button", "since": "1.0.0" },
-        { "name": "shape", "type": "default | circle | round", "default": "default", "description": "Can be set button shape", "since": "1.0.0" },
-        { "name": "size", "type": "large | middle | small", "default": "middle", "description": "Set the size of button", "since": "1.0.0" },
-        { "name": "styles", "type": "Record<SemanticDOM, CSSProperties>", "default": "-", "description": "Semantic DOM style", "since": "5.4.0" },
-        { "name": "target", "type": "string", "default": "-", "description": "Same as target attribute of a, works when href is specified", "since": "1.0.0" },
-        { "name": "variant", "type": "outlined | dashed | solid | filled | text | link", "default": "-", "description": "Set button variant", "since": "5.21.0" },
-        { "name": "onClick", "type": "(event: React.MouseEvent) => void", "default": "-", "description": "Set the handler to handle click event", "since": "1.0.0" }
+        {
+          "name": "block",
+          "type": "boolean",
+          "default": "false",
+          "description": "Option to fit button width to its parent width",
+          "since": "1.0.0"
+        },
+        {
+          "name": "classNames",
+          "type": "Record<SemanticDOM, string>",
+          "default": "-",
+          "description": "Semantic DOM class",
+          "since": "5.4.0"
+        },
+        {
+          "name": "color",
+          "type": "default | primary | danger",
+          "default": "default",
+          "description": "Set button color",
+          "since": "5.21.0"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disabled state of button",
+          "since": "1.0.0"
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "-",
+          "description": "Redirect url of link button",
+          "since": "1.0.0"
+        },
+        {
+          "name": "htmlType",
+          "type": "submit | reset | button",
+          "default": "button",
+          "description": "Set the original html type of button",
+          "since": "1.0.0"
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "default": "-",
+          "description": "Set the icon component of button",
+          "since": "1.0.0"
+        },
+        {
+          "name": "iconPosition",
+          "type": "start | end",
+          "default": "start",
+          "description": "Set the icon position of button",
+          "since": "5.17.0"
+        },
+        {
+          "name": "loading",
+          "type": "boolean | { delay: number }",
+          "default": "false",
+          "description": "Set the loading status of button",
+          "since": "1.0.0"
+        },
+        {
+          "name": "shape",
+          "type": "default | circle | round",
+          "default": "default",
+          "description": "Can be set button shape",
+          "since": "1.0.0"
+        },
+        {
+          "name": "size",
+          "type": "large | middle | small",
+          "default": "middle",
+          "description": "Set the size of button",
+          "since": "1.0.0"
+        },
+        {
+          "name": "styles",
+          "type": "Record<SemanticDOM, CSSProperties>",
+          "default": "-",
+          "description": "Semantic DOM style",
+          "since": "5.4.0"
+        },
+        {
+          "name": "target",
+          "type": "string",
+          "default": "-",
+          "description": "Same as target attribute of a, works when href is specified",
+          "since": "1.0.0"
+        },
+        {
+          "name": "variant",
+          "type": "outlined | dashed | solid | filled | text | link",
+          "default": "-",
+          "description": "Set button variant",
+          "since": "5.21.0"
+        },
+        {
+          "name": "onClick",
+          "type": "(event: React.MouseEvent) => void",
+          "default": "-",
+          "description": "Set the handler to handle click event",
+          "since": "1.0.0"
+        }
       ],
       "demos": [
         {
@@ -36,18 +126,51 @@
         }
       ],
       "tokens": [
-        { "name": "borderColorDisabled", "type": "string", "default": "#d9d9d9", "description": "Border color of disabled button" },
-        { "name": "contentFontSize", "type": "number", "default": "14", "description": "Font size of button content" },
-        { "name": "defaultBg", "type": "string", "default": "#ffffff", "description": "Default button background color" },
-        { "name": "defaultBorderColor", "type": "string", "default": "#d9d9d9", "description": "Default button border color" },
-        { "name": "defaultColor", "type": "string", "default": "rgba(0,0,0,0.88)", "description": "Default button text color" }
+        {
+          "name": "borderColorDisabled",
+          "type": "string",
+          "default": "#d9d9d9",
+          "description": "Border color of disabled button"
+        },
+        {
+          "name": "contentFontSize",
+          "type": "number",
+          "default": "14",
+          "description": "Font size of button content"
+        },
+        {
+          "name": "defaultBg",
+          "type": "string",
+          "default": "#ffffff",
+          "description": "Default button background color"
+        },
+        {
+          "name": "defaultBorderColor",
+          "type": "string",
+          "default": "#d9d9d9",
+          "description": "Default button border color"
+        },
+        {
+          "name": "defaultColor",
+          "type": "string",
+          "default": "rgba(0,0,0,0.88)",
+          "description": "Default button text color"
+        }
       ],
       "semanticStructure": [
-        { "key": "icon", "description": "Icon element" }
+        {
+          "key": "icon",
+          "description": "Icon element"
+        }
       ],
-      "related": ["Button.Group", "Dropdown.Button"],
+      "related": [
+        "Button.Group",
+        "Dropdown.Button"
+      ],
       "faq": [],
-      "subComponents": ["Button.Group"]
+      "subComponents": [
+        "Button.Group"
+      ]
     },
     {
       "name": "Table",
@@ -58,18 +181,79 @@
       "whenToUse": "To display a collection of structured data, or to sort, search, paginate, and filter data.",
       "whenToUseZh": "当有大量结构化的数据需要展现时。",
       "props": [
-        { "name": "bordered", "type": "boolean", "default": "false", "description": "Whether to show all table borders" },
-        { "name": "columns", "type": "ColumnsType<T>", "default": "-", "description": "Columns of table" },
-        { "name": "dataSource", "type": "T[]", "default": "-", "description": "Data record array to be displayed" },
-        { "name": "expandable", "type": "ExpandableConfig<T>", "default": "-", "description": "Config expandable content" },
-        { "name": "loading", "type": "boolean | SpinProps", "default": "false", "description": "Loading status of table" },
-        { "name": "pagination", "type": "false | TablePaginationConfig", "default": "-", "description": "Config of pagination" },
-        { "name": "rowKey", "type": "string | (record, index) => string", "default": "key", "description": "Row's unique key" },
-        { "name": "rowSelection", "type": "object", "default": "-", "description": "Row selection config" },
-        { "name": "scroll", "type": "{ x: number | true, y: number }", "default": "-", "description": "Whether the table can be scrollable" },
-        { "name": "size", "type": "large | middle | small", "default": "large", "description": "Size of table" },
-        { "name": "virtual", "type": "boolean", "default": "false", "description": "Support virtual list", "since": "5.9.0" },
-        { "name": "onChange", "type": "(pagination, filters, sorter, extra) => void", "default": "-", "description": "Callback executed when pagination, filters or sorter is changed" }
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether to show all table borders"
+        },
+        {
+          "name": "columns",
+          "type": "ColumnsType<T>",
+          "default": "-",
+          "description": "Columns of table"
+        },
+        {
+          "name": "dataSource",
+          "type": "T[]",
+          "default": "-",
+          "description": "Data record array to be displayed"
+        },
+        {
+          "name": "expandable",
+          "type": "ExpandableConfig<T>",
+          "default": "-",
+          "description": "Config expandable content"
+        },
+        {
+          "name": "loading",
+          "type": "boolean | SpinProps",
+          "default": "false",
+          "description": "Loading status of table"
+        },
+        {
+          "name": "pagination",
+          "type": "false | TablePaginationConfig",
+          "default": "-",
+          "description": "Config of pagination"
+        },
+        {
+          "name": "rowKey",
+          "type": "string | (record, index) => string",
+          "default": "key",
+          "description": "Row's unique key"
+        },
+        {
+          "name": "rowSelection",
+          "type": "object",
+          "default": "-",
+          "description": "Row selection config"
+        },
+        {
+          "name": "scroll",
+          "type": "{ x: number | true, y: number }",
+          "default": "-",
+          "description": "Whether the table can be scrollable"
+        },
+        {
+          "name": "size",
+          "type": "large | middle | small",
+          "default": "large",
+          "description": "Size of table"
+        },
+        {
+          "name": "virtual",
+          "type": "boolean",
+          "default": "false",
+          "description": "Support virtual list",
+          "since": "5.9.0"
+        },
+        {
+          "name": "onChange",
+          "type": "(pagination, filters, sorter, extra) => void",
+          "default": "-",
+          "description": "Callback executed when pagination, filters or sorter is changed"
+        }
       ],
       "demos": [
         {
@@ -80,21 +264,62 @@
         }
       ],
       "tokens": [
-        { "name": "cellPaddingBlock", "type": "number", "default": "16", "description": "Vertical padding of table cell" },
-        { "name": "cellPaddingInline", "type": "number", "default": "16", "description": "Horizontal padding of table cell" },
-        { "name": "headerBg", "type": "string", "default": "#fafafa", "description": "Background color of table header" }
+        {
+          "name": "cellPaddingBlock",
+          "type": "number",
+          "default": "16",
+          "description": "Vertical padding of table cell"
+        },
+        {
+          "name": "cellPaddingInline",
+          "type": "number",
+          "default": "16",
+          "description": "Horizontal padding of table cell"
+        },
+        {
+          "name": "headerBg",
+          "type": "string",
+          "default": "#fafafa",
+          "description": "Background color of table header"
+        }
       ],
       "semanticStructure": [
-        { "key": "header", "description": "Table header area" },
-        { "key": "body", "description": "Table body area" },
-        { "key": "footer", "description": "Table footer area" },
-        { "key": "cell", "description": "Table cell" },
-        { "key": "row", "description": "Table row" },
-        { "key": "wrapper", "description": "Outer wrapper" }
+        {
+          "key": "header",
+          "description": "Table header area"
+        },
+        {
+          "key": "body",
+          "description": "Table body area"
+        },
+        {
+          "key": "footer",
+          "description": "Table footer area"
+        },
+        {
+          "key": "cell",
+          "description": "Table cell"
+        },
+        {
+          "key": "row",
+          "description": "Table row"
+        },
+        {
+          "key": "wrapper",
+          "description": "Outer wrapper"
+        }
       ],
-      "related": ["Table.Column", "Table.ColumnGroup", "Table.Summary"],
+      "related": [
+        "Table.Column",
+        "Table.ColumnGroup",
+        "Table.Summary"
+      ],
       "faq": [],
-      "subComponents": ["Table.Column", "Table.ColumnGroup", "Table.Summary"]
+      "subComponents": [
+        "Table.Column",
+        "Table.ColumnGroup",
+        "Table.Summary"
+      ]
     },
     {
       "name": "Select",
@@ -105,20 +330,80 @@
       "whenToUse": "A dropdown menu for displaying choices.",
       "whenToUseZh": "弹出一个下拉菜单给用户选择操作。",
       "props": [
-        { "name": "allowClear", "type": "boolean | { clearIcon: ReactNode }", "default": "false", "description": "Show clear button" },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "Whether disabled select" },
-        { "name": "mode", "type": "multiple | tags", "default": "-", "description": "Set mode of Select" },
-        { "name": "options", "type": "{ label, value }[]", "default": "-", "description": "Select options" },
-        { "name": "placeholder", "type": "string | ReactNode", "default": "-", "description": "Placeholder of select" },
-        { "name": "popupClassName", "type": "string", "default": "-", "description": "The className of dropdown menu", "since": "5.0.0" },
-        { "name": "popupMatchSelectWidth", "type": "boolean | number", "default": "true", "description": "Determine whether the popup menu and the select input are the same width", "since": "5.5.0" },
-        { "name": "showSearch", "type": "boolean", "default": "false", "description": "Whether show search input in single mode" },
-        { "name": "size", "type": "large | middle | small", "default": "middle", "description": "Size of Select input" },
-        { "name": "virtual", "type": "boolean", "default": "true", "description": "Disable virtual scroll when set to false" },
-        { "name": "onChange", "type": "(value, option) => void", "default": "-", "description": "Called when select an option or input value change" }
+        {
+          "name": "allowClear",
+          "type": "boolean | { clearIcon: ReactNode }",
+          "default": "false",
+          "description": "Show clear button"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether disabled select"
+        },
+        {
+          "name": "mode",
+          "type": "multiple | tags",
+          "default": "-",
+          "description": "Set mode of Select"
+        },
+        {
+          "name": "options",
+          "type": "{ label, value }[]",
+          "default": "-",
+          "description": "Select options"
+        },
+        {
+          "name": "placeholder",
+          "type": "string | ReactNode",
+          "default": "-",
+          "description": "Placeholder of select"
+        },
+        {
+          "name": "popupClassName",
+          "type": "string",
+          "default": "-",
+          "description": "The className of dropdown menu",
+          "since": "5.0.0"
+        },
+        {
+          "name": "popupMatchSelectWidth",
+          "type": "boolean | number",
+          "default": "true",
+          "description": "Determine whether the popup menu and the select input are the same width",
+          "since": "5.5.0"
+        },
+        {
+          "name": "showSearch",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether show search input in single mode"
+        },
+        {
+          "name": "size",
+          "type": "large | middle | small",
+          "default": "middle",
+          "description": "Size of Select input"
+        },
+        {
+          "name": "virtual",
+          "type": "boolean",
+          "default": "true",
+          "description": "Disable virtual scroll when set to false"
+        },
+        {
+          "name": "onChange",
+          "type": "(value, option) => void",
+          "default": "-",
+          "description": "Called when select an option or input value change"
+        }
       ],
       "demos": [],
-      "related": ["TreeSelect", "AutoComplete"],
+      "related": [
+        "TreeSelect",
+        "AutoComplete"
+      ],
       "faq": []
     },
     {
@@ -128,18 +413,67 @@
       "description": "High performance Form component with data scope management.",
       "descriptionZh": "高性能表单控件，自带数据域管理。",
       "props": [
-        { "name": "colon", "type": "boolean", "default": "true", "description": "Configure the default value of colon for Form.Item" },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "Set form component disable", "since": "4.21.0" },
-        { "name": "form", "type": "FormInstance", "default": "-", "description": "Form control instance created by Form.useForm()" },
-        { "name": "initialValues", "type": "object", "default": "-", "description": "Set value by Form initialization or reset" },
-        { "name": "layout", "type": "horizontal | vertical | inline", "default": "horizontal", "description": "Form layout" },
-        { "name": "name", "type": "string", "default": "-", "description": "Form name" },
-        { "name": "variant", "type": "outlined | borderless | filled | underlined", "default": "outlined", "description": "Variant of components inside form", "since": "5.13.0" },
-        { "name": "onFinish", "type": "(values) => void", "default": "-", "description": "Trigger after submitting the form and verifying data successfully" }
+        {
+          "name": "colon",
+          "type": "boolean",
+          "default": "true",
+          "description": "Configure the default value of colon for Form.Item"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Set form component disable",
+          "since": "4.21.0"
+        },
+        {
+          "name": "form",
+          "type": "FormInstance",
+          "default": "-",
+          "description": "Form control instance created by Form.useForm()"
+        },
+        {
+          "name": "initialValues",
+          "type": "object",
+          "default": "-",
+          "description": "Set value by Form initialization or reset"
+        },
+        {
+          "name": "layout",
+          "type": "horizontal | vertical | inline",
+          "default": "horizontal",
+          "description": "Form layout"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "-",
+          "description": "Form name"
+        },
+        {
+          "name": "variant",
+          "type": "outlined | borderless | filled | underlined",
+          "default": "outlined",
+          "description": "Variant of components inside form",
+          "since": "5.13.0"
+        },
+        {
+          "name": "onFinish",
+          "type": "(values) => void",
+          "default": "-",
+          "description": "Trigger after submitting the form and verifying data successfully"
+        }
       ],
       "demos": [],
-      "related": ["Form.Item", "Form.List"],
-      "subComponents": ["Form.Item", "Form.List", "Form.Provider"]
+      "related": [
+        "Form.Item",
+        "Form.List"
+      ],
+      "subComponents": [
+        "Form.Item",
+        "Form.List",
+        "Form.Provider"
+      ]
     },
     {
       "name": "Modal",
@@ -148,18 +482,67 @@
       "description": "Modal dialogs.",
       "descriptionZh": "模态对话框。",
       "props": [
-        { "name": "cancelText", "type": "ReactNode", "default": "Cancel", "description": "Text of the Cancel button" },
-        { "name": "centered", "type": "boolean", "default": "false", "description": "Centered Modal" },
-        { "name": "closable", "type": "boolean | { closeIcon: ReactNode }", "default": "true", "description": "Whether a close button is visible on top right" },
-        { "name": "footer", "type": "ReactNode | ((originNode, extra) => ReactNode)", "default": "(OK and Cancel buttons)", "description": "Footer content" },
-        { "name": "open", "type": "boolean", "default": "false", "description": "Whether the modal dialog is visible or not" },
-        { "name": "title", "type": "ReactNode", "default": "-", "description": "The modal dialog's title" },
-        { "name": "width", "type": "string | number", "default": "520", "description": "Width of the modal dialog" },
-        { "name": "onCancel", "type": "(e) => void", "default": "-", "description": "Specify a function that will be called when the user clicks cancel button" },
-        { "name": "onOk", "type": "(e) => void", "default": "-", "description": "Specify a function that will be called when the user clicks OK button" }
+        {
+          "name": "cancelText",
+          "type": "ReactNode",
+          "default": "Cancel",
+          "description": "Text of the Cancel button"
+        },
+        {
+          "name": "centered",
+          "type": "boolean",
+          "default": "false",
+          "description": "Centered Modal"
+        },
+        {
+          "name": "closable",
+          "type": "boolean | { closeIcon: ReactNode }",
+          "default": "true",
+          "description": "Whether a close button is visible on top right"
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode | ((originNode, extra) => ReactNode)",
+          "default": "(OK and Cancel buttons)",
+          "description": "Footer content"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the modal dialog is visible or not"
+        },
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "default": "-",
+          "description": "The modal dialog's title"
+        },
+        {
+          "name": "width",
+          "type": "string | number",
+          "default": "520",
+          "description": "Width of the modal dialog"
+        },
+        {
+          "name": "onCancel",
+          "type": "(e) => void",
+          "default": "-",
+          "description": "Specify a function that will be called when the user clicks cancel button"
+        },
+        {
+          "name": "onOk",
+          "type": "(e) => void",
+          "default": "-",
+          "description": "Specify a function that will be called when the user clicks OK button"
+        }
       ],
       "demos": [],
-      "related": ["Modal.confirm", "Modal.info", "Modal.success"],
+      "related": [
+        "Modal.confirm",
+        "Modal.info",
+        "Modal.success"
+      ],
       "subComponents": []
     },
     {
@@ -169,18 +552,68 @@
       "description": "A basic widget for getting the user input as a text field.",
       "descriptionZh": "通过鼠标或键盘输入内容，是最基础的表单域的包装。",
       "props": [
-        { "name": "allowClear", "type": "boolean | { clearIcon: ReactNode }", "default": "false", "description": "If allow to remove input content with clear icon" },
-        { "name": "defaultValue", "type": "string", "default": "-", "description": "The initial input content" },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "Whether the input is disabled" },
-        { "name": "maxLength", "type": "number", "default": "-", "description": "The max length" },
-        { "name": "prefix", "type": "ReactNode", "default": "-", "description": "The prefix icon for the Input" },
-        { "name": "size", "type": "large | middle | small", "default": "middle", "description": "The size of the input box" },
-        { "name": "variant", "type": "outlined | borderless | filled | underlined", "default": "outlined", "description": "Variants of Input", "since": "5.13.0" },
-        { "name": "onChange", "type": "(e: React.ChangeEvent) => void", "default": "-", "description": "Callback when user input" }
+        {
+          "name": "allowClear",
+          "type": "boolean | { clearIcon: ReactNode }",
+          "default": "false",
+          "description": "If allow to remove input content with clear icon"
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "default": "-",
+          "description": "The initial input content"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input is disabled"
+        },
+        {
+          "name": "maxLength",
+          "type": "number",
+          "default": "-",
+          "description": "The max length"
+        },
+        {
+          "name": "prefix",
+          "type": "ReactNode",
+          "default": "-",
+          "description": "The prefix icon for the Input"
+        },
+        {
+          "name": "size",
+          "type": "large | middle | small",
+          "default": "middle",
+          "description": "The size of the input box"
+        },
+        {
+          "name": "variant",
+          "type": "outlined | borderless | filled | underlined",
+          "default": "outlined",
+          "description": "Variants of Input",
+          "since": "5.13.0"
+        },
+        {
+          "name": "onChange",
+          "type": "(e: React.ChangeEvent) => void",
+          "default": "-",
+          "description": "Callback when user input"
+        }
       ],
       "demos": [],
-      "related": ["Input.TextArea", "Input.Search", "Input.Password"],
-      "subComponents": ["Input.TextArea", "Input.Search", "Input.Password", "Input.OTP"]
+      "related": [
+        "Input.TextArea",
+        "Input.Search",
+        "Input.Password"
+      ],
+      "subComponents": [
+        "Input.TextArea",
+        "Input.Search",
+        "Input.Password",
+        "Input.OTP"
+      ]
     },
     {
       "name": "Space",
@@ -189,14 +622,38 @@
       "description": "Set components spacing.",
       "descriptionZh": "设置组件之间的间距。",
       "props": [
-        { "name": "align", "type": "start | end | center | baseline", "default": "-", "description": "Align items" },
-        { "name": "direction", "type": "vertical | horizontal", "default": "horizontal", "description": "The space direction" },
-        { "name": "size", "type": "small | middle | large | number", "default": "small", "description": "The space size" },
-        { "name": "wrap", "type": "boolean", "default": "false", "description": "Auto wrap line" }
+        {
+          "name": "align",
+          "type": "start | end | center | baseline",
+          "default": "-",
+          "description": "Align items"
+        },
+        {
+          "name": "direction",
+          "type": "vertical | horizontal",
+          "default": "horizontal",
+          "description": "The space direction"
+        },
+        {
+          "name": "size",
+          "type": "small | middle | large | number",
+          "default": "small",
+          "description": "The space size"
+        },
+        {
+          "name": "wrap",
+          "type": "boolean",
+          "default": "false",
+          "description": "Auto wrap line"
+        }
       ],
       "demos": [],
-      "related": ["Flex"],
-      "subComponents": ["Space.Compact"]
+      "related": [
+        "Flex"
+      ],
+      "subComponents": [
+        "Space.Compact"
+      ]
     },
     {
       "name": "Flex",
@@ -205,44 +662,1154 @@
       "description": "Flex layout container.",
       "descriptionZh": "弹性布局容器。",
       "props": [
-        { "name": "align", "type": "CSSProperties['alignItems']", "default": "-", "description": "Align items" },
-        { "name": "gap", "type": "small | middle | large | string | number", "default": "-", "description": "Sets the gap between items", "since": "5.8.0" },
-        { "name": "justify", "type": "CSSProperties['justifyContent']", "default": "-", "description": "Justify content" },
-        { "name": "vertical", "type": "boolean", "default": "false", "description": "Is direction of the flex vertical" },
-        { "name": "wrap", "type": "boolean | CSSProperties['flexWrap']", "default": "nowrap", "description": "Set whether the element is displayed in a single line or in multiple lines" }
+        {
+          "name": "align",
+          "type": "CSSProperties['alignItems']",
+          "default": "-",
+          "description": "Align items"
+        },
+        {
+          "name": "gap",
+          "type": "small | middle | large | string | number",
+          "default": "-",
+          "description": "Sets the gap between items",
+          "since": "5.8.0"
+        },
+        {
+          "name": "justify",
+          "type": "CSSProperties['justifyContent']",
+          "default": "-",
+          "description": "Justify content"
+        },
+        {
+          "name": "vertical",
+          "type": "boolean",
+          "default": "false",
+          "description": "Is direction of the flex vertical"
+        },
+        {
+          "name": "wrap",
+          "type": "boolean | CSSProperties['flexWrap']",
+          "default": "nowrap",
+          "description": "Set whether the element is displayed in a single line or in multiple lines"
+        }
       ],
       "demos": [],
-      "related": ["Space"],
+      "related": [
+        "Space"
+      ],
       "subComponents": []
     }
   ],
   "globalTokens": [
-    { "name": "colorPrimary", "type": "string", "default": "#1677ff", "description": "Brand primary color" },
-    { "name": "colorSuccess", "type": "string", "default": "#52c41a", "description": "Success state color" },
-    { "name": "colorWarning", "type": "string", "default": "#faad14", "description": "Warning state color" },
-    { "name": "colorError", "type": "string", "default": "#ff4d4f", "description": "Error state color" },
-    { "name": "colorInfo", "type": "string", "default": "#1677ff", "description": "Info state color" },
-    { "name": "colorBgContainer", "type": "string", "default": "#ffffff", "description": "Container background color" },
-    { "name": "colorText", "type": "string", "default": "rgba(0,0,0,0.88)", "description": "Primary text color" },
-    { "name": "colorBorder", "type": "string", "default": "#d9d9d9", "description": "Default border color" },
-    { "name": "borderRadius", "type": "number", "default": "6", "description": "Base border radius" },
-    { "name": "fontSize", "type": "number", "default": "14", "description": "Base font size" },
-    { "name": "controlHeight", "type": "number", "default": "32", "description": "Control height" },
-    { "name": "padding", "type": "number", "default": "16", "description": "Base padding" },
-    { "name": "wireframe", "type": "boolean", "default": "false", "description": "Enable wireframe style" },
-    { "name": "motion", "type": "boolean", "default": "true", "description": "Enable animation" }
+    {
+      "name": "colorPrimary",
+      "type": "string",
+      "default": "#1677ff",
+      "description": "Brand primary color"
+    },
+    {
+      "name": "colorSuccess",
+      "type": "string",
+      "default": "#52c41a",
+      "description": "Success state color"
+    },
+    {
+      "name": "colorWarning",
+      "type": "string",
+      "default": "#faad14",
+      "description": "Warning state color"
+    },
+    {
+      "name": "colorError",
+      "type": "string",
+      "default": "#ff4d4f",
+      "description": "Error state color"
+    },
+    {
+      "name": "colorInfo",
+      "type": "string",
+      "default": "#1677ff",
+      "description": "Info state color"
+    },
+    {
+      "name": "colorBgContainer",
+      "type": "string",
+      "default": "#ffffff",
+      "description": "Container background color"
+    },
+    {
+      "name": "colorText",
+      "type": "string",
+      "default": "rgba(0,0,0,0.88)",
+      "description": "Primary text color"
+    },
+    {
+      "name": "colorBorder",
+      "type": "string",
+      "default": "#d9d9d9",
+      "description": "Default border color"
+    },
+    {
+      "name": "borderRadius",
+      "type": "number",
+      "default": "6",
+      "description": "Base border radius"
+    },
+    {
+      "name": "fontSize",
+      "type": "number",
+      "default": "14",
+      "description": "Base font size"
+    },
+    {
+      "name": "controlHeight",
+      "type": "number",
+      "default": "32",
+      "description": "Control height"
+    },
+    {
+      "name": "padding",
+      "type": "number",
+      "default": "16",
+      "description": "Base padding"
+    },
+    {
+      "name": "wireframe",
+      "type": "boolean",
+      "default": "false",
+      "description": "Enable wireframe style"
+    },
+    {
+      "name": "motion",
+      "type": "boolean",
+      "default": "true",
+      "description": "Enable animation"
+    }
   ],
   "changelog": [
     {
-      "version": "6.0.0",
-      "date": "2026-01-15",
+      "version": "6.3.2",
+      "date": "2026-03-09",
       "changes": [
-        { "component": "Button", "type": "breaking", "description": "Removed deprecated `type` prop, use `color` + `variant` instead." },
-        { "component": "Button", "type": "breaking", "description": "Removed deprecated `danger` prop, use `color=\"danger\"` instead." },
-        { "component": "Button", "type": "breaking", "description": "Removed deprecated `ghost` prop, use `variant=\"outlined\"` instead." },
-        { "component": "Modal", "type": "breaking", "description": "Removed deprecated `visible` prop, use `open` instead." },
-        { "component": "Global", "type": "breaking", "description": "Minimum React version bumped to 18.3.0." },
-        { "component": "Global", "type": "feature", "description": "Added ESM-only package output." }
+        {
+          "component": "Form",
+          "type": "fix",
+          "description": "修复 Form.Item 使用动态 `rules` 与 `dependencies` 配合使用时，时序问题导致的校验失败的问题。"
+        },
+        {
+          "component": "InputNumber",
+          "type": "fix",
+          "description": "修复 InputNumber 在 `borderless` 形态下与 Input 或 Select 并排时高度异常的问题。"
+        },
+        {
+          "component": "Radio",
+          "type": "fix",
+          "description": "修复 Radio.Group 在选项文案长短不一或换行时，勾选框宽度不一致的问题。"
+        },
+        {
+          "component": "Skeleton",
+          "type": "fix",
+          "description": "修复 Skeleton.Avatar，Skeleton.Button，Skeleton.Input，Rate 及 Spin 无法响应全局 `componentSize` 设置的问题。"
+        },
+        {
+          "component": "Splitter",
+          "type": "fix",
+          "description": "修复 Splitter 存在 `size` 受控面板时其他面板尺寸可能计算错误的问题。"
+        },
+        {
+          "component": "Tree",
+          "type": "fix",
+          "description": "修复 Tree 及 TreeSelect 在自定义 `titleHeight` 时会连线错位的问题。"
+        },
+        {
+          "component": "Checkbox",
+          "type": "style",
+          "description": "修复 Checkbox.Group 在选项文案长短不一或换行时，勾选框宽度不一致的问题。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "style",
+          "description": "修复 ConfigProvider 的 `csp` 配置没有对所有的动态 style 生效的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "style",
+          "description": "修复 Select 在 Firefox 浏览器下可能出现文字跳动的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "style",
+          "description": "修复 Select 无法通过 style 设置 `visibility: hidden` 的问题。"
+        },
+        {
+          "component": "Upload",
+          "type": "style",
+          "description": "修复 Upload 在 picture-card 模式下无数据时仍然存在无效空白区域的问题。"
+        },
+        {
+          "component": "Upload",
+          "type": "a11y",
+          "description": "优化 Upload 在不支持悬停或粗指针的设备上默认显示列表操作按钮。"
+        },
+        {
+          "component": "Global",
+          "type": "i18n",
+          "description": "新增 `es_US` 国际化配置。"
+        },
+        {
+          "component": "Global",
+          "type": "refactor",
+          "description": "统一 `size` 枚举值定义，针对 Badge、Card、Progress、Steps、Switch 及 Spin 使用 `medium` 替代 `default`，针对 Descriptions 使用 `medium` 和 `large` 替代 `middle` 和 `default`，针对 Table 和 Divider 使用 `medium` 替代 `middle`。"
+        },
+        {
+          "component": "Global",
+          "type": "refactor",
+          "description": "统一 `size` className 在所有组件元素上的设置值。"
+        },
+        {
+          "component": "Upload",
+          "type": "typescript",
+          "description": "新增 Upload.Dragger 的泛型支持。"
+        },
+        {
+          "component": "Modal",
+          "type": "typescript",
+          "description": "修复 Modal `onCancel` 入参不支持 KeyboardEvent 类型的问题。"
+        }
+      ]
+    },
+    {
+      "version": "6.3.1",
+      "date": "2026-02-24",
+      "changes": [
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select `value` 为空字符串时下拉框高度不正确的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select `value` 为空字符串时值回显异常的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select & TreeSelect 搜索时已选中值文本仍然显示的问题。"
+        },
+        {
+          "component": "TreeSelect",
+          "type": "fix",
+          "description": "修复 TreeSelect 多行文本时 Checkbox 被压缩变形的问题。"
+        },
+        {
+          "component": "Typography",
+          "type": "fix",
+          "description": "修复 Typography 同时开启 `copyable` 和 `ellipsis` 时，悬停复制按钮会触发省略号 tooltip 的问题；修复从复制按钮移回文字后省略号 tooltip 不再出现的问题。"
+        },
+        {
+          "component": "Progress",
+          "type": "fix",
+          "description": "修复 Progress `status=\"active\"` 时动画溢出的问题。"
+        },
+        {
+          "component": "Upload",
+          "type": "fix",
+          "description": "修复 Upload 照片墙模式下文件数量超过一行时列表溢出重叠的问题。"
+        },
+        {
+          "component": "Image",
+          "type": "fix",
+          "description": "修复 Image 打开预览时，部分浏览器会出现闪烁的问题。"
+        },
+        {
+          "component": "Global",
+          "type": "a11y",
+          "description": "为 Button、Checkbox、Radio、Switch、Segmented 等组件添加 `prefers-reduced-motion` 媒体查询支持，禁用过渡动画以改善无障碍体验。"
+        },
+        {
+          "component": "Input",
+          "type": "fix",
+          "description": "修复 Input `variant=\"borderless\"` 时高度与 Select 不一致的问题。"
+        },
+        {
+          "component": "Modal",
+          "type": "fix",
+          "description": "修复 Modal confirm 方法在 `icon` 为空时布局出现多余空白的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "a11y",
+          "description": "Select 组件中的禁用选项添加 `aria-disabled` 属性。"
+        }
+      ]
+    },
+    {
+      "version": "6.3.0",
+      "date": "2026-02-10",
+      "changes": [
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 Modal 和 Drawer 的 `maskClosable` 全局配置。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 DatePicker 和 TimePicker 的 `suffixIcon` 全局配置。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 Cascader 的 `expandIcon` 和 `loadingIcon` 全局配置。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 Table 的 `scroll` 全局配置。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持配置 App 的 `className` 与 `style`，以及 ColorPicker 的 `arrow` 属性。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 Button 的 `loadingIcon` 全局配置。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 `rangePicker.separator` 全局配置。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 Form 的 `tooltipIcon` 和 `tooltipProps` 全局配置。"
+        },
+        {
+          "component": "Upload",
+          "type": "feature",
+          "description": "Upload 新增 `classNames.trigger` 和 `styles.trigger` 属性。"
+        },
+        {
+          "component": "Upload",
+          "type": "feature",
+          "description": "Upload.Dragger 支持 `onDoubleClick` 事件。"
+        },
+        {
+          "component": "Upload",
+          "type": "fix",
+          "description": "修复 Upload `picture-card` / `picture-circle` 父节点缺少默认高度的问题。"
+        },
+        {
+          "component": "Grid",
+          "type": "feature",
+          "description": "Grid 新增 `xxxl`（1920px）断点以适应 FHD 屏幕。"
+        },
+        {
+          "component": "Switch",
+          "type": "feature",
+          "description": "Switch 语义化结构支持 `indicator` 定制。"
+        },
+        {
+          "component": "Button",
+          "type": "fix",
+          "description": "修复 Button 暗色主题下 `color` 的 hover 与 active 状态颜色相反的问题。"
+        },
+        {
+          "component": "Button",
+          "type": "fix",
+          "description": "修复 Button 边框尺寸未跟随 Design Token `lineWidth` 的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "style",
+          "description": "Select 移除单选模式下额外的 `-content-value` div DOM，优化语义化结构并支持通过 `classNames` 与 `styles` 覆盖。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select `notFoundContent` 不生效的问题。"
+        },
+        {
+          "component": "Radio",
+          "type": "fix",
+          "description": "修复 Radio.Group 垂直排列时单选项出现多余右边距的问题。"
+        },
+        {
+          "component": "Radio",
+          "type": "style",
+          "description": "Radio 移除 icon 子元素 `-inner` DOM 节点以更好适配语义化结构。"
+        },
+        {
+          "component": "Modal",
+          "type": "style",
+          "description": "Modal & Drawer 默认关闭蒙层 blur 效果。"
+        },
+        {
+          "component": "Tooltip",
+          "type": "fix",
+          "description": "修复 Tooltip & Popover 弹出层动画起始位置偏左的问题。"
+        },
+        {
+          "component": "List",
+          "type": "fix",
+          "description": "修复 List 废弃组件配置的颜色相关 token 不生效的问题。"
+        },
+        {
+          "component": "Spin",
+          "type": "refactor",
+          "description": "Spin 重构 DOM 结构以对齐不同场景，并支持全量语义化结构。"
+        },
+        {
+          "component": "Icon",
+          "type": "a11y",
+          "description": "为搜索图标 SVG 添加无障碍名称，改善屏幕阅读器支持。"
+        },
+        {
+          "component": "Cascader",
+          "type": "fix",
+          "description": "修复 Cascader 搜索模式下选择选项并关闭时，过滤列表立即还原影响体验的问题。"
+        },
+        {
+          "component": "Tree",
+          "type": "a11y",
+          "description": "Tree 优化无障碍支持。"
+        },
+        {
+          "component": "ColorPicker",
+          "type": "fix",
+          "description": "ColorPicker 选择块支持语义化结构，并修复 `root` 语义化错误应用到弹出元素的问题。"
+        },
+        {
+          "component": "Avatar",
+          "type": "style",
+          "description": "将 `size` 默认值从 `default` 改为 `medium` 以保持一致性。"
+        },
+        {
+          "component": "Checkbox",
+          "type": "style",
+          "description": "Checkbox 移除 icon 子元素 `-inner` DOM 节点以更好适配语义化结构。"
+        },
+        {
+          "component": "Global",
+          "type": "fix",
+          "description": "修复 UMD 版本中 React Compiler 兼容性问题，现已默认关闭。"
+        },
+        {
+          "component": "Global",
+          "type": "refactor",
+          "description": "精简 `styles` 和 `classNames` 类型定义，使其更规范。"
+        }
+      ]
+    },
+    {
+      "version": "6.2.3",
+      "date": "2026-02-02",
+      "changes": [
+        {
+          "component": "Button",
+          "type": "fix",
+          "description": "修复 Button `defaultBg`、`defaultColor`、`defaultHoverColor` 和 `defaultActiveColor` token 不生效的问题。"
+        },
+        {
+          "component": "Button",
+          "type": "fix",
+          "description": "修复 Button 默认 token 不生效的问题。"
+        },
+        {
+          "component": "Button",
+          "type": "fix",
+          "description": "修复 Button `variant=\"solid\"` 在 Space.Compact 中边框显示异常的问题。"
+        },
+        {
+          "component": "Input",
+          "type": "fix",
+          "description": "修复 Input.TextArea `ref` 缺少 `nativeElement` 属性的问题。"
+        },
+        {
+          "component": "Flex",
+          "type": "fix",
+          "description": "修复 Flex 使用 `orientation` 时默认 `align` 不生效的问题。"
+        },
+        {
+          "component": "Typography",
+          "type": "fix",
+          "description": "修复 Typography 链接选择器特异性过低导致样式被覆盖的问题。"
+        },
+        {
+          "component": "ColorPicker",
+          "type": "fix",
+          "description": "修复 ColorPicker HEX 输入框可以输入无效字符的问题。"
+        }
+      ]
+    },
+    {
+      "version": "6.2.2",
+      "date": "2026-01-26",
+      "changes": [
+        {
+          "component": "Typography",
+          "type": "fix",
+          "description": "修复被 Typography 包裹的带 `href` 的 Button 显示错误颜色和 hover 时 outline 闪烁的问题。"
+        },
+        {
+          "component": "Button",
+          "type": "fix",
+          "description": "修复 Button `type=\"text\"` 时组件 Token 不生效的问题。"
+        },
+        {
+          "component": "Popover",
+          "type": "fix",
+          "description": "修复 Popover 内组件被 Form.Item 状态关联影响的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select 多选时占位符显示异常的问题。"
+        },
+        {
+          "component": "Pagination",
+          "type": "style",
+          "description": "修复 Pagination 全局 fontSize 变大时各元素上下错位的问题。"
+        },
+        {
+          "component": "Drawer",
+          "type": "style",
+          "description": "修复 Drawer 在 rtl 模式下 dragger 位置错误的样式问题。"
+        }
+      ]
+    },
+    {
+      "version": "6.2.1",
+      "date": "2026-01-20",
+      "changes": [
+        {
+          "component": "Button",
+          "type": "fix",
+          "description": "修复 Button 子元素为包含两个中文字符的标签时，原有 className 被清空的问题。"
+        },
+        {
+          "component": "DatePicker",
+          "type": "fix",
+          "description": "修复 DatePicker 在设置 `suffixIcon` 为 null 后不会更新 DOM 的问题。"
+        },
+        {
+          "component": "Table",
+          "type": "fix",
+          "description": "修复 Table 容器设置圆角时，内部内容区域圆角不一致的问题。"
+        },
+        {
+          "component": "Card",
+          "type": "style",
+          "description": "修复 Card Body 区域有非预期圆角值的问题。"
+        },
+        {
+          "component": "Global",
+          "type": "style",
+          "description": "修复 undefined 和 null 值被注入到 CSS 的问题。"
+        },
+        {
+          "component": "Global",
+          "type": "style",
+          "description": "优化所有组件中的 background 过渡为 background-color。"
+        },
+        {
+          "component": "Grid",
+          "type": "refactor",
+          "description": "优化 Grid 使用 genCssVar 方法以生成更加稳定的 CSS 变量名。"
+        },
+        {
+          "component": "Global",
+          "type": "refactor",
+          "description": "优化 @ant-design/icons 引入方式为独立图标引入，避免被 externals 增加前置依赖。"
+        }
+      ]
+    },
+    {
+      "version": "6.2.0",
+      "date": "2026-01-13",
+      "changes": [
+        {
+          "component": "QRCode",
+          "type": "feature",
+          "description": "QRCode 新增 `marginSize` 属性用于展示二维码留白区。"
+        },
+        {
+          "component": "Tour",
+          "type": "feature",
+          "description": "Tour 新增 `keyboard` 属性以配置键盘操作。"
+        },
+        {
+          "component": "Tooltip",
+          "type": "feature",
+          "description": "Tooltip 增加 `maxWidth` design token。"
+        },
+        {
+          "component": "Tooltip",
+          "type": "feature",
+          "description": "Tooltip/Popover/Popconfirm 默认情况下可以通过 ESC 关闭。"
+        },
+        {
+          "component": "Form",
+          "type": "feature",
+          "description": "Form 支持 `tel` 类型校验。"
+        },
+        {
+          "component": "Badge",
+          "type": "fix",
+          "description": "修复 Badge 在使用 `text` 属性时，ref 无效的问题。"
+        },
+        {
+          "component": "Calendar",
+          "type": "feature",
+          "description": "Calendar 和 DatePicker 的 `locale` 配置现在支持只填充部分内容。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "fix",
+          "description": "修复 ConfigProvider 配置 `theme.cssVar` 对图标无效的问题。"
+        },
+        {
+          "component": "Collapse",
+          "type": "fix",
+          "description": "修复 Collapse `items` 语义化属性无效的问题。"
+        },
+        {
+          "component": "Modal",
+          "type": "feature",
+          "description": "Modal 支持 `focusable.trap` 以配置是否将焦点锁定在 Modal 内部。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 pagination 配置 `totalBoundary` 与 `showSizeChanger` 属性。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持配置 Alert 全局图标。"
+        },
+        {
+          "component": "Drawer",
+          "type": "feature",
+          "description": "Drawer 新增 `focusable` 以配置展开后的焦点行为，支持配置锁定焦点在框内、关闭后是否返回焦点。"
+        },
+        {
+          "component": "Drawer",
+          "type": "fix",
+          "description": "修复 Drawer `size` 定义不支持 string 的问题。"
+        },
+        {
+          "component": "Image",
+          "type": "fix",
+          "description": "修复 Image 嵌套在 Modal 内时，Esc 无法顺序关闭。"
+        },
+        {
+          "component": "Pagination",
+          "type": "feature",
+          "description": "Pagination 支持 `size` 属性。"
+        },
+        {
+          "component": "Breadcrumb",
+          "type": "feature",
+          "description": "Breadcrumb 支持 `dropdownIcon` 自定义。"
+        },
+        {
+          "component": "Checkbox",
+          "type": "feature",
+          "description": "Checkbox.Group 支持 `role` 配置。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select 在 `size=\"small\"` 时，清除按钮位置对齐问题。"
+        },
+        {
+          "component": "Steps",
+          "type": "refactor",
+          "description": "Steps 移除无用的样式。"
+        }
+      ]
+    },
+    {
+      "version": "6.1.4",
+      "date": "2026-01-05",
+      "changes": [
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select 配置 `aria-` 属性时，会同时给多个 DOM 添加的问题。"
+        },
+        {
+          "component": "Table",
+          "type": "fix",
+          "description": "修复 Table 配置 `scroll.y` 属性时，隐藏的测量表头挂载筛选下拉组件并参与事件判断，导致筛选下拉意外关闭的问题。"
+        }
+      ]
+    },
+    {
+      "version": "6.1.3",
+      "date": "2025-12-29",
+      "changes": [
+        {
+          "component": "Drawer",
+          "type": "fix",
+          "description": "修复 Drawer.PurePanel 无法响应鼠标交互的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select `options` 属性透传至原生 DOM 导致 React 未知属性警告的问题。"
+        }
+      ]
+    },
+    {
+      "version": "6.1.2",
+      "date": "2025-12-24",
+      "changes": [
+        {
+          "component": "Wave",
+          "type": "fix",
+          "description": "修复 Wave 组件水波纹消失的问题，以及 Button 组件在配置 Dropdown 后，点击触发再次 hover 时无法立刻显示 Dropdown 的问题。"
+        },
+        {
+          "component": "Form",
+          "type": "fix",
+          "description": "修复 Form.List 使用 `useWatch` 时，删除项会触发两次渲染，第一次为不正确的中间状态的问题。"
+        },
+        {
+          "component": "Breadcrumb",
+          "type": "style",
+          "description": "修复 Breadcrumb 组件自定义 `itemRender` 时的链接颜色异常的问题。"
+        },
+        {
+          "component": "Transfer",
+          "type": "style",
+          "description": "修复 Transfer 组件在禁用时不存在选择状态样式类的问题。"
+        },
+        {
+          "component": "Transfer",
+          "type": "fix",
+          "description": "优化 Transfer 组件逻辑，确保优先使用 `disabled` 属性。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select 组件缺少语义化 DOM 名称的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select 组件在搜索状态下鼠标手型样式不对的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select 在同时设置 `showSearch` 和 `disabled` 时鼠标样式不为禁用的问题。"
+        },
+        {
+          "component": "Card",
+          "type": "style",
+          "description": "修复 Card 组件在使用 Card.Grid 且未设置头部内容时，边框圆角显示异常的问题。"
+        },
+        {
+          "component": "Tag",
+          "type": "style",
+          "description": "Tag 加深默认背景，提升无边框状态的对比度。"
+        },
+        {
+          "component": "Segmented",
+          "type": "fix",
+          "description": "修复 Segmented 组件中多余的 `role` 属性和 `aria` 属性。"
+        }
+      ]
+    },
+    {
+      "version": "6.1.1",
+      "date": "2025-12-15",
+      "changes": [
+        {
+          "component": "DatePicker",
+          "type": "fix",
+          "description": "修复 DatePicker 不兼容 webpack 4 的问题：`Can't resolve '@rc-component/picker/locale/en_US'`。"
+        },
+        {
+          "component": "ColorPicker",
+          "type": "fix",
+          "description": "修复 ColorPicker 弹层内输入框高度不一致问题。"
+        },
+        {
+          "component": "Notification",
+          "type": "fix",
+          "description": "修复 notification 在 cssVar 未启用时默认背景色不为白色的问题。"
+        },
+        {
+          "component": "Input",
+          "type": "fix",
+          "description": "修复 Input 在 Space.Compact 下配置 `allowClear` 时聚焦边框丢失的问题。"
+        },
+        {
+          "component": "Splitter",
+          "type": "fix",
+          "description": "修复 Splitter 在 RTL + 垂直模式下折叠方向错误的问题，RTL 逻辑现在仅在横向布局下生效。"
+        },
+        {
+          "component": "Result",
+          "type": "fix",
+          "description": "修复 Result 未向根节点透传 `data-*` 与 `aria-*` 属性的问题。"
+        },
+        {
+          "component": "Global",
+          "type": "fix",
+          "description": "修复 `theme.cssVar.prefix` 与 `theme.cssVar.key` 不支持传入空字符串的问题。"
+        },
+        {
+          "component": "Breadcrumb",
+          "type": "style",
+          "description": "提升 Breadcrumb 链接样式优先级以避免被全局样式覆盖。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "fix",
+          "description": "修复 ConfigProvider `closable.placement` 配置失效的问题。"
+        },
+        {
+          "component": "Form",
+          "type": "fix",
+          "description": "修复 Form `onValuesChange` 对存在嵌套数据的 Form.List 缺失内容的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select `selectorBg` token 不生效的问题。"
+        },
+        {
+          "component": "Upload",
+          "type": "fix",
+          "description": "修复 Upload 进度条位置样式错误的问题。"
+        }
+      ]
+    },
+    {
+      "version": "6.1.0",
+      "date": "2025-12-08",
+      "changes": [
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 新增支持配置 Tooltip、Popover 和 Popconfirm 的 `trigger` 属性。"
+        },
+        {
+          "component": "Alert",
+          "type": "feature",
+          "description": "Alert 新增语义化关闭按钮元素。"
+        },
+        {
+          "component": "Drawer",
+          "type": "feature",
+          "description": "Drawer 新增语义化关闭按钮元素。"
+        },
+        {
+          "component": "Drawer",
+          "type": "feature",
+          "description": "Drawer 新增 `resizable` 的布尔类型设置。"
+        },
+        {
+          "component": "Select",
+          "type": "feature",
+          "description": "Select 新增 `optionFilterProp` 多字段搜索。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select 非搜索状态下显示输入光标的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select 包含交互内容时「选择」选项未打开的问题。"
+        },
+        {
+          "component": "Table",
+          "type": "fix",
+          "description": "修复 Table `cellFontSizeSM` 和 `cellFontSizeLG` token 不生效的问题。"
+        },
+        {
+          "component": "Button",
+          "type": "fix",
+          "description": "修复 Button 部分 Token 在特定变体（solid、outlined、dashed）下不生效的问题。"
+        },
+        {
+          "component": "Menu",
+          "type": "style",
+          "description": "修复 Menu 组件 item 中定义的 `style` 不生效错误。"
+        },
+        {
+          "component": "Alert",
+          "type": "typescript",
+          "description": "Alert 新增导出 `ErrorBoundaryProps` 类型。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "typescript",
+          "description": "ConfigProvider 支持 Table `rowKey` 传入函数。"
+        },
+        {
+          "component": "Notification",
+          "type": "typescript",
+          "description": "Notification `title` 属性修改为可选。"
+        }
+      ]
+    },
+    {
+      "version": "6.0.1",
+      "date": "2025-12-02",
+      "changes": [
+        {
+          "component": "Flex",
+          "type": "fix",
+          "description": "修复 Flex 的 `flex` 属性不能设置为 0 的问题。"
+        },
+        {
+          "component": "Flex",
+          "type": "fix",
+          "description": "修复 Flex 的 `gap` 属性不能设置为 0 的问题。"
+        },
+        {
+          "component": "Input",
+          "type": "fix",
+          "description": "修复 Input `colorText` token 在无前后缀的 filled 变体下不工作的问题。"
+        },
+        {
+          "component": "Input",
+          "type": "fix",
+          "description": "修复 Input.OTP 在输入时可跳过空位的问题。"
+        },
+        {
+          "component": "Anchor",
+          "type": "fix",
+          "description": "修复 Anchor 快速点击同一链接时的滚动问题。"
+        },
+        {
+          "component": "Button",
+          "type": "fix",
+          "description": "修复 Button 在 solid 变体下悬浮态的文字颜色。"
+        },
+        {
+          "component": "Cascader",
+          "type": "fix",
+          "description": "修复 Cascader 使用 `defaultValue` 时首次打开会滚动到页面顶部的问题。"
+        },
+        {
+          "component": "DatePicker",
+          "type": "fix",
+          "description": "修复 DatePicker `borderRadiusSM` 和 `borderRadiusLG` token 未生效问题。"
+        },
+        {
+          "component": "InputNumber",
+          "type": "fix",
+          "description": "修复 InputNumber 在 ColorPicker 中使用时文字被裁切的问题。"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "修复 Select 在深色模式下的搜索框文本颜色。"
+        },
+        {
+          "component": "Splitter",
+          "type": "fix",
+          "description": "修复 Splitter 在 Panel 总占比不为 1 时出现占不满的情况。"
+        },
+        {
+          "component": "Wave",
+          "type": "fix",
+          "description": "修复 Wave 可能由于 RAF 未清理引发内存泄露的风险。"
+        },
+        {
+          "component": "Modal",
+          "type": "fix",
+          "description": "修复 Modal/Image/Drawer 组件 `colorBgMask` token 不生效的问题。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "style",
+          "description": "修复 ConfigProvider 默认没有配置 `theme.hashed` 为 true，从而会导致多版本混用样式冲突的问题。"
+        },
+        {
+          "component": "Layout",
+          "type": "style",
+          "description": "修复 Layout.Sider 在 `zeroRuntime` 开启时样式缺失的问题。"
+        }
+      ]
+    },
+    {
+      "version": "6.0.0",
+      "date": "2025-11-22",
+      "changes": [
+        {
+          "component": "Global",
+          "type": "feature",
+          "description": "Ant Design 6.0.0 发布！组件语义化结构全面支持，所有主要组件支持 `classNames` 和 `styles` 配置以及 ConfigProvider 全局配置。"
+        },
+        {
+          "component": "Masonry",
+          "type": "feature",
+          "description": "新增 Masonry 瀑布流组件。"
+        },
+        {
+          "component": "InputNumber",
+          "type": "feature",
+          "description": "InputNumber 增加 `mode=\"spinner\"` 拨轮模式。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 Table `rowKey` 全局配置。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 Card.Meta 的配置。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 Tooltip / Popover / Popconfirm 组件的箭头配置。"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "feature",
+          "description": "ConfigProvider 支持 Space 组件 root 配置。"
+        },
+        {
+          "component": "Tooltip",
+          "type": "feature",
+          "description": "Tooltip 支持 `unique` 配置让 Tooltip 支持平滑移动。"
+        },
+        {
+          "component": "Tooltip",
+          "type": "perf",
+          "description": "优化 Tooltip 开发模式下性能（约 ~40%）以提升研发体验。"
+        },
+        {
+          "component": "Input",
+          "type": "deprecation",
+          "description": "Input.Search 重构废弃内部 `addon*` 的使用，用 Space.Compact 替换。"
+        },
+        {
+          "component": "Pagination",
+          "type": "feature",
+          "description": "Pagination 快速跳转输入框现在限制只能输入数字。"
+        },
+        {
+          "component": "Mentions",
+          "type": "refactor",
+          "description": "重构 Mentions DOM 结构并支持 `suffix` 语义化结构以及 `size` 属性。"
+        },
+        {
+          "component": "Watermark",
+          "type": "feature",
+          "description": "Watermark 新增 `onRemove` 以支持被用户手工删除的事件触发。"
+        },
+        {
+          "component": "Breadcrumb",
+          "type": "feature",
+          "description": "Breadcrumb 支持 ConfigProvider `separator` 全局配置。"
+        },
+        {
+          "component": "Alert",
+          "type": "feature",
+          "description": "Alert `closable` 支持 `onClose` 和 `afterClose` 方法。"
+        },
+        {
+          "component": "Radio",
+          "type": "feature",
+          "description": "Radio.Group 支持 `vertical` 纵向排列语法糖。"
+        },
+        {
+          "component": "Cascader",
+          "type": "feature",
+          "description": "Cascader 支持 `aria-*` 和 `data-*` 属性。"
+        },
+        {
+          "component": "Cascader",
+          "type": "feature",
+          "description": "Cascader.Panel 添加 `optionRender` 允许自定义渲染选项。"
+        },
+        {
+          "component": "Upload",
+          "type": "feature",
+          "description": "Upload `accept` 配置支持自定义过滤逻辑。"
+        },
+        {
+          "component": "Rate",
+          "type": "feature",
+          "description": "Rate 支持 `size` 以配置大小。"
+        },
+        {
+          "component": "Rate",
+          "type": "feature",
+          "description": "Rate `tooltips` 支持所有的提示属性配置。"
+        },
+        {
+          "component": "Select",
+          "type": "feature",
+          "description": "Select 支持键盘和鼠标交互时 `onActive` 回调。"
+        },
+        {
+          "component": "Typography",
+          "type": "feature",
+          "description": "Typography `copyable` 支持 HTTP 环境。"
+        },
+        {
+          "component": "Form",
+          "type": "feature",
+          "description": "Form `useWatch` 支持动态更改监听字段名称。"
+        },
+        {
+          "component": "Form",
+          "type": "feature",
+          "description": "Form 现在取值会排除 Form.List 中未被注册的字段值。"
+        },
+        {
+          "component": "Form",
+          "type": "perf",
+          "description": "优化 Form 在大量字段卸载时 `useWatch` 的性能。"
+        },
+        {
+          "component": "Flex",
+          "type": "feature",
+          "description": "Flex 增加 `orientation` 属性用于布局，原 `vertical` 语法糖仍然保留。"
+        },
+        {
+          "component": "DatePicker",
+          "type": "feature",
+          "description": "DatePicker 语义化结构新增面板 `container` 支持。"
+        },
+        {
+          "component": "DatePicker",
+          "type": "feature",
+          "description": "DatePicker 新增 `previewValue`，以控制鼠标悬停在选项时是否输入框展示预览值。"
+        },
+        {
+          "component": "Drawer",
+          "type": "feature",
+          "description": "Drawer 新增 `resizable` 属性以支持调整尺寸。"
+        },
+        {
+          "component": "Global",
+          "type": "breaking",
+          "description": "最低 React 版本要求提升至 18.3.0。"
+        },
+        {
+          "component": "Global",
+          "type": "breaking",
+          "description": "移除 IE 11 支持。"
+        }
       ]
     }
   ]

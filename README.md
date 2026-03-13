@@ -9,11 +9,11 @@ CLI tool for querying antd knowledge and analyzing antd usage in projects. Desig
 ## Features
 
 - **Agent-First** — Structured JSON output designed for Code Agents (Claude Code, Cursor, Copilot) to parse and act on directly
-- **Offline-First** — Local metadata cache with on-demand fetch, no network required for cached queries
-- **Multi-Version** — Full support for antd v4 / v5 / v6+, with cross-version API diffing and migration guides
-- **Complete Knowledge** — Components, props, tokens, demos, semantic structure, and changelog in one place
+- **Offline-First** — All metadata is fully bundled in the package — no network required at runtime
+- **Multi-Version** — Full support for antd v4 / v5 / v6, with cross-version API diffing and migration guides
+- **Bundled Knowledge** — Key components covered: props, tokens, demos, semantic structure, and changelog
 - **Project-Aware** — Auto-detects your antd version, scans usage, lints best practices, and diagnoses configuration issues
-- **Auto-Fix Migration** — `antd migrate --apply` runs codemods with dry-run safety, git stash backup, and before/after diffs
+- **Agent Migration** — `antd migrate --apply` outputs a structured migration prompt with before/after examples for Code Agents to execute
 
 ## Install
 
@@ -89,10 +89,8 @@ antd semantic Table --format json
 Query changelog entries and compare API differences between versions.
 
 ```bash
-antd changelog 6.3.0               # exact version
-antd changelog 5.10.0..5.20.0      # version range
-antd changelog diff 4.24.0 5.0.0   # API diff between versions
-antd changelog diff 4.24.0 5.0.0 Select  # component-specific diff
+antd changelog 5.22.0              # exact version
+antd changelog 5.21.0..5.24.0      # version range (both ends inclusive)
 antd changelog --format json
 ```
 
@@ -136,10 +134,10 @@ antd lint --format json
 Version migration guide with optional auto-fix.
 
 ```bash
-antd migrate 4 5                    # full migration checklist
-antd migrate 4 5 --component Select # component-specific migration
-antd migrate 4 5 --apply ./src      # auto-fix (dry-run first)
-antd migrate --format json
+antd migrate 4 5                          # full migration checklist
+antd migrate 4 5 --component Select       # component-specific migration
+antd migrate 4 5 --apply ./src            # output agent migration prompt for ./src
+antd migrate 4 5 --format json            # structured output for agents
 ```
 
 ## Global Flags
@@ -149,5 +147,107 @@ antd migrate --format json
 | `--format json\|text\|markdown` | Output format | `text` |
 | `--version <v>` | Target antd version | auto-detect |
 | `--lang en\|zh` | Output language | `en` |
-| `--no-cache` | Skip local cache | `false` |
 | `--detail` | Full information output | `false` |
+
+## Examples
+
+### `antd list`
+
+```
+Component  Category      Description
+---------  ------------  -----------------------------------------------------------
+Button     General       To trigger an operation.
+Table      Data Display  A table displays rows of data.
+Select     Data Entry    Select component to select value from options.
+Input      Data Entry    A basic widget for getting the user input as a text field.
+Form       Data Entry    High performance Form component with data scope management.
+Modal      Feedback      Modal dialogs.
+Space      Layout        Set components spacing.
+Flex       Layout        Flex layout container.
+Grid       Layout        24 Grids System.
+```
+
+### `antd info Button`
+
+```
+Button — To trigger an operation.
+
+Property      Type                                              Default
+------------  ------------------------------------------------  -------
+block         boolean                                           false
+classNames    Record<SemanticDOM, string>                       -
+color         default | primary | danger                        default
+danger        boolean                                           false
+disabled      boolean                                           false
+ghost         boolean                                           false
+href          string                                            -
+htmlType      submit | reset | button                           button
+icon          ReactNode                                         -
+iconPosition  start | end                                       start
+loading       boolean | { delay: number }                       false
+shape         default | circle | round                          default
+size          large | middle | small                            middle
+styles        Record<SemanticDOM, CSSProperties>                -
+target        string                                            -
+type          primary | default | dashed | text | link          default
+variant       outlined | dashed | solid | filled | text | link  -
+onClick       (event: React.MouseEvent) => void                 -
+```
+
+### `antd search "virtual scroll"`
+
+```
+Search results for "virtual scroll":
+
+  [81%] Table (FAQ)
+    How to use virtual scroll?
+  [77%] Select (props)
+    virtual — Disable virtual scroll when set to false
+  [20%] Table (props)
+    virtual — Support virtual list
+```
+
+### `antd semantic Table`
+
+```
+Table Semantic Structure:
+├── header         # Table header area
+├── body         # Table body area
+├── footer         # Table footer area
+├── cell         # Table cell
+├── row         # Table row
+└── wrapper         # Outer wrapper
+
+Usage:
+  <Table classNames={{ header: 'my-header' }} />
+  <Table styles={{ header: { background: '#fff' } }} />
+```
+
+### `antd migrate 4 5 --component Select`
+
+```
+Migration Guide: v4 → v5
+
+  Select:
+    🔧 [BREAKING] Prop `dropdownClassName` renamed to `popupClassName`
+    🔧 [BREAKING] Prop `dropdownMatchSelectWidth` renamed to `popupMatchSelectWidth`
+
+Total: 2 steps (2 auto-fixable, 0 manual)
+```
+
+### `antd token Button`
+
+```
+Button Component Tokens:
+
+Token                Type    Default
+-------------------  ------  ----------------
+borderColorDisabled  string  #d9d9d9
+colorPrimaryHover    string  #4096ff
+contentFontSize      number  14
+defaultBg            string  #ffffff
+defaultBorderColor   string  #d9d9d9
+defaultColor         string  rgba(0,0,0,0.88)
+paddingBlock         number  4
+paddingInline        number  15
+```

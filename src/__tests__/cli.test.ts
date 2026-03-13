@@ -133,7 +133,7 @@ describe('CLI e2e', () => {
   it('should show changelog', () => {
     const out = run('changelog', '5.21.0');
     expect(out).toContain('5.21.0');
-    expect(out).toContain('Button');
+    expect(out).toContain('Segmented');
   });
 
   it('should show changelog range', () => {
@@ -220,7 +220,7 @@ describe('CLI e2e', () => {
   });
 
   it('should handle changelog version not found', () => {
-    const result = runWithStatus('changelog', '9.99.0');
+    const result = runWithStatus('changelog', '5.99.99');
     expect(result.exitCode).toBe(1);
   });
 
