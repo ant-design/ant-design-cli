@@ -114,8 +114,8 @@ function runApiDiff(
 ): void {
   const major1 = toMajor(v1);
   const major2 = toMajor(v2);
-  const store1 = loadMetadata(major1, opts.cache !== false);
-  const store2 = loadMetadata(major2, opts.cache !== false);
+  const store1 = loadMetadata(major1);
+  const store2 = loadMetadata(major2);
 
   if (store1.components.length === 0) {
     printError(createError(ErrorCodes.VERSION_NOT_FOUND, `No data available for version ${v1} (${major1})`), opts.format);
@@ -212,7 +212,7 @@ export function registerChangelogCommand(program: Command): void {
       if (isChangelogMode) {
         // Changelog mode
         const versionInfo = detectVersion(opts.version);
-        const store = loadMetadata(versionInfo.majorVersion, opts.cache !== false);
+        const store = loadMetadata(versionInfo.majorVersion);
         const changelog = store.changelog || [];
 
         if (changelog.length === 0) {

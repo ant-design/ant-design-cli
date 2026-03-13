@@ -9,7 +9,7 @@
   "main": "./dist/index.js",
   "files": [
     "dist",
-    "sample-data"
+    "data"
   ],
   "scripts": {
     "build": "tsup",

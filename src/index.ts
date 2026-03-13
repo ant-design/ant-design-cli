@@ -21,7 +21,6 @@ program
   .option('--format <format>', 'Output format: json, text, or markdown', 'text')
   .option('--version <version>', 'Target antd version (e.g. 5.20.0)')
   .option('--lang <lang>', 'Output language: en or zh', 'en')
-  .option('--no-cache', 'Skip local cache, re-fetch metadata')
   .option('--detail', 'Full information output', false);
 
 // -V for CLI version (--version is used for antd version targeting)

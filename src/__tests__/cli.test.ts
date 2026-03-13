@@ -131,13 +131,13 @@ describe('CLI e2e', () => {
   });
 
   it('should show changelog', () => {
-    const out = run('changelog', '5.21.0', '--no-cache');
+    const out = run('changelog', '5.21.0');
     expect(out).toContain('5.21.0');
     expect(out).toContain('Button');
   });
 
   it('should show changelog range', () => {
-    const out = run('changelog', '5.20.0..5.22.0', '--no-cache');
+    const out = run('changelog', '5.20.0..5.22.0');
     expect(out).toContain('5.20.0');
     expect(out).toContain('5.21.0');
     expect(out).toContain('5.22.0');
@@ -184,12 +184,12 @@ describe('CLI e2e', () => {
   });
 
   it('should support --lang zh', () => {
-    const out = run('list', '--lang', 'zh', '--no-cache');
+    const out = run('list', '--lang', 'zh');
     expect(out).toContain('按钮');
   });
 
   it('should support --lang zh for info', () => {
-    const out = run('info', 'Button', '--lang', 'zh', '--no-cache');
+    const out = run('info', 'Button', '--lang', 'zh');
     expect(out).toContain('按钮用于开始一个即时操作');
   });
 
@@ -220,12 +220,12 @@ describe('CLI e2e', () => {
   });
 
   it('should handle changelog version not found', () => {
-    const result = runWithStatus('changelog', '9.99.0', '--no-cache');
+    const result = runWithStatus('changelog', '9.99.0');
     expect(result.exitCode).toBe(1);
   });
 
   it('should show changelog as JSON', () => {
-    const out = run('changelog', '5.21.0', '--no-cache', '--format', 'json');
+    const out = run('changelog', '5.21.0', '--format', 'json');
     const data = JSON.parse(out);
     expect(Array.isArray(data)).toBe(true);
     expect(data[0].version).toBe('5.21.0');
