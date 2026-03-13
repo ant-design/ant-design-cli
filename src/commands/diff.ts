@@ -166,7 +166,7 @@ function runApiDiff(
 
   if (opts.format === 'json') {
     const result = component && diffs.length > 0
-      ? { component: diffs[0].component, from: v1, to: v2, ...diffs[0] }
+      ? { from: v1, to: v2, ...diffs[0] }
       : { from: v1, to: v2, diffs };
     output(result, 'json');
     return;

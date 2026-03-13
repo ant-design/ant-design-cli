@@ -1,5 +1,9 @@
 # @ant-design/cli
 
+[![CI](https://github.com/ant-design/ant-design-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/ant-design/ant-design-cli/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@ant-design/cli)](https://www.npmjs.com/package/@ant-design/cli)
+[![npm downloads](https://img.shields.io/npm/dm/@ant-design/cli)](https://www.npmjs.com/package/@ant-design/cli)
+
 CLI tool for querying antd knowledge and analyzing antd usage in projects. Designed for Code Agents (Claude Code, Cursor, Copilot, etc.) to invoke via shell and parse structured output.
 
 ## Features
