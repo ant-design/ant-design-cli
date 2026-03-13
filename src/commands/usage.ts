@@ -1,8 +1,8 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, extname } from 'node:path';
+import { readFileSync } from 'node:fs';
 import { output } from '../output/formatter.js';
+import { collectFiles, parseAntdImports } from '../utils/scan.js';
 
 interface ComponentUsage {
   name: string;
@@ -11,32 +11,6 @@ interface ComponentUsage {
   subComponents?: Record<string, number>;
 }
 
-const SCAN_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx']);
-const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next', '.umi']);
-
-function collectFiles(dir: string): string[] {
-  const files: string[] = [];
-  try {
-    const entries = readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      if (entry.name.startsWith('.') && SKIP_DIRS.has(entry.name)) continue;
-      if (SKIP_DIRS.has(entry.name)) continue;
-      const fullPath = join(dir, entry.name);
-      if (entry.isDirectory()) {
-        files.push(...collectFiles(fullPath));
-      } else if (SCAN_EXTENSIONS.has(extname(entry.name))) {
-        files.push(fullPath);
-      }
-    }
-  } catch {
-    // ignore permission errors etc
-  }
-  return files;
-}
-
-// Match: import { Button, Form } from 'antd'
-// Match: import { Table } from 'antd/es/table'
-const ANTD_IMPORT_RE = /import\s+\{([^}]+)\}\s+from\s+['"]antd(?:\/[^'"]*)?['"]/g;
 // Match: Form.Item, Table.Column etc
 const SUB_COMPONENT_RE = /\b(\w+)\.(\w+)\b/g;
 
@@ -50,14 +24,7 @@ function scanFile(filePath: string): Map<string, { count: number; subComponents:
     return result;
   }
 
-  // Find antd imports
-  const importedNames: string[] = [];
-  let match: RegExpExecArray | null;
-  ANTD_IMPORT_RE.lastIndex = 0;
-  while ((match = ANTD_IMPORT_RE.exec(content)) !== null) {
-    const names = match[1].split(',').map((n) => n.trim()).filter(Boolean);
-    importedNames.push(...names);
-  }
+  const importedNames = parseAntdImports(content);
 
   for (const name of importedNames) {
     if (!result.has(name)) {
@@ -68,6 +35,7 @@ function scanFile(filePath: string): Map<string, { count: number; subComponents:
 
   // Find sub-component usage (e.g. Form.Item)
   SUB_COMPONENT_RE.lastIndex = 0;
+  let match: RegExpExecArray | null;
   while ((match = SUB_COMPONENT_RE.exec(content)) !== null) {
     const [, parent, child] = match;
     if (importedNames.includes(parent)) {

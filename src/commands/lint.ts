@@ -1,10 +1,10 @@
 import type { Command } from 'commander';
-import type { GlobalOptions, PropData } from '../types.js';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, extname } from 'node:path';
-import { loadMetadata, findComponent } from '../data/loader.js';
+import type { GlobalOptions } from '../types.js';
+import { readFileSync } from 'node:fs';
+import { loadMetadata } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { output } from '../output/formatter.js';
+import { collectFiles, parseAntdImports } from '../utils/scan.js';
 
 interface LintIssue {
   file: string;
@@ -12,32 +12,6 @@ interface LintIssue {
   rule: string;
   severity: 'warning' | 'error';
   message: string;
-}
-
-const SCAN_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx']);
-const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next', '.umi']);
-
-function collectFiles(dir: string): string[] {
-  const files: string[] = [];
-  try {
-    const stat = statSync(dir);
-    if (stat.isFile()) return [dir];
-  } catch {
-    return [];
-  }
-  try {
-    const entries = readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      if (SKIP_DIRS.has(entry.name)) continue;
-      const fullPath = join(dir, entry.name);
-      if (entry.isDirectory()) {
-        files.push(...collectFiles(fullPath));
-      } else if (SCAN_EXTENSIONS.has(extname(entry.name))) {
-        files.push(fullPath);
-      }
-    }
-  } catch { /* ignore */ }
-  return files;
 }
 
 // Build a map of deprecated props from metadata
@@ -56,7 +30,14 @@ function getDeprecatedProps(store: ReturnType<typeof loadMetadata>): Map<string,
   return result;
 }
 
-const ANTD_IMPORT_RE = /import\s+\{([^}]+)\}\s+from\s+['"]antd(?:\/[^'"]*)?['"]/g;
+/** Check if a pattern exists within `lookahead` lines starting from index `i`. */
+function hasNearbyMatch(lines: string[], i: number, lookahead: number, pattern: RegExp): boolean {
+  const end = Math.min(i + lookahead, lines.length);
+  for (let j = i; j < end; j++) {
+    if (pattern.test(lines[j])) return true;
+  }
+  return false;
+}
 
 function lintFile(
   filePath: string,
@@ -72,48 +53,46 @@ function lintFile(
   }
 
   const lines = content.split('\n');
-
-  // Find imported components
-  const importedComponents: string[] = [];
-  ANTD_IMPORT_RE.lastIndex = 0;
-  let match: RegExpExecArray | null;
-  while ((match = ANTD_IMPORT_RE.exec(content)) !== null) {
-    const names = match[1].split(',').map((n) => n.trim()).filter(Boolean);
-    importedComponents.push(...names);
-  }
+  const importedComponents = parseAntdImports(content);
 
   if (importedComponents.length === 0) return [];
 
-  // Check deprecated props
+  // Build per-component deprecated prop regexes once
+  const deprecatedChecks: { compName: string; dep: { prop: string; since: string; message: string }; regex: RegExp }[] = [];
   if (!only || only === 'deprecated') {
     for (const compName of importedComponents) {
       const deprecations = deprecatedMap.get(compName);
       if (!deprecations) continue;
-
       for (const dep of deprecations) {
-        // Simple regex search for prop usage: compName ... dep.prop or just dep.prop=
-        const propRegex = new RegExp(`\\b${dep.prop}\\b\\s*[=({]`, 'g');
-        for (let i = 0; i < lines.length; i++) {
-          if (propRegex.test(lines[i])) {
-            issues.push({
-              file: filePath,
-              line: i + 1,
-              rule: 'deprecated',
-              severity: 'warning',
-              message: `${compName} ${dep.message}`,
-            });
-          }
-          propRegex.lastIndex = 0;
-        }
+        deprecatedChecks.push({ compName, dep, regex: new RegExp(`\\b${dep.prop}\\b\\s*[=({]`) });
       }
     }
   }
 
-  // Check best practices
-  if (!only || only === 'best-practice') {
-    for (let i = 0; i < lines.length; i++) {
-      // Check for inline styles on antd components
-      if (/style\s*=\s*\{\{/.test(lines[i]) && importedComponents.some((c) => lines[i].includes(`<${c}`))) {
+  const hasImage = importedComponents.includes('Image');
+  const hasTable = importedComponents.includes('Table');
+  const hasSelect = importedComponents.includes('Select') || importedComponents.includes('TreeSelect');
+
+  // Single pass over all lines
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Deprecated prop checks
+    for (const { compName, dep, regex } of deprecatedChecks) {
+      if (regex.test(line)) {
+        issues.push({
+          file: filePath,
+          line: i + 1,
+          rule: 'deprecated',
+          severity: 'warning',
+          message: `${compName} ${dep.message}`,
+        });
+      }
+    }
+
+    // Best practice checks
+    if (!only || only === 'best-practice') {
+      if (/style\s*=\s*\{\{/.test(line) && importedComponents.some((c) => line.includes(`<${c}`))) {
         issues.push({
           file: filePath,
           line: i + 1,
@@ -123,92 +102,62 @@ function lintFile(
         });
       }
     }
-  }
 
-  // Check accessibility
-  if (!only || only === 'a11y') {
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-
-      // Check for Image without alt
-      if (importedComponents.includes('Image') && /<Image\b/.test(line) && !/alt\s*=/.test(line)) {
-        // Look ahead a few lines for alt prop
-        const nearby = lines.slice(i, Math.min(i + 5, lines.length)).join(' ');
-        if (!/alt\s*=/.test(nearby)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'a11y',
-            severity: 'warning',
-            message: 'Image component is missing `alt` prop for accessibility',
-          });
-        }
+    // Accessibility checks
+    if (!only || only === 'a11y') {
+      if (hasImage && /<Image\b/.test(line) && !hasNearbyMatch(lines, i, 5, /alt\s*=/)) {
+        issues.push({
+          file: filePath,
+          line: i + 1,
+          rule: 'a11y',
+          severity: 'warning',
+          message: 'Image component is missing `alt` prop for accessibility',
+        });
       }
 
-      // Check for Icon used as button without aria-label
-      if (/<\w+Icon\b/.test(line) && /onClick\s*=/.test(line) && !/aria-label\s*=/.test(line)) {
-        const nearby = lines.slice(i, Math.min(i + 3, lines.length)).join(' ');
-        if (!/aria-label\s*=/.test(nearby)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'a11y',
-            severity: 'warning',
-            message: 'Clickable icon should have `aria-label` for screen readers',
-          });
-        }
+      if (/<\w+Icon\b/.test(line) && /onClick\s*=/.test(line) && !hasNearbyMatch(lines, i, 3, /aria-label\s*=/)) {
+        issues.push({
+          file: filePath,
+          line: i + 1,
+          rule: 'a11y',
+          severity: 'warning',
+          message: 'Clickable icon should have `aria-label` for screen readers',
+        });
       }
 
-      // Check for Form.Item without label or aria-label
-      if (/Form\.Item\b/.test(line) && !/label\s*=/.test(line) && !/aria-label\s*=/.test(line) && !/noStyle/.test(line)) {
-        const nearby = lines.slice(i, Math.min(i + 5, lines.length)).join(' ');
-        if (!/label\s*=/.test(nearby) && !/aria-label\s*=/.test(nearby) && !/noStyle/.test(nearby)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'a11y',
-            severity: 'warning',
-            message: 'Form.Item should have a `label` prop for accessibility',
-          });
-        }
+      if (/Form\.Item\b/.test(line) && !hasNearbyMatch(lines, i, 5, /(?:label|aria-label|noStyle)\s*[=]/)) {
+        issues.push({
+          file: filePath,
+          line: i + 1,
+          rule: 'a11y',
+          severity: 'warning',
+          message: 'Form.Item should have a `label` prop for accessibility',
+        });
       }
     }
-  }
 
-  // Check performance
-  if (!only || only === 'performance') {
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-
-      // Check for Table without rowKey
-      if (importedComponents.includes('Table') && /<Table\b/.test(line)) {
-        const nearby = lines.slice(i, Math.min(i + 10, lines.length)).join(' ');
-        if (!/rowKey\s*=/.test(nearby)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'performance',
-            severity: 'warning',
-            message: 'Table should have explicit `rowKey` prop for optimal rendering performance',
-          });
-        }
+    // Performance checks
+    if (!only || only === 'performance') {
+      if (hasTable && /<Table\b/.test(line) && !hasNearbyMatch(lines, i, 10, /rowKey\s*=/)) {
+        issues.push({
+          file: filePath,
+          line: i + 1,
+          rule: 'performance',
+          severity: 'warning',
+          message: 'Table should have explicit `rowKey` prop for optimal rendering performance',
+        });
       }
 
-      // Check for Select/TreeSelect with large option set but no virtual
-      if ((importedComponents.includes('Select') || importedComponents.includes('TreeSelect')) && /<(?:Select|TreeSelect)\b/.test(line)) {
-        const nearby = lines.slice(i, Math.min(i + 10, lines.length)).join(' ');
-        if (/virtual\s*=\s*\{?\s*false/.test(nearby)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'performance',
-            severity: 'warning',
-            message: 'Disabling `virtual` scroll on Select may cause performance issues with large datasets',
-          });
-        }
+      if (hasSelect && /<(?:Select|TreeSelect)\b/.test(line) && hasNearbyMatch(lines, i, 10, /virtual\s*=\s*\{?\s*false/)) {
+        issues.push({
+          file: filePath,
+          line: i + 1,
+          rule: 'performance',
+          severity: 'warning',
+          message: 'Disabling `virtual` scroll on Select may cause performance issues with large datasets',
+        });
       }
 
-      // Check for wildcard antd import
       if (/import\s+antd\b/.test(line) || /import\s+\*\s+as\s+\w+\s+from\s+['"]antd['"]/.test(line)) {
         issues.push({
           file: filePath,

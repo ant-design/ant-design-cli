@@ -1,8 +1,9 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { output } from '../output/formatter.js';
+import { readJson } from '../utils/scan.js';
 
 interface CheckResult {
   name: string;
@@ -12,17 +13,25 @@ interface CheckResult {
   suggestion?: string;
 }
 
-function readJson(path: string): any | null {
-  try {
-    return JSON.parse(readFileSync(path, 'utf-8'));
-  } catch {
-    return null;
-  }
+/** Pre-read context shared across all checks to avoid repeated file I/O. */
+interface DoctorContext {
+  cwd: string;
+  antdPkg: any | null;
+  antdMajor: number;
+  projectPkg: any | null;
+  reactPkg: any | null;
 }
 
-function checkAntdInstalled(cwd: string): CheckResult {
-  const pkgPath = join(cwd, 'node_modules', 'antd', 'package.json');
-  if (!existsSync(pkgPath)) {
+function buildContext(cwd: string): DoctorContext {
+  const antdPkg = readJson(join(cwd, 'node_modules', 'antd', 'package.json'));
+  const antdMajor = antdPkg ? parseInt(antdPkg.version.split('.')[0], 10) : 0;
+  const projectPkg = readJson(join(cwd, 'package.json'));
+  const reactPkg = readJson(join(cwd, 'node_modules', 'react', 'package.json'));
+  return { cwd, antdPkg, antdMajor, projectPkg, reactPkg };
+}
+
+function checkAntdInstalled(ctx: DoctorContext): CheckResult {
+  if (!ctx.antdPkg) {
     return {
       name: 'antd-installed',
       status: 'fail',
@@ -31,19 +40,15 @@ function checkAntdInstalled(cwd: string): CheckResult {
       suggestion: 'Run `npm install antd` or `yarn add antd`',
     };
   }
-  const pkg = readJson(pkgPath);
   return {
     name: 'antd-installed',
     status: 'pass',
-    message: `antd ${pkg?.version || 'unknown'} is installed`,
+    message: `antd ${ctx.antdPkg.version || 'unknown'} is installed`,
   };
 }
 
-function checkReactCompat(cwd: string): CheckResult {
-  const antdPkg = readJson(join(cwd, 'node_modules', 'antd', 'package.json'));
-  const reactPkg = readJson(join(cwd, 'node_modules', 'react', 'package.json'));
-
-  if (!antdPkg || !reactPkg) {
+function checkReactCompat(ctx: DoctorContext): CheckResult {
+  if (!ctx.antdPkg || !ctx.reactPkg) {
     return {
       name: 'react-compat',
       status: 'warn',
@@ -52,15 +57,14 @@ function checkReactCompat(cwd: string): CheckResult {
     };
   }
 
-  const antdMajor = parseInt(antdPkg.version.split('.')[0], 10);
-  const reactMajor = parseInt(reactPkg.version.split('.')[0], 10);
+  const reactMajor = parseInt(ctx.reactPkg.version.split('.')[0], 10);
 
-  if (antdMajor >= 5 && reactMajor < 18) {
+  if (ctx.antdMajor >= 5 && reactMajor < 18) {
     return {
       name: 'react-compat',
       status: 'fail',
       severity: 'error',
-      message: `React ${reactPkg.version} may not be compatible with antd ${antdPkg.version}`,
+      message: `React ${ctx.reactPkg.version} may not be compatible with antd ${ctx.antdPkg.version}`,
       suggestion: 'antd 5.x requires React 18+. Consider upgrading React.',
     };
   }
@@ -68,32 +72,27 @@ function checkReactCompat(cwd: string): CheckResult {
   return {
     name: 'react-compat',
     status: 'pass',
-    message: `React ${reactPkg.version} is compatible with antd ${antdPkg.version}`,
+    message: `React ${ctx.reactPkg.version} is compatible with antd ${ctx.antdPkg.version}`,
   };
 }
 
-function checkDuplicateInstall(cwd: string): CheckResult {
+function checkDuplicateInstall(ctx: DoctorContext): CheckResult {
   const versions: string[] = [];
 
-  // Check main node_modules
-  const mainPkg = readJson(join(cwd, 'node_modules', 'antd', 'package.json'));
-  if (mainPkg?.version) versions.push(mainPkg.version);
+  if (ctx.antdPkg?.version) versions.push(ctx.antdPkg.version);
 
-  // Check for nested antd in common dependency locations
-  const nmDir = join(cwd, 'node_modules');
-  if (existsSync(nmDir)) {
-    try {
-      const entries = readdirSync(nmDir);
-      for (const entry of entries) {
-        if (entry.startsWith('.') || entry === 'antd') continue;
-        const nestedPkg = readJson(join(nmDir, entry, 'node_modules', 'antd', 'package.json'));
-        if (nestedPkg?.version && !versions.includes(nestedPkg.version)) {
-          versions.push(nestedPkg.version);
-        }
+  const nmDir = join(ctx.cwd, 'node_modules');
+  try {
+    const entries = readdirSync(nmDir);
+    for (const entry of entries) {
+      if (entry.startsWith('.') || entry === 'antd') continue;
+      const nestedPkg = readJson(join(nmDir, entry, 'node_modules', 'antd', 'package.json'));
+      if (nestedPkg?.version && !versions.includes(nestedPkg.version)) {
+        versions.push(nestedPkg.version);
       }
-    } catch {
-      // ignore read errors
     }
+  } catch {
+    // ignore read errors
   }
 
   if (versions.length > 1) {
@@ -113,29 +112,12 @@ function checkDuplicateInstall(cwd: string): CheckResult {
   };
 }
 
-function checkThemeConfig(cwd: string): CheckResult {
-  // Check for common theme config files
-  const configFiles = [
-    'theme.config.ts',
-    'theme.config.js',
-    '.antd.theme.json',
-  ];
-  const pkgPath = join(cwd, 'package.json');
-  const pkg = readJson(pkgPath);
-
-  // Check if antd theme is configured in package.json
-  const hasThemeInPkg = pkg?.antd?.theme || pkg?.theme;
-
-  // Check for ConfigProvider usage that might indicate theme config
-  const antdPkg = readJson(join(cwd, 'node_modules', 'antd', 'package.json'));
-  const antdMajor = antdPkg ? parseInt(antdPkg.version.split('.')[0], 10) : 0;
-
-  // v5+ uses CSS-in-JS tokens, v4 uses Less variables
-  if (antdMajor >= 5) {
+function checkThemeConfig(ctx: DoctorContext): CheckResult {
+  if (ctx.antdMajor >= 5) {
     // Check for old Less variable customization (should not exist in v5+)
-    const lessOverrides = join(cwd, 'theme', 'antd.less');
-    const modifyVars = pkg?.theme;
-    if (existsSync(lessOverrides) || modifyVars) {
+    const lessOverrides = readJson(join(ctx.cwd, 'theme', 'antd.less'));
+    const modifyVars = ctx.projectPkg?.theme;
+    if (lessOverrides !== null || modifyVars) {
       return {
         name: 'theme-config',
         status: 'warn',
@@ -153,39 +135,30 @@ function checkThemeConfig(cwd: string): CheckResult {
   };
 }
 
-function checkBabelPlugins(cwd: string): CheckResult {
-  const pkg = readJson(join(cwd, 'package.json'));
-  const antdPkg = readJson(join(cwd, 'node_modules', 'antd', 'package.json'));
-  const antdMajor = antdPkg ? parseInt(antdPkg.version.split('.')[0], 10) : 0;
-
-  // Check for babel-plugin-import (not needed in v5+)
-  const babelRcPath = join(cwd, '.babelrc');
-  const babelConfigPath = join(cwd, 'babel.config.js');
-  const babelConfigJsonPath = join(cwd, 'babel.config.json');
+function checkBabelPlugins(ctx: DoctorContext): CheckResult {
+  const babelConfigs = ['.babelrc', 'babel.config.js', 'babel.config.json'];
 
   let hasBabelPluginImport = false;
 
-  for (const configPath of [babelRcPath, babelConfigPath, babelConfigJsonPath]) {
-    if (existsSync(configPath)) {
-      try {
-        const content = readFileSync(configPath, 'utf-8');
-        if (content.includes('babel-plugin-import') || content.includes('import, { libraryName')) {
-          hasBabelPluginImport = true;
-          break;
-        }
-      } catch { /* ignore */ }
-    }
+  for (const configName of babelConfigs) {
+    try {
+      const content = readFileSync(join(ctx.cwd, configName), 'utf-8');
+      if (content.includes('babel-plugin-import') || content.includes('import, { libraryName')) {
+        hasBabelPluginImport = true;
+        break;
+      }
+    } catch { /* file doesn't exist or can't be read */ }
   }
 
   // Also check package.json babel config
-  if (pkg?.babel) {
-    const babelStr = JSON.stringify(pkg.babel);
+  if (!hasBabelPluginImport && ctx.projectPkg?.babel) {
+    const babelStr = JSON.stringify(ctx.projectPkg.babel);
     if (babelStr.includes('babel-plugin-import')) {
       hasBabelPluginImport = true;
     }
   }
 
-  if (hasBabelPluginImport && antdMajor >= 5) {
+  if (hasBabelPluginImport && ctx.antdMajor >= 5) {
     return {
       name: 'babel-plugin',
       status: 'warn',
@@ -202,8 +175,8 @@ function checkBabelPlugins(cwd: string): CheckResult {
   };
 }
 
-function checkCssInJs(cwd: string): CheckResult {
-  const cssinjs = existsSync(join(cwd, 'node_modules', '@ant-design', 'cssinjs', 'package.json'));
+function checkCssInJs(ctx: DoctorContext): CheckResult {
+  const cssinjs = readJson(join(ctx.cwd, 'node_modules', '@ant-design', 'cssinjs', 'package.json'));
   if (!cssinjs) {
     return {
       name: 'cssinjs',
@@ -226,15 +199,15 @@ export function registerDoctorCommand(program: Command): void {
     .description('Diagnose project-level antd configuration issues')
     .action(() => {
       const opts = program.opts<GlobalOptions>();
-      const cwd = process.cwd();
+      const ctx = buildContext(process.cwd());
 
       const checks: CheckResult[] = [
-        checkAntdInstalled(cwd),
-        checkReactCompat(cwd),
-        checkDuplicateInstall(cwd),
-        checkThemeConfig(cwd),
-        checkBabelPlugins(cwd),
-        checkCssInJs(cwd),
+        checkAntdInstalled(ctx),
+        checkReactCompat(ctx),
+        checkDuplicateInstall(ctx),
+        checkThemeConfig(ctx),
+        checkBabelPlugins(ctx),
+        checkCssInJs(ctx),
       ];
 
       const summary = {
