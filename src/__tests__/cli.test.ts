@@ -238,9 +238,42 @@ describe('CLI e2e', () => {
     expect(data.summary).toBeDefined();
   });
 
-  it('should show migrate dry-run with --apply', () => {
+  it('should show migrate --apply as agent prompt', () => {
     const out = run('migrate', '4', '5', '--apply', '/tmp');
-    expect(out).toContain('Dry-run');
+    expect(out).toContain('Auto-Migration Prompt');
+    expect(out).toContain('/tmp');
+    expect(out).toContain('Auto-fixable Changes');
+    expect(out).toContain('Manual Changes');
+  });
+
+  it('should show migrate --apply as JSON', () => {
+    const out = run('migrate', '4', '5', '--apply', './src', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.from).toBe('4');
+    expect(data.to).toBe('5');
+    expect(data.targetDir).toBe('./src');
+    expect(data.autoFixSteps.length).toBeGreaterThan(0);
+    expect(data.manualSteps.length).toBeGreaterThan(0);
+  });
+
+  it('should show migrate --component filter', () => {
+    const out = run('migrate', '4', '5', '--component', 'Select');
+    expect(out).toContain('Select');
+    expect(out).toContain('popupClassName');
+    expect(out).not.toContain('BackTop');
+  });
+
+  it('should show migrate as markdown', () => {
+    const out = run('migrate', '4', '5', '--format', 'markdown');
+    expect(out).toContain('# Migration Guide');
+    expect(out).toContain('## ');
+    expect(out).toContain('```tsx');
+  });
+
+  it('should show migrate v5 to v6', () => {
+    const out = run('migrate', '5', '6');
+    expect(out).toContain('Button');
+    expect(out).toContain('variant');
   });
 
   it('should handle invalid migration path', () => {
