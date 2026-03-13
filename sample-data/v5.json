@@ -1,0 +1,413 @@
+{
+  "version": "5.24.0",
+  "majorVersion": "v5",
+  "components": [
+    {
+      "name": "Button",
+      "category": "General",
+      "categoryZh": "通用",
+      "description": "To trigger an operation.",
+      "descriptionZh": "按钮用于开始一个即时操作。",
+      "whenToUse": "A button means an operation (or a series of operations). Clicking a button will trigger corresponding business logic.",
+      "whenToUseZh": "标记了一个（或封装一组）操作命令，响应用户点击行为，触发相应的业务逻辑。",
+      "props": [
+        { "name": "block", "type": "boolean", "default": "false", "description": "Option to fit button width to its parent width", "since": "1.0.0" },
+        { "name": "classNames", "type": "Record<SemanticDOM, string>", "default": "-", "description": "Semantic DOM class", "since": "5.4.0" },
+        { "name": "color", "type": "default | primary | danger", "default": "default", "description": "Set button color", "since": "5.21.0" },
+        { "name": "danger", "type": "boolean", "default": "false", "description": "Set the danger status of button", "since": "4.0.0", "deprecated": "5.21.0" },
+        { "name": "disabled", "type": "boolean", "default": "false", "description": "Disabled state of button", "since": "1.0.0" },
+        { "name": "href", "type": "string", "default": "-", "description": "Redirect url of link button", "since": "1.0.0" },
+        { "name": "htmlType", "type": "submit | reset | button", "default": "button", "description": "Set the original html type of button", "since": "1.0.0" },
+        { "name": "icon", "type": "ReactNode", "default": "-", "description": "Set the icon component of button", "since": "1.0.0" },
+        { "name": "iconPosition", "type": "start | end", "default": "start", "description": "Set the icon position of button", "since": "5.17.0" },
+        { "name": "loading", "type": "boolean | { delay: number }", "default": "false", "description": "Set the loading status of button", "since": "1.0.0" },
+        { "name": "shape", "type": "default | circle | round", "default": "default", "description": "Can be set button shape", "since": "1.0.0" },
+        { "name": "size", "type": "large | middle | small", "default": "middle", "description": "Set the size of button", "since": "1.0.0" },
+        { "name": "styles", "type": "Record<SemanticDOM, CSSProperties>", "default": "-", "description": "Semantic DOM style", "since": "5.4.0" },
+        { "name": "target", "type": "string", "default": "-", "description": "Same as target attribute of a, works when href is specified", "since": "1.0.0" },
+        { "name": "type", "type": "primary | default | dashed | text | link", "default": "default", "description": "Set button type", "since": "1.0.0" },
+        { "name": "variant", "type": "outlined | dashed | solid | filled | text | link", "default": "-", "description": "Set button variant", "since": "5.21.0" },
+        { "name": "onClick", "type": "(event: React.MouseEvent) => void", "default": "-", "description": "Set the handler to handle click event", "since": "1.0.0" }
+      ],
+      "demos": [
+        {
+          "name": "basic",
+          "title": "Basic Usage",
+          "description": "There are primary button, default button, dashed button, text button and link button in antd.",
+          "code": "import React from 'react';\nimport { Button, Flex } from 'antd';\n\nconst App: React.FC = () => (\n  <Flex gap=\"small\" wrap>\n    <Button type=\"primary\">Primary Button</Button>\n    <Button>Default Button</Button>\n    <Button type=\"dashed\">Dashed Button</Button>\n    <Button type=\"text\">Text Button</Button>\n    <Button type=\"link\">Link Button</Button>\n  </Flex>\n);\n\nexport default App;"
+        },
+        {
+          "name": "size",
+          "title": "Size",
+          "description": "Ant Design supports a default button size as well as a large and small size. If a large or small button is desired, set the size property to either large or small respectively.",
+          "code": "import React, { useState } from 'react';\nimport { Button, Flex, Radio } from 'antd';\nimport type { SizeType } from 'antd/es/config-provider/SizeContext';\n\nconst App: React.FC = () => {\n  const [size, setSize] = useState<SizeType>('large');\n  return (\n    <Flex gap=\"small\" vertical>\n      <Radio.Group value={size} onChange={(e) => setSize(e.target.value)}>\n        <Radio.Button value=\"large\">Large</Radio.Button>\n        <Radio.Button value=\"middle\">Default</Radio.Button>\n        <Radio.Button value=\"small\">Small</Radio.Button>\n      </Radio.Group>\n      <Flex gap=\"small\" wrap>\n        <Button type=\"primary\" size={size}>Primary</Button>\n        <Button size={size}>Default</Button>\n        <Button type=\"dashed\" size={size}>Dashed</Button>\n      </Flex>\n    </Flex>\n  );\n};\n\nexport default App;"
+        },
+        {
+          "name": "loading",
+          "title": "Loading",
+          "description": "A loading indicator can be added to a button by setting the loading property on the Button.",
+          "code": "import React, { useState } from 'react';\nimport { Button, Flex } from 'antd';\n\nconst App: React.FC = () => {\n  const [loading, setLoading] = useState(false);\n  return (\n    <Flex gap=\"small\" vertical>\n      <Flex gap=\"small\" wrap>\n        <Button type=\"primary\" loading>Loading</Button>\n        <Button type=\"primary\" size=\"small\" loading>Loading</Button>\n      </Flex>\n      <Flex gap=\"small\" wrap>\n        <Button type=\"primary\" loading={loading} onClick={() => setLoading(true)}>\n          Click me!\n        </Button>\n      </Flex>\n    </Flex>\n  );\n};\n\nexport default App;"
+        }
+      ],
+      "tokens": [
+        { "name": "borderColorDisabled", "type": "string", "default": "#d9d9d9", "description": "Border color of disabled button" },
+        { "name": "colorPrimaryHover", "type": "string", "default": "#4096ff", "description": "Primary button hover color" },
+        { "name": "contentFontSize", "type": "number", "default": "14", "description": "Font size of button content" },
+        { "name": "contentFontSizeLG", "type": "number", "default": "16", "description": "Font size of large button content" },
+        { "name": "contentFontSizeSM", "type": "number", "default": "14", "description": "Font size of small button content" },
+        { "name": "defaultBg", "type": "string", "default": "#ffffff", "description": "Default button background color" },
+        { "name": "defaultBorderColor", "type": "string", "default": "#d9d9d9", "description": "Default button border color" },
+        { "name": "defaultColor", "type": "string", "default": "rgba(0,0,0,0.88)", "description": "Default button text color" },
+        { "name": "paddingBlock", "type": "number", "default": "4", "description": "Vertical padding of button" },
+        { "name": "paddingInline", "type": "number", "default": "15", "description": "Horizontal padding of button" }
+      ],
+      "semanticStructure": [
+        { "key": "icon", "description": "Icon element" }
+      ],
+      "related": ["Button.Group", "Dropdown.Button"],
+      "faq": [
+        { "question": "How to remove space between 2 chinese characters?", "answer": "Set ConfigProvider autoInsertSpaceInButton to false." }
+      ],
+      "subComponents": ["Button.Group"]
+    },
+    {
+      "name": "Table",
+      "category": "Data Display",
+      "categoryZh": "数据展示",
+      "description": "A table displays rows of data.",
+      "descriptionZh": "展示行列数据。",
+      "whenToUse": "To display a collection of structured data, or to sort, search, paginate, and filter data.",
+      "whenToUseZh": "当有大量结构化的数据需要展现时；当需要对数据进行排序、搜索、分页、自定义操作等复杂行为时。",
+      "props": [
+        { "name": "bordered", "type": "boolean", "default": "false", "description": "Whether to show all table borders" },
+        { "name": "columns", "type": "ColumnsType<T>", "default": "-", "description": "Columns of table" },
+        { "name": "dataSource", "type": "T[]", "default": "-", "description": "Data record array to be displayed" },
+        { "name": "expandable", "type": "ExpandableConfig<T>", "default": "-", "description": "Config expandable content" },
+        { "name": "loading", "type": "boolean | SpinProps", "default": "false", "description": "Loading status of table" },
+        { "name": "locale", "type": "object", "default": "Default Value", "description": "The i18n text including filter, sort, empty text, etc" },
+        { "name": "pagination", "type": "false | TablePaginationConfig", "default": "-", "description": "Config of pagination" },
+        { "name": "rowKey", "type": "string | (record, index) => string", "default": "key", "description": "Row's unique key" },
+        { "name": "rowSelection", "type": "object", "default": "-", "description": "Row selection config" },
+        { "name": "scroll", "type": "{ x: number | true, y: number }", "default": "-", "description": "Whether the table can be scrollable" },
+        { "name": "showHeader", "type": "boolean", "default": "true", "description": "Whether to show table header" },
+        { "name": "size", "type": "large | middle | small", "default": "large", "description": "Size of table" },
+        { "name": "sticky", "type": "boolean | { offsetHeader: number }", "default": "-", "description": "Set sticky header and scroll bar", "since": "4.6.0" },
+        { "name": "virtual", "type": "boolean", "default": "false", "description": "Support virtual list", "since": "5.9.0" },
+        { "name": "onChange", "type": "(pagination, filters, sorter, extra) => void", "default": "-", "description": "Callback executed when pagination, filters or sorter is changed" }
+      ],
+      "demos": [
+        {
+          "name": "basic",
+          "title": "Basic Usage",
+          "description": "Simple table with columns and data source.",
+          "code": "import React from 'react';\nimport { Table } from 'antd';\nimport type { TableProps } from 'antd';\n\ninterface DataType {\n  key: string;\n  name: string;\n  age: number;\n  address: string;\n}\n\nconst columns: TableProps<DataType>['columns'] = [\n  { title: 'Name', dataIndex: 'name', key: 'name' },\n  { title: 'Age', dataIndex: 'age', key: 'age' },\n  { title: 'Address', dataIndex: 'address', key: 'address' },\n];\n\nconst data: DataType[] = [\n  { key: '1', name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park' },\n  { key: '2', name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park' },\n  { key: '3', name: 'Joe Black', age: 32, address: 'Sydney No. 1 Lake Park' },\n];\n\nconst App: React.FC = () => <Table columns={columns} dataSource={data} />;\n\nexport default App;"
+        }
+      ],
+      "tokens": [
+        { "name": "cellPaddingBlock", "type": "number", "default": "16", "description": "Vertical padding of table cell" },
+        { "name": "cellPaddingInline", "type": "number", "default": "16", "description": "Horizontal padding of table cell" },
+        { "name": "headerBg", "type": "string", "default": "#fafafa", "description": "Background color of table header" },
+        { "name": "headerColor", "type": "string", "default": "rgba(0,0,0,0.88)", "description": "Text color of table header" },
+        { "name": "rowHoverBg", "type": "string", "default": "#fafafa", "description": "Background color of hovered row" }
+      ],
+      "semanticStructure": [
+        { "key": "header", "description": "Table header area" },
+        { "key": "body", "description": "Table body area" },
+        { "key": "footer", "description": "Table footer area" },
+        { "key": "cell", "description": "Table cell" },
+        { "key": "row", "description": "Table row" },
+        { "key": "wrapper", "description": "Outer wrapper" }
+      ],
+      "related": ["Table.Column", "Table.ColumnGroup", "Table.Summary"],
+      "faq": [
+        { "question": "How to use virtual scroll?", "answer": "Set virtual prop to true. Available since antd 5.9.0." },
+        { "question": "How to fix column?", "answer": "Use the fixed property in column config. Set scroll.x to enable horizontal scroll." }
+      ],
+      "subComponents": ["Table.Column", "Table.ColumnGroup", "Table.Summary"]
+    },
+    {
+      "name": "Select",
+      "category": "Data Entry",
+      "categoryZh": "数据录入",
+      "description": "Select component to select value from options.",
+      "descriptionZh": "下拉选择器。",
+      "whenToUse": "A dropdown menu for displaying choices. Use when there are more than 5 options.",
+      "whenToUseZh": "弹出一个下拉菜单给用户选择操作，用于代替原生的选择器，或者需要一个更优雅的多选器时。",
+      "props": [
+        { "name": "allowClear", "type": "boolean | { clearIcon: ReactNode }", "default": "false", "description": "Show clear button" },
+        { "name": "defaultValue", "type": "string | string[] | number | number[]", "default": "-", "description": "Initial selected option" },
+        { "name": "disabled", "type": "boolean", "default": "false", "description": "Whether disabled select" },
+        { "name": "filterOption", "type": "boolean | (input, option) => boolean", "default": "true", "description": "If true, filter options by input" },
+        { "name": "mode", "type": "multiple | tags", "default": "-", "description": "Set mode of Select" },
+        { "name": "notFoundContent", "type": "ReactNode", "default": "Not Found", "description": "Specify content to show when no result matches" },
+        { "name": "options", "type": "{ label, value }[]", "default": "-", "description": "Select options" },
+        { "name": "placeholder", "type": "string | ReactNode", "default": "-", "description": "Placeholder of select" },
+        { "name": "popupClassName", "type": "string", "default": "-", "description": "The className of dropdown menu", "since": "5.0.0" },
+        { "name": "popupMatchSelectWidth", "type": "boolean | number", "default": "true", "description": "Determine whether the popup menu and the select input are the same width", "since": "5.5.0" },
+        { "name": "showSearch", "type": "boolean", "default": "false (single), true (multiple)", "description": "Whether show search input in single mode" },
+        { "name": "size", "type": "large | middle | small", "default": "middle", "description": "Size of Select input" },
+        { "name": "value", "type": "string | string[] | number | number[]", "default": "-", "description": "Current selected option" },
+        { "name": "virtual", "type": "boolean", "default": "true", "description": "Disable virtual scroll when set to false" },
+        { "name": "onChange", "type": "(value, option) => void", "default": "-", "description": "Called when select an option or input value change" },
+        { "name": "onSearch", "type": "(value: string) => void", "default": "-", "description": "Callback function that is fired when input changed" }
+      ],
+      "demos": [
+        {
+          "name": "basic",
+          "title": "Basic Usage",
+          "description": "Basic Usage.",
+          "code": "import React from 'react';\nimport { Select } from 'antd';\n\nconst App: React.FC = () => (\n  <Select\n    defaultValue=\"lucy\"\n    style={{ width: 120 }}\n    options={[\n      { value: 'jack', label: 'Jack' },\n      { value: 'lucy', label: 'Lucy' },\n      { value: 'disabled', label: 'Disabled', disabled: true },\n      { value: 'yiminghe', label: 'Yiminghe' },\n    ]}\n  />\n);\n\nexport default App;"
+        },
+        {
+          "name": "search",
+          "title": "Select with search",
+          "description": "Search the options while expanded.",
+          "code": "import React from 'react';\nimport { Select } from 'antd';\n\nconst onChange = (value: string) => console.log(`selected ${value}`);\nconst onSearch = (value: string) => console.log('search:', value);\n\nconst App: React.FC = () => (\n  <Select\n    showSearch\n    placeholder=\"Select a person\"\n    optionFilterProp=\"label\"\n    onChange={onChange}\n    onSearch={onSearch}\n    options={[\n      { value: 'jack', label: 'Jack' },\n      { value: 'lucy', label: 'Lucy' },\n      { value: 'tom', label: 'Tom' },\n    ]}\n  />\n);\n\nexport default App;"
+        }
+      ],
+      "tokens": [
+        { "name": "optionActiveBg", "type": "string", "default": "#e6f4ff", "description": "Background color of active option" },
+        { "name": "optionSelectedBg", "type": "string", "default": "#e6f4ff", "description": "Background color of selected option" },
+        { "name": "optionSelectedColor", "type": "string", "default": "rgba(0,0,0,0.88)", "description": "Text color of selected option" }
+      ],
+      "related": ["TreeSelect", "AutoComplete"],
+      "faq": [
+        { "question": "Why is the dropdown not showing search results?", "answer": "Check if filterOption is set correctly. By default it filters by option label." }
+      ]
+    },
+    {
+      "name": "Input",
+      "category": "Data Entry",
+      "categoryZh": "数据录入",
+      "description": "A basic widget for getting the user input as a text field.",
+      "descriptionZh": "通过鼠标或键盘输入内容，是最基础的表单域的包装。",
+      "whenToUse": "A user input in a form field is needed.",
+      "whenToUseZh": "需要用户输入表单域内容时。",
+      "props": [
+        { "name": "addonAfter", "type": "ReactNode", "default": "-", "description": "The label text displayed after input field" },
+        { "name": "addonBefore", "type": "ReactNode", "default": "-", "description": "The label text displayed before input field" },
+        { "name": "allowClear", "type": "boolean | { clearIcon: ReactNode }", "default": "false", "description": "If allow to remove input content with clear icon" },
+        { "name": "count", "type": "CountConfig", "default": "-", "description": "Character count config", "since": "5.10.0" },
+        { "name": "defaultValue", "type": "string", "default": "-", "description": "The initial input content" },
+        { "name": "disabled", "type": "boolean", "default": "false", "description": "Whether the input is disabled" },
+        { "name": "maxLength", "type": "number", "default": "-", "description": "The max length" },
+        { "name": "placeholder", "type": "string", "default": "-", "description": "The placeholder text" },
+        { "name": "prefix", "type": "ReactNode", "default": "-", "description": "The prefix icon for the Input" },
+        { "name": "size", "type": "large | middle | small", "default": "middle", "description": "The size of the input box" },
+        { "name": "status", "type": "error | warning", "default": "-", "description": "Set validation status", "since": "5.0.0" },
+        { "name": "suffix", "type": "ReactNode", "default": "-", "description": "The suffix icon for the Input" },
+        { "name": "type", "type": "string", "default": "text", "description": "The type of input, same as html input type" },
+        { "name": "value", "type": "string", "default": "-", "description": "The input content value" },
+        { "name": "variant", "type": "outlined | borderless | filled | underlined", "default": "outlined", "description": "Variants of Input", "since": "5.13.0" },
+        { "name": "onChange", "type": "(e: React.ChangeEvent) => void", "default": "-", "description": "Callback when user input" }
+      ],
+      "demos": [
+        {
+          "name": "basic",
+          "title": "Basic Usage",
+          "description": "Basic usage example.",
+          "code": "import React from 'react';\nimport { Input } from 'antd';\n\nconst App: React.FC = () => <Input placeholder=\"Basic usage\" />;\n\nexport default App;"
+        }
+      ],
+      "related": ["Input.TextArea", "Input.Search", "Input.Password"],
+      "subComponents": ["Input.TextArea", "Input.Search", "Input.Password", "Input.OTP"]
+    },
+    {
+      "name": "Form",
+      "category": "Data Entry",
+      "categoryZh": "数据录入",
+      "description": "High performance Form component with data scope management.",
+      "descriptionZh": "高性能表单控件，自带数据域管理。",
+      "whenToUse": "When you need to create an instance or collect information. When you need to validate fields in certain rules.",
+      "whenToUseZh": "用于创建实体或收集信息。需要对输入的数据类型进行校验时。",
+      "props": [
+        { "name": "colon", "type": "boolean", "default": "true", "description": "Configure the default value of colon for Form.Item" },
+        { "name": "disabled", "type": "boolean", "default": "false", "description": "Set form component disable", "since": "4.21.0" },
+        { "name": "form", "type": "FormInstance", "default": "-", "description": "Form control instance created by Form.useForm()" },
+        { "name": "initialValues", "type": "object", "default": "-", "description": "Set value by Form initialization or reset" },
+        { "name": "layout", "type": "horizontal | vertical | inline", "default": "horizontal", "description": "Form layout" },
+        { "name": "name", "type": "string", "default": "-", "description": "Form name" },
+        { "name": "requiredMark", "type": "boolean | optional | ((label, info) => ReactNode)", "default": "true", "description": "Required mark style" },
+        { "name": "size", "type": "small | middle | large", "default": "-", "description": "Set field component size" },
+        { "name": "variant", "type": "outlined | borderless | filled | underlined", "default": "outlined", "description": "Variant of components inside form", "since": "5.13.0" },
+        { "name": "onFinish", "type": "(values) => void", "default": "-", "description": "Trigger after submitting the form and verifying data successfully" },
+        { "name": "onFinishFailed", "type": "({ values, errorFields, outOfDate }) => void", "default": "-", "description": "Trigger after submitting the form and verifying data failed" }
+      ],
+      "demos": [
+        {
+          "name": "basic",
+          "title": "Basic Usage",
+          "description": "Basic Form data control. Including collection, verification, and submission.",
+          "code": "import React from 'react';\nimport { Button, Form, Input } from 'antd';\n\nconst App: React.FC = () => (\n  <Form name=\"basic\" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFinish={console.log}>\n    <Form.Item label=\"Username\" name=\"username\" rules={[{ required: true, message: 'Please input your username!' }]}>\n      <Input />\n    </Form.Item>\n    <Form.Item label=\"Password\" name=\"password\" rules={[{ required: true, message: 'Please input your password!' }]}>\n      <Input.Password />\n    </Form.Item>\n    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>\n      <Button type=\"primary\" htmlType=\"submit\">Submit</Button>\n    </Form.Item>\n  </Form>\n);\n\nexport default App;"
+        }
+      ],
+      "related": ["Form.Item", "Form.List", "Form.Provider"],
+      "subComponents": ["Form.Item", "Form.List", "Form.Provider", "Form.ErrorList"]
+    },
+    {
+      "name": "Modal",
+      "category": "Feedback",
+      "categoryZh": "反馈",
+      "description": "Modal dialogs.",
+      "descriptionZh": "模态对话框。",
+      "whenToUse": "When requiring users to interact with the application without jumping to a new page to interrupt their workflow.",
+      "whenToUseZh": "需要用户处理事务，又不希望跳转页面以致打断工作流程时。",
+      "props": [
+        { "name": "cancelText", "type": "ReactNode", "default": "Cancel", "description": "Text of the Cancel button" },
+        { "name": "centered", "type": "boolean", "default": "false", "description": "Centered Modal" },
+        { "name": "closable", "type": "boolean | { closeIcon: ReactNode }", "default": "true", "description": "Whether a close button is visible on top right" },
+        { "name": "confirmLoading", "type": "boolean", "default": "false", "description": "Whether to apply loading visual effect for OK button" },
+        { "name": "footer", "type": "ReactNode | ((originNode, extra) => ReactNode)", "default": "(OK and Cancel buttons)", "description": "Footer content" },
+        { "name": "mask", "type": "boolean", "default": "true", "description": "Whether show mask or not" },
+        { "name": "maskClosable", "type": "boolean", "default": "true", "description": "Whether to close the modal dialog when the mask is clicked" },
+        { "name": "okText", "type": "ReactNode", "default": "OK", "description": "Text of the OK button" },
+        { "name": "okType", "type": "string", "default": "primary", "description": "Button type of the OK button" },
+        { "name": "open", "type": "boolean", "default": "false", "description": "Whether the modal dialog is visible or not" },
+        { "name": "title", "type": "ReactNode", "default": "-", "description": "The modal dialog's title" },
+        { "name": "width", "type": "string | number", "default": "520", "description": "Width of the modal dialog" },
+        { "name": "onCancel", "type": "(e) => void", "default": "-", "description": "Specify a function that will be called when the user clicks cancel button" },
+        { "name": "onOk", "type": "(e) => void", "default": "-", "description": "Specify a function that will be called when the user clicks OK button" }
+      ],
+      "demos": [
+        {
+          "name": "basic",
+          "title": "Basic",
+          "description": "Basic modal dialog.",
+          "code": "import React, { useState } from 'react';\nimport { Button, Modal } from 'antd';\n\nconst App: React.FC = () => {\n  const [open, setOpen] = useState(false);\n  return (\n    <>\n      <Button type=\"primary\" onClick={() => setOpen(true)}>Open Modal</Button>\n      <Modal title=\"Basic Modal\" open={open} onOk={() => setOpen(false)} onCancel={() => setOpen(false)}>\n        <p>Some contents...</p>\n      </Modal>\n    </>\n  );\n};\n\nexport default App;"
+        }
+      ],
+      "related": ["Modal.confirm", "Modal.info", "Modal.success", "Modal.error", "Modal.warning"],
+      "subComponents": []
+    },
+    {
+      "name": "Space",
+      "category": "Layout",
+      "categoryZh": "布局",
+      "description": "Set components spacing.",
+      "descriptionZh": "设置组件之间的间距。",
+      "props": [
+        { "name": "align", "type": "start | end | center | baseline", "default": "-", "description": "Align items" },
+        { "name": "direction", "type": "vertical | horizontal", "default": "horizontal", "description": "The space direction" },
+        { "name": "size", "type": "small | middle | large | number", "default": "small", "description": "The space size" },
+        { "name": "wrap", "type": "boolean", "default": "false", "description": "Auto wrap line" }
+      ],
+      "demos": [],
+      "related": ["Flex"],
+      "subComponents": ["Space.Compact"]
+    },
+    {
+      "name": "Flex",
+      "category": "Layout",
+      "categoryZh": "布局",
+      "description": "Flex layout container.",
+      "descriptionZh": "弹性布局容器。",
+      "props": [
+        { "name": "align", "type": "CSSProperties['alignItems']", "default": "-", "description": "Align items" },
+        { "name": "gap", "type": "small | middle | large | string | number", "default": "-", "description": "Sets the gap between items", "since": "5.8.0" },
+        { "name": "justify", "type": "CSSProperties['justifyContent']", "default": "-", "description": "Justify content" },
+        { "name": "vertical", "type": "boolean", "default": "false", "description": "Is direction of the flex vertical" },
+        { "name": "wrap", "type": "boolean | CSSProperties['flexWrap']", "default": "nowrap", "description": "Set whether the element is displayed in a single line or in multiple lines" }
+      ],
+      "demos": [],
+      "related": ["Space"],
+      "subComponents": []
+    },
+    {
+      "name": "Grid",
+      "category": "Layout",
+      "categoryZh": "布局",
+      "description": "24 Grids System.",
+      "descriptionZh": "24 栅格系统。",
+      "props": [
+        { "name": "align", "type": "top | middle | bottom | stretch", "default": "top", "description": "Vertical alignment (Row)" },
+        { "name": "gutter", "type": "number | object | array", "default": "0", "description": "Spacing between grids (Row)" },
+        { "name": "justify", "type": "start | end | center | space-around | space-between | space-evenly", "default": "start", "description": "Horizontal arrangement (Row)" },
+        { "name": "wrap", "type": "boolean", "default": "true", "description": "Auto wrap line (Row)" },
+        { "name": "span", "type": "number", "default": "-", "description": "Number of cells to occupy (Col)" },
+        { "name": "offset", "type": "number", "default": "0", "description": "Number of cells to offset from the left (Col)" }
+      ],
+      "demos": [],
+      "related": [],
+      "subComponents": ["Row", "Col"]
+    }
+  ],
+  "globalTokens": [
+    { "name": "colorPrimary", "type": "string", "default": "#1677ff", "description": "Brand primary color" },
+    { "name": "colorSuccess", "type": "string", "default": "#52c41a", "description": "Success state color" },
+    { "name": "colorWarning", "type": "string", "default": "#faad14", "description": "Warning state color" },
+    { "name": "colorError", "type": "string", "default": "#ff4d4f", "description": "Error state color" },
+    { "name": "colorInfo", "type": "string", "default": "#1677ff", "description": "Info state color" },
+    { "name": "colorBgContainer", "type": "string", "default": "#ffffff", "description": "Container background color" },
+    { "name": "colorBgLayout", "type": "string", "default": "#f5f5f5", "description": "Layout background color" },
+    { "name": "colorText", "type": "string", "default": "rgba(0,0,0,0.88)", "description": "Primary text color" },
+    { "name": "colorTextSecondary", "type": "string", "default": "rgba(0,0,0,0.65)", "description": "Secondary text color" },
+    { "name": "colorBorder", "type": "string", "default": "#d9d9d9", "description": "Default border color" },
+    { "name": "borderRadius", "type": "number", "default": "6", "description": "Base border radius" },
+    { "name": "borderRadiusLG", "type": "number", "default": "8", "description": "Large border radius" },
+    { "name": "borderRadiusSM", "type": "number", "default": "4", "description": "Small border radius" },
+    { "name": "fontSize", "type": "number", "default": "14", "description": "Base font size" },
+    { "name": "fontSizeLG", "type": "number", "default": "16", "description": "Large font size" },
+    { "name": "fontSizeSM", "type": "number", "default": "12", "description": "Small font size" },
+    { "name": "fontFamily", "type": "string", "default": "-apple-system, BlinkMacSystemFont, ...", "description": "Font family" },
+    { "name": "lineHeight", "type": "number", "default": "1.5714", "description": "Base line height" },
+    { "name": "controlHeight", "type": "number", "default": "32", "description": "Control height (input, button, etc.)" },
+    { "name": "controlHeightLG", "type": "number", "default": "40", "description": "Large control height" },
+    { "name": "controlHeightSM", "type": "number", "default": "24", "description": "Small control height" },
+    { "name": "padding", "type": "number", "default": "16", "description": "Base padding" },
+    { "name": "paddingLG", "type": "number", "default": "24", "description": "Large padding" },
+    { "name": "paddingSM", "type": "number", "default": "12", "description": "Small padding" },
+    { "name": "marginXS", "type": "number", "default": "8", "description": "Extra small margin" },
+    { "name": "margin", "type": "number", "default": "16", "description": "Base margin" },
+    { "name": "marginLG", "type": "number", "default": "24", "description": "Large margin" },
+    { "name": "boxShadow", "type": "string", "default": "0 6px 16px rgba(0,0,0,0.08)", "description": "Base box shadow" },
+    { "name": "wireframe", "type": "boolean", "default": "false", "description": "Enable wireframe style" },
+    { "name": "motion", "type": "boolean", "default": "true", "description": "Enable animation" }
+  ],
+  "changelog": [
+    {
+      "version": "5.24.0",
+      "date": "2025-02-15",
+      "changes": [
+        { "component": "Button", "type": "feature", "description": "Added `color` and `variant` combination support." },
+        { "component": "Table", "type": "fix", "description": "Fixed virtual scroll not working with expandable rows." },
+        { "component": "Select", "type": "style", "description": "Updated dropdown animation timing." }
+      ]
+    },
+    {
+      "version": "5.23.0",
+      "date": "2025-01-20",
+      "changes": [
+        { "component": "Form", "type": "feature", "description": "Added `variant` prop to set form components variant globally." },
+        { "component": "Input", "type": "feature", "description": "Added `underlined` variant." },
+        { "component": "Modal", "type": "fix", "description": "Fixed `centered` prop not working with custom footer." }
+      ]
+    },
+    {
+      "version": "5.22.0",
+      "date": "2024-12-10",
+      "changes": [
+        { "component": "Table", "type": "feature", "description": "Added `virtual` prop for virtual scroll support." },
+        { "component": "Button", "type": "deprecation", "description": "Deprecated `ghost` prop, use `variant=\"outlined\"` instead." },
+        { "component": "Select", "type": "fix", "description": "Fixed `popupMatchSelectWidth` not working with `mode=\"tags\"`." }
+      ]
+    },
+    {
+      "version": "5.21.0",
+      "date": "2024-11-05",
+      "changes": [
+        { "component": "Button", "type": "feature", "description": "Added `color` prop for semantic button colors." },
+        { "component": "Button", "type": "feature", "description": "Added `variant` prop for button style variants." },
+        { "component": "Button", "type": "deprecation", "description": "Deprecated `danger` prop, use `color=\"danger\"` instead." }
+      ]
+    },
+    {
+      "version": "5.20.0",
+      "date": "2024-10-01",
+      "changes": [
+        { "component": "Table", "type": "feature", "description": "Table supports virtual scroll via `virtual` prop." },
+        { "component": "Form", "type": "fix", "description": "Fixed Form.List `move` operation not triggering validation." },
+        { "component": "Input", "type": "feature", "description": "Added `count` config for character counting." }
+      ]
+    }
+  ]
+}

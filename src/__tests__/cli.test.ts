@@ -1,0 +1,263 @@
+import { describe, it, expect } from 'vitest';
+import { execFileSync } from 'node:child_process';
+import { join } from 'node:path';
+
+const CLI = join(__dirname, '..', '..', 'dist', 'index.js');
+
+function run(...args: string[]): string {
+  return execFileSync('node', [CLI, ...args], {
+    encoding: 'utf-8',
+    timeout: 5000,
+  }).trim();
+}
+
+function runWithStatus(...args: string[]): { stdout: string; stderr: string; exitCode: number } {
+  try {
+    const stdout = execFileSync('node', [CLI, ...args], {
+      encoding: 'utf-8',
+      timeout: 5000,
+      stdio: ['pipe', 'pipe', 'pipe'],
+    }).trim();
+    return { stdout, stderr: '', exitCode: 0 };
+  } catch (err: any) {
+    return {
+      stdout: (err.stdout || '').trim(),
+      stderr: (err.stderr || '').trim(),
+      exitCode: err.status ?? 1,
+    };
+  }
+}
+
+describe('CLI e2e', () => {
+  it('should show help', () => {
+    const out = run('--help');
+    expect(out).toContain('antd');
+    expect(out).toContain('list');
+    expect(out).toContain('info');
+    expect(out).toContain('demo');
+  });
+
+  it('should list components', () => {
+    const out = run('list');
+    expect(out).toContain('Button');
+    expect(out).toContain('Table');
+    expect(out).toContain('Select');
+  });
+
+  it('should list components as JSON', () => {
+    const out = run('list', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(Array.isArray(data)).toBe(true);
+    expect(data.length).toBeGreaterThan(0);
+    expect(data[0]).toHaveProperty('name');
+  });
+
+  it('should show component info', () => {
+    const out = run('info', 'Button');
+    expect(out).toContain('Button');
+    expect(out).toContain('type');
+    expect(out).toContain('disabled');
+  });
+
+  it('should show component info as JSON', () => {
+    const out = run('info', 'Button', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.name).toBe('Button');
+    expect(data.props.length).toBeGreaterThan(0);
+  });
+
+  it('should show detailed component info', () => {
+    const out = run('info', 'Button', '--detail');
+    expect(out).toContain('When to use');
+    expect(out).toContain('Related');
+  });
+
+  it('should list demos', () => {
+    const out = run('demo', 'Button');
+    expect(out).toContain('basic');
+    expect(out).toContain('Basic Usage');
+  });
+
+  it('should get specific demo code', () => {
+    const out = run('demo', 'Button', 'basic');
+    expect(out).toContain('import');
+    expect(out).toContain('Button');
+  });
+
+  it('should show demo as JSON', () => {
+    const out = run('demo', 'Button', 'basic', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.component).toBe('Button');
+    expect(data.demo).toBe('basic');
+    expect(data.code).toContain('import');
+  });
+
+  it('should show component tokens', () => {
+    const out = run('token', 'Button');
+    expect(out).toContain('contentFontSize');
+    expect(out).toContain('defaultBg');
+  });
+
+  it('should show semantic structure', () => {
+    const out = run('semantic', 'Table');
+    expect(out).toContain('header');
+    expect(out).toContain('body');
+    expect(out).toContain('classNames');
+  });
+
+  it('should suggest correct name for typos', () => {
+    const result = runWithStatus('info', 'Btn');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Did you mean 'Button'");
+  });
+
+  it('should handle unknown component', () => {
+    const result = runWithStatus('info', 'NonExistent');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('not found');
+  });
+
+  it('should search across components', () => {
+    const out = run('search', 'virtual scroll');
+    expect(out).toContain('Table');
+    expect(out).toContain('virtual');
+  });
+
+  it('should search as JSON', () => {
+    const out = run('search', 'disabled', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.query).toBe('disabled');
+    expect(data.results.length).toBeGreaterThan(0);
+  });
+
+  it('should show changelog', () => {
+    const out = run('changelog', '5.21.0', '--no-cache');
+    expect(out).toContain('5.21.0');
+    expect(out).toContain('Button');
+  });
+
+  it('should show changelog range', () => {
+    const out = run('changelog', '5.20.0..5.22.0', '--no-cache');
+    expect(out).toContain('5.20.0');
+    expect(out).toContain('5.21.0');
+    expect(out).toContain('5.22.0');
+  });
+
+  it('should show bundle impact', () => {
+    const out = run('bundle-impact', 'Table');
+    expect(out).toContain('156.8 kB');
+    expect(out).toContain('rc-table');
+  });
+
+  it('should show bundle impact as JSON', () => {
+    const out = run('bundle-impact', 'Button', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.component).toBe('Button');
+    expect(data.size.gzip).toBeDefined();
+  });
+
+  it('should show migration guide', () => {
+    const out = run('migrate', '4', '5');
+    expect(out).toContain('Migration Guide');
+    expect(out).toContain('Select');
+    expect(out).toContain('popupClassName');
+  });
+
+  it('should show migration guide as JSON', () => {
+    const out = run('migrate', '4', '5', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.from).toBe('4');
+    expect(data.to).toBe('5');
+    expect(data.steps.length).toBeGreaterThan(0);
+  });
+
+  it('should run doctor', () => {
+    const out = run('doctor');
+    expect(out).toContain('antd Doctor');
+    expect(out).toContain('Summary');
+  });
+
+  // Edge cases
+  it('should show search no results', () => {
+    const out = run('search', 'xyznonexistent123');
+    expect(out).toContain('No results found');
+  });
+
+  it('should output error as JSON', () => {
+    const result = runWithStatus('info', 'Btn', '--format', 'json');
+    const data = JSON.parse(result.stdout);
+    expect(data.error).toBe(true);
+    expect(data.code).toBe('COMPONENT_NOT_FOUND');
+    expect(data.suggestion).toContain('Button');
+  });
+
+  it('should show CLI version with -V', () => {
+    const out = run('-V');
+    expect(out).toMatch(/^\d+\.\d+\.\d+$/);
+  });
+
+  it('should support --lang zh', () => {
+    const out = run('list', '--lang', 'zh', '--no-cache');
+    expect(out).toContain('按钮');
+  });
+
+  it('should support --lang zh for info', () => {
+    const out = run('info', 'Button', '--lang', 'zh', '--no-cache');
+    expect(out).toContain('按钮用于开始一个即时操作');
+  });
+
+  it('should show list as markdown', () => {
+    const out = run('list', '--format', 'markdown');
+    expect(out).toContain('# antd Components');
+    expect(out).toContain('**Button**');
+  });
+
+  it('should show token as JSON', () => {
+    const out = run('token', 'Button', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.component).toBe('Button');
+    expect(data.tokens.length).toBeGreaterThan(0);
+  });
+
+  it('should show semantic as JSON', () => {
+    const out = run('semantic', 'Table', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.name).toBe('Table');
+    expect(data.semanticStructure.length).toBeGreaterThan(0);
+  });
+
+  it('should handle demo not found', () => {
+    const result = runWithStatus('demo', 'Button', 'nonexistent');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('not found');
+  });
+
+  it('should handle changelog version not found', () => {
+    const result = runWithStatus('changelog', '9.99.0', '--no-cache');
+    expect(result.exitCode).toBe(1);
+  });
+
+  it('should show changelog as JSON', () => {
+    const out = run('changelog', '5.21.0', '--no-cache', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(Array.isArray(data)).toBe(true);
+    expect(data[0].version).toBe('5.21.0');
+  });
+
+  it('should show doctor as JSON', () => {
+    const out = run('doctor', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.checks).toBeDefined();
+    expect(data.summary).toBeDefined();
+  });
+
+  it('should show migrate dry-run with --apply', () => {
+    const out = run('migrate', '4', '5', '--apply', '/tmp');
+    expect(out).toContain('Dry-run');
+  });
+
+  it('should handle invalid migration path', () => {
+    const result = runWithStatus('migrate', '3', '6');
+    expect(result.exitCode).toBe(1);
+  });
+});
