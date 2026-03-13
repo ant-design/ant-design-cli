@@ -280,4 +280,93 @@ describe('CLI e2e', () => {
     const result = runWithStatus('migrate', '3', '6');
     expect(result.exitCode).toBe(1);
   });
+
+  // ─── Additional edge case tests ─────────────────────────────────────────
+
+  // Search edge cases
+  it('should search with single character keyword', () => {
+    const out = run('search', 'a', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.results.length).toBeGreaterThan(0);
+    expect(data.results.length).toBeLessThanOrEqual(20);
+  });
+
+  it('should search and return results sorted by score', () => {
+    const out = run('search', 'button', '--format', 'json');
+    const data = JSON.parse(out);
+    for (let i = 1; i < data.results.length; i++) {
+      expect(data.results[i - 1].score).toBeGreaterThanOrEqual(data.results[i].score);
+    }
+  });
+
+  // Doctor edge cases
+  it('should run doctor as markdown', () => {
+    const out = run('doctor', '--format', 'markdown');
+    expect(out).toContain('antd Doctor');
+  });
+
+  // Token edge cases
+  it('should show global tokens', () => {
+    const out = run('token');
+    expect(out).toContain('colorPrimary');
+  });
+
+  it('should handle unknown component for token', () => {
+    const result = runWithStatus('token', 'NonExistent');
+    expect(result.exitCode).toBe(1);
+  });
+
+  // Semantic edge cases
+  it('should handle unknown component for semantic', () => {
+    const result = runWithStatus('semantic', 'NonExistent');
+    expect(result.exitCode).toBe(1);
+  });
+
+  // Info edge cases
+  it('should show info as markdown', () => {
+    const out = run('info', 'Button', '--format', 'markdown');
+    expect(out).toContain('Button');
+    expect(out).toContain('type');
+  });
+
+  // Usage command
+  it('should scan usage in current directory', () => {
+    const out = run('usage', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data).toHaveProperty('components');
+  });
+
+  // Lint command
+  it('should lint current directory', () => {
+    const out = run('lint', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data).toHaveProperty('issues');
+  });
+
+  // Changelog edge cases
+  it('should show API diff between versions', () => {
+    const out = run('changelog', '5.0.0', '5.24.0', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data).toHaveProperty('from');
+    expect(data).toHaveProperty('to');
+  });
+
+  // v5→v6 migration completeness
+  it('should show v5 to v6 migration with many steps', () => {
+    const out = run('migrate', '5', '6', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.steps.length).toBeGreaterThan(10);
+    // Should include both breaking and non-breaking
+    const breaking = data.steps.filter((s: any) => s.breaking);
+    const nonBreaking = data.steps.filter((s: any) => !s.breaking);
+    expect(breaking.length).toBeGreaterThan(0);
+    expect(nonBreaking.length).toBeGreaterThan(0);
+  });
+
+  // v4→v5 migration completeness
+  it('should show v4 to v5 migration with 30+ steps', () => {
+    const out = run('migrate', '4', '5', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.steps.length).toBeGreaterThanOrEqual(30);
+  });
 });

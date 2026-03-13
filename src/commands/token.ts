@@ -24,7 +24,7 @@ export function registerTokenCommand(program: Command): void {
         return;
       }
 
-      const store = loadMetadata(versionInfo.majorVersion, opts.cache !== false);
+      const store = loadMetadata(versionInfo.majorVersion);
 
       if (!component) {
         const globalTokens = store.globalTokens || [];

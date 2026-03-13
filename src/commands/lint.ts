@@ -182,7 +182,7 @@ export function registerLintCommand(program: Command): void {
       const opts = program.opts<GlobalOptions>();
       const targetPath = target || '.';
       const versionInfo = detectVersion(opts.version);
-      const store = loadMetadata(versionInfo.majorVersion, opts.cache !== false);
+      const store = loadMetadata(versionInfo.majorVersion);
       const deprecatedMap = getDeprecatedProps(store);
 
       const files = collectFiles(targetPath);

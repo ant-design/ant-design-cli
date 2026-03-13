@@ -12,7 +12,7 @@ export function registerSemanticCommand(program: Command): void {
     .action((component: string) => {
       const opts = program.opts<GlobalOptions>();
       const versionInfo = detectVersion(opts.version);
-      const store = loadMetadata(versionInfo.majorVersion, opts.cache !== false);
+      const store = loadMetadata(versionInfo.majorVersion);
       const comp = findComponent(store, component);
 
       if (!comp) {

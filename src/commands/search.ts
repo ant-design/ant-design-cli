@@ -120,7 +120,7 @@ export function registerSearchCommand(program: Command): void {
     .action((keyword: string) => {
       const opts = program.opts<GlobalOptions>();
       const versionInfo = detectVersion(opts.version);
-      const store = loadMetadata(versionInfo.majorVersion, opts.cache !== false);
+      const store = loadMetadata(versionInfo.majorVersion);
 
       let results: SearchResult[] = [];
       for (const comp of store.components) {

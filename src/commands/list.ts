@@ -12,7 +12,7 @@ export function registerListCommand(program: Command): void {
     .action(() => {
       const opts = program.opts<GlobalOptions>();
       const versionInfo = detectVersion(opts.version);
-      const store = loadMetadata(versionInfo.majorVersion, opts.cache !== false);
+      const store = loadMetadata(versionInfo.majorVersion);
       const lang = opts.lang;
 
       if (store.components.length === 0) {
