@@ -12,7 +12,7 @@ See [spec.md](./spec.md) for the full design specification.
 src/
   index.ts          # CLI entry point, registers all commands
   types.ts          # Shared TypeScript types
-  commands/         # One file per command (list, info, demo, token, search, semantic, changelog, doctor, usage, lint, migrate)
+  commands/         # One file per command (list, info, demo, token, semantic, changelog, doctor, usage, lint, migrate)
   data/             # Data loading utilities
   output/           # Output formatting (text, json, markdown)
   utils/            # Shared utilities

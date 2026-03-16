@@ -117,18 +117,6 @@ describe('CLI e2e', () => {
     expect(result.stderr).toContain('not found');
   });
 
-  it('should search across components', () => {
-    const out = run('search', 'virtual scroll');
-    expect(out).toContain('Table');
-    expect(out).toContain('virtual');
-  });
-
-  it('should search as JSON', () => {
-    const out = run('search', 'disabled', '--format', 'json');
-    const data = JSON.parse(out);
-    expect(data.query).toBe('disabled');
-    expect(data.results.length).toBeGreaterThan(0);
-  });
 
   it('should show changelog', () => {
     const out = run('changelog', '5.21.0');
@@ -164,11 +152,6 @@ describe('CLI e2e', () => {
     expect(out).toContain('Summary');
   });
 
-  // Edge cases
-  it('should show search no results', () => {
-    const out = run('search', 'xyznonexistent123');
-    expect(out).toContain('No results found');
-  });
 
   it('should output error as JSON', () => {
     const result = runWithStatus('info', 'Btn', '--format', 'json');
@@ -283,21 +266,6 @@ describe('CLI e2e', () => {
 
   // ─── Additional edge case tests ─────────────────────────────────────────
 
-  // Search edge cases
-  it('should search with single character keyword', () => {
-    const out = run('search', 'a', '--format', 'json');
-    const data = JSON.parse(out);
-    expect(data.results.length).toBeGreaterThan(0);
-    expect(data.results.length).toBeLessThanOrEqual(20);
-  });
-
-  it('should search and return results sorted by score', () => {
-    const out = run('search', 'button', '--format', 'json');
-    const data = JSON.parse(out);
-    for (let i = 1; i < data.results.length; i++) {
-      expect(data.results[i - 1].score).toBeGreaterThanOrEqual(data.results[i].score);
-    }
-  });
 
   // Doctor edge cases
   it('should run doctor as markdown', () => {

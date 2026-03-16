@@ -3,7 +3,6 @@ import { registerListCommand } from './commands/list.js';
 import { registerInfoCommand } from './commands/info.js';
 import { registerDemoCommand } from './commands/demo.js';
 import { registerTokenCommand } from './commands/token.js';
-import { registerSearchCommand } from './commands/search.js';
 import { registerSemanticCommand } from './commands/semantic.js';
 import { registerChangelogCommand } from './commands/diff.js';
 import { registerDoctorCommand } from './commands/doctor.js';
@@ -31,7 +30,6 @@ registerListCommand(program);
 registerInfoCommand(program);
 registerDemoCommand(program);
 registerTokenCommand(program);
-registerSearchCommand(program);
 registerSemanticCommand(program);
 registerChangelogCommand(program);
 

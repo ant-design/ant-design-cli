@@ -128,28 +128,6 @@ antd token Button                   # component-level tokens with defaults
 antd token --version 4.24.0         # v4 has no token system, shows a hint
 ```
 
-#### `antd search <keyword>`
-
-Full-text search across component docs, demos, FAQ, and changelog.
-
-```bash
-antd search "virtual scroll"
-antd search "form validation" --format json
-```
-
-Search scope: component documentation (description, whenToUse, FAQ), demo titles and descriptions, changelog entries. Results ranked by relevance (exact match > partial match).
-
-JSON output:
-```json
-{
-  "query": "virtual scroll",
-  "results": [
-    {"type": "component", "name": "Table", "section": "FAQ", "match": "How to use virtual scroll?", "score": 0.95},
-    {"type": "component", "name": "Select", "section": "props", "match": "virtual - Enable virtual scroll", "score": 0.90},
-    {"type": "changelog", "version": "5.20.0", "match": "Table supports virtual scroll via `virtual` prop", "score": 0.85}
-  ]
-}
-```
 
 #### `antd semantic <Component>`
 

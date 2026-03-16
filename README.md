@@ -66,15 +66,6 @@ antd token Button                   # component-level tokens
 antd token --version 4.24.0
 ```
 
-#### `antd search <keyword>`
-
-Full-text search across component docs, demos, FAQ, and changelog.
-
-```bash
-antd search "virtual scroll"
-antd search "form validation" --format json
-```
-
 #### `antd semantic <Component>`
 
 Query the semantic customization structure (`classNames` and `styles` keys).
@@ -192,19 +183,6 @@ target        string                                            -
 type          primary | default | dashed | text | link          default
 variant       outlined | dashed | solid | filled | text | link  -
 onClick       (event: React.MouseEvent) => void                 -
-```
-
-### `antd search "virtual scroll"`
-
-```
-Search results for "virtual scroll":
-
-  [81%] Table (FAQ)
-    How to use virtual scroll?
-  [77%] Select (props)
-    virtual — Disable virtual scroll when set to false
-  [20%] Table (props)
-    virtual — Support virtual list
 ```
 
 ### `antd semantic Table`
