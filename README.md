@@ -45,6 +45,22 @@ antd list --format json
 antd list --version 5.0.0
 ```
 
+Example output:
+
+```
+Component  Category      Description
+---------  ------------  -----------------------------------------------------------
+Button     General       To trigger an operation.
+Table      Data Display  A table displays rows of data.
+Select     Data Entry    Select component to select value from options.
+Input      Data Entry    A basic widget for getting the user input as a text field.
+Form       Data Entry    High performance Form component with data scope management.
+Modal      Feedback      Modal dialogs.
+Space      Layout        Set components spacing.
+Flex       Layout        Flex layout container.
+Grid       Layout        24 Grids System.
+```
+
 #### `antd info <Component>`
 
 Query component API: props, type definitions, default values.
@@ -54,6 +70,33 @@ antd info Button
 antd info Button --detail
 antd info Button --version 4.24.0
 antd info Button --format json
+```
+
+Example output:
+
+```
+Button — To trigger an operation.
+
+Property      Type                                              Default
+------------  ------------------------------------------------  -------
+block         boolean                                           false
+classNames    Record<SemanticDOM, string>                       -
+color         default | primary | danger                        default
+danger        boolean                                           false
+disabled      boolean                                           false
+ghost         boolean                                           false
+href          string                                            -
+htmlType      submit | reset | button                           button
+icon          ReactNode                                         -
+iconPosition  start | end                                       start
+loading       boolean | { delay: number }                       false
+shape         default | circle | round                          default
+size          large | middle | small                            middle
+styles        Record<SemanticDOM, CSSProperties>                -
+target        string                                            -
+type          primary | default | dashed | text | link          default
+variant       outlined | dashed | solid | filled | text | link  -
+onClick       (event: React.MouseEvent) => void                 -
 ```
 
 #### `antd demo <Component> [name]`
@@ -76,6 +119,23 @@ antd token Button                   # component-level tokens
 antd token --version 4.24.0
 ```
 
+Example output:
+
+```
+Button Component Tokens:
+
+Token                Type    Default
+-------------------  ------  ----------------
+borderColorDisabled  string  #d9d9d9
+colorPrimaryHover    string  #4096ff
+contentFontSize      number  14
+defaultBg            string  #ffffff
+defaultBorderColor   string  #d9d9d9
+defaultColor         string  rgba(0,0,0,0.88)
+paddingBlock         number  4
+paddingInline        number  15
+```
+
 #### `antd semantic <Component>`
 
 Query the semantic customization structure (`classNames` and `styles` keys).
@@ -83,6 +143,22 @@ Query the semantic customization structure (`classNames` and `styles` keys).
 ```bash
 antd semantic Table
 antd semantic Table --format json
+```
+
+Example output:
+
+```
+Table Semantic Structure:
+├── header         # Table header area
+├── body         # Table body area
+├── footer         # Table footer area
+├── cell         # Table cell
+├── row         # Table row
+└── wrapper         # Outer wrapper
+
+Usage:
+  <Table classNames={{ header: 'my-header' }} />
+  <Table styles={{ header: { background: '#fff' } }} />
 ```
 
 #### `antd changelog [version]`
@@ -141,77 +217,7 @@ antd migrate 4 5 --apply ./src            # output agent migration prompt for ./
 antd migrate 4 5 --format json            # structured output for agents
 ```
 
-## Global Flags
-
-| Flag | Description | Default |
-|---|---|---|
-| `--format json\|text\|markdown` | Output format | `text` |
-| `--version <v>` | Target antd version | auto-detect |
-| `--lang en\|zh` | Output language | `en` |
-| `--detail` | Full information output | `false` |
-
-## Examples
-
-### `antd list`
-
-```
-Component  Category      Description
----------  ------------  -----------------------------------------------------------
-Button     General       To trigger an operation.
-Table      Data Display  A table displays rows of data.
-Select     Data Entry    Select component to select value from options.
-Input      Data Entry    A basic widget for getting the user input as a text field.
-Form       Data Entry    High performance Form component with data scope management.
-Modal      Feedback      Modal dialogs.
-Space      Layout        Set components spacing.
-Flex       Layout        Flex layout container.
-Grid       Layout        24 Grids System.
-```
-
-### `antd info Button`
-
-```
-Button — To trigger an operation.
-
-Property      Type                                              Default
-------------  ------------------------------------------------  -------
-block         boolean                                           false
-classNames    Record<SemanticDOM, string>                       -
-color         default | primary | danger                        default
-danger        boolean                                           false
-disabled      boolean                                           false
-ghost         boolean                                           false
-href          string                                            -
-htmlType      submit | reset | button                           button
-icon          ReactNode                                         -
-iconPosition  start | end                                       start
-loading       boolean | { delay: number }                       false
-shape         default | circle | round                          default
-size          large | middle | small                            middle
-styles        Record<SemanticDOM, CSSProperties>                -
-target        string                                            -
-type          primary | default | dashed | text | link          default
-variant       outlined | dashed | solid | filled | text | link  -
-onClick       (event: React.MouseEvent) => void                 -
-```
-
-### `antd semantic Table`
-
-```
-Table Semantic Structure:
-├── header         # Table header area
-├── body         # Table body area
-├── footer         # Table footer area
-├── cell         # Table cell
-├── row         # Table row
-└── wrapper         # Outer wrapper
-
-Usage:
-  <Table classNames={{ header: 'my-header' }} />
-  <Table styles={{ header: { background: '#fff' } }} />
-```
-
-### `antd migrate 4 5 --component Select`
+Example output:
 
 ```
 Migration Guide: v4 → v5
@@ -223,19 +229,11 @@ Migration Guide: v4 → v5
 Total: 2 steps (2 auto-fixable, 0 manual)
 ```
 
-### `antd token Button`
+## Global Flags
 
-```
-Button Component Tokens:
-
-Token                Type    Default
--------------------  ------  ----------------
-borderColorDisabled  string  #d9d9d9
-colorPrimaryHover    string  #4096ff
-contentFontSize      number  14
-defaultBg            string  #ffffff
-defaultBorderColor   string  #d9d9d9
-defaultColor         string  rgba(0,0,0,0.88)
-paddingBlock         number  4
-paddingInline        number  15
-```
+| Flag | Description | Default |
+|---|---|---|
+| `--format json\|text\|markdown` | Output format | `text` |
+| `--version <v>` | Target antd version | auto-detect |
+| `--lang en\|zh` | Output language | `en` |
+| `--detail` | Full information output | `false` |
