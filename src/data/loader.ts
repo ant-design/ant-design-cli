@@ -20,7 +20,10 @@ export function loadMetadata(majorVersion: string): MetadataStore {
   const dataPath = join(getDataPath(), `${majorVersion}.json`);
   try {
     return JSON.parse(readFileSync(dataPath, 'utf-8')) as MetadataStore;
-  } catch {
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      process.stderr.write(`[antd-cli] Warning: data file may be corrupted: ${dataPath}\n`);
+    }
     return {
       version: majorVersion,
       majorVersion,

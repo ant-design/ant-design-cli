@@ -153,9 +153,11 @@ describe('CLI e2e', () => {
   });
 
 
-  it('should output error as JSON', () => {
+  it('should output error as JSON to stderr', () => {
     const result = runWithStatus('info', 'Btn', '--format', 'json');
-    const data = JSON.parse(result.stdout);
+    // JSON errors go to stderr, stdout should be empty
+    expect(result.stdout).toBe('');
+    const data = JSON.parse(result.stderr);
     expect(data.error).toBe(true);
     expect(data.code).toBe('COMPONENT_NOT_FOUND');
     expect(data.suggestion).toContain('Button');
@@ -309,6 +311,12 @@ describe('CLI e2e', () => {
     const out = run('lint', '--format', 'json');
     const data = JSON.parse(out);
     expect(data).toHaveProperty('issues');
+  });
+
+  it('changelog should error when from > to', () => {
+    const result = runWithStatus('changelog', '5.5.0', '5.1.0');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('newer than');
   });
 
   // Changelog edge cases

@@ -16,7 +16,7 @@ export function createError(code: string, message: string, suggestion?: string):
 
 export function printError(err: CLIError, format: string): void {
   if (format === 'json') {
-    console.log(JSON.stringify(err, null, 2));
+    console.error(JSON.stringify(err, null, 2));
   } else {
     console.error(`Error: ${err.message}`);
     if (err.suggestion) {
@@ -26,6 +26,7 @@ export function printError(err: CLIError, format: string): void {
 }
 
 export function fuzzyMatch(input: string, candidates: string[]): string | undefined {
+  if (candidates.length === 0) return undefined;
   const lower = input.toLowerCase();
 
   // Exact match (case-insensitive)

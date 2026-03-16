@@ -1,5 +1,18 @@
-import { describe, it, expect } from 'vitest';
-import { createError, fuzzyMatch, ErrorCodes } from '../error.js';
+import { describe, it, expect, vi } from 'vitest';
+import { createError, fuzzyMatch, printError, ErrorCodes } from '../error.js';
+
+describe('printError', () => {
+  it('should output JSON error to stderr, not stdout', () => {
+    const stderrSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const stdoutSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const err = createError(ErrorCodes.COMPONENT_NOT_FOUND, 'Not found');
+    printError(err, 'json');
+    expect(stderrSpy).toHaveBeenCalled();
+    expect(stdoutSpy).not.toHaveBeenCalled();
+    stderrSpy.mockRestore();
+    stdoutSpy.mockRestore();
+  });
+});
 
 describe('createError', () => {
   it('should create a standard error shape', () => {
@@ -37,5 +50,13 @@ describe('fuzzyMatch', () => {
 
   it('should return undefined for no match', () => {
     expect(fuzzyMatch('zzzzz', candidates)).toBeUndefined();
+  });
+
+  it('should return undefined for empty candidates', () => {
+    expect(fuzzyMatch('Button', [])).toBeUndefined();
+  });
+
+  it('should return undefined for empty input and empty candidates', () => {
+    expect(fuzzyMatch('', [])).toBeUndefined();
   });
 });

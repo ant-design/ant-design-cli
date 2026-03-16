@@ -12,6 +12,13 @@ describe('loadMetadata', () => {
     const store = loadMetadata('v99');
     expect(store.components).toEqual([]);
   });
+
+  it('should return empty store without throwing for nonexistent version', () => {
+    // Covers the error-handling path (file not found)
+    const store = loadMetadata('v_nonexistent_version');
+    expect(store.components).toEqual([]);
+    expect(store.majorVersion).toBe('v_nonexistent_version');
+  });
 });
 
 describe('findComponent', () => {

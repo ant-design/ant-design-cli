@@ -14,6 +14,11 @@ interface LintIssue {
   message: string;
 }
 
+/** Escape special RegExp characters in a string. */
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // Build a map of deprecated props from metadata
 function getDeprecatedProps(store: ReturnType<typeof loadMetadata>): Map<string, { prop: string; since: string; message: string }[]> {
   const result = new Map<string, { prop: string; since: string; message: string }[]>();
@@ -64,7 +69,7 @@ function lintFile(
       const deprecations = deprecatedMap.get(compName);
       if (!deprecations) continue;
       for (const dep of deprecations) {
-        deprecatedChecks.push({ compName, dep, regex: new RegExp(`\\b${dep.prop}\\b\\s*[=({]`) });
+        deprecatedChecks.push({ compName, dep, regex: new RegExp(`\\b${escapeRegExp(dep.prop)}\\b\\s*[=({]`) });
       }
     }
   }

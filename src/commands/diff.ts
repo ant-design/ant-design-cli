@@ -237,7 +237,17 @@ export function registerChangelogCommand(program: Command): void {
 
         printChangelog(entries, opts.format, v1);
       } else {
-        // API diff mode
+        // API diff mode — validate version order
+        if (compare(v1!, v2!) > 0) {
+          const err = createError(
+            ErrorCodes.INVALID_ARGUMENT,
+            `Version order is invalid: "${v1}" is newer than "${v2}"`,
+            `Did you mean: antd changelog ${v2} ${v1}${component ? ' ' + component : ''}?`,
+          );
+          printError(err, opts.format);
+          process.exitCode = 1;
+          return;
+        }
         runApiDiff(v1!, v2!, component, opts);
       }
     });
