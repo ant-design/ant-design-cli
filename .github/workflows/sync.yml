@@ -1,0 +1,131 @@
+name: Sync antd data
+
+on:
+  schedule:
+    - cron: '37 8 * * *' # Daily at UTC 08:37 (Beijing 16:37)
+  workflow_dispatch: # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - major: 4
+            tag_pattern: '4.*'
+          - major: 5
+            tag_pattern: '5.*'
+          - major: 6
+            tag_pattern: '6.*'
+    steps:
+      - name: Checkout CLI repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Install CLI dependencies
+        run: npm ci
+
+      - name: Find latest antd v${{ matrix.major }} tag
+        id: find-tag
+        run: |
+          LATEST_TAG=$(git ls-remote --tags --sort=-v:refname \
+            https://github.com/ant-design/ant-design.git \
+            "refs/tags/${{ matrix.tag_pattern }}" \
+            | grep -v '\^{}' \
+            | head -1 \
+            | sed 's|.*refs/tags/||')
+          echo "tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
+          echo "Found latest v${{ matrix.major }} tag: $LATEST_TAG"
+
+      - name: Checkout antd at tag ${{ steps.find-tag.outputs.tag }}
+        uses: actions/checkout@v4
+        with:
+          repository: ant-design/ant-design
+          ref: ${{ steps.find-tag.outputs.tag }}
+          path: antd-source
+
+      - name: Extract metadata
+        run: npx tsx scripts/extract.ts --antd-dir antd-source --output data/v${{ matrix.major }}.json
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet data/v${{ matrix.major }}.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changes in v${{ matrix.major }} data"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "v${{ matrix.major }} data has changed"
+          fi
+
+      - name: Commit updated data
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/v${{ matrix.major }}.json
+          git commit -m "data: sync v${{ matrix.major }} data from antd ${{ steps.find-tag.outputs.tag }}"
+          git pull --rebase
+          git push
+
+  publish:
+    needs: sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout CLI repo
+        uses: actions/checkout@v4
+        with:
+          ref: main # Get latest commits from sync jobs
+
+      - name: Check if data was updated
+        id: check
+        run: |
+          # Check if any sync job made commits in the last 10 minutes
+          RECENT=$(git log --since="10 minutes ago" --oneline --grep="data: sync" | head -1)
+          if [ -z "$RECENT" ]; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "No recent data sync commits, skipping publish"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            echo "Found recent sync: $RECENT"
+          fi
+
+      - name: Setup Node.js
+        if: steps.check.outputs.publish == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Install and build
+        if: steps.check.outputs.publish == 'true'
+        run: |
+          npm ci
+          npm run build
+
+      - name: Align CLI version with latest antd
+        if: steps.check.outputs.publish == 'true'
+        run: |
+          # Use the latest antd major version's data version as CLI version
+          ANTD_VERSION=$(node -e "const d = require('./data/v6.json'); console.log(d.version)")
+          npm version "$ANTD_VERSION" --no-git-tag-version --allow-same-version
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "release: v${ANTD_VERSION}"
+          git tag "v${ANTD_VERSION}"
+          git push && git push --tags
+
+      - name: Publish to npm
+        if: steps.check.outputs.publish == 'true'
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -17,7 +17,8 @@
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "extract": "tsx scripts/extract.ts"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -39,7 +40,9 @@
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
+    "gray-matter": "^4.0.3",
     "tsup": "^8.4.0",
+    "tsx": "^4.19.0",
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
   }
