@@ -7,9 +7,9 @@
 [![npm downloads](https://img.shields.io/npm/dm/@ant-design/cli)](https://www.npmjs.com/package/@ant-design/cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-**CLI tool for querying antd component knowledge and analyzing antd usage in your projects.**
+**用于查询 antd 组件知识、分析项目中 antd 用法的命令行工具。**
 
-Designed for Code Agents (Claude Code, Cursor, Copilot, etc.) to invoke via shell and parse structured output.
+专为 Code Agent（Claude Code、Cursor、Copilot 等）设计，通过 Shell 调用并解析结构化输出。
 
 [English](./README.md) · [中文](./README.zh-CN.md)
 
@@ -17,18 +17,18 @@ Designed for Code Agents (Claude Code, Cursor, Copilot, etc.) to invoke via shel
 
 ---
 
-## ✨ Features
+## ✨ 功能特性
 
-| Feature | Description |
+| 功能 | 说明 |
 |---|---|
-| **Agent-First** | Structured JSON output designed for Code Agents (Claude Code, Cursor, Copilot) to parse and act on |
-| **Offline-First** | All metadata is fully bundled — no network required at runtime |
-| **Multi-Version** | Full support for antd v4 / v5 / v6, with cross-version API diffing and migration guides |
-| **Bundled Knowledge** | Props, tokens, demos, semantic structure, and changelog — all included |
-| **Project-Aware** | Auto-detects your antd version, scans usage, lints best practices, diagnoses config issues |
-| **Agent Migration** | `antd migrate --apply` outputs a structured migration prompt for Code Agents to execute |
+| **Agent 优先** | 结构化 JSON 输出，专为 Code Agent（Claude Code、Cursor、Copilot）解析使用 |
+| **离线优先** | 所有元数据完整打包，运行时无需网络 |
+| **多版本支持** | 完整支持 antd v4 / v5 / v6，支持跨版本 API 对比与迁移指南 |
+| **知识内置** | Props、Token、Demo、语义结构、Changelog 一应俱全 |
+| **项目感知** | 自动识别 antd 版本，扫描用法、检查最佳实践、诊断配置问题 |
+| **Agent 迁移** | `antd migrate --apply` 为 Code Agent 输出结构化迁移提示 |
 
-## 📦 Install
+## 📦 安装
 
 ```bash
 # npm
@@ -44,29 +44,29 @@ bun add -g @ant-design/cli
 utoo install @ant-design/cli
 ```
 
-## 🚀 Quick Start
+## 🚀 快速开始
 
 ```bash
-# Query a component's API
+# 查询组件 API
 antd info Button
 
-# List all components
+# 列出所有组件
 antd list
 
-# Scan antd usage in your project
+# 扫描项目中的 antd 用法
 antd usage ./src
 
-# Migrate from v4 to v5
+# 从 v4 迁移到 v5
 antd migrate 4 5
 ```
 
-## 📖 Commands
+## 📖 命令
 
-### Knowledge Query
+### 知识查询
 
 #### `antd list`
 
-List all components with one-line descriptions and categories.
+列出所有组件及其简介与分类。
 
 ```bash
 antd list
@@ -75,7 +75,7 @@ antd list --version 5.0.0
 ```
 
 <details>
-<summary>Example output</summary>
+<summary>示例输出</summary>
 
 ```
 Component  Category      Description
@@ -97,7 +97,7 @@ Grid       Layout        24 Grids System.
 
 #### `antd info <Component>`
 
-Query component API: props, type definitions, default values.
+查询组件 API：Props、类型定义、默认值。
 
 ```bash
 antd info Button
@@ -107,7 +107,7 @@ antd info Button --format json
 ```
 
 <details>
-<summary>Example output</summary>
+<summary>示例输出</summary>
 
 ```
 Button — To trigger an operation.
@@ -140,11 +140,11 @@ onClick       (event: React.MouseEvent) => void                 -
 
 #### `antd demo <Component> [name]`
 
-Get demo source code.
+获取 Demo 源码。
 
 ```bash
-antd demo Button                    # list all demos for Button
-antd demo Button basic              # get specific demo code
+antd demo Button                    # 列出 Button 的所有 Demo
+antd demo Button basic              # 获取指定 Demo 代码
 antd demo Button basic --format json
 ```
 
@@ -152,16 +152,16 @@ antd demo Button basic --format json
 
 #### `antd token [component]`
 
-Query Design Tokens.
+查询 Design Token。
 
 ```bash
-antd token                          # list all global tokens
-antd token Button                   # component-level tokens
+antd token                          # 列出所有全局 Token
+antd token Button                   # 组件级 Token
 antd token --version 4.24.0
 ```
 
 <details>
-<summary>Example output</summary>
+<summary>示例输出</summary>
 
 ```
 Button Component Tokens:
@@ -184,7 +184,7 @@ paddingInline        number  15
 
 #### `antd semantic <Component>`
 
-Query the semantic customization structure (`classNames` and `styles` keys).
+查询语义化定制结构（`classNames` 和 `styles` 的键名）。
 
 ```bash
 antd semantic Table
@@ -192,16 +192,16 @@ antd semantic Table --format json
 ```
 
 <details>
-<summary>Example output</summary>
+<summary>示例输出</summary>
 
 ```
 Table Semantic Structure:
-├── header    # Table header area
-├── body      # Table body area
-├── footer    # Table footer area
-├── cell      # Table cell
-├── row       # Table row
-└── wrapper   # Outer wrapper
+├── header    # 表头区域
+├── body      # 表体区域
+├── footer    # 表尾区域
+├── cell      # 单元格
+├── row       # 行
+└── wrapper   # 外层容器
 
 Usage:
   <Table classNames={{ header: 'my-header' }} />
@@ -214,21 +214,21 @@ Usage:
 
 #### `antd changelog [version]`
 
-Query changelog entries and compare API differences between versions.
+查询 Changelog 条目，对比版本间 API 差异。
 
 ```bash
-antd changelog 5.22.0              # exact version
-antd changelog 5.21.0..5.24.0     # version range (both ends inclusive)
+antd changelog 5.22.0              # 精确版本
+antd changelog 5.21.0..5.24.0     # 版本范围（两端均包含）
 antd changelog --format json
 ```
 
 ---
 
-### Project Analysis
+### 项目分析
 
 #### `antd doctor`
 
-Diagnose project-level configuration issues.
+诊断项目级配置问题。
 
 ```bash
 antd doctor
@@ -239,11 +239,11 @@ antd doctor --format json
 
 #### `antd usage [dir]`
 
-Scan project for antd component/API usage statistics.
+扫描项目中 antd 组件/API 的使用情况统计。
 
 ```bash
-antd usage                          # scan current directory
-antd usage ./src                    # scan specific directory
+antd usage                          # 扫描当前目录
+antd usage ./src                    # 扫描指定目录
 antd usage --format json
 ```
 
@@ -251,15 +251,15 @@ antd usage --format json
 
 #### `antd lint [file/dir]`
 
-Check antd usage against best practices.
+按最佳实践检查 antd 用法。
 
 ```bash
 antd lint ./src
 antd lint ./src/pages/home.tsx
-antd lint --only deprecated         # only check deprecated APIs
-antd lint --only a11y               # only check accessibility
-antd lint --only performance        # only check performance
-antd lint --only best-practice      # only check best practices
+antd lint --only deprecated         # 只检查废弃 API
+antd lint --only a11y               # 只检查无障碍
+antd lint --only performance        # 只检查性能
+antd lint --only best-practice      # 只检查最佳实践
 antd lint --format json
 ```
 
@@ -267,17 +267,17 @@ antd lint --format json
 
 #### `antd migrate <from> <to>`
 
-Version migration guide with optional auto-fix.
+版本迁移指南，支持自动修复输出。
 
 ```bash
-antd migrate 4 5                          # full migration checklist
-antd migrate 4 5 --component Select       # component-specific migration
-antd migrate 4 5 --apply ./src            # output agent migration prompt for ./src
-antd migrate 4 5 --format json            # structured output for agents
+antd migrate 4 5                          # 完整迁移清单
+antd migrate 4 5 --component Select       # 指定组件迁移
+antd migrate 4 5 --apply ./src            # 为 ./src 输出 Agent 迁移提示
+antd migrate 4 5 --format json            # 结构化输出，适合 Agent 解析
 ```
 
 <details>
-<summary>Example output</summary>
+<summary>示例输出</summary>
 
 ```
 Migration Guide: v4 → v5
@@ -293,34 +293,34 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 
 ---
 
-## ⚙️ Global Flags
+## ⚙️ 全局参数
 
-| Flag | Description | Default |
+| 参数 | 说明 | 默认值 |
 |---|---|---|
-| `--format json\|text\|markdown` | Output format | `text` |
-| `--version <v>` | Target antd version | auto-detect |
-| `--lang en\|zh` | Output language | `en` |
-| `--detail` | Full information output | `false` |
-| `-V, --cli-version` | Print CLI version number | — |
+| `--format json\|text\|markdown` | 输出格式 | `text` |
+| `--version <v>` | 目标 antd 版本 | 自动检测 |
+| `--lang en\|zh` | 输出语言 | `en` |
+| `--detail` | 完整信息输出 | `false` |
+| `-V, --cli-version` | 打印 CLI 版本号 | — |
 
-## 🤖 Use with AI Agents
+## 🤖 与 AI Agent 配合使用
 
-Add the following to your `CLAUDE.md` (or equivalent agent config) to let your Code Agent automatically invoke the CLI for antd-related queries:
+将以下内容添加到 `CLAUDE.md`（或其他 Agent 配置文件），让 Code Agent 自动调用 CLI 查询 antd 相关信息：
 
 ````markdown
 ## Ant Design
 
-Use `@ant-design/cli` to query antd component knowledge:
+使用 `@ant-design/cli` 查询 antd 组件知识：
 
-- `antd info <Component>` — get props, types, and defaults
-- `antd demo <Component> [name]` — get demo source code
-- `antd token <Component>` — get design tokens
-- `antd migrate 4 5 --apply ./src` — generate migration instructions
-- `antd lint ./src` — check for best practice violations
+- `antd info <Component>` — 获取 Props、类型和默认值
+- `antd demo <Component> [name]` — 获取 Demo 源码
+- `antd token <Component>` — 获取 Design Token
+- `antd migrate 4 5 --apply ./src` — 生成迁移指令
+- `antd lint ./src` — 检查最佳实践违规
 
-Always prefer `--format json` for programmatic parsing.
+程序化解析时优先使用 `--format json`。
 ````
 
-## 📄 License
+## 📄 开源协议
 
 [MIT](./LICENSE) © Ant Design
