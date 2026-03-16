@@ -12,6 +12,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 1  # run sequentially to avoid concurrent push conflicts
       matrix:
         include:
           - major: 4
@@ -88,8 +89,8 @@ jobs:
       - name: Check if data was updated
         id: check
         run: |
-          # Check if any sync job made commits in the last 10 minutes
-          RECENT=$(git log --since="10 minutes ago" --oneline --grep="data: sync" | head -1)
+          # Check if any sync job made commits since the last scheduled run (within 24h)
+          RECENT=$(git log --since="24 hours ago" --oneline --grep="^data: sync" | head -1)
           if [ -z "$RECENT" ]; then
             echo "publish=false" >> "$GITHUB_OUTPUT"
             echo "No recent data sync commits, skipping publish"
@@ -115,7 +116,7 @@ jobs:
         if: steps.check.outputs.publish == 'true'
         run: |
           # Use the latest antd major version's data version as CLI version
-          ANTD_VERSION=$(node -e "const d = require('./data/v6.json'); console.log(d.version)")
+          ANTD_VERSION=$(node -p "JSON.parse(require('fs').readFileSync('data/v6.json','utf8')).version")
           npm version "$ANTD_VERSION" --no-git-tag-version --allow-same-version
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

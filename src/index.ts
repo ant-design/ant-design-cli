@@ -10,7 +10,8 @@ import { registerUsageCommand } from './commands/usage.js';
 import { registerLintCommand } from './commands/lint.js';
 import { registerMigrateCommand } from './commands/migrate.js';
 
-const CLI_VERSION = '0.1.0';
+declare const __CLI_VERSION__: string;
+const CLI_VERSION = __CLI_VERSION__;
 
 const program = new Command();
 

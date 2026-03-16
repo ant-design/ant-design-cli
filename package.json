@@ -18,7 +18,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "extract": "tsx scripts/extract.ts"
+    "extract": "tsx scripts/extract.ts",
+    "prepublishOnly": "npm run build"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -31,9 +32,13 @@
     "react"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/ant-design/ant-design-cli#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/ant-design/ant-design-cli"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "commander": "~13.1.0"
