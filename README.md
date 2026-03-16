@@ -18,7 +18,17 @@ CLI tool for querying antd knowledge and analyzing antd usage in projects. Desig
 ## Install
 
 ```bash
+# npm
 npm install -g @ant-design/cli
+
+# pnpm
+pnpm add -g @ant-design/cli
+
+# bun
+bun add -g @ant-design/cli
+
+# utoo
+utoo install @ant-design/cli
 ```
 
 ## Commands
