@@ -4,6 +4,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { output } from '../output/formatter.js';
 import { readJson } from '../utils/scan.js';
+import { satisfies } from '../data/version.js';
 
 interface CheckResult {
   name: string;
@@ -233,6 +234,80 @@ function checkCssinjsDuplicate(ctx: DoctorContext): CheckResult {
   };
 }
 
+function checkCssinjsCompat(ctx: DoctorContext): CheckResult {
+  const range = ctx.antdPkg?.peerDependencies?.['@ant-design/cssinjs'];
+
+  if (!ctx.antdPkg || !range) {
+    return {
+      name: 'cssinjs-compat',
+      status: 'pass',
+      message: 'No @ant-design/cssinjs peer dependency required (antd v4)',
+    };
+  }
+
+  if (!ctx.cssinjsPkg) {
+    return {
+      name: 'cssinjs-compat',
+      status: 'warn',
+      severity: 'warning',
+      message: `antd ${ctx.antdPkg.version} requires @ant-design/cssinjs but it is not installed`,
+      suggestion: 'Run `npm install @ant-design/cssinjs`',
+    };
+  }
+
+  if (!satisfies(ctx.cssinjsPkg.version, range)) {
+    return {
+      name: 'cssinjs-compat',
+      status: 'fail',
+      severity: 'error',
+      message: `@ant-design/cssinjs ${ctx.cssinjsPkg.version} is not compatible with antd ${ctx.antdPkg.version} (requires ${range})`,
+      suggestion: `Run \`npm install @ant-design/cssinjs@${range}\``,
+    };
+  }
+
+  return {
+    name: 'cssinjs-compat',
+    status: 'pass',
+    message: `@ant-design/cssinjs ${ctx.cssinjsPkg.version} is compatible with antd ${ctx.antdPkg.version}`,
+  };
+}
+
+function checkIconsCompat(ctx: DoctorContext): CheckResult {
+  const range = ctx.antdPkg?.peerDependencies?.['@ant-design/icons'];
+
+  if (!ctx.antdPkg || !range) {
+    return {
+      name: 'icons-compat',
+      status: 'pass',
+      message: 'No @ant-design/icons peer dependency declared',
+    };
+  }
+
+  if (!ctx.iconsPkg) {
+    return {
+      name: 'icons-compat',
+      status: 'pass',
+      message: '@ant-design/icons is not installed (optional)',
+    };
+  }
+
+  if (!satisfies(ctx.iconsPkg.version, range)) {
+    return {
+      name: 'icons-compat',
+      status: 'warn',
+      severity: 'warning',
+      message: `@ant-design/icons ${ctx.iconsPkg.version} may not be compatible with antd ${ctx.antdPkg.version} (requires ${range})`,
+      suggestion: `Run \`npm install @ant-design/icons@${range}\``,
+    };
+  }
+
+  return {
+    name: 'icons-compat',
+    status: 'pass',
+    message: `@ant-design/icons ${ctx.iconsPkg.version} is compatible with antd ${ctx.antdPkg.version}`,
+  };
+}
+
 function checkCssInJs(ctx: DoctorContext): CheckResult {
   if (!ctx.cssinjsPkg) {
     return {
@@ -264,6 +339,8 @@ export function registerDoctorCommand(program: Command): void {
         checkDuplicateInstall(ctx),
         checkDayjsDuplicate(ctx),
         checkCssinjsDuplicate(ctx),
+        checkCssinjsCompat(ctx),
+        checkIconsCompat(ctx),
         checkThemeConfig(ctx),
         checkBabelPlugins(ctx),
         checkCssInJs(ctx),
