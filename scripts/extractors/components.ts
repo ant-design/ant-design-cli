@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 
 export interface ComponentMeta {
   name: string;
+  nameZh: string;
   dirName: string;
   category: string;
   categoryZh: string;
@@ -95,12 +96,14 @@ export function extractComponents(antdDir: string): ComponentMeta[] {
     const category = resolveCategory(fm);
     if (category === 'Components' && !fm.description) continue;
 
+    let nameZh = '';
     let descriptionZh = '';
     let categoryZh = '';
     let whenToUseZh = '';
     if (fs.existsSync(zhPath)) {
       const zhRaw = fs.readFileSync(zhPath, 'utf-8');
       const zhParsed = matter(zhRaw);
+      nameZh = (zhParsed.data.subtitle as string | undefined) || '';
       descriptionZh = (zhParsed.data.description as string | undefined) || '';
       categoryZh = resolveCategory(zhParsed.data);
       whenToUseZh = extractWhenToUse(zhParsed.content, 'zh');
@@ -108,6 +111,7 @@ export function extractComponents(antdDir: string): ComponentMeta[] {
 
     components.push({
       name: componentName,
+      nameZh,
       dirName: dir.name,
       category,
       categoryZh,

@@ -117,7 +117,9 @@
       "faq": [],
       "subComponents": [
         "Button.Group"
-      ]
+      ],
+      "nameZh": "按钮",
+      "since": "4.0.4"
     },
     {
       "name": "Table",
@@ -218,7 +220,9 @@
         "Table.Column",
         "Table.ColumnGroup",
         "Table.Summary"
-      ]
+      ],
+      "nameZh": "表格",
+      "since": "4.0.4"
     },
     {
       "name": "Select",
@@ -327,7 +331,9 @@
         "TreeSelect",
         "AutoComplete"
       ],
-      "faq": []
+      "faq": [],
+      "nameZh": "选择器",
+      "since": "4.0.4"
     },
     {
       "name": "Form",
@@ -397,7 +403,9 @@
         "Form.List",
         "Form.Provider",
         "Form.ErrorList"
-      ]
+      ],
+      "nameZh": "表单",
+      "since": "4.0.4"
     },
     {
       "name": "Modal",
@@ -489,7 +497,9 @@
         "Modal.error",
         "Modal.warning"
       ],
-      "subComponents": []
+      "subComponents": [],
+      "nameZh": "对话框",
+      "since": "4.0.4"
     },
     {
       "name": "Input",
@@ -581,7 +591,9 @@
         "Input.TextArea",
         "Input.Search",
         "Input.Password"
-      ]
+      ],
+      "nameZh": "输入框",
+      "since": "4.0.4"
     },
     {
       "name": "Space",
@@ -618,7 +630,9 @@
       ],
       "demos": [],
       "related": [],
-      "subComponents": []
+      "subComponents": [],
+      "nameZh": "间距",
+      "since": "4.1.5"
     },
     {
       "name": "Grid",
@@ -663,7 +677,9 @@
       "subComponents": [
         "Row",
         "Col"
-      ]
+      ],
+      "nameZh": "栅格",
+      "since": "4.0.4"
     }
   ],
   "globalTokens": [],

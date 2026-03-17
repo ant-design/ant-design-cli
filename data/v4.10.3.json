@@ -53,7 +53,9 @@
           "answer": "We don't listen window scroll for performance consideration. You can add listener if you still want: <https://codesandbox.io/s/2xyj5zr85p>\n\nRelated issues：[#3938](https://github.com/ant-design/ant-design/issues/3938) [#5642](https://github.com/ant-design/ant-design/issues/5642) [#16120](https://github.com/ant-design/ant-design/issues/16120)"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "固钉",
+      "since": "4.0.4"
     },
     {
       "name": "Alert",
@@ -181,7 +183,9 @@
       "subComponents": [
         "Alert.ErrorBoundary"
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "警告提示",
+      "since": "4.0.4"
     },
     {
       "name": "Anchor",
@@ -291,7 +295,9 @@
           "descriptionZh": "链接横向内间距"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "锚点",
+      "since": "4.0.4"
     },
     {
       "name": "AutoComplete",
@@ -476,7 +482,9 @@
           "answer": "AutoComplete is a Input component support auto complete tips which should not support `labelInValue` prop to modify dispaly value in input. In v3, AutoComplete realization can not handle case that user type match of both `value` & `label` are the same. v4 not longer support `label` as the value input.\n\nBesides, to unique API, `dataSource` replaced with `options`:\n\n#### v3\n\n```tsx\ndataSource = ['light', 'bamboo'];\n// or\ndataSource = [\n  { value: 'light', text: 'Light' },\n  { value: 'bamboo', text: 'Bamboo' },\n];\n```\n\n#### v4\n\n```tsx\noptions = [\n  { value: 'light', label: 'Light' },\n  { value: 'bamboo', label: 'Bamboo' },\n];\n```"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "自动完成",
+      "since": "4.0.4"
     },
     {
       "name": "Avatar",
@@ -663,7 +671,9 @@
       "subComponents": [
         "Avatar.Group"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "头像",
+      "since": "4.0.4"
     },
     {
       "name": "BackTop",
@@ -711,7 +721,9 @@
           "descriptionZh": "弹出层的 z-index"
         }
       ],
-      "categoryZh": "其他"
+      "categoryZh": "其他",
+      "nameZh": "回到顶部",
+      "since": "4.0.4"
     },
     {
       "name": "Badge",
@@ -876,7 +888,9 @@
       "subComponents": [
         "Badge.Ribbon"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "徽标数",
+      "since": "4.0.4"
     },
     {
       "name": "Breadcrumb",
@@ -1012,7 +1026,9 @@
         "Breadcrumb.Item",
         "Breadcrumb.Separator"
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "面包屑",
+      "since": "4.0.4"
     },
     {
       "name": "Button",
@@ -1376,7 +1392,9 @@
           "answer": "Following the Ant Design specification, we will add one space between if Button (exclude Text button and Link button) contains two Chinese characters only. If you don't need that, you can use [ConfigProvider](/components/config-provider/#API) to set `autoInsertSpaceInButton` as `false`.\n\n<img src=\"https://gw.alipayobjects.com/zos/antfincdn/MY%26THAPZrW/38f06cb9-293a-4b42-b183-9f443e79ffea.png\" style=\"box-shadow: none; margin: 0; width: 100px\" alt=\"Button with two Chinese characters\" />"
         }
       ],
-      "categoryZh": "通用"
+      "categoryZh": "通用",
+      "nameZh": "按钮",
+      "since": "4.0.4"
     },
     {
       "name": "Calendar",
@@ -1536,7 +1554,9 @@
           "descriptionZh": "年选择器宽度"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "日历",
+      "since": "4.0.4"
     },
     {
       "name": "Card",
@@ -1819,7 +1839,9 @@
         "Card.Grid",
         "Card.Meta"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "卡片",
+      "since": "4.0.4"
     },
     {
       "name": "Carousel",
@@ -1931,7 +1953,9 @@
           "descriptionZh": "指示点宽度"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "走马灯",
+      "since": "4.0.4"
     },
     {
       "name": "Cascader",
@@ -2230,7 +2254,9 @@
           "descriptionZh": "选项选中时字重"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "级联选择",
+      "since": "4.0.4"
     },
     {
       "name": "Checkbox",
@@ -2339,7 +2365,9 @@
           "descriptionZh": ""
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "多选框",
+      "since": "4.0.4"
     },
     {
       "name": "Collapse",
@@ -2515,7 +2543,9 @@
       "subComponents": [
         "Collapse.Panel"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "折叠面板",
+      "since": "4.0.4"
     },
     {
       "name": "Comment",
@@ -2567,7 +2597,9 @@
           "descriptionZh": "展示时间描述"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "评论",
+      "since": "4.0.4"
     },
     {
       "name": "ConfigProvider",
@@ -2688,7 +2720,9 @@
           "descriptionZh": "设置 `false` 时关闭虚拟滚动"
         }
       ],
-      "categoryZh": "其他"
+      "categoryZh": "其他",
+      "nameZh": "全局化配置",
+      "since": "4.0.4"
     },
     {
       "name": "DatePicker",
@@ -3555,7 +3589,9 @@
           "answer": "When you change the layout of nodes by `panelRender`, React will unmount and re-mount it which reset the component state. You should keep the layout stable. Please ref [#27263](https://github.com/ant-design/ant-design/issues/27263) for more info.\n\n```js\nmoment.locale('en', {\n  week: {\n    dow: 1,\n  },\n});\n```"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "日期选择框",
+      "since": "4.0.4"
     },
     {
       "name": "Descriptions",
@@ -3735,7 +3771,9 @@
           "descriptionZh": "标题下间距"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "描述列表",
+      "since": "4.0.4"
     },
     {
       "name": "Divider",
@@ -3813,7 +3851,9 @@
           "descriptionZh": "纵向分割线的横向外间距"
         }
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "分割线",
+      "since": "4.0.4"
     },
     {
       "name": "Drawer",
@@ -3852,7 +3892,9 @@
           "descriptionZh": "弹窗 z-index"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "抽屉",
+      "since": "4.0.4"
     },
     {
       "name": "Dropdown",
@@ -4031,7 +4073,9 @@
       "subComponents": [
         "Dropdown.Button"
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "下拉菜单",
+      "since": "4.0.4"
     },
     {
       "name": "Empty",
@@ -4062,7 +4106,9 @@
           "descriptionZh": "图片样式"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "空状态",
+      "since": "4.0.4"
     },
     {
       "name": "Form",
@@ -4341,7 +4387,9 @@
           "answer": "See similar issues: [#28370](https://github.com/ant-design/ant-design/issues/28370) [#27994](https://github.com/ant-design/ant-design/issues/27994)\n\n`scrollToFirstError` and `scrollToField` deps on `id` attribute passed to form control, please mark sure that it hasn't been ignored in your custom form control. Check [codesandbox](https://codesandbox.io/s/antd-reproduction-template-forked-25nul?file=/index.js) for solution."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "表单",
+      "since": "4.0.4"
     },
     {
       "name": "Grid",
@@ -4472,7 +4520,9 @@
           "descriptionZh": ""
         }
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "栅格",
+      "since": "4.0.4"
     },
     {
       "name": "Icon",
@@ -4595,7 +4645,9 @@
           "descriptionZh": "`svg` 元素宽度"
         }
       ],
-      "categoryZh": "通用"
+      "categoryZh": "通用",
+      "nameZh": "图标",
+      "since": "4.0.4"
     },
     {
       "name": "Image",
@@ -4705,7 +4757,9 @@
           "descriptionZh": "预览浮层 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "图片",
+      "since": "4.6.6"
     },
     {
       "name": "Input",
@@ -5084,7 +5138,9 @@
       "subComponents": [
         "Input.TextArea"
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "输入框",
+      "since": "4.0.4"
     },
     {
       "name": "InputNumber",
@@ -5406,7 +5462,9 @@
           "descriptionZh": "警告状态时激活态阴影"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "数字输入框",
+      "since": "4.0.4"
     },
     {
       "name": "Layout",
@@ -5650,7 +5708,9 @@
       "subComponents": [
         "Layout.Sider"
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "布局",
+      "since": "4.0.4"
     },
     {
       "name": "List",
@@ -5943,7 +6003,9 @@
         "List.Item",
         "List.Item"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "列表",
+      "since": "4.0.4"
     },
     {
       "name": "Mentions",
@@ -6242,7 +6304,9 @@
           "descriptionZh": "弹层 z-index"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "提及",
+      "since": "4.0.4"
     },
     {
       "name": "Menu",
@@ -6644,7 +6708,9 @@
         "Menu.ItemGroup",
         "Menu.Divider"
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "导航菜单",
+      "since": "4.0.4"
     },
     {
       "name": "Message",
@@ -6739,7 +6805,9 @@
           "answer": "antd will dynamic create React instance by `ReactDOM.render` when call message methods. Whose context is different with origin code located context.\n\nWhen you need context info (like ConfigProvider context), you can use `message.useMessage` to get `api` instance and `contextHolder` node. And put it in your children:\n\n```tsx\nconst [api, contextHolder] = message.useMessage();\n\nreturn (\n  <Context1.Provider value=\"Ant\">\n    {/* contextHolder is inside Context1 which means api will get value of Context1 */}\n    {contextHolder}\n    <Context2.Provider value=\"Design\">\n      {/* contextHolder is outside Context2 which means api will **not** get value of Context2 */}\n    </Context2.Provider>\n  </Context1.Provider>\n);\n```\n\n**Note:** You must insert `contextHolder` into your children with hooks. You can use origin method if you do not need context connection."
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "全局提示",
+      "since": "4.0.4"
     },
     {
       "name": "Modal",
@@ -7198,7 +7266,9 @@
         "Modal.useModal",
         "Modal.config"
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "对话框",
+      "since": "4.0.4"
     },
     {
       "name": "Notification",
@@ -7419,7 +7489,9 @@
           "answer": "antd will dynamic create React instance by `ReactDOM.render` when call notification methods. Whose context is different with origin code located context.\n\nWhen you need context info (like ConfigProvider context), you can use `notification.useNotification` to get `api` instance and `contextHolder` node. And put it in your children:\n\n```tsx\nconst [api, contextHolder] = notification.useNotification();\n\nreturn (\n  <Context1.Provider value=\"Ant\">\n    {/* contextHolder is inside Context1 which means api will get value of Context1 */}\n    {contextHolder}\n    <Context2.Provider value=\"Design\">\n      {/* contextHolder is outside Context2 which means api will **not** get value of Context2 */}\n    </Context2.Provider>\n  </Context1.Provider>\n);\n```\n\n**Note:** You must insert `contextHolder` into your children with hooks. You can use origin method if you do not need context connection."
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "通知提醒框",
+      "since": "4.0.4"
     },
     {
       "name": "PageHeader",
@@ -7428,7 +7500,9 @@
       "whenToUse": "PageHeader can be used to highlight the page topic, display important information about the page, and carry the action items related to the current page (including page-level operations, inter-page navigation, etc.) It can also be used as inter-page navigation.",
       "whenToUseZh": "当需要使用户快速理解当前页是什么以及方便用户使用页面功能时使用，通常也可被用作页面间导航。",
       "props": [],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "页头",
+      "since": "4.0.4"
     },
     {
       "name": "Pagination",
@@ -7660,7 +7734,9 @@
           "descriptionZh": "每页展示数量选择器 top"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "分页",
+      "since": "4.0.4"
     },
     {
       "name": "Popconfirm",
@@ -7678,7 +7754,9 @@
           "descriptionZh": "确认框 z-index"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "气泡确认框",
+      "since": "4.0.4"
     },
     {
       "name": "Popover",
@@ -7703,7 +7781,9 @@
           "descriptionZh": "气泡卡片 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "气泡卡片",
+      "since": "4.0.4"
     },
     {
       "name": "Progress",
@@ -7890,7 +7970,9 @@
           "descriptionZh": "进度条剩余部分颜色"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "进度条",
+      "since": "4.0.4"
     },
     {
       "name": "Radio",
@@ -8102,7 +8184,9 @@
           "descriptionZh": "单选框右间距"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "单选框",
+      "since": "4.0.4"
     },
     {
       "name": "Rate",
@@ -8269,7 +8353,9 @@
           "descriptionZh": "小星星尺寸"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "评分",
+      "since": "4.0.4"
     },
     {
       "name": "Result",
@@ -8344,7 +8430,9 @@
           "descriptionZh": "标题字体大小"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "结果",
+      "since": "4.0.4"
     },
     {
       "name": "Select",
@@ -8974,7 +9062,9 @@
           "answer": "Select only create a11y auxiliary node when operating on. Please open Select and retry. For `aria-label` & `aria-labelledby` miss warning, please add related prop to Select with your own requirement."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "选择器",
+      "since": "4.0.4"
     },
     {
       "name": "Skeleton",
@@ -9147,7 +9237,9 @@
           "descriptionZh": "标题骨架屏高度"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "骨架屏",
+      "since": "4.0.4"
     },
     {
       "name": "Slider",
@@ -9431,7 +9523,9 @@
           "descriptionZh": "轨道已覆盖部分背景色（悬浮态）"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "滑动输入条",
+      "since": "4.0.4"
     },
     {
       "name": "Space",
@@ -9481,7 +9575,9 @@
           "descriptionZh": "是否自动换行，仅在 `horizontal` 时有效"
         }
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "间距",
+      "since": "4.1.5"
     },
     {
       "name": "Spin",
@@ -9563,7 +9659,9 @@
           "descriptionZh": "小号加载图标尺寸"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "加载中",
+      "since": "4.0.4"
     },
     {
       "name": "Statistic",
@@ -9711,7 +9809,9 @@
           "descriptionZh": "标题字体大小"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "统计数值",
+      "since": "4.0.4"
     },
     {
       "name": "Steps",
@@ -9932,7 +10032,9 @@
       "subComponents": [
         "Steps.Step"
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "步骤条",
+      "since": "4.0.4"
     },
     {
       "name": "Switch",
@@ -10112,7 +10214,9 @@
           "descriptionZh": "开关内边距"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "开关",
+      "since": "4.0.4"
     },
     {
       "name": "Table",
@@ -11034,7 +11138,9 @@
           "answer": "Fixed column use `z-index` to make it over other columns. You will find sometime fixed columns also over your mask layout. You can set `z-index` on your mask layout to resolve."
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "表格",
+      "since": "4.0.4"
     },
     {
       "name": "Tabs",
@@ -11392,7 +11498,9 @@
       "subComponents": [
         "Tabs.TabPane"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "标签页",
+      "since": "4.0.4"
     },
     {
       "name": "Tag",
@@ -11485,7 +11593,9 @@
       "subComponents": [
         "Tag.CheckableTag"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "标签",
+      "since": "4.0.4"
     },
     {
       "name": "Timeline",
@@ -11598,7 +11708,9 @@
       "subComponents": [
         "Timeline.Item"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "时间轴",
+      "since": "4.0.4"
     },
     {
       "name": "TimePicker",
@@ -11820,7 +11932,9 @@
           "descriptionZh": ""
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "时间选择框",
+      "since": "4.0.4"
     },
     {
       "name": "Tooltip",
@@ -11961,7 +12075,9 @@
           "descriptionZh": "文字提示 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "文字提示",
+      "since": "4.0.4"
     },
     {
       "name": "Transfer",
@@ -12216,7 +12332,9 @@
           "answer": "In order to keep the page number synchronized, you can disable columns you checked without removing the option: <https://codesandbox.io/s/93xeb>"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "穿梭框",
+      "since": "4.0.4"
     },
     {
       "name": "Tree",
@@ -12651,7 +12769,9 @@
           "answer": "Tree change its data by conduction. Includes checked or auto expanded, it will conduction state to parent / children node until current node is `disabled`. So if a controlled node is `disabled`, it will only modify self state and not affect other nodes. For example, a parent node contains 3 child nodes and one of them is `disabled`. When check the parent node, it will only check rest 2 child nodes. As the same, when check these 2 child node, parent will be checked whatever checked state the `disabled` one is.\n\nThis conduction logic prevent that modify `disabled` parent checked state by check children node and user can not modify directly with click parent which makes the interactive conflict. If you want to modify this conduction logic, you can customize it with `checkStrictly` prop."
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "树形控件",
+      "since": "4.0.4"
     },
     {
       "name": "TreeSelect",
@@ -13098,7 +13218,9 @@
           "answer": "You can ref Select [FAQ](/components/select)."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "树选择",
+      "since": "4.0.4"
     },
     {
       "name": "Typography",
@@ -13512,7 +13634,9 @@
         "Typography.Title",
         "Typography.Paragraph"
       ],
-      "categoryZh": "通用"
+      "categoryZh": "通用",
+      "nameZh": "排版",
+      "since": "4.0.4"
     },
     {
       "name": "Upload",
@@ -13784,7 +13908,9 @@
           "answer": "See <https://github.com/react-component/upload#customrequest>."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "上传",
+      "since": "4.0.4"
     }
   ],
   "globalTokens": [

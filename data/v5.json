@@ -240,7 +240,9 @@
       ],
       "subComponents": [
         "Button.Group"
-      ]
+      ],
+      "nameZh": "按钮",
+      "since": "4.0.4"
     },
     {
       "name": "Table",
@@ -429,7 +431,9 @@
         "Table.Column",
         "Table.ColumnGroup",
         "Table.Summary"
-      ]
+      ],
+      "nameZh": "表格",
+      "since": "4.0.4"
     },
     {
       "name": "Select",
@@ -582,7 +586,9 @@
           "question": "Why is the dropdown not showing search results?",
           "answer": "Check if filterOption is set correctly. By default it filters by option label."
         }
-      ]
+      ],
+      "nameZh": "选择器",
+      "since": "4.0.4"
     },
     {
       "name": "Input",
@@ -711,7 +717,9 @@
         "Input.Search",
         "Input.Password",
         "Input.OTP"
-      ]
+      ],
+      "nameZh": "输入框",
+      "since": "4.0.4"
     },
     {
       "name": "Form",
@@ -809,7 +817,9 @@
         "Form.List",
         "Form.Provider",
         "Form.ErrorList"
-      ]
+      ],
+      "nameZh": "表单",
+      "since": "4.0.4"
     },
     {
       "name": "Modal",
@@ -920,7 +930,9 @@
         "Modal.error",
         "Modal.warning"
       ],
-      "subComponents": []
+      "subComponents": [],
+      "nameZh": "对话框",
+      "since": "4.0.4"
     },
     {
       "name": "Space",
@@ -960,7 +972,9 @@
       ],
       "subComponents": [
         "Space.Compact"
-      ]
+      ],
+      "nameZh": "间距",
+      "since": "4.1.5"
     },
     {
       "name": "Flex",
@@ -1005,7 +1019,9 @@
       "related": [
         "Space"
       ],
-      "subComponents": []
+      "subComponents": [],
+      "nameZh": "弹性布局",
+      "since": "5.10.3"
     },
     {
       "name": "Grid",
@@ -1056,7 +1072,9 @@
       "subComponents": [
         "Row",
         "Col"
-      ]
+      ],
+      "nameZh": "栅格",
+      "since": "4.0.4"
     }
   ],
   "globalTokens": [

@@ -83,7 +83,9 @@
           "question": "When Affix is ​​used in a horizontal scroll container, the position of the element `left` is incorrect.",
           "answer": "Affix is ​​generally only applicable to areas with one-way scrolling, and only supports usage in vertical scrolling containers. If you want to use it in a horizontal container, you can consider implementing with the native `position: sticky` property.\n\nRelated issues：[#29108](https://github.com/ant-design/ant-design/issues/29108)"
         }
-      ]
+      ],
+      "nameZh": "固钉",
+      "since": "4.0.4"
     },
     {
       "name": "Alert",
@@ -287,7 +289,9 @@
       ],
       "subComponents": [
         "Alert.ErrorBoundary"
-      ]
+      ],
+      "nameZh": "警告提示",
+      "since": "4.0.4"
     },
     {
       "name": "Anchor",
@@ -531,7 +535,9 @@
           "description": "Horizontal padding of link",
           "descriptionZh": "链接横向内间距"
         }
-      ]
+      ],
+      "nameZh": "锚点",
+      "since": "4.0.4"
     },
     {
       "name": "App",
@@ -575,7 +581,9 @@
           "code": "import React from 'react';\nimport { App, Button, Space } from 'antd';\n\n// Sub page\nconst MyPage = () => {\n  const { message, notification } = App.useApp();\n\n  const showMessage = () => {\n    message.success('Success!');\n  };\n\n  const showNotification = () => {\n    notification.info({\n      message: `Notification`,\n      description: 'Hello, Ant Design!!',\n    });\n  };\n\n  return (\n    <Space>\n      <Button type=\"primary\" onClick={showMessage}>\n        Message for only one\n      </Button>\n      <Button type=\"primary\" onClick={showNotification}>\n        Notification for bottomLeft\n      </Button>\n    </Space>\n  );\n};\n\n// Entry component\nexport default () => (\n  <App message={{ maxCount: 1 }} notification={{ placement: 'bottomLeft' }}>\n    <MyPage />\n  </App>\n);\n"
         }
       ],
-      "categoryZh": "其他"
+      "categoryZh": "其他",
+      "nameZh": "包裹组件",
+      "since": "5.1.7"
     },
     {
       "name": "AutoComplete",
@@ -846,7 +854,9 @@
           "question": "Why doesn't the text composition system work well with onSearch in controlled mode?",
           "answer": "Please use `onChange` to manage control state. `onSearch` is used for searching input which is not the same as `onChange`. Besides, clicking on the option will not trigger the `onSearch` event.\n\nRelated issue: [#18230](https://github.com/ant-design/ant-design/issues/18230) [#17916](https://github.com/ant-design/ant-design/issues/17916)"
         }
-      ]
+      ],
+      "nameZh": "自动完成",
+      "since": "4.0.4"
     },
     {
       "name": "Avatar",
@@ -1107,7 +1117,9 @@
       ],
       "subComponents": [
         "Avatar.Group"
-      ]
+      ],
+      "nameZh": "头像",
+      "since": "4.0.4"
     },
     {
       "name": "Badge",
@@ -1394,7 +1406,9 @@
       "subComponents": [
         "Badge.Ribbon"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "徽标数",
+      "since": "4.0.4"
     },
     {
       "name": "Breadcrumb",
@@ -1608,7 +1622,9 @@
           "descriptionZh": "分隔符外间距"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "面包屑",
+      "since": "4.0.4"
     },
     {
       "name": "Button",
@@ -2071,7 +2087,9 @@
           "question": "How to remove space between 2 chinese characters?",
           "answer": "Following the Ant Design specification, we will add one space between if Button (exclude Text button and Link button) contains two Chinese characters only. If you don't need that, you can use [ConfigProvider](/components/config-provider/#api) to set `autoInsertSpaceInButton` as `false`.\n\n<img src=\"https://gw.alipayobjects.com/zos/antfincdn/MY%26THAPZrW/38f06cb9-293a-4b42-b183-9f443e79ffea.png\" width=\"100px\" height=\"64px\" style=\"box-shadow: none; margin: 0;\" alt=\"Button with two Chinese characters\" />"
         }
-      ]
+      ],
+      "nameZh": "按钮",
+      "since": "4.0.4"
     },
     {
       "name": "Calendar",
@@ -2292,7 +2310,9 @@
           "answer": "`onSelect` provide `info.source` to help on this:\n\n```tsx\n<Calendar\n  onSelect={(date, { source }) => {\n    if (source === 'date') {\n      console.log('Panel Select:', source);\n    }\n  }}\n/>\n```"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "日历",
+      "since": "4.0.4"
     },
     {
       "name": "Card",
@@ -2657,7 +2677,9 @@
         "Card.Grid",
         "Card.Meta"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "卡片",
+      "since": "4.0.4"
     },
     {
       "name": "Carousel",
@@ -2816,7 +2838,9 @@
           "answer": "See [#12479](https://github.com/ant-design/ant-design/issues/12479)."
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "走马灯",
+      "since": "4.0.4"
     },
     {
       "name": "Cascader",
@@ -3349,7 +3373,9 @@
           "descriptionZh": "选项选中时字重"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "级联选择",
+      "since": "4.0.4"
     },
     {
       "name": "Checkbox",
@@ -3510,7 +3536,9 @@
           "code": "import React from 'react';\nimport { Checkbox, Col, Row } from 'antd';\nimport type { CheckboxValueType } from 'antd/es/checkbox/Group';\n\nconst onChange = (checkedValues: CheckboxValueType[]) => {\n  console.log('checked = ', checkedValues);\n};\n\nconst App: React.FC = () => (\n  <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>\n    <Row>\n      <Col span={8}>\n        <Checkbox value=\"A\">A</Checkbox>\n      </Col>\n      <Col span={8}>\n        <Checkbox value=\"B\">B</Checkbox>\n      </Col>\n      <Col span={8}>\n        <Checkbox value=\"C\">C</Checkbox>\n      </Col>\n      <Col span={8}>\n        <Checkbox value=\"D\">D</Checkbox>\n      </Col>\n      <Col span={8}>\n        <Checkbox value=\"E\">E</Checkbox>\n      </Col>\n    </Row>\n  </Checkbox.Group>\n);\n\nexport default App;\n"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "多选框",
+      "since": "4.0.4"
     },
     {
       "name": "Collapse",
@@ -3784,7 +3812,9 @@
       "subComponents": [
         "Collapse.Panel"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "折叠面板",
+      "since": "4.0.4"
     },
     {
       "name": "ColorPicker",
@@ -4094,7 +4124,9 @@
           "question": "Questions about color assignment",
           "answer": "The value of the color selector supports both string color values and selector-generated `Color` objects. However, since there is a precision error when converting color strings of different formats to each other, it is recommended to use selector-generated `Color` objects for assignment operations in controlled scenarios, so that the precision problem can be avoided and the values are guaranteed to be accurate and the selector can work as expected."
         }
-      ]
+      ],
+      "nameZh": "颜色选择器",
+      "since": "5.5.2"
     },
     {
       "name": "ConfigProvider",
@@ -4678,7 +4710,9 @@
         "ConfigProvider.config",
         "ConfigProvider.useConfig"
       ],
-      "categoryZh": "其他"
+      "categoryZh": "其他",
+      "nameZh": "全局化配置",
+      "since": "4.0.4"
     },
     {
       "name": "DatePicker",
@@ -5749,7 +5783,9 @@
           "answer": "When you change the layout of nodes by `panelRender`, React will unmount and re-mount it which reset the component state. You should keep the layout stable. Please ref [#27263](https://github.com/ant-design/ant-design/issues/27263) for more info."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "日期选择框",
+      "since": "4.0.4"
     },
     {
       "name": "Descriptions",
@@ -5980,7 +6016,9 @@
           "descriptionZh": "标题下间距"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "描述列表",
+      "since": "4.0.4"
     },
     {
       "name": "Divider",
@@ -6107,7 +6145,9 @@
           "description": "Horizontal margin of vertical Divider",
           "descriptionZh": "纵向分割线的横向外间距"
         }
-      ]
+      ],
+      "nameZh": "分割线",
+      "since": "4.0.4"
     },
     {
       "name": "Drawer",
@@ -6212,7 +6252,9 @@
           "descriptionZh": "弹窗 z-index"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "抽屉",
+      "since": "4.0.4"
     },
     {
       "name": "Dropdown",
@@ -6518,7 +6560,9 @@
       "subComponents": [
         "Dropdown.Button"
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "下拉菜单",
+      "since": "4.0.4"
     },
     {
       "name": "Empty",
@@ -6591,7 +6635,9 @@
           "code": "import React from 'react';\nimport { Empty } from 'antd';\n\nconst App: React.FC = () => <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;\n\nexport default App;\n"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "空状态",
+      "since": "4.0.4"
     },
     {
       "name": "FloatButton",
@@ -6819,7 +6865,9 @@
         "FloatButton.Group",
         "FloatButton.BackTop"
       ],
-      "categoryZh": "通用"
+      "categoryZh": "通用",
+      "nameZh": "悬浮按钮",
+      "since": "5.0.7"
     },
     {
       "name": "Form",
@@ -7374,7 +7422,9 @@
         "Form.useWatch",
         "Form.Item"
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "表单",
+      "since": "4.0.4"
     },
     {
       "name": "Grid",
@@ -7603,7 +7653,9 @@
           "code": "import React from 'react';\nimport { Grid, Tag } from 'antd';\n\nconst { useBreakpoint } = Grid;\n\nconst App: React.FC = () => {\n  const screens = useBreakpoint();\n\n  return (\n    <>\n      Current break point:{' '}\n      {Object.entries(screens)\n        .filter((screen) => !!screen[1])\n        .map((screen) => (\n          <Tag color=\"blue\" key={screen[0]}>\n            {screen[0]}\n          </Tag>\n        ))}\n    </>\n  );\n};\n\nexport default App;\n"
         }
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "栅格",
+      "since": "4.0.4"
     },
     {
       "name": "Icon",
@@ -7769,7 +7821,9 @@
           "code": "import React from 'react';\nimport { CheckCircleTwoTone, HeartTwoTone, SmileTwoTone } from '@ant-design/icons';\nimport { Space } from 'antd';\n\nconst App: React.FC = () => (\n  <Space>\n    <SmileTwoTone />\n    <HeartTwoTone twoToneColor=\"#eb2f96\" />\n    <CheckCircleTwoTone twoToneColor=\"#52c41a\" />\n  </Space>\n);\n\nexport default App;\n"
         }
       ],
-      "categoryZh": "通用"
+      "categoryZh": "通用",
+      "nameZh": "图标",
+      "since": "4.0.4"
     },
     {
       "name": "Image",
@@ -8089,7 +8143,9 @@
           "descriptionZh": "预览浮层 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "图片",
+      "since": "4.6.6"
     },
     {
       "name": "Input",
@@ -8710,7 +8766,9 @@
       "subComponents": [
         "Input.TextArea"
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "输入框",
+      "since": "4.0.4"
     },
     {
       "name": "InputNumber",
@@ -9194,7 +9252,9 @@
           "answer": "`onChange` is user trigger event. Auto trigger will makes form lib can not detect data modify source."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "数字输入框",
+      "since": "4.0.4"
     },
     {
       "name": "Layout",
@@ -9520,7 +9580,9 @@
       "subComponents": [
         "Layout.Sider"
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "布局",
+      "since": "4.0.4"
     },
     {
       "name": "List",
@@ -9895,7 +9957,9 @@
         "List.Item",
         "List.Item"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "列表",
+      "since": "4.0.4"
     },
     {
       "name": "Mentions",
@@ -10301,7 +10365,9 @@
           "descriptionZh": "弹层 z-index"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "提及",
+      "since": "4.0.4"
     },
     {
       "name": "Menu",
@@ -10838,7 +10904,9 @@
           "answer": "Menu will render fully item in flex layout and then collapse it. You need tell flex not consider Menu width to enable responsive ([online demo](https://codesandbox.io/s/ding-bu-dao-hang-antd-4-21-7-forked-5e3imy?file=/demo.js)):\n\n```jsx\n<div style={{ flex }}>\n  <div style={{ ... }}>Some Content</div>\n  <Menu style={{ minWidth: 0, flex: \"auto\" }} />\n</div>\n```"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "导航菜单",
+      "since": "4.0.4"
     },
     {
       "name": "Message",
@@ -11003,7 +11071,9 @@
           "answer": "You can config with [`ConfigProvider.config`](/components/config-provider#configproviderconfig-4130)"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "全局提示",
+      "since": "4.0.4"
     },
     {
       "name": "Modal",
@@ -11580,7 +11650,9 @@
         "Modal.method",
         "Modal.useModal"
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "对话框",
+      "since": "4.0.4"
     },
     {
       "name": "Notification",
@@ -11946,7 +12018,9 @@
           "answer": "You can config with [`ConfigProvider.config`](/components/config-provider#configproviderconfig-4130)"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "通知提醒框",
+      "since": "4.0.4"
     },
     {
       "name": "Pagination",
@@ -12261,7 +12335,9 @@
           "descriptionZh": "每页展示数量选择器 top"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "分页",
+      "since": "4.0.4"
     },
     {
       "name": "Popconfirm",
@@ -12337,7 +12413,9 @@
           "descriptionZh": "确认框 z-index"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "气泡确认框",
+      "since": "4.0.4"
     },
     {
       "name": "Popover",
@@ -12412,7 +12490,9 @@
           "descriptionZh": "气泡卡片 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "气泡卡片",
+      "since": "4.0.4"
     },
     {
       "name": "Progress",
@@ -12710,7 +12790,9 @@
           "descriptionZh": "进度条剩余部分颜色"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "进度条",
+      "since": "4.0.4"
     },
     {
       "name": "QRCode",
@@ -12881,7 +12963,9 @@
           "question": "About QRCode ErrorLevel",
           "answer": "The ErrorLevel means that the QR code can be scanned normally after being blocked, and the maximum area that can be blocked is the error correction rate.\n\nGenerally, the QR code is divided into 4 error correction levels: Level `L` can correct about `7%` errors, Level `M` can correct about `15%` errors, Level `Q` can correct about `25%` errors, and Level `H` can correct about `30%` errors. When the content encoding of the QR code carries less information, in other words, when the value link is short, set different error correction levels, and the generated image will not change.\n\n> For more information, see the: [https://www.qrcode.com/en/about/error_correction](https://www.qrcode.com/en/about/error_correction.html)"
         }
-      ]
+      ],
+      "nameZh": "二维码",
+      "since": "5.1.7"
     },
     {
       "name": "Radio",
@@ -13167,7 +13251,9 @@
           "descriptionZh": "单选框右间距"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "单选框",
+      "since": "4.0.4"
     },
     {
       "name": "Rate",
@@ -13392,7 +13478,9 @@
           "descriptionZh": "小星星尺寸"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "评分",
+      "since": "4.0.4"
     },
     {
       "name": "Result",
@@ -13533,7 +13621,9 @@
           "descriptionZh": "标题字体大小"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "结果",
+      "since": "4.0.4"
     },
     {
       "name": "Segmented",
@@ -13726,7 +13816,9 @@
           "descriptionZh": "Segmented 控件容器的 padding"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "分段控制器",
+      "since": "4.20.7"
     },
     {
       "name": "Select",
@@ -14566,7 +14658,9 @@
           "answer": "Select only create a11y auxiliary node when operating on. Please open Select and retry. For `aria-label` & `aria-labelledby` miss warning, please add related prop to Select with your own requirement.\n\nDefault virtual scrolling will create a mock element to simulate an accessible binding. If a screen reader needs to fully access the entire list, you can set `virtual={false}` to disable virtual scrolling and the accessibility option will be bound to the actual element."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "选择器",
+      "since": "4.0.4"
     },
     {
       "name": "Skeleton",
@@ -14799,7 +14893,9 @@
           "descriptionZh": "标题骨架屏高度"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "骨架屏",
+      "since": "4.0.4"
     },
     {
       "name": "Slider",
@@ -15205,7 +15301,9 @@
           "descriptionZh": "轨道已覆盖部分背景色（悬浮态）"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "滑动输入条",
+      "since": "4.0.4"
     },
     {
       "name": "Space",
@@ -15372,7 +15470,9 @@
       "subComponents": [
         "Space.Compact"
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "间距",
+      "since": "4.1.5"
     },
     {
       "name": "Spin",
@@ -15512,7 +15612,9 @@
           "descriptionZh": "小号加载图标尺寸"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "加载中",
+      "since": "4.0.4"
     },
     {
       "name": "Statistic",
@@ -15710,7 +15812,9 @@
           "descriptionZh": "标题字体大小"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "统计数值",
+      "since": "4.0.4"
     },
     {
       "name": "Steps",
@@ -16093,7 +16197,9 @@
           "descriptionZh": "可跳转步骤条内容最大宽度"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "步骤条",
+      "since": "4.0.4"
     },
     {
       "name": "Switch",
@@ -16315,7 +16421,9 @@
           "descriptionZh": "开关内边距"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "开关",
+      "since": "4.0.4"
     },
     {
       "name": "Table",
@@ -17599,7 +17707,9 @@
           "answer": "Since `4.1.0`, You can use [`rowSelection.renderCell`](https://ant.design/components/table/#rowselection) to custom render Table Checkbox. If you want to add Tooltip, please refer to this [demo](https://codesandbox.io/s/table-row-tooltip-v79j2v)."
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "表格",
+      "since": "4.0.4"
     },
     {
       "name": "Tabs",
@@ -18106,7 +18216,9 @@
           "descriptionZh": "下拉菜单 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "标签页",
+      "since": "4.0.4"
     },
     {
       "name": "Tag",
@@ -18267,7 +18379,9 @@
       "subComponents": [
         "Tag.CheckableTag"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "标签",
+      "since": "4.0.4"
     },
     {
       "name": "Timeline",
@@ -18449,7 +18563,9 @@
           "descriptionZh": "轨迹宽度"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "时间轴",
+      "since": "4.0.4"
     },
     {
       "name": "TimePicker",
@@ -18787,7 +18903,9 @@
           "code": "import React, { useState } from 'react';\nimport { TimePicker } from 'antd';\nimport type { Dayjs } from 'dayjs';\n\nconst App: React.FC = () => {\n  const [value, setValue] = useState<Dayjs | null>(null);\n\n  const onChange = (time: Dayjs) => {\n    setValue(time);\n  };\n\n  return <TimePicker value={value} onChange={onChange} />;\n};\n\nexport default App;\n"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "时间选择框",
+      "since": "4.0.4"
     },
     {
       "name": "Tooltip",
@@ -18987,7 +19105,9 @@
           "descriptionZh": "文字提示 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "文字提示",
+      "since": "4.0.4"
     },
     {
       "name": "Tour",
@@ -19237,7 +19357,9 @@
           "descriptionZh": "弹层 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "漫游式引导",
+      "since": "5.0.7"
     },
     {
       "name": "Transfer",
@@ -19576,7 +19698,9 @@
           "answer": "In order to keep the page number synchronized, you can disable columns you checked without removing the option: <https://codesandbox.io/s/objective-wing-6iqbx>"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "穿梭框",
+      "since": "4.0.4"
     },
     {
       "name": "Tree",
@@ -20126,7 +20250,9 @@
           "answer": "Tree change its data by conduction. Includes checked or auto expanded, it will conduction state to parent / children node until current node is `disabled`. So if a controlled node is `disabled`, it will only modify self state and not affect other nodes. For example, a parent node contains 3 child nodes and one of them is `disabled`. When check the parent node, it will only check rest 2 child nodes. As the same, when check these 2 child node, parent will be checked whatever checked state the `disabled` one is.\n\nThis conduction logic prevent that modify `disabled` parent checked state by check children node and user can not modify directly with click parent which makes the interactive conflict. If you want to modify this conduction logic, you can customize it with `checkStrictly` prop."
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "树形控件",
+      "since": "4.0.4"
     },
     {
       "name": "TreeSelect",
@@ -20715,7 +20841,9 @@
           "answer": "Just turn off virtual scrolling, because the `scrollWidth` of the complete list cannot be accurately measured when virtual scrolling is turned on."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "树选择",
+      "since": "4.0.4"
     },
     {
       "name": "Typography",
@@ -21267,7 +21395,9 @@
         "Typography.Title",
         "Typography.Paragraph"
       ],
-      "categoryZh": "通用"
+      "categoryZh": "通用",
+      "nameZh": "排版",
+      "since": "4.0.4"
     },
     {
       "name": "Upload",
@@ -21736,7 +21866,9 @@
           "answer": "Chrome update will also break native upload. Please restart Chrome to finish the upload work. Ref:\n\n- [#32672](https://github.com/ant-design/ant-design/issues/32672)\n- [#32913](https://github.com/ant-design/ant-design/issues/32913)\n- [#33988](https://github.com/ant-design/ant-design/issues/33988)"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "上传",
+      "since": "4.0.4"
     },
     {
       "name": "Watermark",
@@ -21887,7 +22019,9 @@
           "answer": "When using an image watermark and the image loads abnormally, you can add `content` at the same time to prevent the watermark from becoming invalid (since 5.2.3).\n\n```typescript jsx\n<Watermark\n  height={30}\n  width={130}\n  content=\"Ant Design\"\n  image=\"https://mdn.alipayobjects.com/huamei_7uahnr/afts/img/A*lkAoRbywo0oAAAAAAAAAAAAADrJ8AQ/original\"\n>\n  <div style={{ height: 500 }} />\n</Watermark>\n```"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "水印",
+      "since": "5.1.7"
     }
   ],
   "globalTokens": [

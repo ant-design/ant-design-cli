@@ -86,6 +86,7 @@ function main() {
 
     const component: ComponentData = {
       name: meta.name,
+      nameZh: meta.nameZh || undefined,
       category: meta.category,
       categoryZh: meta.categoryZh || undefined,
       description: meta.description,

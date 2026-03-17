@@ -1,6 +1,5 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
-import { localize } from '../types.js';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { formatTable, output } from '../output/formatter.js';
@@ -8,12 +7,11 @@ import { formatTable, output } from '../output/formatter.js';
 export function registerListCommand(program: Command): void {
   program
     .command('list')
-    .description('List all components with descriptions and categories')
+    .description('List all components with bilingual names, descriptions, and first-supported version')
     .action(() => {
       const opts = program.opts<GlobalOptions>();
       const versionInfo = detectVersion(opts.version);
       const store = loadMetadataForVersion(versionInfo.version);
-      const lang = opts.lang;
 
       if (store.components.length === 0) {
         console.log('No component data available.');
@@ -23,41 +21,37 @@ export function registerListCommand(program: Command): void {
       if (opts.format === 'json') {
         const data = store.components.map((c) => ({
           name: c.name,
-          category: localize(c.category, c.categoryZh, lang),
-          description: localize(c.description, c.descriptionZh, lang),
+          nameZh: c.nameZh ?? '',
+          description: c.description,
+          descriptionZh: c.descriptionZh ?? '',
+          since: c.since ?? '',
         }));
         output(data, 'json');
         return;
       }
 
-      // Group by category
-      const categories = new Map<string, typeof store.components>();
-      for (const comp of store.components) {
-        const cat = localize(comp.category, comp.categoryZh, lang) || 'Other';
-        if (!categories.has(cat)) categories.set(cat, []);
-        categories.get(cat)!.push(comp);
-      }
-
       if (opts.format === 'markdown') {
-        const lines: string[] = [`# antd Components (${versionInfo.version})`, ''];
-        for (const [category, components] of categories) {
-          lines.push(`## ${category}`, '');
-          for (const comp of components) {
-            const desc = localize(comp.description, comp.descriptionZh, lang);
-            lines.push(`- **${comp.name}** — ${desc}`);
-          }
-          lines.push('');
+        const lines: string[] = [
+          `# antd Components (${versionInfo.version})`,
+          '',
+          '| Component | 组件名 | Description | Since |',
+          '|-----------|--------|-------------|-------|',
+        ];
+        for (const c of store.components) {
+          const desc = c.description || c.descriptionZh || '';
+          lines.push(`| **${c.name}** | ${c.nameZh ?? ''} | ${desc} | ${c.since ?? ''} |`);
         }
         console.log(lines.join('\n'));
         return;
       }
 
       // Text format
-      const headers = ['Component', 'Category', 'Description'];
+      const headers = ['Component', '组件名', 'Description', 'Since'];
       const rows = store.components.map((c) => [
         c.name,
-        localize(c.category, c.categoryZh, lang),
-        localize(c.description, c.descriptionZh, lang),
+        c.nameZh ?? '',
+        c.description,
+        c.since ?? '',
       ]);
       console.log(formatTable(headers, rows, 'text'));
     });

@@ -84,7 +84,9 @@
           "question": "When Affix is ​​used in a horizontal scroll container, the position of the element `left` is incorrect.",
           "answer": "Affix is ​​generally only applicable to areas with one-way scrolling, and only supports usage in vertical scrolling containers. If you want to use it in a horizontal container, you can consider implementing with the native `position: sticky` property.\n\nRelated issues：[#29108](https://github.com/ant-design/ant-design/issues/29108)"
         }
-      ]
+      ],
+      "nameZh": "固钉",
+      "since": "4.0.4"
     },
     {
       "name": "Alert",
@@ -289,7 +291,9 @@
       ],
       "subComponents": [
         "Alert.ErrorBoundary"
-      ]
+      ],
+      "nameZh": "警告提示",
+      "since": "4.0.4"
     },
     {
       "name": "Anchor",
@@ -543,7 +547,9 @@
           "description": "Horizontal padding of link",
           "descriptionZh": "链接横向内间距"
         }
-      ]
+      ],
+      "nameZh": "锚点",
+      "since": "4.0.4"
     },
     {
       "name": "App",
@@ -602,7 +608,9 @@
           "answer": "Make sure the App `component` is a legit React component string, so when you're turning on CSS variables, there's a container to hold the CSS class name."
         }
       ],
-      "categoryZh": "其他"
+      "categoryZh": "其他",
+      "nameZh": "包裹组件",
+      "since": "5.1.7"
     },
     {
       "name": "AutoComplete",
@@ -903,7 +911,9 @@
           "question": "Why won't a controlled open AutoComplete display a drop-down menu when options are empty?",
           "answer": "The AutoComplete component is essentially an extension of the Input form element. When the `options` property is empty, displaying empty text could mislead the user into believing the component is not operational, when in fact they are still able to input text. To avoid confusion, the `open` property will not display the drop-down menu when set to `true` and in combination with an empty `options` property. The `open` property must be used in conjunction with the `options` property."
         }
-      ]
+      ],
+      "nameZh": "自动完成",
+      "since": "4.0.4"
     },
     {
       "name": "Avatar",
@@ -1151,7 +1161,9 @@
       ],
       "subComponents": [
         "Avatar.Group"
-      ]
+      ],
+      "nameZh": "头像",
+      "since": "4.0.4"
     },
     {
       "name": "Badge",
@@ -1435,7 +1447,9 @@
       "subComponents": [
         "Badge.Ribbon"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "徽标数",
+      "since": "4.0.4"
     },
     {
       "name": "Breadcrumb",
@@ -1650,7 +1664,9 @@
           "descriptionZh": "分隔符外间距"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "面包屑",
+      "since": "4.0.4"
     },
     {
       "name": "Button",
@@ -2174,7 +2190,9 @@
           "question": "How to close the click wave effect?",
           "answer": "If you don't need this feature, you can set `disabled` of `wave` in [ConfigProvider](/components/config-provider#api) as `true`.\n\n```jsx\n<ConfigProvider wave={{ disabled: true }}>\n  <Button>click</Button>\n</ConfigProvider>\n```"
         }
-      ]
+      ],
+      "nameZh": "按钮",
+      "since": "4.0.4"
     },
     {
       "name": "Calendar",
@@ -2399,7 +2417,9 @@
           "answer": "`onSelect` provide `info.source` to help on this:\n\n```tsx\n<Calendar\n  onSelect={(date, { source }) => {\n    if (source === 'date') {\n      console.log('Panel Select:', source);\n    }\n  }}\n/>\n```"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "日历",
+      "since": "4.0.4"
     },
     {
       "name": "Card",
@@ -2799,7 +2819,9 @@
         "Card.Grid",
         "Card.Meta"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "卡片",
+      "since": "4.0.4"
     },
     {
       "name": "Carousel",
@@ -3017,7 +3039,9 @@
           "answer": "See [#12479](https://github.com/ant-design/ant-design/issues/12479)."
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "走马灯",
+      "since": "4.0.4"
     },
     {
       "name": "Cascader",
@@ -3586,7 +3610,9 @@
           "descriptionZh": "选项选中时字重"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "级联选择",
+      "since": "4.0.4"
     },
     {
       "name": "Checkbox",
@@ -3776,7 +3802,9 @@
           "answer": "Form.Item default bind value to `value` property, but Checkbox value property is `checked`. You can use `valuePropName` to change bind property.\n\n```tsx | pure\n<Form.Item name=\"fieldA\" valuePropName=\"checked\">\n  <Checkbox />\n</Form.Item>\n```"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "多选框",
+      "since": "4.0.4"
     },
     {
       "name": "Collapse",
@@ -4131,7 +4159,9 @@
       "subComponents": [
         "Collapse.Panel"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "折叠面板",
+      "since": "4.0.4"
     },
     {
       "name": "ColorPicker",
@@ -4494,7 +4524,9 @@
           "question": "Questions about color assignment",
           "answer": "The value of the color selector supports both string color values and selector-generated `Color` objects. However, since there is a precision error when converting color strings of different formats to each other, it is recommended to use selector-generated `Color` objects for assignment operations in controlled scenarios, so that the precision problem can be avoided and the values are guaranteed to be accurate and the selector can work as expected."
         }
-      ]
+      ],
+      "nameZh": "颜色选择器",
+      "since": "5.5.2"
     },
     {
       "name": "ConfigProvider",
@@ -5168,7 +5200,9 @@
         "ConfigProvider.config",
         "ConfigProvider.useConfig"
       ],
-      "categoryZh": "其他"
+      "categoryZh": "其他",
+      "nameZh": "全局化配置",
+      "since": "4.0.4"
     },
     {
       "name": "DatePicker",
@@ -6423,7 +6457,9 @@
           "answer": "Please refer to the blog ['Why is it so hard to disable the date?'](/docs/blog/picker), to learn how to use it."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "日期选择框",
+      "since": "4.0.4"
     },
     {
       "name": "Descriptions",
@@ -6672,7 +6708,9 @@
           "descriptionZh": "标题下间距"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "描述列表",
+      "since": "4.0.4"
     },
     {
       "name": "Divider",
@@ -6816,7 +6854,9 @@
           "description": "Horizontal margin of vertical Divider",
           "descriptionZh": "纵向分割线的横向外间距"
         }
-      ]
+      ],
+      "nameZh": "分割线",
+      "since": "4.0.4"
     },
     {
       "name": "Drawer",
@@ -6965,7 +7005,9 @@
           "descriptionZh": "底部元素"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "抽屉",
+      "since": "4.0.4"
     },
     {
       "name": "Dropdown",
@@ -7280,7 +7322,9 @@
       "subComponents": [
         "Dropdown.Button"
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "下拉菜单",
+      "since": "4.0.4"
     },
     {
       "name": "Empty",
@@ -7354,7 +7398,9 @@
           "code": "import React from 'react';\nimport { Empty } from 'antd';\n\nconst App: React.FC = () => <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;\n\nexport default App;\n"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "空状态",
+      "since": "4.0.4"
     },
     {
       "name": "Flex",
@@ -7458,7 +7504,9 @@
           "code": "import React from 'react';\nimport { Button, Flex } from 'antd';\n\nconst Demo: React.FC = () => (\n  <Flex wrap gap=\"small\">\n    {Array.from({ length: 24 }, (_, i) => (\n      <Button key={i} type=\"primary\">\n        Button\n      </Button>\n    ))}\n  </Flex>\n);\n\nexport default Demo;\n"
         }
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "弹性布局",
+      "since": "5.10.3"
     },
     {
       "name": "FloatButton",
@@ -7726,7 +7774,9 @@
         "FloatButton.Group",
         "FloatButton.BackTop"
       ],
-      "categoryZh": "通用"
+      "categoryZh": "通用",
+      "nameZh": "悬浮按钮",
+      "since": "5.0.7"
     },
     {
       "name": "Form",
@@ -8354,7 +8404,9 @@
         "Form.useWatch",
         "Form.Item"
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "表单",
+      "since": "4.0.4"
     },
     {
       "name": "Grid",
@@ -8592,7 +8644,9 @@
           "code": "import React from 'react';\nimport { Grid, Tag } from 'antd';\n\nconst { useBreakpoint } = Grid;\n\nconst App: React.FC = () => {\n  const screens = useBreakpoint();\n\n  return (\n    <>\n      Current break point:{' '}\n      {Object.entries(screens)\n        .filter((screen) => !!screen[1])\n        .map((screen) => (\n          <Tag color=\"blue\" key={screen[0]}>\n            {screen[0]}\n          </Tag>\n        ))}\n    </>\n  );\n};\n\nexport default App;\n"
         }
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "栅格",
+      "since": "4.0.4"
     },
     {
       "name": "Icon",
@@ -8758,7 +8812,9 @@
           "code": "import React from 'react';\nimport { CheckCircleTwoTone, HeartTwoTone, SmileTwoTone } from '@ant-design/icons';\nimport { Space } from 'antd';\n\nconst App: React.FC = () => (\n  <Space>\n    <SmileTwoTone />\n    <HeartTwoTone twoToneColor=\"#eb2f96\" />\n    <CheckCircleTwoTone twoToneColor=\"#52c41a\" />\n  </Space>\n);\n\nexport default App;\n"
         }
       ],
-      "categoryZh": "通用"
+      "categoryZh": "通用",
+      "nameZh": "图标",
+      "since": "4.0.4"
     },
     {
       "name": "Image",
@@ -9094,7 +9150,9 @@
           "descriptionZh": "预览浮层 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "图片",
+      "since": "4.6.6"
     },
     {
       "name": "Input",
@@ -9727,7 +9785,9 @@
         "Input.Password",
         "Input.OTP"
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "输入框",
+      "since": "4.0.4"
     },
     {
       "name": "InputNumber",
@@ -10267,7 +10327,9 @@
           "answer": "> The use of the `type` attribute is deprecated\n\nThe InputNumber component allows you to use all the attributes of the input element and ultimately pass them to the input element, This attribute will also be added to the input element when you pass in `type='number'`, which will cause the input element to trigger native properties (allowing the mouse wheel to change the value), As a result `changeOnWheel` cannot control whether the mouse wheel changes the value."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "数字输入框",
+      "since": "4.0.4"
     },
     {
       "name": "Layout",
@@ -10602,7 +10664,9 @@
       "subComponents": [
         "Layout.Sider"
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "布局",
+      "since": "4.0.4"
     },
     {
       "name": "List",
@@ -11006,7 +11070,9 @@
         "List.Item",
         "List.Item"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "列表",
+      "since": "4.0.4"
     },
     {
       "name": "Mentions",
@@ -11453,7 +11519,9 @@
           "descriptionZh": "弹层 z-index"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "提及",
+      "since": "4.0.4"
     },
     {
       "name": "Menu",
@@ -11991,7 +12059,9 @@
           "answer": "Menu will render fully item in flex layout and then collapse it. You need tell flex not consider Menu width to enable responsive ([online demo](https://codesandbox.io/s/ding-bu-dao-hang-antd-4-21-7-forked-5e3imy?file=/demo.js)):\n\n```jsx\n<div style={{ flex }}>\n  <div style={{ ... }}>Some Content</div>\n  <Menu style={{ minWidth: 0, flex: \"auto\" }} />\n</div>\n```"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "导航菜单",
+      "since": "4.0.4"
     },
     {
       "name": "Message",
@@ -12157,7 +12227,9 @@
           "answer": "You can config with [`ConfigProvider.config`](/components/config-provider#configproviderconfig-4130)"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "全局提示",
+      "since": "4.0.4"
     },
     {
       "name": "Modal",
@@ -12815,7 +12887,9 @@
         "Modal.method",
         "Modal.useModal"
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "对话框",
+      "since": "4.0.4"
     },
     {
       "name": "Notification",
@@ -13254,7 +13328,9 @@
           "answer": "You can config with [`ConfigProvider.config`](/components/config-provider#configproviderconfig-4130)"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "通知提醒框",
+      "since": "4.0.4"
     },
     {
       "name": "Pagination",
@@ -13587,7 +13663,9 @@
           "descriptionZh": "每页展示数量选择器 top"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "分页",
+      "since": "4.0.4"
     },
     {
       "name": "Popconfirm",
@@ -13678,7 +13756,9 @@
           "answer": "This is due to the implementation of `rc-trigger`. `rc-trigger` forces children to accept ref, otherwise it will fall back to findDOMNode, so children need to be native html tags. If not, you need to use `React.forwardRef` transparently passes `ref` to native html tags.\n\n- `findDOMNode is deprecated` reproduce: <https://codesandbox.io/p/sandbox/finddomnode-c5hy96>\n- Using `forwardRef` to fix: <https://codesandbox.io/p/sandbox/no-finddomnode-warning-forked-gdxczs>"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "气泡确认框",
+      "since": "4.0.4"
     },
     {
       "name": "Popover",
@@ -13772,7 +13852,9 @@
           "answer": "Please ensure that the child node of `Tooltip` accepts `onMouseEnter`, `onMouseLeave`, `onPointerEnter`, `onPointerLeave`, `onFocus`, `onClick` events.\n\nFor more questions, please refer to [Tooltip FAQ](/components/tooltip#faq)."
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "气泡卡片",
+      "since": "4.0.4"
     },
     {
       "name": "Progress",
@@ -14103,7 +14185,9 @@
           "descriptionZh": "进度条剩余部分颜色"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "进度条",
+      "since": "4.0.4"
     },
     {
       "name": "QRCode",
@@ -14295,7 +14379,9 @@
           "question": "⚠️⚠️⚠️ Cannot scan the QR code?",
           "answer": "If the QR code cannot be scanned for identification, it may be because the link address is too long, which leads to too dense pixels.\n\nYou can configure the QR code to be larger through size, or shorten the link through short link services."
         }
-      ]
+      ],
+      "nameZh": "二维码",
+      "since": "5.1.7"
     },
     {
       "name": "Radio",
@@ -14662,7 +14748,9 @@
           "descriptionZh": "单选框右间距"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "单选框",
+      "since": "4.0.4"
     },
     {
       "name": "Rate",
@@ -14896,7 +14984,9 @@
           "descriptionZh": "小星星尺寸"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "评分",
+      "since": "4.0.4"
     },
     {
       "name": "Result",
@@ -15038,7 +15128,9 @@
           "descriptionZh": "标题字体大小"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "结果",
+      "since": "4.0.4"
     },
     {
       "name": "Segmented",
@@ -15284,7 +15376,9 @@
           "descriptionZh": "Segmented 控件容器的 padding"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "分段控制器",
+      "since": "4.20.7"
     },
     {
       "name": "Select",
@@ -16176,7 +16270,9 @@
           "answer": "Select only create a11y auxiliary node when operating on. Please open Select and retry. For `aria-label` & `aria-labelledby` miss warning, please add related prop to Select with your own requirement.\n\nDefault virtual scrolling will create a mock element to simulate an accessible binding. If a screen reader needs to fully access the entire list, you can set `virtual={false}` to disable virtual scrolling and the accessibility option will be bound to the actual element."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "选择器",
+      "since": "4.0.4"
     },
     {
       "name": "Skeleton",
@@ -16410,7 +16506,9 @@
           "descriptionZh": "标题骨架屏高度"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "骨架屏",
+      "since": "4.0.4"
     },
     {
       "name": "Slider",
@@ -16882,7 +16980,9 @@
           "descriptionZh": "抓取点元素"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "滑动输入条",
+      "since": "4.0.4"
     },
     {
       "name": "Space",
@@ -17055,7 +17155,9 @@
       "subComponents": [
         "Space.Compact"
       ],
-      "categoryZh": "布局"
+      "categoryZh": "布局",
+      "nameZh": "间距",
+      "since": "4.1.5"
     },
     {
       "name": "Spin",
@@ -17220,7 +17322,9 @@
           "descriptionZh": "小号加载图标尺寸"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "加载中",
+      "since": "4.0.4"
     },
     {
       "name": "Splitter",
@@ -17384,7 +17488,9 @@
           "descriptionZh": "拖拽触发区域大小"
         }
       ],
-      "categoryZh": "其他"
+      "categoryZh": "其他",
+      "nameZh": "分隔面板",
+      "since": "5.21.6"
     },
     {
       "name": "Statistic",
@@ -17582,7 +17688,9 @@
           "descriptionZh": "标题字体大小"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "统计数值",
+      "since": "4.0.4"
     },
     {
       "name": "Steps",
@@ -17966,7 +18074,9 @@
           "descriptionZh": "可跳转步骤条内容最大宽度"
         }
       ],
-      "categoryZh": "导航"
+      "categoryZh": "导航",
+      "nameZh": "步骤条",
+      "since": "4.0.4"
     },
     {
       "name": "Switch",
@@ -18211,7 +18321,9 @@
           "answer": "Form.Item default bind value to `value` property, but Switch value property is `checked`. You can use `valuePropName` to change bind property.\n\n```tsx | pure\n<Form.Item name=\"fieldA\" valuePropName=\"checked\">\n  <Switch />\n</Form.Item>\n```"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "开关",
+      "since": "4.0.4"
     },
     {
       "name": "Table",
@@ -19592,7 +19704,9 @@
           "answer": "Because virtual table needs to get its ref to do some calculations, so you need to use `React.forwardRef` wrapper and pass the ref to the dom"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "表格",
+      "since": "4.0.4"
     },
     {
       "name": "Tabs",
@@ -20160,7 +20274,9 @@
           "descriptionZh": "下拉菜单 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "标签页",
+      "since": "4.0.4"
     },
     {
       "name": "Tag",
@@ -20322,7 +20438,9 @@
       "subComponents": [
         "Tag.CheckableTag"
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "标签",
+      "since": "4.0.4"
     },
     {
       "name": "Timeline",
@@ -20507,7 +20625,9 @@
           "descriptionZh": "轨迹宽度"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "时间轴",
+      "since": "4.0.4"
     },
     {
       "name": "TimePicker",
@@ -20875,7 +20995,9 @@
           "code": "import React from 'react';\nimport { Flex, TimePicker } from 'antd';\n\nconst { RangePicker } = TimePicker;\n\nconst App: React.FC = () => (\n  <Flex vertical gap={12}>\n    <Flex gap={8}>\n      <TimePicker placeholder=\"Filled\" />\n      <RangePicker placeholder={['Filled', '']} />\n    </Flex>\n    <Flex gap={8}>\n      <TimePicker variant=\"filled\" placeholder=\"Filled\" />\n      <RangePicker variant=\"filled\" placeholder={['Filled', '']} />\n    </Flex>\n    <Flex gap={8}>\n      <TimePicker variant=\"borderless\" placeholder=\"Borderless\" />\n      <RangePicker variant=\"borderless\" placeholder={['Borderless', '']} />\n    </Flex>\n  </Flex>\n);\n\nexport default App;\n"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "时间选择框",
+      "since": "4.0.4"
     },
     {
       "name": "Tooltip",
@@ -20977,7 +21099,9 @@
           "answer": "Tooltip will cache content when it is closed to avoid flicker when content is updated:\n\n```jsx\n// `title` will not blink when `user` is empty\n<Tooltip open={user} title={user?.name} />\n```\n\n<div>\n<img alt=\"no blink\" height=\"50\" src=\"https://mdn.alipayobjects.com/huamei_7uahnr/afts/img/A*KVx7QLOYwVsAAAAAAAAAAAAADrJ8AQ/original\" />\n</div>\n\nIf need update content when close, you can set `fresh` property ([#44830](https://github.com/ant-design/ant-design/issues/44830)):\n\n```jsx\n<Tooltip open={user} title={user?.name} fresh />\n```\n\n<div>\n<img alt=\"no blink\" height=\"50\" src=\"https://mdn.alipayobjects.com/huamei_7uahnr/afts/img/A*rUbsR4xWpMsAAAAAAAAAAAAADrJ8AQ/original\" />\n</div>"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "文字提示",
+      "since": "4.0.4"
     },
     {
       "name": "Tour",
@@ -21276,7 +21400,9 @@
           "descriptionZh": "弹层 z-index"
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "漫游式引导",
+      "since": "5.0.7"
     },
     {
       "name": "Transfer",
@@ -21630,7 +21756,9 @@
           "answer": "In order to keep the page number synchronized, you can disable columns you checked without removing the option: <https://codesandbox.io/s/objective-wing-6iqbx>"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "穿梭框",
+      "since": "4.0.4"
     },
     {
       "name": "Tree",
@@ -22177,7 +22305,9 @@
           "answer": "Tree change its data by conduction. Includes checked or auto expanded, it will conduction state to parent / children node until current node is `disabled`. So if a controlled node is `disabled`, it will only modify self state and not affect other nodes. For example, a parent node contains 3 child nodes and one of them is `disabled`. When check the parent node, it will only check rest 2 child nodes. As the same, when check these 2 child node, parent will be checked whatever checked state the `disabled` one is.\n\nThis conduction logic prevent that modify `disabled` parent checked state by check children node and user can not modify directly with click parent which makes the interactive conflict. If you want to modify this conduction logic, you can customize it with `checkStrictly` prop."
         }
       ],
-      "categoryZh": "数据展示"
+      "categoryZh": "数据展示",
+      "nameZh": "树形控件",
+      "since": "4.0.4"
     },
     {
       "name": "TreeSelect",
@@ -22794,7 +22924,9 @@
           "answer": "Just turn off virtual scrolling, because the `scrollWidth` of the complete list cannot be accurately measured when virtual scrolling is turned on."
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "树选择",
+      "since": "4.0.4"
     },
     {
       "name": "Typography",
@@ -23398,7 +23530,9 @@
         "Typography.Title",
         "Typography.Paragraph"
       ],
-      "categoryZh": "通用"
+      "categoryZh": "通用",
+      "nameZh": "排版",
+      "since": "4.0.4"
     },
     {
       "name": "Upload",
@@ -23873,7 +24007,9 @@
           "answer": "Inside the upload component, we use the `directory` and `webkitdirectory` properties to control only directories can be selected. However, in Safari's implementation it doesn't seem to work. See [here](https://stackoverflow.com/q/55649945/3040605). Please try passing an additional `accept` attribute that cannot match any files. For example:\n\n```jsx\naccept: `.${'n'.repeat(100)}`;\n```"
         }
       ],
-      "categoryZh": "数据录入"
+      "categoryZh": "数据录入",
+      "nameZh": "上传",
+      "since": "4.0.4"
     },
     {
       "name": "Watermark",
@@ -24053,7 +24189,9 @@
           "answer": "User can hide the watermark by setting the container height to 0 through the developer tool in the previous version. To avoid this situation, we added the `overflow: hidden` style to the container. When the container height changes, the content is also hidden. You can override the style to modify this behavior:\n\n```tsx\n<Watermark style={{ overflow: 'visible' }} />\n```"
         }
       ],
-      "categoryZh": "反馈"
+      "categoryZh": "反馈",
+      "nameZh": "水印",
+      "since": "5.1.7"
     }
   ],
   "globalTokens": [
