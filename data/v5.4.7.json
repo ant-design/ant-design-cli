@@ -5894,14 +5894,6 @@
           "code": "import React from 'react';\nimport { FloatButton } from 'antd';\n\nconst App: React.FC = () => (\n  <div style={{ height: '500vh', padding: 10 }}>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <FloatButton.BackTop />\n  </div>\n);\n\nexport default App;\n"
         },
         {
-          "name": "badge-debug",
-          "title": "debug dot",
-          "titleZh": "调试小圆点使用",
-          "description": "debug use.",
-          "descriptionZh": "调试使用。",
-          "code": "import { ConfigProvider, FloatButton, Slider } from 'antd';\nimport type { AliasToken } from 'antd/es/theme/interface';\nimport React, { useState } from 'react';\n\nconst App: React.FC = () => {\n  const [radius, setRadius] = useState<number>(0);\n\n  const token: Partial<AliasToken> = {\n    borderRadius: radius,\n  };\n\n  return (\n    <>\n      <Slider min={0} max={20} style={{ margin: 16 }} onChange={setRadius} />\n      <ConfigProvider theme={{ token }}>\n        <FloatButton shape=\"square\" badge={{ dot: true }} />\n      </ConfigProvider>\n    </>\n  );\n};\n\nexport default App;\n"
-        },
-        {
           "name": "badge",
           "title": "badge",
           "titleZh": "徽标数",
@@ -8321,14 +8313,6 @@
           "description": "Classic page layouts.",
           "descriptionZh": "典型的页面布局。",
           "code": "import React from 'react';\nimport { Layout, Space } from 'antd';\n\nconst { Header, Footer, Sider, Content } = Layout;\n\nconst headerStyle: React.CSSProperties = {\n  textAlign: 'center',\n  color: '#fff',\n  height: 64,\n  paddingInline: 50,\n  lineHeight: '64px',\n  backgroundColor: '#7dbcea',\n};\n\nconst contentStyle: React.CSSProperties = {\n  textAlign: 'center',\n  minHeight: 120,\n  lineHeight: '120px',\n  color: '#fff',\n  backgroundColor: '#108ee9',\n};\n\nconst siderStyle: React.CSSProperties = {\n  textAlign: 'center',\n  lineHeight: '120px',\n  color: '#fff',\n  backgroundColor: '#3ba0e9',\n};\n\nconst footerStyle: React.CSSProperties = {\n  textAlign: 'center',\n  color: '#fff',\n  backgroundColor: '#7dbcea',\n};\n\nconst App: React.FC = () => (\n  <Space direction=\"vertical\" style={{ width: '100%' }} size={[0, 48]}>\n    <Layout>\n      <Header style={headerStyle}>Header</Header>\n      <Content style={contentStyle}>Content</Content>\n      <Footer style={footerStyle}>Footer</Footer>\n    </Layout>\n    <Layout>\n      <Header style={headerStyle}>Header</Header>\n      <Layout>\n        <Sider style={siderStyle}>Sider</Sider>\n        <Content style={contentStyle}>Content</Content>\n      </Layout>\n      <Footer style={footerStyle}>Footer</Footer>\n    </Layout>\n    <Layout>\n      <Header style={headerStyle}>Header</Header>\n      <Layout>\n        <Content style={contentStyle}>Content</Content>\n        <Sider style={siderStyle}>Sider</Sider>\n      </Layout>\n      <Footer style={footerStyle}>Footer</Footer>\n    </Layout>\n    <Layout>\n      <Sider style={siderStyle}>Sider</Sider>\n      <Layout>\n        <Header style={headerStyle}>Header</Header>\n        <Content style={contentStyle}>Content</Content>\n        <Footer style={footerStyle}>Footer</Footer>\n      </Layout>\n    </Layout>\n  </Space>\n);\n\nexport default App;\n"
-        },
-        {
-          "name": "custom-trigger-debug",
-          "title": "Custom trigger debug",
-          "titleZh": "自定义触发器 Debug",
-          "description": "",
-          "descriptionZh": "",
-          "code": "import React, { useState } from 'react';\nimport {\n  DesktopOutlined,\n  FileOutlined,\n  MenuFoldOutlined,\n  MenuUnfoldOutlined,\n  PieChartOutlined,\n  TeamOutlined,\n  UserOutlined,\n} from '@ant-design/icons';\nimport type { MenuProps } from 'antd';\nimport { Layout, Menu, Button, theme } from 'antd';\n\nconst { Header, Sider, Content } = Layout;\n\nconst items: MenuProps['items'] = [\n  {\n    key: '1',\n    icon: <PieChartOutlined />,\n    label: 'Option 1',\n  },\n  {\n    key: '2',\n    icon: <DesktopOutlined />,\n    label: 'Option 2',\n  },\n  {\n    key: 'sub1',\n    icon: <UserOutlined />,\n    label: 'User',\n    children: [\n      {\n        key: '3',\n        label: 'Tom',\n      },\n      {\n        key: '4',\n        label: 'Bill',\n      },\n      {\n        key: '5',\n        label: 'Alex',\n      },\n    ],\n  },\n  {\n    key: 'sub2',\n    icon: <TeamOutlined />,\n    label: 'Team',\n    children: [\n      {\n        key: '6',\n        label: 'Team 1',\n      },\n      {\n        key: '7',\n        label: 'Team 2',\n      },\n    ],\n  },\n  {\n    key: '9',\n    icon: <FileOutlined />,\n  },\n];\n\nconst App: React.FC = () => {\n  const [collapsed, setCollapsed] = useState(true);\n  const {\n    token: { colorBgContainer },\n  } = theme.useToken();\n\n  return (\n    <Layout>\n      <Sider trigger={null} collapsible collapsed={collapsed}>\n        <div className=\"logo\" />\n        <Menu\n          theme=\"dark\"\n          mode=\"inline\"\n          defaultSelectedKeys={['3']}\n          defaultOpenKeys={['sub1']}\n          items={items}\n        />\n      </Sider>\n      <Layout>\n        <Header style={{ padding: 0, background: colorBgContainer }}>\n          <Button\n            type=\"text\"\n            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}\n            onClick={() => setCollapsed(!collapsed)}\n            style={{\n              fontSize: '16px',\n              width: 64,\n              height: 64,\n            }}\n          />\n        </Header>\n        <Content\n          style={{\n            margin: '24px 16px',\n            padding: 24,\n            minHeight: 280,\n            background: colorBgContainer,\n          }}\n        >\n          Content\n        </Content>\n      </Layout>\n    </Layout>\n  );\n};\n\nexport default App;\n"
         },
         {
           "name": "custom-trigger",
@@ -13171,14 +13155,6 @@
           "code": "import React from 'react';\nimport { Select, Tag } from 'antd';\nimport type { CustomTagProps } from 'rc-select/lib/BaseSelect';\n\nconst options = [{ value: 'gold' }, { value: 'lime' }, { value: 'green' }, { value: 'cyan' }];\n\nconst tagRender = (props: CustomTagProps) => {\n  const { label, value, closable, onClose } = props;\n  const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {\n    event.preventDefault();\n    event.stopPropagation();\n  };\n  return (\n    <Tag\n      color={value}\n      onMouseDown={onPreventMouseDown}\n      closable={closable}\n      onClose={onClose}\n      style={{ marginRight: 3 }}\n    >\n      {label}\n    </Tag>\n  );\n};\n\nconst App: React.FC = () => (\n  <Select\n    mode=\"multiple\"\n    showArrow\n    tagRender={tagRender}\n    defaultValue={['gold', 'cyan']}\n    style={{ width: '100%' }}\n    options={options}\n  />\n);\n\nexport default App;\n"
         },
         {
-          "name": "debug-flip-shift",
-          "title": "Flip + Shift",
-          "titleZh": "翻转+偏移",
-          "description": "Shift the popup if not enough space after flip.",
-          "descriptionZh": "翻转后如果不够则偏移以供完全的展示。",
-          "code": "import { Select } from 'antd';\nimport React from 'react';\n\nconst App: React.FC = () => (\n  <Select\n    style={{ width: 120, marginTop: '50vh' }}\n    open\n    options={new Array(100).fill(null).map((_, index) => ({\n      value: index,\n    }))}\n  />\n);\n\nexport default App;\n"
-        },
-        {
           "name": "hide-selected",
           "title": "Hide Already Selected",
           "titleZh": "隐藏已选择选项",
@@ -16700,14 +16676,6 @@
           "description": "Default activate first tab.",
           "descriptionZh": "默认选中第一项。",
           "code": "import React from 'react';\nimport { Tabs } from 'antd';\nimport type { TabsProps } from 'antd';\n\nconst onChange = (key: string) => {\n  console.log(key);\n};\n\nconst items: TabsProps['items'] = [\n  {\n    key: '1',\n    label: `Tab 1`,\n    children: `Content of Tab Pane 1`,\n  },\n  {\n    key: '2',\n    label: `Tab 2`,\n    children: `Content of Tab Pane 2`,\n  },\n  {\n    key: '3',\n    label: `Tab 3`,\n    children: `Content of Tab Pane 3`,\n  },\n];\n\nconst App: React.FC = () => <Tabs defaultActiveKey=\"1\" items={items} onChange={onChange} />;\n\nexport default App;\n"
-        },
-        {
-          "name": "card-top",
-          "title": "Container of card type Tab",
-          "titleZh": "卡片式页签容器",
-          "description": "Should be used at the top of container, needs to override styles.",
-          "descriptionZh": "用于容器顶部，需要一点额外的样式覆盖。",
-          "code": "import React from 'react';\nimport { Tabs, theme } from 'antd';\nimport { css } from '@emotion/css';\n\nconst useStyle = () => {\n  const { token } = theme.useToken();\n  const antdTabsCls = '.ant-tabs';\n\n  return css`\n    ${antdTabsCls}${antdTabsCls}-card {\n      ${antdTabsCls}-content {\n        padding: ${token.padding}px;\n        background: ${token.colorBgContainer};\n      }\n\n      ${antdTabsCls}-nav {\n        margin: 0;\n\n        ${antdTabsCls}-nav-wrap > ${antdTabsCls}-nav-list > ${antdTabsCls}-tab {\n          background: transparent;\n          border-color: transparent;\n\n          &-active {\n            border-color: ${token.colorBorderBg};\n            background: ${token.colorBgContainer};\n          }\n        }\n\n        &::before {\n          display: none;\n        }\n      }\n    }\n  `;\n};\n\nconst items = new Array(3).fill(null).map((_, i) => {\n  const id = String(i + 1);\n  return {\n    label: `Tab Title ${id}`,\n    key: id,\n    children: (\n      <>\n        <p>Content of Tab Pane {id}</p>\n        <p>Content of Tab Pane {id}</p>\n        <p>Content of Tab Pane {id}</p>\n      </>\n    ),\n  };\n});\n\nconst App = () => {\n  const style = useStyle();\n\n  return (\n    <div className={style}>\n      <Tabs type=\"card\" items={items} />\n    </div>\n  );\n};\n\nexport default App;\n"
         },
         {
           "name": "card",
