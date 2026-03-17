@@ -21,12 +21,12 @@
 
 | 功能 | 说明 |
 |---|---|
-| **Agent 优先** | 结构化 JSON 输出，专为 Code Agent（Claude Code、Cursor、Copilot）解析使用 |
-| **离线优先** | 所有元数据完整打包，运行时无需网络 |
-| **多版本支持** | 完整支持 antd v4 / v5 / v6，支持跨版本 API 对比与迁移指南 |
-| **知识内置** | Props、Token、Demo、语义结构、Changelog 一应俱全 |
-| **项目感知** | 自动识别 antd 版本，扫描用法、检查最佳实践、诊断配置问题 |
-| **Agent 迁移** | `antd migrate --apply` 为 Code Agent 输出结构化迁移提示 |
+| 🤖 **Agent 优先** | 结构化 JSON 输出，专为 Code Agent（Claude Code、Cursor、Copilot）解析使用 |
+| 📦 **离线优先** | 所有元数据完整打包，运行时无需网络 |
+| 🔀 **多版本支持** | 完整支持 antd v4 / v5 / v6，支持跨版本 API 对比与迁移指南 |
+| 🧠 **知识内置** | Props、Token、Demo、语义结构、Changelog 一应俱全 |
+| 🔍 **项目感知** | 自动识别 antd 版本，扫描用法、检查最佳实践、诊断配置问题 |
+| 🚚 **Agent 迁移** | `antd migrate --apply` 为 Code Agent 输出结构化迁移提示 |
 
 ## 📦 安装
 

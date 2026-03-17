@@ -21,12 +21,12 @@ Designed for Code Agents (Claude Code, Cursor, Copilot, etc.) to invoke via shel
 
 | Feature | Description |
 |---|---|
-| **Agent-First** | Structured JSON output designed for Code Agents (Claude Code, Cursor, Copilot) to parse and act on |
-| **Offline-First** | All metadata is fully bundled — no network required at runtime |
-| **Multi-Version** | Full support for antd v4 / v5 / v6, with cross-version API diffing and migration guides |
-| **Bundled Knowledge** | Props, tokens, demos, semantic structure, and changelog — all included |
-| **Project-Aware** | Auto-detects your antd version, scans usage, lints best practices, diagnoses config issues |
-| **Agent Migration** | `antd migrate --apply` outputs a structured migration prompt for Code Agents to execute |
+| 🤖 **Agent-First** | Structured JSON output designed for Code Agents (Claude Code, Cursor, Copilot) to parse and act on |
+| 📦 **Offline-First** | All metadata is fully bundled — no network required at runtime |
+| 🔀 **Multi-Version** | Full support for antd v4 / v5 / v6, with cross-version API diffing and migration guides |
+| 🧠 **Bundled Knowledge** | Props, tokens, demos, semantic structure, and changelog — all included |
+| 🔍 **Project-Aware** | Auto-detects your antd version, scans usage, lints best practices, diagnoses config issues |
+| 🚚 **Agent Migration** | `antd migrate --apply` outputs a structured migration prompt for Code Agents to execute |
 
 ## 📦 Install
 
