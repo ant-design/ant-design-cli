@@ -221,6 +221,12 @@ describe('CLI e2e', () => {
     const data = JSON.parse(out);
     expect(data.checks).toBeDefined();
     expect(data.summary).toBeDefined();
+    // Verify all new check names are present
+    const names = (data.checks as Array<{ name: string }>).map(c => c.name);
+    expect(names).toContain('dayjs-duplicate');
+    expect(names).toContain('cssinjs-duplicate');
+    expect(names).toContain('cssinjs-compat');
+    expect(names).toContain('icons-compat');
   });
 
   it('should show migrate --apply as agent prompt', () => {
