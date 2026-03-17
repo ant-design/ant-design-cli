@@ -247,8 +247,8 @@ JSON output:
     {"name": "cssinjs", "status": "warn", "severity": "warning", "message": "No @ant-design/cssinjs found, SSR style extraction will not work"},
     {"name": "dayjs-duplicate", "status": "fail", "severity": "error", "message": "Found 2 dayjs installations", "suggestion": "Run `npm dedupe` to resolve duplicate dayjs versions"},
     {"name": "cssinjs-duplicate", "status": "fail", "severity": "error", "message": "Found 2 @ant-design/cssinjs installations", "suggestion": "Run `npm dedupe` to resolve duplicate @ant-design/cssinjs versions"},
-    {"name": "cssinjs-compat", "status": "fail", "severity": "error", "message": "@ant-design/cssinjs 1.5.0 does not satisfy antd peer requirement >=1.11.0", "suggestion": "Run `npm install @ant-design/cssinjs@latest`"},
-    {"name": "icons-compat", "status": "warn", "severity": "warning", "message": "@ant-design/icons 5.0.0 does not satisfy antd peer requirement >=5.1.0", "suggestion": "Run `npm install @ant-design/icons@latest`"}
+    {"name": "cssinjs-compat", "status": "fail", "severity": "error", "message": "@ant-design/cssinjs 1.5.0 does not satisfy antd peer requirement >=1.11.0", "suggestion": "Run `npm install @ant-design/cssinjs` (requires >=1.11.0)"},
+    {"name": "icons-compat", "status": "warn", "severity": "warning", "message": "@ant-design/icons 5.0.0 does not satisfy antd peer requirement >=5.1.0", "suggestion": "Run `npm install @ant-design/icons` (requires >=5.1.0)"}
   ],
   "summary": {"pass": 2, "warn": 2, "fail": 3}
 }

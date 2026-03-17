@@ -261,7 +261,7 @@ function checkCssinjsCompat(ctx: DoctorContext): CheckResult {
       status: 'fail',
       severity: 'error',
       message: `@ant-design/cssinjs ${ctx.cssinjsPkg.version} is not compatible with antd ${ctx.antdPkg.version} (requires ${range})`,
-      suggestion: `Run \`npm install @ant-design/cssinjs@${range}\``,
+      suggestion: `Run \`npm install @ant-design/cssinjs\` (requires ${range})`,
     };
   }
 
@@ -297,7 +297,7 @@ function checkIconsCompat(ctx: DoctorContext): CheckResult {
       status: 'warn',
       severity: 'warning',
       message: `@ant-design/icons ${ctx.iconsPkg.version} may not be compatible with antd ${ctx.antdPkg.version} (requires ${range})`,
-      suggestion: `Run \`npm install @ant-design/icons@${range}\``,
+      suggestion: `Run \`npm install @ant-design/icons\` (requires ${range})`,
     };
   }
 
