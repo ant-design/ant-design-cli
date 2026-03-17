@@ -35,7 +35,10 @@ jobs:
           else
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
+            V4=$(node -p "JSON.parse(require('fs').readFileSync('data/v4.json','utf8')).version")
+            V5=$(node -p "JSON.parse(require('fs').readFileSync('data/v5.json','utf8')).version")
+            V6=$(node -p "JSON.parse(require('fs').readFileSync('data/v6.json','utf8')).version")
             git add data/
-            git commit -m "data: sync antd metadata"
+            git commit -m "data: sync antd metadata (v4@${V4}, v5@${V5}, v6@${V6})"
             git push
           fi
