@@ -51,9 +51,11 @@ export function extractTokens(antdDir: string, componentName: string): TokenData
 export function extractGlobalTokens(antdDir: string): TokenData[] {
   const meta = loadTokenMeta(antdDir);
   const tokens: TokenData[] = [];
-  for (const [, entries] of Object.entries(meta.global)) {
+  for (const [tokenName, entries] of Object.entries(meta.global)) {
     for (const entry of (Array.isArray(entries) ? entries : [entries])) {
-      tokens.push(toTokenData(entry));
+      const data = toTokenData(entry);
+      if (!data.name) data.name = tokenName;
+      tokens.push(data);
     }
   }
   return tokens;
