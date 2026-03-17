@@ -88,7 +88,8 @@ function buildMinorMap(tags: string[]): Map<string, string> {
 }
 
 function checkoutTag(antdDir: string, tag: string): void {
-  execSync(`git checkout "${tag}" --quiet`, { cwd: antdDir, stdio: 'pipe' });
+  // -f to overwrite untracked files that would conflict with the tag's tree
+  execSync(`git checkout -f "${tag}" --quiet`, { cwd: antdDir, stdio: 'pipe' });
 }
 
 function extractSnapshot(antdDir: string, outputPath: string): void {
