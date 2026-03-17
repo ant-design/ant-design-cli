@@ -96,14 +96,13 @@ function main() {
     console.log(`\n=== Syncing v${major} ===`);
 
     const tags = fetchTags(major);
-    const latestTag = tags.at(-1);
+    const minorMap = buildMinorMap(tags); // pre-releases already excluded
+    const latestTag = [...minorMap.values()].at(-1);
     if (!latestTag) {
-      console.warn(`No tags found for v${major}, skipping`);
+      console.warn(`No stable tags found for v${major}, skipping`);
       continue;
     }
     console.log(`Latest v${major}: ${latestTag}`);
-
-    const minorMap = buildMinorMap(tags);
 
     // Extract primary (latest) snapshot → data/v{major}.json
     checkout(antdDir, latestTag);
