@@ -22535,1387 +22535,1618 @@
       "type": "number",
       "default": "",
       "description": "Border radius of base components",
-      "descriptionZh": "基础组件的圆角大小，例如按钮、输入框、卡片等"
+      "descriptionZh": "基础组件的圆角大小，例如按钮、输入框、卡片等",
+      "name": "borderRadius"
     },
     {
       "type": "string",
       "default": "",
       "description": "Used to derive the base variable of the background color gradient. In v5, we added a layer of background color derivation algorithm to produce map token of background color. But PLEASE DO NOT USE this Seed Token directly in the code!",
-      "descriptionZh": "用于派生背景色梯度的基础变量，v5 中我们添加了一层背景色的派生算法可以产出梯度明确的背景色的梯度变量。但请不要在代码中直接使用该 Seed Token ！"
+      "descriptionZh": "用于派生背景色梯度的基础变量，v5 中我们添加了一层背景色的派生算法可以产出梯度明确的背景色的梯度变量。但请不要在代码中直接使用该 Seed Token ！",
+      "name": "colorBgBase"
     },
     {
       "type": "string",
       "default": "",
       "description": "Used to represent the visual elements of the operation failure, such as the error Button, error Result component, etc.",
-      "descriptionZh": "用于表示操作失败的 Token 序列，如失败按钮、错误状态提示（Result）组件等。"
+      "descriptionZh": "用于表示操作失败的 Token 序列，如失败按钮、错误状态提示（Result）组件等。",
+      "name": "colorError"
     },
     {
       "type": "string",
       "default": "",
       "description": "Used to represent the operation information of the Token sequence, such as Alert, Tag, Progress, and other components use these map tokens.",
-      "descriptionZh": "用于表示操作信息的 Token 序列，如 Alert 、Tag、 Progress 等组件都有用到该组梯度变量。"
+      "descriptionZh": "用于表示操作信息的 Token 序列，如 Alert 、Tag、 Progress 等组件都有用到该组梯度变量。",
+      "name": "colorInfo"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the color of hyperlink.",
-      "descriptionZh": "控制超链接的颜色。"
+      "descriptionZh": "控制超链接的颜色。",
+      "name": "colorLink"
     },
     {
       "type": "string",
       "default": "",
       "description": "Brand color is one of the most direct visual elements to reflect the characteristics and communication of the product. After you have selected the brand color, we will automatically generate a complete color palette and assign it effective design semantics.",
-      "descriptionZh": "品牌色是体现产品特性和传播理念最直观的视觉元素之一。在你完成品牌主色的选取之后，我们会自动帮你生成一套完整的色板，并赋予它们有效的设计语义"
+      "descriptionZh": "品牌色是体现产品特性和传播理念最直观的视觉元素之一。在你完成品牌主色的选取之后，我们会自动帮你生成一套完整的色板，并赋予它们有效的设计语义",
+      "name": "colorPrimary"
     },
     {
       "type": "string",
       "default": "",
       "description": "Used to represent the token sequence of operation success, such as Result, Progress and other components will use these map tokens.",
-      "descriptionZh": "用于表示操作成功的 Token 序列，如 Result、Progress 等组件会使用该组梯度变量。"
+      "descriptionZh": "用于表示操作成功的 Token 序列，如 Result、Progress 等组件会使用该组梯度变量。",
+      "name": "colorSuccess"
     },
     {
       "type": "string",
       "default": "",
       "description": "Used to derive the base variable of the text color gradient. In v5, we added a layer of text color derivation algorithm to produce gradient variables of text color gradient. But please do not use this Seed Token directly in the code!",
-      "descriptionZh": "用于派生文本色梯度的基础变量，v5 中我们添加了一层文本色的派生算法可以产出梯度明确的文本色的梯度变量。但请不要在代码中直接使用该 Seed Token ！"
+      "descriptionZh": "用于派生文本色梯度的基础变量，v5 中我们添加了一层文本色的派生算法可以产出梯度明确的文本色的梯度变量。但请不要在代码中直接使用该 Seed Token ！",
+      "name": "colorTextBase"
     },
     {
       "type": "string",
       "default": "",
       "description": "Used to represent the warning map token, such as Notification, Alert, etc. Alert or Control component(like Input) will use these map tokens.",
-      "descriptionZh": "用于表示操作警告的 Token 序列，如 Notification、 Alert等警告类组件或 Input 输入类等组件会使用该组梯度变量。"
+      "descriptionZh": "用于表示操作警告的 Token 序列，如 Notification、 Alert等警告类组件或 Input 输入类等组件会使用该组梯度变量。",
+      "name": "colorWarning"
     },
     {
       "type": "number",
       "default": "",
       "description": "The height of the basic controls such as buttons and input boxes in Ant Design",
-      "descriptionZh": "Ant Design 中按钮和输入框等基础控件的高度"
+      "descriptionZh": "Ant Design 中按钮和输入框等基础控件的高度",
+      "name": "controlHeight"
     },
     {
       "type": "string",
       "default": "",
       "description": "The font family of Ant Design prioritizes the default interface font of the system, and provides a set of alternative font libraries that are suitable for screen display to maintain the readability and readability of the font under different platforms and browsers, reflecting the friendly, stable and professional characteristics.",
-      "descriptionZh": "Ant Design 的字体家族中优先使用系统默认的界面字体，同时提供了一套利于屏显的备用字体库，来维护在不同平台以及浏览器的显示下，字体始终保持良好的易读性和可读性，体现了友好、稳定和专业的特性。"
+      "descriptionZh": "Ant Design 的字体家族中优先使用系统默认的界面字体，同时提供了一套利于屏显的备用字体库，来维护在不同平台以及浏览器的显示下，字体始终保持良好的易读性和可读性，体现了友好、稳定和专业的特性。",
+      "name": "fontFamily"
     },
     {
       "type": "string",
       "default": "",
       "description": "Code font, used for code, pre and kbd elements in Typography",
-      "descriptionZh": "代码字体，用于 Typography 内的 code、pre 和 kbd 类型的元素"
+      "descriptionZh": "代码字体，用于 Typography 内的 code、pre 和 kbd 类型的元素",
+      "name": "fontFamilyCode"
     },
     {
       "type": "number",
       "default": "",
       "description": "The most widely used font size in the design system, from which the text gradient will be derived.",
-      "descriptionZh": "设计系统中使用最广泛的字体大小，文本梯度也将基于该字号进行派生。"
+      "descriptionZh": "设计系统中使用最广泛的字体大小，文本梯度也将基于该字号进行派生。",
+      "name": "fontSize"
     },
     {
       "type": "string",
       "default": "",
       "description": "Border style of base components",
-      "descriptionZh": "用于控制组件边框、分割线等的样式，默认是实线"
+      "descriptionZh": "用于控制组件边框、分割线等的样式，默认是实线",
+      "name": "lineType"
     },
     {
       "type": "number",
       "default": "",
       "description": "Border width of base components",
-      "descriptionZh": "用于控制组件边框、分割线等的宽度"
+      "descriptionZh": "用于控制组件边框、分割线等的宽度",
+      "name": "lineWidth"
     },
     {
       "type": "boolean",
       "default": "",
       "description": "Used to configure the motion effect, when it is `false`, the motion is turned off",
-      "descriptionZh": "用于配置动画效果，为 `false` 时则关闭动画"
+      "descriptionZh": "用于配置动画效果，为 `false` 时则关闭动画",
+      "name": "motion"
     },
     {
       "type": "number",
       "default": "",
       "description": "Animation Base Duration.",
-      "descriptionZh": "动画基础时长。"
+      "descriptionZh": "动画基础时长。",
+      "name": "motionBase"
     },
     {
       "type": "string",
       "default": "",
       "description": "Preset motion curve.",
-      "descriptionZh": "预设动效曲率"
+      "descriptionZh": "预设动效曲率",
+      "name": "motionEaseInBack"
     },
     {
       "type": "string",
       "default": "",
       "description": "Preset motion curve.",
-      "descriptionZh": "预设动效曲率"
+      "descriptionZh": "预设动效曲率",
+      "name": "motionEaseInOut"
     },
     {
       "type": "string",
       "default": "",
       "description": "Preset motion curve.",
-      "descriptionZh": "预设动效曲率"
+      "descriptionZh": "预设动效曲率",
+      "name": "motionEaseInOutCirc"
     },
     {
       "type": "string",
       "default": "",
       "description": "Preset motion curve.",
-      "descriptionZh": "预设动效曲率"
+      "descriptionZh": "预设动效曲率",
+      "name": "motionEaseInQuint"
     },
     {
       "type": "string",
       "default": "",
       "description": "Preset motion curve.",
-      "descriptionZh": "预设动效曲率"
+      "descriptionZh": "预设动效曲率",
+      "name": "motionEaseOut"
     },
     {
       "type": "string",
       "default": "",
       "description": "Preset motion curve.",
-      "descriptionZh": "预设动效曲率"
+      "descriptionZh": "预设动效曲率",
+      "name": "motionEaseOutBack"
     },
     {
       "type": "string",
       "default": "",
       "description": "Preset motion curve.",
-      "descriptionZh": "预设动效曲率"
+      "descriptionZh": "预设动效曲率",
+      "name": "motionEaseOutCirc"
     },
     {
       "type": "string",
       "default": "",
       "description": "Preset motion curve.",
-      "descriptionZh": "预设动效曲率"
+      "descriptionZh": "预设动效曲率",
+      "name": "motionEaseOutQuint"
     },
     {
       "type": "number",
       "default": "",
       "description": "The unit of animation duration change",
-      "descriptionZh": "用于控制动画时长的变化单位"
+      "descriptionZh": "用于控制动画时长的变化单位",
+      "name": "motionUnit"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control image opacity",
-      "descriptionZh": "控制图片不透明度"
+      "descriptionZh": "控制图片不透明度",
+      "name": "opacityImage"
     },
     {
       "type": "number",
       "default": "",
       "description": "The size of the component arrow",
-      "descriptionZh": "组件箭头的尺寸"
+      "descriptionZh": "组件箭头的尺寸",
+      "name": "sizePopupArrow"
     },
     {
       "type": "number",
       "default": "",
       "description": "The base step of size change, the size step combined with the size change unit, can derive various size steps. By adjusting the step, you can get different layout modes, such as the size step of the compact mode of V5 is 2",
-      "descriptionZh": "用于控制组件尺寸的基础步长，尺寸步长结合尺寸变化单位，就可以派生各种尺寸梯度。通过调整步长即可得到不同的布局模式，例如 V5 紧凑模式下的尺寸步长为 2"
+      "descriptionZh": "用于控制组件尺寸的基础步长，尺寸步长结合尺寸变化单位，就可以派生各种尺寸梯度。通过调整步长即可得到不同的布局模式，例如 V5 紧凑模式下的尺寸步长为 2",
+      "name": "sizeStep"
     },
     {
       "type": "number",
       "default": "",
       "description": "The unit of size change, in Ant Design, our base unit is 4, which is more fine-grained control of the size step",
-      "descriptionZh": "用于控制组件尺寸的变化单位，在 Ant Design 中我们的基础单位为 4 ，便于更加细致地控制尺寸梯度"
+      "descriptionZh": "用于控制组件尺寸的变化单位，在 Ant Design 中我们的基础单位为 4 ，便于更加细致地控制尺寸梯度",
+      "name": "sizeUnit"
     },
     {
       "type": "boolean",
       "default": "",
       "description": "Used to change the visual effect of the component to wireframe, if you need to use the V4 effect, you need to enable the configuration item",
-      "descriptionZh": "用于将组件的视觉效果变为线框化，如果需要使用 V4 的效果，需要开启配置项"
+      "descriptionZh": "用于将组件的视觉效果变为线框化，如果需要使用 V4 的效果，需要开启配置项",
+      "name": "wireframe"
     },
     {
       "type": "number",
       "default": "",
       "description": "The base Z axis value of all components, which can be used to control the level of some floating components based on the Z axis value, such as BackTop, Affix, etc.",
-      "descriptionZh": "所有组件的基础 Z 轴值，用于一些悬浮类的组件的可以基于该值 Z 轴控制层级，例如 BackTop、 Affix 等"
+      "descriptionZh": "所有组件的基础 Z 轴值，用于一些悬浮类的组件的可以基于该值 Z 轴控制层级，例如 BackTop、 Affix 等",
+      "name": "zIndexBase"
     },
     {
       "type": "number",
       "default": "",
       "description": "Base zIndex of component like FloatButton, Affix which can be cover by large popup",
-      "descriptionZh": "浮层类组件的基础 Z 轴值，用于一些悬浮类的组件的可以基于该值 Z 轴控制层级，例如 FloatButton、 Affix、Modal 等"
+      "descriptionZh": "浮层类组件的基础 Z 轴值，用于一些悬浮类的组件的可以基于该值 Z 轴控制层级，例如 FloatButton、 Affix、Modal 等",
+      "name": "zIndexPopupBase"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset blue color",
-      "descriptionZh": "预设blue颜色"
+      "descriptionZh": "预设blue颜色",
+      "name": "blue"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset purple color",
-      "descriptionZh": "预设purple颜色"
+      "descriptionZh": "预设purple颜色",
+      "name": "purple"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset cyan color",
-      "descriptionZh": "预设cyan颜色"
+      "descriptionZh": "预设cyan颜色",
+      "name": "cyan"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset green color",
-      "descriptionZh": "预设green颜色"
+      "descriptionZh": "预设green颜色",
+      "name": "green"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset magenta color",
-      "descriptionZh": "预设magenta颜色"
+      "descriptionZh": "预设magenta颜色",
+      "name": "magenta"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset pink color",
-      "descriptionZh": "预设pink颜色"
+      "descriptionZh": "预设pink颜色",
+      "name": "pink"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset red color",
-      "descriptionZh": "预设red颜色"
+      "descriptionZh": "预设red颜色",
+      "name": "red"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset orange color",
-      "descriptionZh": "预设orange颜色"
+      "descriptionZh": "预设orange颜色",
+      "name": "orange"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset yellow color",
-      "descriptionZh": "预设yellow颜色"
+      "descriptionZh": "预设yellow颜色",
+      "name": "yellow"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset volcano color",
-      "descriptionZh": "预设volcano颜色"
+      "descriptionZh": "预设volcano颜色",
+      "name": "volcano"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset geekblue color",
-      "descriptionZh": "预设geekblue颜色"
+      "descriptionZh": "预设geekblue颜色",
+      "name": "geekblue"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset lime color",
-      "descriptionZh": "预设lime颜色"
+      "descriptionZh": "预设lime颜色",
+      "name": "lime"
     },
     {
       "type": "color",
       "default": "",
       "description": "Preset gold color",
-      "descriptionZh": "预设gold颜色"
+      "descriptionZh": "预设gold颜色",
+      "name": "gold"
     },
     {
       "type": "number",
       "default": "",
       "description": "LG size border radius, used in some large border radius components, such as Card, Modal and other components.",
-      "descriptionZh": "LG号圆角，用于组件中的一些大圆角，如 Card、Modal 等一些组件样式。"
+      "descriptionZh": "LG号圆角，用于组件中的一些大圆角，如 Card、Modal 等一些组件样式。",
+      "name": "borderRadiusLG"
     },
     {
       "type": "number",
       "default": "",
       "description": "Outer border radius",
-      "descriptionZh": "外部圆角"
+      "descriptionZh": "外部圆角",
+      "name": "borderRadiusOuter"
     },
     {
       "type": "number",
       "default": "",
       "description": "SM size border radius, used in small size components, such as Button, Input, Select and other input components in small size",
-      "descriptionZh": "SM号圆角，用于组件小尺寸下的圆角，如 Button、Input、Select 等输入类控件在 small size 下的圆角"
+      "descriptionZh": "SM号圆角，用于组件小尺寸下的圆角，如 Button、Input、Select 等输入类控件在 small size 下的圆角",
+      "name": "borderRadiusSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "XS size border radius, used in some small border radius components, such as Segmented, Arrow and other components with small border radius.",
-      "descriptionZh": "XS号圆角，用于组件中的一些小圆角，如 Segmented 、Arrow 等一些内部圆角的组件样式中。"
+      "descriptionZh": "XS号圆角，用于组件中的一些小圆角，如 Segmented 、Arrow 等一些内部圆角的组件样式中。",
+      "name": "borderRadiusXS"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the background color of frosted glass container, usually transparent.",
-      "descriptionZh": "控制毛玻璃容器的背景色，通常为透明色。"
+      "descriptionZh": "控制毛玻璃容器的背景色，通常为透明色。",
+      "name": "colorBgBlur"
     },
     {
       "type": "string",
       "default": "",
       "description": "Container background color, e.g: default button, input box, etc. Be sure not to confuse this with `colorBgElevated`.",
-      "descriptionZh": "组件的容器背景色，例如：默认按钮、输入框等。务必不要将其与 `colorBgElevated` 混淆。"
+      "descriptionZh": "组件的容器背景色，例如：默认按钮、输入框等。务必不要将其与 `colorBgElevated` 混淆。",
+      "name": "colorBgContainer"
     },
     {
       "type": "string",
       "default": "",
       "description": "Container background color of the popup layer, in dark mode the color value of this token will be a little brighter than `colorBgContainer`. E.g: modal, pop-up, menu, etc.",
-      "descriptionZh": "浮层容器背景色，在暗色模式下该 token 的色值会比 `colorBgContainer` 要亮一些。例如：模态框、弹出框、菜单等。"
+      "descriptionZh": "浮层容器背景色，在暗色模式下该 token 的色值会比 `colorBgContainer` 要亮一些。例如：模态框、弹出框、菜单等。",
+      "name": "colorBgElevated"
     },
     {
       "type": "string",
       "default": "",
       "description": "This color is used for the background color of the overall layout of the page. This token will only be used when it is necessary to be at the B1 visual level in the page. Other usages are wrong.",
-      "descriptionZh": "该色用于页面整体布局的背景色，只有需要在页面中处于 B1 的视觉层级时才会使用该 token，其他用法都是错误的"
+      "descriptionZh": "该色用于页面整体布局的背景色，只有需要在页面中处于 B1 的视觉层级时才会使用该 token，其他用法都是错误的",
+      "name": "colorBgLayout"
     },
     {
       "type": "string",
       "default": "",
       "description": "The background color of the mask, used to cover the content below the mask, Modal, Drawer, Image and other components use this token",
-      "descriptionZh": "浮层的背景蒙层颜色，用于遮罩浮层下面的内容，Modal、Drawer、Image 等组件的蒙层使用的是该 token"
+      "descriptionZh": "浮层的背景蒙层颜色，用于遮罩浮层下面的内容，Modal、Drawer、Image 等组件的蒙层使用的是该 token",
+      "name": "colorBgMask"
     },
     {
       "type": "string",
       "default": "",
       "description": "Solid background color, currently only used for the default solid button background color.",
-      "descriptionZh": "实心的背景颜色，目前只用在默认实心按钮背景色上。"
+      "descriptionZh": "实心的背景颜色，目前只用在默认实心按钮背景色上。",
+      "name": "colorBgSolid"
     },
     {
       "type": "string",
       "default": "",
       "description": "Solid background color active state, currently only used in the active effect of the default solid button.",
-      "descriptionZh": "实心的背景颜色激活态，目前只用在默认实心按钮的 active 效果。"
+      "descriptionZh": "实心的背景颜色激活态，目前只用在默认实心按钮的 active 效果。",
+      "name": "colorBgSolidActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "Solid background color hover state, currently only used in the hover effect of the default solid button.",
-      "descriptionZh": "实心的背景颜色悬浮态，目前只用在默认实心按钮的 hover 效果。"
+      "descriptionZh": "实心的背景颜色悬浮态，目前只用在默认实心按钮的 hover 效果。",
+      "name": "colorBgSolidHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "This color is used to draw the user's strong attention to the background color, and is currently only used in the background color of Tooltip.",
-      "descriptionZh": "该色用于引起用户强烈关注注意的背景色，目前只用在 Tooltip 的背景色上。"
+      "descriptionZh": "该色用于引起用户强烈关注注意的背景色，目前只用在 Tooltip 的背景色上。",
+      "name": "colorBgSpotlight"
     },
     {
       "type": "string",
       "default": "",
       "description": "Default border color, used to separate different elements, such as: form separator, card separator, etc.",
-      "descriptionZh": "默认使用的边框颜色, 用于分割不同的元素，例如：表单的分割线、卡片的分割线等。"
+      "descriptionZh": "默认使用的边框颜色, 用于分割不同的元素，例如：表单的分割线、卡片的分割线等。",
+      "name": "colorBorder"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the border color of the element in the disabled state.",
-      "descriptionZh": "控制元素在禁用状态下的边框颜色。"
+      "descriptionZh": "控制元素在禁用状态下的边框颜色。",
+      "name": "colorBorderDisabled"
     },
     {
       "type": "string",
       "default": "",
       "description": "Slightly lighter than the default border color, this color is the same as `colorSplit`. Solid color is used.",
-      "descriptionZh": "比默认使用的边框色要浅一级，此颜色和 colorSplit 的颜色一致。使用的是实色。"
+      "descriptionZh": "比默认使用的边框色要浅一级，此颜色和 colorSplit 的颜色一致。使用的是实色。",
+      "name": "colorBorderSecondary"
     },
     {
       "type": "string",
       "default": "",
       "description": "The active state of the error color.",
-      "descriptionZh": "错误色的深色激活态"
+      "descriptionZh": "错误色的深色激活态",
+      "name": "colorErrorActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "The background color of the error state.",
-      "descriptionZh": "错误色的浅色背景颜色"
+      "descriptionZh": "错误色的浅色背景颜色",
+      "name": "colorErrorBg"
     },
     {
       "type": "string",
       "default": "",
       "description": "The active state background color of the error state.",
-      "descriptionZh": "错误色的浅色背景色激活态"
+      "descriptionZh": "错误色的浅色背景色激活态",
+      "name": "colorErrorBgActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "The wrong color fills the background color of the suspension state, which is currently only used in the hover effect of the dangerous filled button.",
-      "descriptionZh": "错误色的浅色填充背景色悬浮态，目前只用在危险填充按钮的 hover 效果。"
+      "descriptionZh": "错误色的浅色填充背景色悬浮态，目前只用在危险填充按钮的 hover 效果。",
+      "name": "colorErrorBgFilledHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "The hover state background color of the error state.",
-      "descriptionZh": "错误色的浅色背景色悬浮态"
+      "descriptionZh": "错误色的浅色背景色悬浮态",
+      "name": "colorErrorBgHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "The border color of the error state.",
-      "descriptionZh": "错误色的描边色"
+      "descriptionZh": "错误色的描边色",
+      "name": "colorErrorBorder"
     },
     {
       "type": "string",
       "default": "",
       "description": "The hover state border color of the error state.",
-      "descriptionZh": "错误色的描边色悬浮态"
+      "descriptionZh": "错误色的描边色悬浮态",
+      "name": "colorErrorBorderHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "The hover state of the error color.",
-      "descriptionZh": "错误色的深色悬浮态"
+      "descriptionZh": "错误色的深色悬浮态",
+      "name": "colorErrorHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "The default state of the text in the error color.",
-      "descriptionZh": "错误色的文本默认态"
+      "descriptionZh": "错误色的文本默认态",
+      "name": "colorErrorText"
     },
     {
       "type": "string",
       "default": "",
       "description": "The active state of the text in the error color.",
-      "descriptionZh": "错误色的文本激活态"
+      "descriptionZh": "错误色的文本激活态",
+      "name": "colorErrorTextActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "The hover state of the text in the error color.",
-      "descriptionZh": "错误色的文本悬浮态"
+      "descriptionZh": "错误色的文本悬浮态",
+      "name": "colorErrorTextHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "The darkest fill color is used to distinguish between the second and third level of fill color, and is currently only used in the hover effect of Slider.",
-      "descriptionZh": "最深的填充色，用于拉开与二、三级填充色的区分度，目前只用在 Slider 的 hover 效果。"
+      "descriptionZh": "最深的填充色，用于拉开与二、三级填充色的区分度，目前只用在 Slider 的 hover 效果。",
+      "name": "colorFill"
     },
     {
       "type": "string",
       "default": "",
       "description": "The weakest level of fill color is suitable for color blocks that are not easy to attract attention, such as zebra stripes, color blocks that distinguish boundaries, etc.",
-      "descriptionZh": "最弱一级的填充色，适用于不易引起注意的色块，例如斑马纹、区分边界的色块等。"
+      "descriptionZh": "最弱一级的填充色，适用于不易引起注意的色块，例如斑马纹、区分边界的色块等。",
+      "name": "colorFillQuaternary"
     },
     {
       "type": "string",
       "default": "",
       "description": "The second level of fill color can outline the shape of the element more clearly, such as Rate, Skeleton, etc. It can also be used as the Hover state of the third level of fill color, such as Table, etc.",
-      "descriptionZh": "二级填充色可以较为明显地勾勒出元素形体，如 Rate、Skeleton 等。也可以作为三级填充色的 Hover 状态，如 Table 等。"
+      "descriptionZh": "二级填充色可以较为明显地勾勒出元素形体，如 Rate、Skeleton 等。也可以作为三级填充色的 Hover 状态，如 Table 等。",
+      "name": "colorFillSecondary"
     },
     {
       "type": "string",
       "default": "",
       "description": "The third level of fill color is used to outline the shape of the element, such as Slider, Segmented, etc. If there is no emphasis requirement, it is recommended to use the third level of fill color as the default fill color.",
-      "descriptionZh": "三级填充色用于勾勒出元素形体的场景，如 Slider、Segmented 等。如无强调需求的情况下，建议使用三级填色作为默认填色。"
+      "descriptionZh": "三级填充色用于勾勒出元素形体的场景，如 Slider、Segmented 等。如无强调需求的情况下，建议使用三级填色作为默认填色。",
+      "name": "colorFillTertiary"
     },
     {
       "type": "string",
       "default": "",
       "description": "Active state of dark color of information color.",
-      "descriptionZh": "信息色的深色激活态。"
+      "descriptionZh": "信息色的深色激活态。",
+      "name": "colorInfoActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "Light background color of information color.",
-      "descriptionZh": "信息色的浅色背景颜色。"
+      "descriptionZh": "信息色的浅色背景颜色。",
+      "name": "colorInfoBg"
     },
     {
       "type": "string",
       "default": "",
       "description": "Hover state of light background color of information color.",
-      "descriptionZh": "信息色的浅色背景色悬浮态。"
+      "descriptionZh": "信息色的浅色背景色悬浮态。",
+      "name": "colorInfoBgHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Border color of information color.",
-      "descriptionZh": "信息色的描边色。"
+      "descriptionZh": "信息色的描边色。",
+      "name": "colorInfoBorder"
     },
     {
       "type": "string",
       "default": "",
       "description": "Hover state of border color of information color.",
-      "descriptionZh": "信息色的描边色悬浮态。"
+      "descriptionZh": "信息色的描边色悬浮态。",
+      "name": "colorInfoBorderHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Hover state of dark color of information color.",
-      "descriptionZh": "信息色的深色悬浮态。"
+      "descriptionZh": "信息色的深色悬浮态。",
+      "name": "colorInfoHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Default state of text color of information color.",
-      "descriptionZh": "信息色的文本默认态。"
+      "descriptionZh": "信息色的文本默认态。",
+      "name": "colorInfoText"
     },
     {
       "type": "string",
       "default": "",
       "description": "Active state of text color of information color.",
-      "descriptionZh": "信息色的文本激活态。"
+      "descriptionZh": "信息色的文本激活态。",
+      "name": "colorInfoTextActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "Hover state of text color of information color.",
-      "descriptionZh": "信息色的文本悬浮态。"
+      "descriptionZh": "信息色的文本悬浮态。",
+      "name": "colorInfoTextHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the color of hyperlink when clicked.",
-      "descriptionZh": "控制超链接被点击时的颜色。"
+      "descriptionZh": "控制超链接被点击时的颜色。",
+      "name": "colorLinkActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the color of hyperlink when hovering.",
-      "descriptionZh": "控制超链接悬浮时的颜色。"
+      "descriptionZh": "控制超链接悬浮时的颜色。",
+      "name": "colorLinkHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Dark active state under the main color gradient.",
-      "descriptionZh": "主色梯度下的深色激活态。"
+      "descriptionZh": "主色梯度下的深色激活态。",
+      "name": "colorPrimaryActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "Light background color of primary color, usually used for weak visual level selection state.",
-      "descriptionZh": "主色浅色背景颜色，一般用于视觉层级较弱的选中状态。"
+      "descriptionZh": "主色浅色背景颜色，一般用于视觉层级较弱的选中状态。",
+      "name": "colorPrimaryBg"
     },
     {
       "type": "string",
       "default": "",
       "description": "The hover state color corresponding to the light background color of the primary color.",
-      "descriptionZh": "与主色浅色背景颜色相对应的悬浮态颜色。"
+      "descriptionZh": "与主色浅色背景颜色相对应的悬浮态颜色。",
+      "name": "colorPrimaryBgHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "The stroke color under the main color gradient, used on the stroke of components such as Slider.",
-      "descriptionZh": "主色梯度下的描边用色，用在 Slider 等组件的描边上。"
+      "descriptionZh": "主色梯度下的描边用色，用在 Slider 等组件的描边上。",
+      "name": "colorPrimaryBorder"
     },
     {
       "type": "string",
       "default": "",
       "description": "The hover state of the stroke color under the main color gradient, which will be used when the stroke Hover of components such as Slider and Button.",
-      "descriptionZh": "主色梯度下的描边用色的悬浮态，Slider 、Button 等组件的描边 Hover 时会使用。"
+      "descriptionZh": "主色梯度下的描边用色的悬浮态，Slider 、Button 等组件的描边 Hover 时会使用。",
+      "name": "colorPrimaryBorderHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Hover state under the main color gradient.",
-      "descriptionZh": "主色梯度下的悬浮态。"
+      "descriptionZh": "主色梯度下的悬浮态。",
+      "name": "colorPrimaryHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Text color under the main color gradient.",
-      "descriptionZh": "主色梯度下的文本颜色。"
+      "descriptionZh": "主色梯度下的文本颜色。",
+      "name": "colorPrimaryText"
     },
     {
       "type": "string",
       "default": "",
       "description": "Active state of text color under the main color gradient.",
-      "descriptionZh": "主色梯度下的文本激活态。"
+      "descriptionZh": "主色梯度下的文本激活态。",
+      "name": "colorPrimaryTextActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "Hover state of text color under the main color gradient.",
-      "descriptionZh": "主色梯度下的文本悬浮态。"
+      "descriptionZh": "主色梯度下的文本悬浮态。",
+      "name": "colorPrimaryTextHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Active state color of dark success color",
-      "descriptionZh": "成功色的深色激活态"
+      "descriptionZh": "成功色的深色激活态",
+      "name": "colorSuccessActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "Light background color of success color, used for Tag and Alert success state background color",
-      "descriptionZh": "成功色的浅色背景颜色，用于 Tag 和 Alert 的成功态背景色"
+      "descriptionZh": "成功色的浅色背景颜色，用于 Tag 和 Alert 的成功态背景色",
+      "name": "colorSuccessBg"
     },
     {
       "type": "string",
       "default": "",
       "description": "Light background color of success color, but antd does not use this token currently",
-      "descriptionZh": "成功色浅色背景颜色，一般用于视觉层级较弱的选中状态，不过 antd 目前没有使用到该 token"
+      "descriptionZh": "成功色浅色背景颜色，一般用于视觉层级较弱的选中状态，不过 antd 目前没有使用到该 token",
+      "name": "colorSuccessBgHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Border color of success color, used for Tag and Alert success state border color",
-      "descriptionZh": "成功色的描边色，用于 Tag 和 Alert 的成功态描边色"
+      "descriptionZh": "成功色的描边色，用于 Tag 和 Alert 的成功态描边色",
+      "name": "colorSuccessBorder"
     },
     {
       "type": "string",
       "default": "",
       "description": "Hover state color of success color border",
-      "descriptionZh": "成功色的描边色悬浮态"
+      "descriptionZh": "成功色的描边色悬浮态",
+      "name": "colorSuccessBorderHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Hover state color of dark success color",
-      "descriptionZh": "成功色的深色悬浮态"
+      "descriptionZh": "成功色的深色悬浮态",
+      "name": "colorSuccessHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Default state color of success color text",
-      "descriptionZh": "成功色的文本默认态"
+      "descriptionZh": "成功色的文本默认态",
+      "name": "colorSuccessText"
     },
     {
       "type": "string",
       "default": "",
       "description": "Active state color of success color text",
-      "descriptionZh": "成功色的文本激活态"
+      "descriptionZh": "成功色的文本激活态",
+      "name": "colorSuccessTextActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "Hover state color of success color text",
-      "descriptionZh": "成功色的文本悬浮态"
+      "descriptionZh": "成功色的文本悬浮态",
+      "name": "colorSuccessTextHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Default text color which comply with W3C standards, and this color is also the darkest neutral color.",
-      "descriptionZh": "最深的文本色。为了符合W3C标准，默认的文本颜色使用了该色，同时这个颜色也是最深的中性色。"
+      "descriptionZh": "最深的文本色。为了符合W3C标准，默认的文本颜色使用了该色，同时这个颜色也是最深的中性色。",
+      "name": "colorText"
     },
     {
       "type": "string",
       "default": "",
       "description": "The fourth level of text color is the lightest text color, such as form input prompt text, disabled color text, etc.",
-      "descriptionZh": "第四级文本色是最浅的文本色，例如表单的输入提示文本、禁用色文本等。"
+      "descriptionZh": "第四级文本色是最浅的文本色，例如表单的输入提示文本、禁用色文本等。",
+      "name": "colorTextQuaternary"
     },
     {
       "type": "string",
       "default": "",
       "description": "The second level of text color is generally used in scenarios where text color is not emphasized, such as label text, menu text selection state, etc.",
-      "descriptionZh": "作为第二梯度的文本色，一般用在不那么需要强化文本颜色的场景，例如 Label 文本、Menu 的文本选中态等场景。"
+      "descriptionZh": "作为第二梯度的文本色，一般用在不那么需要强化文本颜色的场景，例如 Label 文本、Menu 的文本选中态等场景。",
+      "name": "colorTextSecondary"
     },
     {
       "type": "string",
       "default": "",
       "description": "The third level of text color is generally used for descriptive text, such as form supplementary explanation text, list descriptive text, etc.",
-      "descriptionZh": "第三级文本色一般用于描述性文本，例如表单的中的补充说明文本、列表的描述性文本等场景。"
+      "descriptionZh": "第三级文本色一般用于描述性文本，例如表单的中的补充说明文本、列表的描述性文本等场景。",
+      "name": "colorTextTertiary"
     },
     {
       "type": "string",
       "default": "",
       "description": "The active state of the warning color.",
-      "descriptionZh": "警戒色的深色激活态"
+      "descriptionZh": "警戒色的深色激活态",
+      "name": "colorWarningActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "The background color of the warning state.",
-      "descriptionZh": "警戒色的浅色背景颜色"
+      "descriptionZh": "警戒色的浅色背景颜色",
+      "name": "colorWarningBg"
     },
     {
       "type": "string",
       "default": "",
       "description": "The hover state background color of the warning state.",
-      "descriptionZh": "警戒色的浅色背景色悬浮态"
+      "descriptionZh": "警戒色的浅色背景色悬浮态",
+      "name": "colorWarningBgHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "The border color of the warning state.",
-      "descriptionZh": "警戒色的描边色"
+      "descriptionZh": "警戒色的描边色",
+      "name": "colorWarningBorder"
     },
     {
       "type": "string",
       "default": "",
       "description": "The hover state border color of the warning state.",
-      "descriptionZh": "警戒色的描边色悬浮态"
+      "descriptionZh": "警戒色的描边色悬浮态",
+      "name": "colorWarningBorderHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "The hover state of the warning color.",
-      "descriptionZh": "警戒色的深色悬浮态"
+      "descriptionZh": "警戒色的深色悬浮态",
+      "name": "colorWarningHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "The default state of the text in the warning color.",
-      "descriptionZh": "警戒色的文本默认态"
+      "descriptionZh": "警戒色的文本默认态",
+      "name": "colorWarningText"
     },
     {
       "type": "string",
       "default": "",
       "description": "The active state of the text in the warning color.",
-      "descriptionZh": "警戒色的文本激活态"
+      "descriptionZh": "警戒色的文本激活态",
+      "name": "colorWarningTextActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "The hover state of the text in the warning color.",
-      "descriptionZh": "警戒色的文本悬浮态"
+      "descriptionZh": "警戒色的文本悬浮态",
+      "name": "colorWarningTextHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Pure white color don't changed by theme",
-      "descriptionZh": "不随主题变化的纯白色"
+      "descriptionZh": "不随主题变化的纯白色",
+      "name": "colorWhite"
     },
     {
       "type": "number",
       "default": "",
       "description": "LG component height",
-      "descriptionZh": "较高的组件高度"
+      "descriptionZh": "较高的组件高度",
+      "name": "controlHeightLG"
     },
     {
       "type": "number",
       "default": "",
       "description": "SM component height",
-      "descriptionZh": "较小的组件高度"
+      "descriptionZh": "较小的组件高度",
+      "name": "controlHeightSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "XS component height",
-      "descriptionZh": "更小的组件高度"
+      "descriptionZh": "更小的组件高度",
+      "name": "controlHeightXS"
     },
     {
       "type": "number",
       "default": "",
       "description": "Font size of h1 tag.",
-      "descriptionZh": "H1 标签所使用的字号"
+      "descriptionZh": "H1 标签所使用的字号",
+      "name": "fontSizeHeading1"
     },
     {
       "type": "number",
       "default": "",
       "description": "Font size of h2 tag.",
-      "descriptionZh": "h2 标签所使用的字号"
+      "descriptionZh": "h2 标签所使用的字号",
+      "name": "fontSizeHeading2"
     },
     {
       "type": "number",
       "default": "",
       "description": "Font size of h3 tag.",
-      "descriptionZh": "h3 标签使用的字号"
+      "descriptionZh": "h3 标签使用的字号",
+      "name": "fontSizeHeading3"
     },
     {
       "type": "number",
       "default": "",
       "description": "Font size of h4 tag.",
-      "descriptionZh": "h4 标签使用的字号"
+      "descriptionZh": "h4 标签使用的字号",
+      "name": "fontSizeHeading4"
     },
     {
       "type": "number",
       "default": "",
       "description": "Font size of h5 tag.",
-      "descriptionZh": "h5 标签使用的字号"
+      "descriptionZh": "h5 标签使用的字号",
+      "name": "fontSizeHeading5"
     },
     {
       "type": "number",
       "default": "",
       "description": "Large font size",
-      "descriptionZh": "大号字体大小"
+      "descriptionZh": "大号字体大小",
+      "name": "fontSizeLG"
     },
     {
       "type": "number",
       "default": "",
       "description": "Small font size",
-      "descriptionZh": "小号字体大小"
+      "descriptionZh": "小号字体大小",
+      "name": "fontSizeSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "Super large font size",
-      "descriptionZh": "超大号字体大小"
+      "descriptionZh": "超大号字体大小",
+      "name": "fontSizeXL"
     },
     {
       "type": "number",
       "default": "",
       "description": "Line height of text.",
-      "descriptionZh": "文本行高"
+      "descriptionZh": "文本行高",
+      "name": "lineHeight"
     },
     {
       "type": "number",
       "default": "",
       "description": "Line height of h1 tag.",
-      "descriptionZh": "H1 标签所使用的行高"
+      "descriptionZh": "H1 标签所使用的行高",
+      "name": "lineHeightHeading1"
     },
     {
       "type": "number",
       "default": "",
       "description": "Line height of h2 tag.",
-      "descriptionZh": "h2 标签所使用的行高"
+      "descriptionZh": "h2 标签所使用的行高",
+      "name": "lineHeightHeading2"
     },
     {
       "type": "number",
       "default": "",
       "description": "Line height of h3 tag.",
-      "descriptionZh": "h3 标签所使用的行高"
+      "descriptionZh": "h3 标签所使用的行高",
+      "name": "lineHeightHeading3"
     },
     {
       "type": "number",
       "default": "",
       "description": "Line height of h4 tag.",
-      "descriptionZh": "h4 标签所使用的行高"
+      "descriptionZh": "h4 标签所使用的行高",
+      "name": "lineHeightHeading4"
     },
     {
       "type": "number",
       "default": "",
       "description": "Line height of h5 tag.",
-      "descriptionZh": "h5 标签所使用的行高"
+      "descriptionZh": "h5 标签所使用的行高",
+      "name": "lineHeightHeading5"
     },
     {
       "type": "number",
       "default": "",
       "description": "Line height of large text.",
-      "descriptionZh": "大型文本行高"
+      "descriptionZh": "大型文本行高",
+      "name": "lineHeightLG"
     },
     {
       "type": "number",
       "default": "",
       "description": "Line height of small text.",
-      "descriptionZh": "小型文本行高"
+      "descriptionZh": "小型文本行高",
+      "name": "lineHeightSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "The default line width of the outline class components, such as Button, Input, Select, etc.",
-      "descriptionZh": "描边类组件的默认线宽，如 Button、Input、Select 等输入类控件。"
+      "descriptionZh": "描边类组件的默认线宽，如 Button、Input、Select 等输入类控件。",
+      "name": "lineWidthBold"
     },
     {
       "type": "string",
       "default": "",
       "description": "Motion speed, fast speed. Used for small element animation interaction.",
-      "descriptionZh": "动效播放速度，快速。用于小型元素动画交互"
+      "descriptionZh": "动效播放速度，快速。用于小型元素动画交互",
+      "name": "motionDurationFast"
     },
     {
       "type": "string",
       "default": "",
       "description": "Motion speed, medium speed. Used for medium element animation interaction.",
-      "descriptionZh": "动效播放速度，中速。用于中型元素动画交互"
+      "descriptionZh": "动效播放速度，中速。用于中型元素动画交互",
+      "name": "motionDurationMid"
     },
     {
       "type": "string",
       "default": "",
       "description": "Motion speed, slow speed. Used for large element animation interaction.",
-      "descriptionZh": "动效播放速度，慢速。用于大型元素如面板动画交互"
+      "descriptionZh": "动效播放速度，慢速。用于大型元素如面板动画交互",
+      "name": "motionDurationSlow"
     },
     {
       "type": "number",
       "default": "",
       "description": "Medium size",
-      "descriptionZh": "中等尺寸"
+      "descriptionZh": "中等尺寸",
+      "name": "size"
     },
     {
       "type": "number",
       "default": "",
       "description": "Large size",
-      "descriptionZh": "大尺寸"
+      "descriptionZh": "大尺寸",
+      "name": "sizeLG"
     },
     {
       "type": "number",
       "default": "",
       "description": "Medium-large size",
-      "descriptionZh": "中大尺寸"
+      "descriptionZh": "中大尺寸",
+      "name": "sizeMD"
     },
     {
       "type": "number",
       "default": "",
       "description": "Same as `size`, but could be larger in compact mode",
-      "descriptionZh": "与size大小相同，但在紧凑模式下可能更大"
+      "descriptionZh": "与size大小相同，但在紧凑模式下可能更大",
+      "name": "sizeMS"
     },
     {
       "type": "number",
       "default": "",
       "description": "Medium-small size",
-      "descriptionZh": "中小尺寸"
+      "descriptionZh": "中小尺寸",
+      "name": "sizeSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "Extra-large size",
-      "descriptionZh": "超大尺寸"
+      "descriptionZh": "超大尺寸",
+      "name": "sizeXL"
     },
     {
       "type": "number",
       "default": "",
       "description": "Small size",
-      "descriptionZh": "小尺寸"
+      "descriptionZh": "小尺寸",
+      "name": "sizeXS"
     },
     {
       "type": "number",
       "default": "",
       "description": "Largest size",
-      "descriptionZh": "最大尺寸"
+      "descriptionZh": "最大尺寸",
+      "name": "sizeXXL"
     },
     {
       "type": "number",
       "default": "",
       "description": "Smallest size",
-      "descriptionZh": "最小尺寸"
+      "descriptionZh": "最小尺寸",
+      "name": "sizeXXS"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the box shadow style of an element.",
-      "descriptionZh": "控制元素阴影样式。"
+      "descriptionZh": "控制元素阴影样式。",
+      "name": "boxShadow"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the secondary box shadow style of an element.",
-      "descriptionZh": "控制元素二级阴影样式。"
+      "descriptionZh": "控制元素二级阴影样式。",
+      "name": "boxShadowSecondary"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the tertiary box shadow style of an element.",
-      "descriptionZh": "控制元素三级盒子阴影样式。"
+      "descriptionZh": "控制元素三级盒子阴影样式。",
+      "name": "boxShadowTertiary"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the background color of container in disabled state.",
-      "descriptionZh": "控制容器在禁用状态下的背景色。"
+      "descriptionZh": "控制容器在禁用状态下的背景色。",
+      "name": "colorBgContainerDisabled"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the background color of text in active state.",
-      "descriptionZh": "控制文本在激活状态下的背景色。"
+      "descriptionZh": "控制文本在激活状态下的背景色。",
+      "name": "colorBgTextActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the background color of text in hover state.",
-      "descriptionZh": "控制文本在悬停状态下的背景色。"
+      "descriptionZh": "控制文本在悬停状态下的背景色。",
+      "name": "colorBgTextHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the color of background border of element.",
-      "descriptionZh": "控制元素背景边框的颜色。"
+      "descriptionZh": "控制元素背景边框的颜色。",
+      "name": "colorBorderBg"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the outline color of input component in error state.",
-      "descriptionZh": "控制输入组件错误状态下的外轮廓线颜色。"
+      "descriptionZh": "控制输入组件错误状态下的外轮廓线颜色。",
+      "name": "colorErrorOutline"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the alternative background color of element.",
-      "descriptionZh": "控制元素替代背景色。"
+      "descriptionZh": "控制元素替代背景色。",
+      "name": "colorFillAlter"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the background color of content area.",
-      "descriptionZh": "控制内容区域的背景色。"
+      "descriptionZh": "控制内容区域的背景色。",
+      "name": "colorFillContent"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the style of background color of content area when mouse hovers over it.",
-      "descriptionZh": "控制内容区域背景色在鼠标悬停时的样式。"
+      "descriptionZh": "控制内容区域背景色在鼠标悬停时的样式。",
+      "name": "colorFillContentHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the color of page element when highlighted.",
-      "descriptionZh": "控制页面元素高亮时的颜色。"
+      "descriptionZh": "控制页面元素高亮时的颜色。",
+      "name": "colorHighlight"
     },
     {
       "type": "string",
       "default": "",
       "description": "Weak action. Such as `allowClear` or Alert close button",
-      "descriptionZh": "控制弱操作图标的颜色，例如 allowClear 或 Alert 关闭按钮。\n *"
+      "descriptionZh": "控制弱操作图标的颜色，例如 allowClear 或 Alert 关闭按钮。\n *",
+      "name": "colorIcon"
     },
     {
       "type": "string",
       "default": "",
       "description": "Weak action hover color. Such as `allowClear` or Alert close button",
-      "descriptionZh": "控制弱操作图标在悬浮状态下的颜色，例如 allowClear 或 Alert 关闭按钮。"
+      "descriptionZh": "控制弱操作图标在悬浮状态下的颜色，例如 allowClear 或 Alert 关闭按钮。",
+      "name": "colorIconHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Used as the color of separator, this color is the same as colorBorderSecondary but with transparency.",
-      "descriptionZh": "用于作为分割线的颜色，此颜色和 colorBorderSecondary 的颜色一致，但是用的是透明色。"
+      "descriptionZh": "用于作为分割线的颜色，此颜色和 colorBorderSecondary 的颜色一致，但是用的是透明色。",
+      "name": "colorSplit"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the font color of text description.",
-      "descriptionZh": "控制文本描述字体颜色。"
+      "descriptionZh": "控制文本描述字体颜色。",
+      "name": "colorTextDescription"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the color of text in disabled state.",
-      "descriptionZh": "控制禁用状态下的字体颜色。"
+      "descriptionZh": "控制禁用状态下的字体颜色。",
+      "name": "colorTextDisabled"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the font color of heading.",
-      "descriptionZh": "控制标题字体颜色。"
+      "descriptionZh": "控制标题字体颜色。",
+      "name": "colorTextHeading"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the font color of text label.",
-      "descriptionZh": "控制文本标签字体颜色。"
+      "descriptionZh": "控制文本标签字体颜色。",
+      "name": "colorTextLabel"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the highlight color of text with background color, such as the text in Primary Button components.",
-      "descriptionZh": "控制带背景色的文本，例如 Primary Button 组件中的文本高亮颜色。"
+      "descriptionZh": "控制带背景色的文本，例如 Primary Button 组件中的文本高亮颜色。",
+      "name": "colorTextLightSolid"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the color of placeholder text.",
-      "descriptionZh": "控制占位文本的颜色。"
+      "descriptionZh": "控制占位文本的颜色。",
+      "name": "colorTextPlaceholder"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the outline color of input component in warning state.",
-      "descriptionZh": "控制输入组件警告状态下的外轮廓线颜色。"
+      "descriptionZh": "控制输入组件警告状态下的外轮廓线颜色。",
+      "name": "colorWarningOutline"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the interactive size of control component.",
-      "descriptionZh": "控制组件的交互大小。"
+      "descriptionZh": "控制组件的交互大小。",
+      "name": "controlInteractiveSize"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the background color of control component item when active.",
-      "descriptionZh": "控制组件项在激活状态下的背景颜色。"
+      "descriptionZh": "控制组件项在激活状态下的背景颜色。",
+      "name": "controlItemBgActive"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the background color of control component item when active and disabled.",
-      "descriptionZh": "控制组件项在禁用状态下的激活背景颜色。"
+      "descriptionZh": "控制组件项在禁用状态下的激活背景颜色。",
+      "name": "controlItemBgActiveDisabled"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the background color of control component item when hovering and active.",
-      "descriptionZh": "控制组件项在鼠标悬浮且激活状态下的背景颜色。"
+      "descriptionZh": "控制组件项在鼠标悬浮且激活状态下的背景颜色。",
+      "name": "controlItemBgActiveHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the background color of control component item when hovering.",
-      "descriptionZh": "控制组件项在鼠标悬浮时的背景颜色。"
+      "descriptionZh": "控制组件项在鼠标悬浮时的背景颜色。",
+      "name": "controlItemBgHover"
     },
     {
       "type": "string",
       "default": "",
       "description": "Control the outline color of input component.",
-      "descriptionZh": "控制输入组件的外轮廓线颜色。"
+      "descriptionZh": "控制输入组件的外轮廓线颜色。",
+      "name": "controlOutline"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the outline width of input component.",
-      "descriptionZh": "控制输入组件的外轮廓线宽度。"
+      "descriptionZh": "控制输入组件的外轮廓线宽度。",
+      "name": "controlOutlineWidth"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the horizontal padding of an element.",
-      "descriptionZh": "控制元素水平内间距。"
+      "descriptionZh": "控制元素水平内间距。",
+      "name": "controlPaddingHorizontal"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the horizontal padding of an element with a small-medium size.",
-      "descriptionZh": "控制元素中小尺寸水平内间距。"
+      "descriptionZh": "控制元素中小尺寸水平内间距。",
+      "name": "controlPaddingHorizontalSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the font size of operation icon in Select, Cascader, etc. Normally same as fontSizeSM.",
-      "descriptionZh": "控制选择器、级联选择器等中的操作图标字体大小。正常情况下与 fontSizeSM 相同。"
+      "descriptionZh": "控制选择器、级联选择器等中的操作图标字体大小。正常情况下与 fontSizeSM 相同。",
+      "name": "fontSizeIcon"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the font weight of heading components (such as h1, h2, h3) or selected item.",
-      "descriptionZh": "控制标题类组件（如 h1、h2、h3）或选中项的字体粗细。"
+      "descriptionZh": "控制标题类组件（如 h1、h2、h3）或选中项的字体粗细。",
+      "name": "fontWeightStrong"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the width of the line when the component is in focus state.",
-      "descriptionZh": "控制线条的宽度，当组件处于聚焦态时。"
+      "descriptionZh": "控制线条的宽度，当组件处于聚焦态时。",
+      "name": "lineWidthFocus"
     },
     {
       "type": "TextDecoration<string | number> | undefined",
       "default": "",
       "description": "Control the text decoration style of a link.",
-      "descriptionZh": "控制链接文本的装饰样式。"
+      "descriptionZh": "控制链接文本的装饰样式。",
+      "name": "linkDecoration"
     },
     {
       "type": "TextDecoration<string | number> | undefined",
       "default": "",
       "description": "Control the text decoration style of a link on focus.",
-      "descriptionZh": "控制链接聚焦时文本的装饰样式。"
+      "descriptionZh": "控制链接聚焦时文本的装饰样式。",
+      "name": "linkFocusDecoration"
     },
     {
       "type": "TextDecoration<string | number> | undefined",
       "default": "",
       "description": "Control the text decoration style of a link on mouse hover.",
-      "descriptionZh": "控制链接鼠标悬浮时文本的装饰样式。"
+      "descriptionZh": "控制链接鼠标悬浮时文本的装饰样式。",
+      "name": "linkHoverDecoration"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the margin of an element, with a medium size.",
-      "descriptionZh": "控制元素外边距，中等尺寸。"
+      "descriptionZh": "控制元素外边距，中等尺寸。",
+      "name": "margin"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the margin of an element, with a large size.",
-      "descriptionZh": "控制元素外边距，大尺寸。"
+      "descriptionZh": "控制元素外边距，大尺寸。",
+      "name": "marginLG"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the margin of an element, with a medium-large size.",
-      "descriptionZh": "控制元素外边距，中大尺寸。"
+      "descriptionZh": "控制元素外边距，中大尺寸。",
+      "name": "marginMD"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the margin of an element, with a medium-small size.",
-      "descriptionZh": "控制元素外边距，中小尺寸。"
+      "descriptionZh": "控制元素外边距，中小尺寸。",
+      "name": "marginSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the margin of an element, with an extra-large size.",
-      "descriptionZh": "控制元素外边距，超大尺寸。"
+      "descriptionZh": "控制元素外边距，超大尺寸。",
+      "name": "marginXL"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the margin of an element, with a small size.",
-      "descriptionZh": "控制元素外边距，小尺寸。"
+      "descriptionZh": "控制元素外边距，小尺寸。",
+      "name": "marginXS"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the margin of an element, with the largest size.",
-      "descriptionZh": "控制元素外边距，最大尺寸。"
+      "descriptionZh": "控制元素外边距，最大尺寸。",
+      "name": "marginXXL"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the margin of an element, with the smallest size.",
-      "descriptionZh": "控制元素外边距，最小尺寸。"
+      "descriptionZh": "控制元素外边距，最小尺寸。",
+      "name": "marginXXS"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the opacity of the loading state.",
-      "descriptionZh": "控制加载状态的透明度。"
+      "descriptionZh": "控制加载状态的透明度。",
+      "name": "opacityLoading"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the padding of the element.",
-      "descriptionZh": "控制元素的内间距。"
+      "descriptionZh": "控制元素的内间距。",
+      "name": "padding"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the horizontal padding of content element.",
-      "descriptionZh": "控制内容元素水平内间距。"
+      "descriptionZh": "控制内容元素水平内间距。",
+      "name": "paddingContentHorizontal"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the horizontal padding of content element, suitable for large screen devices.",
-      "descriptionZh": "控制内容元素水平内间距，适用于大屏幕设备。"
+      "descriptionZh": "控制内容元素水平内间距，适用于大屏幕设备。",
+      "name": "paddingContentHorizontalLG"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the horizontal padding of content element, suitable for small screen devices.",
-      "descriptionZh": "控制内容元素水平内间距，适用于小屏幕设备。"
+      "descriptionZh": "控制内容元素水平内间距，适用于小屏幕设备。",
+      "name": "paddingContentHorizontalSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the vertical padding of content element.",
-      "descriptionZh": "控制内容元素垂直内间距。"
+      "descriptionZh": "控制内容元素垂直内间距。",
+      "name": "paddingContentVertical"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the vertical padding of content element, suitable for large screen devices.",
-      "descriptionZh": "控制内容元素垂直内间距，适用于大屏幕设备。"
+      "descriptionZh": "控制内容元素垂直内间距，适用于大屏幕设备。",
+      "name": "paddingContentVerticalLG"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the vertical padding of content element, suitable for small screen devices.",
-      "descriptionZh": "控制内容元素垂直内间距，适用于小屏幕设备。"
+      "descriptionZh": "控制内容元素垂直内间距，适用于小屏幕设备。",
+      "name": "paddingContentVerticalSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the large padding of the element.",
-      "descriptionZh": "控制元素的大内间距。"
+      "descriptionZh": "控制元素的大内间距。",
+      "name": "paddingLG"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the medium padding of the element.",
-      "descriptionZh": "控制元素的中等内间距。"
+      "descriptionZh": "控制元素的中等内间距。",
+      "name": "paddingMD"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the small padding of the element.",
-      "descriptionZh": "控制元素的小内间距。"
+      "descriptionZh": "控制元素的小内间距。",
+      "name": "paddingSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the extra large padding of the element.",
-      "descriptionZh": "控制元素的特大内间距。"
+      "descriptionZh": "控制元素的特大内间距。",
+      "name": "paddingXL"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the extra small padding of the element.",
-      "descriptionZh": "控制元素的特小内间距。"
+      "descriptionZh": "控制元素的特小内间距。",
+      "name": "paddingXS"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the extra extra small padding of the element.",
-      "descriptionZh": "控制元素的极小内间距。"
+      "descriptionZh": "控制元素的极小内间距。",
+      "name": "paddingXXS"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the screen width of large screens.",
-      "descriptionZh": "控制大屏幕的屏幕宽度。"
+      "descriptionZh": "控制大屏幕的屏幕宽度。",
+      "name": "screenLG"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the maximum width of large screens.",
-      "descriptionZh": "控制大屏幕的最大宽度。"
+      "descriptionZh": "控制大屏幕的最大宽度。",
+      "name": "screenLGMax"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the minimum width of large screens.",
-      "descriptionZh": "控制大屏幕的最小宽度。"
+      "descriptionZh": "控制大屏幕的最小宽度。",
+      "name": "screenLGMin"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the screen width of medium screens.",
-      "descriptionZh": "控制中等屏幕的屏幕宽度。"
+      "descriptionZh": "控制中等屏幕的屏幕宽度。",
+      "name": "screenMD"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the maximum width of medium screens.",
-      "descriptionZh": "控制中等屏幕的最大宽度。"
+      "descriptionZh": "控制中等屏幕的最大宽度。",
+      "name": "screenMDMax"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the minimum width of medium screens.",
-      "descriptionZh": "控制中等屏幕的最小宽度。"
+      "descriptionZh": "控制中等屏幕的最小宽度。",
+      "name": "screenMDMin"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the screen width of small screens.",
-      "descriptionZh": "控制小屏幕的屏幕宽度。"
+      "descriptionZh": "控制小屏幕的屏幕宽度。",
+      "name": "screenSM"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the maximum width of small screens.",
-      "descriptionZh": "控制小屏幕的最大宽度。"
+      "descriptionZh": "控制小屏幕的最大宽度。",
+      "name": "screenSMMax"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the minimum width of small screens.",
-      "descriptionZh": "控制小屏幕的最小宽度。"
+      "descriptionZh": "控制小屏幕的最小宽度。",
+      "name": "screenSMMin"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the screen width of extra large screens.",
-      "descriptionZh": "控制超大屏幕的屏幕宽度。"
+      "descriptionZh": "控制超大屏幕的屏幕宽度。",
+      "name": "screenXL"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the maximum width of extra large screens.",
-      "descriptionZh": "控制超大屏幕的最大宽度。"
+      "descriptionZh": "控制超大屏幕的最大宽度。",
+      "name": "screenXLMax"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the minimum width of extra large screens.",
-      "descriptionZh": "控制超大屏幕的最小宽度。"
+      "descriptionZh": "控制超大屏幕的最小宽度。",
+      "name": "screenXLMin"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the screen width of extra small screens.",
-      "descriptionZh": "控制超小屏幕的屏幕宽度。"
+      "descriptionZh": "控制超小屏幕的屏幕宽度。",
+      "name": "screenXS"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the maximum width of extra small screens.",
-      "descriptionZh": "控制超小屏幕的最大宽度。"
+      "descriptionZh": "控制超小屏幕的最大宽度。",
+      "name": "screenXSMax"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the minimum width of extra small screens.",
-      "descriptionZh": "控制超小屏幕的最小宽度。"
+      "descriptionZh": "控制超小屏幕的最小宽度。",
+      "name": "screenXSMin"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the screen width of extra extra large screens.",
-      "descriptionZh": "控制超超大屏幕的屏幕宽度。"
+      "descriptionZh": "控制超超大屏幕的屏幕宽度。",
+      "name": "screenXXL"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the maximum width of extra extra large screens.",
-      "descriptionZh": "控制超超大屏幕的最大宽度。"
+      "descriptionZh": "控制超超大屏幕的最大宽度。",
+      "name": "screenXXLMax"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the minimum width of extra extra large screens.",
-      "descriptionZh": "控制超超大屏幕的最小宽度。"
+      "descriptionZh": "控制超超大屏幕的最小宽度。",
+      "name": "screenXXLMin"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the screen width of XXXL screens.",
-      "descriptionZh": "控制超超超大屏幕的屏幕宽度。"
+      "descriptionZh": "控制超超超大屏幕的屏幕宽度。",
+      "name": "screenXXXL"
     },
     {
       "type": "number",
       "default": "",
       "description": "Control the minimum width of XXXL screens.",
-      "descriptionZh": "控制超超超大屏幕的最小宽度。"
+      "descriptionZh": "控制超超超大屏幕的最小宽度。",
+      "name": "screenXXXLMin"
     }
   ],
   "changelog": [
