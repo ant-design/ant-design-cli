@@ -22,7 +22,6 @@ Designed for Code Agents (Claude Code, Cursor, Copilot, etc.) to invoke via shel
 | Feature | Description |
 |---|---|
 | 🤖 **Agent-Ready** | Every command supports `--format json` with clean, parseable output and structured error codes — built for Claude Code, Cursor, and Copilot tool calls |
-| 📋 **Multi-Format Output** | Every command supports `--format text\|json\|markdown` — aligned tables for humans, JSON for scripts and agents, Markdown for docs and reports |
 | 📦 **Fully Offline** | Props, tokens, demos, and changelogs for v4/v5/v6 are all bundled at install — no network calls, no latency |
 | 🔀 **Multi-Version** | Query any antd version; diff APIs between two versions; browse changelogs with categorized change types (feature / fix / breaking / deprecation) |
 | 🧠 **Deep Component Data** | Props with types and defaults; Design Tokens; runnable demo source code; semantic `classNames` / `styles` structure — all queryable from the terminal |
