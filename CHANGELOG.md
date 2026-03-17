@@ -1,3 +1,11 @@
+## [6.3.4](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4) (2026-03-17)
+
+
+### Bug Fixes
+
+* restore missing name field in globalTokens for token command ([#10](https://github.com/ant-design/ant-design-cli/issues/10)) ([e3e9ed2](https://github.com/ant-design/ant-design-cli/commit/e3e9ed2aed6e81b421a4a44a7cab3d0753fc3442))
+* show nameZh and since in info command output ([#5](https://github.com/ant-design/ant-design-cli/issues/5)) ([17b9e0a](https://github.com/ant-design/ant-design-cli/commit/17b9e0a6f252afad26bca2bd59285f23f940a8ad))
+
 # Changelog
 
 ## 0.1.0 (2026-03-14)
