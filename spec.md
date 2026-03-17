@@ -430,6 +430,32 @@ Extraction sources:
 
 Extractors are organized as `scripts/extractors/*.ts` modules (components, props, demos, tokens, semantic, changelog, faq).
 
+### Update Check
+
+After each command completes, the CLI silently checks whether a newer version is available on npm and prints a notice to **stderr** if so. The check runs at most once per 24 hours; results are cached locally.
+
+**Cache file:** `~/.config/antd-cli/update-check.json`
+
+```json
+{ "lastChecked": 1710000000000, "latestVersion": "0.2.0" }
+```
+
+**Notice format (stderr only):**
+
+```
+╭────────────────────────────────────────╮
+│  Update available: 0.1.1 → 0.2.0       │
+│  Run: npm i -g @ant-design/cli          │
+╰────────────────────────────────────────╯
+```
+
+**Behavior details:**
+
+- Skipped when `CI=1` or `NO_UPDATE_CHECK=1` is set
+- Uses `registry.npmjs.org` with a 3 s timeout; failures are silent
+- Output goes to **stderr**, so `--format json` stdout is never polluted
+- No new production dependencies — uses only built-in Node modules (`node:https`, `node:fs`, `node:os`, `node:path`)
+
 ### Automated Data Sync
 
 GitHub Actions workflow `.github/workflows/sync.yml` runs daily:
