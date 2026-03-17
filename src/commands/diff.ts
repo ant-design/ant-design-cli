@@ -206,7 +206,9 @@ export function registerChangelogCommand(program: Command): void {
       if (isChangelogMode) {
         // Changelog mode — infer major version from the version argument if not explicitly overridden
         // For ranges like "6.1.0..6.3.0", extract the left-hand version to determine major
-        const v1ForDetect = v1?.includes('..') ? v1.split('..')[0] : v1;
+        // For ranges like "5.20.0..5.22.0", use the "to" version (right side) so we load
+        // a snapshot that contains all entries up to that version.
+        const v1ForDetect = v1?.includes('..') ? v1.split('..')[1] : v1;
         const versionForDetect = opts.version ?? (v1ForDetect && /^\d+\.\d+\.\d+$/.test(v1ForDetect) ? v1ForDetect : undefined);
         const versionInfo = detectVersion(versionForDetect);
         const store = loadMetadataForVersion(versionInfo.version);

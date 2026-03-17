@@ -42,13 +42,18 @@ export function fuzzyMatch(input: string, candidates: string[]): string | undefi
   if (contains) return contains;
 
   // Levenshtein distance for close matches
+  // Tie-break by preferring candidates that start with the same letter as input
   let best: string | undefined;
   let bestDist = Infinity;
   for (const candidate of candidates) {
     const dist = levenshtein(lower, candidate.toLowerCase());
-    if (dist < bestDist && dist <= 3) {
-      bestDist = dist;
-      best = candidate;
+    if (dist <= 3) {
+      const sameFirstLetter = lower[0] === candidate[0]?.toLowerCase();
+      const bestSameFirstLetter = best ? lower[0] === best[0]?.toLowerCase() : false;
+      if (dist < bestDist || (dist === bestDist && sameFirstLetter && !bestSameFirstLetter)) {
+        bestDist = dist;
+        best = candidate;
+      }
     }
   }
   return best;

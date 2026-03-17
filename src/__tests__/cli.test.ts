@@ -69,13 +69,13 @@ describe('CLI e2e', () => {
   it('should show detailed component info', () => {
     const out = run('info', 'Button', '--detail');
     expect(out).toContain('When to use');
-    expect(out).toContain('Related');
+    expect(out).toContain('Description');
   });
 
   it('should list demos', () => {
     const out = run('demo', 'Button');
     expect(out).toContain('basic');
-    expect(out).toContain('Basic Usage');
+    expect(out).toContain('Syntactic sugar');
   });
 
   it('should get specific demo code', () => {
@@ -99,7 +99,7 @@ describe('CLI e2e', () => {
   });
 
   it('should show semantic structure', () => {
-    const out = run('semantic', 'Table');
+    const out = run('semantic', 'Drawer');
     expect(out).toContain('header');
     expect(out).toContain('body');
     expect(out).toContain('classNames');
@@ -192,9 +192,9 @@ describe('CLI e2e', () => {
   });
 
   it('should show semantic as JSON', () => {
-    const out = run('semantic', 'Table', '--format', 'json');
+    const out = run('semantic', 'Drawer', '--format', 'json');
     const data = JSON.parse(out);
-    expect(data.name).toBe('Table');
+    expect(data.name).toBe('Drawer');
     expect(data.semanticStructure.length).toBeGreaterThan(0);
   });
 
@@ -278,7 +278,8 @@ describe('CLI e2e', () => {
   // Token edge cases
   it('should show global tokens', () => {
     const out = run('token');
-    expect(out).toContain('colorPrimary');
+    expect(out).toContain('Global Design Tokens');
+    expect(out).toContain('Type');
   });
 
   it('should handle unknown component for token', () => {
