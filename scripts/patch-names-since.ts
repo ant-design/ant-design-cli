@@ -137,16 +137,20 @@ function computeSinceMap(): Map<string, string> {
   }
   allTags.sort(semverCompare);
 
-  // For each component, record the earliest version it appears in
+  // For each component, record the earliest minor series (as X.Y.0) it appears in.
+  // Snapshots use the latest patch of a minor (e.g. 5.10.3), but the component was
+  // introduced at the start of that minor, so we normalise to X.Y.0.
   const firstSeen = new Map<string, string>();
 
   for (const tag of allTags) {
     const snapshotPath = path.join(DATA_DIR, `v${tag}.json`);
     if (!fs.existsSync(snapshotPath)) continue;
     const store = JSON.parse(fs.readFileSync(snapshotPath, 'utf-8')) as Snapshot;
+    const parts = tag.split('.');
+    const sinceVersion = `${parts[0]}.${parts[1]}.0`;
     for (const comp of store.components) {
       if (!firstSeen.has(comp.name)) {
-        firstSeen.set(comp.name, tag);
+        firstSeen.set(comp.name, sinceVersion);
       }
     }
   }

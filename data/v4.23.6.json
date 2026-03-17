@@ -59,7 +59,7 @@
       ],
       "categoryZh": "导航",
       "nameZh": "固钉",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Alert",
@@ -197,7 +197,7 @@
       ],
       "categoryZh": "反馈",
       "nameZh": "警告提示",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Anchor",
@@ -309,7 +309,7 @@
       ],
       "categoryZh": "导航",
       "nameZh": "锚点",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "AutoComplete",
@@ -513,7 +513,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "自动完成",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Avatar",
@@ -726,7 +726,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "头像",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "BackTop",
@@ -776,7 +776,7 @@
       ],
       "categoryZh": "其他",
       "nameZh": "回到顶部",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Badge",
@@ -943,7 +943,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "徽标数",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Breadcrumb",
@@ -1081,7 +1081,7 @@
       ],
       "categoryZh": "导航",
       "nameZh": "面包屑",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Button",
@@ -1447,7 +1447,7 @@
       ],
       "categoryZh": "通用",
       "nameZh": "按钮",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Calendar",
@@ -1623,7 +1623,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "日历",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Card",
@@ -1908,7 +1908,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "卡片",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Carousel",
@@ -2028,7 +2028,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "走马灯",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Cascader",
@@ -2418,7 +2418,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "级联选择",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Checkbox",
@@ -2529,7 +2529,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "多选框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Collapse",
@@ -2707,7 +2707,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "折叠面板",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Comment",
@@ -2761,7 +2761,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "评论",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "ConfigProvider",
@@ -2903,7 +2903,7 @@
       ],
       "categoryZh": "其他",
       "nameZh": "全局化配置",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "DatePicker",
@@ -3820,7 +3820,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "日期选择框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Descriptions",
@@ -4002,7 +4002,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "描述列表",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Divider",
@@ -4097,7 +4097,7 @@
       ],
       "categoryZh": "布局",
       "nameZh": "分割线",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Drawer",
@@ -4138,7 +4138,7 @@
       ],
       "categoryZh": "反馈",
       "nameZh": "抽屉",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Dropdown",
@@ -4355,7 +4355,7 @@
       ],
       "categoryZh": "导航",
       "nameZh": "下拉菜单",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Empty",
@@ -4388,7 +4388,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "空状态",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Form",
@@ -4695,7 +4695,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "表单",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Grid",
@@ -4828,7 +4828,7 @@
       ],
       "categoryZh": "布局",
       "nameZh": "栅格",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Icon",
@@ -4953,7 +4953,7 @@
       ],
       "categoryZh": "通用",
       "nameZh": "图标",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Image",
@@ -5081,7 +5081,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "图片",
-      "since": "4.6.6"
+      "since": "4.6.0"
     },
     {
       "name": "Input",
@@ -5483,7 +5483,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "输入框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "InputNumber",
@@ -5879,7 +5879,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "数字输入框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Layout",
@@ -6125,7 +6125,7 @@
       ],
       "categoryZh": "布局",
       "nameZh": "布局",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "List",
@@ -6421,7 +6421,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "列表",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Mentions",
@@ -6734,7 +6734,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "提及",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Menu",
@@ -7142,7 +7142,7 @@
       ],
       "categoryZh": "导航",
       "nameZh": "导航菜单",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Message",
@@ -7243,7 +7243,7 @@
       ],
       "categoryZh": "反馈",
       "nameZh": "全局提示",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Modal",
@@ -7719,7 +7719,7 @@
       ],
       "categoryZh": "反馈",
       "nameZh": "对话框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Notification",
@@ -7961,7 +7961,7 @@
       ],
       "categoryZh": "反馈",
       "nameZh": "通知提醒框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "PageHeader",
@@ -7972,7 +7972,7 @@
       "props": [],
       "categoryZh": "导航",
       "nameZh": "页头",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Pagination",
@@ -8206,7 +8206,7 @@
       ],
       "categoryZh": "导航",
       "nameZh": "分页",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Popconfirm",
@@ -8226,7 +8226,7 @@
       ],
       "categoryZh": "反馈",
       "nameZh": "气泡确认框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Popover",
@@ -8253,7 +8253,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "气泡卡片",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Progress",
@@ -8445,7 +8445,7 @@
       ],
       "categoryZh": "反馈",
       "nameZh": "进度条",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Radio",
@@ -8659,7 +8659,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "单选框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Rate",
@@ -8828,7 +8828,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "评分",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Result",
@@ -8905,7 +8905,7 @@
       ],
       "categoryZh": "反馈",
       "nameZh": "结果",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Segmented",
@@ -9026,7 +9026,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "分段控制器",
-      "since": "4.20.7"
+      "since": "4.20.0"
     },
     {
       "name": "Select",
@@ -9690,7 +9690,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "选择器",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Skeleton",
@@ -9875,7 +9875,7 @@
       ],
       "categoryZh": "反馈",
       "nameZh": "骨架屏",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Slider",
@@ -10186,7 +10186,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "滑动输入条",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Space",
@@ -10238,7 +10238,7 @@
       ],
       "categoryZh": "布局",
       "nameZh": "间距",
-      "since": "4.1.5"
+      "since": "4.1.0"
     },
     {
       "name": "Spin",
@@ -10322,7 +10322,7 @@
       ],
       "categoryZh": "反馈",
       "nameZh": "加载中",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Statistic",
@@ -10480,7 +10480,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "统计数值",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Steps",
@@ -10702,7 +10702,7 @@
       ],
       "categoryZh": "导航",
       "nameZh": "步骤条",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Switch",
@@ -10884,7 +10884,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "开关",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Table",
@@ -11865,7 +11865,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "表格",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Tabs",
@@ -12260,7 +12260,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "标签页",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Tag",
@@ -12348,7 +12348,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "标签",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Timeline",
@@ -12463,7 +12463,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "时间轴",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "TimePicker",
@@ -12689,7 +12689,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "时间选择框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Tooltip",
@@ -12849,7 +12849,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "文字提示",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Transfer",
@@ -13116,7 +13116,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "穿梭框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Tree",
@@ -13578,7 +13578,7 @@
       ],
       "categoryZh": "数据展示",
       "nameZh": "树形控件",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "TreeSelect",
@@ -14088,7 +14088,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "树选择",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Typography",
@@ -14576,7 +14576,7 @@
       ],
       "categoryZh": "通用",
       "nameZh": "排版",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Upload",
@@ -14892,7 +14892,7 @@
       ],
       "categoryZh": "数据录入",
       "nameZh": "上传",
-      "since": "4.0.4"
+      "since": "4.0.0"
     }
   ],
   "globalTokens": [

@@ -242,7 +242,7 @@
         "Button.Group"
       ],
       "nameZh": "按钮",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Table",
@@ -433,7 +433,7 @@
         "Table.Summary"
       ],
       "nameZh": "表格",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Select",
@@ -588,7 +588,7 @@
         }
       ],
       "nameZh": "选择器",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Input",
@@ -719,7 +719,7 @@
         "Input.OTP"
       ],
       "nameZh": "输入框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Form",
@@ -819,7 +819,7 @@
         "Form.ErrorList"
       ],
       "nameZh": "表单",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Modal",
@@ -932,7 +932,7 @@
       ],
       "subComponents": [],
       "nameZh": "对话框",
-      "since": "4.0.4"
+      "since": "4.0.0"
     },
     {
       "name": "Space",
@@ -974,7 +974,7 @@
         "Space.Compact"
       ],
       "nameZh": "间距",
-      "since": "4.1.5"
+      "since": "4.1.0"
     },
     {
       "name": "Flex",
@@ -1021,7 +1021,7 @@
       ],
       "subComponents": [],
       "nameZh": "弹性布局",
-      "since": "5.10.3"
+      "since": "5.10.0"
     },
     {
       "name": "Grid",
@@ -1074,7 +1074,7 @@
         "Col"
       ],
       "nameZh": "栅格",
-      "since": "4.0.4"
+      "since": "4.0.0"
     }
   ],
   "globalTokens": [
