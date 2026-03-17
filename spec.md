@@ -231,6 +231,10 @@ Checks:
 - Theme config validity
 - CSS-in-JS configuration correctness
 - Babel/webpack antd-related plugin configuration
+- `dayjs-duplicate` — detects multiple dayjs installations in node_modules; severity: error
+- `cssinjs-duplicate` — detects multiple @ant-design/cssinjs installations in node_modules; severity: error
+- `cssinjs-compat` — checks @ant-design/cssinjs version satisfies antd peerDependencies range; severity: error (incompatible version) / warning (not installed)
+- `icons-compat` — checks @ant-design/icons version satisfies antd peerDependencies range; severity: warning (icons are optional)
 
 JSON output:
 ```json
@@ -240,9 +244,13 @@ JSON output:
     {"name": "react-compat", "status": "pass", "message": "React 18.2.0 is compatible with antd 5.20.0"},
     {"name": "duplicate-install", "status": "fail", "severity": "error", "message": "Found 2 antd installations: 5.20.0, 5.18.0", "suggestion": "Run `npm dedupe` or check your dependency tree"},
     {"name": "theme-config", "status": "pass", "message": "Theme config is valid"},
-    {"name": "cssinjs", "status": "warn", "severity": "warning", "message": "No @ant-design/cssinjs found, SSR style extraction will not work"}
+    {"name": "cssinjs", "status": "warn", "severity": "warning", "message": "No @ant-design/cssinjs found, SSR style extraction will not work"},
+    {"name": "dayjs-duplicate", "status": "fail", "severity": "error", "message": "Found 2 dayjs installations", "suggestion": "Run `npm dedupe` to resolve duplicate dayjs versions"},
+    {"name": "cssinjs-duplicate", "status": "fail", "severity": "error", "message": "Found 2 @ant-design/cssinjs installations", "suggestion": "Run `npm dedupe` to resolve duplicate @ant-design/cssinjs versions"},
+    {"name": "cssinjs-compat", "status": "fail", "severity": "error", "message": "@ant-design/cssinjs 1.5.0 does not satisfy antd peer requirement >=1.11.0", "suggestion": "Run `npm install @ant-design/cssinjs` (requires >=1.11.0)"},
+    {"name": "icons-compat", "status": "warn", "severity": "warning", "message": "@ant-design/icons 5.0.0 does not satisfy antd peer requirement >=5.1.0", "suggestion": "Run `npm install @ant-design/icons` (requires >=5.1.0)"}
   ],
-  "summary": {"pass": 2, "warn": 1, "fail": 1}
+  "summary": {"pass": 2, "warn": 2, "fail": 3}
 }
 ```
 
