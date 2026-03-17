@@ -11,8 +11,6 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ steps.commit.outputs.changed }}
     steps:
       - uses: actions/checkout@v4
 
@@ -103,46 +101,13 @@ jobs:
           done
 
       - name: Commit and push if changed
-        id: commit
         run: |
           if git diff --quiet data/; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No changes in data/"
           else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add data/
             git commit -m "data: sync antd metadata"
             git push
           fi
-
-  publish:
-    needs: sync
-    if: needs.sync.outputs.changed == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main # Get latest commits from sync job
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org
-
-      - run: npm ci && npm run build
-
-      - name: Bump version, tag, and publish
-        run: |
-          ANTD_VERSION=$(node -p "JSON.parse(require('fs').readFileSync('data/v6.json','utf8')).version")
-          npm version "$ANTD_VERSION" --no-git-tag-version --allow-same-version
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add package.json package-lock.json
-          git commit -m "release: v${ANTD_VERSION}"
-          git tag "v${ANTD_VERSION}"
-          git push && git push --tags
-          npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
