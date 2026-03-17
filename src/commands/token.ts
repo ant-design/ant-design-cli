@@ -1,5 +1,6 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
+import { localize } from '../types.js';
 import { loadMetadataForVersion, findComponent, getAllComponentNames } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { createError, printError, fuzzyMatch, ErrorCodes } from '../output/error.js';
@@ -41,7 +42,12 @@ export function registerTokenCommand(program: Command): void {
         console.log('Global Design Tokens:');
         console.log('');
         const headers = ['Token', 'Type', 'Default', 'Description'];
-        const rows = globalTokens.map((t) => [t.name, t.type, t.default, t.description || '-']);
+        const rows = globalTokens.map((t) => [
+          t.name,
+          t.type,
+          t.default,
+          localize(t.description, t.descriptionZh, opts.lang) || '-',
+        ]);
         console.log(formatTable(headers, rows, opts.format === 'markdown' ? 'markdown' : 'text'));
         return;
       }
