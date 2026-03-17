@@ -22,6 +22,7 @@
 | 功能 | 说明 |
 |---|---|
 | 🤖 **Agent 就绪** | 每条命令均支持 `--format json`，输出结构化数据与标准错误码，为 Claude Code、Cursor、Copilot 等工具调用而生 |
+| 📋 **多格式输出** | 每条命令均支持 `--format text\|json\|markdown`——对齐表格方便人类阅读，JSON 供脚本和 Agent 解析，Markdown 用于文档和报告 |
 | 📦 **完全离线** | v4/v5/v6 的 Props、Token、Demo、Changelog 全部随包安装，无需网络，零延迟 |
 | 🔀 **多版本支持** | 查询任意 antd 版本；对比两个版本间的 API 变更；浏览按类型分类的 Changelog（新功能 / 修复 / 破坏性变更 / 废弃） |
 | 🧠 **深度组件数据** | Props 类型与默认值；Design Token；可运行的 Demo 源码；`classNames` / `styles` 语义结构——均可从终端直接查询 |
