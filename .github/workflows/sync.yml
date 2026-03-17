@@ -35,10 +35,14 @@ jobs:
           else
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            V4=$(node -p "JSON.parse(require('fs').readFileSync('data/v4.json','utf8')).version")
-            V5=$(node -p "JSON.parse(require('fs').readFileSync('data/v5.json','utf8')).version")
-            V6=$(node -p "JSON.parse(require('fs').readFileSync('data/v6.json','utf8')).version")
+            VERSIONS=""
+            for major in 4 5 6; do
+              if ! git diff --quiet "data/v${major}.json"; then
+                VER=$(node -p "JSON.parse(require('fs').readFileSync(\"data/v${major}.json\",'utf8')).version")
+                VERSIONS="${VERSIONS:+${VERSIONS}, }v${major}@${VER}"
+              fi
+            done
             git add data/
-            git commit -m "data: sync antd metadata (v4@${V4}, v5@${V5}, v6@${V6})"
+            git commit -m "data: sync antd metadata${VERSIONS:+ (${VERSIONS})}"
             git push
           fi
