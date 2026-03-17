@@ -21,12 +21,12 @@ Designed for Code Agents (Claude Code, Cursor, Copilot, etc.) to invoke via shel
 
 | Feature | Description |
 |---|---|
-| 🤖 **Agent-First** | Structured JSON output designed for Code Agents (Claude Code, Cursor, Copilot) to parse and act on |
-| 📦 **Offline-First** | All metadata is fully bundled — no network required at runtime |
-| 🔀 **Multi-Version** | Full support for antd v4 / v5 / v6, with cross-version API diffing and migration guides |
-| 🧠 **Bundled Knowledge** | Props, tokens, demos, semantic structure, and changelog — all included |
-| 🔍 **Project-Aware** | Auto-detects your antd version, scans usage, lints best practices, diagnoses config issues |
-| 🚚 **Agent Migration** | `antd migrate --apply` outputs a structured migration prompt for Code Agents to execute |
+| 🤖 **Agent-Ready** | Every command supports `--format json` with clean, parseable output and structured error codes — built for Claude Code, Cursor, and Copilot tool calls |
+| 📦 **Fully Offline** | Props, tokens, demos, and changelogs for v4/v5/v6 are all bundled at install — no network calls, no latency |
+| 🔀 **Multi-Version** | Query any antd version; diff APIs between two versions; browse changelogs with categorized change types (feature / fix / breaking / deprecation) |
+| 🧠 **Deep Component Data** | Props with types and defaults; Design Tokens; runnable demo source code; semantic `classNames` / `styles` structure — all queryable from the terminal |
+| 🔍 **Project Analysis** | Scan component usage stats; lint deprecated props, a11y gaps, and performance pitfalls; `doctor` diagnoses React compat, duplicate installs, and config issues |
+| 🚚 **Migration Guides** | Detailed v4→v5 and v5→v6 checklists with auto-fixable / manual split; `--apply` generates an agent-ready prompt for automated execution |
 
 ## 📦 Install
 

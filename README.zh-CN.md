@@ -21,12 +21,12 @@
 
 | 功能 | 说明 |
 |---|---|
-| 🤖 **Agent 优先** | 结构化 JSON 输出，专为 Code Agent（Claude Code、Cursor、Copilot）解析使用 |
-| 📦 **离线优先** | 所有元数据完整打包，运行时无需网络 |
-| 🔀 **多版本支持** | 完整支持 antd v4 / v5 / v6，支持跨版本 API 对比与迁移指南 |
-| 🧠 **知识内置** | Props、Token、Demo、语义结构、Changelog 一应俱全 |
-| 🔍 **项目感知** | 自动识别 antd 版本，扫描用法、检查最佳实践、诊断配置问题 |
-| 🚚 **Agent 迁移** | `antd migrate --apply` 为 Code Agent 输出结构化迁移提示 |
+| 🤖 **Agent 就绪** | 每条命令均支持 `--format json`，输出结构化数据与标准错误码，为 Claude Code、Cursor、Copilot 等工具调用而生 |
+| 📦 **完全离线** | v4/v5/v6 的 Props、Token、Demo、Changelog 全部随包安装，无需网络，零延迟 |
+| 🔀 **多版本支持** | 查询任意 antd 版本；对比两个版本间的 API 变更；浏览按类型分类的 Changelog（新功能 / 修复 / 破坏性变更 / 废弃） |
+| 🧠 **深度组件数据** | Props 类型与默认值；Design Token；可运行的 Demo 源码；`classNames` / `styles` 语义结构——均可从终端直接查询 |
+| 🔍 **项目分析** | 扫描组件用量统计；检查废弃 Props、无障碍缺陷和性能问题；`doctor` 诊断 React 兼容性、重复安装及配置错误 |
+| 🚚 **迁移指南** | 详细的 v4→v5 和 v5→v6 迁移清单，区分可自动修复与手动处理；`--apply` 生成供 Agent 执行的结构化迁移提示 |
 
 ## 📦 安装
 
