@@ -48,10 +48,11 @@ function fetchTags(major: number): string[] {
     .map((line) => line.replace(/.*refs\/tags\//, ''));
 }
 
-/** For each minor series (X.Y), picks the highest patch tag. */
+/** For each minor series (X.Y), picks the highest patch tag. Excludes pre-releases (e.g. 5.0.0-rc.1). */
 function buildMinorMap(tags: string[]): Map<string, string> {
   const map = new Map<string, string>();
   for (const tag of tags) {
+    if (tag.includes('-')) continue; // skip pre-releases
     const parts = tag.split('.');
     if (parts.length < 3) continue;
     const [major, minor, patch] = parts;
