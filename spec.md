@@ -95,14 +95,22 @@ antd info Button --format json            # structured output for agents
 JSON output (concise):
 ```json
 {
-  "name": "Button",
-  "description": "To trigger an operation.",
+  "name": "Splitter",
+  "description": "Split panels to isolate",
   "props": [
-    {"name": "type", "type": "primary | default | dashed | text | link", "default": "default"},
-    {"name": "disabled", "type": "boolean", "default": "false"}
-  ]
+    {"name": "layout", "type": "`horizontal` | `vertical`", "default": "`horizontal`"},
+    {"name": "lazy", "type": "`boolean`", "default": "`false`"}
+  ],
+  "subComponentProps": {
+    "Splitter.Panel": [
+      {"name": "defaultSize", "type": "`number | string`", "default": "-"},
+      {"name": "resizable", "type": "`boolean`", "default": "`true`"}
+    ]
+  }
 }
 ```
+
+For components without sub-components (e.g. Button), `subComponentProps` is omitted.
 
 JSON output (--detail):
 ```json
@@ -126,6 +134,8 @@ JSON output (--detail):
   "faq": []
 }
 ```
+
+Text output for components with sub-components shows main props first, then each sub-component section labeled with its full name (e.g. `Splitter.Panel`).
 
 #### `antd demo <Component> [name]`
 
