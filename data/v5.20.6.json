@@ -468,14 +468,6 @@
           "code": "import React from 'react';\nimport { Anchor, Col, Row } from 'antd';\n\nconst App: React.FC = () => (\n  <Row>\n    <Col span={16}>\n      <div id=\"part-1\" style={{ height: '100vh', background: 'rgba(255,0,0,0.02)' }} />\n      <div id=\"part-2\" style={{ height: '100vh', background: 'rgba(0,255,0,0.02)' }} />\n      <div id=\"part-3\" style={{ height: '100vh', background: 'rgba(0,0,255,0.02)' }} />\n    </Col>\n    <Col span={8}>\n      <Anchor\n        items={[\n          {\n            key: 'part-1',\n            href: '#part-1',\n            title: 'Part 1',\n          },\n          {\n            key: 'part-2',\n            href: '#part-2',\n            title: 'Part 2',\n          },\n          {\n            key: 'part-3',\n            href: '#part-3',\n            title: 'Part 3',\n          },\n        ]}\n      />\n    </Col>\n  </Row>\n);\n\nexport default App;\n"
         },
         {
-          "name": "component-token",
-          "title": "Component Token",
-          "titleZh": "组件 Token",
-          "description": "Component Token Debug",
-          "descriptionZh": "Component Token Debug.",
-          "code": "import React from 'react';\nimport { Anchor, Col, ConfigProvider, Row } from 'antd';\n\n/** Test usage. Do not use in your production. */\n\nexport default () => (\n  <ConfigProvider\n    theme={{\n      components: {\n        Anchor: {\n          linkPaddingBlock: 100,\n          linkPaddingInlineStart: 50,\n        },\n      },\n    }}\n  >\n    <Row>\n      <Col span={16}>\n        <div id=\"part-1\" style={{ height: '100vh', background: 'rgba(255,0,0,0.02)' }} />\n        <div id=\"part-2\" style={{ height: '100vh', background: 'rgba(0,255,0,0.02)' }} />\n        <div id=\"part-3\" style={{ height: '100vh', background: 'rgba(0,0,255,0.02)' }} />\n      </Col>\n      <Col span={8}>\n        <Anchor\n          items={[\n            {\n              key: 'part-1',\n              href: '#part-1',\n              title: 'Part 1',\n            },\n            {\n              key: 'part-2',\n              href: '#part-2',\n              title: 'Part 2',\n            },\n            {\n              key: 'part-3',\n              href: '#part-3',\n              title: 'Part 3',\n            },\n          ]}\n        />\n      </Col>\n    </Row>\n  </ConfigProvider>\n);\n"
-        },
-        {
           "name": "customizeHighlight",
           "title": "Customize the anchor highlight",
           "titleZh": "自定义锚点高亮",
@@ -7481,14 +7473,6 @@
           "code": "import React from 'react';\nimport { FloatButton } from 'antd';\n\nconst App: React.FC = () => (\n  <div style={{ height: '300vh', padding: 10 }}>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <div>Scroll to bottom</div>\n    <FloatButton.BackTop />\n  </div>\n);\n\nexport default App;\n"
         },
         {
-          "name": "badge-debug",
-          "title": "debug dot",
-          "titleZh": "调试小圆点使用",
-          "description": "debug use.",
-          "descriptionZh": "调试使用。",
-          "code": "import React, { useState } from 'react';\nimport { ConfigProvider, FloatButton, Slider } from 'antd';\nimport type { ConfigProviderProps, GetProp } from 'antd';\n\ntype AliasToken = GetProp<ConfigProviderProps, 'theme'>['token'];\n\nconst App: React.FC = () => {\n  const [radius, setRadius] = useState<number>(0);\n\n  const token: Partial<AliasToken> = {\n    borderRadius: radius,\n  };\n\n  return (\n    <>\n      <Slider min={0} max={20} style={{ margin: 16 }} onChange={setRadius} />\n      <ConfigProvider theme={{ token }}>\n        <FloatButton shape=\"square\" badge={{ dot: true }} />\n      </ConfigProvider>\n    </>\n  );\n};\n\nexport default App;\n"
-        },
-        {
           "name": "badge",
           "title": "badge",
           "titleZh": "徽标数",
@@ -10231,22 +10215,6 @@
           "description": "Classic page layouts.",
           "descriptionZh": "典型的页面布局。",
           "code": "import React from 'react';\nimport { Flex, Layout } from 'antd';\n\nconst { Header, Footer, Sider, Content } = Layout;\n\nconst headerStyle: React.CSSProperties = {\n  textAlign: 'center',\n  color: '#fff',\n  height: 64,\n  paddingInline: 48,\n  lineHeight: '64px',\n  backgroundColor: '#4096ff',\n};\n\nconst contentStyle: React.CSSProperties = {\n  textAlign: 'center',\n  minHeight: 120,\n  lineHeight: '120px',\n  color: '#fff',\n  backgroundColor: '#0958d9',\n};\n\nconst siderStyle: React.CSSProperties = {\n  textAlign: 'center',\n  lineHeight: '120px',\n  color: '#fff',\n  backgroundColor: '#1677ff',\n};\n\nconst footerStyle: React.CSSProperties = {\n  textAlign: 'center',\n  color: '#fff',\n  backgroundColor: '#4096ff',\n};\n\nconst layoutStyle = {\n  borderRadius: 8,\n  overflow: 'hidden',\n  width: 'calc(50% - 8px)',\n  maxWidth: 'calc(50% - 8px)',\n};\n\nconst App: React.FC = () => (\n  <Flex gap=\"middle\" wrap>\n    <Layout style={layoutStyle}>\n      <Header style={headerStyle}>Header</Header>\n      <Content style={contentStyle}>Content</Content>\n      <Footer style={footerStyle}>Footer</Footer>\n    </Layout>\n\n    <Layout style={layoutStyle}>\n      <Header style={headerStyle}>Header</Header>\n      <Layout>\n        <Sider width=\"25%\" style={siderStyle}>\n          Sider\n        </Sider>\n        <Content style={contentStyle}>Content</Content>\n      </Layout>\n      <Footer style={footerStyle}>Footer</Footer>\n    </Layout>\n\n    <Layout style={layoutStyle}>\n      <Header style={headerStyle}>Header</Header>\n      <Layout>\n        <Content style={contentStyle}>Content</Content>\n        <Sider width=\"25%\" style={siderStyle}>\n          Sider\n        </Sider>\n      </Layout>\n      <Footer style={footerStyle}>Footer</Footer>\n    </Layout>\n\n    <Layout style={layoutStyle}>\n      <Sider width=\"25%\" style={siderStyle}>\n        Sider\n      </Sider>\n      <Layout>\n        <Header style={headerStyle}>Header</Header>\n        <Content style={contentStyle}>Content</Content>\n        <Footer style={footerStyle}>Footer</Footer>\n      </Layout>\n    </Layout>\n  </Flex>\n);\n\nexport default App;\n"
-        },
-        {
-          "name": "component-token",
-          "title": "Component Token",
-          "titleZh": "组件 Token",
-          "description": "Component Token",
-          "descriptionZh": "组件 Token",
-          "code": "import React from 'react';\nimport { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';\nimport type { MenuProps } from 'antd';\nimport { Breadcrumb, ConfigProvider, Layout, Menu, theme } from 'antd';\n\nconst { Header, Content, Sider } = Layout;\n\nconst items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(\n  (icon, index) => {\n    const key = String(index + 1);\n\n    return {\n      key: `sub${key}`,\n      icon: React.createElement(icon),\n      label: `subnav ${key}`,\n\n      children: new Array(4).fill(null).map((_, j) => {\n        const subKey = index * 4 + j + 1;\n        return {\n          key: subKey,\n          label: `option${subKey}`,\n        };\n      }),\n    };\n  },\n);\n\nconst App: React.FC = () => {\n  const {\n    token: { colorBgContainer, colorBgLayout, borderRadiusLG },\n  } = theme.useToken();\n\n  return (\n    <ConfigProvider\n      theme={{\n        components: {\n          Layout: {\n            bodyBg: '#fff',\n            headerBg: '#1677ff',\n            headerHeight: 64,\n            headerPadding: `0 24px`,\n            headerColor: colorBgContainer,\n            siderBg: colorBgContainer,\n          },\n        },\n      }}\n    >\n      <Layout>\n        <Header style={{ display: 'flex', alignItems: 'center' }}>\n          <div className=\"demo-logo\" />\n          <div style={{ marginInlineStart: 24, fontSize: 24 }}>Ant Design</div>\n        </Header>\n        <Layout>\n          <Sider width={200} style={{ background: colorBgContainer }}>\n            <Menu\n              mode=\"inline\"\n              defaultSelectedKeys={['1']}\n              defaultOpenKeys={['sub1']}\n              style={{ height: '100%', borderRight: 0 }}\n              items={items2}\n            />\n          </Sider>\n          <Layout style={{ padding: '0 24px 24px' }}>\n            <Breadcrumb style={{ margin: '16px 0' }}>\n              <Breadcrumb.Item>Home</Breadcrumb.Item>\n              <Breadcrumb.Item>List</Breadcrumb.Item>\n              <Breadcrumb.Item>App</Breadcrumb.Item>\n            </Breadcrumb>\n            <Content\n              style={{\n                padding: 24,\n                margin: 0,\n                minHeight: 280,\n                background: colorBgLayout,\n                borderRadius: borderRadiusLG,\n              }}\n            >\n              Content\n            </Content>\n          </Layout>\n        </Layout>\n      </Layout>\n    </ConfigProvider>\n  );\n};\n\nexport default App;\n"
-        },
-        {
-          "name": "custom-trigger-debug",
-          "title": "Custom trigger debug",
-          "titleZh": "自定义触发器 Debug",
-          "description": "",
-          "descriptionZh": "",
-          "code": "import React, { useState } from 'react';\nimport {\n  DesktopOutlined,\n  FileOutlined,\n  MenuFoldOutlined,\n  MenuUnfoldOutlined,\n  PieChartOutlined,\n  TeamOutlined,\n  UserOutlined,\n} from '@ant-design/icons';\nimport type { MenuProps } from 'antd';\nimport { Button, Layout, Menu, theme } from 'antd';\n\nconst { Header, Sider, Content } = Layout;\n\nconst items: MenuProps['items'] = [\n  {\n    key: '1',\n    icon: <PieChartOutlined />,\n    label: 'Option 1',\n  },\n  {\n    key: '2',\n    icon: <DesktopOutlined />,\n    label: 'Option 2',\n  },\n  {\n    key: 'sub1',\n    icon: <UserOutlined />,\n    label: 'User',\n    children: [\n      {\n        key: '3',\n        label: 'Tom',\n      },\n      {\n        key: '4',\n        label: 'Bill',\n      },\n      {\n        key: '5',\n        label: 'Alex',\n      },\n    ],\n  },\n  {\n    key: 'sub2',\n    icon: <TeamOutlined />,\n    label: 'Team',\n    children: [\n      {\n        key: '6',\n        label: 'Team 1',\n      },\n      {\n        key: '7',\n        label: 'Team 2',\n      },\n    ],\n  },\n  {\n    key: '9',\n    icon: <FileOutlined />,\n  },\n];\n\nconst App: React.FC = () => {\n  const [collapsed, setCollapsed] = useState(true);\n  const {\n    token: { colorBgContainer, borderRadiusLG },\n  } = theme.useToken();\n\n  return (\n    <Layout>\n      <Sider trigger={null} collapsible collapsed={collapsed}>\n        <div className=\"demo-logo-vertical\" />\n        <Menu\n          theme=\"dark\"\n          mode=\"inline\"\n          defaultSelectedKeys={['3']}\n          defaultOpenKeys={['sub1']}\n          items={items}\n        />\n      </Sider>\n      <Layout>\n        <Header style={{ padding: 0, background: colorBgContainer }}>\n          <Button\n            type=\"text\"\n            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}\n            onClick={() => setCollapsed(!collapsed)}\n            style={{\n              fontSize: '16px',\n              width: 64,\n              height: 64,\n            }}\n          />\n        </Header>\n        <Content\n          style={{\n            margin: '24px 16px',\n            padding: 24,\n            minHeight: 280,\n            background: colorBgContainer,\n            borderRadius: borderRadiusLG,\n          }}\n        >\n          Content\n        </Content>\n      </Layout>\n    </Layout>\n  );\n};\n\nexport default App;\n"
         },
         {
           "name": "custom-trigger",
@@ -15652,14 +15620,6 @@
           "code": "import React from 'react';\nimport { Select, Tag } from 'antd';\nimport type { SelectProps } from 'antd';\n\ntype TagRender = SelectProps['tagRender'];\n\nconst options: SelectProps['options'] = [\n  { value: 'gold' },\n  { value: 'lime' },\n  { value: 'green' },\n  { value: 'cyan' },\n];\n\nconst tagRender: TagRender = (props) => {\n  const { label, value, closable, onClose } = props;\n  const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {\n    event.preventDefault();\n    event.stopPropagation();\n  };\n  return (\n    <Tag\n      color={value}\n      onMouseDown={onPreventMouseDown}\n      closable={closable}\n      onClose={onClose}\n      style={{ marginInlineEnd: 4 }}\n    >\n      {label}\n    </Tag>\n  );\n};\n\nconst App: React.FC = () => (\n  <Select\n    mode=\"multiple\"\n    tagRender={tagRender}\n    defaultValue={['gold', 'cyan']}\n    style={{ width: '100%' }}\n    options={options}\n  />\n);\n\nexport default App;\n"
         },
         {
-          "name": "debug-flip-shift",
-          "title": "Flip + Shift",
-          "titleZh": "翻转+偏移",
-          "description": "Shift the popup if not enough space after flip.",
-          "descriptionZh": "翻转后如果不够则偏移以供完全的展示。",
-          "code": "import React from 'react';\nimport { Select } from 'antd';\n\nconst App: React.FC = () => (\n  <Select\n    style={{ width: 120, marginTop: '50vh' }}\n    open\n    options={new Array(100).fill(null).map((_, index) => ({\n      value: index,\n    }))}\n  />\n);\n\nexport default App;\n"
-        },
-        {
           "name": "hide-selected",
           "title": "Hide Already Selected",
           "titleZh": "隐藏已选择选项",
@@ -19511,14 +19471,6 @@
           "description": "Default activate first tab.",
           "descriptionZh": "默认选中第一项。",
           "code": "import React from 'react';\nimport { Tabs } from 'antd';\nimport type { TabsProps } from 'antd';\n\nconst onChange = (key: string) => {\n  console.log(key);\n};\n\nconst items: TabsProps['items'] = [\n  {\n    key: '1',\n    label: 'Tab 1',\n    children: 'Content of Tab Pane 1',\n  },\n  {\n    key: '2',\n    label: 'Tab 2',\n    children: 'Content of Tab Pane 2',\n  },\n  {\n    key: '3',\n    label: 'Tab 3',\n    children: 'Content of Tab Pane 3',\n  },\n];\n\nconst App: React.FC = () => <Tabs defaultActiveKey=\"1\" items={items} onChange={onChange} />;\n\nexport default App;\n"
-        },
-        {
-          "name": "card-top",
-          "title": "Container of card type Tab",
-          "titleZh": "卡片式页签容器",
-          "description": "Should be used at the top of container, needs to override styles.",
-          "descriptionZh": "用于容器顶部，需要一点额外的样式覆盖。",
-          "code": "import React from 'react';\nimport { Tabs } from 'antd';\nimport { createStyles } from 'antd-style';\n\nconst useStyle = createStyles(({ token, css }) => {\n  const antdTabsCls = '.ant-tabs';\n\n  return css`\n    ${antdTabsCls}${antdTabsCls}-card {\n      ${antdTabsCls}-content {\n        padding: ${token.padding}px;\n        background: ${token.colorBgContainer};\n      }\n\n      ${antdTabsCls}-nav {\n        margin: 0;\n\n        ${antdTabsCls}-nav-wrap > ${antdTabsCls}-nav-list > ${antdTabsCls}-tab {\n          background: transparent;\n          border-color: transparent;\n\n          &-active {\n            border-color: ${token.colorBorderBg};\n            background: ${token.colorBgContainer};\n          }\n        }\n\n        &::before {\n          display: none;\n        }\n      }\n    }\n  `;\n});\n\nconst items = new Array(3).fill(null).map((_, i) => {\n  const id = String(i + 1);\n  return {\n    label: `Tab Title ${id}`,\n    key: id,\n    children: (\n      <>\n        <p>Content of Tab Pane {id}</p>\n        <p>Content of Tab Pane {id}</p>\n        <p>Content of Tab Pane {id}</p>\n      </>\n    ),\n  };\n});\n\nconst App = () => {\n  const { styles } = useStyle();\n\n  return (\n    <div className={styles}>\n      <Tabs type=\"card\" items={items} />\n    </div>\n  );\n};\n\nexport default App;\n"
         },
         {
           "name": "card",

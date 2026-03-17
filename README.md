@@ -1,6 +1,6 @@
-# @ant-design/cli
-
 <div align="center">
+
+# @ant-design/cli
 
 [![CI](https://github.com/ant-design/ant-design-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/ant-design/ant-design-cli/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@ant-design/cli)](https://www.npmjs.com/package/@ant-design/cli)

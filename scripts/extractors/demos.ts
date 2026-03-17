@@ -74,9 +74,8 @@ export function extractDemos(antdDir: string, dirName: string): DemoData[] {
 
     const titleInfo = titles.get(name);
 
-    // Skip debug-only demos (not listed in the component doc, or marked as debug)
-    const isDebug = enMdContent.includes(`src="./demo/${name}.tsx" debug`) ||
-                    enMdContent.includes(`src="./demo/${name}" debug`);
+    // Skip debug-only demos (tagged with the `debug` attribute in the component doc)
+    const isDebug = new RegExp(`<code[^>]*src="[^"]*/${name}(?:\\.tsx)?"[^>]*\\bdebug\\b`).test(enMdContent);
     if (isDebug) continue;
 
     // Skip if not referenced in the component doc at all
