@@ -87,3 +87,51 @@ export function compare(a: string, b: string): number {
 export function valid(version: string): boolean {
   return /^\d+\.\d+\.\d+/.test(version);
 }
+
+/**
+ * Check if a version string satisfies a semver range.
+ * Supports: >=, >, ^, ~, exact x.y.z, bare x, bare x.y
+ * Returns true for unrecognized range formats (fail-open).
+ */
+export function satisfies(version: string, range: string): boolean {
+  range = range.trim();
+  version = version.trim();
+
+  if (range.startsWith('>=')) {
+    const bound = range.slice(2).trim();
+    return compare(version, bound) >= 0;
+  }
+  if (range.startsWith('>')) {
+    const bound = range.slice(1).trim();
+    return compare(version, bound) > 0;
+  }
+  if (range.startsWith('^')) {
+    const bound = range.slice(1).trim();
+    const vParts = version.split('.').map(Number);
+    const bParts = bound.split('.').map(Number);
+    if (vParts[0] !== bParts[0]) return false;
+    return compare(version, bound) >= 0;
+  }
+  if (range.startsWith('~')) {
+    const bound = range.slice(1).trim();
+    const vParts = version.split('.').map(Number);
+    const bParts = bound.split('.').map(Number);
+    if (vParts[0] !== bParts[0] || vParts[1] !== bParts[1]) return false;
+    return compare(version, bound) >= 0;
+  }
+  // bare major (e.g. "5") or major.minor (e.g. "5.1")
+  const parts = range.split('.');
+  if (parts.length <= 2 && parts.every(p => /^\d+$/.test(p))) {
+    const vParts = version.split('.').map(Number);
+    const rParts = parts.map(Number);
+    if (vParts[0] !== rParts[0]) return false;
+    if (rParts.length === 2 && vParts[1] !== rParts[1]) return false;
+    return true;
+  }
+  // exact version (x.y.z)
+  if (/^\d+\.\d+\.\d+/.test(range)) {
+    return compare(version, range) === 0;
+  }
+  // Unrecognized range — fail-open
+  return true;
+}
