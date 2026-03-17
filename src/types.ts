@@ -34,6 +34,8 @@ export interface SemanticKey {
 
 export interface ComponentData {
   name: string;
+  nameZh?: string;
+  since?: string;
   category: string;
   categoryZh?: string;
   description: string;
