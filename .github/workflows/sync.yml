@@ -29,7 +29,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: https://registry.npmjs.org
 
       - name: Install CLI dependencies
         run: npm ci
@@ -157,56 +156,3 @@ jobs:
           git pull --rebase
           git push
 
-  publish:
-    needs: sync
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout CLI repo
-        uses: actions/checkout@v4
-        with:
-          ref: main # Get latest commits from sync jobs
-
-      - name: Check if data was updated
-        id: check
-        run: |
-          # Check if any sync job made commits since the last scheduled run (within 24h)
-          RECENT=$(git log --since="24 hours ago" --oneline --grep="^data: sync" | head -1)
-          if [ -z "$RECENT" ]; then
-            echo "publish=false" >> "$GITHUB_OUTPUT"
-            echo "No recent data sync commits, skipping publish"
-          else
-            echo "publish=true" >> "$GITHUB_OUTPUT"
-            echo "Found recent sync: $RECENT"
-          fi
-
-      - name: Setup Node.js
-        if: steps.check.outputs.publish == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org
-
-      - name: Install and build
-        if: steps.check.outputs.publish == 'true'
-        run: |
-          npm ci
-          npm run build
-
-      - name: Align CLI version with latest antd
-        if: steps.check.outputs.publish == 'true'
-        run: |
-          # Use the latest antd major version's data version as CLI version
-          ANTD_VERSION=$(node -p "JSON.parse(require('fs').readFileSync('data/v6.json','utf8')).version")
-          npm version "$ANTD_VERSION" --no-git-tag-version --allow-same-version
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add package.json package-lock.json
-          git commit -m "release: v${ANTD_VERSION}"
-          git tag "v${ANTD_VERSION}"
-          git push && git push --tags
-
-      - name: Publish to npm
-        if: steps.check.outputs.publish == 'true'
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
