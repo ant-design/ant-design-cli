@@ -38,7 +38,7 @@ export function registerInfoCommand(program: Command): void {
           output(
             {
               name: comp.name,
-              nameZh: comp.nameZh || '',
+              nameZh: comp.nameZh ?? '',
               description: desc,
               whenToUse: whenToUse || '',
               props: comp.props.map((p) => ({
@@ -55,13 +55,13 @@ export function registerInfoCommand(program: Command): void {
           output(
             {
               name: comp.name,
-              nameZh: comp.nameZh || '',
+              nameZh: comp.nameZh ?? '',
               description: desc,
               props: comp.props.map((p) => ({
                 name: p.name,
                 type: p.type,
                 default: p.default,
-                since: p.since || '',
+                since: p.since ?? '',
               })),
             },
             'json',
@@ -82,11 +82,10 @@ export function registerInfoCommand(program: Command): void {
         ? ['Property', 'Type', 'Default', 'Since', 'Description']
         : ['Property', 'Type', 'Default', 'Since'];
 
-      const rows = comp.props.map((p) =>
-        opts.detail
-          ? [p.name, p.type, p.default, p.since || '-', localize(p.description, p.descriptionZh, lang) || '-']
-          : [p.name, p.type, p.default, p.since || '-'],
-      );
+      const rows = comp.props.map((p) => {
+        const base = [p.name, p.type, p.default, p.since ?? '-'];
+        return opts.detail ? [...base, localize(p.description, p.descriptionZh, lang) || '-'] : base;
+      });
 
       console.log(formatTable(headers, rows, opts.format === 'markdown' ? 'markdown' : 'text'));
 
