@@ -76,24 +76,38 @@ function checkReactCompat(ctx: DoctorContext): CheckResult {
   };
 }
 
-function checkDuplicateInstall(ctx: DoctorContext): CheckResult {
+/**
+ * Scans top-level node_modules and one level of nested node_modules for
+ * installations of pkgPath (e.g. 'dayjs' or '@ant-design/cssinjs').
+ * Returns a deduplicated array of distinct version strings found.
+ * If the package is not installed anywhere, returns [].
+ */
+function findDuplicateVersions(cwd: string, pkgPath: string): string[] {
   const versions: string[] = [];
 
-  if (ctx.antdPkg?.version) versions.push(ctx.antdPkg.version);
+  // 1. Top-level install
+  const topPkg = readJson(join(cwd, 'node_modules', pkgPath, 'package.json'));
+  if (topPkg?.version) versions.push(topPkg.version);
 
-  const nmDir = join(ctx.cwd, 'node_modules');
+  // 2. One level of nesting: node_modules/*/node_modules/<pkgPath>
+  const nmDir = join(cwd, 'node_modules');
   try {
     const entries = readdirSync(nmDir);
     for (const entry of entries) {
-      if (entry.startsWith('.') || entry === 'antd') continue;
-      const nestedPkg = readJson(join(nmDir, entry, 'node_modules', 'antd', 'package.json'));
-      if (nestedPkg?.version && !versions.includes(nestedPkg.version)) {
-        versions.push(nestedPkg.version);
-      }
+      if (entry.startsWith('.') || entry === pkgPath) continue;
+      const nestedPkg = readJson(join(nmDir, entry, 'node_modules', pkgPath, 'package.json'));
+      if (nestedPkg?.version) versions.push(nestedPkg.version);
     }
   } catch {
-    // ignore read errors
+    // ignore read errors (e.g. node_modules doesn't exist)
   }
+
+  // Deduplicate
+  return [...new Set(versions)];
+}
+
+function checkDuplicateInstall(ctx: DoctorContext): CheckResult {
+  const versions = findDuplicateVersions(ctx.cwd, 'antd');
 
   if (versions.length > 1) {
     return {
