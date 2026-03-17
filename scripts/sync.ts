@@ -16,10 +16,11 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const MAJORS = [4, 5, 6];
 const ANTD_REMOTE = 'https://github.com/ant-design/ant-design.git';
-const EXTRACT_SCRIPT = path.resolve('scripts/extract.ts');
+const EXTRACT_SCRIPT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'extract.ts');
 
 function parseArgs(args: string[]): { antdDir: string } {
   let antdDir = '';

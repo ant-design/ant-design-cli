@@ -30,7 +30,7 @@ jobs:
 
       - name: Commit and push if changed
         run: |
-          if git diff --quiet data/; then
+          if [ -z "$(git status --porcelain data/)" ]; then
             echo "No changes in data/"
           else
             git config user.name "github-actions[bot]"
