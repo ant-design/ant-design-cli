@@ -1,7 +1,7 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { readFileSync } from 'node:fs';
-import { loadMetadata } from '../data/loader.js';
+import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { output } from '../output/formatter.js';
 import { collectFiles, parseAntdImports } from '../utils/scan.js';
@@ -20,7 +20,7 @@ function escapeRegExp(s: string): string {
 }
 
 // Build a map of deprecated props from metadata
-function getDeprecatedProps(store: ReturnType<typeof loadMetadata>): Map<string, { prop: string; since: string; message: string }[]> {
+function getDeprecatedProps(store: ReturnType<typeof loadMetadataForVersion>): Map<string, { prop: string; since: string; message: string }[]> {
   const result = new Map<string, { prop: string; since: string; message: string }[]>();
   for (const comp of store.components) {
     const deprecated = comp.props.filter((p) => p.deprecated);
@@ -187,7 +187,7 @@ export function registerLintCommand(program: Command): void {
       const opts = program.opts<GlobalOptions>();
       const targetPath = target || '.';
       const versionInfo = detectVersion(opts.version);
-      const store = loadMetadata(versionInfo.majorVersion);
+      const store = loadMetadataForVersion(versionInfo.version);
       const deprecatedMap = getDeprecatedProps(store);
 
       const files = collectFiles(targetPath);

@@ -1,6 +1,6 @@
 import type { Command } from 'commander';
 import type { GlobalOptions, ComponentData, PropData, ChangelogEntry } from '../types.js';
-import { loadMetadata, findComponent, getAllComponentNames } from '../data/loader.js';
+import { loadMetadataForVersion, findComponent, getAllComponentNames } from '../data/loader.js';
 import { detectVersion, compare } from '../data/version.js';
 import { output } from '../output/formatter.js';
 import { createError, printError, fuzzyMatch, ErrorCodes } from '../output/error.js';
@@ -68,10 +68,6 @@ interface ComponentDiff {
   changed: PropDiff[];
 }
 
-function toMajor(version: string): string {
-  return `v${version.split('.')[0]}`;
-}
-
 function diffProps(
   oldProps: PropData[],
   newProps: PropData[],
@@ -112,18 +108,16 @@ function runApiDiff(
   component: string | undefined,
   opts: GlobalOptions,
 ): void {
-  const major1 = toMajor(v1);
-  const major2 = toMajor(v2);
-  const store1 = loadMetadata(major1);
-  const store2 = loadMetadata(major2);
+  const store1 = loadMetadataForVersion(v1);
+  const store2 = loadMetadataForVersion(v2);
 
   if (store1.components.length === 0) {
-    printError(createError(ErrorCodes.VERSION_NOT_FOUND, `No data available for version ${v1} (${major1})`), opts.format);
+    printError(createError(ErrorCodes.VERSION_NOT_FOUND, `No data available for version ${v1}`), opts.format);
     process.exitCode = 1;
     return;
   }
   if (store2.components.length === 0) {
-    printError(createError(ErrorCodes.VERSION_NOT_FOUND, `No data available for version ${v2} (${major2})`), opts.format);
+    printError(createError(ErrorCodes.VERSION_NOT_FOUND, `No data available for version ${v2}`), opts.format);
     process.exitCode = 1;
     return;
   }
@@ -215,7 +209,7 @@ export function registerChangelogCommand(program: Command): void {
         const v1ForDetect = v1?.includes('..') ? v1.split('..')[0] : v1;
         const versionForDetect = opts.version ?? (v1ForDetect && /^\d+\.\d+\.\d+$/.test(v1ForDetect) ? v1ForDetect : undefined);
         const versionInfo = detectVersion(versionForDetect);
-        const store = loadMetadata(versionInfo.majorVersion);
+        const store = loadMetadataForVersion(versionInfo.version);
         const changelog = store.changelog || [];
 
         if (changelog.length === 0) {

@@ -34,32 +34,112 @@ jobs:
       - name: Install CLI dependencies
         run: npm ci
 
-      - name: Find latest antd v${{ matrix.major }} tag
-        id: find-tag
+      - name: Fetch all antd v${{ matrix.major }} tags
+        id: fetch-tags
         run: |
-          LATEST_TAG=$(git ls-remote --tags --sort=-v:refname \
+          # Fetch all tags matching the pattern and find the latest overall tag
+          ALL_TAGS=$(git ls-remote --tags --sort=v:refname \
             https://github.com/ant-design/ant-design.git \
             "refs/tags/${{ matrix.tag_pattern }}" \
             | grep -v '\^{}' \
-            | head -1 \
             | sed 's|.*refs/tags/||')
-          echo "tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
+          echo "All tags found:"
+          echo "$ALL_TAGS"
+
+          # Latest tag (highest semver) becomes the primary v{major}.json
+          LATEST_TAG=$(echo "$ALL_TAGS" | tail -1)
+          echo "latest_tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
           echo "Found latest v${{ matrix.major }} tag: $LATEST_TAG"
 
-      - name: Checkout antd at tag ${{ steps.find-tag.outputs.tag }}
-        uses: actions/checkout@v4
-        with:
-          repository: ant-design/ant-design
-          ref: ${{ steps.find-tag.outputs.tag }}
-          path: antd-source
+          # For each minor series (X.Y), pick the highest patch tag
+          # Output as "minor_key:tag" pairs, newline-separated, stored in a temp file
+          declare -A MINOR_BEST
+          while IFS= read -r tag; do
+            [[ -z "$tag" ]] && continue
+            IFS='.' read -r tmajor tminor tpatch <<< "$tag"
+            minor_key="${tmajor}.${tminor}"
+            cur="${MINOR_BEST[$minor_key]:-}"
+            if [[ -z "$cur" ]]; then
+              MINOR_BEST[$minor_key]="$tag"
+            else
+              # Compare patch numbers
+              IFS='.' read -r _ _ curpatch <<< "$cur"
+              if [[ "$tpatch" -gt "$curpatch" ]]; then
+                MINOR_BEST[$minor_key]="$tag"
+              fi
+            fi
+          done <<< "$ALL_TAGS"
 
-      - name: Extract metadata
-        run: npx tsx scripts/extract.ts --antd-dir antd-source --output data/v${{ matrix.major }}.json
+          # Write the minor→tag map to a file for later steps
+          mkdir -p /tmp/antd-sync
+          for key in "${!MINOR_BEST[@]}"; do
+            echo "${key}:${MINOR_BEST[$key]}"
+          done | sort > /tmp/antd-sync/v${{ matrix.major }}-minors.txt
+          echo "Minor series map:"
+          cat /tmp/antd-sync/v${{ matrix.major }}-minors.txt
+
+      - name: Clone antd repo (shallow, filter tree)
+        run: |
+          git clone --filter=tree:0 --no-checkout \
+            https://github.com/ant-design/ant-design.git antd-source
+
+      - name: Extract latest v${{ matrix.major }} metadata
+        run: |
+          cd antd-source
+          git checkout ${{ steps.fetch-tags.outputs.latest_tag }}
+          cd ..
+          npx tsx scripts/extract.ts --antd-dir antd-source --output data/v${{ matrix.major }}.json
+
+      - name: Extract per-minor snapshots (new minors only)
+        run: |
+          # Read existing versions.json
+          VERSIONS_FILE="data/versions.json"
+          if [[ ! -f "$VERSIONS_FILE" ]]; then
+            echo '{}' > "$VERSIONS_FILE"
+          fi
+
+          while IFS=':' read -r minor_key tag; do
+            [[ -z "$minor_key" || -z "$tag" ]] && continue
+            snapshot_file="data/v${tag}.json"
+
+            # Skip if snapshot already exists
+            if [[ -f "$snapshot_file" ]]; then
+              echo "Snapshot $snapshot_file already exists, skipping"
+              continue
+            fi
+
+            echo "Extracting snapshot for $minor_key → $tag"
+            cd antd-source
+            git checkout "$tag"
+            cd ..
+            npx tsx scripts/extract.ts --antd-dir antd-source --output "$snapshot_file"
+            echo "Created $snapshot_file"
+          done < /tmp/antd-sync/v${{ matrix.major }}-minors.txt
+
+      - name: Update versions.json
+        run: |
+          node -e "
+            const fs = require('fs');
+            const file = 'data/versions.json';
+            const index = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : {};
+            const majorKey = 'v${{ matrix.major }}';
+            if (!index[majorKey]) index[majorKey] = {};
+
+            const lines = fs.readFileSync('/tmp/antd-sync/v${{ matrix.major }}-minors.txt', 'utf8').trim().split('\n');
+            for (const line of lines) {
+              if (!line) continue;
+              const [minorKey, tag] = line.split(':');
+              index[majorKey][minorKey] = tag;
+            }
+
+            fs.writeFileSync(file, JSON.stringify(index, null, 2) + '\n');
+            console.log('Updated versions.json for ${{ matrix.major }}');
+          "
 
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet data/v${{ matrix.major }}.json; then
+          if git diff --quiet data/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No changes in v${{ matrix.major }} data"
           else
@@ -72,8 +152,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/v${{ matrix.major }}.json
-          git commit -m "data: sync v${{ matrix.major }} data from antd ${{ steps.find-tag.outputs.tag }}"
+          git add data/
+          git commit -m "data: sync v${{ matrix.major }} data from antd ${{ steps.fetch-tags.outputs.latest_tag }}"
           git pull --rebase
           git push
 

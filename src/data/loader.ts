@@ -32,6 +32,76 @@ export function loadMetadata(majorVersion: string): MetadataStore {
   }
 }
 
+/**
+ * Load metadata for the most accurate historical snapshot matching the given full semver version.
+ *
+ * Resolution order:
+ * 1. Exact minor match in versions.json  (e.g. "4.3" → "4.3.4" → data/v4.3.4.json)
+ * 2. Nearest earlier minor               (e.g. requested 4.2.5 but only 4.1.x exists → use 4.1.x)
+ * 3. Fall back to loadMetadata(majorVersion) (i.e. data/v4.json)
+ */
+export function loadMetadataForVersion(version: string): MetadataStore {
+  const parts = version.split('.');
+  const major = parts[0];
+  const majorVersion = `v${major}`;
+
+  // If not a recognisable major.minor.patch string, fall back immediately
+  if (!parts[1]) {
+    return loadMetadata(majorVersion);
+  }
+
+  const minorKey = `${major}.${parts[1]}`; // e.g. "4.3"
+
+  // Load versions index
+  const versionsPath = join(getDataPath(), 'versions.json');
+  let versionsIndex: Record<string, Record<string, string>> = {};
+  try {
+    versionsIndex = JSON.parse(readFileSync(versionsPath, 'utf-8'));
+  } catch {
+    return loadMetadata(majorVersion);
+  }
+
+  const majorIndex = versionsIndex[majorVersion] ?? {};
+
+  // Helper: try to load a snapshot by tag string (e.g. "4.3.4")
+  function tryLoadSnapshot(tag: string): MetadataStore | null {
+    const snapshotPath = join(getDataPath(), `v${tag}.json`);
+    if (!existsSync(snapshotPath)) return null;
+    try {
+      return JSON.parse(readFileSync(snapshotPath, 'utf-8')) as MetadataStore;
+    } catch {
+      return null;
+    }
+  }
+
+  // 1. Exact minor match
+  if (majorIndex[minorKey]) {
+    const result = tryLoadSnapshot(majorIndex[minorKey]);
+    if (result) return result;
+  }
+
+  // 2. Nearest earlier minor
+  const requestedMinor = parseInt(parts[1], 10);
+  const availableMinors = Object.keys(majorIndex)
+    .filter((k) => k.startsWith(`${major}.`))
+    .sort((a, b) => parseInt(a.split('.')[1], 10) - parseInt(b.split('.')[1], 10));
+
+  let bestMinorKey: string | undefined;
+  for (const m of availableMinors) {
+    if (parseInt(m.split('.')[1], 10) <= requestedMinor) {
+      bestMinorKey = m;
+    }
+  }
+
+  if (bestMinorKey && majorIndex[bestMinorKey]) {
+    const result = tryLoadSnapshot(majorIndex[bestMinorKey]);
+    if (result) return result;
+  }
+
+  // 3. Fall back to latest major snapshot
+  return loadMetadata(majorVersion);
+}
+
 export function findComponent(
   store: MetadataStore,
   name: string,

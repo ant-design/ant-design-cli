@@ -1,6 +1,6 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
-import { loadMetadata, findComponent, getAllComponentNames } from '../data/loader.js';
+import { loadMetadataForVersion, findComponent, getAllComponentNames } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { createError, printError, fuzzyMatch, ErrorCodes } from '../output/error.js';
 import { formatTable, output } from '../output/formatter.js';
@@ -24,7 +24,7 @@ export function registerTokenCommand(program: Command): void {
         return;
       }
 
-      const store = loadMetadata(versionInfo.majorVersion);
+      const store = loadMetadataForVersion(versionInfo.version);
 
       if (!component) {
         const globalTokens = store.globalTokens || [];

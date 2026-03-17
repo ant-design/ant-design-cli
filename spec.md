@@ -26,16 +26,44 @@ Metadata for all major versions is bundled inside `@ant-design/cli`:
 ```
 @ant-design/cli
 └── data/
-    ├── v4.json    # components, demos, changelog
-    ├── v5.json    # components, tokens, demos, semantic, changelog
-    └── v6.json    # components, tokens, demos, semantic, changelog
+    ├── versions.json        # version index: minor series → snapshot tag
+    ├── v4.json              # latest v4 (from highest v4.x tag)
+    ├── v4.0.9.json          # snapshot for 4.0.x series
+    ├── v4.1.5.json          # snapshot for 4.1.x series
+    ├── ...                  # one file per minor series
+    ├── v4.24.16.json        # snapshot for 4.24.x series
+    ├── v5.json              # latest v5
+    ├── v5.0.7.json          # snapshot for 5.0.x series
+    ├── ...
+    ├── v6.json              # latest v6
+    └── ...
 ```
 
+**`data/versions.json`** maps each minor series to its representative snapshot tag:
+
+```json
+{
+  "v4": { "4.0": "4.0.9", "4.1": "4.1.5", "4.24": "4.24.16" },
+  "v5": { "5.0": "5.0.7", "5.29": "5.29.3" },
+  "v6": { "6.3": "6.3.2" }
+}
+```
+
+### Version Snapshot Resolution
+
+When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves the best snapshot:
+
+1. **Exact minor match** — look up `"4.3"` in `versions.json["v4"]` → e.g. `"4.3.4"` → load `data/v4.3.4.json`
+2. **Nearest earlier minor** — if `"4.3"` is absent, find the largest available minor ≤ 4.3 (e.g. `"4.1"`) → load that snapshot
+3. **Fallback** — load `data/v4.json` (latest)
+
+### Data Layer Notes
+
 - Each version file contains both `en` and `zh` descriptions, keyed by language
-- Minor version differences handled via `since` and `deprecated` fields on each prop/token
 - `semantic` data extracted from `components/*/demo/_semantic.tsx` files
 - Data is auto-extracted from antd source via `scripts/extract.ts`
-- A GitHub Actions workflow (`sync.yml`) runs daily: checks latest antd tags for v4/v5/v6, extracts data, and publishes if changed
+- A GitHub Actions workflow (`sync.yml`) runs daily: for each major version it extracts the latest snapshot and any new minor-series snapshots, then updates `versions.json`
+- Historical snapshots can be bootstrapped locally via `scripts/bootstrap-snapshots.ts`
 - CLI version aligns with the latest antd version (e.g., antd 6.3.2 → CLI 6.3.2)
 - The components schema is consistent across major versions to enable cross-version diffing
 

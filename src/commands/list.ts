@@ -1,7 +1,7 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { localize } from '../types.js';
-import { loadMetadata } from '../data/loader.js';
+import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { formatTable, output } from '../output/formatter.js';
 
@@ -12,7 +12,7 @@ export function registerListCommand(program: Command): void {
     .action(() => {
       const opts = program.opts<GlobalOptions>();
       const versionInfo = detectVersion(opts.version);
-      const store = loadMetadata(versionInfo.majorVersion);
+      const store = loadMetadataForVersion(versionInfo.version);
       const lang = opts.lang;
 
       if (store.components.length === 0) {
