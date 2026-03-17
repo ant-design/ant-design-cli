@@ -9,6 +9,7 @@ import { registerDoctorCommand } from './commands/doctor.js';
 import { registerUsageCommand } from './commands/usage.js';
 import { registerLintCommand } from './commands/lint.js';
 import { registerMigrateCommand } from './commands/migrate.js';
+import { checkForUpdate } from './utils/update-check.js';
 
 declare const __CLI_VERSION__: string;
 const CLI_VERSION = __CLI_VERSION__;
@@ -39,6 +40,10 @@ registerDoctorCommand(program);
 registerUsageCommand(program);
 registerLintCommand(program);
 registerMigrateCommand(program);
+
+program.hook('postAction', async () => {
+  await checkForUpdate();
+});
 
 // Handle -V before subcommand dispatch
 const idx = process.argv.indexOf('-V');
