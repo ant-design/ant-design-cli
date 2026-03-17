@@ -1,10 +1,10 @@
 {
   "name": "@ant-design/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI tool for querying antd knowledge and analyzing antd usage in projects",
   "type": "module",
   "bin": {
-    "antd": "./dist/index.js"
+    "antd": "dist/index.js"
   },
   "main": "./dist/index.js",
   "files": [
@@ -35,7 +35,7 @@
   "homepage": "https://github.com/ant-design/ant-design-cli#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ant-design/ant-design-cli"
+    "url": "git+https://github.com/ant-design/ant-design-cli.git"
   },
   "publishConfig": {
     "access": "public"
