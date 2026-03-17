@@ -20,6 +20,8 @@ interface DoctorContext {
   antdMajor: number;
   projectPkg: any | null;
   reactPkg: any | null;
+  cssinjsPkg: any | null;
+  iconsPkg: any | null;
 }
 
 function buildContext(cwd: string): DoctorContext {
@@ -27,7 +29,9 @@ function buildContext(cwd: string): DoctorContext {
   const antdMajor = antdPkg ? parseInt(antdPkg.version.split('.')[0], 10) : 0;
   const projectPkg = readJson(join(cwd, 'package.json'));
   const reactPkg = readJson(join(cwd, 'node_modules', 'react', 'package.json'));
-  return { cwd, antdPkg, antdMajor, projectPkg, reactPkg };
+  const cssinjsPkg = readJson(join(cwd, 'node_modules', '@ant-design', 'cssinjs', 'package.json'));
+  const iconsPkg = readJson(join(cwd, 'node_modules', '@ant-design', 'icons', 'package.json'));
+  return { cwd, antdPkg, antdMajor, projectPkg, reactPkg, cssinjsPkg, iconsPkg };
 }
 
 function checkAntdInstalled(ctx: DoctorContext): CheckResult {
@@ -189,9 +193,48 @@ function checkBabelPlugins(ctx: DoctorContext): CheckResult {
   };
 }
 
+function checkDayjsDuplicate(ctx: DoctorContext): CheckResult {
+  const versions = findDuplicateVersions(ctx.cwd, 'dayjs');
+
+  if (versions.length > 1) {
+    return {
+      name: 'dayjs-duplicate',
+      status: 'fail',
+      severity: 'error',
+      message: `Found ${versions.length} dayjs installations: ${versions.join(', ')}`,
+      suggestion: 'Run `npm dedupe` or check your monorepo hoisting config',
+    };
+  }
+
+  return {
+    name: 'dayjs-duplicate',
+    status: 'pass',
+    message: 'No duplicate dayjs installations detected',
+  };
+}
+
+function checkCssinjsDuplicate(ctx: DoctorContext): CheckResult {
+  const versions = findDuplicateVersions(ctx.cwd, '@ant-design/cssinjs');
+
+  if (versions.length > 1) {
+    return {
+      name: 'cssinjs-duplicate',
+      status: 'fail',
+      severity: 'error',
+      message: `Found ${versions.length} @ant-design/cssinjs installations: ${versions.join(', ')}`,
+      suggestion: 'Run `npm dedupe` or check your monorepo hoisting config',
+    };
+  }
+
+  return {
+    name: 'cssinjs-duplicate',
+    status: 'pass',
+    message: 'No duplicate @ant-design/cssinjs installations detected',
+  };
+}
+
 function checkCssInJs(ctx: DoctorContext): CheckResult {
-  const cssinjs = readJson(join(ctx.cwd, 'node_modules', '@ant-design', 'cssinjs', 'package.json'));
-  if (!cssinjs) {
+  if (!ctx.cssinjsPkg) {
     return {
       name: 'cssinjs',
       status: 'warn',
@@ -219,6 +262,8 @@ export function registerDoctorCommand(program: Command): void {
         checkAntdInstalled(ctx),
         checkReactCompat(ctx),
         checkDuplicateInstall(ctx),
+        checkDayjsDuplicate(ctx),
+        checkCssinjsDuplicate(ctx),
         checkThemeConfig(ctx),
         checkBabelPlugins(ctx),
         checkCssInJs(ctx),
