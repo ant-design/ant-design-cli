@@ -47,6 +47,28 @@ function extractSubComponents(enContent: string, componentName: string): string[
   return subs;
 }
 
+/**
+ * Resolve the sub-category from component frontmatter.
+ *
+ * antd uses several formats across versions:
+ *   v4:  type: "General"              (plain string field)
+ *   v5+: group: "Data Display"        (plain string)
+ *   v5+: group: { title: "General" }  (object with title)
+ *
+ * Falls back to `category` (usually the top-level "Components") if none found.
+ */
+function resolveCategory(fm: Record<string, unknown>): string {
+  const g = fm.group;
+  if (typeof g === 'string' && g.length > 0) return g;
+  if (g !== null && typeof g === 'object') {
+    const title = (g as Record<string, unknown>).title;
+    if (typeof title === 'string' && title.length > 0) return title;
+  }
+  // v4 stores sub-category in `type`
+  if (typeof fm.type === 'string' && fm.type.length > 0) return fm.type;
+  return typeof fm.category === 'string' ? fm.category : '';
+}
+
 /** Discover and parse all component metadata from an antd source directory */
 export function extractComponents(antdDir: string): ComponentMeta[] {
   const componentsDir = path.join(antdDir, 'components');
@@ -55,6 +77,7 @@ export function extractComponents(antdDir: string): ComponentMeta[] {
 
   for (const dir of dirs) {
     if (!dir.isDirectory()) continue;
+    if (dir.name.startsWith('_')) continue;
 
     const enPath = path.join(componentsDir, dir.name, 'index.en-US.md');
     const zhPath = path.join(componentsDir, dir.name, 'index.zh-CN.md');
@@ -65,11 +88,12 @@ export function extractComponents(antdDir: string): ComponentMeta[] {
     const enParsed = matter(enRaw);
     const fm = enParsed.data;
 
-    // Skip non-component entries (like _util, overview, etc.)
-    if (!fm.category || fm.category === 'Components' && fm.title === 'Overview') continue;
-    if (dir.name.startsWith('_')) continue;
-
-    const componentName = fm.title || toPascalCase(dir.name);
+    // Skip non-component entries: no category, overview pages, or utility dirs
+    if (!fm.category) continue;
+    const componentName = (fm.title as string | undefined) || toPascalCase(dir.name);
+    // Skip "Components Overview" and similar overview pages (no description, no group/type)
+    const category = resolveCategory(fm);
+    if (category === 'Components' && !fm.description) continue;
 
     let descriptionZh = '';
     let categoryZh = '';
@@ -77,17 +101,17 @@ export function extractComponents(antdDir: string): ComponentMeta[] {
     if (fs.existsSync(zhPath)) {
       const zhRaw = fs.readFileSync(zhPath, 'utf-8');
       const zhParsed = matter(zhRaw);
-      descriptionZh = zhParsed.data.description || '';
-      categoryZh = zhParsed.data.group?.title || '';
+      descriptionZh = (zhParsed.data.description as string | undefined) || '';
+      categoryZh = resolveCategory(zhParsed.data);
       whenToUseZh = extractWhenToUse(zhParsed.content, 'zh');
     }
 
     components.push({
       name: componentName,
       dirName: dir.name,
-      category: fm.group?.title || fm.category || '',
+      category,
       categoryZh,
-      description: fm.description || '',
+      description: (fm.description as string | undefined) || '',
       descriptionZh,
       whenToUse: extractWhenToUse(enParsed.content, 'en'),
       whenToUseZh,

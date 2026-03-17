@@ -533,7 +533,7 @@
     },
     {
       "name": "App",
-      "category": "Components",
+      "category": "Other",
       "description": "",
       "whenToUse": "Static function in React 18 concurrent mode will not well support. In v5, we recommend to use hooks for the static replacement. But it will make user manual work on define this.",
       "whenToUseZh": "- 提供可消费 React context 的 `message.xxx`、`Modal.xxx`、`notification.xxx` 的静态方法，可以简化 useMessage 等方法需要手动植入 `contextHolder` 的问题。\n- 提供基于 `.ant-app` 的默认重置样式，解决原生元素没有 antd 规范样式的问题。",
@@ -564,7 +564,8 @@
           "descriptionZh": "获取 `message`, `notification`, `modal` 静态方法。",
           "code": "import React from 'react';\nimport { App, Button, Space } from 'antd';\n\n// Sub page\nconst MyPage = () => {\n  const { message, modal, notification } = App.useApp();\n\n  const showMessage = () => {\n    message.success('Success!');\n  };\n\n  const showModal = () => {\n    modal.warning({\n      title: 'This is a warning message',\n      content: 'some messages...some messages...',\n    });\n  };\n\n  const showNotification = () => {\n    notification.info({\n      message: `Notification topLeft`,\n      description: 'Hello, Ant Design!!',\n      placement: 'topLeft',\n    });\n  };\n\n  return (\n    <Space>\n      <Button type=\"primary\" onClick={showMessage}>\n        Open message\n      </Button>\n      <Button type=\"primary\" onClick={showModal}>\n        Open modal\n      </Button>\n      <Button type=\"primary\" onClick={showNotification}>\n        Open notification\n      </Button>\n    </Space>\n  );\n};\n\n// Entry component\nexport default () => (\n  <App>\n    <MyPage />\n  </App>\n);\n"
         }
-      ]
+      ],
+      "categoryZh": "其他"
     },
     {
       "name": "AutoComplete",
@@ -1085,7 +1086,7 @@
     },
     {
       "name": "Badge",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "Badge normally appears in proximity to notifications or user avatars with eye-catching appeal, typically displaying unread messages count.",
       "whenToUseZh": "一般出现在通知图标或头像的右上角，用于显示需要处理的消息条数，通过醒目视觉形式吸引用户处理。",
@@ -1335,11 +1336,12 @@
       ],
       "subComponents": [
         "Badge.Ribbon"
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Breadcrumb",
-      "category": "Components",
+      "category": "Navigation",
       "description": "",
       "whenToUse": "- When the system has more than two layers in a hierarchy.\n- When you need to inform the user of where they are.\n- When the user may need to navigate back to a higher level.\n\n```jsx\n// works when >=5.3.0, recommended ✅\nreturn <Breadcrumb items={[{ title: 'sample' }]} />;\n\n// works when <5.3.0, deprecated when >=5.3.0 🙅🏻‍♀️\nreturn (\n  <Breadcrumb>\n    <Breadcrumb.Item>sample</Breadcrumb.Item>\n  </Breadcrumb>\n);\n\n// or\n\nreturn <Breadcrumb routes={[{ breadcrumbName: 'sample' }]} />;\n```",
       "whenToUseZh": "- 当系统拥有超过两级以上的层级结构时；\n- 当需要告知用户『你在哪里』时；\n- 当需要向上导航的功能时。\n\n```jsx\n// >=5.3.0 可用，推荐的写法 ✅\nreturn <Breadcrumb items={[{ title: 'sample' }]} />;\n\n// <5.3.0 可用，>=5.3.0 时不推荐 🙅🏻‍♀️\nreturn (\n  <Breadcrumb>\n    <Breadcrumb.Item>sample</Breadcrumb.Item>\n  </Breadcrumb>\n);\n\n// 或\n\nreturn <Breadcrumb routes={[{ breadcrumbName: 'sample' }]} />;\n```",
@@ -1548,7 +1550,8 @@
           "description": "Margin of separator",
           "descriptionZh": "分隔符外间距"
         }
-      ]
+      ],
+      "categoryZh": "导航"
     },
     {
       "name": "Button",
@@ -2014,7 +2017,7 @@
     },
     {
       "name": "Calendar",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "When data is in the form of dates, such as schedules, timetables, prices calendar, lunar calendar. This component also supports Year/Month switch.",
       "whenToUseZh": "当数据是日期或按照日期划分时，例如日程、课表、价格日历等，农历等。目前支持年/月切换。",
@@ -2225,11 +2228,12 @@
           "question": "Date-related components locale is not working?",
           "answer": "See FAQ [Date-related-components-locale-is-not-working?](/docs/react/faq#date-related-components-locale-is-not-working)"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Card",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "A card can be used to display content related to a single subject. The content can consist of multiple elements of varying types and sizes.",
       "whenToUseZh": "最基础的卡片容器，可承载文字、列表、图片、段落，常用于后台概览页面。",
@@ -2589,11 +2593,12 @@
       "subComponents": [
         "Card.Grid",
         "Card.Meta"
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Carousel",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "- When there is a group of content on the same level.\n- When there is insufficient content space, it can be used to save space in the form of a revolving door.\n- Commonly used for a group of pictures/cards.",
       "whenToUseZh": "- 当有一组平级的内容。\n- 当内容空间不足时，可以用走马灯的形式进行收纳，进行轮播展现。\n- 常用于一组图片或卡片轮播。",
@@ -2747,11 +2752,12 @@
           "question": "How to add custom arrows?",
           "answer": "See [#12479](https://github.com/ant-design/ant-design/issues/12479)."
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Cascader",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "- When you need to select from a set of associated data set. Such as province/city/district, company level, things classification.\n- When selecting from a large data set, with multi-stage classification separated for easy selection.\n- Chooses cascade items in one float layer for better user experience.",
       "whenToUseZh": "- 需要从一组相关联的数据集合进行选择，例如省市区，公司层级，事物分类等。\n- 从一个较大的数据集合中进行选择时，用多级分类进行分隔，方便选择。\n- 比起 Select 组件，可以在同一个浮层中完成选择，有较好的体验。",
@@ -3279,11 +3285,12 @@
           "description": "Font weight of selected item",
           "descriptionZh": "选项选中时字重"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Checkbox",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "- Used for selecting multiple values from several options.\n- If you use only one checkbox, it is the same as using Switch to toggle between two states. The difference is that Switch will trigger the state change directly, but Checkbox just marks the state as changed and this needs to be submitted.",
       "whenToUseZh": "- 在一组可选项中进行多项选择时；\n- 单独使用可以表示两种状态之间的切换，和 `switch` 类似。区别在于切换 `switch` 会直接触发状态改变，而 `checkbox` 一般用于状态标记，需要和提交操作配合。",
@@ -3439,11 +3446,12 @@
           "descriptionZh": "Checkbox.Group 内嵌 Checkbox 并与 Grid 组件一起使用，可以实现灵活的布局。",
           "code": "import React from 'react';\nimport { Checkbox, Col, Row } from 'antd';\nimport type { CheckboxValueType } from 'antd/es/checkbox/Group';\n\nconst onChange = (checkedValues: CheckboxValueType[]) => {\n  console.log('checked = ', checkedValues);\n};\n\nconst App: React.FC = () => (\n  <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>\n    <Row>\n      <Col span={8}>\n        <Checkbox value=\"A\">A</Checkbox>\n      </Col>\n      <Col span={8}>\n        <Checkbox value=\"B\">B</Checkbox>\n      </Col>\n      <Col span={8}>\n        <Checkbox value=\"C\">C</Checkbox>\n      </Col>\n      <Col span={8}>\n        <Checkbox value=\"D\">D</Checkbox>\n      </Col>\n      <Col span={8}>\n        <Checkbox value=\"E\">E</Checkbox>\n      </Col>\n    </Row>\n  </Checkbox.Group>\n);\n\nexport default App;\n"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Collapse",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "- Can be used to group or hide complex regions to keep the page clean.\n- `Accordion` is a special kind of `Collapse`, which allows only one panel to be expanded at a time.",
       "whenToUseZh": "- 对复杂区域进行分组和隐藏，保持页面的整洁。\n- `手风琴` 是一种特殊的折叠面板，只允许单个内容区域展开。",
@@ -3704,7 +3712,8 @@
       ],
       "subComponents": [
         "Collapse.Panel"
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "ColorPicker",
@@ -3921,14 +3930,8 @@
       ]
     },
     {
-      "name": "Components Overview",
-      "category": "Components",
-      "description": "",
-      "props": []
-    },
-    {
       "name": "ConfigProvider",
-      "category": "Components",
+      "category": "Other",
       "description": "",
       "props": [
         {
@@ -4114,11 +4117,12 @@
       "subComponents": [
         "ConfigProvider.config",
         "ConfigProvider.useConfig"
-      ]
+      ],
+      "categoryZh": "其他"
     },
     {
       "name": "DatePicker",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "To select or input a date.",
       "descriptionZh": "输入或选择日期的控件。",
       "whenToUse": "By clicking the input box, you can select a date from a popup calendar.",
@@ -5180,11 +5184,12 @@
           "question": "Why origin panel don't switch when using `panelRender`?",
           "answer": "When you change the layout of nodes by `panelRender`, React will unmount and re-mount it which reset the component state. You should keep the layout stable. Please ref [#27263](https://github.com/ant-design/ant-design/issues/27263) for more info."
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Descriptions",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "Commonly displayed on the details page.",
       "whenToUseZh": "常见于详情页的信息展示。",
@@ -5409,7 +5414,8 @@
           "description": "Bottom margin of title",
           "descriptionZh": "标题下间距"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Divider",
@@ -5540,7 +5546,7 @@
     },
     {
       "name": "Drawer",
-      "category": "Components",
+      "category": "Feedback",
       "description": "",
       "whenToUse": "A Drawer is a panel that is typically overlaid on top of a page and slides in from the side. It contains a set of information or actions. Since the user can interact with the Drawer without leaving the current page, tasks can be achieved more efficiently within the same context.\n\n- Use a Form to create or edit a set of information.\n- Processing subtasks. When subtasks are too heavy for a Popover and we still want to keep the subtasks in the context of the main task, Drawer comes very handy.\n- When the same Form is needed in multiple places.",
       "whenToUseZh": "抽屉从父窗体边缘滑入，覆盖住部分父窗体内容。用户在抽屉内操作时不必离开当前任务，操作完成后，可以平滑地回到原任务。\n\n- 当需要一个附加的面板来控制父窗体内容，这个面板在需要时呼出。比如，控制界面展示样式，往界面中添加内容。\n- 当需要在当前任务流中插入临时任务，创建或预览附加内容。比如展示协议条款，创建子对象。",
@@ -5640,11 +5646,12 @@
           "description": "z-index of drawer",
           "descriptionZh": "弹窗 z-index"
         }
-      ]
+      ],
+      "categoryZh": "反馈"
     },
     {
       "name": "Dropdown",
-      "category": "Components",
+      "category": "Navigation",
       "description": "",
       "whenToUse": "When there are more than a few options to choose from, you can wrap them in a `Dropdown`. By hovering or clicking on the trigger, a dropdown menu will appear, which allows you to choose an option and execute the relevant action.",
       "whenToUseZh": "当页面上的操作命令过多时，用此组件可以收纳操作元素。点击或移入触点，会出现一个下拉菜单。可在列表中进行选择，并执行相应的命令。\n\n- 用于收罗一组命令操作。\n- Select 用于选择，而 Dropdown 是命令集合。",
@@ -5939,11 +5946,12 @@
       ],
       "subComponents": [
         "Dropdown.Button"
-      ]
+      ],
+      "categoryZh": "导航"
     },
     {
       "name": "Empty",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "- When there is no data provided, display for friendly tips.\n- User tutorial to create something in fresh new situation.",
       "whenToUseZh": "- 当目前没有数据时，用于显式的用户提示。\n- 初始化场景时的引导创建流程。",
@@ -6011,11 +6019,12 @@
           "descriptionZh": "可以通过设置 `image` 为 `Empty.PRESENTED_IMAGE_SIMPLE` 选择另一种风格的图片。",
           "code": "import React from 'react';\nimport { Empty } from 'antd';\n\nconst App: React.FC = () => <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;\n\nexport default App;\n"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "FloatButton",
-      "category": "Components",
+      "category": "General",
       "description": "",
       "whenToUse": "- For global functionality on the site.\n- Buttons that can be seen wherever you browse.",
       "whenToUseZh": "- 用于网站上的全局功能；\n- 无论浏览到何处都可以看见的按钮。",
@@ -6230,11 +6239,12 @@
       "subComponents": [
         "FloatButton.Group",
         "FloatButton.BackTop"
-      ]
+      ],
+      "categoryZh": "通用"
     },
     {
       "name": "Form",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUseZh": "- 用于创建一个实体或收集信息。\n- 需要对输入的数据类型进行校验时。",
       "props": [
@@ -6780,11 +6790,12 @@
         "Form.useFormInstance",
         "Form.useWatch",
         "Form.Item"
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Grid",
-      "category": "Components",
+      "category": "Layout",
       "description": "",
       "props": [
         {
@@ -7008,11 +7019,12 @@
           "descriptionZh": "使用 `useBreakpoint` Hook 个性化布局。",
           "code": "import React from 'react';\nimport { Grid, Tag } from 'antd';\n\nconst { useBreakpoint } = Grid;\n\nconst App: React.FC = () => {\n  const screens = useBreakpoint();\n\n  return (\n    <>\n      Current break point:{' '}\n      {Object.entries(screens)\n        .filter((screen) => !!screen[1])\n        .map((screen) => (\n          <Tag color=\"blue\" key={screen[0]}>\n            {screen[0]}\n          </Tag>\n        ))}\n    </>\n  );\n};\n\nexport default App;\n"
         }
-      ]
+      ],
+      "categoryZh": "布局"
     },
     {
       "name": "Icon",
-      "category": "Components",
+      "category": "General",
       "description": "Semantic vector graphics.",
       "descriptionZh": "语义化的矢量图形。",
       "props": [
@@ -7173,11 +7185,12 @@
           "descriptionZh": "双色图标可以通过 `twoToneColor` 属性设置主题色。",
           "code": "import React from 'react';\nimport { CheckCircleTwoTone, HeartTwoTone, SmileTwoTone } from '@ant-design/icons';\nimport { Space } from 'antd';\n\nconst App: React.FC = () => (\n  <Space>\n    <SmileTwoTone />\n    <HeartTwoTone twoToneColor=\"#eb2f96\" />\n    <CheckCircleTwoTone twoToneColor=\"#52c41a\" />\n  </Space>\n);\n\nexport default App;\n"
         }
-      ]
+      ],
+      "categoryZh": "通用"
     },
     {
       "name": "Image",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "- When you need to display pictures.\n- Display when loading a large image or fault tolerant handling when loading fail.",
       "whenToUseZh": "- 需要展示图片时使用。\n- 加载显示大图或加载失败时容错处理。",
@@ -7356,11 +7369,12 @@
           "description": "z-index of preview popup",
           "descriptionZh": "预览浮层 z-index"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Input",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "- A user input in a form field is needed.\n- A search input is required.",
       "whenToUseZh": "- 需要用户输入表单域内容时。\n- 提供组合型输入框，带搜索的输入框，还可以进行大小选择。",
@@ -7976,11 +7990,12 @@
       ],
       "subComponents": [
         "Input.TextArea"
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "InputNumber",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "When a numeric value needs to be provided.",
       "whenToUseZh": "当需要获取标准数值时。",
@@ -8459,11 +8474,12 @@
           "question": "Why dynamic change `min` or `max` which makes `value` out of range will not trigger `onChange`?",
           "answer": "`onChange` is user trigger event. Auto trigger will makes form lib can not detect data modify source."
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Layout",
-      "category": "Components",
+      "category": "Layout",
       "description": "",
       "props": [
         {
@@ -8784,11 +8800,12 @@
       ],
       "subComponents": [
         "Layout.Sider"
-      ]
+      ],
+      "categoryZh": "布局"
     },
     {
       "name": "List",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "A list can be used to display content related to a single subject. The content can consist of multiple elements of varying type and size.",
       "whenToUseZh": "最基础的列表展示，可承载文字、列表、图片、段落，常用于后台数据展示页面。",
@@ -9158,11 +9175,12 @@
       "subComponents": [
         "List.Item",
         "List.Item"
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Mentions",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "When you need to mention someone or something.\n\n### Usage upgrade after 5.1.0\n\n<Alert message=\"After version 5.1.0, we provide a simpler usage &lt;Mentions options={[...]} /&gt;  with better performance and potential of writing simpler code style in your applications. Meanwhile, we deprecated the old usage in browser console, we will remove it in antd 6.0.\"></Alert>\n\n```jsx\n// works when >=5.1.0, recommended ✅\nconst options = [{ value: 'sample', label: 'sample' }];\nreturn <Mentions options={options} />;\n\n// works when <5.1.0, deprecated when >=5.1.0 🙅🏻‍♀️\nreturn (\n  <Mentions onChange={onChange}>\n    <Mentions.Option value=\"sample\">Sample</Mentions.Option>\n  </Mentions>\n);\n```",
       "whenToUseZh": "用于在输入中提及某人或某事，常用于发布、聊天或评论功能。\n\n### 5.1.0 用法升级\n\n<Alert message=\"在 5.1.0 版本后，我们提供了 &lt;Mentions options={[...]} /&gt; 的简写方式，有更好的性能和更方便的数据组织方式，开发者不再需要自行拼接 JSX。同时我们废弃了原先的写法，你还是可以在 5.x 继续使用，但会在控制台看到警告，并会在 6.0 后移除。\"></Alert>\n\n```jsx\n// >=5.1.0 可用，推荐的写法 ✅\nconst options = [{ value: 'sample', label: 'sample' }];\nreturn <Mentions options={options} />;\n\n// <5.1.0 可用，>=5.1.0 时不推荐 🙅🏻‍♀️\nreturn (\n  <Mentions onChange={onChange}>\n    <Mentions.Option value=\"sample\">Sample</Mentions.Option>\n  </Mentions>\n);\n```",
@@ -9563,11 +9581,12 @@
           "description": "z-index of popup",
           "descriptionZh": "弹层 z-index"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Menu",
-      "category": "Components",
+      "category": "Navigation",
       "description": "",
       "whenToUse": "Navigation is an important part of any website, as a good navigation setup allows users to move around the site quickly and efficiently. Ant Design offers two navigation options: top and side. Top navigation provides all the categories and functions of the website. Side navigation provides the multi-level structure of the website.\n\nMore layouts with navigation: [Layout](/components/layout).",
       "whenToUseZh": "导航菜单是一个网站的灵魂，用户依赖导航在各个页面中进行跳转。一般分为顶部导航和侧边导航，顶部导航提供全局性的类目和功能，侧边导航提供多级结构来收纳和排列网站架构。\n\n更多布局和导航的使用可以参考：[通用布局](/components/layout-cn)。",
@@ -10099,11 +10118,12 @@
           "question": "Why Menu do not responsive collapse in Flex layout?",
           "answer": "Menu will render fully item in flex layout and then collapse it. You need tell flex not consider Menu width to enable responsive ([online demo](https://codesandbox.io/s/ding-bu-dao-hang-antd-4-21-7-forked-5e3imy?file=/demo.js)):\n\n```jsx\n<div style={{ flex }}>\n  <div style={{ ... }}>Some Content</div>\n  <Menu style={{ minWidth: 0, flex: \"auto\" }} />\n</div>\n```"
         }
-      ]
+      ],
+      "categoryZh": "导航"
     },
     {
       "name": "Message",
-      "category": "Components",
+      "category": "Feedback",
       "description": "",
       "whenToUse": "- To provide feedback such as success, warning, error etc.\n- A message is displayed at top and center and will be dismissed automatically, as a non-interrupting light-weighted prompt.",
       "whenToUseZh": "- 可提供成功、警告和错误等反馈信息。\n- 顶部居中显示并自动消失，是一种不打断用户操作的轻量级提示方式。",
@@ -10263,11 +10283,12 @@
           "question": "How to set static methods prefixCls ？",
           "answer": "You can config with [`ConfigProvider.config`](/components/config-provider#configproviderconfig-4130)"
         }
-      ]
+      ],
+      "categoryZh": "反馈"
     },
     {
       "name": "Modal",
-      "category": "Components",
+      "category": "Feedback",
       "description": "",
       "whenToUse": "When requiring users to interact with the application, but without jumping to a new page and interrupting the user's workflow, you can use `Modal` to create a new floating layer over the current page to get user feedback or display information.\n\nAdditionally, if you need show a simple confirmation dialog, you can use [`App.useApp`](/components/app/) hooks.",
       "whenToUseZh": "需要用户处理事务，又不希望跳转页面以致打断工作流程时，可以使用 `Modal` 在当前页面正中打开一个浮层，承载相应的操作。\n\n另外当需要一个简洁的确认框询问用户时，可以使用 [`App.useApp`](/components/app-cn/) 封装的语法糖方法。",
@@ -10853,11 +10874,12 @@
       "subComponents": [
         "Modal.method",
         "Modal.useModal"
-      ]
+      ],
+      "categoryZh": "反馈"
     },
     {
       "name": "Notification",
-      "category": "Components",
+      "category": "Feedback",
       "description": "",
       "whenToUse": "To display a notification message at any of the four corners of the viewport. Typically it can be used in the following cases:\n\n- A notification with complex content.\n- A notification providing a feedback based on the user interaction. Or it may show some details about upcoming steps the user may have to follow.\n- A notification that is pushed by the application.",
       "whenToUseZh": "在系统四个角显示通知提醒信息。经常用于以下情况：\n\n- 较为复杂的通知内容。\n- 带有交互的通知，给出用户下一步的行动点。\n- 系统主动推送。",
@@ -11195,11 +11217,12 @@
           "question": "How to set static methods prefixCls ？",
           "answer": "You can config with [`ConfigProvider.config`](/components/config-provider#configproviderconfig-4130)"
         }
-      ]
+      ],
+      "categoryZh": "反馈"
     },
     {
       "name": "Pagination",
-      "category": "Components",
+      "category": "Navigation",
       "description": "",
       "whenToUse": "- When it will take a long time to load/render all items.\n- If you want to browse the data by navigating through pages.",
       "whenToUseZh": "- 当加载/渲染所有数据将花费很多时间时；\n- 可切换页码浏览数据。",
@@ -11509,11 +11532,12 @@
           "description": "Top of Pagination size changer",
           "descriptionZh": "每页展示数量选择器 top"
         }
-      ]
+      ],
+      "categoryZh": "导航"
     },
     {
       "name": "Popconfirm",
-      "category": "Components",
+      "category": "Feedback",
       "description": "",
       "whenToUse": "A simple and compact dialog used for asking for user confirmation.\n\nThe difference with the `confirm` modal dialog is that it's more lightweight than the static popped full-screen confirm modal.",
       "whenToUseZh": "目标元素的操作需要用户进一步的确认时，在目标元素附近弹出浮层提示，询问用户。\n\n和 `confirm` 弹出的全屏居中模态对话框相比，交互形式更轻量。",
@@ -11584,11 +11608,12 @@
           "description": "z-index of Popconfirm",
           "descriptionZh": "确认框 z-index"
         }
-      ]
+      ],
+      "categoryZh": "反馈"
     },
     {
       "name": "Popover",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "A simple popup menu to provide extra information or operations.\n\nComparing with `Tooltip`, besides information `Popover` card can also provide action elements like links and buttons.",
       "whenToUseZh": "当目标元素有进一步的描述和相关操作时，可以收纳到卡片中，根据用户的操作行为进行展现。\n\n和 `Tooltip` 的区别是，用户可以对浮层上的元素进行操作，因此它可以承载更复杂的内容，比如链接或按钮等。",
@@ -11658,11 +11683,12 @@
           "description": "z-index of Popover",
           "descriptionZh": "气泡卡片 z-index"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Progress",
-      "category": "Components",
+      "category": "Feedback",
       "description": "",
       "whenToUse": "If it will take a long time to complete an operation, you can use `Progress` to show the current progress and status.\n\n- When an operation will interrupt the current interface, or it needs to run in the background for more than 2 seconds.\n- When you need to display the completion percentage of an operation.",
       "whenToUseZh": "在操作需要较长时间才能完成时，为用户显示该操作的当前进度和状态。\n\n- 当一个操作会打断当前界面，或者需要在后台运行，且耗时可能超过 2 秒时；\n- 当需要显示一个操作完成的百分比时。",
@@ -11955,7 +11981,8 @@
           "description": "Color of remaining part of progress bar",
           "descriptionZh": "进度条剩余部分颜色"
         }
-      ]
+      ],
+      "categoryZh": "反馈"
     },
     {
       "name": "QRCode",
@@ -12114,7 +12141,7 @@
     },
     {
       "name": "Radio",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "- Used to select a single state from multiple options.\n- The difference from Select is that Radio is visible to the user and can facilitate the comparison of choice, which means there shouldn't be too many of them.",
       "whenToUseZh": "- 用于在多个备选项中选中单个状态。\n- 和 Select 的区别是，Radio 所有选项默认可见，方便用户在比较中选择，因此选项不宜过多。",
@@ -12395,11 +12422,12 @@
           "description": "Margin right of Radio button",
           "descriptionZh": "单选框右间距"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Rate",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "- Show evaluation.\n- A quick rating operation on something.",
       "whenToUseZh": "- 对评价进行展示。\n- 对事物进行快速的评级操作。",
@@ -12619,11 +12647,12 @@
           "description": "Small star size",
           "descriptionZh": "小星星尺寸"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Result",
-      "category": "Components",
+      "category": "Feedback",
       "description": "",
       "whenToUse": "Use when important operations need to inform the user to process the results and the feedback is more complicated.",
       "whenToUseZh": "当有重要操作需告知用户处理结果，且反馈内容较为复杂时使用。",
@@ -12759,11 +12788,12 @@
           "description": "Title font size",
           "descriptionZh": "标题字体大小"
         }
-      ]
+      ],
+      "categoryZh": "反馈"
     },
     {
       "name": "Segmented",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "- When displaying multiple options and user can select a single option;\n- When switching the selected option, the content of the associated area changes.",
       "whenToUseZh": "- 用于展示多个选项并允许用户选择其中单个选项；\n- 当切换选中选项时，关联区域的内容会发生变化。",
@@ -12951,11 +12981,12 @@
           "description": "Padding of Segmented container",
           "descriptionZh": "Segmented 控件容器的 padding"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Select",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "- A dropdown menu for displaying choices - an elegant alternative to the native `<select>` element.\n- Utilizing [Radio](/components/radio/) is recommended when there are fewer total options (less than 5).",
       "whenToUseZh": "- 弹出一个下拉菜单给用户选择操作，用于代替原生的选择器，或者需要一个更优雅的多选器时。\n- 当选项少时（少于 5 项），建议直接将选项平铺，使用 [Radio](/components/radio-cn/) 是更好的选择。",
@@ -13790,11 +13821,12 @@
           "question": "Why a11y test report missing `aria-` props?",
           "answer": "Select only create a11y auxiliary node when operating on. Please open Select and retry. For `aria-label` & `aria-labelledby` miss warning, please add related prop to Select with your own requirement.\n\nDefault virtual scrolling will create a mock element to simulate an accessible binding. If a screen reader needs to fully access the entire list, you can set `virtual={false}` to disable virtual scrolling and the accessibility option will be bound to the actual element."
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Skeleton",
-      "category": "Components",
+      "category": "Feedback",
       "description": "",
       "whenToUse": "- When a resource needs long time to load.\n- When the component contains lots of information, such as List or Card.\n- Only works when loading data for the first time.\n- Could be replaced by Spin in any situation, but can provide a better user experience.",
       "whenToUseZh": "- 网络较慢，需要长时间等待加载处理的情况下。\n- 图文信息内容较多的列表/卡片中。\n- 只在第一次加载数据的时候使用。\n- 可以被 Spin 完全代替，但是在可用的场景下可以比 Spin 提供更好的视觉效果和用户体验。",
@@ -14022,11 +14054,12 @@
           "description": "Height of title skeleton",
           "descriptionZh": "标题骨架屏高度"
         }
-      ]
+      ],
+      "categoryZh": "反馈"
     },
     {
       "name": "Slider",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "To input a value in a range.",
       "whenToUseZh": "当用户需要在数值区间/自定义区间内进行选择时，可为连续或离散值。",
@@ -14427,11 +14460,12 @@
           "description": "Background color of track when hover",
           "descriptionZh": "轨道已覆盖部分背景色（悬浮态）"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Space",
-      "category": "Components",
+      "category": "Layout",
       "description": "",
       "whenToUse": "- Avoid components clinging together and set a unified space.\n- Use Space.Compact when child form components are compactly connected and the border is collapsed (After version `antd@4.24.0` Supported).",
       "whenToUseZh": "避免组件紧贴在一起，拉开统一的空间。\n\n- 适合行内元素的水平间距。\n- 可以设置各种水平对齐方式。\n- 需要表单组件之间紧凑连接且合并边框时，使用 Space.Compact（自 `antd@4.24.0` 版本开始提供该组件）。",
@@ -14585,11 +14619,12 @@
       ],
       "subComponents": [
         "Space.Compact"
-      ]
+      ],
+      "categoryZh": "布局"
     },
     {
       "name": "Spin",
-      "category": "Components",
+      "category": "Feedback",
       "description": "",
       "whenToUse": "When part of the page is waiting for asynchronous data or during a rendering process, an appropriate loading animation can effectively alleviate users' inquietude.",
       "whenToUseZh": "页面局部处于等待异步数据或正在渲染过程时，合适的加载动效会有效缓解用户的焦虑。",
@@ -14724,11 +14759,12 @@
           "description": "Small loading icon size",
           "descriptionZh": "小号加载图标尺寸"
         }
-      ]
+      ],
+      "categoryZh": "反馈"
     },
     {
       "name": "Statistic",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "- When want to highlight some data.\n- When want to display statistic data with description.",
       "whenToUseZh": "- 当需要突出某个或某组数字时。\n- 当需要展示带描述的统计类数据时使用。",
@@ -14921,11 +14957,12 @@
           "description": "Title font size",
           "descriptionZh": "标题字体大小"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Steps",
-      "category": "Components",
+      "category": "Navigation",
       "description": "",
       "whenToUse": "When a given task is complicated or has a certain sequence in the series of subtasks, we can decompose it into several steps to make things easier.",
       "whenToUseZh": "当任务复杂或者存在先后关系时，将其分解成一系列步骤，从而简化任务。",
@@ -15303,11 +15340,12 @@
           "description": "Max width of nav content",
           "descriptionZh": "可跳转步骤条内容最大宽度"
         }
-      ]
+      ],
+      "categoryZh": "导航"
     },
     {
       "name": "Switch",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "- If you need to represent the switching between two states or on-off state.\n- The difference between `Switch` and `Checkbox` is that `Switch` will trigger a state change directly when you toggle it, while `Checkbox` is generally used for state marking, which should work in conjunction with submit operation.",
       "whenToUseZh": "- 需要表示开关状态/两种状态之间的切换时；\n- 和 `checkbox` 的区别是，切换 `switch` 会直接触发状态改变，而 `checkbox` 一般用于状态标记，需要和提交操作配合。",
@@ -15524,11 +15562,12 @@
           "description": "Padding of Switch",
           "descriptionZh": "开关内边距"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Table",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "- To display a collection of structured data.\n- To sort, search, paginate, filter data.",
       "whenToUseZh": "- 当有大量结构化的数据需要展现时；\n- 当需要对数据进行排序、搜索、分页、自定义操作等复杂行为时。",
@@ -16799,11 +16838,12 @@
           "question": "How to custom render Table Checkbox（For example, adding Tooltip）?",
           "answer": "Since `4.1.0`, You can use [`rowSelection.renderCell`](https://ant.design/components/table/#rowselection) to custom render Table Checkbox. If you want to add Tooltip, please refer to this [demo](https://codesandbox.io/s/table-row-tooltip-v79j2v)."
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Tabs",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUseZh": "提供平级的区域将大块内容进行收纳和展现，保持界面整洁。\n\nAnt Design 依次提供了三级选项卡，分别用于不同的场景。\n\n- 卡片式的页签，提供可关闭的样式，常用于容器顶部。\n- 既可用于容器顶部，也可用于容器内部，是最通用的 Tabs。\n- [Radio.Button](/components/radio-cn/#components-radio-demo-radiobutton) 可作为更次级的页签来使用。",
       "props": [
@@ -17305,11 +17345,12 @@
           "description": "z-index of dropdown menu",
           "descriptionZh": "下拉菜单 z-index"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Tag",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "- It can be used to tag by dimension or property.\n\n- When categorizing.",
       "whenToUseZh": "- 用于标记事物的属性和维度。\n- 进行分类。",
@@ -17472,11 +17513,12 @@
       ],
       "subComponents": [
         "Tag.CheckableTag"
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Timeline",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "- When a series of information needs to be ordered by time (ascending or descending).\n- When you need a timeline to make a visual connection.\n\n<Alert message=\"After version 5.2.0, we provide a simpler usage &lt;Timeline items={[...]} /&gt; with better performance and potential of writing simpler code style in your applications. Meanwhile, we deprecated the old usage in browser console, we will remove it in antd 6.0.\"></Alert>\n\n```jsx\n// works when >=5.2.0, recommended ✅\nconst items = [{ children: 'sample', label: 'sample' }];\nreturn <Timeline items={items} />;\n\n// works when <5.2.0, deprecated when >=5.2.0 🙅🏻‍♀️\nreturn (\n  <Timeline onChange={onChange}>\n    <Timeline.Item>Sample</Timeline.Item>\n  </Timeline>\n);\n```",
       "whenToUseZh": "- 当有一系列信息需按时间排列时，可正序和倒序。\n- 需要有一条时间轴进行视觉上的串联时。\n\n<Alert message=\"5.2.0版本之后，我们提供了更简单的用法 &lt;Timeline items={[...]} /&gt; 以获得更好的性能，使您能在应用中编写更简单的代码。与此同时，我们弃用了旧的用法，并且将在下一个 major 版本中删除它。\"></Alert>\n\n```jsx\n// >=5.2.0 可用，推荐的写法 ✅\nconst items = [{ children: 'sample', label: 'sample' }];\nreturn <Timeline items={items} />;\n\n// <5.2.0 可用，>=5.2.0 时不推荐 🙅🏻‍♀️\nreturn (\n  <Timeline onChange={onChange}>\n    <Timeline.Item>Sample</Timeline.Item>\n  </Timeline>\n);\n```",
@@ -17653,11 +17695,12 @@
           "description": "Line width",
           "descriptionZh": "轨迹宽度"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "TimePicker",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "By clicking the input box, you can select a time from a popup panel.",
       "whenToUseZh": "当用户需要输入一个时间，可以点击标准输入框，弹出时间面板进行选择。",
@@ -17982,11 +18025,12 @@
           "descriptionZh": "value 和 onChange 需要配合使用。",
           "code": "import React, { useState } from 'react';\nimport { TimePicker } from 'antd';\nimport type { Dayjs } from 'dayjs';\n\nconst App: React.FC = () => {\n  const [value, setValue] = useState<Dayjs | null>(null);\n\n  const onChange = (time: Dayjs) => {\n    setValue(time);\n  };\n\n  return <TimePicker value={value} onChange={onChange} />;\n};\n\nexport default App;\n"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Tooltip",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "- The tip is shown on mouse enter, and is hidden on mouse leave. The Tooltip doesn't support complex text or operations.\n- To provide an explanation of a `button/text/operation`. It's often used instead of the html `title` attribute.",
       "whenToUseZh": "鼠标移入则显示提示，移出消失，气泡浮层不承载复杂文本和操作。\n\n可用来代替系统默认的 `title` 提示，提供一个 `按钮/文字/操作` 的文案解释。",
@@ -18181,11 +18225,12 @@
           "description": "z-index of tooltip",
           "descriptionZh": "文字提示 z-index"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Tour",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "Use when you want to guide users through a product.",
       "whenToUseZh": "常用于引导用户了解产品功能。",
@@ -18430,11 +18475,12 @@
           "description": "Tour popup z-index",
           "descriptionZh": "弹层 z-index"
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "Transfer",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "- It is a select control essentially which can be use for selecting multiple items.\n- Transfer can display more information for items and take up more space.\n\nTransfer the elements between two columns in an intuitive and efficient way.\n\nOne or more elements can be selected from either column, one click on the proper `direction` button, and the transfer is done. The left column is considered the `source` and the right column is considered the `target`. As you can see in the API description, these names are reflected in.\n\n> notice: Transfer is a controlled component, uncontrolled mode is not supported.",
       "whenToUseZh": "- 需要在多个可选项中进行多选时。\n- 比起 Select 和 TreeSelect，穿梭框占据更大的空间，可以展示可选项的更多信息。\n\n穿梭选择框用直观的方式在两栏中移动元素，完成选择行为。\n\n选择一个或以上的选项后，点击对应的方向键，可以把选中的选项移动到另一栏。其中，左边一栏为 `source`，右边一栏为 `target`，API 的设计也反映了这两个概念。\n\n> 注意：穿梭框组件只支持受控使用，不支持非受控模式。",
@@ -18768,11 +18814,12 @@
           "question": "How to support fetch and present data from a remote server in Transfer column.",
           "answer": "In order to keep the page number synchronized, you can disable columns you checked without removing the option: <https://codesandbox.io/s/objective-wing-6iqbx>"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Tree",
-      "category": "Components",
+      "category": "Data Display",
       "description": "",
       "whenToUse": "Almost anything can be represented in a tree structure. Examples include directories, organization hierarchies, biological classifications, countries, etc. The `Tree` component is a way of representing the hierarchical relationship between these things. You can also expand, collapse, and select a treeNode within a `Tree`.",
       "whenToUseZh": "文件夹、组织架构、生物分类、国家地区等等，世间万物的大多数结构都是树形结构。使用 `树控件` 可以完整展现其中的层级关系，并具有展开收起选择等交互功能。",
@@ -19317,11 +19364,12 @@
           "question": "What does `disabled` node work logic in the tree?",
           "answer": "Tree change its data by conduction. Includes checked or auto expanded, it will conduction state to parent / children node until current node is `disabled`. So if a controlled node is `disabled`, it will only modify self state and not affect other nodes. For example, a parent node contains 3 child nodes and one of them is `disabled`. When check the parent node, it will only check rest 2 child nodes. As the same, when check these 2 child node, parent will be checked whatever checked state the `disabled` one is.\n\nThis conduction logic prevent that modify `disabled` parent checked state by check children node and user can not modify directly with click parent which makes the interactive conflict. If you want to modify this conduction logic, you can customize it with `checkStrictly` prop."
         }
-      ]
+      ],
+      "categoryZh": "数据展示"
     },
     {
       "name": "TreeSelect",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "`TreeSelect` is similar to `Select`, but the values are provided in a tree like structure. Any data whose entries are defined in a hierarchical manner is fit to use this control. Examples of such case may include a corporate hierarchy, a directory structure, and so on.",
       "whenToUseZh": "类似 Select 的选择控件，可选择的数据结构是一个树形结构时，可以使用 TreeSelect，例如公司层级、学科系统、分类目录等等。",
@@ -19901,11 +19949,12 @@
           "question": "Why `loadData` not trigger when searching?",
           "answer": "In earlier version, `loadData` will be triggered when searching. But we got feedback that it will block network when inputting. So we change it to not trigger `loadData` when searching. But you can still handle async logic by `filterTreeNode`:\n\n```tsx\n<TreeSelect\n  filterTreeNode={(input, treeNode) => {\n    const match = YOUR_LOGIC_HERE;\n\n    if (match && !treeNode.isLeaf && !treeNode.children) {\n      // Do some loading logic\n    }\n\n    return match;\n  }}\n/>\n```"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Typography",
-      "category": "Components",
+      "category": "General",
       "description": "",
       "whenToUse": "- When need to display a title or paragraph contents in Articles/Blogs/Notes.\n- When you need copyable/editable/ellipsis texts.",
       "whenToUseZh": "- 当需要展示标题、段落、列表内容时使用，如文章/博客/日志的文本样式。\n- 当需要一列基于文本的基础操作时，如拷贝/省略/可编辑。",
@@ -20452,11 +20501,12 @@
         "Typography.Text",
         "Typography.Title",
         "Typography.Paragraph"
-      ]
+      ],
+      "categoryZh": "通用"
     },
     {
       "name": "Upload",
-      "category": "Components",
+      "category": "Data Entry",
       "description": "",
       "whenToUse": "Uploading is the process of publishing information (web pages, text, pictures, video, etc.) to a remote server via a web page or upload tool.\n\n- When you need to upload one or more files.\n- When you need to show the process of uploading.\n- When you need to upload files by dragging and dropping.",
       "whenToUseZh": "上传是将信息（网页、文字、图片、视频等）通过网页或者上传工具发布到远程服务器上的过程。\n\n- 当需要上传一个或一些文件时。\n- 当需要展现上传的进度时。\n- 当需要使用拖拽交互时。",
@@ -20920,11 +20970,12 @@
           "question": "Why sometimes Chrome can not upload?",
           "answer": "Chrome update will also break native upload. Please restart Chrome to finish the upload work. Ref:\n\n- [#32672](https://github.com/ant-design/ant-design/issues/32672)\n- [#32913](https://github.com/ant-design/ant-design/issues/32913)\n- [#33988](https://github.com/ant-design/ant-design/issues/33988)"
         }
-      ]
+      ],
+      "categoryZh": "数据录入"
     },
     {
       "name": "Watermark",
-      "category": "Components",
+      "category": "Feedback",
       "description": "",
       "whenToUse": "- Use when the page needs to be watermarked to identify the copyright.\n- Suitable for preventing information theft.",
       "whenToUseZh": "- 页面需要添加水印标识版权时使用。\n- 适用于防止信息盗用。",
@@ -21070,7 +21121,8 @@
           "question": "Handle abnormal image watermarks",
           "answer": "When using an image watermark and the image loads abnormally, you can add `content` at the same time to prevent the watermark from becoming invalid (since 5.2.3).\n\n```typescript jsx\n<Watermark\n  height={30}\n  width={130}\n  content=\"Ant Design\"\n  image=\"https://mdn.alipayobjects.com/huamei_7uahnr/afts/img/A*lkAoRbywo0oAAAAAAAAAAAAADrJ8AQ/original\"\n>\n  <div style={{ height: 500 }} />\n</Watermark>\n```"
         }
-      ]
+      ],
+      "categoryZh": "反馈"
     }
   ],
   "globalTokens": [
