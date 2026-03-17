@@ -17325,54 +17325,6 @@
           "description": "Drag end callback",
           "since": "-",
           "descriptionZh": "拖拽结束回调"
-        },
-        {
-          "name": "defaultSize",
-          "type": "`number \\",
-          "default": "string`",
-          "description": "Initial panel size support number for px or 'percent%' usage",
-          "since": "-",
-          "descriptionZh": "初始面板大小，支持数字 px 或者文字 '百分比%' 类型"
-        },
-        {
-          "name": "min",
-          "type": "`number \\",
-          "default": "string`",
-          "description": "Minimum threshold support number for px or 'percent%' usage",
-          "since": "-",
-          "descriptionZh": "最小阈值，支持数字 px 或者文字 '百分比%' 类型"
-        },
-        {
-          "name": "max",
-          "type": "`number \\",
-          "default": "string`",
-          "description": "Maximum threshold support number for px or 'percent%' usage",
-          "since": "-",
-          "descriptionZh": "最大阈值，支持数字 px 或者文字 '百分比%' 类型"
-        },
-        {
-          "name": "size",
-          "type": "`number \\",
-          "default": "string`",
-          "description": "Controlled panel size support number for px or 'percent%' usage",
-          "since": "-",
-          "descriptionZh": "受控面板大小，支持数字 px 或者文字 '百分比%' 类型"
-        },
-        {
-          "name": "collapsible",
-          "type": "`boolean \\",
-          "default": "{ start?: boolean; end?: boolean }`",
-          "description": "Quick folding",
-          "since": "`false`",
-          "descriptionZh": "快速折叠"
-        },
-        {
-          "name": "resizable",
-          "type": "`boolean`",
-          "default": "`true`",
-          "description": "Whether to enable drag and drop",
-          "since": "-",
-          "descriptionZh": "是否开启拖拽伸缩"
         }
       ],
       "demos": [
@@ -17450,7 +17402,59 @@
       ],
       "categoryZh": "其他",
       "nameZh": "分隔面板",
-      "since": "5.21.0"
+      "since": "5.21.0",
+      "subComponentProps": {
+        "Splitter.Panel": [
+          {
+            "name": "defaultSize",
+            "type": "`number \\",
+            "default": "string`",
+            "description": "Initial panel size support number for px or 'percent%' usage",
+            "since": "-",
+            "descriptionZh": "初始面板大小，支持数字 px 或者文字 '百分比%' 类型"
+          },
+          {
+            "name": "min",
+            "type": "`number \\",
+            "default": "string`",
+            "description": "Minimum threshold support number for px or 'percent%' usage",
+            "since": "-",
+            "descriptionZh": "最小阈值，支持数字 px 或者文字 '百分比%' 类型"
+          },
+          {
+            "name": "max",
+            "type": "`number \\",
+            "default": "string`",
+            "description": "Maximum threshold support number for px or 'percent%' usage",
+            "since": "-",
+            "descriptionZh": "最大阈值，支持数字 px 或者文字 '百分比%' 类型"
+          },
+          {
+            "name": "size",
+            "type": "`number \\",
+            "default": "string`",
+            "description": "Controlled panel size support number for px or 'percent%' usage",
+            "since": "-",
+            "descriptionZh": "受控面板大小，支持数字 px 或者文字 '百分比%' 类型"
+          },
+          {
+            "name": "collapsible",
+            "type": "`boolean \\",
+            "default": "{ start?: boolean; end?: boolean }`",
+            "description": "Quick folding",
+            "since": "`false`",
+            "descriptionZh": "快速折叠"
+          },
+          {
+            "name": "resizable",
+            "type": "`boolean`",
+            "default": "`true`",
+            "description": "Whether to enable drag and drop",
+            "since": "-",
+            "descriptionZh": "是否开启拖拽伸缩"
+          }
+        ]
+      }
     },
     {
       "name": "Statistic",

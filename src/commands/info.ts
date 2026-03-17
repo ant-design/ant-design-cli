@@ -1,10 +1,18 @@
 import type { Command } from 'commander';
-import type { GlobalOptions } from '../types.js';
+import type { GlobalOptions, PropData } from '../types.js';
 import { localize } from '../types.js';
 import { loadMetadataForVersion, findComponent, getAllComponentNames } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { createError, printError, fuzzyMatch, ErrorCodes } from '../output/error.js';
 import { formatTable, output } from '../output/formatter.js';
+
+function mapProps(props: PropData[], lang: string, detail: boolean) {
+  return props.map((p) =>
+    detail
+      ? [p.name, p.type, p.default, p.since ?? '-', localize(p.description, p.descriptionZh, lang) || '-']
+      : [p.name, p.type, p.default, p.since ?? '-'],
+  );
+}
 
 export function registerInfoCommand(program: Command): void {
   program
@@ -45,6 +53,14 @@ export function registerInfoCommand(program: Command): void {
                 ...p,
                 description: localize(p.description, p.descriptionZh, lang),
               })),
+              subComponentProps: comp.subComponentProps
+                ? Object.fromEntries(
+                    Object.entries(comp.subComponentProps).map(([name, props]) => [
+                      name,
+                      props.map((p) => ({ ...p, description: localize(p.description, p.descriptionZh, lang) })),
+                    ]),
+                  )
+                : undefined,
               methods: comp.methods || [],
               related: comp.related || [],
               faq: comp.faq || [],
@@ -63,6 +79,14 @@ export function registerInfoCommand(program: Command): void {
                 default: p.default,
                 since: p.since ?? '',
               })),
+              subComponentProps: comp.subComponentProps
+                ? Object.fromEntries(
+                    Object.entries(comp.subComponentProps).map(([name, props]) => [
+                      name,
+                      props.map((p) => ({ name: p.name, type: p.type, default: p.default })),
+                    ]),
+                  )
+                : undefined,
             },
             'json',
           );
@@ -71,6 +95,7 @@ export function registerInfoCommand(program: Command): void {
       }
 
       // Text/markdown format
+      const fmt = opts.format === 'markdown' ? 'markdown' : 'text';
       const nameLabel = comp.nameZh ? `${comp.name} (${comp.nameZh})` : comp.name;
       console.log(`${nameLabel} — ${desc}`);
       if (opts.detail && whenToUse) {
@@ -82,12 +107,15 @@ export function registerInfoCommand(program: Command): void {
         ? ['Property', 'Type', 'Default', 'Since', 'Description']
         : ['Property', 'Type', 'Default', 'Since'];
 
-      const rows = comp.props.map((p) => {
-        const base = [p.name, p.type, p.default, p.since ?? '-'];
-        return opts.detail ? [...base, localize(p.description, p.descriptionZh, lang) || '-'] : base;
-      });
+      console.log(formatTable(headers, mapProps(comp.props, lang, opts.detail), fmt));
 
-      console.log(formatTable(headers, rows, opts.format === 'markdown' ? 'markdown' : 'text'));
+      if (comp.subComponentProps) {
+        for (const [subName, subProps] of Object.entries(comp.subComponentProps)) {
+          console.log(`\n${subName}`);
+          console.log('');
+          console.log(formatTable(headers, mapProps(subProps, lang, opts.detail), fmt));
+        }
+      }
 
       if (opts.detail && comp.related && comp.related.length > 0) {
         console.log(`\nRelated: ${comp.related.join(', ')}`);

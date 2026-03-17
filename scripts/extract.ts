@@ -78,11 +78,13 @@ function main() {
 
   // 2. Build full ComponentData for each
   const components: ComponentData[] = componentMetas.map((meta) => {
-    const props = extractProps(antdDir, meta.dirName);
+    const { props, subComponentProps } = extractProps(antdDir, meta.dirName, meta.name);
     const demos = extractDemos(antdDir, meta.dirName);
     const tokens = extractTokens(antdDir, meta.name);
     const semantic = extractSemantic(antdDir, meta.dirName);
     const faq = extractFaq(antdDir, meta.dirName);
+
+    const hasSubComponentProps = Object.keys(subComponentProps).length > 0;
 
     const component: ComponentData = {
       name: meta.name,
@@ -99,6 +101,7 @@ function main() {
       semanticStructure: semantic.length > 0 ? semantic : undefined,
       faq: faq.length > 0 ? faq : undefined,
       subComponents: meta.subComponents.length > 0 ? meta.subComponents : undefined,
+      subComponentProps: hasSubComponentProps ? subComponentProps : undefined,
     };
 
     return component;
