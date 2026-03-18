@@ -9,6 +9,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import matter from 'gray-matter';
 import { extractComponents } from './extractors/components.js';
 import { extractProps } from './extractors/props.js';
 import { extractDemos } from './extractors/demos.js';
@@ -86,6 +87,12 @@ function main() {
 
     const hasSubComponentProps = Object.keys(subComponentProps).length > 0;
 
+    // Bundle raw markdown docs for `antd doc` command
+    const enDocPath = path.join(antdDir, 'components', meta.dirName, 'index.en-US.md');
+    const zhDocPath = path.join(antdDir, 'components', meta.dirName, 'index.zh-CN.md');
+    const doc = fs.existsSync(enDocPath) ? matter(fs.readFileSync(enDocPath, 'utf-8')).content : undefined;
+    const docZh = fs.existsSync(zhDocPath) ? matter(fs.readFileSync(zhDocPath, 'utf-8')).content : undefined;
+
     const component: ComponentData = {
       name: meta.name,
       nameZh: meta.nameZh || undefined,
@@ -102,6 +109,8 @@ function main() {
       faq: faq.length > 0 ? faq : undefined,
       subComponents: meta.subComponents.length > 0 ? meta.subComponents : undefined,
       subComponentProps: hasSubComponentProps ? subComponentProps : undefined,
+      doc: doc || undefined,
+      docZh: docZh || undefined,
     };
 
     return component;
