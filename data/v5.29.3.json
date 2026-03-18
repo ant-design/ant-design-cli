@@ -979,7 +979,25 @@
           "question": "Why won't a controlled open AutoComplete display a drop-down menu when options are empty?",
           "answer": "The AutoComplete component is essentially an extension of the Input form element. When the `options` property is empty, displaying empty text could mislead the user into believing the component is not operational, when in fact they are still able to input text. To avoid confusion, the `open` property will not display the drop-down menu when set to `true` and in combination with an empty `options` property. The `open` property must be used in conjunction with the `options` property."
         }
-      ]
+      ],
+      "subComponentProps": {
+        "AutoComplete.Methods": [
+          {
+            "name": "blur()",
+            "type": "",
+            "default": "-",
+            "description": "Remove focus",
+            "descriptionZh": ""
+          },
+          {
+            "name": "focus()",
+            "type": "",
+            "default": "-",
+            "description": "Get focus",
+            "descriptionZh": ""
+          }
+        ]
+      }
     },
     {
       "name": "Avatar",
@@ -3154,7 +3172,32 @@
           "question": "How to add custom arrows?",
           "answer": "See [#12479](https://github.com/ant-design/ant-design/issues/12479)."
         }
-      ]
+      ],
+      "subComponentProps": {
+        "Carousel.Methods": [
+          {
+            "name": "goTo(slideNumber, dontAnimate)",
+            "type": "",
+            "default": "-",
+            "description": "Go to slide index, if dontAnimate=true, it happens without animation",
+            "descriptionZh": ""
+          },
+          {
+            "name": "next()",
+            "type": "",
+            "default": "-",
+            "description": "Change current slide to next slide",
+            "descriptionZh": ""
+          },
+          {
+            "name": "prev()",
+            "type": "",
+            "default": "-",
+            "description": "Change current slide to previous slide",
+            "descriptionZh": ""
+          }
+        ]
+      }
     },
     {
       "name": "Cascader",
@@ -3790,6 +3833,22 @@
             "default": "-",
             "description": "Used to sort filtered options",
             "descriptionZh": "用于排序 filter 后的选项"
+          }
+        ],
+        "Cascader.Methods": [
+          {
+            "name": "blur()",
+            "type": "",
+            "default": "-",
+            "description": "Remove focus",
+            "descriptionZh": ""
+          },
+          {
+            "name": "focus()",
+            "type": "",
+            "default": "-",
+            "description": "Get focus",
+            "descriptionZh": ""
           }
         ]
       }
@@ -8881,7 +8940,600 @@
         "Form.useFormInstance",
         "Form.useWatch",
         "Form.Item"
-      ]
+      ],
+      "subComponentProps": {
+        "Form.Item": [
+          {
+            "name": "colon",
+            "type": "boolean",
+            "default": "true",
+            "description": "Used with `label`, whether to display `:` after label text.",
+            "descriptionZh": "配合 `label` 属性使用，表示是否显示 `label` 后面的冒号"
+          },
+          {
+            "name": "dependencies",
+            "type": "[NamePath](#namepath)\\[]",
+            "default": "-",
+            "description": "Set the dependency field. See [below](#dependencies)",
+            "descriptionZh": "设置依赖字段，说明[见下](#dependencies)"
+          },
+          {
+            "name": "extra",
+            "type": "ReactNode",
+            "default": "-",
+            "description": "The extra prompt message. It is similar to help. Usage example: to display error message and prompt message at the same time",
+            "descriptionZh": "额外的提示信息，和 `help` 类似，当需要错误信息和提示文案同时出现时，可以使用这个。"
+          },
+          {
+            "name": "getValueFromEvent",
+            "type": "(..args: any\\[]) => any",
+            "default": "-",
+            "description": "Specify how to get value from event or other onChange arguments",
+            "descriptionZh": "设置如何将 event 的值转换成字段值"
+          },
+          {
+            "name": "getValueProps",
+            "type": "(value: any) => Record<string, any>",
+            "default": "-",
+            "description": "Additional props with sub component (It's not recommended to generate dynamic function prop by `getValueProps`. Please pass it to child component directly)",
+            "since": "4.2.0",
+            "descriptionZh": "为子元素添加额外的属性 (不建议通过 `getValueProps` 生成动态函数 prop，请直接将其传递给子组件)"
+          },
+          {
+            "name": "hasFeedback",
+            "type": "boolean \\",
+            "default": "{ icons: [FeedbackIcons](#feedbackicons) }",
+            "description": "Used with `validateStatus`, this option specifies the validation status icon. Recommended to be used only with `Input`. Also, It can get feedback icons via icons prop.",
+            "since": "false",
+            "descriptionZh": "配合 `validateStatus` 属性使用，展示校验状态图标，建议只配合 Input 组件使用 此外，它还可以通过 Icons 属性获取反馈图标。"
+          },
+          {
+            "name": "help",
+            "type": "ReactNode",
+            "default": "-",
+            "description": "The prompt message. If not provided, the prompt message will be generated by the validation rule.",
+            "descriptionZh": "提示信息，如不设置，则会根据校验规则自动生成"
+          },
+          {
+            "name": "hidden",
+            "type": "boolean",
+            "default": "false",
+            "description": "Whether to hide Form.Item (still collect and validate value)",
+            "since": "4.4.0",
+            "descriptionZh": "是否隐藏字段（依然会收集和校验字段）"
+          },
+          {
+            "name": "htmlFor",
+            "type": "string",
+            "default": "-",
+            "description": "Set sub label `htmlFor`",
+            "descriptionZh": "设置子元素 label `htmlFor` 属性"
+          },
+          {
+            "name": "initialValue",
+            "type": "string",
+            "default": "-",
+            "description": "Config sub default value. Form `initialValues` get higher priority when conflict",
+            "since": "4.2.0",
+            "descriptionZh": "设置子元素默认值，如果与 Form 的 `initialValues` 冲突则以 Form 为准"
+          },
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "default": "-",
+            "description": "Label text. When there is no need for a label but it needs to be aligned with a colon, it can be set to null",
+            "since": "null: 5.22.0",
+            "descriptionZh": "`label` 标签的文本，当不需要 label 又需要与冒号对齐，可以设为 null"
+          },
+          {
+            "name": "labelAlign",
+            "type": "`left` \\",
+            "default": "`right`",
+            "description": "The text align of label,",
+            "since": "`right`",
+            "descriptionZh": "标签文本对齐方式"
+          },
+          {
+            "name": "labelCol",
+            "type": "[object](/components/grid/#col)",
+            "default": "-",
+            "description": "The layout of label. You can set `span` `offset` to something like `{span: 3, offset: 12}` or `sm: {span: 3, offset: 12}` same as with `<Col>`. You can set `labelCol` on Form which will not affect nest Item. If both exists, use Item first",
+            "descriptionZh": "`label` 标签布局，同 `<Col>` 组件，设置 `span` `offset` 值，如 `{span: 3, offset: 12}` 或 `sm: {span: 3, offset: 12}`。你可以通过 Form 的 `labelCol` 进行统一设置，不会作用于嵌套 Item。当和 Form 同时设置时，以 Item 为准"
+          },
+          {
+            "name": "messageVariables",
+            "type": "Record&lt;string, string>",
+            "default": "-",
+            "description": "The default validate field info, description [see below](#messagevariables)",
+            "since": "4.7.0",
+            "descriptionZh": "默认验证字段的信息，查看[详情](#messagevariables)"
+          },
+          {
+            "name": "name",
+            "type": "[NamePath](#namepath)",
+            "default": "-",
+            "description": "Field name, support array",
+            "descriptionZh": "字段名，支持数组"
+          },
+          {
+            "name": "normalize",
+            "type": "(value, prevValue, prevValues) => any",
+            "default": "-",
+            "description": "Normalize value from component value before passing to Form instance. Do not support async",
+            "descriptionZh": "组件获取值后进行转换，再放入 Form 中。不支持异步"
+          },
+          {
+            "name": "noStyle",
+            "type": "boolean",
+            "default": "false",
+            "description": "No style for `true`, used as a pure field control. Will inherit parent Form.Item `validateStatus` if self `validateStatus` not configured",
+            "descriptionZh": "为 `true` 时不带样式，作为纯字段控件使用。当自身没有 `validateStatus` 而父元素存在有 `validateStatus` 的 Form.Item 会继承父元素的 `validateStatus`"
+          },
+          {
+            "name": "preserve",
+            "type": "boolean",
+            "default": "true",
+            "description": "Keep field value even when field removed",
+            "since": "4.4.0",
+            "descriptionZh": "当字段被删除时保留字段值"
+          },
+          {
+            "name": "required",
+            "type": "boolean",
+            "default": "false",
+            "description": "Display required style. It will be generated by the validation rule",
+            "descriptionZh": "必填样式设置。如不设置，则会根据校验规则自动生成"
+          },
+          {
+            "name": "rules",
+            "type": "[Rule](#rule)\\[]",
+            "default": "-",
+            "description": "Rules for field validation. Click [here](#form-demo-basic) to see an example",
+            "descriptionZh": "校验规则，设置字段的校验逻辑。点击[此处](#form-demo-basic)查看示例"
+          },
+          {
+            "name": "shouldUpdate",
+            "type": "boolean \\",
+            "default": "(prevValue, curValue) => boolean",
+            "description": "Custom field update logic. See [below](#shouldupdate)",
+            "since": "false",
+            "descriptionZh": "自定义字段更新逻辑，说明[见下](#shouldupdate)"
+          },
+          {
+            "name": "tooltip",
+            "type": "ReactNode \\",
+            "default": "[TooltipProps & { icon: ReactNode }](/components/tooltip#api)",
+            "description": "Config tooltip info",
+            "since": "-",
+            "descriptionZh": "配置提示信息"
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "default": "`onChange`",
+            "description": "When to collect the value of children node. Click [here](#form-demo-customized-form-controls) to see an example",
+            "descriptionZh": "设置收集字段值变更的时机。点击[此处](#form-demo-customized-form-controls)查看示例"
+          },
+          {
+            "name": "validateDebounce",
+            "type": "number",
+            "default": "-",
+            "description": "Delay milliseconds to start validation",
+            "since": "5.9.0",
+            "descriptionZh": "设置防抖，延迟毫秒数后进行校验"
+          },
+          {
+            "name": "validateFirst",
+            "type": "boolean \\",
+            "default": "`parallel`",
+            "description": "Whether stop validate on first rule of error for this field. Will parallel validate when `parallel` configured",
+            "since": "false",
+            "descriptionZh": "当某一规则校验不通过时，是否停止剩下的规则的校验。设置 `parallel` 时会并行校验"
+          },
+          {
+            "name": "validateStatus",
+            "type": "string",
+            "default": "-",
+            "description": "The validation status. If not provided, it will be generated by validation rule. options: `success` `warning` `error` `validating`",
+            "descriptionZh": "校验状态，如不设置，则会根据校验规则自动生成，可选：'success' 'warning' 'error' 'validating'"
+          },
+          {
+            "name": "validateTrigger",
+            "type": "string \\",
+            "default": "string\\[]",
+            "description": "When to validate the value of children node",
+            "since": "`onChange`",
+            "descriptionZh": "设置字段校验的时机"
+          },
+          {
+            "name": "valuePropName",
+            "type": "string",
+            "default": "`value`",
+            "description": "Props of children node, for example, the prop of Switch or Checkbox is `checked`. This prop is an encapsulation of `getValueProps`, which will be invalid after customizing `getValueProps`",
+            "descriptionZh": "子节点的值的属性。注意：Switch、Checkbox 的 valuePropName 应该是 `checked`，否则无法获取这个两个组件的值。该属性为 `getValueProps` 的封装，自定义 `getValueProps` 后会失效"
+          },
+          {
+            "name": "wrapperCol",
+            "type": "[object](/components/grid/#col)",
+            "default": "-",
+            "description": "The layout for input controls, same as `labelCol`. You can set `wrapperCol` on Form which will not affect nest Item. If both exists, use Item first",
+            "descriptionZh": "需要为输入控件设置布局样式时，使用该属性，用法同 `labelCol`。你可以通过 Form 的 `wrapperCol` 进行统一设置，不会作用于嵌套 Item。当和 Form 同时设置时，以 Item 为准"
+          },
+          {
+            "name": "layout",
+            "type": "`horizontal` \\",
+            "default": "`vertical`",
+            "description": "Form item layout",
+            "since": "-",
+            "descriptionZh": "表单项布局"
+          }
+        ],
+        "Form.List": [
+          {
+            "name": "children",
+            "type": "(fields: Field\\[], operation: { add, remove, move }, meta: { errors }) => React.ReactNode",
+            "default": "-",
+            "description": "Render function",
+            "descriptionZh": "渲染函数"
+          },
+          {
+            "name": "initialValue",
+            "type": "any\\[]",
+            "default": "-",
+            "description": "Config sub default value. Form `initialValues` get higher priority when conflict",
+            "since": "4.9.0",
+            "descriptionZh": "设置子元素默认值，如果与 Form 的 `initialValues` 冲突则以 Form 为准"
+          },
+          {
+            "name": "name",
+            "type": "[NamePath](#namepath)",
+            "default": "-",
+            "description": "Field name, support array. List is also a field, so it will return all the values by `getFieldsValue`. You can change this logic by [config](#getfieldsvalue)",
+            "descriptionZh": "字段名，支持数组。List 本身也是字段，因而 `getFieldsValue()` 默认会返回 List 下所有值，你可以通过[参数](#getfieldsvalue)改变这一行为"
+          },
+          {
+            "name": "rules",
+            "type": "{ validator, message }\\[]",
+            "default": "-",
+            "description": "Validate rules, only support customize validator. Should work with [ErrorList](#formerrorlist)",
+            "since": "4.7.0",
+            "descriptionZh": "校验规则，仅支持自定义规则。需要配合 [ErrorList](#formerrorlist) 一同使用。"
+          }
+        ],
+        "Form.operation": [
+          {
+            "name": "add",
+            "type": "(defaultValue?: any, insertIndex?: number) => void",
+            "default": "insertIndex",
+            "description": "add form item",
+            "since": "4.6.0",
+            "descriptionZh": "新增表单项"
+          },
+          {
+            "name": "move",
+            "type": "(from: number, to: number) => void",
+            "default": "-",
+            "description": "move form item",
+            "descriptionZh": "移动表单项"
+          },
+          {
+            "name": "remove",
+            "type": "(index: number \\",
+            "default": "number\\[]) => void",
+            "description": "remove form item",
+            "since": "number\\[]",
+            "descriptionZh": "删除表单项"
+          }
+        ],
+        "Form.ErrorList": [
+          {
+            "name": "errors",
+            "type": "ReactNode\\[]",
+            "default": "-",
+            "description": "Error list",
+            "descriptionZh": "错误列表"
+          }
+        ],
+        "Form.Provider": [
+          {
+            "name": "onFormChange",
+            "type": "function(formName: string, info: { changedFields, forms })",
+            "default": "-",
+            "description": "Triggered when a sub form field updates",
+            "descriptionZh": "子表单字段更新时触发"
+          },
+          {
+            "name": "onFormFinish",
+            "type": "function(formName: string, info: { values, forms })",
+            "default": "-",
+            "description": "Triggered when a sub form submits",
+            "descriptionZh": "子表单提交时触发"
+          }
+        ],
+        "Form.FormInstance": [
+          {
+            "name": "getFieldError",
+            "type": "(name: [NamePath](#namepath)) => string\\[]",
+            "default": "-",
+            "description": "Get the error messages by the field name",
+            "descriptionZh": ""
+          },
+          {
+            "name": "getFieldInstance",
+            "type": "(name: [NamePath](#namepath)) => any",
+            "default": "-",
+            "description": "Get field instance",
+            "since": "4.4.0",
+            "descriptionZh": ""
+          },
+          {
+            "name": "getFieldsError",
+            "type": "(nameList?: [NamePath](#namepath)\\[]) => FieldError\\[]",
+            "default": "-",
+            "description": "Get the error messages by the fields name. Return as an array",
+            "descriptionZh": ""
+          },
+          {
+            "name": "getFieldsValue",
+            "type": "[GetFieldsValue](#getfieldsvalue)",
+            "default": "-",
+            "description": "Get values by a set of field names. Return according to the corresponding structure. Default return mounted field value, but you can use `getFieldsValue(true)` to get all values",
+            "descriptionZh": ""
+          },
+          {
+            "name": "getFieldValue",
+            "type": "(name: [NamePath](#namepath)) => any",
+            "default": "-",
+            "description": "Get the value by the field name",
+            "descriptionZh": ""
+          },
+          {
+            "name": "isFieldsTouched",
+            "type": "(nameList?: [NamePath](#namepath)\\[], allTouched?: boolean) => boolean",
+            "default": "-",
+            "description": "Check if fields have been operated. Check if all fields is touched when `allTouched` is `true`",
+            "descriptionZh": ""
+          },
+          {
+            "name": "isFieldTouched",
+            "type": "(name: [NamePath](#namepath)) => boolean",
+            "default": "-",
+            "description": "Check if a field has been operated",
+            "descriptionZh": ""
+          },
+          {
+            "name": "isFieldValidating",
+            "type": "(name: [NamePath](#namepath)) => boolean",
+            "default": "-",
+            "description": "Check field if is in validating",
+            "descriptionZh": ""
+          },
+          {
+            "name": "resetFields",
+            "type": "(fields?: [NamePath](#namepath)\\[]) => void",
+            "default": "-",
+            "description": "Reset fields to `initialValues`",
+            "descriptionZh": ""
+          },
+          {
+            "name": "scrollToField",
+            "type": "(name: [NamePath](#namepath), options: [ScrollOptions](https://github.com/stipsan/scroll-into-view-if-needed/tree/ece40bd9143f48caf4b99503425ecb16b0ad8249#options) \\",
+            "default": "-",
+            "description": "Scroll to field position",
+            "since": "{ focus: boolean }) => void",
+            "descriptionZh": ""
+          },
+          {
+            "name": "setFields",
+            "type": "(fields: [FieldData](#fielddata)\\[]) => void",
+            "default": "-",
+            "description": "Set fields status",
+            "descriptionZh": ""
+          },
+          {
+            "name": "setFieldValue",
+            "type": "(name: [NamePath](#namepath), value: any) => void",
+            "default": "-",
+            "description": "Set fields value(Will directly pass to form store and **reset validation message**. If you do not want to modify passed object, please clone first)",
+            "since": "4.22.0",
+            "descriptionZh": ""
+          },
+          {
+            "name": "setFieldsValue",
+            "type": "(values) => void",
+            "default": "-",
+            "description": "Set fields value(Will directly pass to form store and **reset validation message**. If you do not want to modify passed object, please clone first). Use `setFieldValue` instead if you want to only config single value in Form.List",
+            "descriptionZh": ""
+          },
+          {
+            "name": "submit",
+            "type": "() => void",
+            "default": "-",
+            "description": "Submit the form. It's same as click `submit` button",
+            "descriptionZh": ""
+          },
+          {
+            "name": "validateFields",
+            "type": "(nameList?: [NamePath](#namepath)\\[], config?: [ValidateConfig](#validatefields)) => Promise",
+            "default": "-",
+            "description": "Validate fields. Use `recursive` to validate all the field in the path",
+            "descriptionZh": ""
+          }
+        ],
+        "Form.FieldData": [
+          {
+            "name": "errors",
+            "type": "string\\[]",
+            "default": "-",
+            "description": "Error messages",
+            "descriptionZh": ""
+          },
+          {
+            "name": "warnings",
+            "type": "string\\[]",
+            "default": "-",
+            "description": "Warning messages",
+            "descriptionZh": ""
+          },
+          {
+            "name": "name",
+            "type": "[NamePath](#namepath)\\[]",
+            "default": "-",
+            "description": "Field name path",
+            "descriptionZh": ""
+          },
+          {
+            "name": "touched",
+            "type": "boolean",
+            "default": "-",
+            "description": "Whether is operated",
+            "descriptionZh": ""
+          },
+          {
+            "name": "validating",
+            "type": "boolean",
+            "default": "-",
+            "description": "Whether is in validating",
+            "descriptionZh": ""
+          },
+          {
+            "name": "value",
+            "type": "any",
+            "default": "-",
+            "description": "Field value",
+            "descriptionZh": ""
+          }
+        ],
+        "Form.Rule": [
+          {
+            "name": "defaultField",
+            "type": "[rule](#rule)",
+            "default": "-",
+            "description": "Validate rule for all array elements, valid when `type` is `array`",
+            "descriptionZh": ""
+          },
+          {
+            "name": "enum",
+            "type": "any\\[]",
+            "default": "-",
+            "description": "Match enum value. You need to set `type` to `enum` to enable this",
+            "descriptionZh": ""
+          },
+          {
+            "name": "fields",
+            "type": "Record&lt;string, [rule](#rule)>",
+            "default": "-",
+            "description": "Validate rule for child elements, valid when `type` is `array` or `object`",
+            "descriptionZh": ""
+          },
+          {
+            "name": "len",
+            "type": "number",
+            "default": "-",
+            "description": "Length of string, number, array",
+            "descriptionZh": ""
+          },
+          {
+            "name": "max",
+            "type": "number",
+            "default": "-",
+            "description": "`type` required: max length of `string`, `number`, `array`",
+            "descriptionZh": ""
+          },
+          {
+            "name": "message",
+            "type": "string \\",
+            "default": "-",
+            "description": "Error message. Will auto generate by [template](#validatemessages) if not provided",
+            "since": "ReactElement",
+            "descriptionZh": ""
+          },
+          {
+            "name": "min",
+            "type": "number",
+            "default": "-",
+            "description": "`type` required: min length of `string`, `number`, `array`",
+            "descriptionZh": ""
+          },
+          {
+            "name": "pattern",
+            "type": "RegExp",
+            "default": "-",
+            "description": "Regex pattern",
+            "descriptionZh": ""
+          },
+          {
+            "name": "required",
+            "type": "boolean",
+            "default": "-",
+            "description": "Required field",
+            "descriptionZh": ""
+          },
+          {
+            "name": "transform",
+            "type": "(value) => any",
+            "default": "-",
+            "description": "Transform value to the rule before validation",
+            "descriptionZh": ""
+          },
+          {
+            "name": "type",
+            "type": "`number` \\",
+            "default": "-",
+            "description": "Normally `string` \\",
+            "since": "`boolean` \\",
+            "descriptionZh": ""
+          },
+          {
+            "name": "validateTrigger",
+            "type": "string \\",
+            "default": "-",
+            "description": "Set validate trigger event. Must be the sub set of `validateTrigger` in Form.Item",
+            "since": "string\\[]",
+            "descriptionZh": ""
+          },
+          {
+            "name": "validator",
+            "type": "([rule](#rule), value) => Promise",
+            "default": "-",
+            "description": "Customize validation rule. Accept Promise as return. See [example](#form-demo-register)",
+            "descriptionZh": ""
+          },
+          {
+            "name": "warningOnly",
+            "type": "boolean",
+            "default": "-",
+            "description": "Warning only. Not block form submit",
+            "since": "4.17.0",
+            "descriptionZh": ""
+          },
+          {
+            "name": "whitespace",
+            "type": "boolean",
+            "default": "-",
+            "description": "Failed if only has whitespace, only work with `type: 'string'` rule",
+            "descriptionZh": ""
+          }
+        ],
+        "Form.WatchOptions": [
+          {
+            "name": "form",
+            "type": "FormInstance",
+            "default": "Current form in context",
+            "description": "Form instance",
+            "since": "5.4.0",
+            "descriptionZh": ""
+          },
+          {
+            "name": "preserve",
+            "type": "boolean",
+            "default": "false",
+            "description": "Whether to watch the field which has no matched `Form.Item`",
+            "since": "5.4.0",
+            "descriptionZh": ""
+          }
+        ]
+      }
     },
     {
       "name": "Grid",
@@ -9655,6 +10307,178 @@
             "default": "-",
             "description": "Callback when `visible` changed",
             "since": "-",
+            "descriptionZh": "当 `visible` 发生改变时的回调"
+          }
+        ],
+        "Image.PreviewGroup": [
+          {
+            "name": "preview",
+            "type": "boolean \\",
+            "default": "[PreviewGroupType](#previewgrouptype)",
+            "description": "Preview config, `disabled` when false",
+            "since": "true",
+            "descriptionZh": "预览参数，为 `false` 时禁用"
+          },
+          {
+            "name": "items",
+            "type": "string[] \\",
+            "default": "{ src: string, crossOrigin: string, ... }[]",
+            "description": "Preview items",
+            "since": "-",
+            "descriptionZh": "预览数组"
+          },
+          {
+            "name": "fallback",
+            "type": "string",
+            "default": "-",
+            "description": "Load failure fault-tolerant src",
+            "since": "5.7.0",
+            "descriptionZh": "加载失败容错地址"
+          }
+        ],
+        "Image.PreviewGroupType": [
+          {
+            "name": "visible",
+            "type": "boolean",
+            "default": "-",
+            "description": "Whether the preview dialog is visible or not",
+            "since": "-",
+            "descriptionZh": "是否显示"
+          },
+          {
+            "name": "getContainer",
+            "type": "string \\",
+            "default": "HTMLElement \\",
+            "description": "The mounted node for preview dialog but still display at fullScreen",
+            "since": "(() => HTMLElement) \\",
+            "descriptionZh": "指定预览挂载的节点，但依旧为全屏展示，false 为挂载在当前位置"
+          },
+          {
+            "name": "movable",
+            "type": "boolean",
+            "default": "true",
+            "description": "whether can be moved",
+            "since": "5.8.0",
+            "descriptionZh": "是否可移动"
+          },
+          {
+            "name": "current",
+            "type": "number",
+            "default": "-",
+            "description": "The index of the current preview",
+            "since": "4.12.0",
+            "descriptionZh": "当前预览图的 index"
+          },
+          {
+            "name": "mask",
+            "type": "ReactNode",
+            "default": "-",
+            "description": "Thumbnail mask",
+            "since": "4.9.0",
+            "descriptionZh": "缩略图遮罩"
+          },
+          {
+            "name": "maskClassName",
+            "type": "string",
+            "default": "-",
+            "description": "The className of the mask",
+            "since": "4.11.0",
+            "descriptionZh": "缩略图遮罩类名"
+          },
+          {
+            "name": "rootClassName",
+            "type": "string",
+            "default": "-",
+            "description": "The classname of the preview root DOM",
+            "since": "5.4.0",
+            "descriptionZh": "预览图的根 DOM 类名，不做推荐了，v6 会移到根组件上"
+          },
+          {
+            "name": "scaleStep",
+            "type": "number",
+            "default": "0.5",
+            "description": "`1 + scaleStep` is the step to increase or decrease the scale",
+            "since": "-",
+            "descriptionZh": "`1 + scaleStep` 为缩放放大的每步倍数"
+          },
+          {
+            "name": "minScale",
+            "type": "number",
+            "default": "1",
+            "description": "Min scale",
+            "since": "5.7.0",
+            "descriptionZh": "最小缩放倍数"
+          },
+          {
+            "name": "maxScale",
+            "type": "number",
+            "default": "50",
+            "description": "Max scale",
+            "since": "5.7.0",
+            "descriptionZh": "最大放大倍数"
+          },
+          {
+            "name": "closeIcon",
+            "type": "React.ReactNode",
+            "default": "-",
+            "description": "Custom close icon",
+            "since": "5.7.0",
+            "descriptionZh": "自定义关闭 Icon"
+          },
+          {
+            "name": "forceRender",
+            "type": "boolean",
+            "default": "-",
+            "description": "Force render preview dialog",
+            "since": "-",
+            "descriptionZh": "强制渲染预览图"
+          },
+          {
+            "name": "countRender",
+            "type": "(current: number, total: number) => React.ReactNode",
+            "default": "-",
+            "description": "Custom preview count content",
+            "since": "4.20.0",
+            "descriptionZh": "自定义预览计数内容"
+          },
+          {
+            "name": "toolbarRender",
+            "type": "(originalNode: React.ReactElement, info: [ToolbarRenderInfoType](#toolbarrenderinfotype)) => React.ReactNode",
+            "default": "-",
+            "description": "Custom toolbar render",
+            "since": "5.7.0, `info.image`: 5.18.0",
+            "descriptionZh": "自定义工具栏"
+          },
+          {
+            "name": "imageRender",
+            "type": "(originalNode: React.ReactElement, info: { transform: [TransformType](#transformtype), image: [ImgInfo](#imginfo), current: number }) => React.ReactNode",
+            "default": "-",
+            "description": "Custom preview content",
+            "since": "5.7.0, image: 5.18.0",
+            "descriptionZh": "自定义预览内容"
+          },
+          {
+            "name": "onTransform",
+            "type": "{ transform: [TransformType](#transformtype), action: [TransformAction](#transformaction) }",
+            "default": "-",
+            "description": "Callback when the transform of image changed",
+            "since": "5.7.0",
+            "descriptionZh": "预览图 transform 变化的回调"
+          },
+          {
+            "name": "onChange",
+            "type": "(current: number, prevCurrent: number) => void",
+            "default": "-",
+            "description": "Callback when switch preview image",
+            "since": "5.3.0",
+            "descriptionZh": "切换预览图的回调"
+          },
+          {
+            "name": "onVisibleChange",
+            "type": "(visible: boolean, prevVisible: boolean, current: number) => void",
+            "default": "-",
+            "description": "Callback when `visible` changed",
+            "since": "current Property 5.3.0",
             "descriptionZh": "当 `visible` 发生改变时的回调"
           }
         ]
@@ -10840,7 +11664,34 @@
           "question": "Why `changeOnWheel` unable to control whether the mouse scroll wheel changes value?",
           "answer": "> The use of the `type` attribute is deprecated\n\nThe InputNumber component allows you to use all the attributes of the input element and ultimately pass them to the input element, This attribute will also be added to the input element when you pass in `type='number'`, which will activate native behavior (allowing the mouse wheel to change the value), As a result `changeOnWheel` cannot control whether the mouse wheel changes the value."
         }
-      ]
+      ],
+      "subComponentProps": {
+        "InputNumber.Ref": [
+          {
+            "name": "blur()",
+            "type": "-",
+            "default": "-",
+            "description": "Remove focus",
+            "descriptionZh": ""
+          },
+          {
+            "name": "focus()",
+            "type": "(option?: { preventScroll?: boolean, cursor?: 'start' \\",
+            "default": "-",
+            "description": "Get focus",
+            "since": "'end' \\",
+            "descriptionZh": ""
+          },
+          {
+            "name": "nativeElement",
+            "type": "-",
+            "default": "-",
+            "description": "The native DOM element",
+            "since": "5.17.3",
+            "descriptionZh": ""
+          }
+        ]
+      }
     },
     {
       "name": "Layout",
@@ -15361,6 +16212,20 @@
           "default": "-",
           "description": "According to value for comparison, to determine whether the selected",
           "descriptionZh": "根据 value 进行比较，判断是否选中"
+        },
+        {
+          "name": "blur()",
+          "type": "",
+          "default": "-",
+          "description": "Remove focus",
+          "descriptionZh": ""
+        },
+        {
+          "name": "focus()",
+          "type": "",
+          "default": "-",
+          "description": "Get focus",
+          "descriptionZh": ""
         }
       ],
       "demos": [
@@ -15935,7 +16800,25 @@
           "description": "Small star size",
           "descriptionZh": "小星星尺寸"
         }
-      ]
+      ],
+      "subComponentProps": {
+        "Rate.Methods": [
+          {
+            "name": "blur()",
+            "type": "",
+            "default": "-",
+            "description": "Remove focus",
+            "descriptionZh": ""
+          },
+          {
+            "name": "focus()",
+            "type": "",
+            "default": "-",
+            "description": "Get focus",
+            "descriptionZh": ""
+          }
+        ]
+      }
     },
     {
       "name": "Result",
@@ -18021,6 +18904,22 @@
             "since": "IDENTITY",
             "descriptionZh": "Slider 会把当前值传给 `formatter`，并在 Tooltip 中显示 `formatter` 的返回值，若为 null，则隐藏 Tooltip"
           }
+        ],
+        "Slider.Methods": [
+          {
+            "name": "blur()",
+            "type": "",
+            "default": "-",
+            "description": "Remove focus",
+            "descriptionZh": ""
+          },
+          {
+            "name": "focus()",
+            "type": "",
+            "default": "-",
+            "description": "Get focus",
+            "descriptionZh": ""
+          }
         ]
       }
     },
@@ -19477,7 +20376,25 @@
           "question": "Why not work in Form.Item?",
           "answer": "Form.Item default bind value to `value` property, but Switch value property is `checked`. You can use `valuePropName` to change bind property.\n\n```tsx | pure\n<Form.Item name=\"fieldA\" valuePropName=\"checked\">\n  <Switch />\n</Form.Item>\n```"
         }
-      ]
+      ],
+      "subComponentProps": {
+        "Switch.Methods": [
+          {
+            "name": "blur()",
+            "type": "",
+            "default": "-",
+            "description": "Remove focus",
+            "descriptionZh": ""
+          },
+          {
+            "name": "focus()",
+            "type": "",
+            "default": "-",
+            "description": "Get focus",
+            "descriptionZh": ""
+          }
+        ]
+      }
     },
     {
       "name": "Table",
@@ -22218,7 +23135,43 @@
           "descriptionZh": "TimePicker 形态变体，可选 `outlined` `filled` `borderless` `underlined` 四种形态。",
           "code": "import React from 'react';\nimport { Flex, TimePicker } from 'antd';\n\nconst { RangePicker } = TimePicker;\n\nconst App: React.FC = () => (\n  <Flex vertical gap={12}>\n    <Flex gap={8}>\n      <TimePicker placeholder=\"Outlined\" />\n      <RangePicker placeholder={['Outlined Start', 'Outlined End']} />\n    </Flex>\n    <Flex gap={8}>\n      <TimePicker variant=\"filled\" placeholder=\"Filled\" />\n      <RangePicker variant=\"filled\" placeholder={['Filled Start', 'Filled End']} />\n    </Flex>\n    <Flex gap={8}>\n      <TimePicker variant=\"borderless\" placeholder=\"Borderless\" />\n      <RangePicker variant=\"borderless\" placeholder={['Borderless Start', 'Borderless End']} />\n    </Flex>\n    <Flex gap={8}>\n      <TimePicker variant=\"underlined\" placeholder=\"Underlined\" />\n      <RangePicker variant=\"underlined\" placeholder={['Underlined Start', 'Underlined End']} />\n    </Flex>\n  </Flex>\n);\n\nexport default App;\n"
         }
-      ]
+      ],
+      "subComponentProps": {
+        "TimePicker.Methods": [
+          {
+            "name": "blur()",
+            "type": "",
+            "default": "-",
+            "description": "Remove focus",
+            "descriptionZh": ""
+          },
+          {
+            "name": "focus()",
+            "type": "",
+            "default": "-",
+            "description": "Get focus",
+            "descriptionZh": ""
+          }
+        ],
+        "TimePicker.RangePicker": [
+          {
+            "name": "disabledTime",
+            "type": "[RangeDisabledTime](#rangedisabledtime)",
+            "default": "-",
+            "description": "To specify the time that cannot be selected",
+            "since": "4.19.0",
+            "descriptionZh": "不可选择的时间"
+          },
+          {
+            "name": "order",
+            "type": "boolean",
+            "default": "true",
+            "description": "Order start and end time",
+            "since": "4.1.0",
+            "descriptionZh": "始末时间是否自动排序"
+          }
+        ]
+      }
     },
     {
       "name": "Tooltip",

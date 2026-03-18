@@ -34,7 +34,7 @@ function parseTable(tableText: string, lang: 'en' | 'zh'): PropData[] {
   const typeIdx = headerRow.findIndex((h) => h === 'Type' || h === '类型');
   const defaultIdx = headerRow.findIndex((h) => h === 'Default' || h === '默认值');
   const versionIdx = headerRow.findIndex((h) => h === 'Version' || h === '版本');
-  // "Param" is used in some components (e.g. Menu) alongside the standard "Property"
+  // "Param" used in some components (e.g. Menu) alongside the standard "Property"
   const nameIdx = headerRow.findIndex((h) =>
     h === 'Property' || h === '属性' ||
     h === 'Name' || h === '参数' ||
@@ -81,23 +81,22 @@ function parseTable(tableText: string, lang: 'en' | 'zh'): PropData[] {
 }
 
 /**
- * Strip markdown / HTML noise from a ### heading label.
+ * Strip markdown / HTML noise from a heading label.
  * e.g. "Avatar.Group <Badge>4.5.0+</Badge>" → "Avatar.Group"
  *      "useConfig() <Badge>5.3.0+</Badge> {#useconfig}" → "useConfig()"
  *      "RequestOptions {#request-options}" → "RequestOptions"
  */
 function cleanLabel(raw: string): string {
   return raw
-    .replace(/<Badge>[^<]*<\/Badge>/gi, '')  // strip <Badge>...</Badge>
-    .replace(/\{#[^}]+\}/g, '')              // strip {#anchor} fragments
+    .replace(/<Badge>[^<]*<\/Badge>/gi, '')   // strip <Badge>...</Badge>
+    .replace(/\{#[^}]+\}/g, '')               // strip {#anchor} fragments
     .trim();
 }
 
 /**
- * Determine whether a ### section heading represents the main component props
- * (vs. a sub-component / sub-type section).
+ * Determine whether a section heading represents the main component props.
  *
- * Handles the many naming conventions found across antd's markdown docs:
+ * Handles naming conventions found across antd's markdown docs:
  *   - Exact: "Splitter" → main for Splitter
  *   - With suffix: "Select props", "Anchor Props", "Tree props" → main
  *   - Slash variants: "Radio/Radio.Button" → main for Radio
@@ -114,7 +113,7 @@ function isMainSection(label: string, componentName: string): boolean {
   // Exact match
   if (lcLabel === lcName) return true;
 
-  // Strip common suffixes to get the "base" topic word(s)
+  // Strip common suffixes to get the base topic word(s)
   const lcBase = lcLabel
     .replace(/\s+(props?|api|options?|config(?:uration)?|ref|methods?|types?)$/, '')
     .trim();
@@ -122,12 +121,11 @@ function isMainSection(label: string, componentName: string): boolean {
   // Base exactly matches component name: "Select props" → "select" === "select"
   if (lcBase === lcName) return true;
 
-  // Base is prefix of component name (handles "Tree props" for "TreeSelect")
+  // Base is a prefix of component name (handles "Tree props" for "TreeSelect")
   // Require at least 4 chars to avoid spurious matches
   if (lcBase.length >= 4 && lcName.startsWith(lcBase)) return true;
 
-  // Component name starts with the label (handles singular "Mention" for "Mentions")
-  // Allow at most 2 chars difference
+  // Component name starts with the label: singular/plural "Mention" for "Mentions"
   if (lcName.startsWith(lcLabel) && lcLabel.length >= lcName.length - 2) return true;
 
   // Slash format: "Radio/Radio.Button" → first part is the component name
@@ -139,38 +137,73 @@ function isMainSection(label: string, componentName: string): boolean {
   return false;
 }
 
+/** Extract all tables from a block of text and accumulate props */
+function extractTablesFromBlock(block: string, lang: 'en' | 'zh'): PropData[] {
+  const result: PropData[] = [];
+  const tableRegex = /\|(.+)\|\n\|[\s:|-]+\|\n((?:\|.+\|\n?)*)/g;
+  let m;
+  while ((m = tableRegex.exec(block)) !== null) {
+    result.push(...parseTable(m[0], lang));
+  }
+  return result;
+}
+
 /**
- * Split the API section into sub-sections by ### headings.
- * Returns a map of cleaned label → props array.
+ * Split the API documentation into per-section prop arrays.
+ *
+ * Scans from "## API" through all intermediate ## sections until it hits a
+ * terminal section (Design Token, FAQ, Note, Examples, When To Use).
+ * Within each block, ### headings create named sub-sections; content
+ * appearing before the first ### belongs to the ## heading itself.
+ *
+ * Returns a Map<label, PropData[]>.
  */
 function parseApiSections(content: string, lang: 'en' | 'zh'): Map<string, PropData[]> {
   const sections = new Map<string, PropData[]>();
 
-  // Find the ## API section
-  const apiMatch = content.match(/^## API/m);
+  // Find the start of ## API
+  const apiMatch = content.match(/^## API\b/m);
   if (!apiMatch || apiMatch.index === undefined) return sections;
 
   const afterApi = content.slice(apiMatch.index);
 
-  // Stop at next ## heading (not ###)
-  const nextSection = afterApi.match(/\n## (?!API)/m);
-  const apiContent = nextSection?.index !== undefined ? afterApi.slice(0, nextSection.index) : afterApi;
+  // Stop at terminal ## sections that never contain API tables
+  const terminalRe = /^## (?:Design Token|FAQ|Note|Examples?|When To Use|When to use|Best Practices?|Semantic DOM)\b/im;
+  const terminalMatch = afterApi.match(terminalRe);
+  const apiBlock = terminalMatch?.index !== undefined
+    ? afterApi.slice(0, terminalMatch.index)
+    : afterApi;
 
-  // Split by ### headings; first part (before any ###) gets label '__main__'
-  const parts = apiContent.split(/^(?=### )/m);
+  // Split the whole API block by ## headings (level 2)
+  // Each chunk is one ## section; first chunk is the "## API" section itself
+  const h2Chunks = apiBlock.split(/^(?=## )/m).filter(Boolean);
 
-  for (const part of parts) {
-    const headingMatch = part.match(/^### (.+)$/m);
-    const rawLabel = headingMatch ? headingMatch[1].trim() : '__main__';
-    const label = rawLabel === '__main__' ? '__main__' : cleanLabel(rawLabel);
+  for (const chunk of h2Chunks) {
+    // Determine this chunk's ## heading label
+    const h2Match = chunk.match(/^## (.+)$/m);
+    const rawH2 = h2Match ? h2Match[1].trim() : 'API';
+    // "API" itself is treated as the root section (no sub-component label)
+    const h2Label = rawH2 === 'API' ? '__api_root__' : cleanLabel(rawH2);
 
-    const tableRegex = /\|(.+)\|\n\|[\s:|-]+\|\n((?:\|.+\|\n?)*)/g;
-    let tableMatch;
-    while ((tableMatch = tableRegex.exec(part)) !== null) {
-      const tableProps = parseTable(tableMatch[0], lang);
-      if (tableProps.length > 0) {
-        const existing = sections.get(label) || [];
-        sections.set(label, [...existing, ...tableProps]);
+    // Split the chunk by ### headings
+    const h3Parts = chunk.split(/^(?=### )/m);
+
+    for (const part of h3Parts) {
+      const h3Match = part.match(/^### (.+)$/m);
+
+      let sectionLabel: string;
+      if (!h3Match) {
+        // Content before any ###: belongs to the ## heading
+        sectionLabel = h2Label === '__api_root__' ? '__main__' : h2Label;
+      } else {
+        // Content under a ### heading
+        sectionLabel = cleanLabel(h3Match[1].trim());
+      }
+
+      const props = extractTablesFromBlock(part, lang);
+      if (props.length > 0) {
+        const existing = sections.get(sectionLabel) || [];
+        sections.set(sectionLabel, [...existing, ...props]);
       }
     }
   }
@@ -227,7 +260,6 @@ export function extractProps(antdDir: string, dirName: string, componentName: st
       result.props = [...result.props, ...merged];
     } else {
       // Qualify as "ComponentName.Label" unless it already contains a dot
-      // (e.g. "FloatButton.Group" stays as-is; "Panel" becomes "Splitter.Panel")
       const fullName = label.includes('.')
         ? label
         : `${componentName}.${label}`;
