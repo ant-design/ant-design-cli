@@ -2,18 +2,21 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [main]
 
 jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # create GitHub Release
-      id-token: write   # npm OIDC Trusted Publishing
+      contents: write        # push release commit + tag, create GitHub Release
+      issues: write          # comment on issues
+      pull-requests: write   # comment on PRs
+      id-token: write        # npm OIDC Trusted Publishing + provenance
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # semantic-release needs full history
 
       - uses: actions/setup-node@v4
         with:
@@ -26,5 +29,7 @@ jobs:
       - run: npm run build
       - run: npm test
 
-      - name: Publish to npm (provenance)
-        run: npm publish --provenance --access public
+      - name: Release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
