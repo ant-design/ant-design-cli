@@ -138,6 +138,18 @@ onClick       (event: React.MouseEvent) => void                 -
 
 ---
 
+#### `antd doc <Component>`
+
+Output full API documentation for a component in markdown.
+
+```bash
+antd doc Button                     # full markdown docs to stdout
+antd doc Button --format json       # structured { name, doc }
+antd doc Button --lang zh           # Chinese docs
+```
+
+---
+
 #### `antd demo <Component> [name]`
 
 Get demo source code.
@@ -313,6 +325,7 @@ Add the following to your `CLAUDE.md` (or equivalent agent config) to let your C
 Use `@ant-design/cli` to query antd component knowledge:
 
 - `antd info <Component>` — get props, types, and defaults
+- `antd doc <Component>` — get full markdown documentation
 - `antd demo <Component> [name]` — get demo source code
 - `antd token <Component>` — get design tokens
 - `antd migrate 4 5 --apply ./src` — generate migration instructions

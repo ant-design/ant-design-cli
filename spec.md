@@ -67,9 +67,9 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 - CLI version aligns with the latest antd version (e.g., antd 6.3.2 → CLI 6.3.2)
 - The components schema is consistent across major versions to enable cross-version diffing
 
-## Commands (11)
+## Commands (12)
 
-### Knowledge Query (7)
+### Knowledge Query (8)
 
 #### `antd list`
 
@@ -136,6 +136,26 @@ JSON output (--detail):
 ```
 
 Text output for components with sub-components shows main props first, then each sub-component section labeled with its full name (e.g. `Splitter.Panel`).
+
+#### `antd doc <Component>`
+
+Output the full API documentation for a component in markdown format. Useful for agents that need the complete component reference in one call.
+
+```bash
+antd doc Button                          # output full markdown docs to stdout
+antd doc Button --format json            # structured output with name and doc fields
+antd doc Button --lang zh                # Chinese documentation
+```
+
+JSON output:
+```json
+{
+  "name": "Button",
+  "doc": "## Button\n\nTo trigger an operation.\n\n### When To Use\n..."
+}
+```
+
+For text and markdown formats, the raw markdown content is written directly to stdout with no additional decoration. Returns error `DOC_NOT_AVAILABLE` if documentation is not available for the component (e.g. older CLI versions without doc data).
 
 #### `antd demo <Component> [name]`
 
@@ -411,7 +431,7 @@ Common error codes: `COMPONENT_NOT_FOUND`, `VERSION_NOT_FOUND`, `NO_PROJECT_DETE
 ┌─────────────┐     ┌──────────────┐     ┌──────────────────┐
 │  CLI Layer   │────>│  Data Layer  │────>│  Data Sources    │
 │              │     │              │     │                  │
-│  11 commands │     │  Version     │     │  Bundled data    │
+│  12 commands │     │  Version     │     │  Bundled data    │
 │  Flag parse  │     │   routing    │     │  data/v4,v5,v6   │
 │  Output fmt  │     │  Filtering   │     │  (JSON files)    │
 └─────────────┘     └──────────────┘     └──────────────────┘
