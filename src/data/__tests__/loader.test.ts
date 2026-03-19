@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { loadMetadata, findComponent, getAllComponentNames } from '../loader.js';
+import { loadMetadata, loadMetadataForVersion, findComponent, getAllComponentNames } from '../loader.js';
 
 describe('loadMetadata', () => {
   it('should load v5 data', () => {
@@ -18,6 +18,34 @@ describe('loadMetadata', () => {
     const store = loadMetadata('v_nonexistent_version');
     expect(store.components).toEqual([]);
     expect(store.majorVersion).toBe('v_nonexistent_version');
+  });
+});
+
+describe('loadMetadataForVersion', () => {
+  it('should load data for a full semver version', () => {
+    const store = loadMetadataForVersion('5.21.0');
+    expect(store.components.length).toBeGreaterThan(0);
+  });
+
+  it('should fall back to major version for unrecognized minor', () => {
+    const store = loadMetadataForVersion('5.999.0');
+    expect(store.components.length).toBeGreaterThan(0);
+  });
+
+  it('should fall back for version without minor part', () => {
+    const store = loadMetadataForVersion('5');
+    expect(store.components.length).toBeGreaterThan(0);
+    expect(store.majorVersion).toBe('v5');
+  });
+
+  it('should return empty store for unknown major version', () => {
+    const store = loadMetadataForVersion('99.0.0');
+    expect(store.components).toEqual([]);
+  });
+
+  it('should load v4 snapshot', () => {
+    const store = loadMetadataForVersion('4.24.0');
+    expect(store.components.length).toBeGreaterThan(0);
   });
 });
 

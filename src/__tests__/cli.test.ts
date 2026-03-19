@@ -118,6 +118,39 @@ describe('CLI e2e', () => {
   });
 
 
+  // ─── Doc command ────────────────────────────────────────────────────
+
+  it('should show full doc for a component', () => {
+    const out = run('doc', 'Button');
+    expect(out).toContain('Button');
+    expect(out).toContain('API');
+  });
+
+  it('should show doc as JSON', () => {
+    const out = run('doc', 'Button', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.name).toBe('Button');
+    expect(typeof data.doc).toBe('string');
+    expect(data.doc.length).toBeGreaterThan(0);
+  });
+
+  it('should show doc in Chinese', () => {
+    const out = run('doc', 'Button', '--lang', 'zh');
+    expect(out).toContain('按钮');
+  });
+
+  it('should handle doc not found for unknown component', () => {
+    const result = runWithStatus('doc', 'NonExistent');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('not found');
+  });
+
+  it('should suggest correct name for doc typo', () => {
+    const result = runWithStatus('doc', 'Btn');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Did you mean 'Button'");
+  });
+
   it('should show changelog', () => {
     const out = run('changelog', '5.21.0');
     expect(out).toContain('5.21.0');

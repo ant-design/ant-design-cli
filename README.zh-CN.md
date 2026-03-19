@@ -138,6 +138,18 @@ onClick       (event: React.MouseEvent) => void                 -
 
 ---
 
+#### `antd doc <Component>`
+
+输出组件的完整 API 文档（Markdown 格式）。
+
+```bash
+antd doc Button                     # 输出完整 Markdown 文档
+antd doc Button --format json       # 结构化输出 { name, doc }
+antd doc Button --lang zh           # 中文文档
+```
+
+---
+
 #### `antd demo <Component> [name]`
 
 获取 Demo 源码。
@@ -313,6 +325,7 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 使用 `@ant-design/cli` 查询 antd 组件知识：
 
 - `antd info <Component>` — 获取 Props、类型和默认值
+- `antd doc <Component>` — 获取完整 Markdown 文档
 - `antd demo <Component> [name]` — 获取 Demo 源码
 - `antd token <Component>` — 获取 Design Token
 - `antd migrate 4 5 --apply ./src` — 生成迁移指令
