@@ -1,3 +1,17 @@
+# [6.4.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.4...v6.4.0) (2026-03-19)
+
+
+### Bug Fixes
+
+* **info:** fix isMainSection detection for all antd API patterns ([88e4b81](https://github.com/ant-design/ant-design-cli/commit/88e4b81c305492f561549ce9bd3013a23dc5a15b))
+* **info:** parse multi-section API docs (Form.FormInstance, useWatch, etc.) ([9f00d82](https://github.com/ant-design/ant-design-cli/commit/9f00d82b6fa3e1e393517495fe13808a5381e918))
+
+
+### Features
+
+* add `antd doc <component>` command to output full markdown docs ([c0fe017](https://github.com/ant-design/ant-design-cli/commit/c0fe017ce97a4925d8561a4ce7252df395243a8b))
+* **info:** show sub-component props separately (e.g. Splitter.Panel) ([bcd505d](https://github.com/ant-design/ant-design-cli/commit/bcd505d25480712b33d852d99a212b592b26185e))
+
 ## [6.3.4](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4) (2026-03-17)
 
 
