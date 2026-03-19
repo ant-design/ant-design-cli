@@ -291,6 +291,8 @@ Scan project for antd component/API usage statistics. Detects direct imports (`i
 ```bash
 antd usage                          # scan current directory
 antd usage ./src                    # scan specific directory
+antd usage --filter Button          # filter results to a specific component
+antd usage ./src -f Form            # combine directory and filter
 antd usage --format json
 ```
 

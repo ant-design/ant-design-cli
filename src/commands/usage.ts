@@ -52,9 +52,11 @@ export function registerUsageCommand(program: Command): void {
   program
     .command('usage [dir]')
     .description('Scan project for antd component/API usage statistics')
-    .action((dir?: string) => {
+    .option('-f, --filter <component>', 'Filter results to a specific component (e.g. Button)')
+    .action((dir?: string, cmdOpts?: { filter?: string }) => {
       const opts = program.opts<GlobalOptions>();
       const targetDir = dir || '.';
+      const filterName = cmdOpts?.filter?.toLowerCase();
 
       const files = collectFiles(targetDir);
       const aggregated = new Map<string, { imports: number; files: Set<string>; subComponents: Map<string, number> }>();
@@ -75,6 +77,7 @@ export function registerUsageCommand(program: Command): void {
       }
 
       const components: ComponentUsage[] = [...aggregated.entries()]
+        .filter(([name]) => !filterName || name.toLowerCase() === filterName)
         .sort((a, b) => b[1].imports - a[1].imports)
         .map(([name, data]) => {
           const usage: ComponentUsage = {
