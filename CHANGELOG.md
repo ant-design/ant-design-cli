@@ -1,3 +1,5 @@
+## [6.4.1](https://github.com/ant-design/ant-design-cli/compare/v6.4.0...v6.4.1) (2026-03-19)
+
 # [6.4.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.4...v6.4.0) (2026-03-19)
 
 
