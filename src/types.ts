@@ -50,6 +50,9 @@ export interface ComponentData {
   related?: string[];
   faq?: { question: string; answer: string }[];
   subComponents?: string[];
+  subComponentProps?: Record<string, PropData[]>;
+  doc?: string;
+  docZh?: string;
 }
 
 /** Pick the right text based on language. Falls back to English. */

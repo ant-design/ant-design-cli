@@ -9,6 +9,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import matter from 'gray-matter';
 import { extractComponents } from './extractors/components.js';
 import { extractProps } from './extractors/props.js';
 import { extractDemos } from './extractors/demos.js';
@@ -78,11 +79,19 @@ function main() {
 
   // 2. Build full ComponentData for each
   const components: ComponentData[] = componentMetas.map((meta) => {
-    const props = extractProps(antdDir, meta.dirName);
+    const { props, subComponentProps } = extractProps(antdDir, meta.dirName, meta.name);
     const demos = extractDemos(antdDir, meta.dirName);
     const tokens = extractTokens(antdDir, meta.name);
     const semantic = extractSemantic(antdDir, meta.dirName);
     const faq = extractFaq(antdDir, meta.dirName);
+
+    const hasSubComponentProps = Object.keys(subComponentProps).length > 0;
+
+    // Bundle raw markdown docs for `antd doc` command
+    const enDocPath = path.join(antdDir, 'components', meta.dirName, 'index.en-US.md');
+    const zhDocPath = path.join(antdDir, 'components', meta.dirName, 'index.zh-CN.md');
+    const doc = fs.existsSync(enDocPath) ? matter(fs.readFileSync(enDocPath, 'utf-8')).content : undefined;
+    const docZh = fs.existsSync(zhDocPath) ? matter(fs.readFileSync(zhDocPath, 'utf-8')).content : undefined;
 
     const component: ComponentData = {
       name: meta.name,
@@ -99,6 +108,9 @@ function main() {
       semanticStructure: semantic.length > 0 ? semantic : undefined,
       faq: faq.length > 0 ? faq : undefined,
       subComponents: meta.subComponents.length > 0 ? meta.subComponents : undefined,
+      subComponentProps: hasSubComponentProps ? subComponentProps : undefined,
+      doc: doc || undefined,
+      docZh: docZh || undefined,
     };
 
     return component;

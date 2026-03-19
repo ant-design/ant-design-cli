@@ -1,6 +1,7 @@
 import { Command, Option } from 'commander';
 import { registerListCommand } from './commands/list.js';
 import { registerInfoCommand } from './commands/info.js';
+import { registerDocCommand } from './commands/doc.js';
 import { registerDemoCommand } from './commands/demo.js';
 import { registerTokenCommand } from './commands/token.js';
 import { registerSemanticCommand } from './commands/semantic.js';
@@ -30,6 +31,7 @@ program.addOption(new Option('-V, --cli-version', 'Output the CLI version number
 // Knowledge Query commands
 registerListCommand(program);
 registerInfoCommand(program);
+registerDocCommand(program);
 registerDemoCommand(program);
 registerTokenCommand(program);
 registerSemanticCommand(program);
