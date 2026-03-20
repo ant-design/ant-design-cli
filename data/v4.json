@@ -306,18 +306,16 @@
         },
         {
           "name": "children (for customize input element)",
-          "type": "HTMLInputElement \\",
-          "default": "HTMLTextAreaElement \\",
+          "type": "HTMLInputElement | HTMLTextAreaElement | React.ReactElement&lt;InputProps>",
+          "default": "&lt;Input />",
           "description": "Customize input element",
-          "since": "React.ReactElement&lt;InputProps>",
           "descriptionZh": ""
         },
         {
           "name": "children (for dataSource)",
-          "type": "React.ReactElement&lt;OptionProps> \\",
-          "default": "Array&lt;React.ReactElement&lt;OptionProps>>",
+          "type": "React.ReactElement&lt;OptionProps> | Array&lt;React.ReactElement&lt;OptionProps>>",
+          "default": "-",
           "description": "Data source to auto complete",
-          "since": "-",
           "descriptionZh": ""
         },
         {
@@ -358,18 +356,16 @@
         },
         {
           "name": "dropdownMatchSelectWidth",
-          "type": "boolean \\",
-          "default": "number",
+          "type": "boolean | number",
+          "default": "true",
           "description": "Determine whether the dropdown menu and the select input are the same width. Default set `min-width` same as input. Will ignore when value less than select width. `false` will disable virtual scroll",
-          "since": "true",
           "descriptionZh": "下拉菜单和选择器同宽。默认将设置 `min-width`，当值小于选择框宽度时会被忽略。false 时会关闭虚拟滚动"
         },
         {
           "name": "filterOption",
-          "type": "boolean \\",
-          "default": "function(inputValue, option)",
+          "type": "boolean | function(inputValue, option)",
+          "default": "true",
           "description": "If true, filter options by input, if function, filter options against it. The function will receive two arguments, `inputValue` and `option`, if the function returns true, the option will be included in the filtered set; Otherwise, it will be excluded",
-          "since": "true",
           "descriptionZh": "是否根据输入项进行筛选。当其为一个函数时，会接收 `inputValue` `option` 两个参数，当 `option` 符合筛选条件时，应返回 true，反之则返回 false"
         },
         {
@@ -402,10 +398,10 @@
         },
         {
           "name": "status",
-          "type": "'error' \\",
-          "default": "'warning'",
+          "type": "'error' | 'warning'",
+          "default": "-",
           "description": "Set validation status",
-          "since": "-",
+          "since": "4.19.0",
           "descriptionZh": "设置校验状态"
         },
         {
@@ -528,26 +524,25 @@
         },
         {
           "name": "shape",
-          "type": "`circle` \\",
-          "default": "`square`",
+          "type": "`circle` | `square`",
+          "default": "`circle`",
           "description": "The shape of avatar",
-          "since": "`circle`",
           "descriptionZh": "指定头像的形状"
         },
         {
           "name": "size",
-          "type": "number \\",
-          "default": "`large` \\",
+          "type": "number | `large` | `small` | `default` | { xs: number, sm: number, ...}",
+          "default": "`default`",
           "description": "The size of the avatar",
-          "since": "`small` \\",
+          "since": "4.7.0",
           "descriptionZh": "设置头像的大小"
         },
         {
           "name": "src",
-          "type": "string \\",
-          "default": "ReactNode",
+          "type": "string | ReactNode",
+          "default": "-",
           "description": "The address of the image for an image avatar or image element",
-          "since": "-",
+          "since": "ReactNode: 4.8.0",
           "descriptionZh": "图片类头像的资源地址或者图片元素"
         },
         {
@@ -559,18 +554,17 @@
         },
         {
           "name": "draggable",
-          "type": "boolean \\",
-          "default": "`'true'` \\",
+          "type": "boolean | `'true'` | `'false'`",
+          "default": "-",
           "description": "Whether the picture is allowed to be dragged",
-          "since": "`'false'`",
           "descriptionZh": "图片是否允许拖动"
         },
         {
           "name": "crossOrigin",
-          "type": "`'anonymous'` \\",
-          "default": "`'use-credentials'` \\",
+          "type": "`'anonymous'` | `'use-credentials'` | `''`",
+          "default": "-",
           "description": "CORS settings attributes",
-          "since": "`''`",
+          "since": "4.17.0",
           "descriptionZh": "CORS 属性设置"
         },
         {
@@ -595,18 +589,17 @@
           },
           {
             "name": "maxPopoverPlacement",
-            "type": "`top` \\",
-            "default": "`bottom`",
+            "type": "`top` | `bottom`",
+            "default": "`top`",
             "description": "The placement of excess avatar Popover",
-            "since": "`top`",
             "descriptionZh": "多余头像气泡弹出位置"
           },
           {
             "name": "maxPopoverTrigger",
-            "type": "`hover` \\",
-            "default": "`focus` \\",
+            "type": "`hover` | `focus` | `click`",
+            "default": "`hover`",
             "description": "Set the trigger of excess avatar Popover",
-            "since": "`click`",
+            "since": "4.17.0",
             "descriptionZh": "设置多余头像 Popover 的触发方式"
           },
           {
@@ -618,10 +611,10 @@
           },
           {
             "name": "size",
-            "type": "number \\",
-            "default": "`large` \\",
+            "type": "number | `large` | `small` | `default` | { xs: number, sm: number, ...}",
+            "default": "`default`",
             "description": "The size of the avatar",
-            "since": "`small` \\",
+            "since": "4.8.0",
             "descriptionZh": "设置头像的大小"
           }
         ]
@@ -724,18 +717,17 @@
         },
         {
           "name": "size",
-          "type": "`default` \\",
-          "default": "`small`",
+          "type": "`default` | `small`",
+          "default": "-",
           "description": "If `count` is set, `size` sets the size of badge",
-          "since": "-",
+          "since": "4.6.0",
           "descriptionZh": "在设置了 `count` 的前提下有效，设置小圆点的大小"
         },
         {
           "name": "status",
-          "type": "`success` \\",
-          "default": "`processing` \\",
+          "type": "`success` | `processing` | `default` | `error` | `warning`",
+          "default": "-",
           "description": "Set Badge as a status dot",
-          "since": "`default` \\",
           "descriptionZh": "设置 Badge 为状态点"
         },
         {
@@ -767,10 +759,9 @@
           },
           {
             "name": "placement",
-            "type": "`start` \\",
+            "type": "`start` | `end`",
             "default": "`end`",
             "description": "The placement of the Ribbon, `start` and `end` follow text direction (RTL or LTR)",
-            "since": "`end`",
             "descriptionZh": "缎带的位置，`start` 和 `end` 随文字方向（RTL 或 LTR）变动"
           },
           {
@@ -939,26 +930,23 @@
         },
         {
           "name": "loading",
-          "type": "boolean \\",
-          "default": "{ delay: number }",
+          "type": "boolean | { delay: number }",
+          "default": "false",
           "description": "Set the loading status of button",
-          "since": "false",
           "descriptionZh": "设置按钮载入状态"
         },
         {
           "name": "shape",
-          "type": "`default` \\",
-          "default": "`circle` \\",
+          "type": "`default` | `circle` | `round`",
+          "default": "'default'",
           "description": "Can be set button shape",
-          "since": "`round`",
           "descriptionZh": "设置按钮形状"
         },
         {
           "name": "size",
-          "type": "`large` \\",
-          "default": "`middle` \\",
+          "type": "`large` | `middle` | `small`",
+          "default": "`middle`",
           "description": "Set the size of button",
-          "since": "`small`",
           "descriptionZh": "设置按钮大小"
         },
         {
@@ -1052,10 +1040,9 @@
         },
         {
           "name": "mode",
-          "type": "`month` \\",
-          "default": "`year`",
+          "type": "`month` | `year`",
+          "default": "`month`",
           "description": "The display mode of the calendar",
-          "since": "`month`",
           "descriptionZh": "初始模式"
         },
         {
@@ -1206,10 +1193,9 @@
         },
         {
           "name": "size",
-          "type": "`default` \\",
-          "default": "`small`",
+          "type": "`default` | `small`",
+          "default": "`default`",
           "description": "Size of card",
-          "since": "`default`",
           "descriptionZh": "card 的尺寸"
         },
         {
@@ -1349,10 +1335,9 @@
         },
         {
           "name": "dots",
-          "type": "boolean \\",
-          "default": "{ className?: string }",
+          "type": "boolean | { className?: string }",
+          "default": "true",
           "description": "Whether to show the dots at the bottom of the gallery, `object` for `dotsClass` and any others",
-          "since": "true",
           "descriptionZh": "是否显示面板指示点，如果为 `object` 则同时可以指定 `dotsClass` 或者"
         },
         {
@@ -1364,10 +1349,9 @@
         },
         {
           "name": "effect",
-          "type": "`scrollx` \\",
-          "default": "`fade`",
+          "type": "`scrollx` | `fade`",
+          "default": "`scrollx`",
           "description": "Transition effect",
-          "since": "`scrollx`",
           "descriptionZh": "动画效果函数"
         },
         {
@@ -1472,10 +1456,9 @@
         },
         {
           "name": "defaultValue",
-          "type": "string\\[] \\",
-          "default": "number\\[]",
+          "type": "string\\[] | number\\[]",
+          "default": "\\[]",
           "description": "Initial selected value",
-          "since": "\\[]",
           "descriptionZh": "默认的选中项"
         },
         {
@@ -1547,18 +1530,18 @@
         },
         {
           "name": "maxTagCount",
-          "type": "number \\",
-          "default": "`responsive`",
+          "type": "number | `responsive`",
+          "default": "-",
           "description": "Max tag count to show. `responsive` will cost render performance",
-          "since": "-",
+          "since": "4.17.0",
           "descriptionZh": "最多显示多少个 tag，响应式模式会对性能产生损耗"
         },
         {
           "name": "maxTagPlaceholder",
-          "type": "ReactNode \\",
-          "default": "function(omittedValues)",
+          "type": "ReactNode | function(omittedValues)",
+          "default": "-",
           "description": "Placeholder for not showing tags",
-          "since": "-",
+          "since": "4.17.0",
           "descriptionZh": "隐藏 tag 时显示的内容"
         },
         {
@@ -1600,26 +1583,24 @@
         },
         {
           "name": "showSearch",
-          "type": "boolean \\",
-          "default": "[Object](#showSearch)",
+          "type": "boolean | [Object](#showSearch)",
+          "default": "false",
           "description": "Whether show search input in single mode",
-          "since": "false",
           "descriptionZh": "在选择框中显示搜索框"
         },
         {
           "name": "size",
-          "type": "`large` \\",
-          "default": "`middle` \\",
+          "type": "`large` | `middle` | `small`",
+          "default": "-",
           "description": "The input size",
-          "since": "`small`",
           "descriptionZh": "输入框大小"
         },
         {
           "name": "status",
-          "type": "'error' \\",
-          "default": "'warning'",
+          "type": "'error' | 'warning'",
+          "default": "-",
           "description": "Set validation status",
-          "since": "-",
+          "since": "4.19.0",
           "descriptionZh": "设置校验状态"
         },
         {
@@ -1638,10 +1619,9 @@
         },
         {
           "name": "value",
-          "type": "string\\[] \\",
-          "default": "number\\[]",
+          "type": "string\\[] | number\\[]",
+          "default": "-",
           "description": "The selected value",
-          "since": "-",
           "descriptionZh": "指定选中项"
         },
         {
@@ -1669,10 +1649,10 @@
         },
         {
           "name": "showCheckedStrategy",
-          "type": "`Cascader.SHOW_PARENT` \\",
-          "default": "`Cascader.SHOW_CHILD`",
+          "type": "`Cascader.SHOW_PARENT` | `Cascader.SHOW_CHILD`",
+          "default": "`Cascader.SHOW_PARENT`",
           "description": "The way show selected item in box. ** `SHOW_CHILD`: ** just show child treeNode. **`Cascader.SHOW_PARENT`:** just show parent treeNode (when all child treeNode under the parent treeNode are checked)",
-          "since": "`Cascader.SHOW_PARENT`",
+          "since": "4.20.0",
           "descriptionZh": "定义选中项回填的方式。`Cascader.SHOW_CHILD`: 只显示选中的子节点。`Cascader.SHOW_PARENT`: 只显示父节点（当父节点下所有子节点都选中时）。"
         },
         {
@@ -1724,10 +1704,9 @@
           },
           {
             "name": "limit",
-            "type": "number \\",
-            "default": "false",
+            "type": "number | false",
+            "default": "50",
             "description": "Set the count of filtered items",
-            "since": "50",
             "descriptionZh": "搜索结果展示数量"
           },
           {
@@ -1848,10 +1827,9 @@
           },
           {
             "name": "options",
-            "type": "string\\[] \\",
-            "default": "number\\[] \\",
+            "type": "string\\[] | number\\[] | Option\\[]",
+            "default": "\\[]",
             "description": "Specifies options",
-            "since": "Option\\[]",
             "descriptionZh": ""
           },
           {
@@ -1907,10 +1885,9 @@
         },
         {
           "name": "activeKey",
-          "type": "string\\[] \\",
-          "default": "string <br/> number\\[] \\",
+          "type": "string\\[] | string <br/> number\\[] | number",
+          "default": "No default value. In `accordion` mode, it's the key of the first panel",
           "description": "Key of the active panel",
-          "since": "number",
           "descriptionZh": "当前激活 tab 面板的 key"
         },
         {
@@ -1922,18 +1899,17 @@
         },
         {
           "name": "collapsible",
-          "type": "`header` \\",
-          "default": "`icon` \\",
+          "type": "`header` | `icon` | `disabled`",
+          "default": "-",
           "description": "Specify whether the panels of children be collapsible or the trigger area of collapsible",
-          "since": "`disabled`",
+          "since": "4.9.0",
           "descriptionZh": "所有子面板是否可折叠或指定可折叠触发区域"
         },
         {
           "name": "defaultActiveKey",
-          "type": "string\\[] \\",
-          "default": "string <br/> number\\[] \\",
+          "type": "string\\[] | string <br/> number\\[] | number",
+          "default": "-",
           "description": "Key of the initial active panel",
-          "since": "number",
           "descriptionZh": "初始化选中面板的 key"
         },
         {
@@ -1952,10 +1928,10 @@
         },
         {
           "name": "expandIconPosition",
-          "type": "`start` \\",
-          "default": "`end`",
+          "type": "`start` | `end`",
+          "default": "-",
           "description": "Set expand icon position",
-          "since": "-",
+          "since": "4.21.0",
           "descriptionZh": "设置图标位置"
         },
         {
@@ -1981,10 +1957,10 @@
         "Collapse.Panel": [
           {
             "name": "collapsible",
-            "type": "`header` \\",
-            "default": "`icon` \\",
+            "type": "`header` | `icon` | `disabled`",
+            "default": "-",
             "description": "Specify whether the panel be collapsible or the trigger area of collapsible",
-            "since": "`disabled`",
+            "since": "4.9.0 (icon: 4.24.0)",
             "descriptionZh": "是否可折叠或指定可折叠触发区域"
           },
           {
@@ -2010,10 +1986,9 @@
           },
           {
             "name": "key",
-            "type": "string \\",
-            "default": "number",
+            "type": "string | number",
+            "default": "-",
             "description": "Unique key identifying the panel from among its siblings",
-            "since": "-",
             "descriptionZh": "对应 activeKey"
           },
           {
@@ -2116,10 +2091,9 @@
         },
         {
           "name": "componentSize",
-          "type": "`small` \\",
-          "default": "`middle` \\",
+          "type": "`small` | `middle` | `large`",
+          "default": "-",
           "description": "Config antd component size",
-          "since": "`large`",
           "descriptionZh": "设置 antd 组件大小"
         },
         {
@@ -2131,26 +2105,25 @@
         },
         {
           "name": "direction",
-          "type": "`ltr` \\",
-          "default": "`rtl`",
+          "type": "`ltr` | `rtl`",
+          "default": "`ltr`",
           "description": "Set direction of layout. See [demo](#components-config-provider-demo-direction)",
-          "since": "`ltr`",
           "descriptionZh": "设置文本展示方向。 [示例](#components-config-provider-demo-direction)"
         },
         {
           "name": "dropdownMatchSelectWidth",
-          "type": "boolean \\",
-          "default": "number",
+          "type": "boolean | number",
+          "default": "-",
           "description": "Determine whether the dropdown menu and the select input are the same width. Default set `min-width` same as input. Will ignore when value less than select width. `false` will disable virtual scroll",
-          "since": "-",
+          "since": "4.3.0",
           "descriptionZh": "下拉菜单和选择器同宽。默认将设置 `min-width`，当值小于选择框宽度时会被忽略。`false` 时会关闭虚拟滚动"
         },
         {
           "name": "form",
-          "type": "{ validateMessages?: [ValidateMessages](/components/form/#validateMessages), requiredMark?: boolean \\",
-          "default": "`optional` }",
+          "type": "{ validateMessages?: [ValidateMessages](/components/form/#validateMessages), requiredMark?: boolean | `optional` }",
+          "default": "-",
           "description": "Set Form common props",
-          "since": "-",
+          "since": "requiredMark: 4.8.0",
           "descriptionZh": "设置 Form 组件的通用属性"
         },
         {
@@ -2214,10 +2187,10 @@
         },
         {
           "name": "space",
-          "type": "{ size: `small` \\",
-          "default": "`middle` \\",
+          "type": "{ size: `small` | `middle` | `large` | `number` }",
+          "default": "-",
           "description": "Set Space `size`, ref [Space](/components/space)",
-          "since": "`large` \\",
+          "since": "4.1.0",
           "descriptionZh": "设置 Space 的 `size`，参考 [Space](/components/space)"
         },
         {
@@ -2324,10 +2297,9 @@
         },
         {
           "name": "mode",
-          "type": "`time` \\",
-          "default": "`date` \\",
+          "type": "`time` | `date` | `month` | `year` | `decade`",
+          "default": "-",
           "description": "The picker panel mode（ [Cannot select year or month anymore?](/docs/react/faq#When-set-mode-to-DatePicker/RangePicker,-cannot-select-year-or-month-anymore?) )",
-          "since": "`month` \\",
           "descriptionZh": ""
         },
         {
@@ -2355,18 +2327,17 @@
         },
         {
           "name": "picker",
-          "type": "`date` \\",
-          "default": "`week` \\",
+          "type": "`date` | `week` | `month` | `quarter` | `year`",
+          "default": "`date`",
           "description": "Set picker type",
-          "since": "`month` \\",
+          "since": "`quarter`: 4.1.0",
           "descriptionZh": ""
         },
         {
           "name": "placeholder",
-          "type": "string \\",
-          "default": "\\[string,string]",
+          "type": "string | \\[string,string]",
+          "default": "-",
           "description": "The placeholder of date input",
-          "since": "-",
           "descriptionZh": ""
         },
         {
@@ -2393,18 +2364,17 @@
         },
         {
           "name": "size",
-          "type": "`large` \\",
-          "default": "`middle` \\",
+          "type": "`large` | `middle` | `small`",
+          "default": "-",
           "description": "To determine the size of the input box, the height of `large` and `small`, are 40px and 24px respectively, while default size is 32px",
-          "since": "`small`",
           "descriptionZh": ""
         },
         {
           "name": "status",
-          "type": "'error' \\",
-          "default": "'warning'",
+          "type": "'error' | 'warning'",
+          "default": "-",
           "description": "Set validation status",
-          "since": "-",
+          "since": "4.19.0",
           "descriptionZh": ""
         },
         {
@@ -2474,10 +2444,9 @@
         },
         {
           "name": "format",
-          "type": "string \\",
-          "default": "(value: moment) => string \\",
+          "type": "string | (value: moment) => string | (string | (value: moment) => string)\\[]",
+          "default": "`YYYY-MM-DD`",
           "description": "To set the date format, refer to [moment.js](http://momentjs.com/). When an array is provided, all values are used for parsing and first value is used for formatting, support [Custom Format](#components-date-picker-demo-format)",
-          "since": "(string \\",
           "descriptionZh": "设置日期格式，为数组时支持多格式匹配，展示以第一个为准。配置参考 [moment.js](http://momentjs.com/)，支持[自定义格式](#components-date-picker-demo-format)"
         },
         {
@@ -2497,10 +2466,9 @@
         },
         {
           "name": "showTime",
-          "type": "object \\",
-          "default": "boolean",
+          "type": "object | boolean",
+          "default": "[TimePicker Options](/components/time-picker/#API)",
           "description": "To provide an additional time selection",
-          "since": "[TimePicker Options](/components/time-picker/#API)",
           "descriptionZh": "增加时间选择功能"
         },
         {
@@ -2778,10 +2746,9 @@
           },
           {
             "name": "dateRender",
-            "type": "function(currentDate: moment, today: moment, info: { range: `start` \\",
-            "default": "`end` }) => React.ReactNode",
+            "type": "function(currentDate: moment, today: moment, info: { range: `start` | `end` }) => React.ReactNode",
+            "default": "-",
             "description": "Customize date cell. `info` argument is added in 4.3.0",
-            "since": "-",
             "descriptionZh": "自定义日期单元格的内容。`info` 参数自 4.3.0 添加"
           },
           {
@@ -2807,26 +2774,23 @@
           },
           {
             "name": "disabledTime",
-            "type": "function(date: moment, partial: `start` \\",
-            "default": "`end`)",
+            "type": "function(date: moment, partial: `start` | `end`)",
+            "default": "-",
             "description": "To specify the time that cannot be selected",
-            "since": "-",
             "descriptionZh": "不可选择的时间"
           },
           {
             "name": "format",
-            "type": "string \\",
-            "default": "string\\[]",
+            "type": "string | string\\[]",
+            "default": "`YYYY-MM-DD HH:mm:ss`",
             "description": "To set the date format, refer to [moment.js](http://momentjs.com/). When an array is provided, all values are used for parsing and first value is used for formatting",
-            "since": "`YYYY-MM-DD HH:mm:ss`",
             "descriptionZh": "展示的日期格式"
           },
           {
             "name": "ranges",
-            "type": "{ \\[range: string]: [moment](http://momentjs.com/)\\[] } \\",
-            "default": "{ \\[range: string]: () => [moment](http://momentjs.com/)\\[] }",
+            "type": "{ \\[range: string]: [moment](http://momentjs.com/)\\[] } | { \\[range: string]: () => [moment](http://momentjs.com/)\\[] }",
+            "default": "-",
             "description": "The preseted ranges for quick selection",
-            "since": "-",
             "descriptionZh": "预设时间范围快捷选择"
           },
           {
@@ -2845,10 +2809,9 @@
           },
           {
             "name": "showTime",
-            "type": "object \\",
-            "default": "boolean",
+            "type": "object | boolean",
+            "default": "[TimePicker Options](/components/time-picker/#API)",
             "description": "To provide an additional time selection",
-            "since": "[TimePicker Options](/components/time-picker/#API)",
             "descriptionZh": "增加时间选择功能"
           },
           {
@@ -2867,10 +2830,9 @@
           },
           {
             "name": "onCalendarChange",
-            "type": "function(dates: \\[moment, moment], dateStrings: \\[string, string], info: { range:`start`\\",
-            "default": "`end` })",
+            "type": "function(dates: \\[moment, moment], dateStrings: \\[string, string], info: { range:`start`|`end` })",
+            "default": "-",
             "description": "Callback function, can be executed when the start time or the end time of the range is changing. `info` argument is added in 4.4.0",
-            "since": "-",
             "descriptionZh": "待选日期发生变化的回调。`info` 参数自 4.4.0 添加"
           },
           {
@@ -2941,18 +2903,16 @@
         },
         {
           "name": "layout",
-          "type": "`horizontal` \\",
-          "default": "`vertical`",
+          "type": "`horizontal` | `vertical`",
+          "default": "`horizontal`",
           "description": "Define description layout",
-          "since": "`horizontal`",
           "descriptionZh": "描述布局"
         },
         {
           "name": "size",
-          "type": "`default` \\",
-          "default": "`middle` \\",
+          "type": "`default` | `middle` | `small`",
+          "default": "-",
           "description": "Set the size of the list. Can be set to `middle`,`small`, or not filled",
-          "since": "`small`",
           "descriptionZh": "设置列表的大小。可以设置为 `middle` 、`small`, 或不填（只有设置 `bordered={true}` 生效）"
         },
         {
@@ -3032,18 +2992,16 @@
         },
         {
           "name": "orientation",
-          "type": "`left` \\",
-          "default": "`right` \\",
+          "type": "`left` | `right` | `center`",
+          "default": "`center`",
           "description": "The position of title inside divider",
-          "since": "`center`",
           "descriptionZh": "分割线标题的位置"
         },
         {
           "name": "orientationMargin",
-          "type": "string \\",
-          "default": "number",
+          "type": "string | number",
+          "default": "-",
           "description": "The margin-left/right between the title and its closest border, while the `orientation` must be `left` or `right`",
-          "since": "-",
           "descriptionZh": "标题和最近 left/right 边框之间的距离，去除了分割线，同时 `orientation` 必须为 `left` 或 `right`"
         },
         {
@@ -3063,10 +3021,9 @@
         },
         {
           "name": "type",
-          "type": "`horizontal` \\",
-          "default": "`vertical`",
+          "type": "`horizontal` | `vertical`",
+          "default": "`horizontal`",
           "description": "The direction type of divider",
-          "since": "`horizontal`",
           "descriptionZh": "水平还是垂直类型"
         }
       ],
@@ -3096,10 +3053,9 @@
       "props": [
         {
           "name": "arrow",
-          "type": "boolean \\",
-          "default": "{ pointAtCenter: boolean }",
+          "type": "boolean | { pointAtCenter: boolean }",
+          "default": "false",
           "description": "Whether the dropdown arrow should be visible",
-          "since": "false",
           "descriptionZh": ""
         },
         {
@@ -3107,7 +3063,7 @@
           "type": "boolean",
           "default": "true",
           "description": "Whether to adjust dropdown placement automatically when dropdown is off screen",
-          "since": ">= 4.24.5 < 5.0.0 \\",
+          "since": ">= 4.24.5 < 5.0.0 || >= 5.2.0",
           "descriptionZh": ""
         },
         {
@@ -3178,10 +3134,9 @@
         },
         {
           "name": "trigger",
-          "type": "Array&lt;`click`\\",
-          "default": "`hover`\\",
+          "type": "Array&lt;`click`|`hover`|`contextMenu`>",
+          "default": "\\[`hover`]",
           "description": "The trigger mode which executes the dropdown action. Note that hover can't be used on touchscreens",
-          "since": "`contextMenu`>",
           "descriptionZh": ""
         },
         {
@@ -3215,10 +3170,9 @@
           },
           {
             "name": "loading",
-            "type": "boolean \\",
-            "default": "{ delay: number }",
+            "type": "boolean | { delay: number }",
+            "default": "false",
             "description": "Set the loading status of button",
-            "since": "false",
             "descriptionZh": "设置按钮载入状态"
           },
           {
@@ -3321,10 +3275,9 @@
         },
         {
           "name": "component",
-          "type": "ComponentType \\",
-          "default": "false",
+          "type": "ComponentType | false",
+          "default": "form",
           "description": "Set the Form rendering element. Do not create a DOM node for `false`",
-          "since": "form",
           "descriptionZh": "设置 Form 渲染元素，为 `false` 则不创建 DOM 节点"
         },
         {
@@ -3350,10 +3303,9 @@
         },
         {
           "name": "labelAlign",
-          "type": "`left` \\",
+          "type": "`left` | `right`",
           "default": "`right`",
           "description": "The text align of label of all items",
-          "since": "`right`",
           "descriptionZh": "label 标签的文本对齐方式"
         },
         {
@@ -3373,10 +3325,9 @@
         },
         {
           "name": "layout",
-          "type": "`horizontal` \\",
-          "default": "`vertical` \\",
+          "type": "`horizontal` | `vertical` | `inline`",
+          "default": "`horizontal`",
           "description": "Form layout",
-          "since": "`inline`",
           "descriptionZh": "表单布局"
         },
         {
@@ -3396,26 +3347,24 @@
         },
         {
           "name": "requiredMark",
-          "type": "boolean \\",
-          "default": "`optional`",
+          "type": "boolean | `optional`",
+          "default": "true",
           "description": "Required mark style. Can use required mark or optional mark. You can not config to single Form.Item since this is a Form level config",
-          "since": "true",
+          "since": "4.6.0",
           "descriptionZh": "必选样式，可以切换为必选或者可选展示样式。此为 Form 配置，Form.Item 无法单独配置"
         },
         {
           "name": "scrollToFirstError",
-          "type": "boolean \\",
-          "default": "[Options](https://github.com/stipsan/scroll-into-view-if-needed/tree/ece40bd9143f48caf4b99503425ecb16b0ad8249#options)",
+          "type": "boolean | [Options](https://github.com/stipsan/scroll-into-view-if-needed/tree/ece40bd9143f48caf4b99503425ecb16b0ad8249#options)",
+          "default": "false",
           "description": "Auto scroll to first failed field when submit",
-          "since": "false",
           "descriptionZh": "提交失败自动滚动到第一个错误字段"
         },
         {
           "name": "size",
-          "type": "`small` \\",
-          "default": "`middle` \\",
+          "type": "`small` | `middle` | `large`",
+          "default": "-",
           "description": "Set field component size (antd components only)",
-          "since": "`large`",
           "descriptionZh": "设置字段组件的尺寸（仅限 antd 组件）"
         },
         {
@@ -3427,10 +3376,10 @@
         },
         {
           "name": "validateTrigger",
-          "type": "string \\",
-          "default": "string\\[]",
+          "type": "string | string\\[]",
+          "default": "`onChange`",
           "description": "Config field validate trigger",
-          "since": "`onChange`",
+          "since": "4.3.0",
           "descriptionZh": "统一设置字段触发验证的时机"
         },
         {
@@ -3613,10 +3562,9 @@
           },
           {
             "name": "labelAlign",
-            "type": "`left` \\",
+            "type": "`left` | `right`",
             "default": "`right`",
             "description": "The text align of label",
-            "since": "`right`",
             "descriptionZh": "标签文本对齐方式"
           },
           {
@@ -3679,18 +3627,17 @@
           },
           {
             "name": "shouldUpdate",
-            "type": "boolean \\",
-            "default": "(prevValue, curValue) => boolean",
+            "type": "boolean | (prevValue, curValue) => boolean",
+            "default": "false",
             "description": "Custom field update logic. See [below](#shouldUpdate)",
-            "since": "false",
             "descriptionZh": "自定义字段更新逻辑，说明[见下](#shouldUpdate)"
           },
           {
             "name": "tooltip",
-            "type": "ReactNode \\",
-            "default": "[TooltipProps & { icon: ReactNode }](/components/tooltip#API)",
+            "type": "ReactNode | [TooltipProps & { icon: ReactNode }](/components/tooltip#API)",
+            "default": "-",
             "description": "Config tooltip info",
-            "since": "-",
+            "since": "4.7.0",
             "descriptionZh": "配置提示信息"
           },
           {
@@ -3702,10 +3649,10 @@
           },
           {
             "name": "validateFirst",
-            "type": "boolean \\",
-            "default": "`parallel`",
+            "type": "boolean | `parallel`",
+            "default": "false",
             "description": "Whether stop validate on first rule of error for this field. Will parallel validate when `parallel` cofigured",
-            "since": "false",
+            "since": "`parallel`: 4.5.0",
             "descriptionZh": "当某一规则校验不通过时，是否停止剩下的规则的校验。设置 `parallel` 时会并行校验"
           },
           {
@@ -3717,10 +3664,9 @@
           },
           {
             "name": "validateTrigger",
-            "type": "string \\",
-            "default": "string\\[]",
+            "type": "string | string\\[]",
+            "default": "`onChange`",
             "description": "When to validate the value of children node",
-            "since": "`onChange`",
             "descriptionZh": "设置字段校验的时机"
           },
           {
@@ -3788,10 +3734,10 @@
           },
           {
             "name": "remove",
-            "type": "(index: number \\",
-            "default": "number\\[]) => void",
+            "type": "(index: number | number\\[]) => void",
+            "default": "number\\[]",
             "description": "remove form item",
-            "since": "number\\[]",
+            "since": "4.5.0",
             "descriptionZh": "删除表单项"
           }
         ],
@@ -4037,18 +3983,16 @@
           },
           {
             "name": "type",
-            "type": "`number` \\",
+            "type": "string",
             "default": "-",
-            "description": "Normally `string` \\",
-            "since": "`boolean` \\",
+            "description": "Normally `string` |`number` |`boolean` |`url` | `email`. More type to ref [here](https://github.com/yiminghe/async-validator#type)",
             "descriptionZh": ""
           },
           {
             "name": "validateTrigger",
-            "type": "string \\",
+            "type": "string | string\\[]",
             "default": "-",
             "description": "Set validate trigger event. Must be the sub set of `validateTrigger` in Form.Item",
-            "since": "string\\[]",
             "descriptionZh": ""
           },
           {
@@ -4089,26 +4033,25 @@
         "Grid.Row": [
           {
             "name": "align",
-            "type": "`top` \\",
-            "default": "`middle` \\",
+            "type": "`top` | `middle` | `bottom` | `stretch` | `{[key in 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl']: 'top' | 'middle' | 'bottom' | 'stretch'}`",
+            "default": "`top`",
             "description": "Vertical alignment",
-            "since": "`bottom` \\",
+            "since": "object: 4.24.0",
             "descriptionZh": ""
           },
           {
             "name": "gutter",
-            "type": "number \\",
-            "default": "object \\",
+            "type": "number | object | array",
+            "default": "0",
             "description": "Spacing between grids, could be a number or a object like { xs: 8, sm: 16, md: 24}. Or you can use array to make horizontal and vertical spacing work at the same time `[horizontal, vertical]`",
-            "since": "array",
             "descriptionZh": ""
           },
           {
             "name": "justify",
-            "type": "`start` \\",
-            "default": "`end` \\",
+            "type": "`start` | `end` | `center` | `space-around` | `space-between` | `space-evenly` | `{[key in 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl']: 'start' | 'end' | 'center' | 'space-around' | 'space-between' | 'space-evenly'}`",
+            "default": "`start`",
             "description": "Horizontal arrangement",
-            "since": "`center` \\",
+            "since": "object: 4.24.0",
             "descriptionZh": ""
           },
           {
@@ -4123,10 +4066,9 @@
         "Grid.Col": [
           {
             "name": "flex",
-            "type": "string \\",
-            "default": "number",
+            "type": "string | number",
+            "default": "-",
             "description": "Flex layout style",
-            "since": "-",
             "descriptionZh": ""
           },
           {
@@ -4166,50 +4108,44 @@
           },
           {
             "name": "xs",
-            "type": "number \\",
-            "default": "object",
+            "type": "number | object",
+            "default": "-",
             "description": "`screen < 576px` and also default setting, could be a `span` value or an object containing above props",
-            "since": "-",
             "descriptionZh": ""
           },
           {
             "name": "sm",
-            "type": "number \\",
-            "default": "object",
+            "type": "number | object",
+            "default": "-",
             "description": "`screen ≥ 576px`, could be a `span` value or an object containing above props",
-            "since": "-",
             "descriptionZh": ""
           },
           {
             "name": "md",
-            "type": "number \\",
-            "default": "object",
+            "type": "number | object",
+            "default": "-",
             "description": "`screen ≥ 768px`, could be a `span` value or an object containing above props",
-            "since": "-",
             "descriptionZh": ""
           },
           {
             "name": "lg",
-            "type": "number \\",
-            "default": "object",
+            "type": "number | object",
+            "default": "-",
             "description": "`screen ≥ 992px`, could be a `span` value or an object containing above props",
-            "since": "-",
             "descriptionZh": ""
           },
           {
             "name": "xl",
-            "type": "number \\",
-            "default": "object",
+            "type": "number | object",
+            "default": "-",
             "description": "`screen ≥ 1200px`, could be a `span` value or an object containing above props",
-            "since": "-",
             "descriptionZh": ""
           },
           {
             "name": "xxl",
-            "type": "number \\",
-            "default": "object",
+            "type": "number | object",
+            "default": "-",
             "description": "`screen ≥ 1600px`, could be a `span` value or an object containing above props",
-            "since": "-",
             "descriptionZh": ""
           }
         ]
@@ -4302,10 +4238,9 @@
           },
           {
             "name": "scriptUrl",
-            "type": "string \\",
-            "default": "string\\[]",
+            "type": "string | string\\[]",
+            "default": "-",
             "description": "The URL generated by [iconfont.cn](http://iconfont.cn/) project. Support `string[]` after `@ant-design/icons@4.1.0`",
-            "since": "-",
             "descriptionZh": ""
           }
         ],
@@ -4326,10 +4261,9 @@
           },
           {
             "name": "height",
-            "type": "string \\",
+            "type": "string | number",
             "default": "-",
             "description": "The height of the `svg` element",
-            "since": "`1em`",
             "descriptionZh": ""
           },
           {
@@ -4341,10 +4275,9 @@
           },
           {
             "name": "width",
-            "type": "string \\",
+            "type": "string | number",
             "default": "-",
             "description": "The width of the `svg` element",
-            "since": "`1em`",
             "descriptionZh": ""
           }
         ]
@@ -4379,10 +4312,10 @@
         },
         {
           "name": "height",
-          "type": "string \\",
-          "default": "number",
+          "type": "string | number",
+          "default": "-",
           "description": "Image height",
-          "since": "-",
+          "since": "4.6.0",
           "descriptionZh": "图像高度"
         },
         {
@@ -4395,10 +4328,10 @@
         },
         {
           "name": "preview",
-          "type": "boolean \\",
-          "default": "[previewType](#previewType)",
+          "type": "boolean | [previewType](#previewType)",
+          "default": "true",
           "description": "preview config, disabled when `false`",
-          "since": "true",
+          "since": "4.6.0 [previewType](#previewType):4.7.0",
           "descriptionZh": "预览参数，为 `false` 时禁用"
         },
         {
@@ -4411,10 +4344,10 @@
         },
         {
           "name": "width",
-          "type": "string \\",
-          "default": "number",
+          "type": "string | number",
+          "default": "-",
           "description": "Image width",
-          "since": "-",
+          "since": "4.6.0",
           "descriptionZh": "图像宽度"
         },
         {
@@ -4462,10 +4395,9 @@
         },
         {
           "name": "allowClear",
-          "type": "boolean \\",
-          "default": "{ clearIcon: ReactNode }",
+          "type": "boolean | { clearIcon: ReactNode }",
+          "default": "false",
           "description": "If allow to remove input content with clear icon",
-          "since": "false",
           "descriptionZh": "可以点击清除图标删除内容"
         },
         {
@@ -4506,18 +4438,18 @@
         },
         {
           "name": "showCount",
-          "type": "boolean \\",
-          "default": "{ formatter: (info: { value: string, count: number, maxLength?: number }) => ReactNode }",
+          "type": "boolean | { formatter: (info: { value: string, count: number, maxLength?: number }) => ReactNode }",
+          "default": "false",
           "description": "Whether show text count",
-          "since": "false",
+          "since": "4.18.0 info.value: 4.23.0",
           "descriptionZh": "是否展示字数"
         },
         {
           "name": "status",
-          "type": "'error' \\",
-          "default": "'warning'",
+          "type": "'error' | 'warning'",
+          "default": "-",
           "description": "Set validation status",
-          "since": "-",
+          "since": "4.19.0",
           "descriptionZh": "设置校验状态"
         },
         {
@@ -4529,10 +4461,9 @@
         },
         {
           "name": "size",
-          "type": "`large` \\",
-          "default": "`middle` \\",
+          "type": "`large` | `middle` | `small`",
+          "default": "-",
           "description": "The size of the input box. Note: in the context of a form, the `middle` size is used",
-          "since": "`small`",
           "descriptionZh": "控件大小。注：标准表单内的输入框大小限制为 `middle`"
         },
         {
@@ -4595,11 +4526,10 @@
           },
           {
             "name": "autoSize",
-            "type": "false or an object { minRows: 2, maxRows: 6 }",
-            "default": "boolean \\",
-            "description": "Height autosize feature, can be set to true \\",
-            "since": "object",
-            "descriptionZh": "自适应内容高度，可设置为 true \\"
+            "type": "boolean | object",
+            "default": "false",
+            "description": "Height autosize feature, can be set to true | false or an object { minRows: 2, maxRows: 6 }",
+            "descriptionZh": "自适应内容高度，可设置为 true | false 或对象：{ minRows: 2, maxRows: 6 }"
           },
           {
             "name": "bordered",
@@ -4626,10 +4556,10 @@
           },
           {
             "name": "showCount",
-            "type": "boolean \\",
-            "default": "{ formatter: (info: { value: string, count: number, maxLength?: number }) => string }",
+            "type": "boolean | { formatter: (info: { value: string, count: number, maxLength?: number }) => string }",
+            "default": "false",
             "description": "Whether show text count",
-            "since": "false",
+            "since": "4.7.0 formatter: 4.10.0 info.value: 4.23.0",
             "descriptionZh": "是否展示字数"
           },
           {
@@ -4655,8 +4585,8 @@
           },
           {
             "name": "enterButton",
-            "type": "boolean \\",
-            "default": "ReactNode",
+            "type": "boolean | ReactNode",
+            "default": "false",
             "description": "Whether to show an enter button after input. This property conflicts with the `addonAfter` property",
             "descriptionZh": "是否有确认按钮，可设为按钮文字。该属性会与 `addonAfter` 冲突。"
           },
@@ -4698,10 +4628,9 @@
           },
           {
             "name": "visibilityToggle",
-            "type": "boolean \\",
-            "default": "[VisibilityToggle](#VisibilityToggle)",
+            "type": "boolean | [VisibilityToggle](#VisibilityToggle)",
+            "default": "true",
             "description": "Whether show toggle button or control password visible",
-            "since": "true",
             "descriptionZh": "是否显示切换按钮或者控制密码显隐"
           },
           {
@@ -4732,7 +4661,7 @@
             "type": "",
             "default": "-",
             "description": "Get focus",
-            "since": "'end' \\",
+            "since": "option - 4.10.0",
             "descriptionZh": ""
           }
         ]
@@ -4781,10 +4710,10 @@
         },
         {
           "name": "controls",
-          "type": "boolean \\",
-          "default": "{ upIcon?: React.ReactNode; downIcon?: React.ReactNode; }",
+          "type": "boolean | { upIcon?: React.ReactNode; downIcon?: React.ReactNode; }",
+          "default": "-",
           "description": "Whether to show `+-` controls, or set custom arrows icon",
-          "since": "-",
+          "since": "4.19.0",
           "descriptionZh": ""
         },
         {
@@ -4813,10 +4742,10 @@
         },
         {
           "name": "formatter",
-          "type": "function(value: number \\",
-          "default": "string, info: { userTyping: boolean, input: string }): string",
+          "type": "function(value: number | string, info: { userTyping: boolean, input: string }): string",
+          "default": "-",
           "description": "Specifies the format of the value presented",
-          "since": "-",
+          "since": "info: 4.17.0",
           "descriptionZh": ""
         },
         {
@@ -4869,10 +4798,10 @@
         },
         {
           "name": "status",
-          "type": "'error' \\",
-          "default": "'warning'",
+          "type": "'error' | 'warning'",
+          "default": "-",
           "description": "Set validation status",
-          "since": "-",
+          "since": "4.19.0",
           "descriptionZh": ""
         },
         {
@@ -4885,18 +4814,18 @@
         },
         {
           "name": "size",
-          "type": "`large` \\",
-          "default": "`middle` \\",
+          "type": "`large` | `middle` | `small`",
+          "default": "-",
           "description": "The height of input box",
-          "since": "`small`",
+          "since": "-",
           "descriptionZh": ""
         },
         {
           "name": "step",
-          "type": "number \\",
-          "default": "string",
+          "type": "number | string",
+          "default": "1",
           "description": "The number to which the current value is increased or decreased. It can be an integer or decimal",
-          "since": "1",
+          "since": "-",
           "descriptionZh": ""
         },
         {
@@ -4917,10 +4846,10 @@
         },
         {
           "name": "onChange",
-          "type": "function(value: number \\",
-          "default": "string \\",
+          "type": "function(value: number | string | null)",
+          "default": "-",
           "description": "The callback triggered when the value is changed",
-          "since": "null)",
+          "since": "-",
           "descriptionZh": ""
         },
         {
@@ -4933,10 +4862,10 @@
         },
         {
           "name": "onStep",
-          "type": "(value: number, info: { offset: number, type: 'up' \\",
-          "default": "'down' }) => void",
+          "type": "(value: number, info: { offset: number, type: 'up' | 'down' }) => void",
+          "default": "-",
           "description": "The callback function that is triggered when click up or down buttons",
-          "since": "-",
+          "since": "4.7.0",
           "descriptionZh": ""
         }
       ],
@@ -5007,8 +4936,8 @@
         "Layout.Sider": [
           {
             "name": "breakpoint",
-            "type": "`xs` \\",
-            "default": "`sm` \\",
+            "type": "`xs` | `sm` | `md` | `lg` | `xl` | `xxl`",
+            "default": "-",
             "description": "[Breakpoints](/components/grid/#Col) of the responsive layout",
             "descriptionZh": "触发响应式布局的[断点](/components/grid/#Col)"
           },
@@ -5063,7 +4992,7 @@
           },
           {
             "name": "theme",
-            "type": "`light` \\",
+            "type": "`light` | `dark`",
             "default": "`dark`",
             "description": "Color theme of the sidebar",
             "descriptionZh": "主题颜色"
@@ -5077,8 +5006,8 @@
           },
           {
             "name": "width",
-            "type": "number \\",
-            "default": "string",
+            "type": "number | string",
+            "default": "200",
             "description": "Width of the sidebar",
             "descriptionZh": "宽度"
           },
@@ -5154,18 +5083,16 @@
         },
         {
           "name": "itemLayout",
-          "type": "`horizontal` \\",
-          "default": "`vertical`",
+          "type": "`horizontal` | `vertical`",
+          "default": "`horizontal`",
           "description": "The layout of list",
-          "since": "`horizontal`",
           "descriptionZh": "设置 `List.Item` 布局, 设置成 `vertical` 则竖直样式显示, 默认横排"
         },
         {
           "name": "loading",
-          "type": "boolean \\",
-          "default": "[SpinProps](/components/spin/#API) ([more](https://github.com/ant-design/ant-design/issues/8659))",
+          "type": "boolean | [SpinProps](/components/spin/#API) ([more](https://github.com/ant-design/ant-design/issues/8659))",
+          "default": "false",
           "description": "Shows a loading indicator while the contents of the list are being fetched",
-          "since": "false",
           "descriptionZh": "当卡片内容还在加载中时，可以用 `loading` 展示一个占位"
         },
         {
@@ -5184,10 +5111,9 @@
         },
         {
           "name": "pagination",
-          "type": "boolean \\",
-          "default": "object",
+          "type": "boolean | object",
+          "default": "false",
           "description": "Pagination [config](/components/pagination/), hide it by setting it to false",
-          "since": "false",
           "descriptionZh": "对应的 `pagination` 配置, 设置 false 不显示"
         },
         {
@@ -5199,18 +5125,16 @@
         },
         {
           "name": "rowKey",
-          "type": "`keyof` T \\",
-          "default": "(item: T) => `React.Key`",
+          "type": "`keyof` T | (item: T) => `React.Key`",
+          "default": "`\"key\"`",
           "description": "Item's unique value, could be an Item's key which holds a unique value of type `React.Key` or function that receives Item and returns a `React.Key`",
-          "since": "`\"key\"`",
           "descriptionZh": "当 `renderItem` 自定义渲染列表项有效时，自定义每一行的 `key` 的获取方式"
         },
         {
           "name": "size",
-          "type": "`default` \\",
-          "default": "`large` \\",
+          "type": "`default` | `large` | `small`",
+          "default": "`default`",
           "description": "Size of list",
-          "since": "`small`",
           "descriptionZh": "list 的尺寸"
         },
         {
@@ -5229,8 +5153,8 @@
         "List.pagination": [
           {
             "name": "position",
-            "type": "`top` \\",
-            "default": "`bottom` \\",
+            "type": "`top` | `bottom` | `both`",
+            "default": "`bottom`",
             "description": "The specify the position of `Pagination`",
             "descriptionZh": "指定分页显示的位置"
           }
@@ -5354,10 +5278,9 @@
         },
         {
           "name": "autoSize",
-          "type": "false or an object { minRows: 2, maxRows: 6 }",
-          "default": "boolean \\",
-          "description": "Textarea height autosize feature, can be set to true \\",
-          "since": "object",
+          "type": "boolean | object",
+          "default": "false",
+          "description": "Textarea height autosize feature, can be set to true | false or an object { minRows: 2, maxRows: 6 }",
           "descriptionZh": ""
         },
         {
@@ -5369,10 +5292,9 @@
         },
         {
           "name": "filterOption",
-          "type": "false \\",
-          "default": "(input: string, option: OptionProps) => boolean",
+          "type": "false | (input: string, option: OptionProps) => boolean",
+          "default": "-",
           "description": "Customize filter option logic",
-          "since": "-",
           "descriptionZh": ""
         },
         {
@@ -5391,18 +5313,16 @@
         },
         {
           "name": "placement",
-          "type": "`top` \\",
+          "type": "`top` | `bottom`",
           "default": "`bottom`",
           "description": "Set popup placement",
-          "since": "`bottom`",
           "descriptionZh": ""
         },
         {
           "name": "prefix",
-          "type": "string \\",
-          "default": "string\\[]",
+          "type": "string | string\\[]",
+          "default": "`@`",
           "description": "Set trigger prefix keyword",
-          "since": "`@`",
           "descriptionZh": ""
         },
         {
@@ -5414,10 +5334,10 @@
         },
         {
           "name": "status",
-          "type": "'error' \\",
-          "default": "'warning' \\",
+          "type": "'error' | 'warning' | 'success' | 'validating'",
+          "default": "-",
           "description": "Set validation status",
-          "since": "'success' \\",
+          "since": "4.19.0",
           "descriptionZh": ""
         },
         {
@@ -5573,10 +5493,10 @@
         },
         {
           "name": "expandIcon",
-          "type": "ReactNode \\",
+          "type": "ReactNode | `(props: SubMenuProps & { isSubMenu: boolean }) => ReactNode`",
           "default": "-",
           "description": "custom expand icon of submenu",
-          "since": "-",
+          "since": "4.9.0",
           "descriptionZh": "自定义展开图标"
         },
         {
@@ -5610,10 +5530,9 @@
         },
         {
           "name": "mode",
-          "type": "`vertical` \\",
+          "type": "`vertical` | `horizontal` | `inline`",
           "default": "-",
           "description": "Type of menu",
-          "since": "`inline`",
           "descriptionZh": "菜单类型，现在支持垂直、水平、和内嵌模式三种"
         },
         {
@@ -5674,18 +5593,16 @@
         },
         {
           "name": "theme",
-          "type": "`light` \\",
+          "type": "`light` | `dark`",
           "default": "-",
           "description": "Color theme of the menu",
-          "since": "`light`",
           "descriptionZh": "主题颜色"
         },
         {
           "name": "triggerSubMenuAction",
-          "type": "`hover` \\",
+          "type": "`hover` | `click`",
           "default": "-",
           "description": "Which action can trigger submenu open/close",
-          "since": "`hover`",
           "descriptionZh": "SubMenu 展开/关闭的触发行为"
         },
         {
@@ -5825,7 +5742,7 @@
             "type": "",
             "default": "-",
             "description": "Color theme of the SubMenu (inherits from Menu by default)",
-            "since": "`dark`",
+            "since": "-",
             "descriptionZh": "设置子菜单的主题，默认从 Menu 上继承"
           },
           {
@@ -5900,8 +5817,8 @@
         },
         {
           "name": "key",
-          "type": "string \\",
-          "default": "number",
+          "type": "string | number",
+          "default": "-",
           "description": "The unique identifier of the Message",
           "descriptionZh": "当前提示的唯一标志"
         },
@@ -6036,10 +5953,9 @@
         },
         {
           "name": "getContainer",
-          "type": "HTMLElement \\",
-          "default": "() => HTMLElement \\",
+          "type": "HTMLElement | () => HTMLElement | Selectors | false",
+          "default": "document.body",
           "description": "The mounted node for Modal but still display at fullscreen. To match React 18 concurrent requirement, `getContainer` should always return same dom since `4.24.x`",
-          "since": "Selectors \\",
           "descriptionZh": "指定 Modal 挂载的节点，但依旧为全局展示，`false` 为挂载在当前位置。为符合 React 18 concurrent 标准，从 `4.20.x` 起 `getContainer` 需要始终返回唯一 dom 节点"
         },
         {
@@ -6123,10 +6039,9 @@
         },
         {
           "name": "width",
-          "type": "string \\",
-          "default": "number",
+          "type": "string | number",
+          "default": "520",
           "description": "Width of the modal dialog",
-          "since": "520",
           "descriptionZh": "宽度"
         },
         {
@@ -6192,10 +6107,9 @@
           },
           {
             "name": "autoFocusButton",
-            "type": "null \\",
-            "default": "`ok` \\",
+            "type": "null | `ok` | `cancel`",
+            "default": "`ok`",
             "description": "Specify which button to autofocus",
-            "since": "`cancel`",
             "descriptionZh": "指定自动获得焦点的按钮"
           },
           {
@@ -6259,10 +6173,9 @@
           },
           {
             "name": "getContainer",
-            "type": "HTMLElement \\",
-            "default": "() => HTMLElement \\",
+            "type": "HTMLElement | () => HTMLElement | Selectors | false",
+            "default": "document.body",
             "description": "Return the mount node for Modal",
-            "since": "Selectors \\",
             "descriptionZh": "指定 Modal 挂载的 HTML 节点, false 为挂载在当前 dom"
           },
           {
@@ -6337,10 +6250,9 @@
           },
           {
             "name": "width",
-            "type": "string \\",
-            "default": "number",
+            "type": "string | number",
+            "default": "416",
             "description": "Width of the modal dialog",
-            "since": "416",
             "descriptionZh": "宽度"
           },
           {
@@ -6587,10 +6499,9 @@
         },
         {
           "name": "backIcon",
-          "type": "ReactNode \\",
+          "type": "ReactNode | boolean",
           "default": "-",
           "description": "Custom back icon, if false the back icon will not be displayed",
-          "since": "&lt;ArrowLeft />",
           "descriptionZh": "自定义 back icon ，如果为 false 不渲染 back icon"
         },
         {
@@ -6638,10 +6549,9 @@
         },
         {
           "name": "tags",
-          "type": "[Tag](/components/tag/)\\[] \\",
+          "type": "[Tag](/components/tag/)\\[] | [Tag](/components/tag/)",
           "default": "-",
           "description": "Tag list next to title",
-          "since": "-",
           "descriptionZh": "title 旁的 tag 列表"
         },
         {
@@ -6708,10 +6618,9 @@
         },
         {
           "name": "itemRender",
-          "type": "(page, type: 'page' \\",
-          "default": "'prev' \\",
+          "type": "(page, type: 'page' | 'prev' | 'next', originalElement) => React.ReactNode",
+          "default": "-",
           "description": "To customize item's innerHTML",
-          "since": "'next', originalElement) => React.ReactNode",
           "descriptionZh": "用于自定义页码的结构，可用于优化 SEO"
         },
         {
@@ -6744,10 +6653,9 @@
         },
         {
           "name": "showQuickJumper",
-          "type": "boolean \\",
-          "default": "{ goButton: ReactNode }",
+          "type": "boolean | { goButton: ReactNode }",
+          "default": "false",
           "description": "Determine whether you can jump to pages directly",
-          "since": "false",
           "descriptionZh": "是否可以快速跳转至某页"
         },
         {
@@ -6780,10 +6688,9 @@
         },
         {
           "name": "size",
-          "type": "`default` \\",
-          "default": "`small`",
+          "type": "`default` | `small`",
+          "default": "`default`",
           "description": "Specify the size of `Pagination`, can be set to `small`",
-          "since": "`default`",
           "descriptionZh": "当为 `small` 时，是小尺寸分页"
         },
         {
@@ -6879,10 +6786,9 @@
         },
         {
           "name": "title",
-          "type": "ReactNode \\",
+          "type": "ReactNode | () => ReactNode",
           "default": "-",
           "description": "The title of the confirmation box",
-          "since": "-",
           "descriptionZh": "确认框的描述"
         },
         {
@@ -6914,18 +6820,16 @@
       "props": [
         {
           "name": "content",
-          "type": "ReactNode \\",
+          "type": "ReactNode | () => ReactNode",
           "default": "-",
           "description": "Content of the card",
-          "since": "-",
           "descriptionZh": "卡片内容"
         },
         {
           "name": "title",
-          "type": "ReactNode \\",
+          "type": "ReactNode | () => ReactNode",
           "default": "-",
           "description": "Title of the card",
-          "since": "-",
           "descriptionZh": "卡片标题"
         }
       ],
@@ -6978,8 +6882,8 @@
         },
         {
           "name": "strokeLinecap",
-          "type": "`round` \\",
-          "default": "`butt` \\",
+          "type": "`round` | `butt` | `square`, see [stroke-linecap](https://developer.mozilla.org/docs/Web/SVG/Attribute/stroke-linecap)",
+          "default": "`round`",
           "description": "To set the style of the progress linecap",
           "descriptionZh": "进度条的样式"
         },
@@ -7017,10 +6921,10 @@
           },
           {
             "name": "strokeColor",
-            "type": "string \\",
-            "default": "string[] \\",
+            "type": "string | string[] | { from: string; to: string; direction: string }",
+            "default": "-",
             "description": "The color of progress bar, render `linear-gradient` when passing an object, could accept `string[]` when has `steps`.",
-            "since": "{ from: string; to: string; direction: string }",
+            "since": "4.21.0: `string[]`",
             "descriptionZh": "进度条的色彩，传入 object 时为渐变。当有 `steps` 时支持传入一个数组。"
           },
           {
@@ -7035,8 +6939,8 @@
         "Progress.`type=\"circle\"`": [
           {
             "name": "strokeColor",
-            "type": "string \\",
-            "default": "object",
+            "type": "string | object",
+            "default": "-",
             "description": "The color of circular progress, render `linear-gradient` when passing an object",
             "descriptionZh": "圆形进度条线的色彩，传入 object 时为渐变"
           },
@@ -7152,10 +7056,9 @@
         "Radio.RadioGroup": [
           {
             "name": "buttonStyle",
-            "type": "`outline` \\",
-            "default": "`solid`",
+            "type": "`outline` | `solid`",
+            "default": "`outline`",
             "description": "The style type of radio button",
-            "since": "`outline`",
             "descriptionZh": "RadioButton 的风格样式，目前有描边和填色两种风格"
           },
           {
@@ -7181,26 +7084,24 @@
           },
           {
             "name": "options",
-            "type": "string\\[] \\",
-            "default": "number\\[] \\",
+            "type": "string\\[] | number\\[] | Array&lt;{ label: string value: string disabled?: boolean }>",
+            "default": "-",
             "description": "Set children optional",
-            "since": "Array&lt;{ label: string value: string disabled?: boolean }>",
             "descriptionZh": "以配置形式设置子元素"
           },
           {
             "name": "optionType",
-            "type": "`default` \\",
-            "default": "`button`",
+            "type": "`default` | `button`",
+            "default": "`default`",
             "description": "Set Radio optionType",
-            "since": "`default`",
+            "since": "4.4.0",
             "descriptionZh": "用于设置 Radio `options` 类型"
           },
           {
             "name": "size",
-            "type": "`large` \\",
-            "default": "`middle` \\",
+            "type": "`large` | `middle` | `small`",
+            "default": "-",
             "description": "The size of radio button style",
-            "since": "`small`",
             "descriptionZh": "大小，只对按钮样式生效"
           },
           {
@@ -7255,9 +7156,9 @@
         {
           "name": "character",
           "type": "",
-          "default": "(RateProps) => ReactNode",
+          "default": "&lt;StarFilled />",
           "description": "The custom character of rate",
-          "since": "&lt;StarFilled />",
+          "since": "function(): 4.4.0",
           "descriptionZh": "自定义字符"
         },
         {
@@ -7391,8 +7292,8 @@
         },
         {
           "name": "status",
-          "type": "`success` \\",
-          "default": "`error` \\",
+          "type": "`success` | `error` | `info` | `warning` | `404` | `403` | `500`",
+          "default": "`info`",
           "description": "Result status, decide icons and colors",
           "descriptionZh": "结果的状态，决定图标和颜色"
         },
@@ -7432,8 +7333,8 @@
         },
         {
           "name": "defaultValue",
-          "type": "string \\",
-          "default": "number",
+          "type": "string | number",
+          "default": "-",
           "description": "Default selected value",
           "descriptionZh": ""
         },
@@ -7446,31 +7347,29 @@
         },
         {
           "name": "onChange",
-          "type": "function(value: string \\",
-          "default": "number)",
+          "type": "function(value: string | number)",
+          "default": "-",
           "description": "The callback function that is triggered when the state changes",
           "descriptionZh": ""
         },
         {
           "name": "options",
-          "type": "string\\[] \\",
-          "default": "number\\[] \\",
+          "type": "string\\[] | number\\[] | Array<{ label: ReactNode value: string icon? ReactNode disabled?: boolean className?: string }>",
+          "default": "[]",
           "description": "Set children optional",
-          "since": "Array<{ label: ReactNode value: string icon? ReactNode disabled?: boolean className?: string }>",
           "descriptionZh": ""
         },
         {
           "name": "size",
-          "type": "`large` \\",
-          "default": "`middle` \\",
+          "type": "`large` | `middle` | `small`",
+          "default": "-",
           "description": "The size of the Segmented.",
-          "since": "`small`",
           "descriptionZh": ""
         },
         {
           "name": "value",
-          "type": "string \\",
-          "default": "number",
+          "type": "string | number",
+          "default": "-",
           "description": "Currently selected value",
           "descriptionZh": ""
         }
@@ -7538,10 +7437,9 @@
         },
         {
           "name": "defaultValue",
-          "type": "string \\",
-          "default": "string\\[]<br />number \\",
+          "type": "string | string\\[]<br />number | number\\[]<br />LabeledValue | LabeledValue\\[]",
+          "default": "-",
           "description": "Initial selected option",
-          "since": "number\\[]<br />LabeledValue \\",
           "descriptionZh": "指定默认选中的条目"
         },
         {
@@ -7561,10 +7459,9 @@
         },
         {
           "name": "dropdownMatchSelectWidth",
-          "type": "boolean \\",
-          "default": "number",
+          "type": "boolean | number",
+          "default": "true",
           "description": "Determine whether the dropdown menu and the select input are the same width. Default set `min-width` same as input. Will ignore when value less than select width. `false` will disable virtual scroll",
-          "since": "true",
           "descriptionZh": "下拉菜单和选择器同宽。默认将设置 `min-width`，当值小于选择框宽度时会被忽略。false 时会关闭虚拟滚动"
         },
         {
@@ -7591,10 +7488,9 @@
         },
         {
           "name": "filterOption",
-          "type": "boolean \\",
-          "default": "function(inputValue, option)",
+          "type": "boolean | function(inputValue, option)",
+          "default": "true",
           "description": "If true, filter options by input, if function, filter options against it. The function will receive two arguments, `inputValue` and `option`, if the function returns `true`, the option will be included in the filtered set; Otherwise, it will be excluded",
-          "since": "true",
           "descriptionZh": "是否根据输入项进行筛选。当其为一个函数时，会接收 `inputValue` `option` 两个参数，当 `option` 符合筛选条件时，应返回 true，反之则返回 false"
         },
         {
@@ -7635,18 +7531,17 @@
         },
         {
           "name": "maxTagCount",
-          "type": "number \\",
-          "default": "`responsive`",
+          "type": "number | `responsive`",
+          "default": "-",
           "description": "Max tag count to show. `responsive` will cost render performance",
-          "since": "-",
+          "since": "responsive: 4.10",
           "descriptionZh": "最多显示多少个 tag，响应式模式会对性能产生损耗"
         },
         {
           "name": "maxTagPlaceholder",
-          "type": "ReactNode \\",
-          "default": "function(omittedValues)",
+          "type": "ReactNode | function(omittedValues)",
+          "default": "-",
           "description": "Placeholder for not showing tags",
-          "since": "-",
           "descriptionZh": "隐藏 tag 时显示的内容"
         },
         {
@@ -7665,10 +7560,9 @@
         },
         {
           "name": "mode",
-          "type": "`multiple` \\",
-          "default": "`tags`",
+          "type": "`multiple` | `tags`",
+          "default": "-",
           "description": "Set mode of Select",
-          "since": "-",
           "descriptionZh": "设置 Select 的模式为多选或标签"
         },
         {
@@ -7750,18 +7644,17 @@
         },
         {
           "name": "size",
-          "type": "`large` \\",
-          "default": "`middle` \\",
+          "type": "`large` | `middle` | `small`",
+          "default": "`middle`",
           "description": "Size of Select input",
-          "since": "`small`",
           "descriptionZh": "选择框大小"
         },
         {
           "name": "status",
-          "type": "'error' \\",
-          "default": "'warning'",
+          "type": "'error' | 'warning'",
+          "default": "-",
           "description": "Set validation status",
-          "since": "-",
+          "since": "4.19.0",
           "descriptionZh": "设置校验状态"
         },
         {
@@ -7787,10 +7680,9 @@
         },
         {
           "name": "value",
-          "type": "string \\",
-          "default": "string\\[]<br />number \\",
+          "type": "string | string\\[]<br />number | number\\[]<br />LabeledValue | LabeledValue\\[]",
+          "default": "-",
           "description": "Current selected option (considered as a immutable array)",
-          "since": "number\\[]<br />LabeledValue \\",
           "descriptionZh": "指定当前选中的条目，多选时为一个数组。（value 数组引用未变化时，Select 不会更新）"
         },
         {
@@ -7810,10 +7702,9 @@
         },
         {
           "name": "onChange",
-          "type": "function(value, option:Option \\",
-          "default": "Array&lt;Option>)",
+          "type": "function(value, option:Option | Array&lt;Option>)",
+          "default": "-",
           "description": "Called when select an option or input value change",
-          "since": "-",
           "descriptionZh": "选中 option，或 input 的 value 变化时，调用此函数"
         },
         {
@@ -7826,10 +7717,9 @@
         },
         {
           "name": "onDeselect",
-          "type": "function(string \\",
-          "default": "number \\",
+          "type": "function(string | number | LabeledValue)",
+          "default": "-",
           "description": "Called when an option is deselected, param is the selected option's value. Only called for `multiple` or `tags`, effective in multiple or tags mode only",
-          "since": "LabeledValue)",
           "descriptionZh": "取消选中时调用，参数为选中项的 value (或 key) 值，仅在 `multiple` 或 `tags` 模式下生效"
         },
         {
@@ -7883,10 +7773,9 @@
         },
         {
           "name": "onSelect",
-          "type": "function(string \\",
-          "default": "number \\",
+          "type": "function(string | number | LabeledValue, option: Option)",
+          "default": "-",
           "description": "Called when an option is selected, the params are option's value (or key) and option instance",
-          "since": "LabeledValue, option: Option)",
           "descriptionZh": "被选中时调用，参数为选中项的 value (或 key) 值"
         },
         {
@@ -7951,10 +7840,9 @@
           },
           {
             "name": "value",
-            "type": "string \\",
-            "default": "number",
+            "type": "string | number",
+            "default": "-",
             "description": "Default to filter with this property",
-            "since": "-",
             "descriptionZh": "默认根据此属性值进行筛选"
           }
         ],
@@ -7968,10 +7856,9 @@
           },
           {
             "name": "label",
-            "type": "string \\",
-            "default": "React.Element",
+            "type": "string | React.Element",
+            "default": "-",
             "description": "Group label",
-            "since": "-",
             "descriptionZh": "组名"
           }
         ]
@@ -7997,8 +7884,8 @@
         },
         {
           "name": "avatar",
-          "type": "boolean \\",
-          "default": "[SkeletonAvatarProps](#SkeletonAvatarProps)",
+          "type": "boolean | [SkeletonAvatarProps](#SkeletonAvatarProps)",
+          "default": "false",
           "description": "Show avatar placeholder",
           "descriptionZh": "是否显示头像占位图"
         },
@@ -8011,8 +7898,8 @@
         },
         {
           "name": "paragraph",
-          "type": "boolean \\",
-          "default": "[SkeletonParagraphProps](#SkeletonParagraphProps)",
+          "type": "boolean | [SkeletonParagraphProps](#SkeletonParagraphProps)",
+          "default": "true",
           "description": "Show paragraph placeholder",
           "descriptionZh": "是否显示段落占位图"
         },
@@ -8025,8 +7912,8 @@
         },
         {
           "name": "title",
-          "type": "boolean \\",
-          "default": "[SkeletonTitleProps](#SkeletonTitleProps)",
+          "type": "boolean | [SkeletonTitleProps](#SkeletonTitleProps)",
+          "default": "true",
           "description": "Show title placeholder",
           "descriptionZh": "是否显示标题占位图"
         }
@@ -8042,15 +7929,15 @@
           },
           {
             "name": "shape",
-            "type": "`circle` \\",
-            "default": "`square`",
+            "type": "`circle` | `square`",
+            "default": "-",
             "description": "Set the shape of avatar",
             "descriptionZh": "指定头像的形状"
           },
           {
             "name": "size",
-            "type": "number \\",
-            "default": "`large` \\",
+            "type": "number | `large` | `small` | `default`",
+            "default": "-",
             "description": "Set the size of avatar",
             "descriptionZh": "设置头像占位图的大小"
           }
@@ -8058,8 +7945,8 @@
         "Skeleton.SkeletonTitleProps": [
           {
             "name": "width",
-            "type": "number \\",
-            "default": "string",
+            "type": "number | string",
+            "default": "-",
             "description": "Set the width of title",
             "descriptionZh": "设置标题占位图的宽度"
           }
@@ -8074,8 +7961,8 @@
           },
           {
             "name": "width",
-            "type": "number \\",
-            "default": "string \\",
+            "type": "number | string | Array&lt;number | string>",
+            "default": "-",
             "description": "Set the width of paragraph. When width is an Array, it can set the width of each row. Otherwise only set the last row width",
             "descriptionZh": "设置段落占位图的宽度，若为数组时则为对应的每行宽度，反之则是最后一行的宽度"
           }
@@ -8098,18 +7985,16 @@
           },
           {
             "name": "shape",
-            "type": "`circle` \\",
-            "default": "`round` \\",
+            "type": "`circle` | `round` | `square` | `default`",
+            "default": "-",
             "description": "Set the shape of button",
-            "since": "`square` \\",
             "descriptionZh": "指定按钮的形状"
           },
           {
             "name": "size",
-            "type": "`large` \\",
-            "default": "`small` \\",
+            "type": "`large` | `small` | `default`",
+            "default": "-",
             "description": "Set the size of button",
-            "since": "`default`",
             "descriptionZh": "设置按钮的大小"
           }
         ],
@@ -8123,8 +8008,8 @@
           },
           {
             "name": "size",
-            "type": "`large` \\",
-            "default": "`small` \\",
+            "type": "`large` | `small` | `default`",
+            "default": "-",
             "description": "Set the size of input",
             "descriptionZh": "设置输入框的大小"
           }
@@ -8151,10 +8036,9 @@
         },
         {
           "name": "defaultValue",
-          "type": "number \\",
-          "default": "\\[number, number]",
+          "type": "number | \\[number, number]",
+          "default": "0 | \\[0, 0]",
           "description": "The default value of slider. When `range` is false, use number, otherwise, use \\[number, number]",
-          "since": "0 \\",
           "descriptionZh": "设置初始取值。当 `range` 为 false 时，使用 number，否则用 \\[number, number]"
         },
         {
@@ -8181,9 +8065,8 @@
         {
           "name": "marks",
           "type": "object",
-          "default": "{ number: ReactNode } \\",
+          "default": "{ number: ReactNode } | { number: { style: CSSProperties, label: ReactNode } }",
           "description": "Tick mark of Slider, type of key must be `number`, and must in closed interval \\[min, max], each mark can declare its own style",
-          "since": "{ number: { style: CSSProperties, label: ReactNode } }",
           "descriptionZh": "刻度标记，key 的类型必须为 `number` 且取值在闭区间 \\[min, max] 内，每个标签可以单独设置样式"
         },
         {
@@ -8216,10 +8099,9 @@
         },
         {
           "name": "step",
-          "type": "number \\",
-          "default": "null",
+          "type": "number | null",
+          "default": "1",
           "description": "The granularity the slider can step through values. Must greater than 0, and be divided by (max - min) . When `marks` no null, `step` can be null",
-          "since": "1",
           "descriptionZh": "步长，取值必须大于 0，并且可被 (max - min) 整除。当 `marks` 不为空对象时，可以设置 `step` 为 null，此时 Slider 的可选值仅有 marks 标出来的部分"
         },
         {
@@ -8232,10 +8114,9 @@
         },
         {
           "name": "value",
-          "type": "number \\",
-          "default": "\\[number, number]",
+          "type": "number | \\[number, number]",
+          "default": "-",
           "description": "The value of slider. When `range` is false, use number, otherwise, use \\[number, number]",
-          "since": "-",
           "descriptionZh": "设置当前取值。当 `range` 为 false 时，使用 number，否则用 \\[number, number]"
         },
         {
@@ -8319,10 +8200,10 @@
           },
           {
             "name": "formatter",
-            "type": "value => ReactNode \\",
-            "default": "null",
+            "type": "value => ReactNode | null",
+            "default": "IDENTITY",
             "description": "Slider will pass its value to `formatter`, and display its value in Tooltip, and hide Tooltip when return value is null",
-            "since": "IDENTITY",
+            "since": "4.23.0",
             "descriptionZh": "Slider 会把当前值传给 `formatter`，并在 Tooltip 中显示 `formatter` 的返回值，若为 null，则隐藏 Tooltip"
           }
         ],
@@ -8357,26 +8238,26 @@
       "props": [
         {
           "name": "align",
-          "type": "`start` \\",
-          "default": "`end` \\",
+          "type": "`start` | `end` |`center` |`baseline`",
+          "default": "-",
           "description": "Align items",
-          "since": "`center` \\",
+          "since": "4.2.0",
           "descriptionZh": ""
         },
         {
           "name": "direction",
-          "type": "`vertical` \\",
+          "type": "`vertical` | `horizontal`",
           "default": "`horizontal`",
           "description": "The space direction",
-          "since": "`horizontal`",
+          "since": "4.1.0",
           "descriptionZh": ""
         },
         {
           "name": "size",
-          "type": "[Size](#Size) \\",
-          "default": "[Size\\[\\]](#Size)",
+          "type": "[Size](#Size) | [Size\\[\\]](#Size)",
+          "default": "`small`",
           "description": "The space size",
-          "since": "`small`",
+          "since": "4.1.0 | Array: 4.9.0",
           "descriptionZh": ""
         },
         {
@@ -8411,18 +8292,18 @@
           },
           {
             "name": "direction",
-            "type": "`vertical` \\",
+            "type": "`vertical` | `horizontal`",
             "default": "`horizontal`",
             "description": "Set direction of layout",
-            "since": "`horizontal`",
+            "since": "4.24.0",
             "descriptionZh": "指定排列方向"
           },
           {
             "name": "size",
-            "type": "`large` \\",
-            "default": "`middle` \\",
+            "type": "`large` | `middle` | `small`",
+            "default": "`middle`",
             "description": "Set child component size",
-            "since": "`small`",
+            "since": "4.24.0",
             "descriptionZh": "子组件大小"
           }
         ]
@@ -8553,10 +8434,9 @@
         },
         {
           "name": "value",
-          "type": "string \\",
-          "default": "number",
+          "type": "string | number",
+          "default": "-",
           "description": "Display value",
-          "since": "-",
           "descriptionZh": "数值内容"
         },
         {
@@ -8596,10 +8476,9 @@
         },
         {
           "name": "value",
-          "type": "number \\",
-          "default": "moment",
+          "type": "number | moment",
+          "default": "-",
           "description": "Set target countdown time",
-          "since": "-",
           "descriptionZh": "数值内容"
         },
         {
@@ -8682,10 +8561,9 @@
         },
         {
           "name": "progressDot",
-          "type": "boolean \\",
-          "default": "(iconDot, {index, status, title, description}) => ReactNode",
+          "type": "boolean | (iconDot, {index, status, title, description}) => ReactNode",
+          "default": "false",
           "description": "Steps with progress dot style, customize the progress dot by setting it to a function. labelPlacement will be `vertical`",
-          "since": "false",
           "descriptionZh": "点状步骤条，可以设置为一个 function，labelPlacement 将强制为 `vertical`"
         },
         {
@@ -8949,10 +8827,9 @@
         },
         {
           "name": "loading",
-          "type": "boolean \\",
-          "default": "[Spin Props](/components/spin/#API)",
+          "type": "boolean | [Spin Props](/components/spin/#API)",
+          "default": "false",
           "description": "Loading status of table",
-          "since": "false",
           "descriptionZh": "页面是否加载中"
         },
         {
@@ -8978,10 +8855,9 @@
         },
         {
           "name": "rowKey",
-          "type": "string \\",
-          "default": "function(record): string",
+          "type": "string | function(record): string",
+          "default": "`key`",
           "description": "Row's unique key, could be a string or function that returns a string",
-          "since": "`key`",
           "descriptionZh": "表格行 key 的取值，可以是字符串或一个函数"
         },
         {
@@ -9007,18 +8883,16 @@
         },
         {
           "name": "showSorterTooltip",
-          "type": "boolean \\",
-          "default": "[Tooltip props](/components/tooltip/#API)",
+          "type": "boolean | [Tooltip props](/components/tooltip/#API)",
+          "default": "true",
           "description": "The header show next sorter direction tooltip. It will be set as the property of Tooltip if its type is object",
-          "since": "true",
           "descriptionZh": "表头是否显示下一次排序的 tooltip 提示。当参数类型为对象时，将被设置为 Tooltip 的属性"
         },
         {
           "name": "size",
-          "type": "`default` \\",
-          "default": "`middle` \\",
+          "type": "`default` | `middle` | `small`",
+          "default": "`default`",
           "description": "Size of table",
-          "since": "`small`",
           "descriptionZh": "表格大小"
         },
         {
@@ -9030,10 +8904,10 @@
         },
         {
           "name": "sticky",
-          "type": "boolean \\",
-          "default": "`{offsetHeader?: number, offsetScroll?: number, getContainer?: () => HTMLElement}`",
+          "type": "boolean | `{offsetHeader?: number, offsetScroll?: number, getContainer?: () => HTMLElement}`",
+          "default": "-",
           "description": "Set sticky header and scroll bar",
-          "since": "-",
+          "since": "4.6.0 (getContainer: 4.7.0)",
           "descriptionZh": "设置粘性头部和滚动条"
         },
         {
@@ -9045,10 +8919,9 @@
         },
         {
           "name": "tableLayout",
-          "type": "- \\",
-          "default": "`auto` \\",
+          "type": "- | `auto` | `fixed`",
+          "default": "-<hr />`fixed` when header/columns are fixed, or using `column.ellipsis`",
           "description": "The [table-layout](https://developer.mozilla.org/en-US/docs/Web/CSS/table-layout) attribute of table element",
-          "since": "`fixed`",
           "descriptionZh": "表格元素的 [table-layout](https://developer.mozilla.org/zh-CN/docs/Web/CSS/table-layout) 属性，设为 `fixed` 表示内容不会影响列的布局"
         },
         {
@@ -9060,10 +8933,9 @@
         },
         {
           "name": "onChange",
-          "type": "function(pagination, filters, sorter, extra: { currentDataSource: \\[], action: `paginate` \\",
-          "default": "`sort` \\",
+          "type": "function(pagination, filters, sorter, extra: { currentDataSource: \\[], action: `paginate` | `sort` | `filter` })",
+          "default": "-",
           "description": "Callback executed when pagination, filters or sorter is changed",
-          "since": "`filter` })",
           "descriptionZh": "分页、排序、筛选变化时触发"
         },
         {
@@ -9111,10 +8983,9 @@
         "Table.Column": [
           {
             "name": "align",
-            "type": "`left` \\",
-            "default": "`right` \\",
+            "type": "`left` | `right` | `center`",
+            "default": "`left`",
             "description": "The specify which way that column is aligned",
-            "since": "`center`",
             "descriptionZh": "设置列的对齐方式"
           },
           {
@@ -9133,10 +9004,9 @@
           },
           {
             "name": "dataIndex",
-            "type": "string \\",
-            "default": "string\\[]",
+            "type": "string | string\\[]",
+            "default": "-",
             "description": "Display field of the data record, support nest path by string array",
-            "since": "-",
             "descriptionZh": "列数据在数据项中对应的路径，支持通过数组查询嵌套路径"
           },
           {
@@ -9155,26 +9025,24 @@
           },
           {
             "name": "defaultSortOrder",
-            "type": "`ascend` \\",
-            "default": "`descend`",
+            "type": "`ascend` | `descend`",
+            "default": "-",
             "description": "Default order of sorted values",
-            "since": "-",
             "descriptionZh": "默认排序顺序"
           },
           {
             "name": "ellipsis",
-            "type": "boolean \\",
-            "default": "{showTitle?: boolean }",
+            "type": "boolean | {showTitle?: boolean }",
+            "default": "false",
             "description": "The ellipsis cell content, not working with sorter and filters for now.<br />tableLayout would be `fixed` when `ellipsis` is `true` or `{ showTitle?: boolean }`",
-            "since": "false",
+            "since": "showTitle: 4.3.0",
             "descriptionZh": "超过宽度将自动省略，暂不支持和排序筛选一起使用。<br />设置为 `true` 或 `{ showTitle?: boolean }` 时，表格布局将变成 `tableLayout=\"fixed\"`。"
           },
           {
             "name": "filterDropdown",
-            "type": "ReactNode \\",
-            "default": "(props: [FilterDropdownProps](https://github.com/ant-design/ant-design/blob/ecc54dda839619e921c0ace530408871f0281c2a/components/table/interface.tsx#L79)) => ReactNode",
+            "type": "ReactNode | (props: [FilterDropdownProps](https://github.com/ant-design/ant-design/blob/ecc54dda839619e921c0ace530408871f0281c2a/components/table/interface.tsx#L79)) => ReactNode",
+            "default": "-",
             "description": "Customized filter overlay",
-            "since": "-",
             "descriptionZh": "可以自定义筛选菜单，此函数只负责渲染图层，需要自行编写各种交互"
           },
           {
@@ -9201,10 +9069,9 @@
           },
           {
             "name": "filterIcon",
-            "type": "ReactNode \\",
-            "default": "(filtered: boolean) => ReactNode",
+            "type": "ReactNode | (filtered: boolean) => ReactNode",
+            "default": "-",
             "description": "Customized filter icon",
-            "since": "-",
             "descriptionZh": "自定义 filter 图标。"
           },
           {
@@ -9216,18 +9083,18 @@
           },
           {
             "name": "filterMode",
-            "type": "'menu' \\",
-            "default": "'tree'",
+            "type": "'menu' | 'tree'",
+            "default": "'menu'",
             "description": "To specify the filter interface",
-            "since": "'menu'",
+            "since": "4.17.0",
             "descriptionZh": "指定筛选菜单的用户界面"
           },
           {
             "name": "filterSearch",
-            "type": "boolean \\",
-            "default": "function(input, record):boolean",
+            "type": "boolean | function(input, record):boolean",
+            "default": "false",
             "description": "Whether to be searchable for filter menu",
-            "since": "false",
+            "since": "boolean:4.17.0 function:4.19.0",
             "descriptionZh": "筛选菜单项是否可搜索"
           },
           {
@@ -9239,10 +9106,9 @@
           },
           {
             "name": "fixed",
-            "type": "boolean \\",
-            "default": "string",
+            "type": "boolean | string",
+            "default": "false",
             "description": "(IE not support) Set column to be fixed: `true`(same as left) `'left'` `'right'`",
-            "since": "false",
             "descriptionZh": "（IE 下无效）列是否固定，可选 true (等效于 left) `left` `right`"
           },
           {
@@ -9277,10 +9143,9 @@
           },
           {
             "name": "showSorterTooltip",
-            "type": "boolean \\",
-            "default": "[Tooltip props](/components/tooltip/)",
+            "type": "boolean | [Tooltip props](/components/tooltip/)",
+            "default": "true",
             "description": "If header show next sorter direction tooltip, override `showSorterTooltip` in table",
-            "since": "true",
             "descriptionZh": "表头显示下一次排序的 tooltip 提示, 覆盖 table 中 `showSorterTooltip`"
           },
           {
@@ -9292,34 +9157,30 @@
           },
           {
             "name": "sorter",
-            "type": "function \\",
-            "default": "boolean",
+            "type": "function | boolean",
+            "default": "-",
             "description": "Sort function for local sort, see [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)'s compareFunction. If you need sort buttons only, set to `true`",
-            "since": "-",
             "descriptionZh": "排序函数，本地排序使用一个函数(参考 [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) 的 compareFunction)，需要服务端排序可设为 true"
           },
           {
             "name": "sortOrder",
-            "type": "`ascend` \\",
-            "default": "`descend` \\",
+            "type": "`ascend` | `descend` | null",
+            "default": "-",
             "description": "Order of sorted values: `ascend` `descend` `null`",
-            "since": "null",
             "descriptionZh": "排序的受控属性，外界可用此控制列的排序，可设置为 `ascend` `descend` `null`"
           },
           {
             "name": "title",
-            "type": "ReactNode \\",
-            "default": "({ sortOrder, sortColumn, filters }) => ReactNode",
+            "type": "ReactNode | ({ sortOrder, sortColumn, filters }) => ReactNode",
+            "default": "-",
             "description": "Title of this column",
-            "since": "-",
             "descriptionZh": "列头显示文字（函数用法 `3.10.0` 后支持）"
           },
           {
             "name": "width",
-            "type": "string \\",
-            "default": "number",
+            "type": "string | number",
+            "default": "-",
             "description": "Width of this column ([width not working?](https://github.com/ant-design/ant-design/issues/13825#issuecomment-449889241))",
-            "since": "-",
             "descriptionZh": "列宽度（[指定了也不生效？](https://github.com/ant-design/ant-design/issues/13825#issuecomment-449889241)）"
           },
           {
@@ -9364,10 +9225,10 @@
         "Table.pagination": [
           {
             "name": "position",
-            "type": "`topCenter` \\",
-            "default": "`topRight` \\",
-            "description": "Specify the position of `Pagination`, could be`topLeft` \\",
-            "descriptionZh": "指定分页显示的位置， 取值为`topLeft` \\"
+            "type": "Array",
+            "default": "\\[`bottomRight`]",
+            "description": "Specify the position of `Pagination`, could be`topLeft` | `topCenter` | `topRight` |`bottomLeft` | `bottomCenter` | `bottomRight`",
+            "descriptionZh": "指定分页显示的位置， 取值为`topLeft` | `topCenter` | `topRight` |`bottomLeft` | `bottomCenter` | `bottomRight`"
           }
         ],
         "Table.expandable": [
@@ -9388,10 +9249,9 @@
           },
           {
             "name": "columnWidth",
-            "type": "string \\",
-            "default": "number",
+            "type": "string | number",
+            "default": "-",
             "description": "Set the width of the expand column",
-            "since": "-",
             "descriptionZh": "自定义展开列宽度"
           },
           {
@@ -9445,10 +9305,10 @@
           },
           {
             "name": "fixed",
-            "type": "boolean \\",
-            "default": "string",
+            "type": "boolean | string",
+            "default": "false",
             "description": "Whether the expansion icon is fixed. Optional true `left` `right`",
-            "since": "false",
+            "since": "4.16.0",
             "descriptionZh": "控制展开图标是否固定，可选 true `left` `right`"
           },
           {
@@ -9506,10 +9366,9 @@
           },
           {
             "name": "columnWidth",
-            "type": "string \\",
-            "default": "number",
+            "type": "string | number",
+            "default": "`32px`",
             "description": "Set the width of the selection column",
-            "since": "`32px`",
             "descriptionZh": "自定义列表选择框宽度"
           },
           {
@@ -9552,26 +9411,23 @@
           },
           {
             "name": "selectedRowKeys",
-            "type": "string\\[] \\",
-            "default": "number\\[]",
+            "type": "string\\[] | number\\[]",
+            "default": "\\[]",
             "description": "Controlled selected row keys",
-            "since": "\\[]",
             "descriptionZh": "指定选中项的 key 数组，需要和 onChange 进行配合"
           },
           {
             "name": "selections",
-            "type": "object\\[] \\",
-            "default": "boolean",
+            "type": "object\\[] | boolean",
+            "default": "-",
             "description": "Custom selection [config](#selection), only displays default selections when set to `true`",
-            "since": "-",
             "descriptionZh": "自定义选择项 [配置项](#selection), 设为 `true` 时使用默认选择项"
           },
           {
             "name": "type",
-            "type": "`checkbox` \\",
-            "default": "`radio`",
+            "type": "`checkbox` | `radio`",
+            "default": "`checkbox`",
             "description": "`checkbox` or `radio`",
-            "since": "`checkbox`",
             "descriptionZh": "多选/单选"
           },
           {
@@ -9628,15 +9484,15 @@
           },
           {
             "name": "x",
-            "type": "string \\",
-            "default": "number \\",
+            "type": "string | number | true",
+            "default": "-",
             "description": "Set horizontal scrolling, can also be used to specify the width of the scroll area, could be number, percent value, true and ['max-content'](https://developer.mozilla.org/zh-CN/docs/Web/CSS/width#max-content)",
             "descriptionZh": "设置横向滚动，也可用于指定滚动区域的宽，可以设置为像素值，百分比，true 和 ['max-content'](https://developer.mozilla.org/zh-CN/docs/Web/CSS/width#max-content)"
           },
           {
             "name": "y",
-            "type": "string \\",
-            "default": "number",
+            "type": "string | number",
+            "default": "-",
             "description": "Set vertical scrolling, can also be used to specify the height of the scroll area, could be string or number",
             "descriptionZh": "设置纵向滚动，也可用于指定滚动区域的高，可以设置为像素值"
           }
@@ -9693,10 +9549,9 @@
         },
         {
           "name": "animated",
-          "type": "boolean \\",
-          "default": "{ inkBar: boolean, tabPane: boolean }",
+          "type": "boolean | { inkBar: boolean, tabPane: boolean }",
+          "default": "{ inkBar: true, tabPane: false }",
           "description": "Whether to change tabs with animation. Only works while `tabPosition=\"top\"`",
-          "since": "{ inkBar: true, tabPane: false }",
           "descriptionZh": "是否使用动画切换 Tabs, 仅生效于 `tabPosition=\"top\"`"
         },
         {
@@ -9754,18 +9609,17 @@
         },
         {
           "name": "size",
-          "type": "`large` \\",
-          "default": "`middle` \\",
+          "type": "`large` | `middle` | `small`",
+          "default": "`middle`",
           "description": "Preset tab bar size",
-          "since": "`small`",
           "descriptionZh": "大小，提供 `large` `middle` 和 `small` 三种大小"
         },
         {
           "name": "tabBarExtraContent",
-          "type": "ReactNode \\",
-          "default": "{left?: ReactNode, right?: ReactNode}",
+          "type": "ReactNode | {left?: ReactNode, right?: ReactNode}",
+          "default": "-",
           "description": "Extra content in tab bar",
-          "since": "-",
+          "since": "object: 4.6.0",
           "descriptionZh": "tab bar 上额外的元素"
         },
         {
@@ -9784,10 +9638,10 @@
         },
         {
           "name": "tabPosition",
-          "type": "`top` \\",
-          "default": "`right` \\",
+          "type": "`top` | `right` | `bottom` \\",
+          "default": "`left`",
           "description": "Position of tabs",
-          "since": "`bottom` \\",
+          "since": "`top`",
           "descriptionZh": "页签位置，可选值有 `top` `right` `bottom` `left`"
         },
         {
@@ -9799,10 +9653,9 @@
         },
         {
           "name": "type",
-          "type": "`line` \\",
-          "default": "`card` \\",
+          "type": "`line` | `card` | `editable-card`",
+          "default": "`line`",
           "description": "Basic style of tabs",
-          "since": "`editable-card`",
           "descriptionZh": "页签的基本样式，可选 `line`、`card` `editable-card` 类型"
         },
         {
@@ -9828,10 +9681,10 @@
         },
         {
           "name": "onTabScroll",
-          "type": "function({ direction: `left` \\",
-          "default": "`right` \\",
+          "type": "function({ direction: `left` | `right` | `top` | `bottom` })",
+          "default": "-",
           "description": "Trigger when tab scroll",
-          "since": "`top` \\",
+          "since": "4.3.0",
           "descriptionZh": "tab 滚动时触发"
         },
         {
@@ -9973,15 +9826,15 @@
       "props": [
         {
           "name": "mode",
-          "type": "`left` \\",
-          "default": "`alternate` \\",
+          "type": "`left` | `alternate` | `right`",
+          "default": "-",
           "description": "By sending `alternate` the timeline will distribute the nodes to the left and right",
           "descriptionZh": "通过设置 `mode` 可以改变时间轴和内容的相对位置"
         },
         {
           "name": "pending",
-          "type": "boolean \\",
-          "default": "ReactNode",
+          "type": "boolean | ReactNode",
+          "default": "false",
           "description": "Set the last ghost node's existence or its content",
           "descriptionZh": "指定最后一个幽灵节点是否存在或内容"
         },
@@ -10028,8 +9881,8 @@
           },
           {
             "name": "position",
-            "type": "`left` \\",
-            "default": "`right`",
+            "type": "`left` | `right`",
+            "default": "-",
             "description": "Customize node position",
             "descriptionZh": "自定义节点位置"
           }
@@ -10162,10 +10015,9 @@
         },
         {
           "name": "placeholder",
-          "type": "string \\",
-          "default": "\\[string, string]",
+          "type": "string | \\[string, string]",
+          "default": "`Select a time`",
           "description": "Display when there's no value",
-          "since": "`Select a time`",
           "descriptionZh": "没有值的时候显示的内容"
         },
         {
@@ -10213,10 +10065,10 @@
         },
         {
           "name": "status",
-          "type": "'error' \\",
-          "default": "'warning' \\",
+          "type": "'error' | 'warning' | 'success' | 'validating'",
+          "default": "-",
           "description": "Set validation status",
-          "since": "'success' \\",
+          "since": "4.19.0",
           "descriptionZh": "设置校验状态"
         },
         {
@@ -10312,8 +10164,8 @@
       "props": [
         {
           "name": "title",
-          "type": "ReactNode \\",
-          "default": "() => ReactNode",
+          "type": "ReactNode | () => ReactNode",
+          "default": "-",
           "description": "The text shown in the tooltip",
           "descriptionZh": "提示文字"
         },
@@ -10356,10 +10208,9 @@
         },
         {
           "name": "destroyTooltipOnHide",
-          "type": "boolean \\",
-          "default": "{ keepParent?: boolean }",
+          "type": "boolean | { keepParent?: boolean }",
+          "default": "false",
           "description": "Whether destroy tooltip when hidden, parent container of tooltip will be destroyed when `keepParent` is false",
-          "since": "false",
           "descriptionZh": ""
         },
         {
@@ -10413,10 +10264,9 @@
         },
         {
           "name": "trigger",
-          "type": "`hover` \\",
-          "default": "`focus` \\",
+          "type": "`hover` | `focus` | `click` | `contextMenu` | Array&lt;string>",
+          "default": "`hover`",
           "description": "Tooltip trigger mode. Could be multiple by passing an array",
-          "since": "`click` \\",
           "descriptionZh": ""
         },
         {
@@ -10486,18 +10336,16 @@
         },
         {
           "name": "listStyle",
-          "type": "object \\",
-          "default": "({direction: `left` \\",
+          "type": "object | ({direction: `left` | `right`}) => object",
+          "default": "-",
           "description": "A custom CSS style used for rendering the transfer columns",
-          "since": "`right`}) => object",
           "descriptionZh": ""
         },
         {
           "name": "locale",
-          "type": "{ itemUnit: string; itemsUnit: string; searchPlaceholder: string; notFoundContent: ReactNode \\",
-          "default": "ReactNode[]; }",
+          "type": "{ itemUnit: string; itemsUnit: string; searchPlaceholder: string; notFoundContent: ReactNode | ReactNode[]; }",
+          "default": "{ itemUnit: `item`, itemsUnit: `items`, notFoundContent: `The list is empty`, searchPlaceholder: `Search here` }",
           "description": "The i18n text including filter, empty text, item unit, etc",
-          "since": "{ itemUnit: `item`, itemsUnit: `items`, notFoundContent: `The list is empty`, searchPlaceholder: `Search here` }",
           "descriptionZh": ""
         },
         {
@@ -10524,10 +10372,10 @@
         },
         {
           "name": "pagination",
-          "type": "boolean \\",
-          "default": "{ pageSize: number, simple: boolean, showSizeChanger?: boolean, showLessItems?: boolean }",
+          "type": "boolean | { pageSize: number, simple: boolean, showSizeChanger?: boolean, showLessItems?: boolean }",
+          "default": "false",
           "description": "Use pagination. Not work in render props",
-          "since": "false",
+          "since": "4.3.0",
           "descriptionZh": ""
         },
         {
@@ -10539,10 +10387,9 @@
         },
         {
           "name": "selectAllLabels",
-          "type": "(ReactNode \\",
-          "default": "(info: { selectedCount: number, totalCount: number }) => ReactNode)\\[]",
+          "type": "(ReactNode | (info: { selectedCount: number, totalCount: number }) => ReactNode)\\[]",
+          "default": "-",
           "description": "A set of customized labels for select all checkboxs on the header",
-          "since": "-",
           "descriptionZh": ""
         },
         {
@@ -10568,10 +10415,10 @@
         },
         {
           "name": "status",
-          "type": "'error' \\",
-          "default": "'warning'",
+          "type": "'error' | 'warning'",
+          "default": "-",
           "description": "Set validation status",
-          "since": "-",
+          "since": "4.19.0",
           "descriptionZh": ""
         },
         {
@@ -10604,10 +10451,9 @@
         },
         {
           "name": "onSearch",
-          "type": "(direction: `left` \\",
-          "default": "`right`, value: string): void",
+          "type": "(direction: `left` | `right`, value: string): void",
+          "default": "-",
           "description": "A callback function which is executed when search field are changed",
-          "since": "-",
           "descriptionZh": ""
         },
         {
@@ -10628,10 +10474,9 @@
         "Transfer.Render Props": [
           {
             "name": "direction",
-            "type": "`left` \\",
+            "type": "`left` | `right`",
             "default": "-",
             "description": "List render direction",
-            "since": "`right`",
             "descriptionZh": "渲染列表的方向"
           },
           {
@@ -10713,10 +10558,9 @@
         },
         {
           "name": "checkedKeys",
-          "type": "string\\[] \\",
-          "default": "{checked: string\\[], halfChecked: string\\[]}",
+          "type": "string\\[] | {checked: string\\[], halfChecked: string\\[]}",
+          "default": "\\[]",
           "description": "(Controlled) Specifies the keys of the checked treeNodes (PS: When this specifies the key of a treeNode which is also a parent treeNode, all the children treeNodes of will be checked; and vice versa, when it specifies the key of a treeNode which is a child treeNode, its parent treeNode will also be checked. When `checkable` and `checkStrictly` is true, its object has `checked` and `halfChecked` property. Regardless of whether the child or parent treeNode is checked, they won't impact each other",
-          "since": "\\[]",
           "descriptionZh": "（受控）选中复选框的树节点（注意：父子节点有关联，如果传入父节点 key，则子节点自动选中；相应当子节点 key 都传入，父节点也自动选中。当设置 `checkable` 和 `checkStrictly`，它是一个有`checked`和`halfChecked`属性的对象，并且父子节点的选中与否不再关联"
         },
         {
@@ -10770,10 +10614,10 @@
         },
         {
           "name": "draggable",
-          "type": "boolean \\",
-          "default": "((node: DataNode) => boolean) \\",
+          "type": "boolean | ((node: DataNode) => boolean) | { icon?: React.ReactNode | false, nodeDraggable?: (node: DataNode) => boolean }",
+          "default": "false",
           "description": "Specifies whether this Tree or the node is draggable. Use `icon: false` to disable drag handler icon",
-          "since": "{ icon?: React.ReactNode \\",
+          "since": "`config`: 4.17.0",
           "descriptionZh": "设置节点可拖拽，可以通过 `icon: false` 关闭拖拽提示图标"
         },
         {
@@ -10807,10 +10651,9 @@
         },
         {
           "name": "icon",
-          "type": "ReactNode \\",
-          "default": "(props) => ReactNode",
+          "type": "ReactNode | (props) => ReactNode",
+          "default": "-",
           "description": "Customize treeNode icon",
-          "since": "-",
           "descriptionZh": "自定义树节点图标。"
         },
         {
@@ -10873,18 +10716,17 @@
         },
         {
           "name": "showLine",
-          "type": "boolean \\",
-          "default": "{showLeafIcon: boolean \\",
+          "type": "boolean | {showLeafIcon: boolean | ReactNode | ((props: AntTreeNodeProps) => ReactNode)}",
+          "default": "false",
           "description": "Shows a connecting line",
-          "since": "ReactNode \\",
           "descriptionZh": "是否展示连接线"
         },
         {
           "name": "switcherIcon",
-          "type": "ReactNode \\",
-          "default": "((props: AntTreeNodeProps) => ReactNode)",
+          "type": "ReactNode | ((props: AntTreeNodeProps) => ReactNode)",
+          "default": "-",
           "description": "Customize collapse/expand icon of tree node",
-          "since": "-",
+          "since": "renderProps: 4.20.0",
           "descriptionZh": "自定义树节点的展开/折叠图标"
         },
         {
@@ -11031,8 +10873,8 @@
           },
           {
             "name": "icon",
-            "type": "ReactNode \\",
-            "default": "(props) => ReactNode",
+            "type": "ReactNode | (props) => ReactNode",
+            "default": "-",
             "description": "Customize icon. When you pass component, whose render will receive full TreeNode props as component props",
             "descriptionZh": "自定义图标。可接收组件，props 为当前节点 props"
           },
@@ -11068,10 +10910,10 @@
         "Tree.DirectoryTree props": [
           {
             "name": "expandAction",
-            "type": "`click` \\",
-            "default": "`doubleClick`",
-            "description": "Directory open logic, optional: false \\",
-            "descriptionZh": "目录展开逻辑，可选：false \\"
+            "type": "string | boolean",
+            "default": "`click`",
+            "description": "Directory open logic, optional: false | `click` | `doubleClick`",
+            "descriptionZh": "目录展开逻辑，可选：false | `click` | `doubleClick`"
           }
         ]
       },
@@ -11110,10 +10952,9 @@
         },
         {
           "name": "defaultValue",
-          "type": "string \\",
-          "default": "string\\[]",
+          "type": "string | string\\[]",
+          "default": "-",
           "description": "To set the initial selected treeNode(s)",
-          "since": "-",
           "descriptionZh": "指定默认选中的条目"
         },
         {
@@ -11133,10 +10974,9 @@
         },
         {
           "name": "dropdownMatchSelectWidth",
-          "type": "boolean \\",
-          "default": "number",
+          "type": "boolean | number",
+          "default": "true",
           "description": "Determine whether the dropdown menu and the select input are the same width. Default set `min-width` same as input. Will ignore when value less than select width. `false` will disable virtual scroll",
-          "since": "true",
           "descriptionZh": "下拉菜单和选择器同宽。默认将设置 `min-width`，当值小于选择框宽度时会被忽略。false 时会关闭虚拟滚动"
         },
         {
@@ -11163,10 +11003,9 @@
         },
         {
           "name": "filterTreeNode",
-          "type": "boolean \\",
-          "default": "function(inputValue: string, treeNode: TreeNode) (should return boolean)",
+          "type": "boolean | function(inputValue: string, treeNode: TreeNode) (should return boolean)",
+          "default": "function",
           "description": "Whether to filter treeNodes by input value. The value of `treeNodeFilterProp` is used for filtering by default",
-          "since": "function",
           "descriptionZh": "是否根据输入项进行筛选，默认用 treeNodeFilterProp 的值作为要筛选的 TreeNode 的属性值"
         },
         {
@@ -11199,18 +11038,17 @@
         },
         {
           "name": "maxTagCount",
-          "type": "number \\",
-          "default": "`responsive`",
+          "type": "number | `responsive`",
+          "default": "-",
           "description": "Max tag count to show. `responsive` will cost render performance",
-          "since": "-",
+          "since": "responsive: 4.10",
           "descriptionZh": "最多显示多少个 tag，响应式模式会对性能产生损耗"
         },
         {
           "name": "maxTagPlaceholder",
-          "type": "ReactNode \\",
-          "default": "function(omittedValues)",
+          "type": "ReactNode | function(omittedValues)",
+          "default": "-",
           "description": "Placeholder for not showing tags",
-          "since": "-",
           "descriptionZh": "隐藏 tag 时显示的内容"
         },
         {
@@ -11257,34 +11095,31 @@
         },
         {
           "name": "showCheckedStrategy",
-          "type": "`TreeSelect.SHOW_ALL` \\",
-          "default": "`TreeSelect.SHOW_PARENT` \\",
+          "type": "`TreeSelect.SHOW_ALL` | `TreeSelect.SHOW_PARENT` | `TreeSelect.SHOW_CHILD`",
+          "default": "`TreeSelect.SHOW_CHILD`",
           "description": "The way show selected item in box when `treeCheckable` set. **Default:** just show child nodes. **`TreeSelect.SHOW_ALL`:** show all checked treeNodes (include parent treeNode). **`TreeSelect.SHOW_PARENT`:** show checked treeNodes (just show parent treeNode)",
-          "since": "`TreeSelect.SHOW_CHILD`",
           "descriptionZh": "配置 `treeCheckable` 时，定义选中项回填的方式。`TreeSelect.SHOW_ALL`: 显示所有选中节点(包括父节点)。`TreeSelect.SHOW_PARENT`: 只显示父节点(当父节点下所有子节点都选中时)。 默认只显示子节点"
         },
         {
           "name": "showSearch",
           "type": "boolean",
-          "default": "single: false \\",
+          "default": "single: false | multiple: true",
           "description": "Support search or not",
-          "since": "multiple: true",
           "descriptionZh": "是否支持搜索框"
         },
         {
           "name": "size",
-          "type": "`large` \\",
-          "default": "`middle` \\",
+          "type": "`large` | `middle` | `small`",
+          "default": "-",
           "description": "To set the size of the select input",
-          "since": "`small`",
           "descriptionZh": "选择框大小"
         },
         {
           "name": "status",
-          "type": "'error' \\",
-          "default": "'warning'",
+          "type": "'error' | 'warning'",
+          "default": "-",
           "description": "Set validation status",
-          "since": "-",
+          "since": "4.19.0",
           "descriptionZh": "设置校验状态"
         },
         {
@@ -11296,10 +11131,10 @@
         },
         {
           "name": "switcherIcon",
-          "type": "ReactNode \\",
-          "default": "((props: AntTreeNodeProps) => ReactNode)",
+          "type": "ReactNode | ((props: AntTreeNodeProps) => ReactNode)",
+          "default": "-",
           "description": "Customize collapse/expand icon of tree node",
-          "since": "-",
+          "since": "renderProps: 4.20.0",
           "descriptionZh": "自定义树节点的展开/折叠图标"
         },
         {
@@ -11332,10 +11167,9 @@
         },
         {
           "name": "treeDataSimpleMode",
-          "type": "boolean \\",
-          "default": "object&lt;{ id: string, pId: string, rootPId: string }>",
+          "type": "boolean | object&lt;{ id: string, pId: string, rootPId: string }>",
+          "default": "false",
           "description": "Enable simple mode of treeData. Changes the `treeData` schema to: \\[{id:1, pId:0, value:'1', title:\"test1\",...},...] where pId is parent node's id). It is possible to replace the default `id` and `pId` keys by providing object to `treeDataSimpleMode`",
-          "since": "false",
           "descriptionZh": "使用简单格式的 treeData，具体设置参考可设置的类型 (此时 treeData 应变为这样的数据结构: \\[{id:1, pId:0, value:'1', title:\"test1\",...},...]， `pId` 是父节点的 id)"
         },
         {
@@ -11354,11 +11188,11 @@
         },
         {
           "name": "treeExpandAction",
-          "type": "`click` \\",
-          "default": "`doubleClick`",
-          "description": "Tree title open logic when click, optional: false \\",
-          "since": "string \\",
-          "descriptionZh": "点击节点 title 时的展开逻辑，可选：false \\"
+          "type": "string | boolean",
+          "default": "false",
+          "description": "Tree title open logic when click, optional: false | `click` | `doubleClick`",
+          "since": "4.21.0",
+          "descriptionZh": "点击节点 title 时的展开逻辑，可选：false | `click` | `doubleClick`"
         },
         {
           "name": "treeExpandedKeys",
@@ -11383,10 +11217,10 @@
         },
         {
           "name": "treeLine",
-          "type": "boolean \\",
-          "default": "object",
+          "type": "boolean | object",
+          "default": "false",
           "description": "Show the line. Ref [Tree - showLine](/components/tree/#components-tree-demo-line)",
-          "since": "false",
+          "since": "4.17.0",
           "descriptionZh": "是否展示线条样式，请参考 [Tree - showLine](/components/tree/#components-tree-demo-line)"
         },
         {
@@ -11405,10 +11239,9 @@
         },
         {
           "name": "value",
-          "type": "string \\",
-          "default": "string\\[]",
+          "type": "string | string\\[]",
+          "default": "-",
           "description": "To set the current selected treeNode(s)",
-          "since": "-",
           "descriptionZh": "指定当前选中的条目"
         },
         {
@@ -11573,10 +11406,10 @@
           },
           {
             "name": "copyable",
-            "type": "boolean \\",
-            "default": "[copyable](#copyable)",
+            "type": "boolean | [copyable](#copyable)",
+            "default": "false",
             "description": "Whether to be copyable, customize it via setting an object",
-            "since": "false",
+            "since": "[copyable](#copyable)",
             "descriptionZh": "是否可拷贝，为对象时可进行各种自定义"
           },
           {
@@ -11595,18 +11428,18 @@
           },
           {
             "name": "editable",
-            "type": "boolean \\",
-            "default": "[editable](#editable)",
+            "type": "boolean | [editable](#editable)",
+            "default": "false",
             "description": "If editable. Can control edit state when is object",
-            "since": "false",
+            "since": "[editable](#editable)",
             "descriptionZh": "是否可编辑，为对象时可对编辑进行控制"
           },
           {
             "name": "ellipsis",
-            "type": "boolean \\",
-            "default": "[Omit<ellipsis, 'expandable' \\",
+            "type": "boolean | [Omit<ellipsis, 'expandable' | 'rows' | 'onExpand'>](#ellipsis)",
+            "default": "false",
             "description": "Display ellipsis when text overflows，can't configure expandable、rows and onExpand by using object. Diff with Typography.Paragraph, Text do not have 100% width style which means it will fix width on the first ellipsis. If you want to have responsive ellipsis, please set width manually",
-            "since": "'rows' \\",
+            "since": "[ellipsis](#ellipsis)",
             "descriptionZh": "自动溢出省略，为对象时不能设置省略行数、是否可展开、onExpand 展开事件。不同于 Typography.Paragraph，Text 组件自身不带 100% 宽度样式，因而默认情况下初次缩略后宽度便不再变化。如果需要自适应宽度，请手工配置宽度样式"
           },
           {
@@ -11648,10 +11481,10 @@
           },
           {
             "name": "type",
-            "type": "`secondary` \\",
-            "default": "`success` \\",
+            "type": "`secondary` | `success` | `warning` | `danger`",
+            "default": "-",
             "description": "Content type",
-            "since": "`warning` \\",
+            "since": "success: 4.6.0",
             "descriptionZh": "文本类型"
           },
           {
@@ -11672,10 +11505,10 @@
           },
           {
             "name": "copyable",
-            "type": "boolean \\",
-            "default": "[copyable](#copyable)",
+            "type": "boolean | [copyable](#copyable)",
+            "default": "false",
             "description": "Whether to be copyable, customize it via setting an object",
-            "since": "false",
+            "since": "[copyable](#copyable)",
             "descriptionZh": "是否可拷贝，为对象时可进行各种自定义"
           },
           {
@@ -11694,18 +11527,18 @@
           },
           {
             "name": "editable",
-            "type": "boolean \\",
-            "default": "[editable](#editable)",
+            "type": "boolean | [editable](#editable)",
+            "default": "false",
             "description": "If editable. Can control edit state when is object",
-            "since": "false",
+            "since": "[editable](#editable)",
             "descriptionZh": "是否可编辑，为对象时可对编辑进行控制"
           },
           {
             "name": "ellipsis",
-            "type": "boolean \\",
-            "default": "[ellipsis](#ellipsis)",
+            "type": "boolean | [ellipsis](#ellipsis)",
+            "default": "false",
             "description": "Display ellipsis when text overflows, can configure rows and expandable by using object",
-            "since": "false",
+            "since": "[ellipsis](#ellipsis)",
             "descriptionZh": "自动溢出省略，为对象时可设置省略行数、是否可展开、添加后缀等"
           },
           {
@@ -11740,10 +11573,10 @@
           },
           {
             "name": "type",
-            "type": "`secondary` \\",
-            "default": "`success` \\",
+            "type": "`secondary` | `success` | `warning` | `danger`",
+            "default": "-",
             "description": "Content type",
-            "since": "`warning` \\",
+            "since": "success: 4.6.0",
             "descriptionZh": "文本类型"
           },
           {
@@ -11764,10 +11597,10 @@
           },
           {
             "name": "copyable",
-            "type": "boolean \\",
-            "default": "[copyable](#copyable)",
+            "type": "boolean | [copyable](#copyable)",
+            "default": "false",
             "description": "Whether to be copyable, customize it via setting an object",
-            "since": "false",
+            "since": "[copyable](#copyable)",
             "descriptionZh": "是否可拷贝，为对象时可进行各种自定义"
           },
           {
@@ -11786,18 +11619,18 @@
           },
           {
             "name": "editable",
-            "type": "boolean \\",
-            "default": "[editable](#editable)",
+            "type": "boolean | [editable](#editable)",
+            "default": "false",
             "description": "If editable. Can control edit state when is object",
-            "since": "false",
+            "since": "[editable](#editable)",
             "descriptionZh": "是否可编辑，为对象时可对编辑进行控制"
           },
           {
             "name": "ellipsis",
-            "type": "boolean \\",
-            "default": "[ellipsis](#ellipsis)",
+            "type": "boolean | [ellipsis](#ellipsis)",
+            "default": "false",
             "description": "Display ellipsis when text overflows, can configure rows and expandable by using object",
-            "since": "false",
+            "since": "[ellipsis](#ellipsis)",
             "descriptionZh": "自动溢出省略，为对象时可设置省略行数、是否可展开、添加后缀等"
           },
           {
@@ -11831,10 +11664,10 @@
           },
           {
             "name": "type",
-            "type": "`secondary` \\",
-            "default": "`success` \\",
+            "type": "`secondary` | `success` | `warning` | `danger`",
+            "default": "-",
             "description": "Content type",
-            "since": "`warning` \\",
+            "since": "success: 4.6.0",
             "descriptionZh": "文本类型"
           },
           {
@@ -11848,10 +11681,10 @@
         "Typography.copyable": [
           {
             "name": "format",
-            "type": "'text/plain' \\",
-            "default": "'text/html'",
+            "type": "'text/plain' | 'text/html'",
+            "default": "-",
             "description": "The Mime Type of the text",
-            "since": "-",
+            "since": "4.21.0",
             "descriptionZh": "剪切板数据的 Mime Type"
           },
           {
@@ -11888,10 +11721,10 @@
         "Typography.editable": [
           {
             "name": "autoSize",
-            "type": "boolean \\",
-            "default": "{ minRows: number, maxRows: number }",
+            "type": "boolean | { minRows: number, maxRows: number }",
+            "default": "-",
             "description": "`autoSize` attribute of textarea",
-            "since": "-",
+            "since": "4.4.0",
             "descriptionZh": "自动 resize 文本域"
           },
           {
@@ -11919,10 +11752,10 @@
           },
           {
             "name": "tooltip",
-            "type": "boolean \\",
-            "default": "ReactNode",
+            "type": "boolean | ReactNode",
+            "default": "`Edit`",
             "description": "Custom tooltip text, hide when it is false",
-            "since": "`Edit`",
+            "since": "4.6.0",
             "descriptionZh": "自定义提示文本，为 false 时关闭"
           },
           {
@@ -11964,10 +11797,9 @@
           },
           {
             "name": "triggerType",
-            "type": "Array&lt;`icon`\\",
-            "default": "`text`>",
+            "type": "Array&lt;`icon`|`text`>",
+            "default": "\\[`icon`]",
             "description": "Edit mode trigger - icon, text or both (not specifying icon as trigger hides it)",
-            "since": "\\[`icon`]",
             "descriptionZh": "编辑模式触发器类型，图标、文本或者两者都设置（不设置图标作为触发器时它会隐藏）"
           },
           {
@@ -12010,10 +11842,10 @@
           },
           {
             "name": "tooltip",
-            "type": "boolean \\",
-            "default": "ReactNode \\",
+            "type": "boolean | ReactNode | [TooltipProps](/components/tooltip/#API)",
+            "default": "-",
             "description": "Show tooltip when ellipsis",
-            "since": "[TooltipProps](/components/tooltip/#API)",
+            "since": "4.11.0",
             "descriptionZh": "省略时，展示提示信息"
           },
           {
@@ -12054,18 +11886,16 @@
         },
         {
           "name": "action",
-          "type": "string \\",
-          "default": "(file) => Promise&lt;string>",
+          "type": "string | (file) => Promise&lt;string>",
+          "default": "-",
           "description": "Uploading URL",
-          "since": "-",
           "descriptionZh": "上传的地址"
         },
         {
           "name": "beforeUpload",
-          "type": "(file, fileList) => boolean \\",
-          "default": "Promise&lt;File> \\",
+          "type": "(file, fileList) => boolean | Promise&lt;File> | `Upload.LIST_IGNORE`",
+          "default": "-",
           "description": "Hook function which will be executed before uploading. Uploading will be stopped with `false` or a rejected Promise returned. When returned value is `Upload.LIST_IGNORE`, the list of files that have been uploaded will ignore it. **Warning：this function is not supported in IE9**",
-          "since": "`Upload.LIST_IGNORE`",
           "descriptionZh": "上传文件之前的钩子，参数为上传的文件，若返回 `false` 则停止上传。支持返回一个 Promise 对象，Promise 对象 reject 时则停止上传，resolve 时开始上传（ resolve 传入 `File` 或 `Blob` 对象则上传 resolve 传入对象）；也可以返回 `Upload.LIST_IGNORE`，此时列表中将不展示此文件。 **注意：IE9 不支持该方法**"
         },
         {
@@ -12077,10 +11907,9 @@
         },
         {
           "name": "data",
-          "type": "object \\",
-          "default": "(file) => object \\",
+          "type": "object | (file) => object | Promise&lt;object>",
+          "default": "-",
           "description": "Uploading extra params or function which can return uploading extra params",
-          "since": "Promise&lt;object>",
           "descriptionZh": "上传所需额外参数或返回上传额外参数的方法"
         },
         {
@@ -12185,10 +12014,9 @@
         },
         {
           "name": "previewFile",
-          "type": "(file: File \\",
-          "default": "Blob) => Promise&lt;dataURL: string>",
+          "type": "(file: File | Blob) => Promise&lt;dataURL: string>",
+          "default": "-",
           "description": "Customize preview file logic",
-          "since": "-",
           "descriptionZh": "自定义文件预览逻辑"
         },
         {
@@ -12201,10 +12029,10 @@
         },
         {
           "name": "showUploadList",
-          "type": "boolean \\",
-          "default": "{ showPreviewIcon?: boolean, showDownloadIcon?: boolean, showRemoveIcon?: boolean, previewIcon?: ReactNode \\",
+          "type": "boolean | { showPreviewIcon?: boolean, showDownloadIcon?: boolean, showRemoveIcon?: boolean, previewIcon?: ReactNode | (file: UploadFile) => ReactNode, removeIcon?: ReactNode | (file: UploadFile) => ReactNode, downloadIcon?: ReactNode | (file: UploadFile) => ReactNode }",
+          "default": "true",
           "description": "Whether to show default upload list, could be an object to specify `showPreviewIcon`, `showRemoveIcon`, `showDownloadIcon`, `removeIcon` and `downloadIcon` individually",
-          "since": "(file: UploadFile) => ReactNode, removeIcon?: ReactNode \\",
+          "since": "function: 4.7.0",
           "descriptionZh": "是否展示文件列表, 可设为一个对象，用于单独设定 `showPreviewIcon`, `showRemoveIcon`, `showDownloadIcon`, `removeIcon` 和 `downloadIcon`"
         },
         {
@@ -12245,10 +12073,9 @@
         },
         {
           "name": "onRemove",
-          "type": "function(file): boolean \\",
-          "default": "Promise",
+          "type": "function(file): boolean | Promise",
+          "default": "-",
           "description": "A callback function, will be executed when removing file button is clicked, remove event will be prevented when return value is false or a Promise which resolve(false) or reject",
-          "since": "-",
           "descriptionZh": "点击移除文件时的回调，返回值为 false 时不移除。支持返回一个 Promise 对象，Promise 对象 resolve(false) 或 reject 时不移除"
         }
       ],
@@ -12282,10 +12109,10 @@
         "Upload.UploadFile": [
           {
             "name": "crossOrigin",
-            "type": "`'anonymous'` \\",
-            "default": "`'use-credentials'` \\",
+            "type": "`'anonymous'` | `'use-credentials'` | `''`",
+            "default": "-",
             "description": "CORS settings attributes",
-            "since": "`''`",
+            "since": "4.20.0",
             "descriptionZh": "CORS 属性设置"
           },
           {
@@ -12306,10 +12133,10 @@
           },
           {
             "name": "status",
-            "type": "`error` \\",
-            "default": "`success` \\",
+            "type": "`error` | `success` | `done` | `uploading` | `removed`",
+            "default": "-",
             "description": "Upload status. Show different style when configured",
-            "since": "`done` \\",
+            "since": "-",
             "descriptionZh": "上传状态，不同状态展示颜色也会有所不同"
           },
           {
