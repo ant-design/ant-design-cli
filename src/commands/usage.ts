@@ -3,6 +3,8 @@ import type { GlobalOptions } from '../types.js';
 import { readFileSync } from 'node:fs';
 import { output } from '../output/formatter.js';
 import { collectFiles, parseAntdImports } from '../utils/scan.js';
+import { loadMetadataForVersion } from '../data/loader.js';
+import { detectVersion } from '../data/version.js';
 
 interface ComponentUsage {
   name: string;
@@ -33,12 +35,13 @@ function scanFile(filePath: string): Map<string, { count: number; subComponents:
     result.get(name)!.count++;
   }
 
-  // Find sub-component usage (e.g. Form.Item)
+  // Find sub-component usage (e.g. Form.Item) — only count capitalized children
+  // to exclude method/hook calls like Form.useForm, Modal.confirm, App.useApp
   SUB_COMPONENT_RE.lastIndex = 0;
   let match: RegExpExecArray | null;
   while ((match = SUB_COMPONENT_RE.exec(content)) !== null) {
     const [, parent, child] = match;
-    if (importedNames.includes(parent)) {
+    if (importedNames.includes(parent) && /^[A-Z]/.test(child)) {
       const entry = result.get(parent)!;
       const subKey = `${parent}.${child}`;
       entry.subComponents.set(subKey, (entry.subComponents.get(subKey) || 0) + 1);
@@ -58,6 +61,18 @@ export function registerUsageCommand(program: Command): void {
       const targetDir = dir || '.';
       const filterName = cmdOpts?.filter?.toLowerCase();
 
+      const versionInfo = detectVersion(opts.version);
+      const store = loadMetadataForVersion(versionInfo.version);
+      const knownComponents = new Set(store.components.map((c) => c.name));
+      // Also include sub-component leaf names that are directly importable
+      // (e.g. Row, Col from Grid.Row, Grid.Col)
+      for (const comp of store.components) {
+        for (const subKey of Object.keys(comp.subComponentProps ?? {})) {
+          const leaf = subKey.split('.').pop();
+          if (leaf) knownComponents.add(leaf);
+        }
+      }
+
       const files = collectFiles(targetDir);
       const aggregated = new Map<string, { imports: number; files: Set<string>; subComponents: Map<string, number> }>();
 
@@ -76,20 +91,29 @@ export function registerUsageCommand(program: Command): void {
         }
       }
 
-      const components: ComponentUsage[] = [...aggregated.entries()]
+      const toUsage = ([name, data]: [string, { imports: number; files: Set<string>; subComponents: Map<string, number> }]): ComponentUsage => {
+        const usage: ComponentUsage = {
+          name,
+          imports: data.imports,
+          files: [...data.files],
+        };
+        if (data.subComponents.size > 0) {
+          usage.subComponents = Object.fromEntries(data.subComponents);
+        }
+        return usage;
+      };
+
+      const allEntries = [...aggregated.entries()]
         .filter(([name]) => !filterName || name.toLowerCase() === filterName)
-        .sort((a, b) => b[1].imports - a[1].imports)
-        .map(([name, data]) => {
-          const usage: ComponentUsage = {
-            name,
-            imports: data.imports,
-            files: [...data.files],
-          };
-          if (data.subComponents.size > 0) {
-            usage.subComponents = Object.fromEntries(data.subComponents);
-          }
-          return usage;
-        });
+        .sort((a, b) => b[1].imports - a[1].imports);
+
+      const components: ComponentUsage[] = allEntries
+        .filter(([name]) => knownComponents.has(name))
+        .map(toUsage);
+
+      const nonComponents: ComponentUsage[] = allEntries
+        .filter(([name]) => !knownComponents.has(name))
+        .map(toUsage);
 
       const totalImports = components.reduce((sum, c) => sum + c.imports, 0);
 
@@ -97,6 +121,7 @@ export function registerUsageCommand(program: Command): void {
         output({
           scanned: files.length,
           components,
+          nonComponents,
           summary: { totalComponents: components.length, totalImports },
         }, 'json');
         return;
@@ -104,20 +129,28 @@ export function registerUsageCommand(program: Command): void {
 
       console.log(`Scanned ${files.length} files in ${targetDir}\n`);
 
-      if (components.length === 0) {
+      if (components.length === 0 && nonComponents.length === 0) {
         console.log('No antd imports found.');
         return;
       }
 
-      for (const comp of components) {
-        console.log(`  ${comp.name} — ${comp.imports} imports across ${comp.files.length} files`);
-        if (comp.subComponents) {
-          for (const [sub, count] of Object.entries(comp.subComponents)) {
-            console.log(`    ${sub}: ${count} usages`);
+      if (components.length > 0) {
+        for (const comp of components) {
+          console.log(`  ${comp.name} — ${comp.imports} imports across ${comp.files.length} files`);
+          if (comp.subComponents) {
+            for (const [sub, count] of Object.entries(comp.subComponents)) {
+              console.log(`    ${sub}: ${count} usages`);
+            }
           }
         }
+        console.log(`\nTotal: ${components.length} components, ${totalImports} imports`);
       }
 
-      console.log(`\nTotal: ${components.length} components, ${totalImports} imports`);
+      if (nonComponents.length > 0) {
+        console.log(`\nNon-component antd exports (${nonComponents.length}):`);
+        for (const item of nonComponents) {
+          console.log(`  ${item.name} — ${item.imports} imports across ${item.files.length} files`);
+        }
+      }
     });
 }
