@@ -25,11 +25,20 @@ function getDeprecatedProps(store: ReturnType<typeof loadMetadataForVersion>): M
   for (const comp of store.components) {
     const deprecated = comp.props.filter((p) => p.deprecated);
     if (deprecated.length > 0) {
-      result.set(comp.name, deprecated.map((p) => ({
-        prop: p.name,
-        since: typeof p.deprecated === 'string' ? p.deprecated : 'unknown',
-        message: `\`${p.name}\` prop is deprecated${typeof p.deprecated === 'string' ? ` since ${p.deprecated}` : ''}`,
-      })));
+      result.set(comp.name, deprecated.map((p) => {
+        const sinceStr = typeof p.deprecated === 'string' ? ` since ${p.deprecated}` : '';
+        // Extract "use X instead" replacement hint from description when deprecated is boolean
+        let hint = '';
+        if (p.deprecated === true && p.description) {
+          const m = p.description.match(/(?:use|replaced? by|see)\s+(`[^`]+`|\w+)/i);
+          if (m) hint = `, use ${m[1]} instead`;
+        }
+        return {
+          prop: p.name,
+          since: typeof p.deprecated === 'string' ? p.deprecated : 'unknown',
+          message: `\`${p.name}\` prop is deprecated${sinceStr}${hint}`,
+        };
+      }));
     }
   }
   return result;

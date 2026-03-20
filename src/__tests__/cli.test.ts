@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
+import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 
 const CLI = join(__dirname, '..', '..', 'dist', 'index.js');
@@ -351,6 +352,20 @@ describe('CLI e2e', () => {
     const out = run('lint', '--format', 'json');
     const data = JSON.parse(out);
     expect(data).toHaveProperty('issues');
+  });
+
+  it('lint deprecated message includes replacement hint from description', () => {
+    const tmpDir = join(__dirname, '__tmp_lint_deprecated__');
+    const fixture = join(tmpDir, 'card-test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Card } from 'antd';\nconst App = () => <Card bordered={false}>x</Card>;\n`);
+      const out = run('lint', fixture, '--version', '6.3.1');
+      expect(out).toMatch(/bordered.*deprecated/i);
+      expect(out).toMatch(/variant/i);
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
   });
 
   it('changelog should error when from > to', () => {
