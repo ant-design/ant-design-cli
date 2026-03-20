@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
 
 export const SCAN_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx']);
-export const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next', '.umi']);
+export const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next']);
 
 /** Match: import { Button, Form } from 'antd' or 'antd/es/...' */
 export const ANTD_IMPORT_RE = /import\s+\{([^}]+)\}\s+from\s+['"]antd(?:\/[^'"]*)?['"]/g;
@@ -21,7 +21,7 @@ export function collectFiles(dir: string): string[] {
   try {
     const entries = readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
-      if (SKIP_DIRS.has(entry.name)) continue;
+      if (entry.name.startsWith('.umi') || SKIP_DIRS.has(entry.name)) continue;
       const fullPath = join(dir, entry.name);
       if (entry.isDirectory()) {
         files.push(...collectFiles(fullPath));
@@ -43,7 +43,9 @@ export function parseAntdImports(content: string): string[] {
   ANTD_IMPORT_RE.lastIndex = 0;
   let match: RegExpExecArray | null;
   while ((match = ANTD_IMPORT_RE.exec(content)) !== null) {
-    const parsed = match[1].split(',').map((n) => n.trim()).filter(Boolean);
+    const parsed = match[1].split(',')
+      .map((n) => n.trim())
+      .filter((n) => Boolean(n) && !/^type\s/.test(n));
     names.push(...parsed);
   }
   return names;

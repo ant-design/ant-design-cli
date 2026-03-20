@@ -40,6 +40,19 @@ import { Form, Input } from 'antd';
     const code = `import { Select } from "antd";`;
     expect(parseAntdImports(code)).toEqual(['Select']);
   });
+
+  it('excludes type-only imports entirely', () => {
+    const code = `import { type InputRef, Button } from 'antd';`;
+    const result = parseAntdImports(code);
+    expect(result).toEqual(['Button']);
+    expect(result).not.toContain('InputRef');
+    expect(result).not.toContain('type InputRef');
+  });
+
+  it('excludes all type-only imports when entire import is types', () => {
+    const code = `import { type FormInstance, type InputRef } from 'antd';`;
+    expect(parseAntdImports(code)).toEqual([]);
+  });
 });
 
 describe('collectFiles', () => {
