@@ -16,10 +16,23 @@ function getDataPath(): string {
   return candidates.find((p) => existsSync(join(p, probe))) ?? candidates[0];
 }
 
+/** Deduplicate props by name (keep first occurrence). */
+function normalizeStore(store: MetadataStore): MetadataStore {
+  for (const comp of store.components) {
+    const seen = new Set<string>();
+    comp.props = comp.props.filter((p) => {
+      if (seen.has(p.name)) return false;
+      seen.add(p.name);
+      return true;
+    });
+  }
+  return store;
+}
+
 export function loadMetadata(majorVersion: string): MetadataStore {
   const dataPath = join(getDataPath(), `${majorVersion}.json`);
   try {
-    return JSON.parse(readFileSync(dataPath, 'utf-8')) as MetadataStore;
+    return normalizeStore(JSON.parse(readFileSync(dataPath, 'utf-8')) as MetadataStore);
   } catch (err) {
     if (err instanceof SyntaxError) {
       process.stderr.write(`[antd-cli] Warning: data file may be corrupted: ${dataPath}\n`);
@@ -68,7 +81,7 @@ export function loadMetadataForVersion(version: string): MetadataStore {
     const snapshotPath = join(getDataPath(), `v${tag}.json`);
     if (!existsSync(snapshotPath)) return null;
     try {
-      return JSON.parse(readFileSync(snapshotPath, 'utf-8')) as MetadataStore;
+      return normalizeStore(JSON.parse(readFileSync(snapshotPath, 'utf-8')) as MetadataStore);
     } catch {
       return null;
     }

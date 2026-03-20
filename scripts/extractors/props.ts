@@ -3,13 +3,15 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import type { PropData } from '../../src/types.js';
 
-/** Parse a markdown table row into cells, handling escaped pipes */
-function parseTableRow(row: string): string[] {
+/** Parse a markdown table row into cells, handling escaped pipes (`\|`) */
+export function parseTableRow(row: string): string[] {
+  const PIPE = '\x00PIPE\x00';
   return row
+    .replace(/\\\|/g, PIPE)   // protect \| before splitting
     .replace(/^\|/, '')
     .replace(/\|$/, '')
     .split('|')
-    .map((cell) => cell.trim());
+    .map((cell) => cell.trim().replace(new RegExp(PIPE, 'g'), '|'));
 }
 
 /** Detect if a prop name indicates deprecation (~~name~~) */
