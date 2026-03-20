@@ -59,7 +59,8 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 
 ### Data Layer Notes
 
-- On load, component props are deduplicated by name (first entry wins) and trailing ` \` from markdown table continuation lines is stripped from `type`, `default`, and `since` fields. This is a defensive normalisation — the extraction script should be the authoritative fix.
+- On load, component props are deduplicated by name (first entry wins).
+- The extraction script handles `\|` (escaped pipes in markdown table cells) by replacing them with a placeholder before splitting. This ensures multi-value union types like `` `primary` \| `dashed` \| `link` `` are stored correctly as `` `primary` | `dashed` | `link` `` instead of being split across wrong columns.
 - Each version file contains both `en` and `zh` descriptions, keyed by language
 - `semantic` data extracted from `components/*/demo/_semantic.tsx` files
 - Data is auto-extracted from antd source via `scripts/extract.ts`
@@ -297,7 +298,7 @@ antd usage ./src -f Form            # combine directory and filter
 antd usage --format json
 ```
 
-Imports are cross-referenced against the antd metadata for the detected version. Known antd component exports (e.g. `Button`, `Form`) appear in `components`. Non-component antd exports (e.g. `message`, `notification`, `theme`, `version`, TypeScript type-only imports like `FormInstance`) are reported separately in `nonComponents`. TypeScript `import { type X }` syntax is handled — the `type` keyword is stripped before matching.
+Imports are cross-referenced against the antd metadata for the detected version. Known antd component exports (e.g. `Button`, `Form`, `Row`, `Col`) appear in `components`. Non-component antd exports (e.g. `message`, `notification`, `theme`) are reported separately in `nonComponents`. TypeScript `import { type X }` syntax is handled — type-only imports are excluded entirely (they are not runtime values and have no component usage to track). Sub-component usage detection only counts JSX sub-components with capitalized names (e.g. `Form.Item`, `Table.Column`), not method or hook calls (e.g. `Form.useForm`, `Modal.confirm`).
 
 The scanner skips directories named `node_modules`, `dist`, `build`, `.next`, `.git`, and any directory whose name starts with `.umi` (covers `.umi`, `.umi-production`, `.umi-test`, etc.).
 
@@ -349,6 +350,8 @@ JSON output:
 ```
 
 Note: This is complementary to ESLint. `antd lint` focuses on antd-specific knowledge (deprecated APIs per version, antd best practices) that generic ESLint rules cannot cover.
+
+When a deprecated prop has a replacement hint in its description (e.g. "please use `variant` instead"), the warning includes the replacement: `` Card `bordered` prop is deprecated, use `variant` instead ``.
 
 #### `antd migrate <from> <to>`
 
