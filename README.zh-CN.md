@@ -44,6 +44,12 @@ bun add -g @ant-design/cli
 utoo install @ant-design/cli
 ```
 
+也可以通过 `npx` 无需安装直接使用：
+
+```bash
+npx @ant-design/cli info Button
+```
+
 ## 🚀 快速开始
 
 ```bash
