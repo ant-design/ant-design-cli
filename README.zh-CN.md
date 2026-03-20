@@ -315,24 +315,39 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 | `--detail` | 完整信息输出 | `false` |
 | `-V, --cli-version` | 打印 CLI 版本号 | — |
 
-## 🤖 与 AI Agent 配合使用
+## 🤖 与 Code Agent 配合使用
 
-将以下内容添加到 `CLAUDE.md`（或其他 Agent 配置文件），让 Code Agent 自动调用 CLI 查询 antd 相关信息：
+CLI 内置了一份 [skill 文件](./docs/skill.md)，教会 Code Agent 在何时、如何使用每条命令。按你使用的 Agent 安装：
 
-````markdown
-## Ant Design
+### Claude Code
 
-使用 `@ant-design/cli` 查询 antd 组件知识：
+```bash
+# 添加到项目指令（推荐）
+echo '\n## Ant Design\n\nSee [docs/skill.md](./docs/skill.md) for antd CLI usage.' >> CLAUDE.md
 
-- `antd info <Component>` — 获取 Props、类型和默认值
-- `antd doc <Component>` — 获取完整 Markdown 文档
-- `antd demo <Component> [name]` — 获取 Demo 源码
-- `antd token <Component>` — 获取 Design Token
-- `antd migrate 4 5 --apply ./src` — 生成迁移指令
-- `antd lint ./src` — 检查最佳实践违规
+# 或直接复制 skill 内容
+cat node_modules/@ant-design/cli/docs/skill.md >> CLAUDE.md
+```
 
-程序化解析时优先使用 `--format json`。
-````
+### Cursor
+
+将 skill 文件复制到 Cursor 规则目录：
+
+```bash
+cp node_modules/@ant-design/cli/docs/skill.md .cursor/rules/antd.md
+```
+
+### OpenAI Codex
+
+```bash
+cat node_modules/@ant-design/cli/docs/skill.md >> AGENTS.md
+```
+
+### Gemini CLI
+
+```bash
+cat node_modules/@ant-design/cli/docs/skill.md >> GEMINI.md
+```
 
 ## 📄 开源协议
 

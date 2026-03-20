@@ -315,24 +315,39 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 | `--detail` | Full information output | `false` |
 | `-V, --cli-version` | Print CLI version number | — |
 
-## 🤖 Use with AI Agents
+## 🤖 Use with Code Agents
 
-Add the following to your `CLAUDE.md` (or equivalent agent config) to let your Code Agent automatically invoke the CLI for antd-related queries:
+The CLI ships with a [skill file](./docs/skill.md) that teaches Code Agents when and how to use each command. Install it for your agent:
 
-````markdown
-## Ant Design
+### Claude Code
 
-Use `@ant-design/cli` to query antd component knowledge:
+```bash
+# Add to project instructions (recommended)
+echo '\n## Ant Design\n\nSee [docs/skill.md](./docs/skill.md) for antd CLI usage.' >> CLAUDE.md
 
-- `antd info <Component>` — get props, types, and defaults
-- `antd doc <Component>` — get full markdown documentation
-- `antd demo <Component> [name]` — get demo source code
-- `antd token <Component>` — get design tokens
-- `antd migrate 4 5 --apply ./src` — generate migration instructions
-- `antd lint ./src` — check for best practice violations
+# Or copy the skill content directly
+cat node_modules/@ant-design/cli/docs/skill.md >> CLAUDE.md
+```
 
-Always prefer `--format json` for programmatic parsing.
-````
+### Cursor
+
+Copy the skill file to your Cursor rules directory:
+
+```bash
+cp node_modules/@ant-design/cli/docs/skill.md .cursor/rules/antd.md
+```
+
+### OpenAI Codex
+
+```bash
+cat node_modules/@ant-design/cli/docs/skill.md >> AGENTS.md
+```
+
+### Gemini CLI
+
+```bash
+cat node_modules/@ant-design/cli/docs/skill.md >> GEMINI.md
+```
 
 ## 📄 License
 
