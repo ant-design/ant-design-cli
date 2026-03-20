@@ -241,7 +241,7 @@ function checkCssinjsCompat(ctx: DoctorContext): CheckResult {
     return {
       name: 'cssinjs-compat',
       status: 'pass',
-      message: 'No @ant-design/cssinjs peer dependency required (antd v4)',
+      message: 'No @ant-design/cssinjs peer dependency required by this antd version',
     };
   }
 

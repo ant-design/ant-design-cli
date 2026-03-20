@@ -59,6 +59,7 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 
 ### Data Layer Notes
 
+- On load, component props are deduplicated by name (first entry wins) and trailing ` \` from markdown table continuation lines is stripped from `type`, `default`, and `since` fields. This is a defensive normalisation — the extraction script should be the authoritative fix.
 - Each version file contains both `en` and `zh` descriptions, keyed by language
 - `semantic` data extracted from `components/*/demo/_semantic.tsx` files
 - Data is auto-extracted from antd source via `scripts/extract.ts`
@@ -296,6 +297,10 @@ antd usage ./src -f Form            # combine directory and filter
 antd usage --format json
 ```
 
+Imports are cross-referenced against the antd metadata for the detected version. Known antd component exports (e.g. `Button`, `Form`) appear in `components`. Non-component antd exports (e.g. `message`, `notification`, `theme`, `version`, TypeScript type-only imports like `FormInstance`) are reported separately in `nonComponents`. TypeScript `import { type X }` syntax is handled — the `type` keyword is stripped before matching.
+
+The scanner skips directories named `node_modules`, `dist`, `build`, `.next`, `.git`, and any directory whose name starts with `.umi` (covers `.umi`, `.umi-production`, `.umi-test`, etc.).
+
 JSON output:
 ```json
 {
@@ -304,6 +309,10 @@ JSON output:
     {"name": "Button", "imports": 18, "files": ["src/pages/home.tsx", "src/components/Header.tsx"]},
     {"name": "Form", "imports": 12, "subComponents": {"Form.Item": 35, "Form.List": 3}},
     {"name": "Table", "imports": 8, "files": ["src/pages/list.tsx"]}
+  ],
+  "nonComponents": [
+    {"name": "message", "imports": 5, "files": ["src/utils/notify.ts"]},
+    {"name": "theme", "imports": 2, "files": ["src/theme.ts"]}
   ],
   "summary": {"totalComponents": 15, "totalImports": 87}
 }
@@ -347,6 +356,7 @@ Version migration guide with optional auto-fix.
 
 ```bash
 antd migrate 4 5                    # full migration checklist
+antd migrate v4 v5                  # v prefix is accepted and normalized
 antd migrate 4 5 --component Select # Select-specific migration
 antd migrate 4 5 --apply ./src      # auto-fix what can be auto-fixed
 antd migrate --format json

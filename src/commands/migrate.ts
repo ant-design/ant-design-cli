@@ -243,8 +243,10 @@ export function registerMigrateCommand(program: Command): void {
     .option('--component <name>', 'Component-specific migration guide')
     .option('--apply <dir>', 'Generate migration prompts for scanning a directory')
     .option('--confirm', 'Confirm auto-fix (required with --apply)')
-    .action((from: string, to: string, cmdOpts: { component?: string; apply?: string; confirm?: boolean }) => {
+    .action((rawFrom: string, rawTo: string, cmdOpts: { component?: string; apply?: string; confirm?: boolean }) => {
       const opts = program.opts<GlobalOptions>();
+      const from = rawFrom.replace(/^v/i, '');
+      const to = rawTo.replace(/^v/i, '');
       const key = `${from}-${to}`;
       let steps = MIGRATION_GUIDES[key];
 
