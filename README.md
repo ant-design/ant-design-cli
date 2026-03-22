@@ -317,33 +317,44 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 
 ## 🤖 Use with Code Agents
 
-The CLI ships with a [skill file](./docs/skill.md) that teaches Code Agents when and how to use each command. Install it for your agent:
+The CLI ships with a [skill file](./docs/skill.md) that teaches Code Agents when and how to use each command — not just a command list, but a complete workflow guide that tells the agent *when* to call *which* command.
+
+Install it for your agent:
 
 ### Claude Code
 
-```bash
-# Add to project instructions (recommended)
-echo '\n## Ant Design\n\nSee [docs/skill.md](./docs/skill.md) for antd CLI usage.' >> CLAUDE.md
+Install as a [skill](https://docs.anthropic.com/en/docs/claude-code/skills) (auto-triggers when working with antd):
 
-# Or copy the skill content directly
-cat node_modules/@ant-design/cli/docs/skill.md >> CLAUDE.md
+```bash
+# Project-level (recommended)
+mkdir -p .claude/skills/antd
+cp node_modules/@ant-design/cli/docs/skill.md .claude/skills/antd/SKILL.md
+
+# Or user-level (available across all projects)
+mkdir -p ~/.claude/skills/antd
+cp $(npm root -g)/@ant-design/cli/docs/skill.md ~/.claude/skills/antd/SKILL.md
 ```
 
 ### Cursor
 
-Copy the skill file to your Cursor rules directory:
+Install as a [rule](https://docs.cursor.com/context/rules):
 
 ```bash
-cp node_modules/@ant-design/cli/docs/skill.md .cursor/rules/antd.md
+mkdir -p .cursor/rules
+cp node_modules/@ant-design/cli/docs/skill.md .cursor/rules/antd.mdc
 ```
 
 ### OpenAI Codex
+
+Append to [AGENTS.md](https://agents.md):
 
 ```bash
 cat node_modules/@ant-design/cli/docs/skill.md >> AGENTS.md
 ```
 
 ### Gemini CLI
+
+Append to [GEMINI.md](https://geminicli.com/docs/cli/gemini-md/):
 
 ```bash
 cat node_modules/@ant-design/cli/docs/skill.md >> GEMINI.md

@@ -1,18 +1,19 @@
-# Ant Design CLI Skill
+---
+name: antd
+description: >
+  Use when the user's task involves Ant Design (antd) — writing antd components,
+  debugging antd issues, querying antd APIs/props/tokens/demos, migrating between
+  antd versions, or analyzing antd usage in a project. Triggers on antd-related
+  code, imports from 'antd', or explicit antd questions.
+allowed-tools:
+  - Bash(antd *)
+---
+
+# Ant Design CLI
 
 You have access to `@ant-design/cli` — a local CLI tool with bundled antd metadata for v4/v5/v6. Use it to query component knowledge, analyze projects, and guide migrations. All data is offline, no network needed.
 
 **Always use `--format json` for structured output you can parse programmatically.**
-
-## When to Use
-
-Activate this skill whenever the user's task involves antd (Ant Design). Trigger on:
-
-- Writing or modifying antd component code
-- Debugging antd-related issues
-- Asking about antd APIs, props, tokens, or demos
-- Migrating between antd versions
-- Reviewing or optimizing antd usage in a project
 
 ## Scenarios
 

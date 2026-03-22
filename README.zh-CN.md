@@ -317,33 +317,44 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 
 ## 🤖 与 Code Agent 配合使用
 
-CLI 内置了一份 [skill 文件](./docs/skill.md)，教会 Code Agent 在何时、如何使用每条命令。按你使用的 Agent 安装：
+CLI 内置了一份 [skill 文件](./docs/skill.md)，教会 Code Agent 在何时、如何使用每条命令 — 不仅是命令列表，而是完整的工作流指南，让 agent 在正确的时机主动调用正确的命令。
+
+按你使用的 Agent 安装：
 
 ### Claude Code
 
-```bash
-# 添加到项目指令（推荐）
-echo '\n## Ant Design\n\nSee [docs/skill.md](./docs/skill.md) for antd CLI usage.' >> CLAUDE.md
+安装为 [skill](https://docs.anthropic.com/en/docs/claude-code/skills)（处理 antd 相关任务时自动触发）：
 
-# 或直接复制 skill 内容
-cat node_modules/@ant-design/cli/docs/skill.md >> CLAUDE.md
+```bash
+# 项目级（推荐）
+mkdir -p .claude/skills/antd
+cp node_modules/@ant-design/cli/docs/skill.md .claude/skills/antd/SKILL.md
+
+# 或用户级（所有项目可用）
+mkdir -p ~/.claude/skills/antd
+cp $(npm root -g)/@ant-design/cli/docs/skill.md ~/.claude/skills/antd/SKILL.md
 ```
 
 ### Cursor
 
-将 skill 文件复制到 Cursor 规则目录：
+安装为 [rule](https://docs.cursor.com/context/rules)：
 
 ```bash
-cp node_modules/@ant-design/cli/docs/skill.md .cursor/rules/antd.md
+mkdir -p .cursor/rules
+cp node_modules/@ant-design/cli/docs/skill.md .cursor/rules/antd.mdc
 ```
 
 ### OpenAI Codex
+
+追加到 [AGENTS.md](https://agents.md)：
 
 ```bash
 cat node_modules/@ant-design/cli/docs/skill.md >> AGENTS.md
 ```
 
 ### Gemini CLI
+
+追加到 [GEMINI.md](https://geminicli.com/docs/cli/gemini-md/)：
 
 ```bash
 cat node_modules/@ant-design/cli/docs/skill.md >> GEMINI.md
