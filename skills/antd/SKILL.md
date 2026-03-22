@@ -75,13 +75,13 @@ antd migrate 4 5 --format json
 antd migrate 4 5 --component Select --format json
 
 # See what changed between two versions
-antd changelog diff 4.24.0 5.0.0 --format json
+antd changelog 4.24.0 5.0.0 --format json
 
 # See changes for a specific component
-antd changelog diff 4.24.0 5.0.0 Select --format json
+antd changelog 4.24.0 5.0.0 Select --format json
 ```
 
-**Workflow:** `antd migrate` → get full checklist → `antd changelog diff` → understand breaking changes → apply fixes → `antd lint` → verify no deprecated usage remains.
+**Workflow:** `antd migrate` → get full checklist → `antd changelog <v1> <v2>` → understand breaking changes → apply fixes → `antd lint` → verify no deprecated usage remains.
 
 ### 5. Analyzing project antd usage
 
@@ -141,5 +141,5 @@ antd list --version 5.0.0 --format json
 1. **Always query before writing** — Don't guess antd APIs from memory. Run `antd info` first.
 2. **Match the user's version** — If the project uses antd 4.x, pass `--version 4.24.0`. The CLI auto-detects from `node_modules` if no flag is given.
 3. **Use `--format json`** — Every command supports it. Parse the JSON output rather than regex-matching text output.
-4. **Check before suggesting migration** — Run `antd changelog diff` and `antd migrate` before advising on version upgrades.
+4. **Check before suggesting migration** — Run `antd changelog <v1> <v2>` and `antd migrate` before advising on version upgrades.
 5. **Lint after changes** — After writing or modifying antd code, run `antd lint` on the changed files to catch deprecated or problematic usage.

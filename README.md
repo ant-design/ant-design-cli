@@ -30,18 +30,18 @@ Designed for Code Agents (Claude Code, Cursor, Copilot, etc.) to invoke via shel
 
 ## 📦 Install
 
+**Just ask the agent**
+
+The simplest approach — just tell your agent to use it:
+
+> Use the antd CLI to help me write antd code. Run `npx skills add ant-design/ant-design-cli` to install it.
+
+**Install as a skill**
+
+For richer context, install as a [skill](https://github.com/vercel-labs/skills):
+
 ```bash
-# npm
-npm install -g @ant-design/cli
-
-# pnpm
-pnpm add -g @ant-design/cli
-
-# bun
-bun add -g @ant-design/cli
-
-# utoo
-utoo install @ant-design/cli
+npx skills add ant-design/ant-design-cli
 ```
 
 ## 🚀 Quick Start
@@ -317,47 +317,12 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 
 ## 🤖 Use with Code Agents
 
-The CLI ships with a [skill file](./docs/skill.md) that teaches Code Agents when and how to use each command — not just a command list, but a complete workflow guide that tells the agent *when* to call *which* command.
+The CLI ships with a [skill file](./skills/antd/SKILL.md) that teaches Code Agents when and how to use each command — not just a command list, but a complete workflow guide that tells the agent *when* to call *which* command.
 
-Install it for your agent:
-
-### Claude Code
-
-Install as a [skill](https://docs.anthropic.com/en/docs/claude-code/skills) (auto-triggers when working with antd):
+Install with one command (works with Claude Code, Cursor, Codex, Gemini CLI, and more):
 
 ```bash
-# Project-level (recommended)
-mkdir -p .claude/skills/antd
-cp node_modules/@ant-design/cli/docs/skill.md .claude/skills/antd/SKILL.md
-
-# Or user-level (available across all projects)
-mkdir -p ~/.claude/skills/antd
-cp $(npm root -g)/@ant-design/cli/docs/skill.md ~/.claude/skills/antd/SKILL.md
-```
-
-### Cursor
-
-Install as a [rule](https://docs.cursor.com/context/rules):
-
-```bash
-mkdir -p .cursor/rules
-cp node_modules/@ant-design/cli/docs/skill.md .cursor/rules/antd.mdc
-```
-
-### OpenAI Codex
-
-Append to [AGENTS.md](https://agents.md):
-
-```bash
-cat node_modules/@ant-design/cli/docs/skill.md >> AGENTS.md
-```
-
-### Gemini CLI
-
-Append to [GEMINI.md](https://geminicli.com/docs/cli/gemini-md/):
-
-```bash
-cat node_modules/@ant-design/cli/docs/skill.md >> GEMINI.md
+npx skills add ant-design/ant-design-cli
 ```
 
 ## 📄 License
