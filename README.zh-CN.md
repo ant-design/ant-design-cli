@@ -30,7 +30,18 @@
 
 ## 📦 安装
 
-**直接告诉 agent**
+```bash
+# npm
+npm install -g @ant-design/cli
+
+# pnpm
+pnpm add -g @ant-design/cli
+
+# bun
+bun add -g @ant-design/cli
+```
+
+**或者直接告诉 agent**
 
 最简单的方式 — 直接告诉你的 agent 去用它：
 

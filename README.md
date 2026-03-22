@@ -30,7 +30,18 @@ Designed for Code Agents (Claude Code, Cursor, Copilot, etc.) to invoke via shel
 
 ## 📦 Install
 
-**Just ask the agent**
+```bash
+# npm
+npm install -g @ant-design/cli
+
+# pnpm
+pnpm add -g @ant-design/cli
+
+# bun
+bun add -g @ant-design/cli
+```
+
+**Or just ask the agent**
 
 The simplest approach — just tell your agent to use it:
 
