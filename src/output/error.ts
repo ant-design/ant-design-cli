@@ -8,6 +8,8 @@ export const ErrorCodes = {
   UNSUPPORTED_VERSION_FEATURE: 'UNSUPPORTED_VERSION_FEATURE',
   DEMO_NOT_FOUND: 'DEMO_NOT_FOUND',
   INVALID_ARGUMENT: 'INVALID_ARGUMENT',
+  GH_NOT_FOUND: 'GH_NOT_FOUND',
+  GH_SUBMIT_FAILED: 'GH_SUBMIT_FAILED',
 } as const;
 
 export function createError(code: string, message: string, suggestion?: string): CLIError {
