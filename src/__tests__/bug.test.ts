@@ -100,3 +100,26 @@ describe('checkGhAvailable', () => {
     expect(typeof result).toBe('boolean');
   });
 });
+
+import { registerBugCommand, registerBugCliCommand } from '../commands/bug.js';
+import { Command } from 'commander';
+
+describe('registerBugCommand', () => {
+  it('should register the bug command', () => {
+    const program = new Command();
+    registerBugCommand(program);
+    const cmd = program.commands.find((c) => c.name() === 'bug');
+    expect(cmd).toBeDefined();
+    expect(cmd!.description()).toContain('antd');
+  });
+});
+
+describe('registerBugCliCommand', () => {
+  it('should register the bug-cli command', () => {
+    const program = new Command();
+    registerBugCliCommand(program);
+    const cmd = program.commands.find((c) => c.name() === 'bug-cli');
+    expect(cmd).toBeDefined();
+    expect(cmd!.description()).toContain('cli');
+  });
+});
