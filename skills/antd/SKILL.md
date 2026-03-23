@@ -7,6 +7,8 @@ description: >
   code, imports from 'antd', or explicit antd questions.
 allowed-tools:
   - Bash(antd *)
+  - Bash(antd bug*)
+  - Bash(antd bug-cli*)
   - Bash(npm install -g @ant-design/cli*)
   - Bash(which antd)
 ---
@@ -138,6 +140,59 @@ antd list --format json
 antd list --version 5.0.0 --format json
 ```
 
+### 8. Reporting issues
+
+When you encounter a confirmed antd or CLI bug that can't be resolved locally, use the agentic feedback flow:
+
+**Workflow:**
+1. First diagnose using `antd doctor`, `antd info`, `antd lint`
+2. If it's a genuine bug, assemble the report and preview it:
+
+```bash
+# Preview antd bug report for user review
+antd bug --title "DatePicker crashes when selecting date" \
+  --reproduction "https://codesandbox.io/s/xxx" \
+  --steps "1. Open DatePicker 2. Click a date" \
+  --expected "Date is selected" \
+  --actual "Component crashes with error" \
+  --format json
+
+# Preview CLI bug report for user review
+antd bug-cli --title "antd info shows wrong props for Select" \
+  --description "Running antd info Select shows incorrect data" \
+  --steps "1. Run antd info Select --version 5.0.0" \
+  --expected "Shows 5.0.0 props" \
+  --actual "Shows latest props instead" \
+  --format json
+```
+
+3. Show the assembled issue content to the user and ask for confirmation
+4. After user confirms, submit:
+
+```bash
+# Submit antd bug
+antd bug --title "DatePicker crashes when selecting date" \
+  --reproduction "https://codesandbox.io/s/xxx" \
+  --steps "1. Open DatePicker 2. Click a date" \
+  --expected "Date is selected" \
+  --actual "Component crashes with error" \
+  --submit
+
+# Submit CLI bug
+antd bug-cli --title "antd info shows wrong props for Select" \
+  --description "Running antd info Select shows incorrect data" \
+  --steps "1. Run antd info Select --version 5.0.0" \
+  --expected "Shows 5.0.0 props" \
+  --actual "Shows latest props instead" \
+  --submit
+```
+
+**Key rules:**
+- Always diagnose first before reporting — don't report issues that can be resolved locally
+- Always preview and get user confirmation before submitting with `--submit`
+- Include reproduction links when possible for antd bugs
+- Provide clear, specific steps to reproduce
+
 ## Global Flags
 
 | Flag | Purpose |
@@ -154,3 +209,4 @@ antd list --version 5.0.0 --format json
 3. **Use `--format json`** — Every command supports it. Parse the JSON output rather than regex-matching text output.
 4. **Check before suggesting migration** — Run `antd changelog <v1> <v2>` and `antd migrate` before advising on version upgrades.
 5. **Lint after changes** — After writing or modifying antd code, run `antd lint` on the changed files to catch deprecated or problematic usage.
+6. **Report bugs through the CLI** — When you encounter an antd or CLI bug that can't be resolved, use `antd bug` / `antd bug-cli` to report it. Always preview first, get user confirmation, then submit.
