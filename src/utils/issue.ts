@@ -1,4 +1,5 @@
 import { platform, release } from 'node:os';
+import { execFileSync } from 'node:child_process';
 import { readJson } from './scan.js';
 import { join } from 'node:path';
 
@@ -143,6 +144,36 @@ ${actual}
   }
 
   return body;
+}
+
+export function checkGhAvailable(): boolean {
+  try {
+    execFileSync('gh', ['--version'], { stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export interface SubmitResult {
+  issueNumber: number;
+  url: string;
+}
+
+export function submitViaGh(repo: string, title: string, body: string): SubmitResult {
+  const result = execFileSync('gh', ['issue', 'create', '--repo', repo, '--title', title, '--body', body], {
+    encoding: 'utf-8',
+    timeout: 30000,
+  }).trim();
+
+  // gh issue create outputs the issue URL, e.g. https://github.com/org/repo/issues/123
+  const match = result.match(/\/issues\/(\d+)/);
+  const issueNumber = match ? parseInt(match[1], 10) : 0;
+
+  return {
+    issueNumber,
+    url: result,
+  };
 }
 
 export function buildIssueUrl(repo: string, title: string, body: string): string {

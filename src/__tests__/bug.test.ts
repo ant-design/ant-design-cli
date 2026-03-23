@@ -91,3 +91,12 @@ describe('buildIssueUrl', () => {
     expect(url).toContain('Content+truncated');
   });
 });
+
+import { checkGhAvailable } from '../utils/issue.js';
+
+describe('checkGhAvailable', () => {
+  it('should return a boolean', () => {
+    const result = checkGhAvailable();
+    expect(typeof result).toBe('boolean');
+  });
+});
