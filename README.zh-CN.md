@@ -39,9 +39,20 @@ pnpm add -g @ant-design/cli
 
 # bun
 bun add -g @ant-design/cli
+```
 
-# utoo
-utoo install @ant-design/cli
+**或者直接告诉 agent**
+
+最简单的方式 — 直接告诉你的 agent 去用它：
+
+> 使用 antd CLI 来帮我写 antd 代码。运行 `npx skills add ant-design/ant-design-cli` 来安装。
+
+**安装为 skill**
+
+获得更丰富的上下文，安装为 [skill](https://github.com/vercel-labs/skills)：
+
+```bash
+npx skills add ant-design/ant-design-cli
 ```
 
 ## 🚀 快速开始
@@ -315,24 +326,15 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 | `--detail` | 完整信息输出 | `false` |
 | `-V, --cli-version` | 打印 CLI 版本号 | — |
 
-## 🤖 与 AI Agent 配合使用
+## 🤖 与 Code Agent 配合使用
 
-将以下内容添加到 `CLAUDE.md`（或其他 Agent 配置文件），让 Code Agent 自动调用 CLI 查询 antd 相关信息：
+CLI 内置了一份 [skill 文件](./skills/antd/SKILL.md)，教会 Code Agent 在何时、如何使用每条命令 — 不仅是命令列表，而是完整的工作流指南，让 agent 在正确的时机主动调用正确的命令。
 
-````markdown
-## Ant Design
+一条命令安装（支持 Claude Code、Cursor、Codex、Gemini CLI 等）：
 
-使用 `@ant-design/cli` 查询 antd 组件知识：
-
-- `antd info <Component>` — 获取 Props、类型和默认值
-- `antd doc <Component>` — 获取完整 Markdown 文档
-- `antd demo <Component> [name]` — 获取 Demo 源码
-- `antd token <Component>` — 获取 Design Token
-- `antd migrate 4 5 --apply ./src` — 生成迁移指令
-- `antd lint ./src` — 检查最佳实践违规
-
-程序化解析时优先使用 `--format json`。
-````
+```bash
+npx skills add ant-design/ant-design-cli
+```
 
 ## 📄 开源协议
 
