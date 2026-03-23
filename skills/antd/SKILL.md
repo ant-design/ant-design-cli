@@ -7,11 +7,21 @@ description: >
   code, imports from 'antd', or explicit antd questions.
 allowed-tools:
   - Bash(antd *)
+  - Bash(npm install -g @ant-design/cli*)
+  - Bash(which antd)
 ---
 
 # Ant Design CLI
 
 You have access to `@ant-design/cli` — a local CLI tool with bundled antd metadata for v4/v5/v6. Use it to query component knowledge, analyze projects, and guide migrations. All data is offline, no network needed.
+
+## Setup
+
+Before first use, check if the CLI is installed. If not, install it automatically:
+
+```bash
+which antd || npm install -g @ant-design/cli
+```
 
 **Always use `--format json` for structured output you can parse programmatically.**
 
