@@ -23,6 +23,7 @@ Before first use, check if the CLI is installed. If not, install it automaticall
 which antd || npm install -g @ant-design/cli
 ```
 
+
 **Always use `--format json` for structured output you can parse programmatically.**
 
 ## Scenarios
