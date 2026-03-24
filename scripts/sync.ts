@@ -104,9 +104,18 @@ function main() {
     }
     console.log(`Latest v${major}: ${latestTag}`);
 
-    // Extract primary (latest) snapshot → data/v{major}.json
-    checkout(antdDir, latestTag);
-    extract(antdDir, `data/v${major}.json`);
+    // Extract primary (latest) snapshot → data/v{major}.json (skip if already up-to-date)
+    const primaryFile = `data/v${major}.json`;
+    const currentVersion = fs.existsSync(primaryFile)
+      ? JSON.parse(fs.readFileSync(primaryFile, 'utf8')).version
+      : null;
+    if (currentVersion === latestTag) {
+      console.log(`  v${major} already at ${latestTag}, skipping primary extract`);
+    } else {
+      console.log(`  v${major}: ${currentVersion} → ${latestTag}`);
+      checkout(antdDir, latestTag);
+      extract(antdDir, primaryFile);
+    }
 
     // Extract per-minor snapshots, skip ones that already exist
     for (const [minorKey, tag] of minorMap) {
