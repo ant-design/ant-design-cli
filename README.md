@@ -1,30 +1,47 @@
 <div align="center">
 
-# @ant-design/cli
+<br>
 
+<img src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="Ant Design" width="72">
+
+<h1>@ant-design/cli</h1>
+
+**Ant Design on your command line.**<br>
+Query component knowledge, analyze project usage, and guide migrations — fully offline.
+
+<br>
+
+[![npm version](https://img.shields.io/npm/v/@ant-design/cli?color=blue&label=npm)](https://www.npmjs.com/package/@ant-design/cli)
+[![npm downloads](https://img.shields.io/npm/dm/@ant-design/cli?color=blue)](https://www.npmjs.com/package/@ant-design/cli)
 [![CI](https://github.com/ant-design/ant-design-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/ant-design/ant-design-cli/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/@ant-design/cli)](https://www.npmjs.com/package/@ant-design/cli)
-[![npm downloads](https://img.shields.io/npm/dm/@ant-design/cli)](https://www.npmjs.com/package/@ant-design/cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-**CLI tool for querying Ant Design component knowledge and analyzing antd usage in projects.**
-
-Built for Code Agents (Claude Code, Cursor, Copilot, Codex, Gemini CLI) — structured output, fully offline, zero config.
-
-[English](./README.md) · [中文](./README.zh-CN.md)
+[English](./README.md) · [中文](./README.zh-CN.md) · [Changelog](./CHANGELOG.md)
 
 </div>
 
----
+<br>
 
-## Features
+## Why
 
-- **Agent-Ready** — Every command supports `--format json` with clean, parseable output and structured error codes
-- **Fully Offline** — Props, tokens, demos, and changelogs for v4 / v5 / v6 are bundled at install time
-- **Multi-Version** — Query any antd version with per-minor snapshots; diff APIs between two versions
-- **Deep Component Data** — Props, Design Tokens, demo source code, semantic `classNames` / `styles` structure
-- **Project Analysis** — Usage scanning, deprecated API linting, a11y checks, `doctor` diagnostics
-- **Migration Guides** — v4→v5 and v5→v6 checklists with auto-fixable / manual split
+Code agents (Claude Code, Cursor, Copilot, Codex, Gemini CLI) write better antd code when they have instant access to the right API data. This CLI gives them exactly that — **every prop, token, demo, and changelog entry for antd v4 / v5 / v6**, bundled locally, queryable in milliseconds.
+
+```bash
+npx skills add ant-design/ant-design-cli    # install as an agent skill
+```
+
+<br>
+
+## Highlights
+
+- **Fully offline** — All metadata ships with the package. No network calls, no latency, no API keys.
+- **Version-accurate** — 55+ per-minor snapshots across v4/v5/v6. Query the exact API surface of `antd@5.3.0`, not just "latest v5".
+- **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
+- **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
+- **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
+- **14 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
+
+<br>
 
 ## Install
 
@@ -32,68 +49,97 @@ Built for Code Agents (Claude Code, Cursor, Copilot, Codex, Gemini CLI) — stru
 npm install -g @ant-design/cli
 ```
 
-Or install as a [skill](https://github.com/nicepkg/agent-skills) for your code agent:
+<details>
+<summary>Other package managers</summary>
 
 ```bash
-npx skills add ant-design/ant-design-cli
+pnpm add -g @ant-design/cli
+bun add -g @ant-design/cli
 ```
+
+</details>
+
+<br>
 
 ## Quick Start
 
 ```bash
-antd info Button                    # Query component API
-antd list                           # List all components
-antd demo Button basic              # Get demo source code
-antd token Button                   # Query Design Tokens
-antd changelog 4.24.0 5.0.0 Select  # Diff API between versions
-antd usage ./src                    # Scan antd usage in project
+antd info Button                    # Component props, types, defaults
+antd demo Select basic              # Runnable demo source code
+antd token DatePicker               # Design Token values (v5+)
+antd semantic Table                 # classNames / styles structure
+antd changelog 4.24.0 5.0.0 Select  # API diff across versions
 antd doctor                         # Diagnose project issues
-antd migrate 4 5                    # Migration guide v4 → v5
+antd lint ./src                     # Check deprecated APIs & best practices
+antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 ```
+
+<br>
 
 ## Commands
 
 ### Knowledge Query
 
-#### `antd list`
+| Command | Description |
+|---|---|
+| [`antd list`](#antd-list) | List all components with bilingual names, categories, and `since` versions |
+| [`antd info <C>`](#antd-info-component) | Props table with types, defaults, `since`, and deprecated status |
+| [`antd doc <C>`](#antd-doc-component) | Full markdown documentation for a component |
+| [`antd demo <C> [name]`](#antd-demo-component-name) | Runnable demo source code (TSX) |
+| [`antd token [C]`](#antd-token-component) | Global or component-level Design Tokens |
+| [`antd semantic <C>`](#antd-semantic-component) | Semantic `classNames` / `styles` structure with usage examples |
+| [`antd changelog`](#antd-changelog-v1-v2-component) | Changelog entries, version ranges, or cross-version API diff |
 
-List all components with descriptions and categories.
+### Project Analysis
+
+| Command | Description |
+|---|---|
+| [`antd doctor`](#antd-doctor) | 10 diagnostic checks: React compat, duplicates, peer deps, SSR, babel plugins |
+| [`antd usage [dir]`](#antd-usage-dir) | Import stats, sub-component breakdown (`Form.Item`), non-component exports |
+| [`antd lint [target]`](#antd-lint-target) | Deprecated APIs, accessibility gaps, performance issues, best practices |
+| [`antd migrate <from> <to>`](#antd-migrate-from-to) | Migration checklist with auto-fixable/manual split and `--apply` agent prompt |
+
+### Issue Reporting
+
+| Command | Description |
+|---|---|
+| [`antd bug`](#antd-bug) | File a bug to ant-design/ant-design with auto-collected environment info |
+| [`antd bug-cli`](#antd-bug-cli) | File a bug to ant-design/ant-design-cli |
+
+<br>
+
+---
+
+### `antd list`
 
 ```bash
-antd list
-antd list --version 5.0.0
-antd list --format json
+antd list                           # all components
+antd list --version 5.0.0           # components available in v5.0.0
 ```
 
 <details>
 <summary>Example output</summary>
 
 ```
-Component       组件名    Description                                               Since
---------------  -----  -------------------------------------------------------  ------
-Button          按钮     To trigger an operation.                                  4.0.0
-Table           表格     A table displays rows of data.                            4.0.0
-Form            表单     High performance Form component with data scope management. 4.0.0
-Select          选择器    Select component to select value from options.            4.0.0
-Modal           对话框    Modal dialogs.                                            4.0.0
-DatePicker      日期选择框  To select or input a date.                               4.0.0
-Input           输入框    A basic widget for getting the user input.                4.0.0
+Component       组件名     Description                                                Since
+--------------  -------  -------------------------------------------------------  ------
+Button          按钮       To trigger an operation.                                  4.0.0
+Table           表格       A table displays rows of data.                            4.0.0
+Form            表单       High performance Form component with data scope management. 4.0.0
+Select          选择器      Select component to select value from options.            4.0.0
+Modal           对话框      Modal dialogs.                                            4.0.0
+ColorPicker     颜色选择器   Used for color selection.                                 5.5.0
 ...
 ```
 
 </details>
 
----
-
-#### `antd info <Component>`
-
-Query component API: props, type definitions, default values. Use `--detail` for full docs including descriptions, `since` versions, deprecated status, and FAQ.
+### `antd info <Component>`
 
 ```bash
-antd info Button
-antd info Button --detail
-antd info Button --version 4.24.0
-antd info Button --format json
+antd info Button                    # props table
+antd info Button --detail           # + descriptions, since, deprecated, FAQ
+antd info Button --version 4.24.0   # v4 API snapshot
 ```
 
 <details>
@@ -102,96 +148,49 @@ antd info Button --format json
 ```
 Button (按钮) — To trigger an operation.
 
-Property         Type                                                        Default   Since
----------------  ----------------------------------------------------------  --------  ------
-autoInsertSpace  boolean                                                     true      5.17.0
-block            boolean                                                     false     -
-classNames       Record<SemanticDOM, string>                                 -         5.4.0
-danger           boolean                                                     false     -
-disabled         boolean                                                     false     -
-ghost            boolean                                                     false     -
-href             string                                                      -         -
-htmlType         submit | reset | button                                     button    -
-icon             ReactNode                                                   -         -
-iconPosition     start | end                                                 start     5.17.0
-loading          boolean | { delay: number, icon: ReactNode }                false     -
-shape            default | circle | round                                    default   -
-size             large | middle | small                                      middle    -
-styles           Record<SemanticDOM, CSSProperties>                          -         5.4.0
-type             primary | default | dashed | text | link                    default   -
-variant          outlined | dashed | solid | filled | text | link            -         5.13.0
-onClick          (event: React.MouseEvent) => void                           -         -
+Property         Type                                          Default   Since
+---------------  --------------------------------------------  --------  ------
+autoInsertSpace  boolean                                       true      5.17.0
+block            boolean                                       false     -
+classNames       Record<SemanticDOM, string>                   -         5.4.0
+disabled         boolean                                       false     -
+href             string                                        -         -
+icon             ReactNode                                     -         -
+loading          boolean | { delay: number, icon: ReactNode }  false     -
+size             large | middle | small                        middle    -
+type             primary | default | dashed | text | link      default   -
+variant          outlined | dashed | solid | filled | text     -         5.13.0
+onClick          (event: React.MouseEvent) => void             -         -
 ```
 
 </details>
 
----
-
-#### `antd doc <Component>`
-
-Output full API documentation for a component in markdown.
+### `antd doc <Component>`
 
 ```bash
 antd doc Button                     # full markdown docs to stdout
-antd doc Button --format json       # structured { name, doc }
-antd doc Button --lang zh           # Chinese docs
+antd doc Button --format json       # { name, doc }
+antd doc Button --lang zh           # Chinese documentation
 ```
 
----
-
-#### `antd demo <Component> [name]`
-
-Get demo source code. Without a name, lists all available demos.
+### `antd demo <Component> [name]`
 
 ```bash
-antd demo Button                    # list all demos for Button
-antd demo Button basic              # get specific demo source code
-antd demo Button basic --format json
+antd demo Button                    # list all available demos
+antd demo Button basic              # get demo source code
 ```
 
----
-
-#### `antd token [component]`
-
-Query Design Tokens (v5+ only).
+### `antd token [Component]`
 
 ```bash
-antd token                          # list all global tokens
+antd token                          # global tokens (colorPrimary, borderRadius, ...)
 antd token Button                   # component-level tokens
-antd token --format json
 ```
 
-<details>
-<summary>Example output</summary>
-
-```
-Button Component Tokens:
-
-Token                     Type    Default
-------------------------  ------  -------
-contentFontSize           number
-contentFontSizeLG         number
-contentFontSizeSM         number
-dangerColor               string
-dangerShadow              string
-defaultActiveBg           string
-defaultActiveBorderColor  string
-defaultActiveColor        string
-defaultBg                 string
-...
-```
-
-</details>
-
----
-
-#### `antd semantic <Component>`
-
-Query the semantic customization structure — available `classNames` and `styles` keys.
+### `antd semantic <Component>`
 
 ```bash
 antd semantic Table
-antd semantic Table --format json
 ```
 
 <details>
@@ -213,73 +212,52 @@ Usage:
 
 </details>
 
----
-
-#### `antd changelog [v1] [v2] [component]`
-
-Query changelog entries, view version ranges, or diff API between two versions.
+### `antd changelog [v1] [v2] [component]`
 
 ```bash
-antd changelog 5.22.0               # single version changelog
+antd changelog 5.22.0               # single version
 antd changelog 5.21.0..5.24.0       # version range (inclusive)
-antd changelog 4.24.0 5.0.0         # diff all API changes between versions
-antd changelog 4.24.0 5.0.0 Select  # diff Select API only
-antd changelog --format json
+antd changelog 4.24.0 5.0.0         # API diff between two versions
+antd changelog 4.24.0 5.0.0 Select  # API diff for Select only
 ```
 
 ---
 
-### Project Analysis
+### `antd doctor`
 
-#### `antd doctor`
-
-Diagnose project-level configuration issues: React compatibility, duplicate installs, theme config, babel plugins, CSS-in-JS setup.
+Runs 10 checks against your project: antd installed, React version compat, duplicate antd/dayjs/cssinjs installs, peer dependency satisfaction, theme config, babel-plugin-import usage, and CSS-in-JS setup.
 
 ```bash
 antd doctor
 antd doctor --format json
 ```
 
----
-
-#### `antd usage [dir]`
-
-Scan project for antd component/API usage statistics. Detects imports, sub-components (`Form.Item`), and non-component exports (`message`, `theme`).
+### `antd usage [dir]`
 
 ```bash
 antd usage                          # scan current directory
 antd usage ./src                    # scan specific directory
-antd usage -f Button                # filter to a specific component
-antd usage --format json
+antd usage -f Button                # filter to one component
 ```
 
----
+### `antd lint [target]`
 
-#### `antd lint [file/dir]`
-
-Check antd usage against best practices. Complements ESLint with antd-specific knowledge.
+Four rule categories: `deprecated`, `a11y`, `performance`, `best-practice`. Deprecation rules are derived from metadata at runtime, so they're always version-accurate.
 
 ```bash
 antd lint ./src
-antd lint ./src/pages/home.tsx
-antd lint --only deprecated         # only check deprecated APIs
-antd lint --only a11y               # only check accessibility
-antd lint --only performance        # only check performance
-antd lint --only best-practice      # only check best practices
-antd lint --format json
+antd lint ./src --only deprecated
+antd lint ./src --only a11y
 ```
 
----
+### `antd migrate <from> <to>`
 
-#### `antd migrate <from> <to>`
-
-Version migration guide with auto-fixable / manual breakdown.
+v4→v5 covers 25+ migration steps; v5→v6 covers 30+. Each step includes component name, breaking flag, search pattern, and before/after code.
 
 ```bash
-antd migrate 4 5                    # full migration checklist
-antd migrate 4 5 --component Select # component-specific migration
-antd migrate 4 5 --apply ./src      # output agent migration prompt
-antd migrate 4 5 --format json
+antd migrate 4 5                    # full checklist
+antd migrate 4 5 --component Select # component-specific
+antd migrate 4 5 --apply ./src      # generate agent migration prompt
 ```
 
 <details>
@@ -297,31 +275,22 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 
 </details>
 
----
-
-### Issue Reporting
-
-#### `antd bug`
-
-Report a bug to `ant-design/ant-design`. Auto-collects environment info.
+### `antd bug`
 
 ```bash
 antd bug --title "DatePicker crashes with dayjs 2.0"
-antd bug --title "..." --steps "1. Click button" --expected "Works" --actual "Crashes"
-antd bug --title "..." --reproduction "https://codesandbox.io/s/xxx"
-antd bug --title "..." --submit          # submit via gh CLI
+antd bug --title "..." --steps "1. Click" --expected "Works" --actual "Crashes"
+antd bug --title "..." --submit     # submit via gh CLI
 ```
 
-#### `antd bug-cli`
-
-Report a bug to `ant-design/ant-design-cli`.
+### `antd bug-cli`
 
 ```bash
-antd bug-cli --title "antd info crashes on v4 components"
+antd bug-cli --title "info command crashes on v4"
 antd bug-cli --title "..." --submit
 ```
 
----
+<br>
 
 ## Global Flags
 
@@ -330,19 +299,25 @@ antd bug-cli --title "..." --submit
 | `--format json\|text\|markdown` | Output format | `text` |
 | `--version <v>` | Target antd version (e.g. `5.20.0`) | auto-detect |
 | `--lang en\|zh` | Output language | `en` |
-| `--detail` | Full information output | `false` |
-| `-V, --cli-version` | Print CLI version number | — |
+| `--detail` | Include extended information | `false` |
+| `-V, --cli-version` | Print CLI version | — |
 
-## Use with Code Agents
+**Version auto-detection**: `--version` flag → `node_modules/antd` → `package.json` dependencies → fallback `5.24.0`
 
-The CLI ships with a [skill file](./skills/antd/SKILL.md) that teaches code agents when and how to use each command. One command to install:
+<br>
+
+## Agent Integration
+
+The CLI ships with a [skill file](./skills/antd/SKILL.md) that teaches code agents *when* and *how* to use each command:
 
 ```bash
 npx skills add ant-design/ant-design-cli
 ```
 
-Works with Claude Code, Cursor, Codex, Gemini CLI, and any agent that supports the [skills](https://github.com/nicepkg/agent-skills) protocol.
+Works with [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [Codex](https://openai.com/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli), and any agent supporting the [skills](https://github.com/nicepkg/agent-skills) protocol.
+
+<br>
 
 ## License
 
-[MIT](./LICENSE) © Ant Design
+[MIT](./LICENSE) © [Ant Design](https://ant.design)
