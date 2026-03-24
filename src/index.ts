@@ -5,11 +5,12 @@ import { registerDocCommand } from './commands/doc.js';
 import { registerDemoCommand } from './commands/demo.js';
 import { registerTokenCommand } from './commands/token.js';
 import { registerSemanticCommand } from './commands/semantic.js';
-import { registerChangelogCommand } from './commands/diff.js';
+import { registerChangelogCommand } from './commands/changelog.js';
 import { registerDoctorCommand } from './commands/doctor.js';
 import { registerUsageCommand } from './commands/usage.js';
 import { registerLintCommand } from './commands/lint.js';
 import { registerMigrateCommand } from './commands/migrate.js';
+import { registerBugCommand, registerBugCliCommand } from './commands/bug.js';
 import { checkForUpdate } from './utils/update-check.js';
 
 declare const __CLI_VERSION__: string;
@@ -42,6 +43,10 @@ registerDoctorCommand(program);
 registerUsageCommand(program);
 registerLintCommand(program);
 registerMigrateCommand(program);
+
+// Issue Reporting commands
+registerBugCommand(program);
+registerBugCliCommand(program);
 
 program.hook('postAction', async () => {
   await checkForUpdate();

@@ -195,11 +195,11 @@ export function registerChangelogCommand(program: Command): void {
       const opts = program.opts<GlobalOptions>();
 
       // Determine mode:
-      //   antd diff                    → latest changelog
-      //   antd diff 5.21.0             → single version changelog
-      //   antd diff 5.20.0..5.22.0     → version range changelog
-      //   antd diff 5.20.0 5.22.0      → API diff between two versions
-      //   antd diff 5.20.0 5.22.0 Btn  → API diff for specific component
+      //   antd changelog                    → latest changelog
+      //   antd changelog 5.21.0             → single version changelog
+      //   antd changelog 5.20.0..5.22.0     → version range changelog
+      //   antd changelog 5.20.0 5.22.0      → API diff between two versions
+      //   antd changelog 5.20.0 5.22.0 Btn  → API diff for specific component
 
       const isChangelogMode = !v2 || (v1 && v1.includes('..'));
 

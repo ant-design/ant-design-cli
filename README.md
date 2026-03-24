@@ -39,9 +39,20 @@ pnpm add -g @ant-design/cli
 
 # bun
 bun add -g @ant-design/cli
+```
 
-# utoo
-utoo install @ant-design/cli
+**Or just ask the agent**
+
+The simplest approach — just tell your agent to use it:
+
+> Use the antd CLI to help me write antd code. Run `npx skills add ant-design/ant-design-cli` to install it.
+
+**Install as a skill**
+
+For richer context, install as a [skill](https://github.com/vercel-labs/skills):
+
+```bash
+npx skills add ant-design/ant-design-cli
 ```
 
 ## 🚀 Quick Start
@@ -305,6 +316,34 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 
 ---
 
+### Issue Reporting
+
+#### `antd bug`
+
+Report a bug to the antd repository. Auto-collects environment info and generates an issue in the [antd-issue-helper](https://new-issue.ant.design) format.
+
+```bash
+antd bug --title "DatePicker crashes with dayjs 2.0"
+antd bug --title "..." --steps "1. Click button" --expected "Works" --actual "Crashes"
+antd bug --title "..." --reproduction "https://codesandbox.io/s/xxx"
+antd bug --title "..." --submit          # submit via gh CLI
+antd bug --format json                   # preview as structured output
+```
+
+---
+
+#### `antd bug-cli`
+
+Report a bug to the [ant-design-cli](https://github.com/ant-design/ant-design-cli) repository.
+
+```bash
+antd bug-cli --title "antd info crashes on v4 components"
+antd bug-cli --title "..." --description "Detailed description..."
+antd bug-cli --title "..." --submit
+```
+
+---
+
 ## ⚙️ Global Flags
 
 | Flag | Description | Default |
@@ -315,24 +354,15 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 | `--detail` | Full information output | `false` |
 | `-V, --cli-version` | Print CLI version number | — |
 
-## 🤖 Use with AI Agents
+## 🤖 Use with Code Agents
 
-Add the following to your `CLAUDE.md` (or equivalent agent config) to let your Code Agent automatically invoke the CLI for antd-related queries:
+The CLI ships with a [skill file](./skills/antd/SKILL.md) that teaches Code Agents when and how to use each command — not just a command list, but a complete workflow guide that tells the agent *when* to call *which* command.
 
-````markdown
-## Ant Design
+Install with one command (works with Claude Code, Cursor, Codex, Gemini CLI, and more):
 
-Use `@ant-design/cli` to query antd component knowledge:
-
-- `antd info <Component>` — get props, types, and defaults
-- `antd doc <Component>` — get full markdown documentation
-- `antd demo <Component> [name]` — get demo source code
-- `antd token <Component>` — get design tokens
-- `antd migrate 4 5 --apply ./src` — generate migration instructions
-- `antd lint ./src` — check for best practice violations
-
-Always prefer `--format json` for programmatic parsing.
-````
+```bash
+npx skills add ant-design/ant-design-cli
+```
 
 ## 📄 License
 
