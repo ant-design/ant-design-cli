@@ -83,11 +83,11 @@ antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 | Command | Description |
 |---|---|
 | [`antd list`](#antd-list) | List all components with bilingual names, categories, and `since` versions |
-| [`antd info <C>`](#antd-info-component) | Props table with types, defaults, `since`, and deprecated status |
-| [`antd doc <C>`](#antd-doc-component) | Full markdown documentation for a component |
-| [`antd demo <C> [name]`](#antd-demo-component-name) | Runnable demo source code (TSX) |
-| [`antd token [C]`](#antd-token-component) | Global or component-level Design Tokens |
-| [`antd semantic <C>`](#antd-semantic-component) | Semantic `classNames` / `styles` structure with usage examples |
+| [`antd info <Component>`](#antd-info-component) | Props table with types, defaults, `since`, and deprecated status |
+| [`antd doc <Component>`](#antd-doc-component) | Full markdown documentation for a component |
+| [`antd demo <Component> [name]`](#antd-demo-component-name) | Runnable demo source code (TSX) |
+| [`antd token [Component]`](#antd-token-component) | Global or component-level Design Tokens |
+| [`antd semantic <Component>`](#antd-semantic-component) | Semantic `classNames` / `styles` structure with usage examples |
 | [`antd changelog`](#antd-changelog-v1-v2-component) | Changelog entries, version ranges, or cross-version API diff |
 
 ### 🔍 Project Analysis
