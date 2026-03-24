@@ -20,7 +20,7 @@ jobs:
           node-version: 22
           registry-url: 'https://registry.npmjs.org'
 
-      - run: npm install
+      - run: npm ci
 
       - name: Clone antd repo (shallow, filter tree)
         run: |
