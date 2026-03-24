@@ -64,8 +64,9 @@ export function registerBugCommand(program: Command): void {
             console.log(`Issue created: ${result.url}`);
           }
         } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : String(err);
           printError(
-            createError(ErrorCodes.GH_SUBMIT_FAILED, `Failed to create issue: ${err.message}`, 'Check your gh authentication with `gh auth status`'),
+            createError(ErrorCodes.GH_SUBMIT_FAILED, `Failed to create issue: ${message}`, 'Check your gh authentication with `gh auth status`'),
             opts.format,
           );
           process.exit(2);
@@ -142,8 +143,9 @@ export function registerBugCliCommand(program: Command): void {
             console.log(`Issue created: ${result.url}`);
           }
         } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : String(err);
           printError(
-            createError(ErrorCodes.GH_SUBMIT_FAILED, `Failed to create issue: ${err.message}`, 'Check your gh authentication with `gh auth status`'),
+            createError(ErrorCodes.GH_SUBMIT_FAILED, `Failed to create issue: ${message}`, 'Check your gh authentication with `gh auth status`'),
             opts.format,
           );
           process.exit(2);
