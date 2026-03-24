@@ -83,6 +83,13 @@ antd list --format json
 antd list --version 5.0.0
 ```
 
+JSON output includes bilingual fields:
+```json
+[
+  {"name": "Button", "nameZh": "按钮", "description": "To trigger an operation.", "descriptionZh": "按钮用于开始一个即时操作。", "since": "0.x"}
+]
+```
+
 #### `antd info <Component>`
 
 Query component API: props, type definitions, default values.
@@ -257,16 +264,17 @@ antd doctor                         # run in project root
 antd doctor --format json
 ```
 
-Checks:
-- antd version compatibility with React/Node versions
-- Duplicate antd installations
-- Theme config validity
-- CSS-in-JS configuration correctness
-- Babel/webpack antd-related plugin configuration
-- `dayjs-duplicate` — detects multiple dayjs installations in node_modules; severity: error
-- `cssinjs-duplicate` — detects multiple @ant-design/cssinjs installations in node_modules; severity: error
-- `cssinjs-compat` — checks @ant-design/cssinjs version satisfies antd peerDependencies range; severity: error (incompatible version) / warning (not installed)
-- `icons-compat` — checks @ant-design/icons version satisfies antd peerDependencies range; severity: warning (icons are optional)
+Checks (in order):
+1. `antd-installed` — verifies antd is installed in the project; severity: error
+2. `react-compat` — antd version compatibility with React version
+3. `duplicate-install` — detects multiple antd installations
+4. `dayjs-duplicate` — detects multiple dayjs installations in node_modules; severity: error
+5. `cssinjs-duplicate` — detects multiple @ant-design/cssinjs installations in node_modules; severity: error
+6. `cssinjs-compat` — checks @ant-design/cssinjs version satisfies antd peerDependencies range; severity: error (incompatible version) / warning (not installed)
+7. `icons-compat` — checks @ant-design/icons version satisfies antd peerDependencies range; severity: warning (icons are optional)
+8. `theme-config` — theme config validity
+9. `babel-plugins` — checks for deprecated babel-plugin-import usage with antd v5+
+10. `cssinjs` — CSS-in-JS configuration correctness
 
 JSON output:
 ```json
@@ -293,7 +301,7 @@ Scan project for antd component/API usage statistics. Detects direct imports (`i
 ```bash
 antd usage                          # scan current directory
 antd usage ./src                    # scan specific directory
-antd usage --filter Button          # filter results to a specific component
+antd usage --filter Button          # filter results to a specific component (short: -f)
 antd usage ./src -f Form            # combine directory and filter
 antd usage --format json
 ```
@@ -452,7 +460,7 @@ Priority order:
 1. `--version` flag (highest)
 2. Installed version in `node_modules/antd/package.json`
 3. Declared version in project `package.json` dependencies
-4. Latest stable version (fallback)
+4. Fallback version `5.24.0` (latest stable at time of build)
 
 Resolution: The CLI maps the resolved version to a major version data directory (e.g. `5.20.0` → `v5/`), then filters props/tokens by `since` and `deprecated` fields against the exact version. If the resolved version does not exist as a published antd version (e.g. `5.999.0`), the CLI warns and uses the latest known version within that major.
 

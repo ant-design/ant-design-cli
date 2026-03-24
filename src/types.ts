@@ -85,7 +85,6 @@ export interface GlobalOptions {
   format: OutputFormat;
   version?: string;
   lang: 'en' | 'zh';
-  cache: boolean;
   detail: boolean;
 }
 
