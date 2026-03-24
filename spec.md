@@ -26,18 +26,20 @@ Metadata for all major versions is bundled inside `@ant-design/cli`:
 ```
 @ant-design/cli
 └── data/
-    ├── versions.json        # version index: minor series → snapshot tag
-    ├── v4.json              # latest v4 (from highest v4.x tag)
-    ├── v4.0.9.json          # snapshot for 4.0.x series
-    ├── v4.1.5.json          # snapshot for 4.1.x series
-    ├── ...                  # one file per minor series
-    ├── v4.24.16.json        # snapshot for 4.24.x series
-    ├── v5.json              # latest v5
-    ├── v5.0.7.json          # snapshot for 5.0.x series
+    ├── versions.json        # version index: minor series → snapshot tag (plain JSON)
+    ├── v4.json.gz           # latest v4 (gzip-compressed JSON)
+    ├── v4.0.9.json.gz       # snapshot for 4.0.x series
+    ├── v4.1.5.json.gz       # snapshot for 4.1.x series
+    ├── ...                  # one .json.gz file per minor series
+    ├── v4.24.16.json.gz     # snapshot for 4.24.x series
+    ├── v5.json.gz           # latest v5
+    ├── v5.0.7.json.gz       # snapshot for 5.0.x series
     ├── ...
-    ├── v6.json              # latest v6
+    ├── v6.json.gz           # latest v6
     └── ...
 ```
+
+Data files (except `versions.json`) are gzip-compressed to reduce npm package size (~25MB vs ~136MB uncompressed). The loader transparently decompresses them at runtime using `zlib.gunzipSync()`, with a fallback to plain `.json` for development compatibility.
 
 **`data/versions.json`** maps each minor series to its representative snapshot tag:
 

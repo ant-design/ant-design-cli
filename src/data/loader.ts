@@ -1,4 +1,5 @@
 import { readFileSync, existsSync } from 'node:fs';
+import { gunzipSync } from 'node:zlib';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { MetadataStore, ComponentData } from '../types.js';
@@ -8,12 +9,23 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 function getDataPath(): string {
   // Check for a known file to confirm the correct directory
   // Works from both dist/ and src/data/
-  const probe = 'v5.json';
+  // Probe for both .json.gz (production) and .json (dev) formats
   const candidates = [
     join(__dirname, '..', 'data'),       // from dist/
     join(__dirname, '..', '..', 'data'), // from src/data/
   ];
-  return candidates.find((p) => existsSync(join(p, probe))) ?? candidates[0];
+  return candidates.find((p) =>
+    existsSync(join(p, 'v5.json.gz')) || existsSync(join(p, 'v5.json'))
+  ) ?? candidates[0];
+}
+
+/** Read a JSON data file, supporting both .json.gz and plain .json formats. */
+function readDataFile(filePath: string): string {
+  const gzPath = filePath + '.gz';
+  if (existsSync(gzPath)) {
+    return gunzipSync(readFileSync(gzPath)).toString('utf-8');
+  }
+  return readFileSync(filePath, 'utf-8');
 }
 
 /** Deduplicate props by name (keep first occurrence). */
@@ -32,7 +44,7 @@ function normalizeStore(store: MetadataStore): MetadataStore {
 export function loadMetadata(majorVersion: string): MetadataStore {
   const dataPath = join(getDataPath(), `${majorVersion}.json`);
   try {
-    return normalizeStore(JSON.parse(readFileSync(dataPath, 'utf-8')) as MetadataStore);
+    return normalizeStore(JSON.parse(readDataFile(dataPath)) as MetadataStore);
   } catch (err) {
     if (err instanceof SyntaxError) {
       process.stderr.write(`[antd-cli] Warning: data file may be corrupted: ${dataPath}\n`);
@@ -79,9 +91,9 @@ export function loadMetadataForVersion(version: string): MetadataStore {
   // Helper: try to load a snapshot by tag string (e.g. "4.3.4")
   function tryLoadSnapshot(tag: string): MetadataStore | null {
     const snapshotPath = join(getDataPath(), `v${tag}.json`);
-    if (!existsSync(snapshotPath)) return null;
+    if (!existsSync(snapshotPath) && !existsSync(snapshotPath + '.gz')) return null;
     try {
-      return normalizeStore(JSON.parse(readFileSync(snapshotPath, 'utf-8')) as MetadataStore);
+      return normalizeStore(JSON.parse(readDataFile(snapshotPath)) as MetadataStore);
     } catch {
       return null;
     }
