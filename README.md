@@ -316,6 +316,34 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 
 ---
 
+### Issue Reporting
+
+#### `antd bug`
+
+Report a bug to the antd repository. Auto-collects environment info and generates an issue in the [antd-issue-helper](https://new-issue.ant.design) format.
+
+```bash
+antd bug --title "DatePicker crashes with dayjs 2.0"
+antd bug --title "..." --steps "1. Click button" --expected "Works" --actual "Crashes"
+antd bug --title "..." --reproduction "https://codesandbox.io/s/xxx"
+antd bug --title "..." --submit          # submit via gh CLI
+antd bug --format json                   # preview as structured output
+```
+
+---
+
+#### `antd bug-cli`
+
+Report a bug to the [ant-design-cli](https://github.com/ant-design/ant-design-cli) repository.
+
+```bash
+antd bug-cli --title "antd info crashes on v4 components"
+antd bug-cli --title "..." --description "Detailed description..."
+antd bug-cli --title "..." --submit
+```
+
+---
+
 ## ⚙️ Global Flags
 
 | Flag | Description | Default |

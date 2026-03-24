@@ -316,6 +316,34 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 
 ---
 
+### 问题反馈
+
+#### `antd bug`
+
+向 antd 仓库报告 Bug。自动收集环境信息，生成符合 [antd-issue-helper](https://new-issue.ant.design) 格式的 Issue。
+
+```bash
+antd bug --title "DatePicker 选择日期时崩溃"
+antd bug --title "..." --steps "1. 点击按钮" --expected "正常工作" --actual "崩溃"
+antd bug --title "..." --reproduction "https://codesandbox.io/s/xxx"
+antd bug --title "..." --submit          # 通过 gh CLI 直接提交
+antd bug --format json                   # 预览结构化输出
+```
+
+---
+
+#### `antd bug-cli`
+
+向 [ant-design-cli](https://github.com/ant-design/ant-design-cli) 仓库报告 Bug。
+
+```bash
+antd bug-cli --title "antd info 在 v4 组件上崩溃"
+antd bug-cli --title "..." --description "详细描述..."
+antd bug-cli --title "..." --submit
+```
+
+---
+
 ## ⚙️ 全局参数
 
 | 参数 | 说明 | 默认值 |
