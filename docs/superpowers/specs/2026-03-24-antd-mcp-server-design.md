@@ -12,6 +12,7 @@ Add `antd mcp` command that starts a Model Context Protocol (MCP) stdio server. 
 - Let agents use antd knowledge via MCP protocol natively in IDE integrations
 - Reuse all existing command logic — no duplicate business logic
 - Focus on knowledge query tools only (not project analysis commands)
+- Provide MCP Prompts to guide LLMs on tool usage and reduce hallucination
 
 ## Architecture
 
@@ -206,6 +207,28 @@ The `version` field in the schema is the entry filter (single version or range).
 
 `antd_list` returns 100+ components. For MCP context, the response includes `name`, `nameZh`, `category`, and `description` only — no props or details. Agents should use `antd_info` or `antd_doc` for detailed component data.
 
+## MCP Prompts
+
+Two prompts are registered on the MCP server to guide LLMs on how to use the tools effectively. Prompts reduce hallucination and repetitive tool calls.
+
+### `antd-expert`
+
+General-purpose antd expert assistant. Teaches the LLM:
+- Query workflow: use `antd_list` to discover components → `antd_info` for props → `antd_doc` for full docs → `antd_demo` for code examples
+- Avoid duplicate tool calls for the same component in a conversation
+- Always query component docs/props before generating code
+- Use `antd_token` when customizing themes, `antd_semantic` when using classNames/styles
+
+### `antd-page-generator`
+
+Page generation focused variant. Same rules as `antd-expert` plus:
+- Before generating any page code, query all relevant components' docs and examples first
+- Produce complete, runnable code with all imports
+
+### Implementation
+
+Prompts are registered via `server.prompt()` in `src/commands/mcp.ts`. Each prompt returns a `messages` array with a single `user` role message containing the system prompt text. Prompt content is stored as constants in `src/mcp/prompts.ts`.
+
 ## MCP Error Response Format
 
 Tool errors use the MCP-native error shape:
@@ -240,8 +263,9 @@ This allows agents to distinguish tool failures from successful output while sti
 
 ### New Files
 
-- `src/commands/mcp.ts` — registers `antd mcp` command, initializes `Server` + `StdioServerTransport`, registers 7 tools
+- `src/commands/mcp.ts` — registers `antd mcp` command, initializes `Server` + `StdioServerTransport`, registers 7 tools and 2 prompts
 - `src/mcp/tools.ts` — tool definitions and handlers
+- `src/mcp/prompts.ts` — prompt content constants (`ANTD_EXPERT_PROMPT`, `ANTD_PAGE_GENERATOR_PROMPT`)
 
 ### Modified Files
 
