@@ -26,18 +26,20 @@ Metadata for all major versions is bundled inside `@ant-design/cli`:
 ```
 @ant-design/cli
 └── data/
-    ├── versions.json        # version index: minor series → snapshot tag
-    ├── v4.json              # latest v4 (from highest v4.x tag)
-    ├── v4.0.9.json          # snapshot for 4.0.x series
-    ├── v4.1.5.json          # snapshot for 4.1.x series
-    ├── ...                  # one file per minor series
-    ├── v4.24.16.json        # snapshot for 4.24.x series
-    ├── v5.json              # latest v5
-    ├── v5.0.7.json          # snapshot for 5.0.x series
+    ├── versions.json        # version index: minor series → snapshot tag (always plain JSON)
+    ├── v4.json.gz           # latest v4 (gzip-compressed in published package)
+    ├── v4.0.9.json.gz       # snapshot for 4.0.x series
+    ├── v4.1.5.json.gz       # snapshot for 4.1.x series
+    ├── ...                  # one .json.gz file per minor series
+    ├── v4.24.16.json.gz     # snapshot for 4.24.x series
+    ├── v5.json.gz           # latest v5
+    ├── v5.0.7.json.gz       # snapshot for 5.0.x series
     ├── ...
-    ├── v6.json              # latest v6
+    ├── v6.json.gz           # latest v6
     └── ...
 ```
+
+> **Note on data format:** In the git repository, data files are stored as plain `.json` for readable diffs. During `npm pack`/`npm publish`, a `prepack` hook compresses them to `.json.gz` (gzip level 9), reducing package size from ~136MB to ~25MB. A `postpack` hook restores them to `.json` afterward. The loader transparently supports both formats via `zlib.gunzipSync()` with fallback to plain JSON.
 
 **`data/versions.json`** maps each minor series to its representative snapshot tag:
 
