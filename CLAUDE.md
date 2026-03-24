@@ -83,6 +83,10 @@ scripts/
 - Tests: `vitest`
 - Node minimum: 18+
 
+## Git Workflow
+
+- **Never commit directly to main.** Always create a feature branch and submit a PR.
+
 ## Key Conventions
 
 - All commands support `--format json|text|markdown` and `--lang en|zh`
