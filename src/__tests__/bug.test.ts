@@ -2,6 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { ErrorCodes } from '../output/error.js';
 
 describe('bug command error codes', () => {
+  it('should have TITLE_REQUIRED error code', () => {
+    expect(ErrorCodes.TITLE_REQUIRED).toBe('TITLE_REQUIRED');
+  });
+
   it('should have GH_NOT_FOUND error code', () => {
     expect(ErrorCodes.GH_NOT_FOUND).toBe('GH_NOT_FOUND');
   });

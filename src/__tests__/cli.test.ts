@@ -435,9 +435,11 @@ describe('CLI e2e', () => {
   });
 
   it('should error when --title is missing for bug', () => {
-    const result = runWithStatus('bug');
+    const result = runWithStatus('bug', '--format', 'json');
     expect(result.exitCode).not.toBe(0);
-    expect(result.stderr).toContain('--title');
+    const err = JSON.parse(result.stderr);
+    expect(err.code).toBe('TITLE_REQUIRED');
+    expect(err.message).toContain('--title');
   });
 
   // antd bug-cli command
