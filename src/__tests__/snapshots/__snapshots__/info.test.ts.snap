@@ -1,0 +1,656 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`info > info Btn (typo) 1`] = `
+"Error: Component 'Btn' not found
+Suggestion: Did you mean 'Button'?"
+`;
+
+exports[`info > info Btn --format json (typo, json) 1`] = `
+"{
+  "error": true,
+  "code": "COMPONENT_NOT_FOUND",
+  "message": "Component 'Btn' not found",
+  "suggestion": "Did you mean 'Button'?"
+}"
+`;
+
+exports[`info > info Button --detail --format json 1`] = `
+"{
+  "name": "Button",
+  "nameZh": "按钮",
+  "description": "To trigger an operation.",
+  "whenToUse": "A button means an operation (or a series of operations). Clicking a button will trigger its corresponding business logic.\\n\\nIn Ant Design we provide 5 types of button.\\n\\n- 🔵 Primary button: used for the main action, there can be at most one primary button in a section.\\n- ⚪️ Default button: used for a series of actions without priority.\\n- 🫥 Dashed button: commonly used for adding more actions.\\n- 🔤 Text button: used for the most secondary action.\\n- 🔗 Link button: used for external links.\\n\\nAnd 4 other properties additionally.\\n\\n- 🔴 \`danger\`: used for actions of risk, like deletion or authorization.\\n- 👻 \`ghost\`: used in situations with complex background, home pages usually.\\n- 🚫 \`disabled\`: used when actions are not available.\\n- 🔃 \`loading\`: adds a loading spinner in button, avoids multiple submits too.",
+  "props": [
+    {
+      "name": "autoInsertSpace",
+      "type": "boolean",
+      "default": "\`true\`",
+      "description": "We add a space between two Chinese characters by default, which removed by setting \`autoInsertSpace\` to \`false\`.",
+      "since": "5.17.0",
+      "descriptionZh": "我们默认提供两个汉字之间的空格，可以设置 \`autoInsertSpace\` 为 \`false\` 关闭"
+    },
+    {
+      "name": "block",
+      "type": "boolean",
+      "default": "false",
+      "description": "Option to fit button width to its parent width",
+      "descriptionZh": "将按钮宽度调整为其父宽度的选项"
+    },
+    {
+      "name": "classNames",
+      "type": "[Record<SemanticDOM, string>](#semantic-dom)",
+      "default": "-",
+      "description": "Semantic DOM class",
+      "since": "5.4.0",
+      "descriptionZh": "语义化结构 class"
+    },
+    {
+      "name": "color",
+      "type": "\`default\` \\\\",
+      "default": "\`primary\` \\\\",
+      "description": "Set button color",
+      "since": "\`danger\` \\\\",
+      "descriptionZh": "设置按钮的颜色"
+    },
+    {
+      "name": "danger",
+      "type": "boolean",
+      "default": "false",
+      "description": "Syntactic sugar. Set the danger status of button. will follow \`color\` if provided",
+      "descriptionZh": "语法糖，设置危险按钮。当设置 \`color\` 时会以后者为准"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disabled state of button",
+      "descriptionZh": "设置按钮失效状态"
+    },
+    {
+      "name": "ghost",
+      "type": "boolean",
+      "default": "false",
+      "description": "Make background transparent and invert text and border colors",
+      "descriptionZh": "幽灵属性，使按钮背景透明"
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "default": "-",
+      "description": "Redirect url of link button",
+      "descriptionZh": "点击跳转的地址，指定此属性 button 的行为和 a 链接一致"
+    },
+    {
+      "name": "htmlType",
+      "type": "\`submit\` \\\\",
+      "default": "\`reset\` \\\\",
+      "description": "Set the original html \`type\` of \`button\`, see: [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#type)",
+      "since": "\`button\`",
+      "descriptionZh": "设置 \`button\` 原生的 \`type\` 值，可选值请参考 [HTML 标准](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/button#type)"
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "default": "-",
+      "description": "Set the icon component of button",
+      "descriptionZh": "设置按钮的图标组件"
+    },
+    {
+      "name": "iconPosition",
+      "type": "\`start\` \\\\",
+      "default": "\`end\`",
+      "description": "Set the icon position of button",
+      "since": "\`start\`",
+      "descriptionZh": "设置按钮图标组件的位置"
+    },
+    {
+      "name": "loading",
+      "type": "boolean \\\\",
+      "default": "{ delay: number, icon: ReactNode }",
+      "description": "Set the loading status of button",
+      "since": "false",
+      "descriptionZh": "设置按钮载入状态"
+    },
+    {
+      "name": "shape",
+      "type": "\`default\` \\\\",
+      "default": "\`circle\` \\\\",
+      "description": "Can be used to set button shape",
+      "since": "\`round\`",
+      "descriptionZh": "设置按钮形状"
+    },
+    {
+      "name": "size",
+      "type": "\`large\` \\\\",
+      "default": "\`middle\` \\\\",
+      "description": "Set the size of button",
+      "since": "\`small\`",
+      "descriptionZh": "设置按钮大小"
+    },
+    {
+      "name": "styles",
+      "type": "[Record<SemanticDOM, CSSProperties>](#semantic-dom)",
+      "default": "-",
+      "description": "Semantic DOM style",
+      "since": "5.4.0",
+      "descriptionZh": "语义化结构 style"
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "default": "-",
+      "description": "Same as target attribute of a, works when href is specified",
+      "descriptionZh": "相当于 a 链接的 target 属性，href 存在时生效"
+    },
+    {
+      "name": "type",
+      "type": "\`primary\` \\\\",
+      "default": "\`dashed\` \\\\",
+      "description": "Syntactic sugar. Set button type. Will follow \`variant\` & \`color\` if provided",
+      "since": "\`link\` \\\\",
+      "descriptionZh": "语法糖，设置按钮类型。当设置 \`variant\` 与 \`color\` 时以后者为准"
+    },
+    {
+      "name": "onClick",
+      "type": "(event: React.MouseEvent<HTMLElement, MouseEvent>) => void",
+      "default": "-",
+      "description": "Set the handler to handle \`click\` event",
+      "descriptionZh": "点击按钮时的回调"
+    },
+    {
+      "name": "variant",
+      "type": "\`outlined\` \\\\",
+      "default": "\`dashed\` \\\\",
+      "description": "Set button variant",
+      "since": "\`solid\` \\\\",
+      "descriptionZh": "设置按钮的变体"
+    }
+  ],
+  "methods": [],
+  "related": [],
+  "faq": [
+    {
+      "question": "How to choose type and color & variant?",
+      "answer": "Type is essentially syntactic sugar for colors and variants. It internally provides a set of mapping relationships between colors and variants for the type. If both exist at the same time, the colors and variants will be used first.\\n\\n\`\`\`jsx\\n<Button type=\\"primary\\">click</Button>\\n\`\`\`\\n\\nEquivalent\\n\\n\`\`\`jsx\\n<Button color=\\"primary\\" variant=\\"solid\\">\\n  click\\n</Button>\\n\`\`\`"
+    },
+    {
+      "question": "How to close the click wave effect?",
+      "answer": "If you don't need this feature, you can set \`disabled\` of \`wave\` in [ConfigProvider](/components/config-provider#api) as \`true\`.\\n\\n\`\`\`jsx\\n<ConfigProvider wave={{ disabled: true }}>\\n  <Button>click</Button>\\n</ConfigProvider>\\n\`\`\`"
+    }
+  ]
+}"
+`;
+
+exports[`info > info Button --detail --format markdown 1`] = `
+"Button (按钮) — To trigger an operation.
+
+When to use: A button means an operation (or a series of operations). Clicking a button will trigger its corresponding business logic.
+
+In Ant Design we provide 5 types of button.
+
+- 🔵 Primary button: used for the main action, there can be at most one primary button in a section.
+- ⚪️ Default button: used for a series of actions without priority.
+- 🫥 Dashed button: commonly used for adding more actions.
+- 🔤 Text button: used for the most secondary action.
+- 🔗 Link button: used for external links.
+
+And 4 other properties additionally.
+
+- 🔴 \`danger\`: used for actions of risk, like deletion or authorization.
+- 👻 \`ghost\`: used in situations with complex background, home pages usually.
+- 🚫 \`disabled\`: used when actions are not available.
+- 🔃 \`loading\`: adds a loading spinner in button, avoids multiple submits too.
+
+| Property | Type | Default | Since | Description |
+| --- | --- | --- | --- | --- |
+| autoInsertSpace | boolean | \`true\` | 5.17.0 | We add a space between two Chinese characters by default, which removed by setting \`autoInsertSpace\` to \`false\`. |
+| block | boolean | false | - | Option to fit button width to its parent width |
+| classNames | [Record<SemanticDOM, string>](#semantic-dom) | - | 5.4.0 | Semantic DOM class |
+| color | \`default\` \\ | \`primary\` \\ | \`danger\` \\ | Set button color |
+| danger | boolean | false | - | Syntactic sugar. Set the danger status of button. will follow \`color\` if provided |
+| disabled | boolean | false | - | Disabled state of button |
+| ghost | boolean | false | - | Make background transparent and invert text and border colors |
+| href | string | - | - | Redirect url of link button |
+| htmlType | \`submit\` \\ | \`reset\` \\ | \`button\` | Set the original html \`type\` of \`button\`, see: [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#type) |
+| icon | ReactNode | - | - | Set the icon component of button |
+| iconPosition | \`start\` \\ | \`end\` | \`start\` | Set the icon position of button |
+| loading | boolean \\ | { delay: number, icon: ReactNode } | false | Set the loading status of button |
+| shape | \`default\` \\ | \`circle\` \\ | \`round\` | Can be used to set button shape |
+| size | \`large\` \\ | \`middle\` \\ | \`small\` | Set the size of button |
+| styles | [Record<SemanticDOM, CSSProperties>](#semantic-dom) | - | 5.4.0 | Semantic DOM style |
+| target | string | - | - | Same as target attribute of a, works when href is specified |
+| type | \`primary\` \\ | \`dashed\` \\ | \`link\` \\ | Syntactic sugar. Set button type. Will follow \`variant\` & \`color\` if provided |
+| onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - | Set the handler to handle \`click\` event |
+| variant | \`outlined\` \\ | \`dashed\` \\ | \`solid\` \\ | Set button variant |"
+`;
+
+exports[`info > info Button --detail --format text 1`] = `
+"Button (按钮) — To trigger an operation.
+
+When to use: A button means an operation (or a series of operations). Clicking a button will trigger its corresponding business logic.
+
+In Ant Design we provide 5 types of button.
+
+- 🔵 Primary button: used for the main action, there can be at most one primary button in a section.
+- ⚪️ Default button: used for a series of actions without priority.
+- 🫥 Dashed button: commonly used for adding more actions.
+- 🔤 Text button: used for the most secondary action.
+- 🔗 Link button: used for external links.
+
+And 4 other properties additionally.
+
+- 🔴 \`danger\`: used for actions of risk, like deletion or authorization.
+- 👻 \`ghost\`: used in situations with complex background, home pages usually.
+- 🚫 \`disabled\`: used when actions are not available.
+- 🔃 \`loading\`: adds a loading spinner in button, avoids multiple submits too.
+
+Property         Type                                                        Default                             Since       Description                                                                                                                
+---------------  ----------------------------------------------------------  ----------------------------------  ----------  ---------------------------------------------------------------------------------------------------------------------------
+autoInsertSpace  boolean                                                     \`true\`                              5.17.0      We add a space between two Chinese characters by default, which removed by setting \`autoInsertSpace\` to \`false\`.           
+block            boolean                                                     false                               -           Option to fit button width to its parent width                                                                             
+classNames       [Record<SemanticDOM, string>](#semantic-dom)                -                                   5.4.0       Semantic DOM class                                                                                                         
+color            \`default\` \\                                                 \`primary\` \\                         \`danger\` \\  Set button color                                                                                                           
+danger           boolean                                                     false                               -           Syntactic sugar. Set the danger status of button. will follow \`color\` if provided                                          
+disabled         boolean                                                     false                               -           Disabled state of button                                                                                                   
+ghost            boolean                                                     false                               -           Make background transparent and invert text and border colors                                                              
+href             string                                                      -                                   -           Redirect url of link button                                                                                                
+htmlType         \`submit\` \\                                                  \`reset\` \\                           \`button\`    Set the original html \`type\` of \`button\`, see: [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#type)
+icon             ReactNode                                                   -                                   -           Set the icon component of button                                                                                           
+iconPosition     \`start\` \\                                                   \`end\`                               \`start\`     Set the icon position of button                                                                                            
+loading          boolean \\                                                   { delay: number, icon: ReactNode }  false       Set the loading status of button                                                                                           
+shape            \`default\` \\                                                 \`circle\` \\                          \`round\`     Can be used to set button shape                                                                                            
+size             \`large\` \\                                                   \`middle\` \\                          \`small\`     Set the size of button                                                                                                     
+styles           [Record<SemanticDOM, CSSProperties>](#semantic-dom)         -                                   5.4.0       Semantic DOM style                                                                                                         
+target           string                                                      -                                   -           Same as target attribute of a, works when href is specified                                                                
+type             \`primary\` \\                                                 \`dashed\` \\                          \`link\` \\    Syntactic sugar. Set button type. Will follow \`variant\` & \`color\` if provided                                              
+onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void  -                                   -           Set the handler to handle \`click\` event                                                                                    
+variant          \`outlined\` \\                                                \`dashed\` \\                          \`solid\` \\   Set button variant"
+`;
+
+exports[`info > info Button --format json --lang en 1`] = `
+"{
+  "name": "Button",
+  "nameZh": "按钮",
+  "description": "To trigger an operation.",
+  "props": [
+    {
+      "name": "autoInsertSpace",
+      "type": "boolean",
+      "default": "\`true\`",
+      "since": "5.17.0"
+    },
+    {
+      "name": "block",
+      "type": "boolean",
+      "default": "false",
+      "since": ""
+    },
+    {
+      "name": "classNames",
+      "type": "[Record<SemanticDOM, string>](#semantic-dom)",
+      "default": "-",
+      "since": "5.4.0"
+    },
+    {
+      "name": "color",
+      "type": "\`default\` \\\\",
+      "default": "\`primary\` \\\\",
+      "since": "\`danger\` \\\\"
+    },
+    {
+      "name": "danger",
+      "type": "boolean",
+      "default": "false",
+      "since": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "since": ""
+    },
+    {
+      "name": "ghost",
+      "type": "boolean",
+      "default": "false",
+      "since": ""
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "default": "-",
+      "since": ""
+    },
+    {
+      "name": "htmlType",
+      "type": "\`submit\` \\\\",
+      "default": "\`reset\` \\\\",
+      "since": "\`button\`"
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "default": "-",
+      "since": ""
+    },
+    {
+      "name": "iconPosition",
+      "type": "\`start\` \\\\",
+      "default": "\`end\`",
+      "since": "\`start\`"
+    },
+    {
+      "name": "loading",
+      "type": "boolean \\\\",
+      "default": "{ delay: number, icon: ReactNode }",
+      "since": "false"
+    },
+    {
+      "name": "shape",
+      "type": "\`default\` \\\\",
+      "default": "\`circle\` \\\\",
+      "since": "\`round\`"
+    },
+    {
+      "name": "size",
+      "type": "\`large\` \\\\",
+      "default": "\`middle\` \\\\",
+      "since": "\`small\`"
+    },
+    {
+      "name": "styles",
+      "type": "[Record<SemanticDOM, CSSProperties>](#semantic-dom)",
+      "default": "-",
+      "since": "5.4.0"
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "default": "-",
+      "since": ""
+    },
+    {
+      "name": "type",
+      "type": "\`primary\` \\\\",
+      "default": "\`dashed\` \\\\",
+      "since": "\`link\` \\\\"
+    },
+    {
+      "name": "onClick",
+      "type": "(event: React.MouseEvent<HTMLElement, MouseEvent>) => void",
+      "default": "-",
+      "since": ""
+    },
+    {
+      "name": "variant",
+      "type": "\`outlined\` \\\\",
+      "default": "\`dashed\` \\\\",
+      "since": "\`solid\` \\\\"
+    }
+  ]
+}"
+`;
+
+exports[`info > info Button --format json --lang zh 1`] = `
+"{
+  "name": "Button",
+  "nameZh": "按钮",
+  "description": "按钮用于开始一个即时操作。",
+  "props": [
+    {
+      "name": "autoInsertSpace",
+      "type": "boolean",
+      "default": "\`true\`",
+      "since": "5.17.0"
+    },
+    {
+      "name": "block",
+      "type": "boolean",
+      "default": "false",
+      "since": ""
+    },
+    {
+      "name": "classNames",
+      "type": "[Record<SemanticDOM, string>](#semantic-dom)",
+      "default": "-",
+      "since": "5.4.0"
+    },
+    {
+      "name": "color",
+      "type": "\`default\` \\\\",
+      "default": "\`primary\` \\\\",
+      "since": "\`danger\` \\\\"
+    },
+    {
+      "name": "danger",
+      "type": "boolean",
+      "default": "false",
+      "since": ""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "since": ""
+    },
+    {
+      "name": "ghost",
+      "type": "boolean",
+      "default": "false",
+      "since": ""
+    },
+    {
+      "name": "href",
+      "type": "string",
+      "default": "-",
+      "since": ""
+    },
+    {
+      "name": "htmlType",
+      "type": "\`submit\` \\\\",
+      "default": "\`reset\` \\\\",
+      "since": "\`button\`"
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "default": "-",
+      "since": ""
+    },
+    {
+      "name": "iconPosition",
+      "type": "\`start\` \\\\",
+      "default": "\`end\`",
+      "since": "\`start\`"
+    },
+    {
+      "name": "loading",
+      "type": "boolean \\\\",
+      "default": "{ delay: number, icon: ReactNode }",
+      "since": "false"
+    },
+    {
+      "name": "shape",
+      "type": "\`default\` \\\\",
+      "default": "\`circle\` \\\\",
+      "since": "\`round\`"
+    },
+    {
+      "name": "size",
+      "type": "\`large\` \\\\",
+      "default": "\`middle\` \\\\",
+      "since": "\`small\`"
+    },
+    {
+      "name": "styles",
+      "type": "[Record<SemanticDOM, CSSProperties>](#semantic-dom)",
+      "default": "-",
+      "since": "5.4.0"
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "default": "-",
+      "since": ""
+    },
+    {
+      "name": "type",
+      "type": "\`primary\` \\\\",
+      "default": "\`dashed\` \\\\",
+      "since": "\`link\` \\\\"
+    },
+    {
+      "name": "onClick",
+      "type": "(event: React.MouseEvent<HTMLElement, MouseEvent>) => void",
+      "default": "-",
+      "since": ""
+    },
+    {
+      "name": "variant",
+      "type": "\`outlined\` \\\\",
+      "default": "\`dashed\` \\\\",
+      "since": "\`solid\` \\\\"
+    }
+  ]
+}"
+`;
+
+exports[`info > info Button --format markdown --lang en 1`] = `
+"Button (按钮) — To trigger an operation.
+
+| Property | Type | Default | Since |
+| --- | --- | --- | --- |
+| autoInsertSpace | boolean | \`true\` | 5.17.0 |
+| block | boolean | false | - |
+| classNames | [Record<SemanticDOM, string>](#semantic-dom) | - | 5.4.0 |
+| color | \`default\` \\ | \`primary\` \\ | \`danger\` \\ |
+| danger | boolean | false | - |
+| disabled | boolean | false | - |
+| ghost | boolean | false | - |
+| href | string | - | - |
+| htmlType | \`submit\` \\ | \`reset\` \\ | \`button\` |
+| icon | ReactNode | - | - |
+| iconPosition | \`start\` \\ | \`end\` | \`start\` |
+| loading | boolean \\ | { delay: number, icon: ReactNode } | false |
+| shape | \`default\` \\ | \`circle\` \\ | \`round\` |
+| size | \`large\` \\ | \`middle\` \\ | \`small\` |
+| styles | [Record<SemanticDOM, CSSProperties>](#semantic-dom) | - | 5.4.0 |
+| target | string | - | - |
+| type | \`primary\` \\ | \`dashed\` \\ | \`link\` \\ |
+| onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - |
+| variant | \`outlined\` \\ | \`dashed\` \\ | \`solid\` \\ |"
+`;
+
+exports[`info > info Button --format markdown --lang zh 1`] = `
+"Button (按钮) — 按钮用于开始一个即时操作。
+
+| Property | Type | Default | Since |
+| --- | --- | --- | --- |
+| autoInsertSpace | boolean | \`true\` | 5.17.0 |
+| block | boolean | false | - |
+| classNames | [Record<SemanticDOM, string>](#semantic-dom) | - | 5.4.0 |
+| color | \`default\` \\ | \`primary\` \\ | \`danger\` \\ |
+| danger | boolean | false | - |
+| disabled | boolean | false | - |
+| ghost | boolean | false | - |
+| href | string | - | - |
+| htmlType | \`submit\` \\ | \`reset\` \\ | \`button\` |
+| icon | ReactNode | - | - |
+| iconPosition | \`start\` \\ | \`end\` | \`start\` |
+| loading | boolean \\ | { delay: number, icon: ReactNode } | false |
+| shape | \`default\` \\ | \`circle\` \\ | \`round\` |
+| size | \`large\` \\ | \`middle\` \\ | \`small\` |
+| styles | [Record<SemanticDOM, CSSProperties>](#semantic-dom) | - | 5.4.0 |
+| target | string | - | - |
+| type | \`primary\` \\ | \`dashed\` \\ | \`link\` \\ |
+| onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - |
+| variant | \`outlined\` \\ | \`dashed\` \\ | \`solid\` \\ |"
+`;
+
+exports[`info > info Button --format text --lang en 1`] = `
+"Button (按钮) — To trigger an operation.
+
+Property         Type                                                        Default                             Since     
+---------------  ----------------------------------------------------------  ----------------------------------  ----------
+autoInsertSpace  boolean                                                     \`true\`                              5.17.0    
+block            boolean                                                     false                               -         
+classNames       [Record<SemanticDOM, string>](#semantic-dom)                -                                   5.4.0     
+color            \`default\` \\                                                 \`primary\` \\                         \`danger\` \\
+danger           boolean                                                     false                               -         
+disabled         boolean                                                     false                               -         
+ghost            boolean                                                     false                               -         
+href             string                                                      -                                   -         
+htmlType         \`submit\` \\                                                  \`reset\` \\                           \`button\`  
+icon             ReactNode                                                   -                                   -         
+iconPosition     \`start\` \\                                                   \`end\`                               \`start\`   
+loading          boolean \\                                                   { delay: number, icon: ReactNode }  false     
+shape            \`default\` \\                                                 \`circle\` \\                          \`round\`   
+size             \`large\` \\                                                   \`middle\` \\                          \`small\`   
+styles           [Record<SemanticDOM, CSSProperties>](#semantic-dom)         -                                   5.4.0     
+target           string                                                      -                                   -         
+type             \`primary\` \\                                                 \`dashed\` \\                          \`link\` \\  
+onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void  -                                   -         
+variant          \`outlined\` \\                                                \`dashed\` \\                          \`solid\` \\"
+`;
+
+exports[`info > info Button --format text --lang zh 1`] = `
+"Button (按钮) — 按钮用于开始一个即时操作。
+
+Property         Type                                                        Default                             Since     
+---------------  ----------------------------------------------------------  ----------------------------------  ----------
+autoInsertSpace  boolean                                                     \`true\`                              5.17.0    
+block            boolean                                                     false                               -         
+classNames       [Record<SemanticDOM, string>](#semantic-dom)                -                                   5.4.0     
+color            \`default\` \\                                                 \`primary\` \\                         \`danger\` \\
+danger           boolean                                                     false                               -         
+disabled         boolean                                                     false                               -         
+ghost            boolean                                                     false                               -         
+href             string                                                      -                                   -         
+htmlType         \`submit\` \\                                                  \`reset\` \\                           \`button\`  
+icon             ReactNode                                                   -                                   -         
+iconPosition     \`start\` \\                                                   \`end\`                               \`start\`   
+loading          boolean \\                                                   { delay: number, icon: ReactNode }  false     
+shape            \`default\` \\                                                 \`circle\` \\                          \`round\`   
+size             \`large\` \\                                                   \`middle\` \\                          \`small\`   
+styles           [Record<SemanticDOM, CSSProperties>](#semantic-dom)         -                                   5.4.0     
+target           string                                                      -                                   -         
+type             \`primary\` \\                                                 \`dashed\` \\                          \`link\` \\  
+onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void  -                                   -         
+variant          \`outlined\` \\                                                \`dashed\` \\                          \`solid\` \\"
+`;
+
+exports[`info > info NonExistent --format json 1`] = `
+"{
+  "error": true,
+  "code": "COMPONENT_NOT_FOUND",
+  "message": "Component 'NonExistent' not found"
+}"
+`;
+
+exports[`info > info NonExistent 1`] = `"Error: Component 'NonExistent' not found"`;
+
+exports[`info > info button (lowercase) 1`] = `
+"Button (按钮) — To trigger an operation.
+
+Property         Type                                                        Default                             Since     
+---------------  ----------------------------------------------------------  ----------------------------------  ----------
+autoInsertSpace  boolean                                                     \`true\`                              5.17.0    
+block            boolean                                                     false                               -         
+classNames       [Record<SemanticDOM, string>](#semantic-dom)                -                                   5.4.0     
+color            \`default\` \\                                                 \`primary\` \\                         \`danger\` \\
+danger           boolean                                                     false                               -         
+disabled         boolean                                                     false                               -         
+ghost            boolean                                                     false                               -         
+href             string                                                      -                                   -         
+htmlType         \`submit\` \\                                                  \`reset\` \\                           \`button\`  
+icon             ReactNode                                                   -                                   -         
+iconPosition     \`start\` \\                                                   \`end\`                               \`start\`   
+loading          boolean \\                                                   { delay: number, icon: ReactNode }  false     
+shape            \`default\` \\                                                 \`circle\` \\                          \`round\`   
+size             \`large\` \\                                                   \`middle\` \\                          \`small\`   
+styles           [Record<SemanticDOM, CSSProperties>](#semantic-dom)         -                                   5.4.0     
+target           string                                                      -                                   -         
+type             \`primary\` \\                                                 \`dashed\` \\                          \`link\` \\  
+onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void  -                                   -         
+variant          \`outlined\` \\                                                \`dashed\` \\                          \`solid\` \\"
+`;

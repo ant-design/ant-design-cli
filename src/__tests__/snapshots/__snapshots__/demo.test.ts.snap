@@ -1,0 +1,319 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`demo > demo Button --format json --lang en 1`] = `
+"{
+  "component": "Button",
+  "demos": [
+    {
+      "name": "basic",
+      "title": "Syntactic sugar",
+      "description": "Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons."
+    },
+    {
+      "name": "block",
+      "title": "Block Button",
+      "description": "The \`block\` property will make a button fit to its parent width."
+    },
+    {
+      "name": "color-variant",
+      "title": "Color & Variant",
+      "description": "You can set the \`color\` and \`variant\` attributes at the same time can derive more variant buttons."
+    },
+    {
+      "name": "danger",
+      "title": "Danger Buttons",
+      "description": "The \`danger\` is a property of buttons after antd 4.0."
+    },
+    {
+      "name": "disabled",
+      "title": "Disabled",
+      "description": "To mark a button as disabled, add the \`disabled\` property to the \`Button\`."
+    },
+    {
+      "name": "ghost",
+      "title": "Ghost Button",
+      "description": "The \`ghost\` property will make a button's background transparent, this is commonly used in colored background."
+    },
+    {
+      "name": "icon-position",
+      "title": "Icon Position",
+      "description": "You can set the position of a button's icon by setting the \`iconPosition\` to \`start\` or \`end\` respectively."
+    },
+    {
+      "name": "icon",
+      "title": "Icon",
+      "description": "You can add an icon using the \`icon\` property."
+    },
+    {
+      "name": "linear-gradient",
+      "title": "Gradient Button",
+      "description": "Buttons with a gradient background."
+    },
+    {
+      "name": "loading",
+      "title": "Loading",
+      "description": "A loading indicator can be added to a button by setting the \`loading\` property on the \`Button\`. The \`loading.icon\` can be used to customize the loading icon."
+    },
+    {
+      "name": "multiple",
+      "title": "Multiple Buttons",
+      "description": "If you need several buttons, we recommend that you use 1 primary button + n secondary buttons. If there are more than three operations, you can group some of them into a [Dropdown.Button](/components/dropdown/#dropdown-demo-dropdown-button)."
+    },
+    {
+      "name": "size",
+      "title": "Size",
+      "description": "Ant Design supports three sizes of buttons: small, default and large."
+    }
+  ]
+}"
+`;
+
+exports[`demo > demo Button --format json --lang zh 1`] = `
+"{
+  "component": "Button",
+  "demos": [
+    {
+      "name": "basic",
+      "title": "Syntactic sugar",
+      "description": "Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons."
+    },
+    {
+      "name": "block",
+      "title": "Block Button",
+      "description": "The \`block\` property will make a button fit to its parent width."
+    },
+    {
+      "name": "color-variant",
+      "title": "Color & Variant",
+      "description": "You can set the \`color\` and \`variant\` attributes at the same time can derive more variant buttons."
+    },
+    {
+      "name": "danger",
+      "title": "Danger Buttons",
+      "description": "The \`danger\` is a property of buttons after antd 4.0."
+    },
+    {
+      "name": "disabled",
+      "title": "Disabled",
+      "description": "To mark a button as disabled, add the \`disabled\` property to the \`Button\`."
+    },
+    {
+      "name": "ghost",
+      "title": "Ghost Button",
+      "description": "The \`ghost\` property will make a button's background transparent, this is commonly used in colored background."
+    },
+    {
+      "name": "icon-position",
+      "title": "Icon Position",
+      "description": "You can set the position of a button's icon by setting the \`iconPosition\` to \`start\` or \`end\` respectively."
+    },
+    {
+      "name": "icon",
+      "title": "Icon",
+      "description": "You can add an icon using the \`icon\` property."
+    },
+    {
+      "name": "linear-gradient",
+      "title": "Gradient Button",
+      "description": "Buttons with a gradient background."
+    },
+    {
+      "name": "loading",
+      "title": "Loading",
+      "description": "A loading indicator can be added to a button by setting the \`loading\` property on the \`Button\`. The \`loading.icon\` can be used to customize the loading icon."
+    },
+    {
+      "name": "multiple",
+      "title": "Multiple Buttons",
+      "description": "If you need several buttons, we recommend that you use 1 primary button + n secondary buttons. If there are more than three operations, you can group some of them into a [Dropdown.Button](/components/dropdown/#dropdown-demo-dropdown-button)."
+    },
+    {
+      "name": "size",
+      "title": "Size",
+      "description": "Ant Design supports three sizes of buttons: small, default and large."
+    }
+  ]
+}"
+`;
+
+exports[`demo > demo Button --format markdown --lang en 1`] = `
+"Button Demos:
+
+  basic — Syntactic sugar
+    Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons.
+  block — Block Button
+    The \`block\` property will make a button fit to its parent width.
+  color-variant — Color & Variant
+    You can set the \`color\` and \`variant\` attributes at the same time can derive more variant buttons.
+  danger — Danger Buttons
+    The \`danger\` is a property of buttons after antd 4.0.
+  disabled — Disabled
+    To mark a button as disabled, add the \`disabled\` property to the \`Button\`.
+  ghost — Ghost Button
+    The \`ghost\` property will make a button's background transparent, this is commonly used in colored background.
+  icon-position — Icon Position
+    You can set the position of a button's icon by setting the \`iconPosition\` to \`start\` or \`end\` respectively.
+  icon — Icon
+    You can add an icon using the \`icon\` property.
+  linear-gradient — Gradient Button
+    Buttons with a gradient background.
+  loading — Loading
+    A loading indicator can be added to a button by setting the \`loading\` property on the \`Button\`. The \`loading.icon\` can be used to customize the loading icon.
+  multiple — Multiple Buttons
+    If you need several buttons, we recommend that you use 1 primary button + n secondary buttons. If there are more than three operations, you can group some of them into a [Dropdown.Button](/components/dropdown/#dropdown-demo-dropdown-button).
+  size — Size
+    Ant Design supports three sizes of buttons: small, default and large."
+`;
+
+exports[`demo > demo Button --format markdown --lang zh 1`] = `
+"Button Demos:
+
+  basic — Syntactic sugar
+    Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons.
+  block — Block Button
+    The \`block\` property will make a button fit to its parent width.
+  color-variant — Color & Variant
+    You can set the \`color\` and \`variant\` attributes at the same time can derive more variant buttons.
+  danger — Danger Buttons
+    The \`danger\` is a property of buttons after antd 4.0.
+  disabled — Disabled
+    To mark a button as disabled, add the \`disabled\` property to the \`Button\`.
+  ghost — Ghost Button
+    The \`ghost\` property will make a button's background transparent, this is commonly used in colored background.
+  icon-position — Icon Position
+    You can set the position of a button's icon by setting the \`iconPosition\` to \`start\` or \`end\` respectively.
+  icon — Icon
+    You can add an icon using the \`icon\` property.
+  linear-gradient — Gradient Button
+    Buttons with a gradient background.
+  loading — Loading
+    A loading indicator can be added to a button by setting the \`loading\` property on the \`Button\`. The \`loading.icon\` can be used to customize the loading icon.
+  multiple — Multiple Buttons
+    If you need several buttons, we recommend that you use 1 primary button + n secondary buttons. If there are more than three operations, you can group some of them into a [Dropdown.Button](/components/dropdown/#dropdown-demo-dropdown-button).
+  size — Size
+    Ant Design supports three sizes of buttons: small, default and large."
+`;
+
+exports[`demo > demo Button --format text --lang en 1`] = `
+"Button Demos:
+
+  basic — Syntactic sugar
+    Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons.
+  block — Block Button
+    The \`block\` property will make a button fit to its parent width.
+  color-variant — Color & Variant
+    You can set the \`color\` and \`variant\` attributes at the same time can derive more variant buttons.
+  danger — Danger Buttons
+    The \`danger\` is a property of buttons after antd 4.0.
+  disabled — Disabled
+    To mark a button as disabled, add the \`disabled\` property to the \`Button\`.
+  ghost — Ghost Button
+    The \`ghost\` property will make a button's background transparent, this is commonly used in colored background.
+  icon-position — Icon Position
+    You can set the position of a button's icon by setting the \`iconPosition\` to \`start\` or \`end\` respectively.
+  icon — Icon
+    You can add an icon using the \`icon\` property.
+  linear-gradient — Gradient Button
+    Buttons with a gradient background.
+  loading — Loading
+    A loading indicator can be added to a button by setting the \`loading\` property on the \`Button\`. The \`loading.icon\` can be used to customize the loading icon.
+  multiple — Multiple Buttons
+    If you need several buttons, we recommend that you use 1 primary button + n secondary buttons. If there are more than three operations, you can group some of them into a [Dropdown.Button](/components/dropdown/#dropdown-demo-dropdown-button).
+  size — Size
+    Ant Design supports three sizes of buttons: small, default and large."
+`;
+
+exports[`demo > demo Button --format text --lang zh 1`] = `
+"Button Demos:
+
+  basic — Syntactic sugar
+    Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons.
+  block — Block Button
+    The \`block\` property will make a button fit to its parent width.
+  color-variant — Color & Variant
+    You can set the \`color\` and \`variant\` attributes at the same time can derive more variant buttons.
+  danger — Danger Buttons
+    The \`danger\` is a property of buttons after antd 4.0.
+  disabled — Disabled
+    To mark a button as disabled, add the \`disabled\` property to the \`Button\`.
+  ghost — Ghost Button
+    The \`ghost\` property will make a button's background transparent, this is commonly used in colored background.
+  icon-position — Icon Position
+    You can set the position of a button's icon by setting the \`iconPosition\` to \`start\` or \`end\` respectively.
+  icon — Icon
+    You can add an icon using the \`icon\` property.
+  linear-gradient — Gradient Button
+    Buttons with a gradient background.
+  loading — Loading
+    A loading indicator can be added to a button by setting the \`loading\` property on the \`Button\`. The \`loading.icon\` can be used to customize the loading icon.
+  multiple — Multiple Buttons
+    If you need several buttons, we recommend that you use 1 primary button + n secondary buttons. If there are more than three operations, you can group some of them into a [Dropdown.Button](/components/dropdown/#dropdown-demo-dropdown-button).
+  size — Size
+    Ant Design supports three sizes of buttons: small, default and large."
+`;
+
+exports[`demo > demo Button basic --format json 1`] = `
+"{
+  "component": "Button",
+  "demo": "basic",
+  "title": "Syntactic sugar",
+  "description": "Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons.",
+  "code": "import React from 'react';\\nimport { Button, Flex } from 'antd';\\n\\nconst App: React.FC = () => (\\n  <Flex gap=\\"small\\" wrap>\\n    <Button type=\\"primary\\">Primary Button</Button>\\n    <Button>Default Button</Button>\\n    <Button type=\\"dashed\\">Dashed Button</Button>\\n    <Button type=\\"text\\">Text Button</Button>\\n    <Button type=\\"link\\">Link Button</Button>\\n  </Flex>\\n);\\n\\nexport default App;\\n"
+}"
+`;
+
+exports[`demo > demo Button basic --format markdown 1`] = `
+"Button / Syntactic sugar
+Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons.
+
+import React from 'react';
+import { Button, Flex } from 'antd';
+
+const App: React.FC = () => (
+  <Flex gap="small" wrap>
+    <Button type="primary">Primary Button</Button>
+    <Button>Default Button</Button>
+    <Button type="dashed">Dashed Button</Button>
+    <Button type="text">Text Button</Button>
+    <Button type="link">Link Button</Button>
+  </Flex>
+);
+
+export default App;"
+`;
+
+exports[`demo > demo Button basic --format text 1`] = `
+"Button / Syntactic sugar
+Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons.
+
+import React from 'react';
+import { Button, Flex } from 'antd';
+
+const App: React.FC = () => (
+  <Flex gap="small" wrap>
+    <Button type="primary">Primary Button</Button>
+    <Button>Default Button</Button>
+    <Button type="dashed">Dashed Button</Button>
+    <Button type="text">Text Button</Button>
+    <Button type="link">Link Button</Button>
+  </Flex>
+);
+
+export default App;"
+`;
+
+exports[`demo > demo Button nonexistent --format json 1`] = `
+"{
+  "error": true,
+  "code": "DEMO_NOT_FOUND",
+  "message": "Demo 'nonexistent' not found for Button",
+  "suggestion": "Available demos: basic, block, color-variant, danger, disabled, ghost, icon-position, icon, linear-gradient, loading, multiple, size"
+}"
+`;
+
+exports[`demo > demo Button nonexistent 1`] = `
+"Error: Demo 'nonexistent' not found for Button
+Suggestion: Available demos: basic, block, color-variant, danger, disabled, ghost, icon-position, icon, linear-gradient, loading, multiple, size"
+`;
+
+exports[`demo > demo NonExistent 1`] = `"Error: Component 'NonExistent' not found"`;

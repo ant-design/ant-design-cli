@@ -1,0 +1,121 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`semantic > semantic Drawer --format json --lang en 1`] = `
+"{
+  "name": "Drawer",
+  "semanticStructure": [
+    {
+      "key": "mask",
+      "description": "Mask element",
+      "descriptionZh": "遮罩层元素"
+    },
+    {
+      "key": "content",
+      "description": "Drawer container element",
+      "descriptionZh": "Drawer 容器元素"
+    },
+    {
+      "key": "header",
+      "description": "Header element",
+      "descriptionZh": "头部元素"
+    },
+    {
+      "key": "body",
+      "description": "Body element",
+      "descriptionZh": "内容元素"
+    },
+    {
+      "key": "footer",
+      "description": "Footer element",
+      "descriptionZh": "底部元素"
+    }
+  ]
+}"
+`;
+
+exports[`semantic > semantic Drawer --format json --lang zh 1`] = `
+"{
+  "name": "Drawer",
+  "semanticStructure": [
+    {
+      "key": "mask",
+      "description": "Mask element",
+      "descriptionZh": "遮罩层元素"
+    },
+    {
+      "key": "content",
+      "description": "Drawer container element",
+      "descriptionZh": "Drawer 容器元素"
+    },
+    {
+      "key": "header",
+      "description": "Header element",
+      "descriptionZh": "头部元素"
+    },
+    {
+      "key": "body",
+      "description": "Body element",
+      "descriptionZh": "内容元素"
+    },
+    {
+      "key": "footer",
+      "description": "Footer element",
+      "descriptionZh": "底部元素"
+    }
+  ]
+}"
+`;
+
+exports[`semantic > semantic Drawer --format markdown --lang en 1`] = `
+"Drawer Semantic Structure:
+├── mask         # Mask element
+├── content         # Drawer container element
+├── header         # Header element
+├── body         # Body element
+└── footer         # Footer element
+
+Usage:
+  <Drawer classNames={{ mask: 'my-mask' }} />
+  <Drawer styles={{ mask: { background: '#fff' } }} />"
+`;
+
+exports[`semantic > semantic Drawer --format markdown --lang zh 1`] = `
+"Drawer Semantic Structure:
+├── mask         # Mask element
+├── content         # Drawer container element
+├── header         # Header element
+├── body         # Body element
+└── footer         # Footer element
+
+Usage:
+  <Drawer classNames={{ mask: 'my-mask' }} />
+  <Drawer styles={{ mask: { background: '#fff' } }} />"
+`;
+
+exports[`semantic > semantic Drawer --format text --lang en 1`] = `
+"Drawer Semantic Structure:
+├── mask         # Mask element
+├── content         # Drawer container element
+├── header         # Header element
+├── body         # Body element
+└── footer         # Footer element
+
+Usage:
+  <Drawer classNames={{ mask: 'my-mask' }} />
+  <Drawer styles={{ mask: { background: '#fff' } }} />"
+`;
+
+exports[`semantic > semantic Drawer --format text --lang zh 1`] = `
+"Drawer Semantic Structure:
+├── mask         # Mask element
+├── content         # Drawer container element
+├── header         # Header element
+├── body         # Body element
+└── footer         # Footer element
+
+Usage:
+  <Drawer classNames={{ mask: 'my-mask' }} />
+  <Drawer styles={{ mask: { background: '#fff' } }} />"
+`;
+
+exports[`semantic > semantic NonExistent 1`] = `"Error: Component 'NonExistent' not found"`;
