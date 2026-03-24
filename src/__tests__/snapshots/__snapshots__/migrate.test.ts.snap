@@ -1,0 +1,2873 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`migrate > migrate 3 6 (invalid) 1`] = `
+"Error: No migration guide available for v3 → v6
+Suggestion: Available migrations: v4 → v5, v5 → v6"
+`;
+
+exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
+"{
+  "from": "4",
+  "to": "5",
+  "targetDir": "/tmp",
+  "autoFixSteps": [
+    {
+      "component": "Global",
+      "description": "Moment.js replaced by Day.js. All date-related components (DatePicker, TimePicker, Calendar) now use Day.js.",
+      "searchPattern": "import\\\\s+moment\\\\s+from\\\\s+['\\"]moment['\\"]",
+      "before": "import moment from 'moment';\\n<DatePicker value={moment('2024-01-01')} />",
+      "after": "import dayjs from 'dayjs';\\n<DatePicker value={dayjs('2024-01-01')} />",
+      "migrationGuide": "1. Replace moment imports with dayjs\\n2. dayjs API is mostly compatible with moment\\n3. If you need locale support, import dayjs locale separately\\n4. If you need plugins (isBetween, etc.), import and extend dayjs"
+    },
+    {
+      "component": "Global",
+      "description": "\`antd/dist/antd.css\` and \`antd/dist/antd.less\` removed. CSS-in-JS generates styles automatically.",
+      "searchPattern": "import\\\\s+['\\"]antd/dist/antd\\\\.(css|less)['\\"]",
+      "before": "import 'antd/dist/antd.css';\\n// or\\nimport 'antd/dist/antd.less';",
+      "after": "// No global import needed — styles are auto-injected",
+      "migrationGuide": "Remove the global CSS/Less import. Styles are now injected via CSS-in-JS automatically."
+    },
+    {
+      "component": "Modal",
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "searchPattern": "<Modal[^>]*\\\\bvisible\\\\b",
+      "before": "<Modal visible={show} onCancel={onClose}>",
+      "after": "<Modal open={show} onCancel={onClose}>",
+      "migrationGuide": "Search for \`<Modal\` with \`visible\` prop and rename to \`open\`. Also applies to Modal.confirm, Modal.info, etc."
+    },
+    {
+      "component": "Drawer",
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "searchPattern": "<Drawer[^>]*\\\\bvisible\\\\b",
+      "before": "<Drawer visible={show} onClose={onClose}>",
+      "after": "<Drawer open={show} onClose={onClose}>"
+    },
+    {
+      "component": "Tooltip",
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "searchPattern": "<Tooltip[^>]*\\\\bvisible\\\\b",
+      "before": "<Tooltip visible={show}>",
+      "after": "<Tooltip open={show}>"
+    },
+    {
+      "component": "Popover",
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "searchPattern": "<Popover[^>]*\\\\bvisible\\\\b",
+      "before": "<Popover visible={show}>",
+      "after": "<Popover open={show}>"
+    },
+    {
+      "component": "Popconfirm",
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "searchPattern": "<Popconfirm[^>]*\\\\bvisible\\\\b",
+      "before": "<Popconfirm visible={show}>",
+      "after": "<Popconfirm open={show}>"
+    },
+    {
+      "component": "Dropdown",
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "searchPattern": "<Dropdown[^>]*\\\\bvisible\\\\b",
+      "before": "<Dropdown visible={show}>",
+      "after": "<Dropdown open={show}>"
+    },
+    {
+      "component": "Select",
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "searchPattern": "<Select[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<Select dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<Select popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "Select",
+      "description": "Prop \`dropdownMatchSelectWidth\` renamed to \`popupMatchSelectWidth\`",
+      "searchPattern": "<Select[^>]*\\\\bdropdownMatchSelectWidth\\\\b",
+      "before": "<Select dropdownMatchSelectWidth={false} />",
+      "after": "<Select popupMatchSelectWidth={false} />"
+    },
+    {
+      "component": "TreeSelect",
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "searchPattern": "<TreeSelect[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<TreeSelect dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<TreeSelect popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "Cascader",
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "searchPattern": "<Cascader[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<Cascader dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<Cascader popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "AutoComplete",
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "searchPattern": "<AutoComplete[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<AutoComplete dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<AutoComplete popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "DatePicker",
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "searchPattern": "<DatePicker[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<DatePicker dropdownClassName=\\"my-popup\\" />",
+      "after": "<DatePicker popupClassName=\\"my-popup\\" />"
+    },
+    {
+      "component": "TimePicker",
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "searchPattern": "<TimePicker[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<TimePicker dropdownClassName=\\"my-popup\\" />",
+      "after": "<TimePicker popupClassName=\\"my-popup\\" />"
+    },
+    {
+      "component": "Mentions",
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "searchPattern": "<Mentions[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<Mentions dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<Mentions popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "BackTop",
+      "description": "Removed. Use FloatButton.BackTop instead.",
+      "searchPattern": "import\\\\s*\\\\{[^}]*\\\\bBackTop\\\\b[^}]*\\\\}\\\\s*from\\\\s*['\\"]antd['\\"]",
+      "before": "import { BackTop } from 'antd';\\n<BackTop />",
+      "after": "import { FloatButton } from 'antd';\\n<FloatButton.BackTop />"
+    },
+    {
+      "component": "Table",
+      "description": "Column prop \`filterDropdownVisible\` renamed to \`filterDropdownOpen\`.",
+      "searchPattern": "filterDropdownVisible",
+      "before": "{ title: 'Name', dataIndex: 'name', filterDropdownVisible: visible }",
+      "after": "{ title: 'Name', dataIndex: 'name', filterDropdownOpen: visible }",
+      "migrationGuide": "Search for \`filterDropdownVisible\` in Table column definitions and rename to \`filterDropdownOpen\`."
+    },
+    {
+      "component": "message",
+      "description": "\`message.warn()\` completely removed. Use \`message.warning()\` instead.",
+      "searchPattern": "\\\\bmessage\\\\.warn\\\\(",
+      "before": "message.warn('Something went wrong');",
+      "after": "message.warning('Something went wrong');",
+      "migrationGuide": "Search for \`message.warn(\` and replace with \`message.warning(\`."
+    }
+  ],
+  "manualSteps": [
+    {
+      "component": "Global",
+      "description": "Design token system replaces Less variables. All Less variable overrides must be migrated to CSS-in-JS tokens via ConfigProvider.",
+      "guide": "https://ant.design/docs/react/migrate-less-variables",
+      "migrationGuide": "1. Remove all Less variable overrides (modifyVars, less-loader theme config)\\n2. Wrap your app with ConfigProvider and pass a theme object\\n3. Map Less variables to Design Tokens (e.g. @primary-color → token.colorPrimary)\\n4. Remove babel-plugin-import if present (v5 supports tree-shaking natively)",
+      "before": "// webpack.config.js or .umirc.ts\\ntheme: { '@primary-color': '#1890ff' }\\n\\n// or .less file\\n@import '~antd/dist/antd.less';\\n@primary-color: #1890ff;",
+      "after": "import { ConfigProvider } from 'antd';\\n<ConfigProvider theme={{ token: { colorPrimary: '#1890ff' } }}>\\n  <App />\\n</ConfigProvider>"
+    },
+    {
+      "component": "Global",
+      "description": "Component styles no longer include CSS reset. Wrap app with <App /> component to restore.",
+      "guide": "https://ant.design/components/app",
+      "migrationGuide": "1. Import App component from antd\\n2. Wrap your root component with <App />\\n3. Use App.useApp() hook to access message, notification, modal instances",
+      "before": "import { Button } from 'antd';\\n\\nconst MyApp = () => <Button>Click</Button>;",
+      "after": "import { App, Button } from 'antd';\\n\\nconst MyApp = () => (\\n  <App>\\n    <Button>Click</Button>\\n  </App>\\n);"
+    },
+    {
+      "component": "Global",
+      "description": "babel-plugin-import is no longer needed. antd v5 supports tree-shaking natively.",
+      "migrationGuide": "1. Remove babel-plugin-import from babel config\\n2. Remove related configuration in .babelrc, babel.config.js, or package.json\\n3. Direct imports like \`import { Button } from 'antd'\` work without the plugin"
+    },
+    {
+      "component": "Tag",
+      "description": "Prop \`visible\` removed. Use conditional rendering instead.",
+      "migrationGuide": "Replace \`visible\` prop with conditional rendering using \`{condition && <Tag>...</Tag>}\`.",
+      "before": "<Tag visible={show}>Tag</Tag>",
+      "after": "{show && <Tag>Tag</Tag>}"
+    },
+    {
+      "component": "Comment",
+      "description": "Removed from antd. Use @ant-design/compatible instead.",
+      "guide": "https://ant.design/docs/react/migration-v5",
+      "migrationGuide": "1. Install @ant-design/compatible: npm install @ant-design/compatible\\n2. Change import from 'antd' to '@ant-design/compatible'",
+      "before": "import { Comment } from 'antd';",
+      "after": "import { Comment } from '@ant-design/compatible';"
+    },
+    {
+      "component": "PageHeader",
+      "description": "Removed from antd. Use @ant-design/pro-components instead.",
+      "guide": "https://ant.design/docs/react/migration-v5",
+      "migrationGuide": "1. Install @ant-design/pro-components: npm install @ant-design/pro-components\\n2. Change import from 'antd' to '@ant-design/pro-components'",
+      "before": "import { PageHeader } from 'antd';",
+      "after": "import { PageHeader } from '@ant-design/pro-components';"
+    },
+    {
+      "component": "message",
+      "description": "Static methods \`message.xxx()\` deprecated. Use \`App.useApp()\` hook instead for context support.",
+      "migrationGuide": "1. Wrap app with <App /> component\\n2. Use const { message } = App.useApp(); in functional components\\n3. Replace static message.xxx() calls with the hook-provided instance",
+      "before": "import { message } from 'antd';\\nmessage.success('Done!');",
+      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { message } = App.useApp();\\n  message.success('Done!');\\n};"
+    },
+    {
+      "component": "notification",
+      "description": "Static methods \`notification.xxx()\` deprecated. Use \`App.useApp()\` hook instead.",
+      "migrationGuide": "Same pattern as message — use App.useApp() to get notification instance.",
+      "before": "import { notification } from 'antd';\\nnotification.success({ message: 'Done!' });",
+      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { notification } = App.useApp();\\n  notification.success({ message: 'Done!' });\\n};"
+    },
+    {
+      "component": "Modal",
+      "description": "Static methods \`Modal.confirm()\` etc. deprecated. Use \`App.useApp()\` hook instead.",
+      "migrationGuide": "Same pattern as message/notification — use App.useApp() to get modal instance.",
+      "before": "import { Modal } from 'antd';\\nModal.confirm({ title: 'Sure?' });",
+      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { modal } = App.useApp();\\n  modal.confirm({ title: 'Sure?' });\\n};"
+    },
+    {
+      "component": "Table",
+      "description": "Column \`filterDropdown\` render args changed. \`confirm({ closeDropdown: false })\` replaced by separate \`close\` function.",
+      "migrationGuide": "Update filterDropdown render function signature to use the new \`close\` parameter instead of \`confirm({ closeDropdown: false })\`.",
+      "before": "filterDropdown: ({ confirm }) => (\\n  <Button onClick={() => confirm({ closeDropdown: false })}>Filter</Button>\\n)",
+      "after": "filterDropdown: ({ confirm, close }) => (\\n  <Button onClick={() => close()}>Filter</Button>\\n)"
+    },
+    {
+      "component": "Form",
+      "description": "Prop \`labelCol\` and \`wrapperCol\` can now be set globally via ConfigProvider.",
+      "migrationGuide": "Optional improvement: move repeated labelCol/wrapperCol config to ConfigProvider for consistency."
+    },
+    {
+      "component": "Slider",
+      "description": "Tooltip-related APIs converged into \`tooltip\` property. \`tooltipVisible\` → \`tooltip.open\`, \`tipFormatter\` → \`tooltip.formatter\`, etc.",
+      "migrationGuide": "Migrate Slider tooltip props:\\n- tooltipVisible → tooltip.open\\n- tipFormatter → tooltip.formatter\\n- tooltipPlacement → tooltip.placement\\n- getTooltipPopupContainer → tooltip.getPopupContainer",
+      "before": "<Slider tooltipVisible={show} tipFormatter={(v) => \`\${v}%\`} />",
+      "after": "<Slider tooltip={{ open: show, formatter: (v) => \`\${v}%\` }} />"
+    },
+    {
+      "component": "Drawer",
+      "description": "Drawer \`style\` and \`className\` now apply to the panel node. Use \`rootStyle\` and \`rootClassName\` for the wrapper.",
+      "migrationGuide": "In v5, Drawer \`style\` and \`className\` are migrated to the Drawer panel node.\\nIf you were using them to style the wrapper/mask, replace with \`rootStyle\` and \`rootClassName\`.",
+      "before": "<Drawer className=\\"my-drawer\\" style={{ zIndex: 1000 }}>",
+      "after": "<Drawer rootClassName=\\"my-drawer\\" rootStyle={{ zIndex: 1000 }}>"
+    },
+    {
+      "component": "notification",
+      "description": "Static method \`notification.close()\` renamed to \`notification.destroy()\`. Static config options restricted.",
+      "migrationGuide": "1. Rename notification.close() to notification.destroy()\\n2. Static methods no longer allow dynamic prefixCls, maxCount, top, bottom, getContainer in open()\\n3. Use useNotification hook if you need different configurations",
+      "before": "notification.close(key);",
+      "after": "notification.destroy(key);"
+    },
+    {
+      "component": "Global",
+      "description": "IE browser is no longer supported. v5 uses CSS-in-JS and modern CSS features.",
+      "migrationGuide": "If your project needs IE support, you cannot upgrade to v5. Consider using @ant-design/cssinjs StyleProvider for :where selector compatibility with older browsers."
+    }
+  ],
+  "summary": {
+    "totalAutoFix": 19,
+    "totalManual": 15
+  }
+}"
+`;
+
+exports[`migrate > migrate 4 5 --apply /tmp 1`] = `
+"# Auto-Migration Prompt: antd v4 → v5
+# Target directory: /tmp
+
+## Instructions for Code Agent
+
+Scan all .ts/.tsx/.js/.jsx files in \`/tmp\` and apply the following migrations.
+For each file changed, verify the fix compiles correctly before moving on.
+
+## Auto-fixable Changes
+
+### 1. Global: Moment.js replaced by Day.js. All date-related components (DatePicker, TimePicker, Calendar) now use Day.js.
+
+**Search regex:** \`import\\s+moment\\s+from\\s+['"]moment['"]\`
+
+1. Replace moment imports with dayjs
+2. dayjs API is mostly compatible with moment
+3. If you need locale support, import dayjs locale separately
+4. If you need plugins (isBetween, etc.), import and extend dayjs
+
+**Before:**
+\`\`\`tsx
+import moment from 'moment';
+<DatePicker value={moment('2024-01-01')} />
+\`\`\`
+**After:**
+\`\`\`tsx
+import dayjs from 'dayjs';
+<DatePicker value={dayjs('2024-01-01')} />
+\`\`\`
+
+### 2. Global: \`antd/dist/antd.css\` and \`antd/dist/antd.less\` removed. CSS-in-JS generates styles automatically.
+
+**Search regex:** \`import\\s+['"]antd/dist/antd\\.(css|less)['"]\`
+
+Remove the global CSS/Less import. Styles are now injected via CSS-in-JS automatically.
+
+**Before:**
+\`\`\`tsx
+import 'antd/dist/antd.css';
+// or
+import 'antd/dist/antd.less';
+\`\`\`
+**After:**
+\`\`\`tsx
+// No global import needed — styles are auto-injected
+\`\`\`
+
+### 3. Modal: Prop \`visible\` renamed to \`open\`
+
+**Search regex:** \`<Modal[^>]*\\bvisible\\b\`
+
+Search for \`<Modal\` with \`visible\` prop and rename to \`open\`. Also applies to Modal.confirm, Modal.info, etc.
+
+**Before:**
+\`\`\`tsx
+<Modal visible={show} onCancel={onClose}>
+\`\`\`
+**After:**
+\`\`\`tsx
+<Modal open={show} onCancel={onClose}>
+\`\`\`
+
+### 4. Drawer: Prop \`visible\` renamed to \`open\`
+
+**Search regex:** \`<Drawer[^>]*\\bvisible\\b\`
+
+**Before:**
+\`\`\`tsx
+<Drawer visible={show} onClose={onClose}>
+\`\`\`
+**After:**
+\`\`\`tsx
+<Drawer open={show} onClose={onClose}>
+\`\`\`
+
+### 5. Tooltip: Prop \`visible\` renamed to \`open\`
+
+**Search regex:** \`<Tooltip[^>]*\\bvisible\\b\`
+
+**Before:**
+\`\`\`tsx
+<Tooltip visible={show}>
+\`\`\`
+**After:**
+\`\`\`tsx
+<Tooltip open={show}>
+\`\`\`
+
+### 6. Popover: Prop \`visible\` renamed to \`open\`
+
+**Search regex:** \`<Popover[^>]*\\bvisible\\b\`
+
+**Before:**
+\`\`\`tsx
+<Popover visible={show}>
+\`\`\`
+**After:**
+\`\`\`tsx
+<Popover open={show}>
+\`\`\`
+
+### 7. Popconfirm: Prop \`visible\` renamed to \`open\`
+
+**Search regex:** \`<Popconfirm[^>]*\\bvisible\\b\`
+
+**Before:**
+\`\`\`tsx
+<Popconfirm visible={show}>
+\`\`\`
+**After:**
+\`\`\`tsx
+<Popconfirm open={show}>
+\`\`\`
+
+### 8. Dropdown: Prop \`visible\` renamed to \`open\`
+
+**Search regex:** \`<Dropdown[^>]*\\bvisible\\b\`
+
+**Before:**
+\`\`\`tsx
+<Dropdown visible={show}>
+\`\`\`
+**After:**
+\`\`\`tsx
+<Dropdown open={show}>
+\`\`\`
+
+### 9. Select: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**Search regex:** \`<Select[^>]*\\bdropdownClassName\\b\`
+
+**Before:**
+\`\`\`tsx
+<Select dropdownClassName="my-dropdown" />
+\`\`\`
+**After:**
+\`\`\`tsx
+<Select popupClassName="my-dropdown" />
+\`\`\`
+
+### 10. Select: Prop \`dropdownMatchSelectWidth\` renamed to \`popupMatchSelectWidth\`
+
+**Search regex:** \`<Select[^>]*\\bdropdownMatchSelectWidth\\b\`
+
+**Before:**
+\`\`\`tsx
+<Select dropdownMatchSelectWidth={false} />
+\`\`\`
+**After:**
+\`\`\`tsx
+<Select popupMatchSelectWidth={false} />
+\`\`\`
+
+### 11. TreeSelect: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**Search regex:** \`<TreeSelect[^>]*\\bdropdownClassName\\b\`
+
+**Before:**
+\`\`\`tsx
+<TreeSelect dropdownClassName="my-dropdown" />
+\`\`\`
+**After:**
+\`\`\`tsx
+<TreeSelect popupClassName="my-dropdown" />
+\`\`\`
+
+### 12. Cascader: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**Search regex:** \`<Cascader[^>]*\\bdropdownClassName\\b\`
+
+**Before:**
+\`\`\`tsx
+<Cascader dropdownClassName="my-dropdown" />
+\`\`\`
+**After:**
+\`\`\`tsx
+<Cascader popupClassName="my-dropdown" />
+\`\`\`
+
+### 13. AutoComplete: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**Search regex:** \`<AutoComplete[^>]*\\bdropdownClassName\\b\`
+
+**Before:**
+\`\`\`tsx
+<AutoComplete dropdownClassName="my-dropdown" />
+\`\`\`
+**After:**
+\`\`\`tsx
+<AutoComplete popupClassName="my-dropdown" />
+\`\`\`
+
+### 14. DatePicker: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**Search regex:** \`<DatePicker[^>]*\\bdropdownClassName\\b\`
+
+**Before:**
+\`\`\`tsx
+<DatePicker dropdownClassName="my-popup" />
+\`\`\`
+**After:**
+\`\`\`tsx
+<DatePicker popupClassName="my-popup" />
+\`\`\`
+
+### 15. TimePicker: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**Search regex:** \`<TimePicker[^>]*\\bdropdownClassName\\b\`
+
+**Before:**
+\`\`\`tsx
+<TimePicker dropdownClassName="my-popup" />
+\`\`\`
+**After:**
+\`\`\`tsx
+<TimePicker popupClassName="my-popup" />
+\`\`\`
+
+### 16. Mentions: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**Search regex:** \`<Mentions[^>]*\\bdropdownClassName\\b\`
+
+**Before:**
+\`\`\`tsx
+<Mentions dropdownClassName="my-dropdown" />
+\`\`\`
+**After:**
+\`\`\`tsx
+<Mentions popupClassName="my-dropdown" />
+\`\`\`
+
+### 17. BackTop: Removed. Use FloatButton.BackTop instead.
+
+**Search regex:** \`import\\s*\\{[^}]*\\bBackTop\\b[^}]*\\}\\s*from\\s*['"]antd['"]\`
+
+**Before:**
+\`\`\`tsx
+import { BackTop } from 'antd';
+<BackTop />
+\`\`\`
+**After:**
+\`\`\`tsx
+import { FloatButton } from 'antd';
+<FloatButton.BackTop />
+\`\`\`
+
+### 18. Table: Column prop \`filterDropdownVisible\` renamed to \`filterDropdownOpen\`.
+
+**Search regex:** \`filterDropdownVisible\`
+
+Search for \`filterDropdownVisible\` in Table column definitions and rename to \`filterDropdownOpen\`.
+
+**Before:**
+\`\`\`tsx
+{ title: 'Name', dataIndex: 'name', filterDropdownVisible: visible }
+\`\`\`
+**After:**
+\`\`\`tsx
+{ title: 'Name', dataIndex: 'name', filterDropdownOpen: visible }
+\`\`\`
+
+### 19. message: \`message.warn()\` completely removed. Use \`message.warning()\` instead.
+
+**Search regex:** \`\\bmessage\\.warn\\(\`
+
+Search for \`message.warn(\` and replace with \`message.warning(\`.
+
+**Before:**
+\`\`\`tsx
+message.warn('Something went wrong');
+\`\`\`
+**After:**
+\`\`\`tsx
+message.warning('Something went wrong');
+\`\`\`
+
+## Manual Changes (require human review)
+
+### 1. Global: Design token system replaces Less variables. All Less variable overrides must be migrated to CSS-in-JS tokens via ConfigProvider.
+
+1. Remove all Less variable overrides (modifyVars, less-loader theme config)
+2. Wrap your app with ConfigProvider and pass a theme object
+3. Map Less variables to Design Tokens (e.g. @primary-color → token.colorPrimary)
+4. Remove babel-plugin-import if present (v5 supports tree-shaking natively)
+
+**Before:**
+\`\`\`tsx
+// webpack.config.js or .umirc.ts
+theme: { '@primary-color': '#1890ff' }
+
+// or .less file
+@import '~antd/dist/antd.less';
+@primary-color: #1890ff;
+\`\`\`
+**After:**
+\`\`\`tsx
+import { ConfigProvider } from 'antd';
+<ConfigProvider theme={{ token: { colorPrimary: '#1890ff' } }}>
+  <App />
+</ConfigProvider>
+\`\`\`
+
+**Reference:** https://ant.design/docs/react/migrate-less-variables
+
+### 2. Global: Component styles no longer include CSS reset. Wrap app with <App /> component to restore.
+
+1. Import App component from antd
+2. Wrap your root component with <App />
+3. Use App.useApp() hook to access message, notification, modal instances
+
+**Before:**
+\`\`\`tsx
+import { Button } from 'antd';
+
+const MyApp = () => <Button>Click</Button>;
+\`\`\`
+**After:**
+\`\`\`tsx
+import { App, Button } from 'antd';
+
+const MyApp = () => (
+  <App>
+    <Button>Click</Button>
+  </App>
+);
+\`\`\`
+
+**Reference:** https://ant.design/components/app
+
+### 3. Global: babel-plugin-import is no longer needed. antd v5 supports tree-shaking natively.
+
+1. Remove babel-plugin-import from babel config
+2. Remove related configuration in .babelrc, babel.config.js, or package.json
+3. Direct imports like \`import { Button } from 'antd'\` work without the plugin
+
+### 4. Tag: Prop \`visible\` removed. Use conditional rendering instead.
+
+Replace \`visible\` prop with conditional rendering using \`{condition && <Tag>...</Tag>}\`.
+
+**Before:**
+\`\`\`tsx
+<Tag visible={show}>Tag</Tag>
+\`\`\`
+**After:**
+\`\`\`tsx
+{show && <Tag>Tag</Tag>}
+\`\`\`
+
+### 5. Comment: Removed from antd. Use @ant-design/compatible instead.
+
+1. Install @ant-design/compatible: npm install @ant-design/compatible
+2. Change import from 'antd' to '@ant-design/compatible'
+
+**Before:**
+\`\`\`tsx
+import { Comment } from 'antd';
+\`\`\`
+**After:**
+\`\`\`tsx
+import { Comment } from '@ant-design/compatible';
+\`\`\`
+
+**Reference:** https://ant.design/docs/react/migration-v5
+
+### 6. PageHeader: Removed from antd. Use @ant-design/pro-components instead.
+
+1. Install @ant-design/pro-components: npm install @ant-design/pro-components
+2. Change import from 'antd' to '@ant-design/pro-components'
+
+**Before:**
+\`\`\`tsx
+import { PageHeader } from 'antd';
+\`\`\`
+**After:**
+\`\`\`tsx
+import { PageHeader } from '@ant-design/pro-components';
+\`\`\`
+
+**Reference:** https://ant.design/docs/react/migration-v5
+
+### 7. message: Static methods \`message.xxx()\` deprecated. Use \`App.useApp()\` hook instead for context support.
+
+1. Wrap app with <App /> component
+2. Use const { message } = App.useApp(); in functional components
+3. Replace static message.xxx() calls with the hook-provided instance
+
+**Before:**
+\`\`\`tsx
+import { message } from 'antd';
+message.success('Done!');
+\`\`\`
+**After:**
+\`\`\`tsx
+import { App } from 'antd';
+const MyComponent = () => {
+  const { message } = App.useApp();
+  message.success('Done!');
+};
+\`\`\`
+
+### 8. notification: Static methods \`notification.xxx()\` deprecated. Use \`App.useApp()\` hook instead.
+
+Same pattern as message — use App.useApp() to get notification instance.
+
+**Before:**
+\`\`\`tsx
+import { notification } from 'antd';
+notification.success({ message: 'Done!' });
+\`\`\`
+**After:**
+\`\`\`tsx
+import { App } from 'antd';
+const MyComponent = () => {
+  const { notification } = App.useApp();
+  notification.success({ message: 'Done!' });
+};
+\`\`\`
+
+### 9. Modal: Static methods \`Modal.confirm()\` etc. deprecated. Use \`App.useApp()\` hook instead.
+
+Same pattern as message/notification — use App.useApp() to get modal instance.
+
+**Before:**
+\`\`\`tsx
+import { Modal } from 'antd';
+Modal.confirm({ title: 'Sure?' });
+\`\`\`
+**After:**
+\`\`\`tsx
+import { App } from 'antd';
+const MyComponent = () => {
+  const { modal } = App.useApp();
+  modal.confirm({ title: 'Sure?' });
+};
+\`\`\`
+
+### 10. Table: Column \`filterDropdown\` render args changed. \`confirm({ closeDropdown: false })\` replaced by separate \`close\` function.
+
+Update filterDropdown render function signature to use the new \`close\` parameter instead of \`confirm({ closeDropdown: false })\`.
+
+**Before:**
+\`\`\`tsx
+filterDropdown: ({ confirm }) => (
+  <Button onClick={() => confirm({ closeDropdown: false })}>Filter</Button>
+)
+\`\`\`
+**After:**
+\`\`\`tsx
+filterDropdown: ({ confirm, close }) => (
+  <Button onClick={() => close()}>Filter</Button>
+)
+\`\`\`
+
+### 11. Form: Prop \`labelCol\` and \`wrapperCol\` can now be set globally via ConfigProvider.
+
+Optional improvement: move repeated labelCol/wrapperCol config to ConfigProvider for consistency.
+
+### 12. Slider: Tooltip-related APIs converged into \`tooltip\` property. \`tooltipVisible\` → \`tooltip.open\`, \`tipFormatter\` → \`tooltip.formatter\`, etc.
+
+Migrate Slider tooltip props:
+- tooltipVisible → tooltip.open
+- tipFormatter → tooltip.formatter
+- tooltipPlacement → tooltip.placement
+- getTooltipPopupContainer → tooltip.getPopupContainer
+
+**Before:**
+\`\`\`tsx
+<Slider tooltipVisible={show} tipFormatter={(v) => \`\${v}%\`} />
+\`\`\`
+**After:**
+\`\`\`tsx
+<Slider tooltip={{ open: show, formatter: (v) => \`\${v}%\` }} />
+\`\`\`
+
+### 13. Drawer: Drawer \`style\` and \`className\` now apply to the panel node. Use \`rootStyle\` and \`rootClassName\` for the wrapper.
+
+In v5, Drawer \`style\` and \`className\` are migrated to the Drawer panel node.
+If you were using them to style the wrapper/mask, replace with \`rootStyle\` and \`rootClassName\`.
+
+**Before:**
+\`\`\`tsx
+<Drawer className="my-drawer" style={{ zIndex: 1000 }}>
+\`\`\`
+**After:**
+\`\`\`tsx
+<Drawer rootClassName="my-drawer" rootStyle={{ zIndex: 1000 }}>
+\`\`\`
+
+### 14. notification: Static method \`notification.close()\` renamed to \`notification.destroy()\`. Static config options restricted.
+
+1. Rename notification.close() to notification.destroy()
+2. Static methods no longer allow dynamic prefixCls, maxCount, top, bottom, getContainer in open()
+3. Use useNotification hook if you need different configurations
+
+**Before:**
+\`\`\`tsx
+notification.close(key);
+\`\`\`
+**After:**
+\`\`\`tsx
+notification.destroy(key);
+\`\`\`
+
+### 15. Global: IE browser is no longer supported. v5 uses CSS-in-JS and modern CSS features.
+
+If your project needs IE support, you cannot upgrade to v5. Consider using @ant-design/cssinjs StyleProvider for :where selector compatibility with older browsers."
+`;
+
+exports[`migrate > migrate 4 5 --component Select --format json 1`] = `
+"{
+  "from": "4",
+  "to": "5",
+  "steps": [
+    {
+      "component": "Select",
+      "breaking": true,
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Select[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<Select dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<Select popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "Select",
+      "breaking": true,
+      "description": "Prop \`dropdownMatchSelectWidth\` renamed to \`popupMatchSelectWidth\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Select[^>]*\\\\bdropdownMatchSelectWidth\\\\b",
+      "before": "<Select dropdownMatchSelectWidth={false} />",
+      "after": "<Select popupMatchSelectWidth={false} />"
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "autoFixable": 2,
+    "manual": 0
+  }
+}"
+`;
+
+exports[`migrate > migrate 4 5 --component Select 1`] = `
+"Migration Guide: v4 → v5
+
+  Select:
+    🔧 [BREAKING] Prop \`dropdownClassName\` renamed to \`popupClassName\`
+    🔧 [BREAKING] Prop \`dropdownMatchSelectWidth\` renamed to \`popupMatchSelectWidth\`
+
+Total: 2 steps (2 auto-fixable, 0 manual)"
+`;
+
+exports[`migrate > migrate 4 5 --format json 1`] = `
+"{
+  "from": "4",
+  "to": "5",
+  "steps": [
+    {
+      "component": "Global",
+      "breaking": true,
+      "description": "Design token system replaces Less variables. All Less variable overrides must be migrated to CSS-in-JS tokens via ConfigProvider.",
+      "autoFixable": false,
+      "guide": "https://ant.design/docs/react/migrate-less-variables",
+      "migrationGuide": "1. Remove all Less variable overrides (modifyVars, less-loader theme config)\\n2. Wrap your app with ConfigProvider and pass a theme object\\n3. Map Less variables to Design Tokens (e.g. @primary-color → token.colorPrimary)\\n4. Remove babel-plugin-import if present (v5 supports tree-shaking natively)",
+      "before": "// webpack.config.js or .umirc.ts\\ntheme: { '@primary-color': '#1890ff' }\\n\\n// or .less file\\n@import '~antd/dist/antd.less';\\n@primary-color: #1890ff;",
+      "after": "import { ConfigProvider } from 'antd';\\n<ConfigProvider theme={{ token: { colorPrimary: '#1890ff' } }}>\\n  <App />\\n</ConfigProvider>"
+    },
+    {
+      "component": "Global",
+      "breaking": true,
+      "description": "Component styles no longer include CSS reset. Wrap app with <App /> component to restore.",
+      "autoFixable": false,
+      "guide": "https://ant.design/components/app",
+      "searchPattern": "import\\\\s*\\\\{[^}]*\\\\}\\\\s*from\\\\s*['\\"]antd['\\"]",
+      "migrationGuide": "1. Import App component from antd\\n2. Wrap your root component with <App />\\n3. Use App.useApp() hook to access message, notification, modal instances",
+      "before": "import { Button } from 'antd';\\n\\nconst MyApp = () => <Button>Click</Button>;",
+      "after": "import { App, Button } from 'antd';\\n\\nconst MyApp = () => (\\n  <App>\\n    <Button>Click</Button>\\n  </App>\\n);"
+    },
+    {
+      "component": "Global",
+      "breaking": true,
+      "description": "Moment.js replaced by Day.js. All date-related components (DatePicker, TimePicker, Calendar) now use Day.js.",
+      "autoFixable": true,
+      "codemod": "v5-removed-component-migration",
+      "searchPattern": "import\\\\s+moment\\\\s+from\\\\s+['\\"]moment['\\"]",
+      "migrationGuide": "1. Replace moment imports with dayjs\\n2. dayjs API is mostly compatible with moment\\n3. If you need locale support, import dayjs locale separately\\n4. If you need plugins (isBetween, etc.), import and extend dayjs",
+      "before": "import moment from 'moment';\\n<DatePicker value={moment('2024-01-01')} />",
+      "after": "import dayjs from 'dayjs';\\n<DatePicker value={dayjs('2024-01-01')} />"
+    },
+    {
+      "component": "Global",
+      "breaking": true,
+      "description": "babel-plugin-import is no longer needed. antd v5 supports tree-shaking natively.",
+      "autoFixable": false,
+      "searchPattern": "babel-plugin-import",
+      "migrationGuide": "1. Remove babel-plugin-import from babel config\\n2. Remove related configuration in .babelrc, babel.config.js, or package.json\\n3. Direct imports like \`import { Button } from 'antd'\` work without the plugin"
+    },
+    {
+      "component": "Global",
+      "breaking": true,
+      "description": "\`antd/dist/antd.css\` and \`antd/dist/antd.less\` removed. CSS-in-JS generates styles automatically.",
+      "autoFixable": true,
+      "codemod": "v5-removed-component-migration",
+      "searchPattern": "import\\\\s+['\\"]antd/dist/antd\\\\.(css|less)['\\"]",
+      "migrationGuide": "Remove the global CSS/Less import. Styles are now injected via CSS-in-JS automatically.",
+      "before": "import 'antd/dist/antd.css';\\n// or\\nimport 'antd/dist/antd.less';",
+      "after": "// No global import needed — styles are auto-injected"
+    },
+    {
+      "component": "Modal",
+      "breaking": true,
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Modal[^>]*\\\\bvisible\\\\b",
+      "before": "<Modal visible={show} onCancel={onClose}>",
+      "after": "<Modal open={show} onCancel={onClose}>",
+      "migrationGuide": "Search for \`<Modal\` with \`visible\` prop and rename to \`open\`. Also applies to Modal.confirm, Modal.info, etc."
+    },
+    {
+      "component": "Drawer",
+      "breaking": true,
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Drawer[^>]*\\\\bvisible\\\\b",
+      "before": "<Drawer visible={show} onClose={onClose}>",
+      "after": "<Drawer open={show} onClose={onClose}>"
+    },
+    {
+      "component": "Tooltip",
+      "breaking": true,
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Tooltip[^>]*\\\\bvisible\\\\b",
+      "before": "<Tooltip visible={show}>",
+      "after": "<Tooltip open={show}>"
+    },
+    {
+      "component": "Popover",
+      "breaking": true,
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Popover[^>]*\\\\bvisible\\\\b",
+      "before": "<Popover visible={show}>",
+      "after": "<Popover open={show}>"
+    },
+    {
+      "component": "Popconfirm",
+      "breaking": true,
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Popconfirm[^>]*\\\\bvisible\\\\b",
+      "before": "<Popconfirm visible={show}>",
+      "after": "<Popconfirm open={show}>"
+    },
+    {
+      "component": "Dropdown",
+      "breaking": true,
+      "description": "Prop \`visible\` renamed to \`open\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Dropdown[^>]*\\\\bvisible\\\\b",
+      "before": "<Dropdown visible={show}>",
+      "after": "<Dropdown open={show}>"
+    },
+    {
+      "component": "Tag",
+      "breaking": true,
+      "description": "Prop \`visible\` removed. Use conditional rendering instead.",
+      "autoFixable": false,
+      "searchPattern": "<Tag[^>]*\\\\bvisible\\\\b",
+      "before": "<Tag visible={show}>Tag</Tag>",
+      "after": "{show && <Tag>Tag</Tag>}",
+      "migrationGuide": "Replace \`visible\` prop with conditional rendering using \`{condition && <Tag>...</Tag>}\`."
+    },
+    {
+      "component": "Select",
+      "breaking": true,
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Select[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<Select dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<Select popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "Select",
+      "breaking": true,
+      "description": "Prop \`dropdownMatchSelectWidth\` renamed to \`popupMatchSelectWidth\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Select[^>]*\\\\bdropdownMatchSelectWidth\\\\b",
+      "before": "<Select dropdownMatchSelectWidth={false} />",
+      "after": "<Select popupMatchSelectWidth={false} />"
+    },
+    {
+      "component": "TreeSelect",
+      "breaking": true,
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<TreeSelect[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<TreeSelect dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<TreeSelect popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "Cascader",
+      "breaking": true,
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Cascader[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<Cascader dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<Cascader popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "AutoComplete",
+      "breaking": true,
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<AutoComplete[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<AutoComplete dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<AutoComplete popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "DatePicker",
+      "breaking": true,
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<DatePicker[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<DatePicker dropdownClassName=\\"my-popup\\" />",
+      "after": "<DatePicker popupClassName=\\"my-popup\\" />"
+    },
+    {
+      "component": "TimePicker",
+      "breaking": true,
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<TimePicker[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<TimePicker dropdownClassName=\\"my-popup\\" />",
+      "after": "<TimePicker popupClassName=\\"my-popup\\" />"
+    },
+    {
+      "component": "Mentions",
+      "breaking": true,
+      "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "<Mentions[^>]*\\\\bdropdownClassName\\\\b",
+      "before": "<Mentions dropdownClassName=\\"my-dropdown\\" />",
+      "after": "<Mentions popupClassName=\\"my-dropdown\\" />"
+    },
+    {
+      "component": "Comment",
+      "breaking": true,
+      "description": "Removed from antd. Use @ant-design/compatible instead.",
+      "autoFixable": false,
+      "guide": "https://ant.design/docs/react/migration-v5",
+      "searchPattern": "import\\\\s*\\\\{[^}]*\\\\bComment\\\\b[^}]*\\\\}\\\\s*from\\\\s*['\\"]antd['\\"]",
+      "migrationGuide": "1. Install @ant-design/compatible: npm install @ant-design/compatible\\n2. Change import from 'antd' to '@ant-design/compatible'",
+      "before": "import { Comment } from 'antd';",
+      "after": "import { Comment } from '@ant-design/compatible';"
+    },
+    {
+      "component": "PageHeader",
+      "breaking": true,
+      "description": "Removed from antd. Use @ant-design/pro-components instead.",
+      "autoFixable": false,
+      "guide": "https://ant.design/docs/react/migration-v5",
+      "searchPattern": "import\\\\s*\\\\{[^}]*\\\\bPageHeader\\\\b[^}]*\\\\}\\\\s*from\\\\s*['\\"]antd['\\"]",
+      "migrationGuide": "1. Install @ant-design/pro-components: npm install @ant-design/pro-components\\n2. Change import from 'antd' to '@ant-design/pro-components'",
+      "before": "import { PageHeader } from 'antd';",
+      "after": "import { PageHeader } from '@ant-design/pro-components';"
+    },
+    {
+      "component": "BackTop",
+      "breaking": true,
+      "description": "Removed. Use FloatButton.BackTop instead.",
+      "autoFixable": true,
+      "codemod": "v5-removed-component-migration",
+      "searchPattern": "import\\\\s*\\\\{[^}]*\\\\bBackTop\\\\b[^}]*\\\\}\\\\s*from\\\\s*['\\"]antd['\\"]",
+      "before": "import { BackTop } from 'antd';\\n<BackTop />",
+      "after": "import { FloatButton } from 'antd';\\n<FloatButton.BackTop />"
+    },
+    {
+      "component": "message",
+      "breaking": true,
+      "description": "Static methods \`message.xxx()\` deprecated. Use \`App.useApp()\` hook instead for context support.",
+      "autoFixable": false,
+      "searchPattern": "\\\\bmessage\\\\.(success|error|warning|info|loading|open)\\\\(",
+      "migrationGuide": "1. Wrap app with <App /> component\\n2. Use const { message } = App.useApp(); in functional components\\n3. Replace static message.xxx() calls with the hook-provided instance",
+      "before": "import { message } from 'antd';\\nmessage.success('Done!');",
+      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { message } = App.useApp();\\n  message.success('Done!');\\n};"
+    },
+    {
+      "component": "notification",
+      "breaking": true,
+      "description": "Static methods \`notification.xxx()\` deprecated. Use \`App.useApp()\` hook instead.",
+      "autoFixable": false,
+      "searchPattern": "\\\\bnotification\\\\.(success|error|warning|info|open)\\\\(",
+      "migrationGuide": "Same pattern as message — use App.useApp() to get notification instance.",
+      "before": "import { notification } from 'antd';\\nnotification.success({ message: 'Done!' });",
+      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { notification } = App.useApp();\\n  notification.success({ message: 'Done!' });\\n};"
+    },
+    {
+      "component": "Modal",
+      "breaking": true,
+      "description": "Static methods \`Modal.confirm()\` etc. deprecated. Use \`App.useApp()\` hook instead.",
+      "autoFixable": false,
+      "searchPattern": "\\\\bModal\\\\.(confirm|info|success|error|warning)\\\\(",
+      "migrationGuide": "Same pattern as message/notification — use App.useApp() to get modal instance.",
+      "before": "import { Modal } from 'antd';\\nModal.confirm({ title: 'Sure?' });",
+      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { modal } = App.useApp();\\n  modal.confirm({ title: 'Sure?' });\\n};"
+    },
+    {
+      "component": "Table",
+      "breaking": true,
+      "description": "Column \`filterDropdown\` render args changed. \`confirm({ closeDropdown: false })\` replaced by separate \`close\` function.",
+      "autoFixable": false,
+      "searchPattern": "filterDropdown.*closeDropdown",
+      "migrationGuide": "Update filterDropdown render function signature to use the new \`close\` parameter instead of \`confirm({ closeDropdown: false })\`.",
+      "before": "filterDropdown: ({ confirm }) => (\\n  <Button onClick={() => confirm({ closeDropdown: false })}>Filter</Button>\\n)",
+      "after": "filterDropdown: ({ confirm, close }) => (\\n  <Button onClick={() => close()}>Filter</Button>\\n)"
+    },
+    {
+      "component": "Form",
+      "breaking": false,
+      "description": "Prop \`labelCol\` and \`wrapperCol\` can now be set globally via ConfigProvider.",
+      "autoFixable": false,
+      "migrationGuide": "Optional improvement: move repeated labelCol/wrapperCol config to ConfigProvider for consistency."
+    },
+    {
+      "component": "Slider",
+      "breaking": true,
+      "description": "Tooltip-related APIs converged into \`tooltip\` property. \`tooltipVisible\` → \`tooltip.open\`, \`tipFormatter\` → \`tooltip.formatter\`, etc.",
+      "autoFixable": false,
+      "searchPattern": "<Slider[^>]*\\\\b(tooltipVisible|tipFormatter|tooltipPlacement|getTooltipPopupContainer)\\\\b",
+      "before": "<Slider tooltipVisible={show} tipFormatter={(v) => \`\${v}%\`} />",
+      "after": "<Slider tooltip={{ open: show, formatter: (v) => \`\${v}%\` }} />",
+      "migrationGuide": "Migrate Slider tooltip props:\\n- tooltipVisible → tooltip.open\\n- tipFormatter → tooltip.formatter\\n- tooltipPlacement → tooltip.placement\\n- getTooltipPopupContainer → tooltip.getPopupContainer"
+    },
+    {
+      "component": "Table",
+      "breaking": true,
+      "description": "Column prop \`filterDropdownVisible\` renamed to \`filterDropdownOpen\`.",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "filterDropdownVisible",
+      "before": "{ title: 'Name', dataIndex: 'name', filterDropdownVisible: visible }",
+      "after": "{ title: 'Name', dataIndex: 'name', filterDropdownOpen: visible }",
+      "migrationGuide": "Search for \`filterDropdownVisible\` in Table column definitions and rename to \`filterDropdownOpen\`."
+    },
+    {
+      "component": "Drawer",
+      "breaking": true,
+      "description": "Drawer \`style\` and \`className\` now apply to the panel node. Use \`rootStyle\` and \`rootClassName\` for the wrapper.",
+      "autoFixable": false,
+      "searchPattern": "<Drawer[^>]*\\\\b(style|className)\\\\s*=",
+      "migrationGuide": "In v5, Drawer \`style\` and \`className\` are migrated to the Drawer panel node.\\nIf you were using them to style the wrapper/mask, replace with \`rootStyle\` and \`rootClassName\`.",
+      "before": "<Drawer className=\\"my-drawer\\" style={{ zIndex: 1000 }}>",
+      "after": "<Drawer rootClassName=\\"my-drawer\\" rootStyle={{ zIndex: 1000 }}>"
+    },
+    {
+      "component": "notification",
+      "breaking": true,
+      "description": "Static method \`notification.close()\` renamed to \`notification.destroy()\`. Static config options restricted.",
+      "autoFixable": false,
+      "searchPattern": "\\\\bnotification\\\\.close\\\\(",
+      "before": "notification.close(key);",
+      "after": "notification.destroy(key);",
+      "migrationGuide": "1. Rename notification.close() to notification.destroy()\\n2. Static methods no longer allow dynamic prefixCls, maxCount, top, bottom, getContainer in open()\\n3. Use useNotification hook if you need different configurations"
+    },
+    {
+      "component": "message",
+      "breaking": true,
+      "description": "\`message.warn()\` completely removed. Use \`message.warning()\` instead.",
+      "autoFixable": true,
+      "codemod": "v5-props-changed-migration",
+      "searchPattern": "\\\\bmessage\\\\.warn\\\\(",
+      "before": "message.warn('Something went wrong');",
+      "after": "message.warning('Something went wrong');",
+      "migrationGuide": "Search for \`message.warn(\` and replace with \`message.warning(\`."
+    },
+    {
+      "component": "Global",
+      "breaking": true,
+      "description": "IE browser is no longer supported. v5 uses CSS-in-JS and modern CSS features.",
+      "autoFixable": false,
+      "migrationGuide": "If your project needs IE support, you cannot upgrade to v5. Consider using @ant-design/cssinjs StyleProvider for :where selector compatibility with older browsers."
+    }
+  ],
+  "summary": {
+    "total": 34,
+    "autoFixable": 19,
+    "manual": 15
+  }
+}"
+`;
+
+exports[`migrate > migrate 4 5 --format markdown 1`] = `
+"# Migration Guide: antd v4 → v5
+
+> 34 total steps: 19 auto-fixable, 15 manual
+
+## Global
+
+### Design token system replaces Less variables. All Less variable overrides must be migrated to CSS-in-JS tokens via ConfigProvider.
+
+**BREAKING** | 📝 manual
+
+1. Remove all Less variable overrides (modifyVars, less-loader theme config)
+2. Wrap your app with ConfigProvider and pass a theme object
+3. Map Less variables to Design Tokens (e.g. @primary-color → token.colorPrimary)
+4. Remove babel-plugin-import if present (v5 supports tree-shaking natively)
+
+**Before:**
+\`\`\`tsx
+// webpack.config.js or .umirc.ts
+theme: { '@primary-color': '#1890ff' }
+
+// or .less file
+@import '~antd/dist/antd.less';
+@primary-color: #1890ff;
+\`\`\`
+
+**After:**
+\`\`\`tsx
+import { ConfigProvider } from 'antd';
+<ConfigProvider theme={{ token: { colorPrimary: '#1890ff' } }}>
+  <App />
+</ConfigProvider>
+\`\`\`
+
+**Reference:** https://ant.design/docs/react/migrate-less-variables
+
+### Component styles no longer include CSS reset. Wrap app with <App /> component to restore.
+
+**BREAKING** | 📝 manual
+
+1. Import App component from antd
+2. Wrap your root component with <App />
+3. Use App.useApp() hook to access message, notification, modal instances
+
+**Before:**
+\`\`\`tsx
+import { Button } from 'antd';
+
+const MyApp = () => <Button>Click</Button>;
+\`\`\`
+
+**After:**
+\`\`\`tsx
+import { App, Button } from 'antd';
+
+const MyApp = () => (
+  <App>
+    <Button>Click</Button>
+  </App>
+);
+\`\`\`
+
+**Search pattern:** \`import\\s*\\{[^}]*\\}\\s*from\\s*['"]antd['"]\`
+
+**Reference:** https://ant.design/components/app
+
+### Moment.js replaced by Day.js. All date-related components (DatePicker, TimePicker, Calendar) now use Day.js.
+
+**BREAKING** | 🔧 auto-fixable
+
+1. Replace moment imports with dayjs
+2. dayjs API is mostly compatible with moment
+3. If you need locale support, import dayjs locale separately
+4. If you need plugins (isBetween, etc.), import and extend dayjs
+
+**Before:**
+\`\`\`tsx
+import moment from 'moment';
+<DatePicker value={moment('2024-01-01')} />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+import dayjs from 'dayjs';
+<DatePicker value={dayjs('2024-01-01')} />
+\`\`\`
+
+**Search pattern:** \`import\\s+moment\\s+from\\s+['"]moment['"]\`
+
+### babel-plugin-import is no longer needed. antd v5 supports tree-shaking natively.
+
+**BREAKING** | 📝 manual
+
+1. Remove babel-plugin-import from babel config
+2. Remove related configuration in .babelrc, babel.config.js, or package.json
+3. Direct imports like \`import { Button } from 'antd'\` work without the plugin
+
+**Search pattern:** \`babel-plugin-import\`
+
+### \`antd/dist/antd.css\` and \`antd/dist/antd.less\` removed. CSS-in-JS generates styles automatically.
+
+**BREAKING** | 🔧 auto-fixable
+
+Remove the global CSS/Less import. Styles are now injected via CSS-in-JS automatically.
+
+**Before:**
+\`\`\`tsx
+import 'antd/dist/antd.css';
+// or
+import 'antd/dist/antd.less';
+\`\`\`
+
+**After:**
+\`\`\`tsx
+// No global import needed — styles are auto-injected
+\`\`\`
+
+**Search pattern:** \`import\\s+['"]antd/dist/antd\\.(css|less)['"]\`
+
+### IE browser is no longer supported. v5 uses CSS-in-JS and modern CSS features.
+
+**BREAKING** | 📝 manual
+
+If your project needs IE support, you cannot upgrade to v5. Consider using @ant-design/cssinjs StyleProvider for :where selector compatibility with older browsers.
+
+## Modal
+
+### Prop \`visible\` renamed to \`open\`
+
+**BREAKING** | 🔧 auto-fixable
+
+Search for \`<Modal\` with \`visible\` prop and rename to \`open\`. Also applies to Modal.confirm, Modal.info, etc.
+
+**Before:**
+\`\`\`tsx
+<Modal visible={show} onCancel={onClose}>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Modal open={show} onCancel={onClose}>
+\`\`\`
+
+**Search pattern:** \`<Modal[^>]*\\bvisible\\b\`
+
+### Static methods \`Modal.confirm()\` etc. deprecated. Use \`App.useApp()\` hook instead.
+
+**BREAKING** | 📝 manual
+
+Same pattern as message/notification — use App.useApp() to get modal instance.
+
+**Before:**
+\`\`\`tsx
+import { Modal } from 'antd';
+Modal.confirm({ title: 'Sure?' });
+\`\`\`
+
+**After:**
+\`\`\`tsx
+import { App } from 'antd';
+const MyComponent = () => {
+  const { modal } = App.useApp();
+  modal.confirm({ title: 'Sure?' });
+};
+\`\`\`
+
+**Search pattern:** \`\\bModal\\.(confirm|info|success|error|warning)\\(\`
+
+## Drawer
+
+### Prop \`visible\` renamed to \`open\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<Drawer visible={show} onClose={onClose}>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Drawer open={show} onClose={onClose}>
+\`\`\`
+
+**Search pattern:** \`<Drawer[^>]*\\bvisible\\b\`
+
+### Drawer \`style\` and \`className\` now apply to the panel node. Use \`rootStyle\` and \`rootClassName\` for the wrapper.
+
+**BREAKING** | 📝 manual
+
+In v5, Drawer \`style\` and \`className\` are migrated to the Drawer panel node.
+If you were using them to style the wrapper/mask, replace with \`rootStyle\` and \`rootClassName\`.
+
+**Before:**
+\`\`\`tsx
+<Drawer className="my-drawer" style={{ zIndex: 1000 }}>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Drawer rootClassName="my-drawer" rootStyle={{ zIndex: 1000 }}>
+\`\`\`
+
+**Search pattern:** \`<Drawer[^>]*\\b(style|className)\\s*=\`
+
+## Tooltip
+
+### Prop \`visible\` renamed to \`open\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<Tooltip visible={show}>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Tooltip open={show}>
+\`\`\`
+
+**Search pattern:** \`<Tooltip[^>]*\\bvisible\\b\`
+
+## Popover
+
+### Prop \`visible\` renamed to \`open\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<Popover visible={show}>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Popover open={show}>
+\`\`\`
+
+**Search pattern:** \`<Popover[^>]*\\bvisible\\b\`
+
+## Popconfirm
+
+### Prop \`visible\` renamed to \`open\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<Popconfirm visible={show}>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Popconfirm open={show}>
+\`\`\`
+
+**Search pattern:** \`<Popconfirm[^>]*\\bvisible\\b\`
+
+## Dropdown
+
+### Prop \`visible\` renamed to \`open\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<Dropdown visible={show}>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Dropdown open={show}>
+\`\`\`
+
+**Search pattern:** \`<Dropdown[^>]*\\bvisible\\b\`
+
+## Tag
+
+### Prop \`visible\` removed. Use conditional rendering instead.
+
+**BREAKING** | 📝 manual
+
+Replace \`visible\` prop with conditional rendering using \`{condition && <Tag>...</Tag>}\`.
+
+**Before:**
+\`\`\`tsx
+<Tag visible={show}>Tag</Tag>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+{show && <Tag>Tag</Tag>}
+\`\`\`
+
+**Search pattern:** \`<Tag[^>]*\\bvisible\\b\`
+
+## Select
+
+### Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<Select dropdownClassName="my-dropdown" />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Select popupClassName="my-dropdown" />
+\`\`\`
+
+**Search pattern:** \`<Select[^>]*\\bdropdownClassName\\b\`
+
+### Prop \`dropdownMatchSelectWidth\` renamed to \`popupMatchSelectWidth\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<Select dropdownMatchSelectWidth={false} />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Select popupMatchSelectWidth={false} />
+\`\`\`
+
+**Search pattern:** \`<Select[^>]*\\bdropdownMatchSelectWidth\\b\`
+
+## TreeSelect
+
+### Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<TreeSelect dropdownClassName="my-dropdown" />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<TreeSelect popupClassName="my-dropdown" />
+\`\`\`
+
+**Search pattern:** \`<TreeSelect[^>]*\\bdropdownClassName\\b\`
+
+## Cascader
+
+### Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<Cascader dropdownClassName="my-dropdown" />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Cascader popupClassName="my-dropdown" />
+\`\`\`
+
+**Search pattern:** \`<Cascader[^>]*\\bdropdownClassName\\b\`
+
+## AutoComplete
+
+### Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<AutoComplete dropdownClassName="my-dropdown" />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<AutoComplete popupClassName="my-dropdown" />
+\`\`\`
+
+**Search pattern:** \`<AutoComplete[^>]*\\bdropdownClassName\\b\`
+
+## DatePicker
+
+### Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<DatePicker dropdownClassName="my-popup" />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<DatePicker popupClassName="my-popup" />
+\`\`\`
+
+**Search pattern:** \`<DatePicker[^>]*\\bdropdownClassName\\b\`
+
+## TimePicker
+
+### Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<TimePicker dropdownClassName="my-popup" />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<TimePicker popupClassName="my-popup" />
+\`\`\`
+
+**Search pattern:** \`<TimePicker[^>]*\\bdropdownClassName\\b\`
+
+## Mentions
+
+### Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<Mentions dropdownClassName="my-dropdown" />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Mentions popupClassName="my-dropdown" />
+\`\`\`
+
+**Search pattern:** \`<Mentions[^>]*\\bdropdownClassName\\b\`
+
+## Comment
+
+### Removed from antd. Use @ant-design/compatible instead.
+
+**BREAKING** | 📝 manual
+
+1. Install @ant-design/compatible: npm install @ant-design/compatible
+2. Change import from 'antd' to '@ant-design/compatible'
+
+**Before:**
+\`\`\`tsx
+import { Comment } from 'antd';
+\`\`\`
+
+**After:**
+\`\`\`tsx
+import { Comment } from '@ant-design/compatible';
+\`\`\`
+
+**Search pattern:** \`import\\s*\\{[^}]*\\bComment\\b[^}]*\\}\\s*from\\s*['"]antd['"]\`
+
+**Reference:** https://ant.design/docs/react/migration-v5
+
+## PageHeader
+
+### Removed from antd. Use @ant-design/pro-components instead.
+
+**BREAKING** | 📝 manual
+
+1. Install @ant-design/pro-components: npm install @ant-design/pro-components
+2. Change import from 'antd' to '@ant-design/pro-components'
+
+**Before:**
+\`\`\`tsx
+import { PageHeader } from 'antd';
+\`\`\`
+
+**After:**
+\`\`\`tsx
+import { PageHeader } from '@ant-design/pro-components';
+\`\`\`
+
+**Search pattern:** \`import\\s*\\{[^}]*\\bPageHeader\\b[^}]*\\}\\s*from\\s*['"]antd['"]\`
+
+**Reference:** https://ant.design/docs/react/migration-v5
+
+## BackTop
+
+### Removed. Use FloatButton.BackTop instead.
+
+**BREAKING** | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+import { BackTop } from 'antd';
+<BackTop />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+import { FloatButton } from 'antd';
+<FloatButton.BackTop />
+\`\`\`
+
+**Search pattern:** \`import\\s*\\{[^}]*\\bBackTop\\b[^}]*\\}\\s*from\\s*['"]antd['"]\`
+
+## message
+
+### Static methods \`message.xxx()\` deprecated. Use \`App.useApp()\` hook instead for context support.
+
+**BREAKING** | 📝 manual
+
+1. Wrap app with <App /> component
+2. Use const { message } = App.useApp(); in functional components
+3. Replace static message.xxx() calls with the hook-provided instance
+
+**Before:**
+\`\`\`tsx
+import { message } from 'antd';
+message.success('Done!');
+\`\`\`
+
+**After:**
+\`\`\`tsx
+import { App } from 'antd';
+const MyComponent = () => {
+  const { message } = App.useApp();
+  message.success('Done!');
+};
+\`\`\`
+
+**Search pattern:** \`\\bmessage\\.(success|error|warning|info|loading|open)\\(\`
+
+### \`message.warn()\` completely removed. Use \`message.warning()\` instead.
+
+**BREAKING** | 🔧 auto-fixable
+
+Search for \`message.warn(\` and replace with \`message.warning(\`.
+
+**Before:**
+\`\`\`tsx
+message.warn('Something went wrong');
+\`\`\`
+
+**After:**
+\`\`\`tsx
+message.warning('Something went wrong');
+\`\`\`
+
+**Search pattern:** \`\\bmessage\\.warn\\(\`
+
+## notification
+
+### Static methods \`notification.xxx()\` deprecated. Use \`App.useApp()\` hook instead.
+
+**BREAKING** | 📝 manual
+
+Same pattern as message — use App.useApp() to get notification instance.
+
+**Before:**
+\`\`\`tsx
+import { notification } from 'antd';
+notification.success({ message: 'Done!' });
+\`\`\`
+
+**After:**
+\`\`\`tsx
+import { App } from 'antd';
+const MyComponent = () => {
+  const { notification } = App.useApp();
+  notification.success({ message: 'Done!' });
+};
+\`\`\`
+
+**Search pattern:** \`\\bnotification\\.(success|error|warning|info|open)\\(\`
+
+### Static method \`notification.close()\` renamed to \`notification.destroy()\`. Static config options restricted.
+
+**BREAKING** | 📝 manual
+
+1. Rename notification.close() to notification.destroy()
+2. Static methods no longer allow dynamic prefixCls, maxCount, top, bottom, getContainer in open()
+3. Use useNotification hook if you need different configurations
+
+**Before:**
+\`\`\`tsx
+notification.close(key);
+\`\`\`
+
+**After:**
+\`\`\`tsx
+notification.destroy(key);
+\`\`\`
+
+**Search pattern:** \`\\bnotification\\.close\\(\`
+
+## Table
+
+### Column \`filterDropdown\` render args changed. \`confirm({ closeDropdown: false })\` replaced by separate \`close\` function.
+
+**BREAKING** | 📝 manual
+
+Update filterDropdown render function signature to use the new \`close\` parameter instead of \`confirm({ closeDropdown: false })\`.
+
+**Before:**
+\`\`\`tsx
+filterDropdown: ({ confirm }) => (
+  <Button onClick={() => confirm({ closeDropdown: false })}>Filter</Button>
+)
+\`\`\`
+
+**After:**
+\`\`\`tsx
+filterDropdown: ({ confirm, close }) => (
+  <Button onClick={() => close()}>Filter</Button>
+)
+\`\`\`
+
+**Search pattern:** \`filterDropdown.*closeDropdown\`
+
+### Column prop \`filterDropdownVisible\` renamed to \`filterDropdownOpen\`.
+
+**BREAKING** | 🔧 auto-fixable
+
+Search for \`filterDropdownVisible\` in Table column definitions and rename to \`filterDropdownOpen\`.
+
+**Before:**
+\`\`\`tsx
+{ title: 'Name', dataIndex: 'name', filterDropdownVisible: visible }
+\`\`\`
+
+**After:**
+\`\`\`tsx
+{ title: 'Name', dataIndex: 'name', filterDropdownOpen: visible }
+\`\`\`
+
+**Search pattern:** \`filterDropdownVisible\`
+
+## Form
+
+### Prop \`labelCol\` and \`wrapperCol\` can now be set globally via ConfigProvider.
+
+non-breaking | 📝 manual
+
+Optional improvement: move repeated labelCol/wrapperCol config to ConfigProvider for consistency.
+
+## Slider
+
+### Tooltip-related APIs converged into \`tooltip\` property. \`tooltipVisible\` → \`tooltip.open\`, \`tipFormatter\` → \`tooltip.formatter\`, etc.
+
+**BREAKING** | 📝 manual
+
+Migrate Slider tooltip props:
+- tooltipVisible → tooltip.open
+- tipFormatter → tooltip.formatter
+- tooltipPlacement → tooltip.placement
+- getTooltipPopupContainer → tooltip.getPopupContainer
+
+**Before:**
+\`\`\`tsx
+<Slider tooltipVisible={show} tipFormatter={(v) => \`\${v}%\`} />
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Slider tooltip={{ open: show, formatter: (v) => \`\${v}%\` }} />
+\`\`\`
+
+**Search pattern:** \`<Slider[^>]*\\b(tooltipVisible|tipFormatter|tooltipPlacement|getTooltipPopupContainer)\\b\`"
+`;
+
+exports[`migrate > migrate 4 5 --format text 1`] = `
+"Migration Guide: v4 → v5
+
+  Global:
+    📝 [BREAKING] Design token system replaces Less variables. All Less variable overrides must be migrated to CSS-in-JS tokens via ConfigProvider.
+       Guide: https://ant.design/docs/react/migrate-less-variables
+    📝 [BREAKING] Component styles no longer include CSS reset. Wrap app with <App /> component to restore.
+       Guide: https://ant.design/components/app
+    🔧 [BREAKING] Moment.js replaced by Day.js. All date-related components (DatePicker, TimePicker, Calendar) now use Day.js.
+    📝 [BREAKING] babel-plugin-import is no longer needed. antd v5 supports tree-shaking natively.
+    🔧 [BREAKING] \`antd/dist/antd.css\` and \`antd/dist/antd.less\` removed. CSS-in-JS generates styles automatically.
+    📝 [BREAKING] IE browser is no longer supported. v5 uses CSS-in-JS and modern CSS features.
+
+  Modal:
+    🔧 [BREAKING] Prop \`visible\` renamed to \`open\`
+    📝 [BREAKING] Static methods \`Modal.confirm()\` etc. deprecated. Use \`App.useApp()\` hook instead.
+
+  Drawer:
+    🔧 [BREAKING] Prop \`visible\` renamed to \`open\`
+    📝 [BREAKING] Drawer \`style\` and \`className\` now apply to the panel node. Use \`rootStyle\` and \`rootClassName\` for the wrapper.
+
+  Tooltip:
+    🔧 [BREAKING] Prop \`visible\` renamed to \`open\`
+
+  Popover:
+    🔧 [BREAKING] Prop \`visible\` renamed to \`open\`
+
+  Popconfirm:
+    🔧 [BREAKING] Prop \`visible\` renamed to \`open\`
+
+  Dropdown:
+    🔧 [BREAKING] Prop \`visible\` renamed to \`open\`
+
+  Tag:
+    📝 [BREAKING] Prop \`visible\` removed. Use conditional rendering instead.
+
+  Select:
+    🔧 [BREAKING] Prop \`dropdownClassName\` renamed to \`popupClassName\`
+    🔧 [BREAKING] Prop \`dropdownMatchSelectWidth\` renamed to \`popupMatchSelectWidth\`
+
+  TreeSelect:
+    🔧 [BREAKING] Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+  Cascader:
+    🔧 [BREAKING] Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+  AutoComplete:
+    🔧 [BREAKING] Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+  DatePicker:
+    🔧 [BREAKING] Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+  TimePicker:
+    🔧 [BREAKING] Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+  Mentions:
+    🔧 [BREAKING] Prop \`dropdownClassName\` renamed to \`popupClassName\`
+
+  Comment:
+    📝 [BREAKING] Removed from antd. Use @ant-design/compatible instead.
+       Guide: https://ant.design/docs/react/migration-v5
+
+  PageHeader:
+    📝 [BREAKING] Removed from antd. Use @ant-design/pro-components instead.
+       Guide: https://ant.design/docs/react/migration-v5
+
+  BackTop:
+    🔧 [BREAKING] Removed. Use FloatButton.BackTop instead.
+
+  message:
+    📝 [BREAKING] Static methods \`message.xxx()\` deprecated. Use \`App.useApp()\` hook instead for context support.
+    🔧 [BREAKING] \`message.warn()\` completely removed. Use \`message.warning()\` instead.
+
+  notification:
+    📝 [BREAKING] Static methods \`notification.xxx()\` deprecated. Use \`App.useApp()\` hook instead.
+    📝 [BREAKING] Static method \`notification.close()\` renamed to \`notification.destroy()\`. Static config options restricted.
+
+  Table:
+    📝 [BREAKING] Column \`filterDropdown\` render args changed. \`confirm({ closeDropdown: false })\` replaced by separate \`close\` function.
+    🔧 [BREAKING] Column prop \`filterDropdownVisible\` renamed to \`filterDropdownOpen\`.
+
+  Form:
+    📝 Prop \`labelCol\` and \`wrapperCol\` can now be set globally via ConfigProvider.
+
+  Slider:
+    📝 [BREAKING] Tooltip-related APIs converged into \`tooltip\` property. \`tooltipVisible\` → \`tooltip.open\`, \`tipFormatter\` → \`tooltip.formatter\`, etc.
+
+Total: 34 steps (19 auto-fixable, 15 manual)"
+`;
+
+exports[`migrate > migrate 5 6 --format json 1`] = `
+"{
+  "from": "5",
+  "to": "6",
+  "steps": [
+    {
+      "component": "Global",
+      "breaking": true,
+      "description": "React >= 18 required. React 17 and earlier are no longer supported.",
+      "autoFixable": false,
+      "migrationGuide": "1. Upgrade React to 18 or above\\n2. Remove @ant-design/v5-patch-for-react-19 if present (no longer needed)",
+      "searchPattern": "@ant-design/v5-patch-for-react-19",
+      "before": "import '@ant-design/v5-patch-for-react-19';",
+      "after": "// Remove this import — no longer needed in v6"
+    },
+    {
+      "component": "Global",
+      "breaking": true,
+      "description": "@ant-design/icons must be upgraded to v6. Icons v6 is not compatible with antd v5.",
+      "autoFixable": false,
+      "migrationGuide": "1. Run: npm install @ant-design/icons@6\\n2. @ant-design/icons@6 is NOT compatible with antd@5 — upgrade both together\\n3. If build errors occur, verify icon package version matches antd version"
+    },
+    {
+      "component": "Global",
+      "breaking": true,
+      "description": "CSS variables enabled by default. Only modern browsers supported, IE is not supported.",
+      "autoFixable": false,
+      "migrationGuide": "Verify your target browsers support CSS variables. IE and some older domestic browsers may have issues."
+    },
+    {
+      "component": "Global",
+      "breaking": false,
+      "description": "DOM structure of many components optimized. Custom styles targeting internal DOM nodes may need adjustment.",
+      "autoFixable": false,
+      "migrationGuide": "If your project has CSS that targets component internal DOM nodes (specific selectors or hierarchy), inspect and adjust after upgrading."
+    },
+    {
+      "component": "Button",
+      "breaking": true,
+      "description": "Prop \`type\` split into \`color\` and \`variant\` for styling. \`type=\\"primary\\"\` → \`color=\\"primary\\" variant=\\"solid\\"\`.",
+      "autoFixable": true,
+      "codemod": "v6-type-to-variant",
+      "searchPattern": "<Button[^>]*\\\\btype\\\\s*=\\\\s*['\\"](?:primary|dashed|link|text)['\\"]",
+      "migrationGuide": "Button type prop is decomposed:\\n- type=\\"primary\\" → color=\\"primary\\" variant=\\"solid\\" (or just keep type=\\"primary\\" as alias)\\n- type=\\"dashed\\" → variant=\\"dashed\\"\\n- type=\\"link\\" → variant=\\"link\\"\\n- type=\\"text\\" → variant=\\"text\\"\\n- type=\\"default\\" → no change needed",
+      "before": "<Button type=\\"primary\\">Submit</Button>\\n<Button type=\\"dashed\\">Dashed</Button>\\n<Button type=\\"link\\">Link</Button>\\n<Button type=\\"text\\">Text</Button>",
+      "after": "<Button color=\\"primary\\" variant=\\"solid\\">Submit</Button>\\n<Button variant=\\"dashed\\">Dashed</Button>\\n<Button variant=\\"link\\">Link</Button>\\n<Button variant=\\"text\\">Text</Button>"
+    },
+    {
+      "component": "Button",
+      "breaking": true,
+      "description": "Prop \`danger\` removed. Use \`color=\\"danger\\"\` instead.",
+      "autoFixable": true,
+      "codemod": "v6-danger-migration",
+      "searchPattern": "<Button[^>]*\\\\bdanger\\\\b",
+      "before": "<Button danger>Delete</Button>\\n<Button type=\\"primary\\" danger>Delete</Button>",
+      "after": "<Button color=\\"danger\\">Delete</Button>\\n<Button color=\\"danger\\" variant=\\"solid\\">Delete</Button>",
+      "migrationGuide": "Search for all Button components with \`danger\` prop. Replace with \`color=\\"danger\\"\`. If the button also had \`type=\\"primary\\"\`, add \`variant=\\"solid\\"\`."
+    },
+    {
+      "component": "Button",
+      "breaking": true,
+      "description": "Prop \`ghost\` removed. Use \`variant=\\"outlined\\"\` instead.",
+      "autoFixable": true,
+      "codemod": "v6-ghost-migration",
+      "searchPattern": "<Button[^>]*\\\\bghost\\\\b",
+      "before": "<Button ghost>Ghost</Button>\\n<Button type=\\"primary\\" ghost>Ghost Primary</Button>",
+      "after": "<Button variant=\\"outlined\\">Ghost</Button>\\n<Button color=\\"primary\\" variant=\\"outlined\\">Ghost Primary</Button>",
+      "migrationGuide": "Search for all Button components with \`ghost\` prop. Replace with \`variant=\\"outlined\\"\`. Preserve the color from the original \`type\` prop."
+    },
+    {
+      "component": "Button",
+      "breaking": false,
+      "description": "\`iconPosition\` deprecated, use \`iconPlacement\` instead.",
+      "autoFixable": true,
+      "codemod": "v6-props-changed-migration",
+      "searchPattern": "<Button[^>]*\\\\biconPosition\\\\b",
+      "before": "<Button iconPosition=\\"end\\">Click</Button>",
+      "after": "<Button iconPlacement=\\"end\\">Click</Button>"
+    },
+    {
+      "component": "Button.Group",
+      "breaking": false,
+      "description": "\`Button.Group\` deprecated, use \`Space.Compact\` instead.",
+      "autoFixable": false,
+      "searchPattern": "Button\\\\.Group",
+      "before": "<Button.Group><Button>A</Button><Button>B</Button></Button.Group>",
+      "after": "<Space.Compact><Button>A</Button><Button>B</Button></Space.Compact>"
+    },
+    {
+      "component": "Alert",
+      "breaking": false,
+      "description": "\`closeText\` deprecated → \`closable.closeIcon\`; \`message\` deprecated → \`title\`.",
+      "autoFixable": false,
+      "searchPattern": "<Alert[^>]*\\\\b(closeText|message)\\\\s*=",
+      "migrationGuide": "- closeText=\\"Close\\" → closable={{ closeIcon: \\"Close\\" }}\\n- message=\\"Title\\" → title=\\"Title\\""
+    },
+    {
+      "component": "Anchor",
+      "breaking": false,
+      "description": "\`Anchor\` children usage deprecated, use \`items\` prop instead.",
+      "autoFixable": false,
+      "searchPattern": "<Anchor>\\\\s*<Anchor\\\\.Link",
+      "migrationGuide": "Replace Anchor children with items prop array."
+    },
+    {
+      "component": "AutoComplete",
+      "breaking": false,
+      "description": "Multiple deprecated props: \`dropdownMatchSelectWidth\` → \`popupMatchSelectWidth\`, \`dropdownClassName\` → \`classNames.popup.root\`, \`dropdownRender\` → \`popupRender\`, \`dataSource\` → \`options\`.",
+      "autoFixable": false,
+      "searchPattern": "<AutoComplete[^>]*\\\\b(dropdownMatchSelectWidth|dropdownClassName|dropdownStyle|dropdownRender|onDropdownVisibleChange|dataSource)\\\\b",
+      "migrationGuide": "- dropdownMatchSelectWidth → popupMatchSelectWidth\\n- dropdownClassName / popupClassName → classNames.popup.root\\n- dropdownStyle → styles.popup.root\\n- dropdownRender → popupRender\\n- onDropdownVisibleChange → onOpenChange\\n- dataSource → options"
+    },
+    {
+      "component": "Avatar.Group",
+      "breaking": false,
+      "description": "\`maxCount\`/\`maxStyle\`/\`maxPopoverPlacement\`/\`maxPopoverTrigger\` deprecated, use \`max\` prop object.",
+      "autoFixable": false,
+      "searchPattern": "<Avatar\\\\.Group[^>]*\\\\b(maxCount|maxStyle|maxPopoverPlacement|maxPopoverTrigger)\\\\b",
+      "before": "<Avatar.Group maxCount={3} maxStyle={{ color: 'red' }}>",
+      "after": "<Avatar.Group max={{ count: 3, style: { color: 'red' } }}>"
+    },
+    {
+      "component": "Breadcrumb",
+      "breaking": false,
+      "description": "\`routes\` deprecated → \`items\`; \`Breadcrumb.Item\` / \`Breadcrumb.Separator\` deprecated → \`items\`.",
+      "autoFixable": false,
+      "searchPattern": "(Breadcrumb\\\\.Item|Breadcrumb\\\\.Separator|<Breadcrumb[^>]*\\\\broutes\\\\b)",
+      "migrationGuide": "Replace Breadcrumb children or routes prop with items array."
+    },
+    {
+      "component": "Calendar",
+      "breaking": false,
+      "description": "\`dateFullCellRender\`/\`dateCellRender\`/\`monthFullCellRender\`/\`monthCellRender\` deprecated → \`fullCellRender\`/\`cellRender\`.",
+      "autoFixable": false,
+      "searchPattern": "<Calendar[^>]*\\\\b(dateFullCellRender|dateCellRender|monthFullCellRender|monthCellRender)\\\\b"
+    },
+    {
+      "component": "Card",
+      "breaking": false,
+      "description": "\`headStyle\` → \`styles.header\`; \`bodyStyle\` → \`styles.body\`; \`bordered\` → \`variant\`.",
+      "autoFixable": false,
+      "searchPattern": "<Card[^>]*\\\\b(headStyle|bodyStyle|bordered)\\\\b",
+      "migrationGuide": "- headStyle → styles.header\\n- bodyStyle → styles.body\\n- bordered={false} → variant=\\"borderless\\""
+    },
+    {
+      "component": "Cascader",
+      "breaking": false,
+      "description": "Multiple deprecated props: \`dropdownClassName\` → \`classNames.popup.root\`, \`bordered\` → \`variant\`, \`onPopupVisibleChange\` → \`onOpenChange\`.",
+      "autoFixable": false,
+      "searchPattern": "<Cascader[^>]*\\\\b(dropdownClassName|dropdownStyle|dropdownRender|dropdownMenuColumnStyle|onDropdownVisibleChange|onPopupVisibleChange|bordered)\\\\b"
+    },
+    {
+      "component": "Collapse",
+      "breaking": false,
+      "description": "\`destroyInactivePanel\` → \`destroyOnHidden\`; \`expandIconPosition\` → \`expandIconPlacement\`.",
+      "autoFixable": false,
+      "searchPattern": "<Collapse[^>]*\\\\b(destroyInactivePanel|expandIconPosition)\\\\b"
+    },
+    {
+      "component": "DatePicker",
+      "breaking": false,
+      "description": "Multiple deprecated props: \`popupClassName\` → \`classNames.popup.root\`, \`bordered\` → \`variant\`, \`onSelect\` → \`onCalendarChange\`.",
+      "autoFixable": false,
+      "searchPattern": "<(DatePicker|RangePicker)[^>]*\\\\b(dropdownClassName|popupClassName|popupStyle|bordered|onSelect)\\\\b"
+    },
+    {
+      "component": "Descriptions",
+      "breaking": false,
+      "description": "\`labelStyle\` → \`styles.label\`; \`contentStyle\` → \`styles.content\`.",
+      "autoFixable": false,
+      "searchPattern": "<Descriptions[^>]*\\\\b(labelStyle|contentStyle)\\\\b"
+    },
+    {
+      "component": "Divider",
+      "breaking": false,
+      "description": "\`type\` deprecated → \`orientation\`; \`orientationMargin\` → \`styles.content.margin\`.",
+      "autoFixable": false,
+      "searchPattern": "<Divider[^>]*\\\\b(type\\\\s*=|orientationMargin)\\\\b"
+    },
+    {
+      "component": "Drawer",
+      "breaking": false,
+      "description": "Style props deprecated: \`headerStyle\`/\`bodyStyle\`/\`footerStyle\`/\`maskStyle\`/\`drawerStyle\`/\`contentWrapperStyle\` → \`styles.*\`; \`width\`/\`height\` → \`size\`; \`destroyInactivePanel\` → \`destroyOnHidden\`.",
+      "autoFixable": false,
+      "searchPattern": "<Drawer[^>]*\\\\b(headerStyle|bodyStyle|footerStyle|contentWrapperStyle|maskStyle|drawerStyle|destroyInactivePanel)\\\\b",
+      "migrationGuide": "- headerStyle → styles.header\\n- bodyStyle → styles.body\\n- footerStyle → styles.footer\\n- contentWrapperStyle → styles.wrapper\\n- maskStyle → styles.mask\\n- drawerStyle → styles.section\\n- width/height → size\\n- destroyInactivePanel → destroyOnHidden"
+    },
+    {
+      "component": "Dropdown",
+      "breaking": false,
+      "description": "\`overlayClassName\` → \`classNames.root\`; \`overlayStyle\` → \`styles.root\`; \`destroyPopupOnHide\` → \`destroyOnHidden\`. \`Dropdown.Button\` deprecated → \`Space.Compact + Dropdown + Button\`.",
+      "autoFixable": false,
+      "searchPattern": "(Dropdown\\\\.Button|<Dropdown[^>]*\\\\b(overlayClassName|overlayStyle|destroyPopupOnHide|dropdownRender)\\\\b)"
+    },
+    {
+      "component": "Form",
+      "breaking": true,
+      "description": "\`onFinish\` no longer includes all Form.List data. Unregistered Form.Item fields are excluded.",
+      "autoFixable": false,
+      "migrationGuide": "In v5, Form.List was treated as a single Field, causing onFinish to include all data.\\nIn v6, only registered Form.Item fields are included.\\nYou no longer need getFieldsValue({ strict: true }) to filter.",
+      "before": "const onFinish = (values) => {\\n  const realValues = getFieldsValue({ strict: true });\\n};",
+      "after": "const onFinish = (values) => {\\n  const realValues = values; // Already filtered in v6\\n};"
+    },
+    {
+      "component": "Image",
+      "breaking": false,
+      "description": "\`visible\` → \`open\`; \`onVisibleChange\` → \`onOpenChange\`; \`wrapperStyle\` → \`styles.root\`; \`maskClassName\` → \`classNames.cover\`; \`toolbarRender\` → \`actionsRender\`.",
+      "autoFixable": false,
+      "searchPattern": "<Image[^>]*\\\\b(visible|onVisibleChange|wrapperStyle|maskClassName|rootClassName|toolbarRender)\\\\b"
+    },
+    {
+      "component": "Input.Group",
+      "breaking": false,
+      "description": "\`Input.Group\` deprecated, use \`Space.Compact\` instead.",
+      "autoFixable": false,
+      "searchPattern": "Input\\\\.Group",
+      "before": "<Input.Group compact><Input /><Input /></Input.Group>",
+      "after": "<Space.Compact><Input /><Input /></Space.Compact>"
+    },
+    {
+      "component": "Menu",
+      "breaking": false,
+      "description": "\`children\` deprecated, use \`items\` prop instead.",
+      "autoFixable": false,
+      "searchPattern": "<Menu>\\\\s*<Menu\\\\.Item"
+    },
+    {
+      "component": "Modal",
+      "breaking": false,
+      "description": "\`bodyStyle\` → \`styles.body\`; \`maskStyle\` → \`styles.mask\`; \`destroyOnClose\` → \`destroyOnHidden\`.",
+      "autoFixable": false,
+      "searchPattern": "<Modal[^>]*\\\\b(bodyStyle|maskStyle|destroyOnClose)\\\\b"
+    },
+    {
+      "component": "notification",
+      "breaking": false,
+      "description": "\`btn\` deprecated → \`actions\`; \`message\` deprecated → \`title\`.",
+      "autoFixable": false,
+      "searchPattern": "notification\\\\.(open|success|error|info|warning)\\\\(\\\\{[^}]*(\\\\bbtn\\\\b|\\\\bmessage\\\\b)"
+    },
+    {
+      "component": "Progress",
+      "breaking": false,
+      "description": "\`strokeWidth\`/\`width\` → \`size\`; \`trailColor\` → \`railColor\`; \`gapPosition\` → \`gapPlacement\`.",
+      "autoFixable": false,
+      "searchPattern": "<Progress[^>]*\\\\b(strokeWidth|trailColor|gapPosition)\\\\b"
+    },
+    {
+      "component": "Select",
+      "breaking": false,
+      "description": "Multiple deprecated props: \`dropdownClassName\` → \`classNames.popup.root\`, \`dropdownRender\` → \`popupRender\`, \`bordered\` → \`variant\`, \`onDropdownVisibleChange\` → \`onOpenChange\`.",
+      "autoFixable": false,
+      "searchPattern": "<Select[^>]*\\\\b(dropdownClassName|dropdownStyle|dropdownRender|onDropdownVisibleChange|bordered)\\\\b"
+    },
+    {
+      "component": "Slider",
+      "breaking": false,
+      "description": "Tooltip props deprecated: \`tooltipPrefixCls\` → \`tooltip.prefixCls\`, \`tipFormatter\` → \`tooltip.formatter\`, \`tooltipVisible\` → \`tooltip.open\`, \`tooltipPlacement\` → \`tooltip.placement\`.",
+      "autoFixable": false,
+      "searchPattern": "<Slider[^>]*\\\\b(tooltipPrefixCls|tipFormatter|tooltipVisible|tooltipPlacement|getTooltipPopupContainer)\\\\b"
+    },
+    {
+      "component": "Space",
+      "breaking": false,
+      "description": "\`direction\` → \`orientation\`; \`split\` → \`separator\`.",
+      "autoFixable": false,
+      "searchPattern": "<Space[^>]*\\\\b(direction|split)\\\\s*="
+    },
+    {
+      "component": "Steps",
+      "breaking": false,
+      "description": "\`labelPlacement\` → \`titlePlacement\`; \`progressDot\` → \`type=\\"dot\\"\`; \`direction\` → \`orientation\`; \`items.description\` → \`items.content\`.",
+      "autoFixable": false,
+      "searchPattern": "<Steps[^>]*\\\\b(labelPlacement|progressDot|direction)\\\\b"
+    },
+    {
+      "component": "Table",
+      "breaking": false,
+      "description": "\`pagination.position\` → \`pagination.placement\`; \`filterDropdownOpen\` → \`filterDropdownProps.open\`; \`onFilterDropdownOpenChange\` → \`filterDropdownProps.onOpenChange\`.",
+      "autoFixable": false,
+      "searchPattern": "(filterDropdownOpen|onFilterDropdownOpenChange|filterCheckall)"
+    },
+    {
+      "component": "Tabs",
+      "breaking": false,
+      "description": "\`tabPosition\` → \`tabPlacement\`; \`destroyInactiveTabPane\` → \`destroyOnHidden\`; \`Tabs.TabPane\` deprecated → \`items\`.",
+      "autoFixable": false,
+      "searchPattern": "(Tabs\\\\.TabPane|<Tabs[^>]*\\\\b(tabPosition|destroyInactiveTabPane)\\\\b)"
+    },
+    {
+      "component": "Tag",
+      "breaking": true,
+      "description": "Default trailing margin removed. \`bordered={false}\` → \`variant=\\"filled\\"\`; \`color=\\"xxx-inverse\\"\` → \`variant=\\"solid\\"\`.",
+      "autoFixable": false,
+      "searchPattern": "<Tag[^>]*\\\\b(bordered|color\\\\s*=\\\\s*['\\"][^'\\"]*-inverse)",
+      "migrationGuide": "- Tag trailing margin removed. Add margin via ConfigProvider tag.styles if needed.\\n- bordered={false} → variant=\\"filled\\"\\n- color=\\"xxx-inverse\\" → variant=\\"solid\\""
+    },
+    {
+      "component": "Timeline",
+      "breaking": false,
+      "description": "\`Timeline.Item\` deprecated → \`items\`; \`pending\`/\`pendingDot\` deprecated → \`items\`; \`mode=left|right\` → \`mode=start|end\`.",
+      "autoFixable": false,
+      "searchPattern": "(Timeline\\\\.Item|<Timeline[^>]*\\\\b(pending|pendingDot|mode\\\\s*=\\\\s*['\\"](?:left|right))\\\\b)"
+    },
+    {
+      "component": "Tooltip",
+      "breaking": false,
+      "description": "\`overlayStyle\` → \`styles.root\`; \`overlayInnerStyle\` → \`styles.container\`; \`overlayClassName\` → \`classNames.root\`; \`destroyTooltipOnHide\` → \`destroyOnHidden\`.",
+      "autoFixable": false,
+      "searchPattern": "<Tooltip[^>]*\\\\b(overlayStyle|overlayInnerStyle|overlayClassName|destroyTooltipOnHide)\\\\b"
+    },
+    {
+      "component": "Transfer",
+      "breaking": false,
+      "description": "\`listStyle\` → \`styles.section\`; \`operationStyle\` → \`styles.actions\`; \`operations\` → \`actions\`.",
+      "autoFixable": false,
+      "searchPattern": "<Transfer[^>]*\\\\b(listStyle|operationStyle|operations)\\\\b"
+    },
+    {
+      "component": "TreeSelect",
+      "breaking": false,
+      "description": "Multiple deprecated props: \`dropdownClassName\` → \`classNames.popup.root\`, \`dropdownRender\` → \`popupRender\`, \`bordered\` → \`variant\`, \`onDropdownVisibleChange\` → \`onOpenChange\`.",
+      "autoFixable": false,
+      "searchPattern": "<TreeSelect[^>]*\\\\b(dropdownClassName|dropdownStyle|dropdownRender|onDropdownVisibleChange|bordered)\\\\b"
+    },
+    {
+      "component": "Global",
+      "breaking": false,
+      "description": "Modal/Drawer mask blur enabled by default. Disable via ConfigProvider if undesired.",
+      "autoFixable": false,
+      "migrationGuide": "If you don't want the mask blur effect:\\n<ConfigProvider modal={{ mask: { blur: false } }} drawer={{ mask: { blur: false } }}>\\n  <App />\\n</ConfigProvider>"
+    }
+  ],
+  "summary": {
+    "total": 42,
+    "autoFixable": 4,
+    "manual": 38
+  }
+}"
+`;
+
+exports[`migrate > migrate 5 6 --format markdown 1`] = `
+"# Migration Guide: antd v5 → v6
+
+> 42 total steps: 4 auto-fixable, 38 manual
+
+## Global
+
+### React >= 18 required. React 17 and earlier are no longer supported.
+
+**BREAKING** | 📝 manual
+
+1. Upgrade React to 18 or above
+2. Remove @ant-design/v5-patch-for-react-19 if present (no longer needed)
+
+**Before:**
+\`\`\`tsx
+import '@ant-design/v5-patch-for-react-19';
+\`\`\`
+
+**After:**
+\`\`\`tsx
+// Remove this import — no longer needed in v6
+\`\`\`
+
+**Search pattern:** \`@ant-design/v5-patch-for-react-19\`
+
+### @ant-design/icons must be upgraded to v6. Icons v6 is not compatible with antd v5.
+
+**BREAKING** | 📝 manual
+
+1. Run: npm install @ant-design/icons@6
+2. @ant-design/icons@6 is NOT compatible with antd@5 — upgrade both together
+3. If build errors occur, verify icon package version matches antd version
+
+### CSS variables enabled by default. Only modern browsers supported, IE is not supported.
+
+**BREAKING** | 📝 manual
+
+Verify your target browsers support CSS variables. IE and some older domestic browsers may have issues.
+
+### DOM structure of many components optimized. Custom styles targeting internal DOM nodes may need adjustment.
+
+non-breaking | 📝 manual
+
+If your project has CSS that targets component internal DOM nodes (specific selectors or hierarchy), inspect and adjust after upgrading.
+
+### Modal/Drawer mask blur enabled by default. Disable via ConfigProvider if undesired.
+
+non-breaking | 📝 manual
+
+If you don't want the mask blur effect:
+<ConfigProvider modal={{ mask: { blur: false } }} drawer={{ mask: { blur: false } }}>
+  <App />
+</ConfigProvider>
+
+## Button
+
+### Prop \`type\` split into \`color\` and \`variant\` for styling. \`type="primary"\` → \`color="primary" variant="solid"\`.
+
+**BREAKING** | 🔧 auto-fixable
+
+Button type prop is decomposed:
+- type="primary" → color="primary" variant="solid" (or just keep type="primary" as alias)
+- type="dashed" → variant="dashed"
+- type="link" → variant="link"
+- type="text" → variant="text"
+- type="default" → no change needed
+
+**Before:**
+\`\`\`tsx
+<Button type="primary">Submit</Button>
+<Button type="dashed">Dashed</Button>
+<Button type="link">Link</Button>
+<Button type="text">Text</Button>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Button color="primary" variant="solid">Submit</Button>
+<Button variant="dashed">Dashed</Button>
+<Button variant="link">Link</Button>
+<Button variant="text">Text</Button>
+\`\`\`
+
+**Search pattern:** \`<Button[^>]*\\btype\\s*=\\s*['"](?:primary|dashed|link|text)['"]\`
+
+### Prop \`danger\` removed. Use \`color="danger"\` instead.
+
+**BREAKING** | 🔧 auto-fixable
+
+Search for all Button components with \`danger\` prop. Replace with \`color="danger"\`. If the button also had \`type="primary"\`, add \`variant="solid"\`.
+
+**Before:**
+\`\`\`tsx
+<Button danger>Delete</Button>
+<Button type="primary" danger>Delete</Button>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Button color="danger">Delete</Button>
+<Button color="danger" variant="solid">Delete</Button>
+\`\`\`
+
+**Search pattern:** \`<Button[^>]*\\bdanger\\b\`
+
+### Prop \`ghost\` removed. Use \`variant="outlined"\` instead.
+
+**BREAKING** | 🔧 auto-fixable
+
+Search for all Button components with \`ghost\` prop. Replace with \`variant="outlined"\`. Preserve the color from the original \`type\` prop.
+
+**Before:**
+\`\`\`tsx
+<Button ghost>Ghost</Button>
+<Button type="primary" ghost>Ghost Primary</Button>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Button variant="outlined">Ghost</Button>
+<Button color="primary" variant="outlined">Ghost Primary</Button>
+\`\`\`
+
+**Search pattern:** \`<Button[^>]*\\bghost\\b\`
+
+### \`iconPosition\` deprecated, use \`iconPlacement\` instead.
+
+non-breaking | 🔧 auto-fixable
+
+**Before:**
+\`\`\`tsx
+<Button iconPosition="end">Click</Button>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Button iconPlacement="end">Click</Button>
+\`\`\`
+
+**Search pattern:** \`<Button[^>]*\\biconPosition\\b\`
+
+## Button.Group
+
+### \`Button.Group\` deprecated, use \`Space.Compact\` instead.
+
+non-breaking | 📝 manual
+
+**Before:**
+\`\`\`tsx
+<Button.Group><Button>A</Button><Button>B</Button></Button.Group>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Space.Compact><Button>A</Button><Button>B</Button></Space.Compact>
+\`\`\`
+
+**Search pattern:** \`Button\\.Group\`
+
+## Alert
+
+### \`closeText\` deprecated → \`closable.closeIcon\`; \`message\` deprecated → \`title\`.
+
+non-breaking | 📝 manual
+
+- closeText="Close" → closable={{ closeIcon: "Close" }}
+- message="Title" → title="Title"
+
+**Search pattern:** \`<Alert[^>]*\\b(closeText|message)\\s*=\`
+
+## Anchor
+
+### \`Anchor\` children usage deprecated, use \`items\` prop instead.
+
+non-breaking | 📝 manual
+
+Replace Anchor children with items prop array.
+
+**Search pattern:** \`<Anchor>\\s*<Anchor\\.Link\`
+
+## AutoComplete
+
+### Multiple deprecated props: \`dropdownMatchSelectWidth\` → \`popupMatchSelectWidth\`, \`dropdownClassName\` → \`classNames.popup.root\`, \`dropdownRender\` → \`popupRender\`, \`dataSource\` → \`options\`.
+
+non-breaking | 📝 manual
+
+- dropdownMatchSelectWidth → popupMatchSelectWidth
+- dropdownClassName / popupClassName → classNames.popup.root
+- dropdownStyle → styles.popup.root
+- dropdownRender → popupRender
+- onDropdownVisibleChange → onOpenChange
+- dataSource → options
+
+**Search pattern:** \`<AutoComplete[^>]*\\b(dropdownMatchSelectWidth|dropdownClassName|dropdownStyle|dropdownRender|onDropdownVisibleChange|dataSource)\\b\`
+
+## Avatar.Group
+
+### \`maxCount\`/\`maxStyle\`/\`maxPopoverPlacement\`/\`maxPopoverTrigger\` deprecated, use \`max\` prop object.
+
+non-breaking | 📝 manual
+
+**Before:**
+\`\`\`tsx
+<Avatar.Group maxCount={3} maxStyle={{ color: 'red' }}>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Avatar.Group max={{ count: 3, style: { color: 'red' } }}>
+\`\`\`
+
+**Search pattern:** \`<Avatar\\.Group[^>]*\\b(maxCount|maxStyle|maxPopoverPlacement|maxPopoverTrigger)\\b\`
+
+## Breadcrumb
+
+### \`routes\` deprecated → \`items\`; \`Breadcrumb.Item\` / \`Breadcrumb.Separator\` deprecated → \`items\`.
+
+non-breaking | 📝 manual
+
+Replace Breadcrumb children or routes prop with items array.
+
+**Search pattern:** \`(Breadcrumb\\.Item|Breadcrumb\\.Separator|<Breadcrumb[^>]*\\broutes\\b)\`
+
+## Calendar
+
+### \`dateFullCellRender\`/\`dateCellRender\`/\`monthFullCellRender\`/\`monthCellRender\` deprecated → \`fullCellRender\`/\`cellRender\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Calendar[^>]*\\b(dateFullCellRender|dateCellRender|monthFullCellRender|monthCellRender)\\b\`
+
+## Card
+
+### \`headStyle\` → \`styles.header\`; \`bodyStyle\` → \`styles.body\`; \`bordered\` → \`variant\`.
+
+non-breaking | 📝 manual
+
+- headStyle → styles.header
+- bodyStyle → styles.body
+- bordered={false} → variant="borderless"
+
+**Search pattern:** \`<Card[^>]*\\b(headStyle|bodyStyle|bordered)\\b\`
+
+## Cascader
+
+### Multiple deprecated props: \`dropdownClassName\` → \`classNames.popup.root\`, \`bordered\` → \`variant\`, \`onPopupVisibleChange\` → \`onOpenChange\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Cascader[^>]*\\b(dropdownClassName|dropdownStyle|dropdownRender|dropdownMenuColumnStyle|onDropdownVisibleChange|onPopupVisibleChange|bordered)\\b\`
+
+## Collapse
+
+### \`destroyInactivePanel\` → \`destroyOnHidden\`; \`expandIconPosition\` → \`expandIconPlacement\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Collapse[^>]*\\b(destroyInactivePanel|expandIconPosition)\\b\`
+
+## DatePicker
+
+### Multiple deprecated props: \`popupClassName\` → \`classNames.popup.root\`, \`bordered\` → \`variant\`, \`onSelect\` → \`onCalendarChange\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<(DatePicker|RangePicker)[^>]*\\b(dropdownClassName|popupClassName|popupStyle|bordered|onSelect)\\b\`
+
+## Descriptions
+
+### \`labelStyle\` → \`styles.label\`; \`contentStyle\` → \`styles.content\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Descriptions[^>]*\\b(labelStyle|contentStyle)\\b\`
+
+## Divider
+
+### \`type\` deprecated → \`orientation\`; \`orientationMargin\` → \`styles.content.margin\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Divider[^>]*\\b(type\\s*=|orientationMargin)\\b\`
+
+## Drawer
+
+### Style props deprecated: \`headerStyle\`/\`bodyStyle\`/\`footerStyle\`/\`maskStyle\`/\`drawerStyle\`/\`contentWrapperStyle\` → \`styles.*\`; \`width\`/\`height\` → \`size\`; \`destroyInactivePanel\` → \`destroyOnHidden\`.
+
+non-breaking | 📝 manual
+
+- headerStyle → styles.header
+- bodyStyle → styles.body
+- footerStyle → styles.footer
+- contentWrapperStyle → styles.wrapper
+- maskStyle → styles.mask
+- drawerStyle → styles.section
+- width/height → size
+- destroyInactivePanel → destroyOnHidden
+
+**Search pattern:** \`<Drawer[^>]*\\b(headerStyle|bodyStyle|footerStyle|contentWrapperStyle|maskStyle|drawerStyle|destroyInactivePanel)\\b\`
+
+## Dropdown
+
+### \`overlayClassName\` → \`classNames.root\`; \`overlayStyle\` → \`styles.root\`; \`destroyPopupOnHide\` → \`destroyOnHidden\`. \`Dropdown.Button\` deprecated → \`Space.Compact + Dropdown + Button\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`(Dropdown\\.Button|<Dropdown[^>]*\\b(overlayClassName|overlayStyle|destroyPopupOnHide|dropdownRender)\\b)\`
+
+## Form
+
+### \`onFinish\` no longer includes all Form.List data. Unregistered Form.Item fields are excluded.
+
+**BREAKING** | 📝 manual
+
+In v5, Form.List was treated as a single Field, causing onFinish to include all data.
+In v6, only registered Form.Item fields are included.
+You no longer need getFieldsValue({ strict: true }) to filter.
+
+**Before:**
+\`\`\`tsx
+const onFinish = (values) => {
+  const realValues = getFieldsValue({ strict: true });
+};
+\`\`\`
+
+**After:**
+\`\`\`tsx
+const onFinish = (values) => {
+  const realValues = values; // Already filtered in v6
+};
+\`\`\`
+
+## Image
+
+### \`visible\` → \`open\`; \`onVisibleChange\` → \`onOpenChange\`; \`wrapperStyle\` → \`styles.root\`; \`maskClassName\` → \`classNames.cover\`; \`toolbarRender\` → \`actionsRender\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Image[^>]*\\b(visible|onVisibleChange|wrapperStyle|maskClassName|rootClassName|toolbarRender)\\b\`
+
+## Input.Group
+
+### \`Input.Group\` deprecated, use \`Space.Compact\` instead.
+
+non-breaking | 📝 manual
+
+**Before:**
+\`\`\`tsx
+<Input.Group compact><Input /><Input /></Input.Group>
+\`\`\`
+
+**After:**
+\`\`\`tsx
+<Space.Compact><Input /><Input /></Space.Compact>
+\`\`\`
+
+**Search pattern:** \`Input\\.Group\`
+
+## Menu
+
+### \`children\` deprecated, use \`items\` prop instead.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Menu>\\s*<Menu\\.Item\`
+
+## Modal
+
+### \`bodyStyle\` → \`styles.body\`; \`maskStyle\` → \`styles.mask\`; \`destroyOnClose\` → \`destroyOnHidden\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Modal[^>]*\\b(bodyStyle|maskStyle|destroyOnClose)\\b\`
+
+## notification
+
+### \`btn\` deprecated → \`actions\`; \`message\` deprecated → \`title\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`notification\\.(open|success|error|info|warning)\\(\\{[^}]*(\\bbtn\\b|\\bmessage\\b)\`
+
+## Progress
+
+### \`strokeWidth\`/\`width\` → \`size\`; \`trailColor\` → \`railColor\`; \`gapPosition\` → \`gapPlacement\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Progress[^>]*\\b(strokeWidth|trailColor|gapPosition)\\b\`
+
+## Select
+
+### Multiple deprecated props: \`dropdownClassName\` → \`classNames.popup.root\`, \`dropdownRender\` → \`popupRender\`, \`bordered\` → \`variant\`, \`onDropdownVisibleChange\` → \`onOpenChange\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Select[^>]*\\b(dropdownClassName|dropdownStyle|dropdownRender|onDropdownVisibleChange|bordered)\\b\`
+
+## Slider
+
+### Tooltip props deprecated: \`tooltipPrefixCls\` → \`tooltip.prefixCls\`, \`tipFormatter\` → \`tooltip.formatter\`, \`tooltipVisible\` → \`tooltip.open\`, \`tooltipPlacement\` → \`tooltip.placement\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Slider[^>]*\\b(tooltipPrefixCls|tipFormatter|tooltipVisible|tooltipPlacement|getTooltipPopupContainer)\\b\`
+
+## Space
+
+### \`direction\` → \`orientation\`; \`split\` → \`separator\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Space[^>]*\\b(direction|split)\\s*=\`
+
+## Steps
+
+### \`labelPlacement\` → \`titlePlacement\`; \`progressDot\` → \`type="dot"\`; \`direction\` → \`orientation\`; \`items.description\` → \`items.content\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Steps[^>]*\\b(labelPlacement|progressDot|direction)\\b\`
+
+## Table
+
+### \`pagination.position\` → \`pagination.placement\`; \`filterDropdownOpen\` → \`filterDropdownProps.open\`; \`onFilterDropdownOpenChange\` → \`filterDropdownProps.onOpenChange\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`(filterDropdownOpen|onFilterDropdownOpenChange|filterCheckall)\`
+
+## Tabs
+
+### \`tabPosition\` → \`tabPlacement\`; \`destroyInactiveTabPane\` → \`destroyOnHidden\`; \`Tabs.TabPane\` deprecated → \`items\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`(Tabs\\.TabPane|<Tabs[^>]*\\b(tabPosition|destroyInactiveTabPane)\\b)\`
+
+## Tag
+
+### Default trailing margin removed. \`bordered={false}\` → \`variant="filled"\`; \`color="xxx-inverse"\` → \`variant="solid"\`.
+
+**BREAKING** | 📝 manual
+
+- Tag trailing margin removed. Add margin via ConfigProvider tag.styles if needed.
+- bordered={false} → variant="filled"
+- color="xxx-inverse" → variant="solid"
+
+**Search pattern:** \`<Tag[^>]*\\b(bordered|color\\s*=\\s*['"][^'"]*-inverse)\`
+
+## Timeline
+
+### \`Timeline.Item\` deprecated → \`items\`; \`pending\`/\`pendingDot\` deprecated → \`items\`; \`mode=left|right\` → \`mode=start|end\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`(Timeline\\.Item|<Timeline[^>]*\\b(pending|pendingDot|mode\\s*=\\s*['"](?:left|right))\\b)\`
+
+## Tooltip
+
+### \`overlayStyle\` → \`styles.root\`; \`overlayInnerStyle\` → \`styles.container\`; \`overlayClassName\` → \`classNames.root\`; \`destroyTooltipOnHide\` → \`destroyOnHidden\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Tooltip[^>]*\\b(overlayStyle|overlayInnerStyle|overlayClassName|destroyTooltipOnHide)\\b\`
+
+## Transfer
+
+### \`listStyle\` → \`styles.section\`; \`operationStyle\` → \`styles.actions\`; \`operations\` → \`actions\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<Transfer[^>]*\\b(listStyle|operationStyle|operations)\\b\`
+
+## TreeSelect
+
+### Multiple deprecated props: \`dropdownClassName\` → \`classNames.popup.root\`, \`dropdownRender\` → \`popupRender\`, \`bordered\` → \`variant\`, \`onDropdownVisibleChange\` → \`onOpenChange\`.
+
+non-breaking | 📝 manual
+
+**Search pattern:** \`<TreeSelect[^>]*\\b(dropdownClassName|dropdownStyle|dropdownRender|onDropdownVisibleChange|bordered)\\b\`"
+`;
+
+exports[`migrate > migrate 5 6 --format text 1`] = `
+"Migration Guide: v5 → v6
+
+  Global:
+    📝 [BREAKING] React >= 18 required. React 17 and earlier are no longer supported.
+    📝 [BREAKING] @ant-design/icons must be upgraded to v6. Icons v6 is not compatible with antd v5.
+    📝 [BREAKING] CSS variables enabled by default. Only modern browsers supported, IE is not supported.
+    📝 DOM structure of many components optimized. Custom styles targeting internal DOM nodes may need adjustment.
+    📝 Modal/Drawer mask blur enabled by default. Disable via ConfigProvider if undesired.
+
+  Button:
+    🔧 [BREAKING] Prop \`type\` split into \`color\` and \`variant\` for styling. \`type="primary"\` → \`color="primary" variant="solid"\`.
+    🔧 [BREAKING] Prop \`danger\` removed. Use \`color="danger"\` instead.
+    🔧 [BREAKING] Prop \`ghost\` removed. Use \`variant="outlined"\` instead.
+    🔧 \`iconPosition\` deprecated, use \`iconPlacement\` instead.
+
+  Button.Group:
+    📝 \`Button.Group\` deprecated, use \`Space.Compact\` instead.
+
+  Alert:
+    📝 \`closeText\` deprecated → \`closable.closeIcon\`; \`message\` deprecated → \`title\`.
+
+  Anchor:
+    📝 \`Anchor\` children usage deprecated, use \`items\` prop instead.
+
+  AutoComplete:
+    📝 Multiple deprecated props: \`dropdownMatchSelectWidth\` → \`popupMatchSelectWidth\`, \`dropdownClassName\` → \`classNames.popup.root\`, \`dropdownRender\` → \`popupRender\`, \`dataSource\` → \`options\`.
+
+  Avatar.Group:
+    📝 \`maxCount\`/\`maxStyle\`/\`maxPopoverPlacement\`/\`maxPopoverTrigger\` deprecated, use \`max\` prop object.
+
+  Breadcrumb:
+    📝 \`routes\` deprecated → \`items\`; \`Breadcrumb.Item\` / \`Breadcrumb.Separator\` deprecated → \`items\`.
+
+  Calendar:
+    📝 \`dateFullCellRender\`/\`dateCellRender\`/\`monthFullCellRender\`/\`monthCellRender\` deprecated → \`fullCellRender\`/\`cellRender\`.
+
+  Card:
+    📝 \`headStyle\` → \`styles.header\`; \`bodyStyle\` → \`styles.body\`; \`bordered\` → \`variant\`.
+
+  Cascader:
+    📝 Multiple deprecated props: \`dropdownClassName\` → \`classNames.popup.root\`, \`bordered\` → \`variant\`, \`onPopupVisibleChange\` → \`onOpenChange\`.
+
+  Collapse:
+    📝 \`destroyInactivePanel\` → \`destroyOnHidden\`; \`expandIconPosition\` → \`expandIconPlacement\`.
+
+  DatePicker:
+    📝 Multiple deprecated props: \`popupClassName\` → \`classNames.popup.root\`, \`bordered\` → \`variant\`, \`onSelect\` → \`onCalendarChange\`.
+
+  Descriptions:
+    📝 \`labelStyle\` → \`styles.label\`; \`contentStyle\` → \`styles.content\`.
+
+  Divider:
+    📝 \`type\` deprecated → \`orientation\`; \`orientationMargin\` → \`styles.content.margin\`.
+
+  Drawer:
+    📝 Style props deprecated: \`headerStyle\`/\`bodyStyle\`/\`footerStyle\`/\`maskStyle\`/\`drawerStyle\`/\`contentWrapperStyle\` → \`styles.*\`; \`width\`/\`height\` → \`size\`; \`destroyInactivePanel\` → \`destroyOnHidden\`.
+
+  Dropdown:
+    📝 \`overlayClassName\` → \`classNames.root\`; \`overlayStyle\` → \`styles.root\`; \`destroyPopupOnHide\` → \`destroyOnHidden\`. \`Dropdown.Button\` deprecated → \`Space.Compact + Dropdown + Button\`.
+
+  Form:
+    📝 [BREAKING] \`onFinish\` no longer includes all Form.List data. Unregistered Form.Item fields are excluded.
+
+  Image:
+    📝 \`visible\` → \`open\`; \`onVisibleChange\` → \`onOpenChange\`; \`wrapperStyle\` → \`styles.root\`; \`maskClassName\` → \`classNames.cover\`; \`toolbarRender\` → \`actionsRender\`.
+
+  Input.Group:
+    📝 \`Input.Group\` deprecated, use \`Space.Compact\` instead.
+
+  Menu:
+    📝 \`children\` deprecated, use \`items\` prop instead.
+
+  Modal:
+    📝 \`bodyStyle\` → \`styles.body\`; \`maskStyle\` → \`styles.mask\`; \`destroyOnClose\` → \`destroyOnHidden\`.
+
+  notification:
+    📝 \`btn\` deprecated → \`actions\`; \`message\` deprecated → \`title\`.
+
+  Progress:
+    📝 \`strokeWidth\`/\`width\` → \`size\`; \`trailColor\` → \`railColor\`; \`gapPosition\` → \`gapPlacement\`.
+
+  Select:
+    📝 Multiple deprecated props: \`dropdownClassName\` → \`classNames.popup.root\`, \`dropdownRender\` → \`popupRender\`, \`bordered\` → \`variant\`, \`onDropdownVisibleChange\` → \`onOpenChange\`.
+
+  Slider:
+    📝 Tooltip props deprecated: \`tooltipPrefixCls\` → \`tooltip.prefixCls\`, \`tipFormatter\` → \`tooltip.formatter\`, \`tooltipVisible\` → \`tooltip.open\`, \`tooltipPlacement\` → \`tooltip.placement\`.
+
+  Space:
+    📝 \`direction\` → \`orientation\`; \`split\` → \`separator\`.
+
+  Steps:
+    📝 \`labelPlacement\` → \`titlePlacement\`; \`progressDot\` → \`type="dot"\`; \`direction\` → \`orientation\`; \`items.description\` → \`items.content\`.
+
+  Table:
+    📝 \`pagination.position\` → \`pagination.placement\`; \`filterDropdownOpen\` → \`filterDropdownProps.open\`; \`onFilterDropdownOpenChange\` → \`filterDropdownProps.onOpenChange\`.
+
+  Tabs:
+    📝 \`tabPosition\` → \`tabPlacement\`; \`destroyInactiveTabPane\` → \`destroyOnHidden\`; \`Tabs.TabPane\` deprecated → \`items\`.
+
+  Tag:
+    📝 [BREAKING] Default trailing margin removed. \`bordered={false}\` → \`variant="filled"\`; \`color="xxx-inverse"\` → \`variant="solid"\`.
+
+  Timeline:
+    📝 \`Timeline.Item\` deprecated → \`items\`; \`pending\`/\`pendingDot\` deprecated → \`items\`; \`mode=left|right\` → \`mode=start|end\`.
+
+  Tooltip:
+    📝 \`overlayStyle\` → \`styles.root\`; \`overlayInnerStyle\` → \`styles.container\`; \`overlayClassName\` → \`classNames.root\`; \`destroyTooltipOnHide\` → \`destroyOnHidden\`.
+
+  Transfer:
+    📝 \`listStyle\` → \`styles.section\`; \`operationStyle\` → \`styles.actions\`; \`operations\` → \`actions\`.
+
+  TreeSelect:
+    📝 Multiple deprecated props: \`dropdownClassName\` → \`classNames.popup.root\`, \`dropdownRender\` → \`popupRender\`, \`bordered\` → \`variant\`, \`onDropdownVisibleChange\` → \`onOpenChange\`.
+
+Total: 42 steps (4 auto-fixable, 38 manual)"
+`;

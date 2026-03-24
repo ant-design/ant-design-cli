@@ -1,0 +1,2322 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`changelog > changelog 5.5.0 5.1.0 (from > to) 1`] = `
+"Error: Version order is invalid: "5.5.0" is newer than "5.1.0"
+Suggestion: Did you mean: antd changelog 5.1.0 5.5.0?"
+`;
+
+exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
+"{
+  "from": "5.20.0",
+  "to": "5.22.0",
+  "diffs": [
+    {
+      "component": "Button",
+      "added": [
+        {
+          "name": "color",
+          "type": "\`default\` \\\\"
+        },
+        {
+          "name": "variant",
+          "type": "\`outlined\` \\\\"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "name": "htmlType",
+          "change": "string → \`submit\` \\\\"
+        }
+      ]
+    },
+    {
+      "component": "Calendar",
+      "added": [],
+      "removed": [
+        {
+          "name": "dateCellRender",
+          "type": "function(date: Dayjs): ReactNode"
+        },
+        {
+          "name": "monthCellRender",
+          "type": "function(date: Dayjs): ReactNode"
+        },
+        {
+          "name": "monthFullCellRender",
+          "type": "function(date: Dayjs): ReactNode"
+        }
+      ],
+      "changed": [
+        {
+          "name": "cellRender",
+          "change": "function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' \\\\ → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' \\\\"
+        },
+        {
+          "name": "fullCellRender",
+          "change": "function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' \\\\ → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' \\\\"
+        }
+      ]
+    },
+    {
+      "component": "Cascader",
+      "added": [
+        {
+          "name": "prefix",
+          "type": "ReactNode"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "name": "notFoundContent",
+          "change": "string → ReactNode"
+        }
+      ]
+    },
+    {
+      "component": "Checkbox",
+      "added": [
+        {
+          "name": "onBlur",
+          "type": "function()"
+        },
+        {
+          "name": "onFocus",
+          "type": "function()"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "Collapse",
+      "added": [
+        {
+          "name": "classNames",
+          "type": "[\`Record<header \\\\"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode"
+        },
+        {
+          "name": "label",
+          "type": "ReactNode"
+        },
+        {
+          "name": "styles",
+          "type": "[\`Record<header \\\\"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "name": "items",
+          "change": "[ItemType](https://github.com/react-component/collapse/blob/27250ca5415faab16db412b9bff2c131bb4f32fc/src/interface.ts#L6) → [ItemType](#itemtype)"
+        }
+      ]
+    },
+    {
+      "component": "ColorPicker",
+      "added": [
+        {
+          "name": "disabledFormat",
+          "type": "boolean"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "name": "mode",
+          "change": "\`('single' \\\\ → \`'single' \\\\"
+        }
+      ]
+    },
+    {
+      "component": "ConfigProvider",
+      "added": [
+        {
+          "name": "splitter",
+          "type": "{ className?: string, style?: React.CSSProperties }"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "DatePicker",
+      "added": [
+        {
+          "name": "prefix",
+          "type": "ReactNode"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "name": "disabledDate",
+          "change": "(currentDate: dayjs, info: { from?: dayjs }) => boolean → (currentDate: dayjs, info: { from?: dayjs, type: Picker }) => boolean"
+        }
+      ]
+    },
+    {
+      "component": "FloatButton",
+      "added": [
+        {
+          "name": "htmlType",
+          "type": "\`submit\` \\\\"
+        },
+        {
+          "name": "placement",
+          "type": "\`top\` \\\\"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "Input",
+      "added": [
+        {
+          "name": "bordered",
+          "type": "boolean"
+        },
+        {
+          "name": "onInput",
+          "type": "(value: string[]) => void"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "Pagination",
+      "added": [],
+      "removed": [],
+      "changed": [
+        {
+          "name": "pageSizeOptions",
+          "change": "string\\\\[] \\\\ → number\\\\[]"
+        },
+        {
+          "name": "showSizeChanger",
+          "change": "boolean → boolean \\\\"
+        }
+      ]
+    },
+    {
+      "component": "Radio",
+      "added": [
+        {
+          "name": "block",
+          "type": "boolean"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "Segmented",
+      "added": [
+        {
+          "name": "vertical",
+          "type": "boolean"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "Select",
+      "added": [
+        {
+          "name": "prefix",
+          "type": "ReactNode"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "Table",
+      "added": [
+        {
+          "name": "filterDropdownProps",
+          "type": "[DropdownProps](/components/dropdown#api)"
+        },
+        {
+          "name": "minWidth",
+          "type": "number"
+        }
+      ],
+      "removed": [
+        {
+          "name": "filterDropdownOpen",
+          "type": "boolean"
+        },
+        {
+          "name": "onFilterDropdownOpenChange",
+          "type": "function(visible) {}"
+        }
+      ],
+      "changed": [
+        {
+          "name": "render",
+          "change": "function(text, record, index) {} → function(value, record, index) {}"
+        },
+        {
+          "name": "expandedRowClassName",
+          "change": "function(record, index, indent): string → string \\\\"
+        }
+      ]
+    },
+    {
+      "component": "Tabs",
+      "added": [
+        {
+          "name": "[DropdownProps](/components/dropdown#api)",
+          "type": ""
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "TimePicker",
+      "added": [
+        {
+          "name": "prefix",
+          "type": "ReactNode"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "Tooltip",
+      "added": [],
+      "removed": [
+        {
+          "name": "align",
+          "type": "object"
+        },
+        {
+          "name": "arrow",
+          "type": "boolean \\\\"
+        },
+        {
+          "name": "autoAdjustOverflow",
+          "type": "boolean"
+        },
+        {
+          "name": "color",
+          "type": "string"
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean"
+        },
+        {
+          "name": "destroyTooltipOnHide",
+          "type": "boolean"
+        },
+        {
+          "name": "fresh",
+          "type": "boolean"
+        },
+        {
+          "name": "getPopupContainer",
+          "type": "(triggerNode: HTMLElement) => HTMLElement"
+        },
+        {
+          "name": "mouseEnterDelay",
+          "type": "number"
+        },
+        {
+          "name": "mouseLeaveDelay",
+          "type": "number"
+        },
+        {
+          "name": "overlayClassName",
+          "type": "string"
+        },
+        {
+          "name": "overlayStyle",
+          "type": "object"
+        },
+        {
+          "name": "overlayInnerStyle",
+          "type": "object"
+        },
+        {
+          "name": "placement",
+          "type": "string"
+        },
+        {
+          "name": "trigger",
+          "type": "\`hover\` \\\\"
+        },
+        {
+          "name": "open",
+          "type": "boolean"
+        },
+        {
+          "name": "zIndex",
+          "type": "number"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void"
+        }
+      ],
+      "changed": []
+    },
+    {
+      "component": "TreeSelect",
+      "added": [
+        {
+          "name": "prefix",
+          "type": "ReactNode"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "Splitter",
+      "added": [
+        {
+          "name": "layout",
+          "type": "\`horizontal\` \\\\"
+        },
+        {
+          "name": "onResizeStart",
+          "type": "\`(sizes: number[]) => void\`"
+        },
+        {
+          "name": "onResize",
+          "type": "\`(sizes: number[]) => void\`"
+        },
+        {
+          "name": "onResizeEnd",
+          "type": "\`(sizes: number[]) => void\`"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    }
+  ]
+}"
+`;
+
+exports[`changelog > changelog 5.20.0 5.22.0 --format markdown 1`] = `
+"API Diff: 5.20.0 → 5.22.0
+
+  Button:
+    + color: \`default\` \\
+    + variant: \`outlined\` \\
+    ~ htmlType: string → \`submit\` \\
+
+  Calendar:
+    - dateCellRender: function(date: Dayjs): ReactNode
+    - monthCellRender: function(date: Dayjs): ReactNode
+    - monthFullCellRender: function(date: Dayjs): ReactNode
+    ~ cellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' \\ → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' \\
+    ~ fullCellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' \\ → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' \\
+
+  Cascader:
+    + prefix: ReactNode
+    ~ notFoundContent: string → ReactNode
+
+  Checkbox:
+    + onBlur: function()
+    + onFocus: function()
+
+  Collapse:
+    + classNames: [\`Record<header \\
+    + children: ReactNode
+    + label: ReactNode
+    + styles: [\`Record<header \\
+    ~ items: [ItemType](https://github.com/react-component/collapse/blob/27250ca5415faab16db412b9bff2c131bb4f32fc/src/interface.ts#L6) → [ItemType](#itemtype)
+
+  ColorPicker:
+    + disabledFormat: boolean
+    ~ mode: \`('single' \\ → \`'single' \\
+
+  ConfigProvider:
+    + splitter: { className?: string, style?: React.CSSProperties }
+
+  DatePicker:
+    + prefix: ReactNode
+    ~ disabledDate: (currentDate: dayjs, info: { from?: dayjs }) => boolean → (currentDate: dayjs, info: { from?: dayjs, type: Picker }) => boolean
+
+  FloatButton:
+    + htmlType: \`submit\` \\
+    + placement: \`top\` \\
+
+  Input:
+    + bordered: boolean
+    + onInput: (value: string[]) => void
+
+  Pagination:
+    ~ pageSizeOptions: string\\[] \\ → number\\[]
+    ~ showSizeChanger: boolean → boolean \\
+
+  Radio:
+    + block: boolean
+
+  Segmented:
+    + vertical: boolean
+
+  Select:
+    + prefix: ReactNode
+
+  Table:
+    + filterDropdownProps: [DropdownProps](/components/dropdown#api)
+    + minWidth: number
+    - filterDropdownOpen: boolean
+    - onFilterDropdownOpenChange: function(visible) {}
+    ~ render: function(text, record, index) {} → function(value, record, index) {}
+    ~ expandedRowClassName: function(record, index, indent): string → string \\
+
+  Tabs:
+    + [DropdownProps](/components/dropdown#api): 
+
+  TimePicker:
+    + prefix: ReactNode
+
+  Tooltip:
+    - align: object
+    - arrow: boolean \\
+    - autoAdjustOverflow: boolean
+    - color: string
+    - defaultOpen: boolean
+    - destroyTooltipOnHide: boolean
+    - fresh: boolean
+    - getPopupContainer: (triggerNode: HTMLElement) => HTMLElement
+    - mouseEnterDelay: number
+    - mouseLeaveDelay: number
+    - overlayClassName: string
+    - overlayStyle: object
+    - overlayInnerStyle: object
+    - placement: string
+    - trigger: \`hover\` \\
+    - open: boolean
+    - zIndex: number
+    - onOpenChange: (open: boolean) => void
+
+  TreeSelect:
+    + prefix: ReactNode
+
+  Splitter:
+    + layout: \`horizontal\` \\
+    + onResizeStart: \`(sizes: number[]) => void\`
+    + onResize: \`(sizes: number[]) => void\`
+    + onResizeEnd: \`(sizes: number[]) => void\`"
+`;
+
+exports[`changelog > changelog 5.20.0 5.22.0 --format text 1`] = `
+"API Diff: 5.20.0 → 5.22.0
+
+  Button:
+    + color: \`default\` \\
+    + variant: \`outlined\` \\
+    ~ htmlType: string → \`submit\` \\
+
+  Calendar:
+    - dateCellRender: function(date: Dayjs): ReactNode
+    - monthCellRender: function(date: Dayjs): ReactNode
+    - monthFullCellRender: function(date: Dayjs): ReactNode
+    ~ cellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' \\ → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' \\
+    ~ fullCellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' \\ → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' \\
+
+  Cascader:
+    + prefix: ReactNode
+    ~ notFoundContent: string → ReactNode
+
+  Checkbox:
+    + onBlur: function()
+    + onFocus: function()
+
+  Collapse:
+    + classNames: [\`Record<header \\
+    + children: ReactNode
+    + label: ReactNode
+    + styles: [\`Record<header \\
+    ~ items: [ItemType](https://github.com/react-component/collapse/blob/27250ca5415faab16db412b9bff2c131bb4f32fc/src/interface.ts#L6) → [ItemType](#itemtype)
+
+  ColorPicker:
+    + disabledFormat: boolean
+    ~ mode: \`('single' \\ → \`'single' \\
+
+  ConfigProvider:
+    + splitter: { className?: string, style?: React.CSSProperties }
+
+  DatePicker:
+    + prefix: ReactNode
+    ~ disabledDate: (currentDate: dayjs, info: { from?: dayjs }) => boolean → (currentDate: dayjs, info: { from?: dayjs, type: Picker }) => boolean
+
+  FloatButton:
+    + htmlType: \`submit\` \\
+    + placement: \`top\` \\
+
+  Input:
+    + bordered: boolean
+    + onInput: (value: string[]) => void
+
+  Pagination:
+    ~ pageSizeOptions: string\\[] \\ → number\\[]
+    ~ showSizeChanger: boolean → boolean \\
+
+  Radio:
+    + block: boolean
+
+  Segmented:
+    + vertical: boolean
+
+  Select:
+    + prefix: ReactNode
+
+  Table:
+    + filterDropdownProps: [DropdownProps](/components/dropdown#api)
+    + minWidth: number
+    - filterDropdownOpen: boolean
+    - onFilterDropdownOpenChange: function(visible) {}
+    ~ render: function(text, record, index) {} → function(value, record, index) {}
+    ~ expandedRowClassName: function(record, index, indent): string → string \\
+
+  Tabs:
+    + [DropdownProps](/components/dropdown#api): 
+
+  TimePicker:
+    + prefix: ReactNode
+
+  Tooltip:
+    - align: object
+    - arrow: boolean \\
+    - autoAdjustOverflow: boolean
+    - color: string
+    - defaultOpen: boolean
+    - destroyTooltipOnHide: boolean
+    - fresh: boolean
+    - getPopupContainer: (triggerNode: HTMLElement) => HTMLElement
+    - mouseEnterDelay: number
+    - mouseLeaveDelay: number
+    - overlayClassName: string
+    - overlayStyle: object
+    - overlayInnerStyle: object
+    - placement: string
+    - trigger: \`hover\` \\
+    - open: boolean
+    - zIndex: number
+    - onOpenChange: (open: boolean) => void
+
+  TreeSelect:
+    + prefix: ReactNode
+
+  Splitter:
+    + layout: \`horizontal\` \\
+    + onResizeStart: \`(sizes: number[]) => void\`
+    + onResize: \`(sizes: number[]) => void\`
+    + onResizeEnd: \`(sizes: number[]) => void\`"
+`;
+
+exports[`changelog > changelog 5.20.0..5.22.0 --format json 1`] = `
+"[
+  {
+    "version": "5.22.0",
+    "date": "2024-11-12",
+    "changes": [
+      {
+        "component": "Form",
+        "type": "feature",
+        "description": "- 🆕 Form.Item supports hiding labels. [](https://github.com/crazyair)"
+      },
+      {
+        "component": "Form",
+        "type": "fix",
+        "description": "- 🐞 Form removes the div used to expand the error height, wraps errorDom and extraDom with a div, and sets a minimum height for the div. [](https://github.com/hongzzz)"
+      },
+      {
+        "component": "Form",
+        "type": "fix",
+        "description": "- 🐞 Fix the problem that \`onValuesChange\` is still triggered when the Form field triggers change but the value does not change. [](https://github.com/crazyair)"
+      },
+      {
+        "component": "Form",
+        "type": "feature",
+        "description": "- 🆕 Form supports the focus property in scrollToFirstError when form validation fails. [](https://github.com/nathanlao)"
+      },
+      {
+        "component": "Table",
+        "type": "feature",
+        "description": "- 🆕 Table column filter drop-down box supports \`filterDropdownProps\`. [](https://github.com/Wxh16144)"
+      },
+      {
+        "component": "Table",
+        "type": "feature",
+        "description": "- 🆕 Table \`expandedRowClassName\` supports string . [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "Tree",
+        "type": "style",
+        "description": "- 💄 Fix the problem of missing padding style for selected nodes in Tree. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "Tree",
+        "type": "feature",
+        "description": "- 🆕 Tree component Token adds \`nodeHoverColor\` and \`nodeSelectedColor\` support. [](https://github.com/zmbxy)"
+      },
+      {
+        "component": "Tree",
+        "type": "feature",
+        "description": "- 🆕 Tree adds \`indentSize\` token for custom indent width. [](https://github.com/afc163)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "feature",
+        "description": "- 🆕 DatePicker supports prefix attribute. [](https://github.com/guoyunhe)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "style",
+        "description": "- 💄 Fixed the issue of DatePicker.RangePicker flashing when the mouse moves between cells. [](https://github.com/afc163)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "feature",
+        "description": "- 🆕 In the \`Input.OTP\` component, add \`onInput\` event to get the value of each user input. At the same time, the relevant documentation has been updated. [](https://github.com/aojunhao123)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "fix",
+        "description": "- 🐞 Fixed the problem that Input.OTP cannot specify \`inputMode\`. [-rudzinski](https://github.com/alan-rudzinski)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "feature",
+        "description": "🆕 ColorPicker supports \`disabledFormat\`. [-muzhi](https://github.com/su-muzhi)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "feature",
+        "description": "🆕 Add \`cursor\` configuration item to the \`focus\` method of InputNumber component to control the cursor position. [](https://github.com/aojunhao123)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "feature",
+        "description": "🆕 Cascader adds \`disabled\` attribute to disable all first-level directory items of the component. [](https://github.com/aojunhao123)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "feature",
+        "description": "🆕 Descriptions supports single-line spreading. [](https://github.com/crazyair)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "feature",
+        "description": "🆕 Select/TreeSelect/Cascader components add \`prefix\` property to support custom prefix. [](https://github.com/guoyunhe)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "fix",
+        "description": "🐞 Fix the problem that the preview image class name is lost when setting \`ImageProps.preview.rootClassName\` in Image. [](https://github.com/dislido)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "fix",
+        "description": "🐞 Fixed the issue that the last item in the TimePicker panel column cannot be scrolled to the top. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "fix",
+        "description": "🐞 Fix TreeSelect dropdown height not enough. [](https://github.com/afc163)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "fix",
+        "description": "🐞 Fixed the issue that Typography is not updated immediately when the ConfigProvider language is switched. [](https://github.com/thinkasany)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "fix",
+        "description": "🐞 Fixed the issue that Upload \`itemRender\` calling \`action.preview\` will cause a crash. [](https://github.com/yoyo837)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "fix",
+        "description": "🐞 Fixed Splitter pseudo-element symbol issue. [](https://github.com/dislido)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "style",
+        "description": "💄 Optimize Collapse accessibility attribute and mouse hover style. [](https://github.com/afc163)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "style",
+        "description": "💄 Fix styling issue of Menu title content. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Upload exports type DraggerProps. [](https://github.com/DBvc)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Add defaultValue property to TimePicker.RangePicker example. [](https://github.com/nathanlao)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Message Optimize the top type in message.config. [](https://github.com/Fog3211)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Optimize the TS definition of Tree and TreeSelect. [](https://github.com/afc163)"
+      }
+    ]
+  },
+  {
+    "version": "5.21.6",
+    "date": "2024-10-28",
+    "changes": [
+      {
+        "component": "Tree.DirectoryTree",
+        "type": "fix",
+        "description": "🐞 Fix Tree.DirectoryTree interactive area not being a whole row."
+      },
+      {
+        "component": "the",
+        "type": "fix",
+        "description": "🐞 Fix the Button icon was not vertically centered."
+      },
+      {
+        "component": "the",
+        "type": "fix",
+        "description": "🐞 Fix the pointer style not set to \`not-allowed\` in the \`disabled\` state when \`variant\` of the Input was set to \`borderless\`. [](https://github.com/ustcfury)"
+      },
+      {
+        "component": "Splitter",
+        "type": "style",
+        "description": "- 💄 Improve the pre-rendered style of Splitter under SSR."
+      },
+      {
+        "component": "Splitter",
+        "type": "style",
+        "description": "- 💄 Increased the click area of ​​the Splitter collapse button to improve usability. [](https://github.com/aojunhao123)"
+      },
+      {
+        "component": "Splitter",
+        "type": "style",
+        "description": "💄 Improve Checkbox \`indeterminate\` to enhance accessibility experience. [](https://github.com/SpaNb4)"
+      },
+      {
+        "component": "Splitter",
+        "type": "style",
+        "description": "💄 Improve the \`title\` of the Empty preset svg image to improve accessibility experience."
+      }
+    ]
+  },
+  {
+    "version": "5.21.5",
+    "date": "2024-10-21",
+    "changes": [
+      {
+        "component": "Cascader",
+        "type": "fix",
+        "description": "🐞 Fix Cascader filter limitation not working when \`limit\` set to \`false\`. [](https://github.com/dongbanban)"
+      },
+      {
+        "component": "DatePicker",
+        "type": "fix",
+        "description": "🐞 Fix DatePicker disabled items cannot response mouse events bug. [-mparticle](https://github.com/ajenkins-mparticle)"
+      },
+      {
+        "component": "FloatButton",
+        "type": "fix",
+        "description": "🐞 Fix FloatButton menu problem what is difficult to click. [](https://github.com/aojunhao123)"
+      },
+      {
+        "component": "QRCode",
+        "type": "fix",
+        "description": "🐞 Fix QRCode \`onRefresh\` property not working properly. [-tang](https://github.com/kiner-tang)"
+      },
+      {
+        "component": "Typography",
+        "type": "fix",
+        "description": "🐞 Fix Typography links cannot be selected by user. [](https://github.com/thinkasany)"
+      },
+      {
+        "component": "Badge",
+        "type": "style",
+        "description": "💄 Fix Badge incorrect token of texts. [](https://github.com/Wxh16144)"
+      },
+      {
+        "component": "Layout",
+        "type": "style",
+        "description": "💄 Fix Layout lost styles of collapse button. [](https://github.com/aojunhao123)"
+      },
+      {
+        "component": "Button",
+        "type": "feature",
+        "description": "🛠 Improve Button event handler declaration. [](https://github.com/SohaibRaza)"
+      },
+      {
+        "component": "Splitter",
+        "type": "feature",
+        "description": "🛠 Improve Splitter style token semantic name. [](https://github.com/wanpan11)"
+      }
+    ]
+  },
+  {
+    "version": "5.21.4",
+    "date": "2024-10-14",
+    "changes": [
+      {
+        "component": "General",
+        "type": "fix",
+        "description": "🐞 Fixed Input.Search not applying the \`hoverBorderColor/activeBorderColor\` token for hover/active states. [](https://github.com/iqingting)"
+      },
+      {
+        "component": "Tree",
+        "type": "fix",
+        "description": "🐞 Fix Tree icon align issue. [](https://github.com/Meowu)"
+      },
+      {
+        "component": "Splitter",
+        "type": "fix",
+        "description": "🐞 Fix Splitter occasionally shows unnecessary scrollbars in nested combinations. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "General",
+        "type": "style",
+        "description": "💄 Modify Button \`textHoverBg\` hover background to \`colorFillTertiary\`. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Improve type of Switch \`eventHandler\`. [](https://github.com/thinkasany)"
+      }
+    ]
+  },
+  {
+    "version": "5.21.3",
+    "date": "2024-10-09",
+    "changes": [
+      {
+        "component": "General",
+        "type": "style",
+        "description": "💄 Added a scroll bar to Dropdown when having many items. [-Asdf](https://github.com/Cameron-Asdf)"
+      },
+      {
+        "component": "Slider",
+        "type": "fix",
+        "description": "- 🐞 Fix Slider issue where the \`id\` prop is not supported."
+      },
+      {
+        "component": "Slider",
+        "type": "fix",
+        "description": "- 🐞 Fix Slider to address the issue causing \`useLayoutEffect does nothing on the server\` warning when \`extractStyle\` is invoked."
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "🐞 Fix ColorPicker with gradient mode, sometimes handle color will be force sync back to first handle color issue. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "Table",
+        "type": "fix",
+        "description": "🐞 Fix Table \`onChange\` function receiving incorrect sorter value. [](https://github.com/nathanlao)"
+      },
+      {
+        "component": "Splitter",
+        "type": "fix",
+        "description": "- 🐞 Fix the issue about throw a warning when Splitter nested in a hidden tab panel. [-tang](https://github.com/kiner-tang)"
+      },
+      {
+        "component": "Splitter",
+        "type": "fix",
+        "description": "- 🐞 Fix the issue about Splitter had unexpected gaps in Flex. [-tang](https://github.com/kiner-tang)"
+      },
+      {
+        "component": "Splitter",
+        "type": "fix",
+        "description": "🐞 MISC: Restore \`react\` and \`react-dom\` peerDependencies. [](https://github.com/chentsulin)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Improve type of Slider \`eventName\`. [](https://github.com/thinkasany)"
+      }
+    ]
+  },
+  {
+    "version": "5.21.2",
+    "date": "2024-10-01",
+    "changes": [
+      {
+        "component": "Typography",
+        "type": "fix",
+        "description": "🐞 Revert to fix Typography \`copyable\` icon align issue. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Tabs",
+        "type": "fix",
+        "description": "🐞 Fix Tabs flicker when browser zoom is enabled. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "🐞 Fix Select incorrect \`activeBorderColor\` token when variant is filled. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "General",
+        "type": "fix",
+        "description": "🐞 Fixed Input.Search alignment issue between the input field and search button at different zoom levels. [](https://github.com/nathanlao)"
+      },
+      {
+        "component": "General",
+        "type": "style",
+        "description": "💄 MISC: Tweak outline width of focus style from \`4px\` to \`3px\`. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Splitter",
+        "type": "fix",
+        "description": "- 🐞 Fixed the issue with Splitter dragging abnormally on touch screen devices. [](https://github.com/sakuraee)"
+      },
+      {
+        "component": "Splitter",
+        "type": "style",
+        "description": "- 💄 Fixed Splitter.Panel style is invalid error. [](https://github.com/wanpan11)"
+      },
+      {
+        "component": "Splitter",
+        "type": "deprecation",
+        "description": "⚡️ Remove TransButton in Table/Transfer/Typography. [](https://github.com/afc163)"
+      }
+    ]
+  },
+  {
+    "version": "5.21.1",
+    "date": "2024-09-25",
+    "changes": [
+      {
+        "component": "Button",
+        "type": "fix",
+        "description": "🐞 Fix Button issue where \`type=\\"link\\"\` incorrectly used \`colorPrimary\`. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "Button",
+        "type": "fix",
+        "description": "🐞 Fix Button style class name weight issue that caused custom gradient styles to be overridden. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "Transfer",
+        "type": "fix",
+        "description": "🐞 Fix Transfer width issue when customized as TableTransfer. [](https://github.com/zombieJ)"
+      }
+    ]
+  },
+  {
+    "version": "5.21.0",
+    "date": "2024-09-22",
+    "changes": [
+      {
+        "component": "Button",
+        "type": "style",
+        "description": "- 💄 Button adds \`textColor\`, \`textHoverColor\` and \` textActiveColor\` tokens. [](https://github.com/madocto)"
+      },
+      {
+        "component": "FloatButton",
+        "type": "feature",
+        "description": "- 🆕 FloatButton supports \`placement\` property, allowing menus to pop up from multiple directions. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "FloatButton",
+        "type": "feature",
+        "description": "- 🆕 FloatButton supports \`htmlType\` prop. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "FloatButton",
+        "type": "style",
+        "description": "- 💄 Unify FloatButton and FloatButton.Group button round style. [](https://github.com/Layouwen)"
+      },
+      {
+        "component": "FloatButton",
+        "type": "style",
+        "description": "- 💄 Manage FloatButton's \`z-index\` with \`useZIndex\` to improve compatibility with other popup components. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "Menu",
+        "type": "feature",
+        "description": "- 🆕 Menu.Item and Dropdown's \`menu\` supports \`extra\` prop now. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "Menu",
+        "type": "fix",
+        "description": "- 🐞 Fix Menu \`popupStyle\` not working on SubMenu. [](https://github.com/Wxh16144)"
+      },
+      {
+        "component": "Table",
+        "type": "feature",
+        "description": "- 🆕 Table supports \`minWidth\` for columns. [](https://github.com/linxianxi)"
+      },
+      {
+        "component": "Table",
+        "type": "fix",
+        "description": "- 🐞 Fix Table empty and shadow issues in virtual mode. [](https://github.com/linxianxi)"
+      },
+      {
+        "component": "Table",
+        "type": "fix",
+        "description": "- 🐞 Fix Table column selection issue where deselection was not possible under certain circumstances. [](https://github.com/Jarryxin)"
+      },
+      {
+        "component": "Input",
+        "type": "feature",
+        "description": "- 🆕 Input.OTP support \`type\` to help handle some case need number only. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "Input",
+        "type": "fix",
+        "description": "- 🐞 Fix Select inside Input addon text color when Select is focused. [](https://github.com/DDDDD12138)"
+      },
+      {
+        "component": "Modal",
+        "type": "other",
+        "description": "- ⌨️ Fix Modal throws warning \`avoid using aria-hidden on a focused element or its ancestor\`. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Modal",
+        "type": "feature",
+        "description": "- 🆕 Modal supports \`closable.disabled\` prop now. [](https://github.com/Ke1sy)"
+      },
+      {
+        "component": "Descriptions",
+        "type": "fix",
+        "description": "- 🐞 Fix Descriptions column is missing in some cases. [](https://github.com/yezhonghu0503)"
+      },
+      {
+        "component": "Descriptions",
+        "type": "fix",
+        "description": "- 🐞 Revert to fix the issue where the popup layer component inside Descriptions is being cut off. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Upload",
+        "type": "feature",
+        "description": "- 🆕 Upload will pass \`name\` prop to \`<input type=\\"file\\" />\`. [](https://github.com/Wxh16144)"
+      },
+      {
+        "component": "Upload",
+        "type": "feature",
+        "description": "- 🆕 Upload \`showUploadList.showXxxIcon\` accept a function value now. [](https://github.com/guoyunhe)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "- 🐞 Fix ColorPicker when type hex input may not get correct color with precision issue. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "- 🐞 Adjust ColorPicker popup panel not lock by \`value\` to allow control mode with \`onChangeComplete\` scenarios. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "App",
+        "type": "fix",
+        "description": "- 🐞 Fixed App warn about \`zIndex\` too large when using the \`modal\` with having popup component method via \`useApp\`. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "App",
+        "type": "fix",
+        "description": "- 🐞 Fix App rtl style does not respect ConfigProvider direction prop. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "Pagination",
+        "type": "feature",
+        "description": "- 🆕 Pagination \`showSizeChanger\` accepts Select props now. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Pagination",
+        "type": "style",
+        "description": "- 💄 Remove Pagination default font family. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Select",
+        "type": "style",
+        "description": "- 💄 Add more tokens for Select to customize hover/focus style. [-tang](https://github.com/kiner-tang)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "- 🐞 Fix Select search text overlap with arrow icon. [](https://github.com/yezhonghu0503)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "- 🐞 Fix Select extra background of clear icon when enable \`allowClear\` and \`variant=\\"filled\\"\`. [](https://github.com/thinkasany)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 Segmented adds \`vertical\` property and improves accessibility. [](https://github.com/liangchaofei)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 Radio.Group supports \`block\` prop now. [](https://github.com/yuanliu147)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 ConfigProvider supports configuring the \`className\` and \`style\` properties of the Splitter component. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 Image add \`onActive\` to \`toolbarRender\` for toggling images . [](https://github.com/madocto)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 Add ref on List component. [](https://github.com/Asanio06)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 Collapse support \`classNames\` and \`styles\` for semantic style customization. [](https://github.com/wanpan11)"
+      },
+      {
+        "component": "Select",
+        "type": "style",
+        "description": "💄 Make Skeleton.Node custom node by remove it's default icon children. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "🐞 Fix Layout.Sider can not modify theme when used alone. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "🐞 Fix Typography \`copyable\` with array \`children\` has additional \`,\` string issue. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "🐞 Fix Tour where long title will overlap with close button. [-tang](https://github.com/kiner-tang)"
+      },
+      {
+        "component": "Select",
+        "type": "other",
+        "description": "🌐 Localization"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Checkbox adds onFocus\` and \`onBlur\` in type definition. [](https://github.com/huiliangShen)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Fix Badge property type definition to support passing mouse events. [](https://github.com/yuanliu147)"
+      }
+    ]
+  },
+  {
+    "version": "5.20.6",
+    "date": "2024-09-09",
+    "changes": [
+      {
+        "component": "Menu",
+        "type": "fix",
+        "description": "🐞 Improve Menu collapse animation smoothness. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Table",
+        "type": "fix",
+        "description": "🐞 Fix Table cell overflow bug if edit with virtual scroll. [](https://github.com/huiliangShen)"
+      },
+      {
+        "component": "Input.Search",
+        "type": "fix",
+        "description": "🐞 Fix Input.Search button radius not changing with \`size\`. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Form",
+        "type": "fix",
+        "description": "🐞 Fix Form password still can be toggle show/hide even if disabled. [](https://github.com/Jarryxin)"
+      },
+      {
+        "component": "wrap",
+        "type": "fix",
+        "description": "🐞 Revert to fix wrap behavior for Dropdown, and re-fix wrap when out of screen edge. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Badge",
+        "type": "style",
+        "description": "💄 Fix Badge background transition when mouse out. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Fix Collapse types for \`onChange\` arguments. [](https://github.com/yuanliu147)"
+      }
+    ]
+  },
+  {
+    "version": "5.20.5",
+    "date": "2024-09-03",
+    "changes": [
+      {
+        "component": "internal",
+        "type": "feature",
+        "description": "🛠 Adjust Tree & TreeSelect \`defaultExpandAll\` logic to only add internal \`expandedKeys\` which \`treeNode\` has children instead to avoid perf issue when with large data or \`loadData\` case. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "Cascader",
+        "type": "fix",
+        "description": "🐞 Fix Cascader not show parent option in search when using \`multiple\`."
+      },
+      {
+        "component": "Typography",
+        "type": "fix",
+        "description": "🐞 Fix Typography \`ellipsis.tooltip.title\` with ReactNode will cause dead loop. [](https://github.com/zombieJ)"
+      }
+    ]
+  },
+  {
+    "version": "5.20.4",
+    "date": "2024-09-02",
+    "changes": [
+      {
+        "component": "Menu",
+        "type": "fix",
+        "description": "- 🐞 Fix Menu token \`itemPaddingInline inoperative\` not working. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "Menu",
+        "type": "fix",
+        "description": "- 🐞 Fix Menu missing \`hover\` transition style. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Menu",
+        "type": "style",
+        "description": "💄 Badge add transition effect to count node. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Menu",
+        "type": "style",
+        "description": "💄 Fix Table column header move with unexpected transition. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Menu",
+        "type": "feature",
+        "description": "🛠 Refactor Typography code to optimize internal logic. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Menu",
+        "type": "fix",
+        "description": "🐞 Disable the Rate component within Form.Item when the form is disabled. [](https://github.com/nikzanda)"
+      },
+      {
+        "component": "Menu",
+        "type": "other",
+        "description": "🌐 Patch tr_TR \`Transfer.deselectAll\` locale. [-ice](https://github.com/coding-ice)"
+      }
+    ]
+  },
+  {
+    "version": "5.20.3",
+    "date": "2024-08-26",
+    "changes": [
+      {
+        "component": "Typography",
+        "type": "fix",
+        "description": "🐞 Refactor Typography native css ellipsis measure logic to handle precision edge case. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "🐞 Fix ColorPicker \`onChangeComplete\` not correct when click directly without move on the picker panel. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "FloatButton.Group",
+        "type": "fix",
+        "description": "🐞 Fix FloatButton.Group with controlled mode warning for nest updating issue. [](https://github.com/zombieJ)"
+      }
+    ]
+  },
+  {
+    "version": "5.20.2",
+    "date": "2024-08-19",
+    "changes": [
+      {
+        "component": "the",
+        "type": "style",
+        "description": "💄 Fix the suffix style problem of InputNumber without control. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "General",
+        "type": "feature",
+        "description": "🆕 Form \`rule.message\` supports skipping variable substitution through \`\\\\\\\\\${}\`. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "General",
+        "type": "fix",
+        "description": "🐞 Fixed the issue where the rounded corners of the trigger element are missing when the FloatButton component has shape=\\"square\\" and in menu mode when the menu pops up. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "General",
+        "type": "fix",
+        "description": "🐞 Fixed the problem that Upload.Dragger does not work when dragging and dropping upload folders. [](https://github.com/huiliangShen)"
+      },
+      {
+        "component": "General",
+        "type": "fix",
+        "description": "🐞 Fixed the issue where the arrow icon disappears after hovering when Select specifies \`getPopcontainer={node=node.parentNode}\`. [](https://github.com/afc163)"
+      },
+      {
+        "component": "General",
+        "type": "fix",
+        "description": "🐞 Fixed the arrow misalignment error when Popover sets the \`arrow.pointAtCenter\` property. [](https://github.com/Wxh16144)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Roll back the Table partial generic constraint object to any to reduce break changes caused by . [](https://github.com/crazyair)"
+      }
+    ]
+  },
+  {
+    "version": "5.20.1",
+    "date": "2024-08-11",
+    "changes": [
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "- 🐞 Fix ColorPicker compile error of \`-design/fast-color\`. [](https://github.com/afc163)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "style",
+        "description": "- 💄 Fix ColorPicker not adjust border style when under Space.Compact. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "style",
+        "description": "💄 Fix Table \`zIndexTableFixed\` token not support CSS var. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "🐞 Fix FloatButton don't support \`zIndexPopupBase\` token. [-io](https://github.com/Yuzu-io)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "🐞 Fix Typography \`tooltip\` not show with precision issue of \`ellipsis\`. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "🐞 Fix Form \`preserve={false}\` should not trigger \`shouldUpdate\` rerender. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "🐞 Fix Tour default \`z-index\` not follow \`zIndexPopup\` token issue. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "🐞 Fix Calendar \`locale\` should override \`locale\` from ConfigProvider. [](https://github.com/Asanio06)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "🐞 Fix Spin align issue when setting \`percent\`. [](https://github.com/Wxh16144)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "🐞 Fix Tree switcher position not ping at top when title break the line. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "other",
+        "description": "🌐 Locales"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Refine Table all Record types from any to Object. [-jia-nan](https://github.com/li-jia-nan)"
+      }
+    ]
+  },
+  {
+    "version": "5.20.0",
+    "date": "2024-08-03",
+    "changes": [
+      {
+        "component": "ColorPicker",
+        "type": "feature",
+        "description": "- 🛠 Replace ColorPicker internal \`/tinycolor\` with \`-design/fast-color\`."
+      },
+      {
+        "component": "ColorPicker",
+        "type": "feature",
+        "description": "- 🆕 ColorPicker support gradient color type and fix controlled mode not working."
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "- 🐞 Fix the issue where line-height is not effective in cssinjs mode for ColorPicker. [](https://github.com/vagusX)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "- 🐞 Fix cursor disabled state for ColorPicker. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "style",
+        "description": "- 💄 Optimize ColorPicker when selecting a color from the \`transparent\` state, it defaults to using a bright color instead of black color to enhance the user interaction experience."
+      },
+      {
+        "component": "ColorPicker",
+        "type": "feature",
+        "description": "🆕 ConfigProvider support indicator property for Spin. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "feature",
+        "description": "🆕 Upload \`showUploadList\` support \`extra\` for additional content. [](https://github.com/guoyunhe)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "feature",
+        "description": "🆕 Tree support custom loading icon for tree nodes with new prop \`switcherLoadingIcon\`. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "Slider",
+        "type": "feature",
+        "description": "- 🆕 Slider support \`range.editable\` to dynamic add/remove handles."
+      },
+      {
+        "component": "Slider",
+        "type": "feature",
+        "description": "- 🆕 Slider \`range.editable\` support \`minCount\` and \`maxCount\`."
+      },
+      {
+        "component": "Slider",
+        "type": "feature",
+        "description": "🆕 Support custom status render in QRCode. [-tang](https://github.com/kiner-tang)"
+      },
+      {
+        "component": "Slider",
+        "type": "feature",
+        "description": "🆕 Table component supports custom Filter dropdown box empty status. [](https://github.com/Wxh16144)"
+      },
+      {
+        "component": "Slider",
+        "type": "feature",
+        "description": "🆕 Allow user to add the Divider style of \`dashed\`, \`dotted\` or \`solid\`. [-08](https://github.com/pinaki-08)"
+      },
+      {
+        "component": "Slider",
+        "type": "feature",
+        "description": "🆕 InputNumber supports \`suffix\` prop. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "Slider",
+        "type": "feature",
+        "description": "🆕 Input/TextArea/Mentions support \`onClear\` prop. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "Slider",
+        "type": "other",
+        "description": "⌨️ Optimize Input be changed repeatedly when hold the enter key in multi-mode. [rc-input#72](https://github.com/react-component/input/pull/72/files) [](https://github.com/crazyair)"
+      },
+      {
+        "component": "Slider",
+        "type": "fix",
+        "description": "🐞 Fix grouping columns does not apply sorting for Table. [](https://github.com/Zyf665)"
+      },
+      {
+        "component": "Slider",
+        "type": "fix",
+        "description": "🐞 Fix Popover/PopConfirm/Tooltip with \`topLeft\`, \`topRight\`, \`bottomLeft\`, \`bottomRight\` zoom in transform origin not correct when target element width is too large."
+      },
+      {
+        "component": "Slider",
+        "type": "style",
+        "description": "💄 Fix Tree filter node style lost. [](https://github.com/wanpan11)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Component Token support string and number. [](https://github.com/thinkasany)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Improve Radio export types. [](https://github.com/baicie)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "🌐 Locales"
+      }
+    ]
+  }
+]"
+`;
+
+exports[`changelog > changelog 5.20.0..5.22.0 --format markdown 1`] = `
+"## 5.22.0 (2024-11-12)
+
+  🆕 Form - 🆕 Form.Item supports hiding labels. [](https://github.com/crazyair)
+  🐞 Form - 🐞 Form removes the div used to expand the error height, wraps errorDom and extraDom with a div, and sets a minimum height for the div. [](https://github.com/hongzzz)
+  🐞 Form - 🐞 Fix the problem that \`onValuesChange\` is still triggered when the Form field triggers change but the value does not change. [](https://github.com/crazyair)
+  🆕 Form - 🆕 Form supports the focus property in scrollToFirstError when form validation fails. [](https://github.com/nathanlao)
+  🆕 Table - 🆕 Table column filter drop-down box supports \`filterDropdownProps\`. [](https://github.com/Wxh16144)
+  🆕 Table - 🆕 Table \`expandedRowClassName\` supports string . [-jia-nan](https://github.com/li-jia-nan)
+  💄 Tree - 💄 Fix the problem of missing padding style for selected nodes in Tree. [](https://github.com/zombieJ)
+  🆕 Tree - 🆕 Tree component Token adds \`nodeHoverColor\` and \`nodeSelectedColor\` support. [](https://github.com/zmbxy)
+  🆕 Tree - 🆕 Tree adds \`indentSize\` token for custom indent width. [](https://github.com/afc163)
+  🆕 DatePicker - 🆕 DatePicker supports prefix attribute. [](https://github.com/guoyunhe)
+  💄 DatePicker - 💄 Fixed the issue of DatePicker.RangePicker flashing when the mouse moves between cells. [](https://github.com/afc163)
+  🆕 DatePicker - 🆕 In the \`Input.OTP\` component, add \`onInput\` event to get the value of each user input. At the same time, the relevant documentation has been updated. [](https://github.com/aojunhao123)
+  🐞 DatePicker - 🐞 Fixed the problem that Input.OTP cannot specify \`inputMode\`. [-rudzinski](https://github.com/alan-rudzinski)
+  🆕 DatePicker 🆕 ColorPicker supports \`disabledFormat\`. [-muzhi](https://github.com/su-muzhi)
+  🆕 DatePicker 🆕 Add \`cursor\` configuration item to the \`focus\` method of InputNumber component to control the cursor position. [](https://github.com/aojunhao123)
+  🆕 DatePicker 🆕 Cascader adds \`disabled\` attribute to disable all first-level directory items of the component. [](https://github.com/aojunhao123)
+  🆕 DatePicker 🆕 Descriptions supports single-line spreading. [](https://github.com/crazyair)
+  🆕 DatePicker 🆕 Select/TreeSelect/Cascader components add \`prefix\` property to support custom prefix. [](https://github.com/guoyunhe)
+  🐞 DatePicker 🐞 Fix the problem that the preview image class name is lost when setting \`ImageProps.preview.rootClassName\` in Image. [](https://github.com/dislido)
+  🐞 DatePicker 🐞 Fixed the issue that the last item in the TimePicker panel column cannot be scrolled to the top. [](https://github.com/zombieJ)
+  🐞 DatePicker 🐞 Fix TreeSelect dropdown height not enough. [](https://github.com/afc163)
+  🐞 DatePicker 🐞 Fixed the issue that Typography is not updated immediately when the ConfigProvider language is switched. [](https://github.com/thinkasany)
+  🐞 DatePicker 🐞 Fixed the issue that Upload \`itemRender\` calling \`action.preview\` will cause a crash. [](https://github.com/yoyo837)
+  🐞 DatePicker 🐞 Fixed Splitter pseudo-element symbol issue. [](https://github.com/dislido)
+  💄 DatePicker 💄 Optimize Collapse accessibility attribute and mouse hover style. [](https://github.com/afc163)
+  💄 DatePicker 💄 Fix styling issue of Menu title content. [-ice](https://github.com/coding-ice)
+  🛠 TypeScript - 🤖 Upload exports type DraggerProps. [](https://github.com/DBvc)
+  🛠 TypeScript - 🤖 Add defaultValue property to TimePicker.RangePicker example. [](https://github.com/nathanlao)
+  🛠 TypeScript - 🤖 Message Optimize the top type in message.config. [](https://github.com/Fog3211)
+  🛠 TypeScript - 🤖 Optimize the TS definition of Tree and TreeSelect. [](https://github.com/afc163)
+
+## 5.21.6 (2024-10-28)
+
+  🐞 Tree.DirectoryTree 🐞 Fix Tree.DirectoryTree interactive area not being a whole row.
+  🐞 the 🐞 Fix the Button icon was not vertically centered.
+  🐞 the 🐞 Fix the pointer style not set to \`not-allowed\` in the \`disabled\` state when \`variant\` of the Input was set to \`borderless\`. [](https://github.com/ustcfury)
+  💄 Splitter - 💄 Improve the pre-rendered style of Splitter under SSR.
+  💄 Splitter - 💄 Increased the click area of ​​the Splitter collapse button to improve usability. [](https://github.com/aojunhao123)
+  💄 Splitter 💄 Improve Checkbox \`indeterminate\` to enhance accessibility experience. [](https://github.com/SpaNb4)
+  💄 Splitter 💄 Improve the \`title\` of the Empty preset svg image to improve accessibility experience.
+
+## 5.21.5 (2024-10-21)
+
+  🐞 Cascader 🐞 Fix Cascader filter limitation not working when \`limit\` set to \`false\`. [](https://github.com/dongbanban)
+  🐞 DatePicker 🐞 Fix DatePicker disabled items cannot response mouse events bug. [-mparticle](https://github.com/ajenkins-mparticle)
+  🐞 FloatButton 🐞 Fix FloatButton menu problem what is difficult to click. [](https://github.com/aojunhao123)
+  🐞 QRCode 🐞 Fix QRCode \`onRefresh\` property not working properly. [-tang](https://github.com/kiner-tang)
+  🐞 Typography 🐞 Fix Typography links cannot be selected by user. [](https://github.com/thinkasany)
+  💄 Badge 💄 Fix Badge incorrect token of texts. [](https://github.com/Wxh16144)
+  💄 Layout 💄 Fix Layout lost styles of collapse button. [](https://github.com/aojunhao123)
+  🆕 Button 🛠 Improve Button event handler declaration. [](https://github.com/SohaibRaza)
+  🆕 Splitter 🛠 Improve Splitter style token semantic name. [](https://github.com/wanpan11)
+
+## 5.21.4 (2024-10-14)
+
+  🐞 General 🐞 Fixed Input.Search not applying the \`hoverBorderColor/activeBorderColor\` token for hover/active states. [](https://github.com/iqingting)
+  🐞 Tree 🐞 Fix Tree icon align issue. [](https://github.com/Meowu)
+  🐞 Splitter 🐞 Fix Splitter occasionally shows unnecessary scrollbars in nested combinations. [](https://github.com/zombieJ)
+  💄 General 💄 Modify Button \`textHoverBg\` hover background to \`colorFillTertiary\`. [-ice](https://github.com/coding-ice)
+  🛠 TypeScript - 🤖 Improve type of Switch \`eventHandler\`. [](https://github.com/thinkasany)
+
+## 5.21.3 (2024-10-09)
+
+  💄 General 💄 Added a scroll bar to Dropdown when having many items. [-Asdf](https://github.com/Cameron-Asdf)
+  🐞 Slider - 🐞 Fix Slider issue where the \`id\` prop is not supported.
+  🐞 Slider - 🐞 Fix Slider to address the issue causing \`useLayoutEffect does nothing on the server\` warning when \`extractStyle\` is invoked.
+  🐞 ColorPicker 🐞 Fix ColorPicker with gradient mode, sometimes handle color will be force sync back to first handle color issue. [](https://github.com/zombieJ)
+  🐞 Table 🐞 Fix Table \`onChange\` function receiving incorrect sorter value. [](https://github.com/nathanlao)
+  🐞 Splitter - 🐞 Fix the issue about throw a warning when Splitter nested in a hidden tab panel. [-tang](https://github.com/kiner-tang)
+  🐞 Splitter - 🐞 Fix the issue about Splitter had unexpected gaps in Flex. [-tang](https://github.com/kiner-tang)
+  🐞 Splitter 🐞 MISC: Restore \`react\` and \`react-dom\` peerDependencies. [](https://github.com/chentsulin)
+  🛠 TypeScript - 🤖 Improve type of Slider \`eventName\`. [](https://github.com/thinkasany)
+
+## 5.21.2 (2024-10-01)
+
+  🐞 Typography 🐞 Revert to fix Typography \`copyable\` icon align issue. [](https://github.com/afc163)
+  🐞 Tabs 🐞 Fix Tabs flicker when browser zoom is enabled. [](https://github.com/afc163)
+  🐞 Select 🐞 Fix Select incorrect \`activeBorderColor\` token when variant is filled. [-ice](https://github.com/coding-ice)
+  🐞 General 🐞 Fixed Input.Search alignment issue between the input field and search button at different zoom levels. [](https://github.com/nathanlao)
+  💄 General 💄 MISC: Tweak outline width of focus style from \`4px\` to \`3px\`. [](https://github.com/afc163)
+  🐞 Splitter - 🐞 Fixed the issue with Splitter dragging abnormally on touch screen devices. [](https://github.com/sakuraee)
+  💄 Splitter - 💄 Fixed Splitter.Panel style is invalid error. [](https://github.com/wanpan11)
+  🗑 Splitter ⚡️ Remove TransButton in Table/Transfer/Typography. [](https://github.com/afc163)
+
+## 5.21.1 (2024-09-25)
+
+  🐞 Button 🐞 Fix Button issue where \`type="link"\` incorrectly used \`colorPrimary\`. [-ice](https://github.com/coding-ice)
+  🐞 Button 🐞 Fix Button style class name weight issue that caused custom gradient styles to be overridden. [-ice](https://github.com/coding-ice)
+  🐞 Transfer 🐞 Fix Transfer width issue when customized as TableTransfer. [](https://github.com/zombieJ)
+
+## 5.21.0 (2024-09-22)
+
+  💄 Button - 💄 Button adds \`textColor\`, \`textHoverColor\` and \` textActiveColor\` tokens. [](https://github.com/madocto)
+  🆕 FloatButton - 🆕 FloatButton supports \`placement\` property, allowing menus to pop up from multiple directions. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 FloatButton - 🆕 FloatButton supports \`htmlType\` prop. [-jia-nan](https://github.com/li-jia-nan)
+  💄 FloatButton - 💄 Unify FloatButton and FloatButton.Group button round style. [](https://github.com/Layouwen)
+  💄 FloatButton - 💄 Manage FloatButton's \`z-index\` with \`useZIndex\` to improve compatibility with other popup components. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Menu - 🆕 Menu.Item and Dropdown's \`menu\` supports \`extra\` prop now. [-ice](https://github.com/coding-ice)
+  🐞 Menu - 🐞 Fix Menu \`popupStyle\` not working on SubMenu. [](https://github.com/Wxh16144)
+  🆕 Table - 🆕 Table supports \`minWidth\` for columns. [](https://github.com/linxianxi)
+  🐞 Table - 🐞 Fix Table empty and shadow issues in virtual mode. [](https://github.com/linxianxi)
+  🐞 Table - 🐞 Fix Table column selection issue where deselection was not possible under certain circumstances. [](https://github.com/Jarryxin)
+  🆕 Input - 🆕 Input.OTP support \`type\` to help handle some case need number only. [](https://github.com/zombieJ)
+  🐞 Input - 🐞 Fix Select inside Input addon text color when Select is focused. [](https://github.com/DDDDD12138)
+  🛠 Modal - ⌨️ Fix Modal throws warning \`avoid using aria-hidden on a focused element or its ancestor\`. [](https://github.com/afc163)
+  🆕 Modal - 🆕 Modal supports \`closable.disabled\` prop now. [](https://github.com/Ke1sy)
+  🐞 Descriptions - 🐞 Fix Descriptions column is missing in some cases. [](https://github.com/yezhonghu0503)
+  🐞 Descriptions - 🐞 Revert to fix the issue where the popup layer component inside Descriptions is being cut off. [](https://github.com/afc163)
+  🆕 Upload - 🆕 Upload will pass \`name\` prop to \`<input type="file" />\`. [](https://github.com/Wxh16144)
+  🆕 Upload - 🆕 Upload \`showUploadList.showXxxIcon\` accept a function value now. [](https://github.com/guoyunhe)
+  🐞 ColorPicker - 🐞 Fix ColorPicker when type hex input may not get correct color with precision issue. [](https://github.com/zombieJ)
+  🐞 ColorPicker - 🐞 Adjust ColorPicker popup panel not lock by \`value\` to allow control mode with \`onChangeComplete\` scenarios. [](https://github.com/zombieJ)
+  🐞 App - 🐞 Fixed App warn about \`zIndex\` too large when using the \`modal\` with having popup component method via \`useApp\`. [](https://github.com/zombieJ)
+  🐞 App - 🐞 Fix App rtl style does not respect ConfigProvider direction prop. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Pagination - 🆕 Pagination \`showSizeChanger\` accepts Select props now. [](https://github.com/afc163)
+  💄 Pagination - 💄 Remove Pagination default font family. [](https://github.com/afc163)
+  💄 Select - 💄 Add more tokens for Select to customize hover/focus style. [-tang](https://github.com/kiner-tang)
+  🐞 Select - 🐞 Fix Select search text overlap with arrow icon. [](https://github.com/yezhonghu0503)
+  🐞 Select - 🐞 Fix Select extra background of clear icon when enable \`allowClear\` and \`variant="filled"\`. [](https://github.com/thinkasany)
+  🆕 Select 🆕 Segmented adds \`vertical\` property and improves accessibility. [](https://github.com/liangchaofei)
+  🆕 Select 🆕 Radio.Group supports \`block\` prop now. [](https://github.com/yuanliu147)
+  🆕 Select 🆕 ConfigProvider supports configuring the \`className\` and \`style\` properties of the Splitter component. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Select 🆕 Image add \`onActive\` to \`toolbarRender\` for toggling images . [](https://github.com/madocto)
+  🆕 Select 🆕 Add ref on List component. [](https://github.com/Asanio06)
+  🆕 Select 🆕 Collapse support \`classNames\` and \`styles\` for semantic style customization. [](https://github.com/wanpan11)
+  💄 Select 💄 Make Skeleton.Node custom node by remove it's default icon children. [](https://github.com/afc163)
+  🐞 Select 🐞 Fix Layout.Sider can not modify theme when used alone. [](https://github.com/zombieJ)
+  🐞 Select 🐞 Fix Typography \`copyable\` with array \`children\` has additional \`,\` string issue. [](https://github.com/zombieJ)
+  🐞 Select 🐞 Fix Tour where long title will overlap with close button. [-tang](https://github.com/kiner-tang)
+  🛠 Select 🌐 Localization
+  🛠 TypeScript - 🤖 Checkbox adds onFocus\` and \`onBlur\` in type definition. [](https://github.com/huiliangShen)
+  🛠 TypeScript - 🤖 Fix Badge property type definition to support passing mouse events. [](https://github.com/yuanliu147)
+
+## 5.20.6 (2024-09-09)
+
+  🐞 Menu 🐞 Improve Menu collapse animation smoothness. [](https://github.com/afc163)
+  🐞 Table 🐞 Fix Table cell overflow bug if edit with virtual scroll. [](https://github.com/huiliangShen)
+  🐞 Input.Search 🐞 Fix Input.Search button radius not changing with \`size\`. [](https://github.com/afc163)
+  🐞 Form 🐞 Fix Form password still can be toggle show/hide even if disabled. [](https://github.com/Jarryxin)
+  🐞 wrap 🐞 Revert to fix wrap behavior for Dropdown, and re-fix wrap when out of screen edge. [](https://github.com/afc163)
+  💄 Badge 💄 Fix Badge background transition when mouse out. [-ice](https://github.com/coding-ice)
+  🛠 TypeScript - 🤖 Fix Collapse types for \`onChange\` arguments. [](https://github.com/yuanliu147)
+
+## 5.20.5 (2024-09-03)
+
+  🆕 internal 🛠 Adjust Tree & TreeSelect \`defaultExpandAll\` logic to only add internal \`expandedKeys\` which \`treeNode\` has children instead to avoid perf issue when with large data or \`loadData\` case. [](https://github.com/zombieJ)
+  🐞 Cascader 🐞 Fix Cascader not show parent option in search when using \`multiple\`.
+  🐞 Typography 🐞 Fix Typography \`ellipsis.tooltip.title\` with ReactNode will cause dead loop. [](https://github.com/zombieJ)
+
+## 5.20.4 (2024-09-02)
+
+  🐞 Menu - 🐞 Fix Menu token \`itemPaddingInline inoperative\` not working. [-ice](https://github.com/coding-ice)
+  🐞 Menu - 🐞 Fix Menu missing \`hover\` transition style. [](https://github.com/afc163)
+  💄 Menu 💄 Badge add transition effect to count node. [](https://github.com/afc163)
+  💄 Menu 💄 Fix Table column header move with unexpected transition. [](https://github.com/afc163)
+  🆕 Menu 🛠 Refactor Typography code to optimize internal logic. [](https://github.com/afc163)
+  🐞 Menu 🐞 Disable the Rate component within Form.Item when the form is disabled. [](https://github.com/nikzanda)
+  🛠 Menu 🌐 Patch tr_TR \`Transfer.deselectAll\` locale. [-ice](https://github.com/coding-ice)
+
+## 5.20.3 (2024-08-26)
+
+  🐞 Typography 🐞 Refactor Typography native css ellipsis measure logic to handle precision edge case. [](https://github.com/zombieJ)
+  🐞 ColorPicker 🐞 Fix ColorPicker \`onChangeComplete\` not correct when click directly without move on the picker panel. [](https://github.com/zombieJ)
+  🐞 FloatButton.Group 🐞 Fix FloatButton.Group with controlled mode warning for nest updating issue. [](https://github.com/zombieJ)
+
+## 5.20.2 (2024-08-19)
+
+  💄 the 💄 Fix the suffix style problem of InputNumber without control. [-ice](https://github.com/coding-ice)
+  🆕 General 🆕 Form \`rule.message\` supports skipping variable substitution through \`\\\\\${}\`. [](https://github.com/zombieJ)
+  🐞 General 🐞 Fixed the issue where the rounded corners of the trigger element are missing when the FloatButton component has shape="square" and in menu mode when the menu pops up. [-jia-nan](https://github.com/li-jia-nan)
+  🐞 General 🐞 Fixed the problem that Upload.Dragger does not work when dragging and dropping upload folders. [](https://github.com/huiliangShen)
+  🐞 General 🐞 Fixed the issue where the arrow icon disappears after hovering when Select specifies \`getPopcontainer={node=node.parentNode}\`. [](https://github.com/afc163)
+  🐞 General 🐞 Fixed the arrow misalignment error when Popover sets the \`arrow.pointAtCenter\` property. [](https://github.com/Wxh16144)
+  🛠 TypeScript - 🤖 Roll back the Table partial generic constraint object to any to reduce break changes caused by . [](https://github.com/crazyair)
+
+## 5.20.1 (2024-08-11)
+
+  🐞 ColorPicker - 🐞 Fix ColorPicker compile error of \`-design/fast-color\`. [](https://github.com/afc163)
+  💄 ColorPicker - 💄 Fix ColorPicker not adjust border style when under Space.Compact. [](https://github.com/zombieJ)
+  💄 ColorPicker 💄 Fix Table \`zIndexTableFixed\` token not support CSS var. [-jia-nan](https://github.com/li-jia-nan)
+  🐞 ColorPicker 🐞 Fix FloatButton don't support \`zIndexPopupBase\` token. [-io](https://github.com/Yuzu-io)
+  🐞 ColorPicker 🐞 Fix Typography \`tooltip\` not show with precision issue of \`ellipsis\`. [](https://github.com/zombieJ)
+  🐞 ColorPicker 🐞 Fix Form \`preserve={false}\` should not trigger \`shouldUpdate\` rerender. [](https://github.com/zombieJ)
+  🐞 ColorPicker 🐞 Fix Tour default \`z-index\` not follow \`zIndexPopup\` token issue. [](https://github.com/zombieJ)
+  🐞 ColorPicker 🐞 Fix Calendar \`locale\` should override \`locale\` from ConfigProvider. [](https://github.com/Asanio06)
+  🐞 ColorPicker 🐞 Fix Spin align issue when setting \`percent\`. [](https://github.com/Wxh16144)
+  🐞 ColorPicker 🐞 Fix Tree switcher position not ping at top when title break the line. [](https://github.com/zombieJ)
+  🛠 ColorPicker 🌐 Locales
+  🛠 TypeScript - 🤖 Refine Table all Record types from any to Object. [-jia-nan](https://github.com/li-jia-nan)
+
+## 5.20.0 (2024-08-03)
+
+  🆕 ColorPicker - 🛠 Replace ColorPicker internal \`/tinycolor\` with \`-design/fast-color\`.
+  🆕 ColorPicker - 🆕 ColorPicker support gradient color type and fix controlled mode not working.
+  🐞 ColorPicker - 🐞 Fix the issue where line-height is not effective in cssinjs mode for ColorPicker. [](https://github.com/vagusX)
+  🐞 ColorPicker - 🐞 Fix cursor disabled state for ColorPicker. [-ice](https://github.com/coding-ice)
+  💄 ColorPicker - 💄 Optimize ColorPicker when selecting a color from the \`transparent\` state, it defaults to using a bright color instead of black color to enhance the user interaction experience.
+  🆕 ColorPicker 🆕 ConfigProvider support indicator property for Spin. [-ice](https://github.com/coding-ice)
+  🆕 ColorPicker 🆕 Upload \`showUploadList\` support \`extra\` for additional content. [](https://github.com/guoyunhe)
+  🆕 ColorPicker 🆕 Tree support custom loading icon for tree nodes with new prop \`switcherLoadingIcon\`. [-ice](https://github.com/coding-ice)
+  🆕 Slider - 🆕 Slider support \`range.editable\` to dynamic add/remove handles.
+  🆕 Slider - 🆕 Slider \`range.editable\` support \`minCount\` and \`maxCount\`.
+  🆕 Slider 🆕 Support custom status render in QRCode. [-tang](https://github.com/kiner-tang)
+  🆕 Slider 🆕 Table component supports custom Filter dropdown box empty status. [](https://github.com/Wxh16144)
+  🆕 Slider 🆕 Allow user to add the Divider style of \`dashed\`, \`dotted\` or \`solid\`. [-08](https://github.com/pinaki-08)
+  🆕 Slider 🆕 InputNumber supports \`suffix\` prop. [-ice](https://github.com/coding-ice)
+  🆕 Slider 🆕 Input/TextArea/Mentions support \`onClear\` prop. [-jia-nan](https://github.com/li-jia-nan)
+  🛠 Slider ⌨️ Optimize Input be changed repeatedly when hold the enter key in multi-mode. [rc-input#72](https://github.com/react-component/input/pull/72/files) [](https://github.com/crazyair)
+  🐞 Slider 🐞 Fix grouping columns does not apply sorting for Table. [](https://github.com/Zyf665)
+  🐞 Slider 🐞 Fix Popover/PopConfirm/Tooltip with \`topLeft\`, \`topRight\`, \`bottomLeft\`, \`bottomRight\` zoom in transform origin not correct when target element width is too large.
+  💄 Slider 💄 Fix Tree filter node style lost. [](https://github.com/wanpan11)
+  🛠 TypeScript - 🤖 Component Token support string and number. [](https://github.com/thinkasany)
+  🛠 TypeScript - 🤖 Improve Radio export types. [](https://github.com/baicie)
+  🛠 TypeScript 🌐 Locales"
+`;
+
+exports[`changelog > changelog 5.20.0..5.22.0 --format text 1`] = `
+"## 5.22.0 (2024-11-12)
+
+  🆕 Form - 🆕 Form.Item supports hiding labels. [](https://github.com/crazyair)
+  🐞 Form - 🐞 Form removes the div used to expand the error height, wraps errorDom and extraDom with a div, and sets a minimum height for the div. [](https://github.com/hongzzz)
+  🐞 Form - 🐞 Fix the problem that \`onValuesChange\` is still triggered when the Form field triggers change but the value does not change. [](https://github.com/crazyair)
+  🆕 Form - 🆕 Form supports the focus property in scrollToFirstError when form validation fails. [](https://github.com/nathanlao)
+  🆕 Table - 🆕 Table column filter drop-down box supports \`filterDropdownProps\`. [](https://github.com/Wxh16144)
+  🆕 Table - 🆕 Table \`expandedRowClassName\` supports string . [-jia-nan](https://github.com/li-jia-nan)
+  💄 Tree - 💄 Fix the problem of missing padding style for selected nodes in Tree. [](https://github.com/zombieJ)
+  🆕 Tree - 🆕 Tree component Token adds \`nodeHoverColor\` and \`nodeSelectedColor\` support. [](https://github.com/zmbxy)
+  🆕 Tree - 🆕 Tree adds \`indentSize\` token for custom indent width. [](https://github.com/afc163)
+  🆕 DatePicker - 🆕 DatePicker supports prefix attribute. [](https://github.com/guoyunhe)
+  💄 DatePicker - 💄 Fixed the issue of DatePicker.RangePicker flashing when the mouse moves between cells. [](https://github.com/afc163)
+  🆕 DatePicker - 🆕 In the \`Input.OTP\` component, add \`onInput\` event to get the value of each user input. At the same time, the relevant documentation has been updated. [](https://github.com/aojunhao123)
+  🐞 DatePicker - 🐞 Fixed the problem that Input.OTP cannot specify \`inputMode\`. [-rudzinski](https://github.com/alan-rudzinski)
+  🆕 DatePicker 🆕 ColorPicker supports \`disabledFormat\`. [-muzhi](https://github.com/su-muzhi)
+  🆕 DatePicker 🆕 Add \`cursor\` configuration item to the \`focus\` method of InputNumber component to control the cursor position. [](https://github.com/aojunhao123)
+  🆕 DatePicker 🆕 Cascader adds \`disabled\` attribute to disable all first-level directory items of the component. [](https://github.com/aojunhao123)
+  🆕 DatePicker 🆕 Descriptions supports single-line spreading. [](https://github.com/crazyair)
+  🆕 DatePicker 🆕 Select/TreeSelect/Cascader components add \`prefix\` property to support custom prefix. [](https://github.com/guoyunhe)
+  🐞 DatePicker 🐞 Fix the problem that the preview image class name is lost when setting \`ImageProps.preview.rootClassName\` in Image. [](https://github.com/dislido)
+  🐞 DatePicker 🐞 Fixed the issue that the last item in the TimePicker panel column cannot be scrolled to the top. [](https://github.com/zombieJ)
+  🐞 DatePicker 🐞 Fix TreeSelect dropdown height not enough. [](https://github.com/afc163)
+  🐞 DatePicker 🐞 Fixed the issue that Typography is not updated immediately when the ConfigProvider language is switched. [](https://github.com/thinkasany)
+  🐞 DatePicker 🐞 Fixed the issue that Upload \`itemRender\` calling \`action.preview\` will cause a crash. [](https://github.com/yoyo837)
+  🐞 DatePicker 🐞 Fixed Splitter pseudo-element symbol issue. [](https://github.com/dislido)
+  💄 DatePicker 💄 Optimize Collapse accessibility attribute and mouse hover style. [](https://github.com/afc163)
+  💄 DatePicker 💄 Fix styling issue of Menu title content. [-ice](https://github.com/coding-ice)
+  🛠 TypeScript - 🤖 Upload exports type DraggerProps. [](https://github.com/DBvc)
+  🛠 TypeScript - 🤖 Add defaultValue property to TimePicker.RangePicker example. [](https://github.com/nathanlao)
+  🛠 TypeScript - 🤖 Message Optimize the top type in message.config. [](https://github.com/Fog3211)
+  🛠 TypeScript - 🤖 Optimize the TS definition of Tree and TreeSelect. [](https://github.com/afc163)
+
+## 5.21.6 (2024-10-28)
+
+  🐞 Tree.DirectoryTree 🐞 Fix Tree.DirectoryTree interactive area not being a whole row.
+  🐞 the 🐞 Fix the Button icon was not vertically centered.
+  🐞 the 🐞 Fix the pointer style not set to \`not-allowed\` in the \`disabled\` state when \`variant\` of the Input was set to \`borderless\`. [](https://github.com/ustcfury)
+  💄 Splitter - 💄 Improve the pre-rendered style of Splitter under SSR.
+  💄 Splitter - 💄 Increased the click area of ​​the Splitter collapse button to improve usability. [](https://github.com/aojunhao123)
+  💄 Splitter 💄 Improve Checkbox \`indeterminate\` to enhance accessibility experience. [](https://github.com/SpaNb4)
+  💄 Splitter 💄 Improve the \`title\` of the Empty preset svg image to improve accessibility experience.
+
+## 5.21.5 (2024-10-21)
+
+  🐞 Cascader 🐞 Fix Cascader filter limitation not working when \`limit\` set to \`false\`. [](https://github.com/dongbanban)
+  🐞 DatePicker 🐞 Fix DatePicker disabled items cannot response mouse events bug. [-mparticle](https://github.com/ajenkins-mparticle)
+  🐞 FloatButton 🐞 Fix FloatButton menu problem what is difficult to click. [](https://github.com/aojunhao123)
+  🐞 QRCode 🐞 Fix QRCode \`onRefresh\` property not working properly. [-tang](https://github.com/kiner-tang)
+  🐞 Typography 🐞 Fix Typography links cannot be selected by user. [](https://github.com/thinkasany)
+  💄 Badge 💄 Fix Badge incorrect token of texts. [](https://github.com/Wxh16144)
+  💄 Layout 💄 Fix Layout lost styles of collapse button. [](https://github.com/aojunhao123)
+  🆕 Button 🛠 Improve Button event handler declaration. [](https://github.com/SohaibRaza)
+  🆕 Splitter 🛠 Improve Splitter style token semantic name. [](https://github.com/wanpan11)
+
+## 5.21.4 (2024-10-14)
+
+  🐞 General 🐞 Fixed Input.Search not applying the \`hoverBorderColor/activeBorderColor\` token for hover/active states. [](https://github.com/iqingting)
+  🐞 Tree 🐞 Fix Tree icon align issue. [](https://github.com/Meowu)
+  🐞 Splitter 🐞 Fix Splitter occasionally shows unnecessary scrollbars in nested combinations. [](https://github.com/zombieJ)
+  💄 General 💄 Modify Button \`textHoverBg\` hover background to \`colorFillTertiary\`. [-ice](https://github.com/coding-ice)
+  🛠 TypeScript - 🤖 Improve type of Switch \`eventHandler\`. [](https://github.com/thinkasany)
+
+## 5.21.3 (2024-10-09)
+
+  💄 General 💄 Added a scroll bar to Dropdown when having many items. [-Asdf](https://github.com/Cameron-Asdf)
+  🐞 Slider - 🐞 Fix Slider issue where the \`id\` prop is not supported.
+  🐞 Slider - 🐞 Fix Slider to address the issue causing \`useLayoutEffect does nothing on the server\` warning when \`extractStyle\` is invoked.
+  🐞 ColorPicker 🐞 Fix ColorPicker with gradient mode, sometimes handle color will be force sync back to first handle color issue. [](https://github.com/zombieJ)
+  🐞 Table 🐞 Fix Table \`onChange\` function receiving incorrect sorter value. [](https://github.com/nathanlao)
+  🐞 Splitter - 🐞 Fix the issue about throw a warning when Splitter nested in a hidden tab panel. [-tang](https://github.com/kiner-tang)
+  🐞 Splitter - 🐞 Fix the issue about Splitter had unexpected gaps in Flex. [-tang](https://github.com/kiner-tang)
+  🐞 Splitter 🐞 MISC: Restore \`react\` and \`react-dom\` peerDependencies. [](https://github.com/chentsulin)
+  🛠 TypeScript - 🤖 Improve type of Slider \`eventName\`. [](https://github.com/thinkasany)
+
+## 5.21.2 (2024-10-01)
+
+  🐞 Typography 🐞 Revert to fix Typography \`copyable\` icon align issue. [](https://github.com/afc163)
+  🐞 Tabs 🐞 Fix Tabs flicker when browser zoom is enabled. [](https://github.com/afc163)
+  🐞 Select 🐞 Fix Select incorrect \`activeBorderColor\` token when variant is filled. [-ice](https://github.com/coding-ice)
+  🐞 General 🐞 Fixed Input.Search alignment issue between the input field and search button at different zoom levels. [](https://github.com/nathanlao)
+  💄 General 💄 MISC: Tweak outline width of focus style from \`4px\` to \`3px\`. [](https://github.com/afc163)
+  🐞 Splitter - 🐞 Fixed the issue with Splitter dragging abnormally on touch screen devices. [](https://github.com/sakuraee)
+  💄 Splitter - 💄 Fixed Splitter.Panel style is invalid error. [](https://github.com/wanpan11)
+  🗑 Splitter ⚡️ Remove TransButton in Table/Transfer/Typography. [](https://github.com/afc163)
+
+## 5.21.1 (2024-09-25)
+
+  🐞 Button 🐞 Fix Button issue where \`type="link"\` incorrectly used \`colorPrimary\`. [-ice](https://github.com/coding-ice)
+  🐞 Button 🐞 Fix Button style class name weight issue that caused custom gradient styles to be overridden. [-ice](https://github.com/coding-ice)
+  🐞 Transfer 🐞 Fix Transfer width issue when customized as TableTransfer. [](https://github.com/zombieJ)
+
+## 5.21.0 (2024-09-22)
+
+  💄 Button - 💄 Button adds \`textColor\`, \`textHoverColor\` and \` textActiveColor\` tokens. [](https://github.com/madocto)
+  🆕 FloatButton - 🆕 FloatButton supports \`placement\` property, allowing menus to pop up from multiple directions. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 FloatButton - 🆕 FloatButton supports \`htmlType\` prop. [-jia-nan](https://github.com/li-jia-nan)
+  💄 FloatButton - 💄 Unify FloatButton and FloatButton.Group button round style. [](https://github.com/Layouwen)
+  💄 FloatButton - 💄 Manage FloatButton's \`z-index\` with \`useZIndex\` to improve compatibility with other popup components. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Menu - 🆕 Menu.Item and Dropdown's \`menu\` supports \`extra\` prop now. [-ice](https://github.com/coding-ice)
+  🐞 Menu - 🐞 Fix Menu \`popupStyle\` not working on SubMenu. [](https://github.com/Wxh16144)
+  🆕 Table - 🆕 Table supports \`minWidth\` for columns. [](https://github.com/linxianxi)
+  🐞 Table - 🐞 Fix Table empty and shadow issues in virtual mode. [](https://github.com/linxianxi)
+  🐞 Table - 🐞 Fix Table column selection issue where deselection was not possible under certain circumstances. [](https://github.com/Jarryxin)
+  🆕 Input - 🆕 Input.OTP support \`type\` to help handle some case need number only. [](https://github.com/zombieJ)
+  🐞 Input - 🐞 Fix Select inside Input addon text color when Select is focused. [](https://github.com/DDDDD12138)
+  🛠 Modal - ⌨️ Fix Modal throws warning \`avoid using aria-hidden on a focused element or its ancestor\`. [](https://github.com/afc163)
+  🆕 Modal - 🆕 Modal supports \`closable.disabled\` prop now. [](https://github.com/Ke1sy)
+  🐞 Descriptions - 🐞 Fix Descriptions column is missing in some cases. [](https://github.com/yezhonghu0503)
+  🐞 Descriptions - 🐞 Revert to fix the issue where the popup layer component inside Descriptions is being cut off. [](https://github.com/afc163)
+  🆕 Upload - 🆕 Upload will pass \`name\` prop to \`<input type="file" />\`. [](https://github.com/Wxh16144)
+  🆕 Upload - 🆕 Upload \`showUploadList.showXxxIcon\` accept a function value now. [](https://github.com/guoyunhe)
+  🐞 ColorPicker - 🐞 Fix ColorPicker when type hex input may not get correct color with precision issue. [](https://github.com/zombieJ)
+  🐞 ColorPicker - 🐞 Adjust ColorPicker popup panel not lock by \`value\` to allow control mode with \`onChangeComplete\` scenarios. [](https://github.com/zombieJ)
+  🐞 App - 🐞 Fixed App warn about \`zIndex\` too large when using the \`modal\` with having popup component method via \`useApp\`. [](https://github.com/zombieJ)
+  🐞 App - 🐞 Fix App rtl style does not respect ConfigProvider direction prop. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Pagination - 🆕 Pagination \`showSizeChanger\` accepts Select props now. [](https://github.com/afc163)
+  💄 Pagination - 💄 Remove Pagination default font family. [](https://github.com/afc163)
+  💄 Select - 💄 Add more tokens for Select to customize hover/focus style. [-tang](https://github.com/kiner-tang)
+  🐞 Select - 🐞 Fix Select search text overlap with arrow icon. [](https://github.com/yezhonghu0503)
+  🐞 Select - 🐞 Fix Select extra background of clear icon when enable \`allowClear\` and \`variant="filled"\`. [](https://github.com/thinkasany)
+  🆕 Select 🆕 Segmented adds \`vertical\` property and improves accessibility. [](https://github.com/liangchaofei)
+  🆕 Select 🆕 Radio.Group supports \`block\` prop now. [](https://github.com/yuanliu147)
+  🆕 Select 🆕 ConfigProvider supports configuring the \`className\` and \`style\` properties of the Splitter component. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Select 🆕 Image add \`onActive\` to \`toolbarRender\` for toggling images . [](https://github.com/madocto)
+  🆕 Select 🆕 Add ref on List component. [](https://github.com/Asanio06)
+  🆕 Select 🆕 Collapse support \`classNames\` and \`styles\` for semantic style customization. [](https://github.com/wanpan11)
+  💄 Select 💄 Make Skeleton.Node custom node by remove it's default icon children. [](https://github.com/afc163)
+  🐞 Select 🐞 Fix Layout.Sider can not modify theme when used alone. [](https://github.com/zombieJ)
+  🐞 Select 🐞 Fix Typography \`copyable\` with array \`children\` has additional \`,\` string issue. [](https://github.com/zombieJ)
+  🐞 Select 🐞 Fix Tour where long title will overlap with close button. [-tang](https://github.com/kiner-tang)
+  🛠 Select 🌐 Localization
+  🛠 TypeScript - 🤖 Checkbox adds onFocus\` and \`onBlur\` in type definition. [](https://github.com/huiliangShen)
+  🛠 TypeScript - 🤖 Fix Badge property type definition to support passing mouse events. [](https://github.com/yuanliu147)
+
+## 5.20.6 (2024-09-09)
+
+  🐞 Menu 🐞 Improve Menu collapse animation smoothness. [](https://github.com/afc163)
+  🐞 Table 🐞 Fix Table cell overflow bug if edit with virtual scroll. [](https://github.com/huiliangShen)
+  🐞 Input.Search 🐞 Fix Input.Search button radius not changing with \`size\`. [](https://github.com/afc163)
+  🐞 Form 🐞 Fix Form password still can be toggle show/hide even if disabled. [](https://github.com/Jarryxin)
+  🐞 wrap 🐞 Revert to fix wrap behavior for Dropdown, and re-fix wrap when out of screen edge. [](https://github.com/afc163)
+  💄 Badge 💄 Fix Badge background transition when mouse out. [-ice](https://github.com/coding-ice)
+  🛠 TypeScript - 🤖 Fix Collapse types for \`onChange\` arguments. [](https://github.com/yuanliu147)
+
+## 5.20.5 (2024-09-03)
+
+  🆕 internal 🛠 Adjust Tree & TreeSelect \`defaultExpandAll\` logic to only add internal \`expandedKeys\` which \`treeNode\` has children instead to avoid perf issue when with large data or \`loadData\` case. [](https://github.com/zombieJ)
+  🐞 Cascader 🐞 Fix Cascader not show parent option in search when using \`multiple\`.
+  🐞 Typography 🐞 Fix Typography \`ellipsis.tooltip.title\` with ReactNode will cause dead loop. [](https://github.com/zombieJ)
+
+## 5.20.4 (2024-09-02)
+
+  🐞 Menu - 🐞 Fix Menu token \`itemPaddingInline inoperative\` not working. [-ice](https://github.com/coding-ice)
+  🐞 Menu - 🐞 Fix Menu missing \`hover\` transition style. [](https://github.com/afc163)
+  💄 Menu 💄 Badge add transition effect to count node. [](https://github.com/afc163)
+  💄 Menu 💄 Fix Table column header move with unexpected transition. [](https://github.com/afc163)
+  🆕 Menu 🛠 Refactor Typography code to optimize internal logic. [](https://github.com/afc163)
+  🐞 Menu 🐞 Disable the Rate component within Form.Item when the form is disabled. [](https://github.com/nikzanda)
+  🛠 Menu 🌐 Patch tr_TR \`Transfer.deselectAll\` locale. [-ice](https://github.com/coding-ice)
+
+## 5.20.3 (2024-08-26)
+
+  🐞 Typography 🐞 Refactor Typography native css ellipsis measure logic to handle precision edge case. [](https://github.com/zombieJ)
+  🐞 ColorPicker 🐞 Fix ColorPicker \`onChangeComplete\` not correct when click directly without move on the picker panel. [](https://github.com/zombieJ)
+  🐞 FloatButton.Group 🐞 Fix FloatButton.Group with controlled mode warning for nest updating issue. [](https://github.com/zombieJ)
+
+## 5.20.2 (2024-08-19)
+
+  💄 the 💄 Fix the suffix style problem of InputNumber without control. [-ice](https://github.com/coding-ice)
+  🆕 General 🆕 Form \`rule.message\` supports skipping variable substitution through \`\\\\\${}\`. [](https://github.com/zombieJ)
+  🐞 General 🐞 Fixed the issue where the rounded corners of the trigger element are missing when the FloatButton component has shape="square" and in menu mode when the menu pops up. [-jia-nan](https://github.com/li-jia-nan)
+  🐞 General 🐞 Fixed the problem that Upload.Dragger does not work when dragging and dropping upload folders. [](https://github.com/huiliangShen)
+  🐞 General 🐞 Fixed the issue where the arrow icon disappears after hovering when Select specifies \`getPopcontainer={node=node.parentNode}\`. [](https://github.com/afc163)
+  🐞 General 🐞 Fixed the arrow misalignment error when Popover sets the \`arrow.pointAtCenter\` property. [](https://github.com/Wxh16144)
+  🛠 TypeScript - 🤖 Roll back the Table partial generic constraint object to any to reduce break changes caused by . [](https://github.com/crazyair)
+
+## 5.20.1 (2024-08-11)
+
+  🐞 ColorPicker - 🐞 Fix ColorPicker compile error of \`-design/fast-color\`. [](https://github.com/afc163)
+  💄 ColorPicker - 💄 Fix ColorPicker not adjust border style when under Space.Compact. [](https://github.com/zombieJ)
+  💄 ColorPicker 💄 Fix Table \`zIndexTableFixed\` token not support CSS var. [-jia-nan](https://github.com/li-jia-nan)
+  🐞 ColorPicker 🐞 Fix FloatButton don't support \`zIndexPopupBase\` token. [-io](https://github.com/Yuzu-io)
+  🐞 ColorPicker 🐞 Fix Typography \`tooltip\` not show with precision issue of \`ellipsis\`. [](https://github.com/zombieJ)
+  🐞 ColorPicker 🐞 Fix Form \`preserve={false}\` should not trigger \`shouldUpdate\` rerender. [](https://github.com/zombieJ)
+  🐞 ColorPicker 🐞 Fix Tour default \`z-index\` not follow \`zIndexPopup\` token issue. [](https://github.com/zombieJ)
+  🐞 ColorPicker 🐞 Fix Calendar \`locale\` should override \`locale\` from ConfigProvider. [](https://github.com/Asanio06)
+  🐞 ColorPicker 🐞 Fix Spin align issue when setting \`percent\`. [](https://github.com/Wxh16144)
+  🐞 ColorPicker 🐞 Fix Tree switcher position not ping at top when title break the line. [](https://github.com/zombieJ)
+  🛠 ColorPicker 🌐 Locales
+  🛠 TypeScript - 🤖 Refine Table all Record types from any to Object. [-jia-nan](https://github.com/li-jia-nan)
+
+## 5.20.0 (2024-08-03)
+
+  🆕 ColorPicker - 🛠 Replace ColorPicker internal \`/tinycolor\` with \`-design/fast-color\`.
+  🆕 ColorPicker - 🆕 ColorPicker support gradient color type and fix controlled mode not working.
+  🐞 ColorPicker - 🐞 Fix the issue where line-height is not effective in cssinjs mode for ColorPicker. [](https://github.com/vagusX)
+  🐞 ColorPicker - 🐞 Fix cursor disabled state for ColorPicker. [-ice](https://github.com/coding-ice)
+  💄 ColorPicker - 💄 Optimize ColorPicker when selecting a color from the \`transparent\` state, it defaults to using a bright color instead of black color to enhance the user interaction experience.
+  🆕 ColorPicker 🆕 ConfigProvider support indicator property for Spin. [-ice](https://github.com/coding-ice)
+  🆕 ColorPicker 🆕 Upload \`showUploadList\` support \`extra\` for additional content. [](https://github.com/guoyunhe)
+  🆕 ColorPicker 🆕 Tree support custom loading icon for tree nodes with new prop \`switcherLoadingIcon\`. [-ice](https://github.com/coding-ice)
+  🆕 Slider - 🆕 Slider support \`range.editable\` to dynamic add/remove handles.
+  🆕 Slider - 🆕 Slider \`range.editable\` support \`minCount\` and \`maxCount\`.
+  🆕 Slider 🆕 Support custom status render in QRCode. [-tang](https://github.com/kiner-tang)
+  🆕 Slider 🆕 Table component supports custom Filter dropdown box empty status. [](https://github.com/Wxh16144)
+  🆕 Slider 🆕 Allow user to add the Divider style of \`dashed\`, \`dotted\` or \`solid\`. [-08](https://github.com/pinaki-08)
+  🆕 Slider 🆕 InputNumber supports \`suffix\` prop. [-ice](https://github.com/coding-ice)
+  🆕 Slider 🆕 Input/TextArea/Mentions support \`onClear\` prop. [-jia-nan](https://github.com/li-jia-nan)
+  🛠 Slider ⌨️ Optimize Input be changed repeatedly when hold the enter key in multi-mode. [rc-input#72](https://github.com/react-component/input/pull/72/files) [](https://github.com/crazyair)
+  🐞 Slider 🐞 Fix grouping columns does not apply sorting for Table. [](https://github.com/Zyf665)
+  🐞 Slider 🐞 Fix Popover/PopConfirm/Tooltip with \`topLeft\`, \`topRight\`, \`bottomLeft\`, \`bottomRight\` zoom in transform origin not correct when target element width is too large.
+  💄 Slider 💄 Fix Tree filter node style lost. [](https://github.com/wanpan11)
+  🛠 TypeScript - 🤖 Component Token support string and number. [](https://github.com/thinkasany)
+  🛠 TypeScript - 🤖 Improve Radio export types. [](https://github.com/baicie)
+  🛠 TypeScript 🌐 Locales"
+`;
+
+exports[`changelog > changelog 5.21.0 --format json 1`] = `
+"[
+  {
+    "version": "5.21.0",
+    "date": "2024-09-22",
+    "changes": [
+      {
+        "component": "Button",
+        "type": "style",
+        "description": "- 💄 Button adds \`textColor\`, \`textHoverColor\` and \` textActiveColor\` tokens. [](https://github.com/madocto)"
+      },
+      {
+        "component": "FloatButton",
+        "type": "feature",
+        "description": "- 🆕 FloatButton supports \`placement\` property, allowing menus to pop up from multiple directions. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "FloatButton",
+        "type": "feature",
+        "description": "- 🆕 FloatButton supports \`htmlType\` prop. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "FloatButton",
+        "type": "style",
+        "description": "- 💄 Unify FloatButton and FloatButton.Group button round style. [](https://github.com/Layouwen)"
+      },
+      {
+        "component": "FloatButton",
+        "type": "style",
+        "description": "- 💄 Manage FloatButton's \`z-index\` with \`useZIndex\` to improve compatibility with other popup components. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "Menu",
+        "type": "feature",
+        "description": "- 🆕 Menu.Item and Dropdown's \`menu\` supports \`extra\` prop now. [-ice](https://github.com/coding-ice)"
+      },
+      {
+        "component": "Menu",
+        "type": "fix",
+        "description": "- 🐞 Fix Menu \`popupStyle\` not working on SubMenu. [](https://github.com/Wxh16144)"
+      },
+      {
+        "component": "Table",
+        "type": "feature",
+        "description": "- 🆕 Table supports \`minWidth\` for columns. [](https://github.com/linxianxi)"
+      },
+      {
+        "component": "Table",
+        "type": "fix",
+        "description": "- 🐞 Fix Table empty and shadow issues in virtual mode. [](https://github.com/linxianxi)"
+      },
+      {
+        "component": "Table",
+        "type": "fix",
+        "description": "- 🐞 Fix Table column selection issue where deselection was not possible under certain circumstances. [](https://github.com/Jarryxin)"
+      },
+      {
+        "component": "Input",
+        "type": "feature",
+        "description": "- 🆕 Input.OTP support \`type\` to help handle some case need number only. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "Input",
+        "type": "fix",
+        "description": "- 🐞 Fix Select inside Input addon text color when Select is focused. [](https://github.com/DDDDD12138)"
+      },
+      {
+        "component": "Modal",
+        "type": "other",
+        "description": "- ⌨️ Fix Modal throws warning \`avoid using aria-hidden on a focused element or its ancestor\`. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Modal",
+        "type": "feature",
+        "description": "- 🆕 Modal supports \`closable.disabled\` prop now. [](https://github.com/Ke1sy)"
+      },
+      {
+        "component": "Descriptions",
+        "type": "fix",
+        "description": "- 🐞 Fix Descriptions column is missing in some cases. [](https://github.com/yezhonghu0503)"
+      },
+      {
+        "component": "Descriptions",
+        "type": "fix",
+        "description": "- 🐞 Revert to fix the issue where the popup layer component inside Descriptions is being cut off. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Upload",
+        "type": "feature",
+        "description": "- 🆕 Upload will pass \`name\` prop to \`<input type=\\"file\\" />\`. [](https://github.com/Wxh16144)"
+      },
+      {
+        "component": "Upload",
+        "type": "feature",
+        "description": "- 🆕 Upload \`showUploadList.showXxxIcon\` accept a function value now. [](https://github.com/guoyunhe)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "- 🐞 Fix ColorPicker when type hex input may not get correct color with precision issue. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "ColorPicker",
+        "type": "fix",
+        "description": "- 🐞 Adjust ColorPicker popup panel not lock by \`value\` to allow control mode with \`onChangeComplete\` scenarios. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "App",
+        "type": "fix",
+        "description": "- 🐞 Fixed App warn about \`zIndex\` too large when using the \`modal\` with having popup component method via \`useApp\`. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "App",
+        "type": "fix",
+        "description": "- 🐞 Fix App rtl style does not respect ConfigProvider direction prop. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "Pagination",
+        "type": "feature",
+        "description": "- 🆕 Pagination \`showSizeChanger\` accepts Select props now. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Pagination",
+        "type": "style",
+        "description": "- 💄 Remove Pagination default font family. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Select",
+        "type": "style",
+        "description": "- 💄 Add more tokens for Select to customize hover/focus style. [-tang](https://github.com/kiner-tang)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "- 🐞 Fix Select search text overlap with arrow icon. [](https://github.com/yezhonghu0503)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "- 🐞 Fix Select extra background of clear icon when enable \`allowClear\` and \`variant=\\"filled\\"\`. [](https://github.com/thinkasany)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 Segmented adds \`vertical\` property and improves accessibility. [](https://github.com/liangchaofei)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 Radio.Group supports \`block\` prop now. [](https://github.com/yuanliu147)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 ConfigProvider supports configuring the \`className\` and \`style\` properties of the Splitter component. [-jia-nan](https://github.com/li-jia-nan)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 Image add \`onActive\` to \`toolbarRender\` for toggling images . [](https://github.com/madocto)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 Add ref on List component. [](https://github.com/Asanio06)"
+      },
+      {
+        "component": "Select",
+        "type": "feature",
+        "description": "🆕 Collapse support \`classNames\` and \`styles\` for semantic style customization. [](https://github.com/wanpan11)"
+      },
+      {
+        "component": "Select",
+        "type": "style",
+        "description": "💄 Make Skeleton.Node custom node by remove it's default icon children. [](https://github.com/afc163)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "🐞 Fix Layout.Sider can not modify theme when used alone. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "🐞 Fix Typography \`copyable\` with array \`children\` has additional \`,\` string issue. [](https://github.com/zombieJ)"
+      },
+      {
+        "component": "Select",
+        "type": "fix",
+        "description": "🐞 Fix Tour where long title will overlap with close button. [-tang](https://github.com/kiner-tang)"
+      },
+      {
+        "component": "Select",
+        "type": "other",
+        "description": "🌐 Localization"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Checkbox adds onFocus\` and \`onBlur\` in type definition. [](https://github.com/huiliangShen)"
+      },
+      {
+        "component": "TypeScript",
+        "type": "other",
+        "description": "- 🤖 Fix Badge property type definition to support passing mouse events. [](https://github.com/yuanliu147)"
+      }
+    ]
+  }
+]"
+`;
+
+exports[`changelog > changelog 5.21.0 --format markdown 1`] = `
+"## 5.21.0 (2024-09-22)
+
+  💄 Button - 💄 Button adds \`textColor\`, \`textHoverColor\` and \` textActiveColor\` tokens. [](https://github.com/madocto)
+  🆕 FloatButton - 🆕 FloatButton supports \`placement\` property, allowing menus to pop up from multiple directions. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 FloatButton - 🆕 FloatButton supports \`htmlType\` prop. [-jia-nan](https://github.com/li-jia-nan)
+  💄 FloatButton - 💄 Unify FloatButton and FloatButton.Group button round style. [](https://github.com/Layouwen)
+  💄 FloatButton - 💄 Manage FloatButton's \`z-index\` with \`useZIndex\` to improve compatibility with other popup components. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Menu - 🆕 Menu.Item and Dropdown's \`menu\` supports \`extra\` prop now. [-ice](https://github.com/coding-ice)
+  🐞 Menu - 🐞 Fix Menu \`popupStyle\` not working on SubMenu. [](https://github.com/Wxh16144)
+  🆕 Table - 🆕 Table supports \`minWidth\` for columns. [](https://github.com/linxianxi)
+  🐞 Table - 🐞 Fix Table empty and shadow issues in virtual mode. [](https://github.com/linxianxi)
+  🐞 Table - 🐞 Fix Table column selection issue where deselection was not possible under certain circumstances. [](https://github.com/Jarryxin)
+  🆕 Input - 🆕 Input.OTP support \`type\` to help handle some case need number only. [](https://github.com/zombieJ)
+  🐞 Input - 🐞 Fix Select inside Input addon text color when Select is focused. [](https://github.com/DDDDD12138)
+  🛠 Modal - ⌨️ Fix Modal throws warning \`avoid using aria-hidden on a focused element or its ancestor\`. [](https://github.com/afc163)
+  🆕 Modal - 🆕 Modal supports \`closable.disabled\` prop now. [](https://github.com/Ke1sy)
+  🐞 Descriptions - 🐞 Fix Descriptions column is missing in some cases. [](https://github.com/yezhonghu0503)
+  🐞 Descriptions - 🐞 Revert to fix the issue where the popup layer component inside Descriptions is being cut off. [](https://github.com/afc163)
+  🆕 Upload - 🆕 Upload will pass \`name\` prop to \`<input type="file" />\`. [](https://github.com/Wxh16144)
+  🆕 Upload - 🆕 Upload \`showUploadList.showXxxIcon\` accept a function value now. [](https://github.com/guoyunhe)
+  🐞 ColorPicker - 🐞 Fix ColorPicker when type hex input may not get correct color with precision issue. [](https://github.com/zombieJ)
+  🐞 ColorPicker - 🐞 Adjust ColorPicker popup panel not lock by \`value\` to allow control mode with \`onChangeComplete\` scenarios. [](https://github.com/zombieJ)
+  🐞 App - 🐞 Fixed App warn about \`zIndex\` too large when using the \`modal\` with having popup component method via \`useApp\`. [](https://github.com/zombieJ)
+  🐞 App - 🐞 Fix App rtl style does not respect ConfigProvider direction prop. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Pagination - 🆕 Pagination \`showSizeChanger\` accepts Select props now. [](https://github.com/afc163)
+  💄 Pagination - 💄 Remove Pagination default font family. [](https://github.com/afc163)
+  💄 Select - 💄 Add more tokens for Select to customize hover/focus style. [-tang](https://github.com/kiner-tang)
+  🐞 Select - 🐞 Fix Select search text overlap with arrow icon. [](https://github.com/yezhonghu0503)
+  🐞 Select - 🐞 Fix Select extra background of clear icon when enable \`allowClear\` and \`variant="filled"\`. [](https://github.com/thinkasany)
+  🆕 Select 🆕 Segmented adds \`vertical\` property and improves accessibility. [](https://github.com/liangchaofei)
+  🆕 Select 🆕 Radio.Group supports \`block\` prop now. [](https://github.com/yuanliu147)
+  🆕 Select 🆕 ConfigProvider supports configuring the \`className\` and \`style\` properties of the Splitter component. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Select 🆕 Image add \`onActive\` to \`toolbarRender\` for toggling images . [](https://github.com/madocto)
+  🆕 Select 🆕 Add ref on List component. [](https://github.com/Asanio06)
+  🆕 Select 🆕 Collapse support \`classNames\` and \`styles\` for semantic style customization. [](https://github.com/wanpan11)
+  💄 Select 💄 Make Skeleton.Node custom node by remove it's default icon children. [](https://github.com/afc163)
+  🐞 Select 🐞 Fix Layout.Sider can not modify theme when used alone. [](https://github.com/zombieJ)
+  🐞 Select 🐞 Fix Typography \`copyable\` with array \`children\` has additional \`,\` string issue. [](https://github.com/zombieJ)
+  🐞 Select 🐞 Fix Tour where long title will overlap with close button. [-tang](https://github.com/kiner-tang)
+  🛠 Select 🌐 Localization
+  🛠 TypeScript - 🤖 Checkbox adds onFocus\` and \`onBlur\` in type definition. [](https://github.com/huiliangShen)
+  🛠 TypeScript - 🤖 Fix Badge property type definition to support passing mouse events. [](https://github.com/yuanliu147)"
+`;
+
+exports[`changelog > changelog 5.21.0 --format text 1`] = `
+"## 5.21.0 (2024-09-22)
+
+  💄 Button - 💄 Button adds \`textColor\`, \`textHoverColor\` and \` textActiveColor\` tokens. [](https://github.com/madocto)
+  🆕 FloatButton - 🆕 FloatButton supports \`placement\` property, allowing menus to pop up from multiple directions. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 FloatButton - 🆕 FloatButton supports \`htmlType\` prop. [-jia-nan](https://github.com/li-jia-nan)
+  💄 FloatButton - 💄 Unify FloatButton and FloatButton.Group button round style. [](https://github.com/Layouwen)
+  💄 FloatButton - 💄 Manage FloatButton's \`z-index\` with \`useZIndex\` to improve compatibility with other popup components. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Menu - 🆕 Menu.Item and Dropdown's \`menu\` supports \`extra\` prop now. [-ice](https://github.com/coding-ice)
+  🐞 Menu - 🐞 Fix Menu \`popupStyle\` not working on SubMenu. [](https://github.com/Wxh16144)
+  🆕 Table - 🆕 Table supports \`minWidth\` for columns. [](https://github.com/linxianxi)
+  🐞 Table - 🐞 Fix Table empty and shadow issues in virtual mode. [](https://github.com/linxianxi)
+  🐞 Table - 🐞 Fix Table column selection issue where deselection was not possible under certain circumstances. [](https://github.com/Jarryxin)
+  🆕 Input - 🆕 Input.OTP support \`type\` to help handle some case need number only. [](https://github.com/zombieJ)
+  🐞 Input - 🐞 Fix Select inside Input addon text color when Select is focused. [](https://github.com/DDDDD12138)
+  🛠 Modal - ⌨️ Fix Modal throws warning \`avoid using aria-hidden on a focused element or its ancestor\`. [](https://github.com/afc163)
+  🆕 Modal - 🆕 Modal supports \`closable.disabled\` prop now. [](https://github.com/Ke1sy)
+  🐞 Descriptions - 🐞 Fix Descriptions column is missing in some cases. [](https://github.com/yezhonghu0503)
+  🐞 Descriptions - 🐞 Revert to fix the issue where the popup layer component inside Descriptions is being cut off. [](https://github.com/afc163)
+  🆕 Upload - 🆕 Upload will pass \`name\` prop to \`<input type="file" />\`. [](https://github.com/Wxh16144)
+  🆕 Upload - 🆕 Upload \`showUploadList.showXxxIcon\` accept a function value now. [](https://github.com/guoyunhe)
+  🐞 ColorPicker - 🐞 Fix ColorPicker when type hex input may not get correct color with precision issue. [](https://github.com/zombieJ)
+  🐞 ColorPicker - 🐞 Adjust ColorPicker popup panel not lock by \`value\` to allow control mode with \`onChangeComplete\` scenarios. [](https://github.com/zombieJ)
+  🐞 App - 🐞 Fixed App warn about \`zIndex\` too large when using the \`modal\` with having popup component method via \`useApp\`. [](https://github.com/zombieJ)
+  🐞 App - 🐞 Fix App rtl style does not respect ConfigProvider direction prop. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Pagination - 🆕 Pagination \`showSizeChanger\` accepts Select props now. [](https://github.com/afc163)
+  💄 Pagination - 💄 Remove Pagination default font family. [](https://github.com/afc163)
+  💄 Select - 💄 Add more tokens for Select to customize hover/focus style. [-tang](https://github.com/kiner-tang)
+  🐞 Select - 🐞 Fix Select search text overlap with arrow icon. [](https://github.com/yezhonghu0503)
+  🐞 Select - 🐞 Fix Select extra background of clear icon when enable \`allowClear\` and \`variant="filled"\`. [](https://github.com/thinkasany)
+  🆕 Select 🆕 Segmented adds \`vertical\` property and improves accessibility. [](https://github.com/liangchaofei)
+  🆕 Select 🆕 Radio.Group supports \`block\` prop now. [](https://github.com/yuanliu147)
+  🆕 Select 🆕 ConfigProvider supports configuring the \`className\` and \`style\` properties of the Splitter component. [-jia-nan](https://github.com/li-jia-nan)
+  🆕 Select 🆕 Image add \`onActive\` to \`toolbarRender\` for toggling images . [](https://github.com/madocto)
+  🆕 Select 🆕 Add ref on List component. [](https://github.com/Asanio06)
+  🆕 Select 🆕 Collapse support \`classNames\` and \`styles\` for semantic style customization. [](https://github.com/wanpan11)
+  💄 Select 💄 Make Skeleton.Node custom node by remove it's default icon children. [](https://github.com/afc163)
+  🐞 Select 🐞 Fix Layout.Sider can not modify theme when used alone. [](https://github.com/zombieJ)
+  🐞 Select 🐞 Fix Typography \`copyable\` with array \`children\` has additional \`,\` string issue. [](https://github.com/zombieJ)
+  🐞 Select 🐞 Fix Tour where long title will overlap with close button. [-tang](https://github.com/kiner-tang)
+  🛠 Select 🌐 Localization
+  🛠 TypeScript - 🤖 Checkbox adds onFocus\` and \`onBlur\` in type definition. [](https://github.com/huiliangShen)
+  🛠 TypeScript - 🤖 Fix Badge property type definition to support passing mouse events. [](https://github.com/yuanliu147)"
+`;
+
+exports[`changelog > changelog 5.99.99 1`] = `
+"Error: No changelog entries found for "5.99.99"
+Suggestion: Available versions: 5.29.1, 5.29.0, 5.28.1, 5.28.0, 5.27.6, 5.27.5, 5.27.4, 5.27.3, 5.27.2, 5.27.1, 5.27.0, 5.26.7, 5.26.6, 5.26.5, 5.26.4, 5.26.3, 5.26.2, 5.26.1, 5.26.0, 5.25.4, 5.25.3, 5.25.2, 5.25.1, 5.25.0, 5.24.9, 5.24.8, 5.24.7, 5.24.6, 5.24.5, 5.24.4, 5.24.3, 5.24.2, 5.24.1, 5.24.0, 5.23.4, 5.23.3, 5.23.2, 5.23.1, 5.23.0, 5.22.7, 5.22.6, 5.22.5, 5.22.4, 5.22.3, 5.22.2, 5.22.1, 5.22.0, 5.21.6, 5.21.5, 5.21.4, 5.21.3, 5.21.2, 5.21.1, 5.21.0, 5.20.6, 5.20.5, 5.20.4, 5.20.3, 5.20.2, 5.20.1, 5.20.0, 5.19.4, 5.19.3, 5.19.2, 5.19.1, 5.19.0, 5.18.3, 5.18.2, 5.18.1, 5.18.0, 5.17.4, 5.17.3, 5.17.2, 5.17.1, 5.17.0, 5.16.5, 5.16.4, 5.16.3, 5.16.2, 5.16.1, 5.16.0, 5.15.4, 5.15.3, 5.15.2, 5.15.1, 5.15.0, 5.14.2, 5.14.1, 5.14.0, 5.13.3, 5.13.2, 5.13.1, 5.13.0, 5.12.8, 5.12.7, 5.12.6, 5.12.5, 5.12.4, 5.12.3, 5.12.2, 5.12.1, 5.12.0, 5.11.5, 5.11.4, 5.11.3, 5.11.2, 5.11.1, 5.11.0, 5.10.3, 5.10.2, 5.10.1, 5.10.0, 5.9.4, 5.9.3, 5.9.2, 5.9.1, 5.9.0, 5.8.6, 5.8.5, 5.8.4, 5.8.3, 5.8.2, 5.8.1, 5.8.0, 5.7.3, 5.7.2, 5.7.1, 5.7.0, 5.6.4, 5.6.3, 5.6.2, 5.6.1, 5.6.0, 5.5.2, 5.5.1, 5.5.0, 5.4.7, 5.4.6, 5.4.5, 5.4.4, 5.4.3, 5.4.2, 5.4.1, 5.4.0, 5.3.3, 5.3.2, 5.3.1, 5.3.0, 5.2.3, 5.2.2, 5.2.1, 5.2.0, 5.1.7, 5.1.6, 5.1.5, 5.1.4, 5.1.3, 5.1.2, 5.1.1, 5.1.0, 5.0.7, 5.0.6, 5.0.5, 5.0.4, 5.0.3, 5.0.2, 5.0.1, 5.0.0"
+`;
