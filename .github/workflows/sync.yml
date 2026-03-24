@@ -53,21 +53,8 @@ jobs:
           npm version "$CLI_VERSION" --no-git-tag-version
 
           # Prepend changelog entry with compare link
-          node -e "
-            const fs = require('fs');
-            const date = new Date().toISOString().slice(0, 10);
-            const repo = 'https://github.com/ant-design/ant-design-cli';
-            const compare = '[${CLI_VERSION}](' + repo + '/compare/v${OLD_VERSION}...v${CLI_VERSION})';
-            const versions = '${VERSIONS}';
-            for (const [file, title, msg] of [
-              ['CHANGELOG.md', '# Changelog', 'Update antd metadata'],
-              ['CHANGELOG.zh-CN.md', '# 更新日志', '同步 antd 元数据'],
-            ]) {
-              const content = fs.readFileSync(file, 'utf8');
-              const entry = '## ' + compare + ' (' + date + ')\n\n- ' + msg + ' (' + versions + ')\n';
-              fs.writeFileSync(file, content.replace(title, title + '\n\n' + entry));
-            }
-          "
+          npx tsx scripts/update-changelog.ts \
+            --old "$OLD_VERSION" --new "$CLI_VERSION" --versions "$VERSIONS"
 
           # Build and test
           npm run build
