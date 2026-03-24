@@ -46,10 +46,15 @@ jobs:
           done
 
           # Use antd v6 version as CLI version
+          OLD_VERSION=$(node -p "require('./package.json').version")
           CLI_VERSION=$(node -p "JSON.parse(require('fs').readFileSync('data/v6.json','utf8')).version")
 
           # Update package.json version
           npm version "$CLI_VERSION" --no-git-tag-version
+
+          # Prepend changelog entry with compare link
+          npx tsx scripts/update-changelog.ts \
+            --old "$OLD_VERSION" --new "$CLI_VERSION" --versions "$VERSIONS"
 
           # Build and test
           npm run build
@@ -58,7 +63,7 @@ jobs:
           # Commit, tag and push
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ package.json package-lock.json
+          git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md
           git commit -m "data: sync antd metadata (${VERSIONS})"
           git tag "v${CLI_VERSION}"
           git push origin main --tags
