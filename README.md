@@ -69,6 +69,12 @@ The CLI ships with a [skill file](./skills/antd/SKILL.md) that teaches code agen
 npx skills add ant-design/ant-design-cli
 ```
 
+Or simply tell your code agent:
+
+> Install `@ant-design/cli` and the antd skill from `ant-design/ant-design-cli`
+
+The agent will handle `npm install`, `npx skills add`, and start using the CLI automatically.
+
 Works with [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [Codex](https://openai.com/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli), and any agent supporting the [skills](https://github.com/nicepkg/agent-skills) protocol.
 
 <br>
