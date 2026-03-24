@@ -24,7 +24,7 @@ Query component knowledge, analyze project usage, and guide migrations — fully
 
 ## 🤔 Why
 
-Code agents (Claude Code, Cursor, Copilot, Codex, Gemini CLI) write better antd code when they have instant access to the right API data. This CLI gives them exactly that — **every prop, token, demo, and changelog entry for antd v4 / v5 / v6**, bundled locally, queryable in milliseconds.
+Code agents (Claude Code, Codex, Gemini CLI) write better antd code when they have instant access to the right API data. This CLI gives them exactly that — **every prop, token, demo, and changelog entry for antd v4 / v5 / v6**, bundled locally, queryable in milliseconds.
 
 ```bash
 npx skills add ant-design/ant-design-cli    # install as an agent skill
@@ -39,7 +39,7 @@ npx skills add ant-design/ant-design-cli    # install as an agent skill
 - 🤖 **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
 - 🌍 **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
 - 🔮 **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
-- 🧩 **14 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
+- 🧩 **13 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
 
 <br>
 

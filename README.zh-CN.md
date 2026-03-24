@@ -24,7 +24,7 @@
 
 ## 🤔 为什么
 
-Code Agent（Claude Code、Cursor、Copilot、Codex、Gemini CLI）在拥有即时 API 数据访问能力时，能写出更好的 antd 代码。这个 CLI 正是为此而生 — **antd v4 / v5 / v6 的每个 Prop、Token、Demo 和 Changelog 条目**，本地打包，毫秒级查询。
+Code Agent（Claude Code、Codex、Gemini CLI）在拥有即时 API 数据访问能力时，能写出更好的 antd 代码。这个 CLI 正是为此而生 — **antd v4 / v5 / v6 的每个 Prop、Token、Demo 和 Changelog 条目**，本地打包，毫秒级查询。
 
 ```bash
 npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
@@ -39,7 +39,7 @@ npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
 - 🤖 **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
 - 🌍 **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
 - 🔮 **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
-- 🧩 **14 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
+- 🧩 **13 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
 
 <br>
 

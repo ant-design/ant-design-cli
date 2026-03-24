@@ -6,7 +6,7 @@ A CLI tool for Code Agents to query antd knowledge and analyze antd usage in pro
 
 ## Product Positioning
 
-- **Target user**: Code Agents (Claude Code, Cursor, Copilot, etc.)
+- **Target user**: Code Agents (Claude Code, Codex, Gemini CLI, etc.)
 - **Invocation**: Pure CLI, agents execute via shell
 - **Data strategy**: Bundled — all metadata is included in the CLI package, no remote fetch required
 - **Output principle**: Concise by default, `--detail` for full information
@@ -71,9 +71,9 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 - CLI version aligns with the latest antd version (e.g., antd 6.3.2 → CLI 6.3.2)
 - The components schema is consistent across major versions to enable cross-version diffing
 
-## Commands (14)
+## Commands
 
-### Knowledge Query (8)
+### Knowledge Query
 
 #### `antd list`
 
@@ -255,7 +255,7 @@ Version range uses `<from>..<to>` syntax (inclusive on both ends). Both `from` a
 
 API diff mode (`changelog <v1> <v2>`) output includes: added props, removed props, changed types, renamed props. Cross-major-version diffing (e.g. v4 vs v5) is supported because the components schema is consistent across versions.
 
-### Project Analysis (4)
+### Project Analysis
 
 #### `antd doctor`
 
@@ -425,7 +425,7 @@ JSON output (guide mode):
 }
 ```
 
-### Issue Reporting (2)
+### Issue Reporting
 
 #### `antd bug`
 
@@ -509,7 +509,7 @@ Common error codes: `COMPONENT_NOT_FOUND`, `VERSION_NOT_FOUND`, `NO_PROJECT_DETE
 ┌─────────────┐     ┌──────────────┐     ┌──────────────────┐
 │  CLI Layer   │────>│  Data Layer  │────>│  Data Sources    │
 │              │     │              │     │                  │
-│  12 commands │     │  Version     │     │  Bundled data    │
+│  Commands    │     │  Version     │     │  Bundled data    │
 │  Flag parse  │     │   routing    │     │  data/v4,v5,v6   │
 │  Output fmt  │     │  Filtering   │     │  (JSON files)    │
 └─────────────┘     └──────────────┘     └──────────────────┘
