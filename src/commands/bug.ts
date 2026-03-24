@@ -54,7 +54,7 @@ export function registerBugCommand(program: Command): void {
           } else {
             console.log(`Issue created: ${result.url}`);
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           printError(
             createError(ErrorCodes.GH_SUBMIT_FAILED, `Failed to create issue: ${err.message}`, 'Check your gh authentication with `gh auth status`'),
             opts.format,
