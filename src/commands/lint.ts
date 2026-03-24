@@ -26,17 +26,13 @@ function getDeprecatedProps(store: ReturnType<typeof loadMetadataForVersion>): M
     const deprecated = comp.props.filter((p) => p.deprecated);
     if (deprecated.length > 0) {
       result.set(comp.name, deprecated.map((p) => {
-        const sinceStr = typeof p.deprecated === 'string' ? ` since ${p.deprecated}` : '';
-        // Extract "use X instead" replacement hint from description when deprecated is boolean
-        let hint = '';
-        if (p.deprecated === true && p.description) {
-          const m = p.description.match(/(?:use|replaced? by|see)\s+(`[^`]+`|\w+)/i);
-          if (m) hint = `, use ${m[1]} instead`;
-        }
+        const sinceStr = typeof p.deprecated === 'string' ? ` (since ${p.deprecated})` : '';
+        // Use description directly as it contains replacement info like "use X instead"
+        const desc = p.description ? `. ${p.description}` : '';
         return {
           prop: p.name,
           since: typeof p.deprecated === 'string' ? p.deprecated : 'unknown',
-          message: `\`${p.name}\` prop is deprecated${sinceStr}${hint}`,
+          message: `\`${p.name}\` is deprecated${sinceStr}${desc}`,
         };
       }));
     }
@@ -84,8 +80,15 @@ function lintFile(
   }
 
   const hasImage = importedComponents.includes('Image');
-  const hasTable = importedComponents.includes('Table');
   const hasSelect = importedComponents.includes('Select') || importedComponents.includes('TreeSelect');
+  const hasButton = importedComponents.includes('Button');
+  const hasCheckbox = importedComponents.includes('Checkbox');
+  const hasDivider = importedComponents.includes('Divider');
+  const hasMenu = importedComponents.includes('Menu');
+  const hasQRCode = importedComponents.includes('QRCode');
+  const hasRadio = importedComponents.includes('Radio');
+  const hasTreeSelect = importedComponents.includes('TreeSelect');
+  const hasTypography = importedComponents.includes('Typography');
 
   // Single pass over all lines
   for (let i = 0; i < lines.length; i++) {
@@ -104,15 +107,35 @@ function lintFile(
       }
     }
 
-    // Best practice checks
-    if (!only || only === 'best-practice') {
-      if (/style\s*=\s*\{\{/.test(line) && importedComponents.some((c) => line.includes(`<${c}`))) {
+    // Deprecated component checks
+    if (!only || only === 'deprecated') {
+      if (/<BackTop\b/.test(line)) {
         issues.push({
           file: filePath,
           line: i + 1,
-          rule: 'best-practice',
+          rule: 'deprecated',
           severity: 'warning',
-          message: 'Consider using `classNames` / `styles` props or Design Tokens instead of inline styles',
+          message: '`BackTop` is deprecated, use `FloatButton.BackTop` instead',
+        });
+      }
+
+      if (hasButton && /<Button\.Group\b/.test(line)) {
+        issues.push({
+          file: filePath,
+          line: i + 1,
+          rule: 'deprecated',
+          severity: 'warning',
+          message: '`Button.Group` is deprecated, use `Space.Compact` instead',
+        });
+      }
+
+      if (/<Input\.Group\b/.test(line)) {
+        issues.push({
+          file: filePath,
+          line: i + 1,
+          rule: 'deprecated',
+          severity: 'warning',
+          message: '`Input.Group` is deprecated, use `Space.Compact` instead',
         });
       }
     }
@@ -138,30 +161,160 @@ function lintFile(
           message: 'Clickable icon should have `aria-label` for screen readers',
         });
       }
+    }
 
-      if (/Form\.Item\b/.test(line) && !hasNearbyMatch(lines, i, 5, /(?:label|aria-label|noStyle)\s*[=]/)) {
+    // Usage checks (prop combination mistakes)
+    if (!only || only === 'usage') {
+      // Form.Item: shouldUpdate and dependencies should not be used together
+      if (/Form\.Item\b/.test(line)) {
+        if (hasNearbyMatch(lines, i, 10, /shouldUpdate\s*[=]/) && hasNearbyMatch(lines, i, 10, /dependencies\s*[=]/)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'usage',
+            severity: 'warning',
+            message: '`shouldUpdate` and `dependencies` should not be used together on Form.Item',
+          });
+        }
+      }
+
+      // Button: ghost cannot be used with type="link" or type="text"
+      if (hasButton && /<Button\b/.test(line)) {
+        if (hasNearbyMatch(lines, i, 5, /\bghost\b/) &&
+            hasNearbyMatch(lines, i, 5, /type\s*=\s*['"{](?:link|text)['"}\s]/)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'usage',
+            severity: 'warning',
+            message: 'Button `ghost` prop cannot be used with `type="link"` or `type="text"`',
+          });
+        }
+      }
+
+      // Checkbox: value is not a valid prop, did you mean checked?
+      if (hasCheckbox && /<Checkbox\b/.test(line) && !/Checkbox\.Group/.test(line)) {
+        if (hasNearbyMatch(lines, i, 5, /\bvalue\s*=/)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'usage',
+            severity: 'warning',
+            message: 'Checkbox `value` is not a valid prop outside Checkbox.Group, did you mean `checked`?',
+          });
+        }
+      }
+
+      // Divider: children not working in vertical mode
+      if (hasDivider && /<Divider\b/.test(line)) {
+        if (hasNearbyMatch(lines, i, 5, /type\s*=\s*['"{]vertical['"}]/) &&
+            (!hasNearbyMatch(lines, i, 3, /\/>/) || hasNearbyMatch(lines, i, 5, /\bchildren\s*=/))) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'usage',
+            severity: 'warning',
+            message: 'Divider `children` are not supported in `type="vertical"` mode',
+          });
+        }
+      }
+
+      // Select: maxCount only works with mode="multiple" or mode="tags"
+      if (hasSelect && /<Select\b/.test(line)) {
+        if (hasNearbyMatch(lines, i, 10, /maxCount\s*=/) &&
+            !hasNearbyMatch(lines, i, 10, /mode\s*=\s*['"{](?:multiple|tags)['"}]/)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'usage',
+            severity: 'warning',
+            message: 'Select `maxCount` only works with `mode="multiple"` or `mode="tags"`',
+          });
+        }
+      }
+
+      // Menu: inlineCollapsed should only be used when mode is inline
+      if (hasMenu && /<Menu\b/.test(line)) {
+        if (hasNearbyMatch(lines, i, 10, /inlineCollapsed\s*=/) &&
+            !hasNearbyMatch(lines, i, 10, /mode\s*=\s*['"{]inline['"}]/)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'usage',
+            severity: 'warning',
+            message: 'Menu `inlineCollapsed` should only be used with `mode="inline"`',
+          });
+        }
+      }
+
+      // QRCode: missing value prop
+      if (hasQRCode && /<QRCode\b/.test(line) && !hasNearbyMatch(lines, i, 10, /\bvalue\s*=/)) {
         issues.push({
           file: filePath,
           line: i + 1,
-          rule: 'a11y',
+          rule: 'usage',
           severity: 'warning',
-          message: 'Form.Item should have a `label` prop for accessibility',
+          message: 'QRCode is missing required `value` prop',
         });
+      }
+
+      // Typography.Link: ellipsis only supports boolean
+      if (hasTypography && /<Typography\.Link\b/.test(line)) {
+        if (hasNearbyMatch(lines, i, 5, /ellipsis\s*=\s*\{\{/)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'usage',
+            severity: 'warning',
+            message: 'Typography.Link `ellipsis` only supports boolean value, not object config',
+          });
+        }
+      }
+
+      // Typography.Text: ellipsis does not support expandable or rows
+      if (hasTypography && /<Typography\.Text\b/.test(line)) {
+        if (hasNearbyMatch(lines, i, 10, /ellipsis\s*=\s*\{\{/) &&
+            hasNearbyMatch(lines, i, 10, /\b(?:expandable|rows)\s*[=:]/)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'usage',
+            severity: 'warning',
+            message: 'Typography.Text `ellipsis` does not support `expandable` or `rows`',
+          });
+        }
+      }
+
+      // Radio: optionType is only supported on Radio.Group
+      if (hasRadio && /<Radio\b/.test(line) && !/<Radio\.Group\b/.test(line)) {
+        if (hasNearbyMatch(lines, i, 5, /optionType\s*=/)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'usage',
+            severity: 'warning',
+            message: '`optionType` is only supported on Radio.Group, not Radio',
+          });
+        }
+      }
+
+      // TreeSelect: multiple={false} is ignored when treeCheckable is true
+      if (hasTreeSelect && /<TreeSelect\b/.test(line)) {
+        if (hasNearbyMatch(lines, i, 10, /multiple\s*=\s*\{?\s*false/) &&
+            hasNearbyMatch(lines, i, 10, /treeCheckable\b/)) {
+          issues.push({
+            file: filePath,
+            line: i + 1,
+            rule: 'usage',
+            severity: 'warning',
+            message: 'TreeSelect `multiple={false}` is ignored when `treeCheckable` is true',
+          });
+        }
       }
     }
 
     // Performance checks
     if (!only || only === 'performance') {
-      if (hasTable && /<Table\b/.test(line) && !hasNearbyMatch(lines, i, 10, /rowKey\s*=/)) {
-        issues.push({
-          file: filePath,
-          line: i + 1,
-          rule: 'performance',
-          severity: 'warning',
-          message: 'Table should have explicit `rowKey` prop for optimal rendering performance',
-        });
-      }
-
       if (hasSelect && /<(?:Select|TreeSelect)\b/.test(line) && hasNearbyMatch(lines, i, 10, /virtual\s*=\s*\{?\s*false/)) {
         issues.push({
           file: filePath,
@@ -191,7 +344,7 @@ export function registerLintCommand(program: Command): void {
   program
     .command('lint [target]')
     .description('Check antd usage against best practices')
-    .option('--only <category>', 'Only check specific category (deprecated, a11y, performance, best-practice)')
+    .option('--only <category>', 'Only check specific category (deprecated, a11y, usage, performance)')
     .action((target: string | undefined, cmdOpts: { only?: string }) => {
       const opts = program.opts<GlobalOptions>();
       const targetPath = target || '.';
@@ -210,8 +363,8 @@ export function registerLintCommand(program: Command): void {
         total: allIssues.length,
         deprecated: allIssues.filter((i) => i.rule === 'deprecated').length,
         a11y: allIssues.filter((i) => i.rule === 'a11y').length,
+        usage: allIssues.filter((i) => i.rule === 'usage').length,
         performance: allIssues.filter((i) => i.rule === 'performance').length,
-        'best-practice': allIssues.filter((i) => i.rule === 'best-practice').length,
       };
 
       if (opts.format === 'json') {
@@ -232,6 +385,6 @@ export function registerLintCommand(program: Command): void {
         console.log(`    ${issue.message}`);
       }
 
-      console.log(`\nSummary: ${summary.deprecated} deprecated, ${summary.a11y} a11y, ${summary.performance} performance, ${summary['best-practice']} best-practice`);
+      console.log(`\nSummary: ${summary.deprecated} deprecated, ${summary.a11y} a11y, ${summary.usage} usage, ${summary.performance} performance`);
     });
 }

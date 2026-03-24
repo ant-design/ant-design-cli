@@ -331,15 +331,15 @@ JSON output:
 
 #### `antd lint [file/dir]`
 
-Check antd usage against best practices. Uses AST parsing (TypeScript compiler API) to analyze source files.
+Check antd usage against best practices. Uses pattern-based analysis (regex + line scanning) on source files.
 
 ```bash
 antd lint ./src
 antd lint ./src/pages/home.tsx
 antd lint --only deprecated         # only check deprecated APIs
 antd lint --only a11y               # only check accessibility
+antd lint --only usage              # only check usage mistakes
 antd lint --only performance        # only check performance
-antd lint --only best-practice      # only check best practices
 antd lint --format json
 ```
 
@@ -352,16 +352,32 @@ JSON output:
       "line": 12,
       "rule": "deprecated",
       "severity": "warning",
-      "message": "Button `ghost` prop is deprecated since 5.12.0, use `variant=\"outlined\"` instead"
+      "message": "Button `ghost` is deprecated (since 5.12.0). Please use `variant` instead"
     }
   ],
-  "summary": {"total": 1, "deprecated": 1, "a11y": 0, "performance": 0, "best-practice": 0}
+  "summary": {"total": 1, "deprecated": 1, "a11y": 0, "usage": 0, "performance": 0}
 }
 ```
 
-Note: This is complementary to ESLint. `antd lint` focuses on antd-specific knowledge (deprecated APIs per version, antd best practices) that generic ESLint rules cannot cover.
+Note: This is complementary to ESLint. `antd lint` focuses on antd-specific knowledge (deprecated APIs per version, prop combination mistakes, antd accessibility) that generic ESLint rules cannot cover.
 
-When a deprecated prop has a replacement hint in its description (e.g. "please use `variant` instead"), the warning includes the replacement: `` Card `bordered` prop is deprecated, use `variant` instead ``.
+**Rule categories:**
+
+- **deprecated** — Deprecated props (with replacement info from metadata) and deprecated components (`BackTop` → `FloatButton.BackTop`, `Button.Group` / `Input.Group` → `Space.Compact`)
+- **a11y** — Accessibility: missing `alt` on Image, missing `aria-label` on clickable icons
+- **usage** — Prop combination mistakes detected from antd runtime warnings:
+  - Form.Item `shouldUpdate` + `dependencies` conflict
+  - Button `ghost` + `type="link"` / `type="text"` conflict
+  - Checkbox `value` prop (should be `checked`)
+  - Divider `type="vertical"` with children
+  - Select `maxCount` without `mode="multiple"` / `mode="tags"`
+  - Menu `inlineCollapsed` without `mode="inline"`
+  - QRCode missing `value` prop
+  - Typography.Link `ellipsis` as object (only boolean supported)
+  - Typography.Text `ellipsis` with `expandable` / `rows` (not supported)
+  - Radio `optionType` on Radio (only on Radio.Group)
+  - TreeSelect `multiple={false}` + `treeCheckable` conflict
+- **performance** — Wildcard imports, disabling virtual scroll on Select
 
 #### `antd migrate <from> <to>`
 
