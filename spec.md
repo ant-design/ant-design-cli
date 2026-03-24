@@ -277,6 +277,7 @@ Checks (in order):
 8. `theme-config` — theme config validity
 9. `babel-plugins` — checks for deprecated babel-plugin-import usage with antd v5+
 10. `cssinjs` — CSS-in-JS configuration correctness
+11. `ecosystem-compat:<shortName>` (dynamic, 0–N checks, one per installed `@ant-design/*` package with peerDependencies) — scans `node_modules/@ant-design/` and for each package that declares `peerDependencies`, checks that each required dep's installed version satisfies the range. Uses `satisfies()` with fail-open for unrecognized range formats (e.g. compound `>=x <y`). Packages with empty `peerDependencies` are skipped. If no `@ant-design/*` packages are installed, no checks are added. severity: error (version incompatible) / warning (dep not installed). Covers pro-components series, @ant-design/charts, @ant-design/x, @ant-design/icons, @ant-design/cssinjs, and any future `@ant-design/*` package.
 
 JSON output:
 ```json

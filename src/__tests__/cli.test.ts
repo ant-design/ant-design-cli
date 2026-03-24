@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
-import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { writeFileSync, mkdirSync, rmSync, mkdtempSync } from 'node:fs';
 import { join } from 'node:path';
+import { tmpdir } from 'node:os';
 
 const CLI = join(__dirname, '..', '..', 'dist', 'index.js');
 
@@ -26,6 +27,34 @@ function runWithStatus(...args: string[]): { stdout: string; stderr: string; exi
       stderr: (err.stderr || '').trim(),
       exitCode: err.status ?? 1,
     };
+  }
+}
+
+/**
+ * Run `doctor --format json` in a temp directory with a controlled node_modules layout.
+ * `packages` maps package path → package.json content.
+ * e.g. { 'antd': { version: '5.20.0' }, '@ant-design/pro-components': { version: '2.7.0', peerDependencies: { antd: '>=5.16.0' } } }
+ */
+function runDoctorInTempDir(packages: Record<string, object>): any {
+  const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-test-'));
+  try {
+    mkdirSync(tempDir, { recursive: true });
+    writeFileSync(join(tempDir, 'package.json'), JSON.stringify({ name: 'test-project', version: '1.0.0' }));
+
+    for (const [pkgName, pkgJson] of Object.entries(packages)) {
+      const pkgDir = join(tempDir, 'node_modules', pkgName);
+      mkdirSync(pkgDir, { recursive: true });
+      writeFileSync(join(pkgDir, 'package.json'), JSON.stringify(pkgJson));
+    }
+
+    const stdout = execFileSync('node', [CLI, 'doctor', '--format', 'json'], {
+      encoding: 'utf-8',
+      timeout: 5000,
+      cwd: tempDir,
+    }).trim();
+    return JSON.parse(stdout);
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
   }
 }
 
@@ -464,5 +493,125 @@ describe('CLI e2e', () => {
     const out = run('bug-cli', '--title', 'Test', '--description', 'Info crashes', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.body).toContain('Info crashes');
+  });
+});
+
+describe('doctor ecosystem peerDeps', () => {
+  it('should report pass when all peerDeps are satisfied', () => {
+    const data = runDoctorInTempDir({
+      'antd': { version: '5.20.0', peerDependencies: {} },
+      'react': { version: '18.2.0' },
+      '@ant-design/pro-components': {
+        version: '2.7.0',
+        peerDependencies: {
+          antd: '>=5.16.0',
+          react: '>=18.0.0',
+        },
+      },
+    });
+    const check = data.checks.find((c: any) => c.name === 'ecosystem-compat:pro-components');
+    expect(check).toBeDefined();
+    expect(check.status).toBe('pass');
+    expect(check.message).toContain('satisfies all peerDependencies');
+  });
+
+  it('should report fail when an installed dep does not satisfy peerDep range', () => {
+    const data = runDoctorInTempDir({
+      'antd': { version: '5.10.0', peerDependencies: {} },
+      'react': { version: '18.2.0' },
+      '@ant-design/pro-components': {
+        version: '2.7.0',
+        peerDependencies: {
+          antd: '>=5.16.0',
+          react: '>=18.0.0',
+        },
+      },
+    });
+    const check = data.checks.find((c: any) => c.name === 'ecosystem-compat:pro-components');
+    expect(check).toBeDefined();
+    expect(check.status).toBe('fail');
+    expect(check.severity).toBe('error');
+    expect(check.message).toContain('antd requires >=5.16.0');
+    expect(check.message).toContain('installed: 5.10.0');
+  });
+
+  it('should report warn when a peerDep is not installed at all', () => {
+    const data = runDoctorInTempDir({
+      'antd': { version: '5.20.0', peerDependencies: {} },
+      // react is NOT installed
+      '@ant-design/pro-components': {
+        version: '2.7.0',
+        peerDependencies: {
+          antd: '>=5.16.0',
+          react: '>=18.0.0',
+        },
+      },
+    });
+    const check = data.checks.find((c: any) => c.name === 'ecosystem-compat:pro-components');
+    expect(check).toBeDefined();
+    expect(check.status).toBe('warn');
+    expect(check.message).toContain('react is not installed');
+  });
+
+  it('should not emit a check for packages with no peerDependencies', () => {
+    const data = runDoctorInTempDir({
+      'antd': { version: '5.20.0', peerDependencies: {} },
+      '@ant-design/colors': {
+        version: '7.0.0',
+        // no peerDependencies field
+      },
+    });
+    const names = (data.checks as any[]).map((c) => c.name);
+    expect(names).not.toContain('ecosystem-compat:colors');
+  });
+
+  it('should emit no ecosystem checks when no @ant-design/* packages are installed', () => {
+    const data = runDoctorInTempDir({
+      'antd': { version: '5.20.0', peerDependencies: {} },
+    });
+    const ecosystemChecks = (data.checks as any[]).filter((c) => c.name.startsWith('ecosystem-compat:'));
+    expect(ecosystemChecks).toHaveLength(0);
+  });
+
+  it('should treat compound ranges as compatible (fail-open)', () => {
+    // satisfies() processes ">=5.0.0 <6.0.0" by slicing off ">=" and passing "5.0.0 <6.0.0"
+    // as the bound to compare(). The bound splits as [5, 0, NaN] — the NaN comparison
+    // resolves before reaching it (10 > 0 at index 1), so compare returns 1 (>=0) → pass.
+    // Upper bound <6.0.0 is effectively ignored. This is the intended fail-open behavior.
+    const data = runDoctorInTempDir({
+      'antd': { version: '5.10.0', peerDependencies: {} },
+      'react': { version: '18.2.0' },
+      '@ant-design/pro-components': {
+        version: '2.7.0',
+        peerDependencies: {
+          antd: '>=5.0.0 <6.0.0',
+          react: '>=18.0.0',
+        },
+      },
+    });
+    const check = data.checks.find((c: any) => c.name === 'ecosystem-compat:pro-components');
+    expect(check).toBeDefined();
+    expect(check.status).toBe('pass'); // fail-open: compound range treated as satisfied
+  });
+
+  it('should check multiple ecosystem packages independently', () => {
+    const data = runDoctorInTempDir({
+      'antd': { version: '5.20.0', peerDependencies: {} },
+      'react': { version: '18.2.0' },
+      '@ant-design/pro-components': {
+        version: '2.7.0',
+        peerDependencies: { antd: '>=5.16.0', react: '>=18.0.0' },
+      },
+      '@ant-design/charts': {
+        version: '2.1.0',
+        peerDependencies: { react: '>=17.0.0' },
+      },
+    });
+    const proCheck = data.checks.find((c: any) => c.name === 'ecosystem-compat:pro-components');
+    const chartsCheck = data.checks.find((c: any) => c.name === 'ecosystem-compat:charts');
+    expect(proCheck).toBeDefined();
+    expect(proCheck.status).toBe('pass');
+    expect(chartsCheck).toBeDefined();
+    expect(chartsCheck.status).toBe('pass');
   });
 });

@@ -23,6 +23,56 @@ interface DoctorContext {
   reactPkg: any | null;
   cssinjsPkg: any | null;
   iconsPkg: any | null;
+  ecosystemPackages: EcosystemPackage[];
+}
+
+interface EcosystemPackage {
+  name: string;       // e.g. "@ant-design/pro-components"
+  shortName: string;  // e.g. "pro-components"
+  version: string;
+  peerDependencies: Record<string, string>;
+  peerDependenciesMeta: Record<string, { optional?: boolean }>;
+}
+
+/**
+ * Read the installed version of a package from node_modules.
+ * Returns null if not installed. Handles scoped packages (e.g. "@ant-design/cssinjs").
+ */
+function getInstalledVersion(cwd: string, pkgName: string): string | null {
+  const pkg = readJson(join(cwd, 'node_modules', pkgName, 'package.json'));
+  return pkg?.version ?? null;
+}
+
+/**
+ * Scan node_modules/@ant-design/ for all installed scoped packages that declare peerDependencies.
+ * Packages with no peerDependencies are skipped (no check emitted for them).
+ * Note: antd itself lives at node_modules/antd/, not here, so it will never appear in this scan.
+ */
+function scanEcosystemPackages(cwd: string): EcosystemPackage[] {
+  const scopeDir = join(cwd, 'node_modules', '@ant-design');
+  let entries: string[];
+  try {
+    entries = readdirSync(scopeDir);
+  } catch {
+    return [];
+  }
+
+  const result: EcosystemPackage[] = [];
+  for (const entry of entries) {
+    if (entry.startsWith('.')) continue;
+    const pkg = readJson(join(scopeDir, entry, 'package.json'));
+    if (!pkg?.version) continue;
+    const peerDeps: Record<string, string> = pkg.peerDependencies ?? {};
+    if (Object.keys(peerDeps).length === 0) continue;
+    result.push({
+      name: `@ant-design/${entry}`,
+      shortName: entry,
+      version: pkg.version,
+      peerDependencies: peerDeps,
+      peerDependenciesMeta: pkg.peerDependenciesMeta ?? {},
+    });
+  }
+  return result;
 }
 
 function buildContext(cwd: string): DoctorContext {
@@ -32,7 +82,8 @@ function buildContext(cwd: string): DoctorContext {
   const reactPkg = readJson(join(cwd, 'node_modules', 'react', 'package.json'));
   const cssinjsPkg = readJson(join(cwd, 'node_modules', '@ant-design', 'cssinjs', 'package.json'));
   const iconsPkg = readJson(join(cwd, 'node_modules', '@ant-design', 'icons', 'package.json'));
-  return { cwd, antdPkg, antdMajor, projectPkg, reactPkg, cssinjsPkg, iconsPkg };
+  const ecosystemPackages = scanEcosystemPackages(cwd);
+  return { cwd, antdPkg, antdMajor, projectPkg, reactPkg, cssinjsPkg, iconsPkg, ecosystemPackages };
 }
 
 function checkAntdInstalled(ctx: DoctorContext): CheckResult {
@@ -325,6 +376,58 @@ function checkCssInJs(ctx: DoctorContext): CheckResult {
   };
 }
 
+function checkEcosystemPeerDeps(ctx: DoctorContext): CheckResult[] {
+  return ctx.ecosystemPackages.map((pkg) => {
+    const failures: string[] = [];  // installed but version doesn't satisfy range
+    const warnings: string[] = [];  // not installed at all
+    const failureSuggestions: string[] = [];
+    const warningSuggestions: string[] = [];
+
+    for (const [dep, range] of Object.entries(pkg.peerDependencies)) {
+      const installedVersion = getInstalledVersion(ctx.cwd, dep);
+
+      if (installedVersion === null) {
+        warnings.push(`${dep} is not installed (requires ${range})`);
+        warningSuggestions.push(dep);
+      } else if (!satisfies(installedVersion, range)) {
+        failures.push(`${dep} requires ${range} (installed: ${installedVersion})`);
+        failureSuggestions.push(`npm install ${dep}@"${range}"`);
+      }
+    }
+
+    if (failures.length > 0) {
+      const allIssues = [...failures, ...warnings].join('; ');
+      const suggestionCmds = [...failureSuggestions];
+      if (warningSuggestions.length > 0) {
+        suggestionCmds.push(`npm install ${warningSuggestions.join(' ')}`);
+      }
+      return {
+        name: `ecosystem-compat:${pkg.shortName}`,
+        status: 'fail' as const,
+        severity: 'error' as const,
+        message: `${pkg.name} ${pkg.version} peerDep issues: ${allIssues}`,
+        suggestion: `Run: ${suggestionCmds.join(' && ')}`,
+      };
+    }
+
+    if (warnings.length > 0) {
+      return {
+        name: `ecosystem-compat:${pkg.shortName}`,
+        status: 'warn' as const,
+        severity: 'warning' as const,
+        message: `${pkg.name} ${pkg.version} peerDep issues: ${warnings.join('; ')}`,
+        suggestion: `Run \`npm install ${warningSuggestions.join(' ')}\``,
+      };
+    }
+
+    return {
+      name: `ecosystem-compat:${pkg.shortName}`,
+      status: 'pass' as const,
+      message: `${pkg.name} ${pkg.version} satisfies all peerDependencies`,
+    };
+  });
+}
+
 export function registerDoctorCommand(program: Command): void {
   program
     .command('doctor')
@@ -344,6 +447,7 @@ export function registerDoctorCommand(program: Command): void {
         checkThemeConfig(ctx),
         checkBabelPlugins(ctx),
         checkCssInJs(ctx),
+        ...checkEcosystemPeerDeps(ctx),
       ];
 
       const summary = {
