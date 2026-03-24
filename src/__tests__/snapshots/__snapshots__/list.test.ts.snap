@@ -1,0 +1,1277 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`list > list --format json --lang en 1`] = `
+"[
+  {
+    "name": "Affix",
+    "nameZh": "固钉",
+    "description": "Stick an element to the viewport.",
+    "descriptionZh": "将页面元素钉在可视范围。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Alert",
+    "nameZh": "警告提示",
+    "description": "Display warning messages that require attention.",
+    "descriptionZh": "警告提示，展现需要关注的信息。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Anchor",
+    "nameZh": "锚点",
+    "description": "Hyperlinks to scroll on one page.",
+    "descriptionZh": "用于跳转到页面指定位置。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "App",
+    "nameZh": "包裹组件",
+    "description": "Application wrapper for some global usages.",
+    "descriptionZh": "提供重置样式和提供消费上下文的默认环境。",
+    "since": "5.1.0"
+  },
+  {
+    "name": "AutoComplete",
+    "nameZh": "自动完成",
+    "description": "Autocomplete function of input field.",
+    "descriptionZh": "输入框自动完成功能。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Avatar",
+    "nameZh": "头像",
+    "description": "Used to represent users or things, supporting the display of images, icons, or characters.",
+    "descriptionZh": "用来代表用户或事物，支持图片、图标或字符展示。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Badge",
+    "nameZh": "徽标数",
+    "description": "Small numerical value or status descriptor for UI elements.",
+    "descriptionZh": "图标右上角的圆形徽标数字。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Breadcrumb",
+    "nameZh": "面包屑",
+    "description": "Display the current location within a hierarchy. And allow going back to states higher up in the hierarchy.",
+    "descriptionZh": "显示当前页面在系统层级结构中的位置，并能向上返回。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Button",
+    "nameZh": "按钮",
+    "description": "To trigger an operation.",
+    "descriptionZh": "按钮用于开始一个即时操作。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Calendar",
+    "nameZh": "日历",
+    "description": "A container that displays data in calendar form.",
+    "descriptionZh": "按照日历形式展示数据的容器。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Card",
+    "nameZh": "卡片",
+    "description": "A container for displaying information.",
+    "descriptionZh": "通用卡片容器。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Carousel",
+    "nameZh": "走马灯",
+    "description": "A set of carousel areas.",
+    "descriptionZh": "一组轮播的区域。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Cascader",
+    "nameZh": "级联选择",
+    "description": "Cascade selection box.",
+    "descriptionZh": "级联选择框。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Checkbox",
+    "nameZh": "多选框",
+    "description": "Collect user's choices.",
+    "descriptionZh": "收集用户的多项选择。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Collapse",
+    "nameZh": "折叠面板",
+    "description": "A content area which can be collapsed and expanded.",
+    "descriptionZh": "可以折叠/展开的内容区域。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "ColorPicker",
+    "nameZh": "颜色选择器",
+    "description": "Used for color selection.",
+    "descriptionZh": "用于选择颜色。",
+    "since": "5.5.0"
+  },
+  {
+    "name": "ConfigProvider",
+    "nameZh": "全局化配置",
+    "description": "Provide a uniform configuration support for components.",
+    "descriptionZh": "为组件提供统一的全局化配置。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "DatePicker",
+    "nameZh": "日期选择框",
+    "description": "To select or input a date.",
+    "descriptionZh": "输入或选择日期的控件。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Descriptions",
+    "nameZh": "描述列表",
+    "description": "Display multiple read-only fields in a group.",
+    "descriptionZh": "展示多个只读字段的组合。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Divider",
+    "nameZh": "分割线",
+    "description": "A divider line separates different content.",
+    "descriptionZh": "区隔内容的分割线。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Drawer",
+    "nameZh": "抽屉",
+    "description": "A panel that slides out from the edge of the screen.",
+    "descriptionZh": "屏幕边缘滑出的浮层面板。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Dropdown",
+    "nameZh": "下拉菜单",
+    "description": "A dropdown list.",
+    "descriptionZh": "向下弹出的列表。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Empty",
+    "nameZh": "空状态",
+    "description": "Empty state placeholder.",
+    "descriptionZh": "空状态时的展示占位图。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Flex",
+    "nameZh": "弹性布局",
+    "description": "A flex layout container for alignment.",
+    "descriptionZh": "用于对齐的弹性布局容器。",
+    "since": "5.10.0"
+  },
+  {
+    "name": "FloatButton",
+    "nameZh": "悬浮按钮",
+    "description": "A button that floats at the top of the page.",
+    "descriptionZh": "悬浮于页面上方的按钮。",
+    "since": "5.0.0"
+  },
+  {
+    "name": "Form",
+    "nameZh": "表单",
+    "description": "High-performance form component with data domain management. Includes data entry, validation, and corresponding styles.",
+    "descriptionZh": "高性能表单控件，自带数据域管理。包含数据录入、校验以及对应样式。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Grid",
+    "nameZh": "栅格",
+    "description": "24 Grids System.",
+    "descriptionZh": "24 栅格系统。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Icon",
+    "nameZh": "图标",
+    "description": "Semantic vector graphics.",
+    "descriptionZh": "语义化的矢量图形。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Image",
+    "nameZh": "图片",
+    "description": "Preview-able image.",
+    "descriptionZh": "可预览的图片。",
+    "since": "4.6.0"
+  },
+  {
+    "name": "Input",
+    "nameZh": "输入框",
+    "description": "Through mouse or keyboard input content, it is the most basic form field wrapper.",
+    "descriptionZh": "通过鼠标或键盘输入内容，是最基础的表单域的包装。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "InputNumber",
+    "nameZh": "数字输入框",
+    "description": "Enter a number within certain range with the mouse or keyboard.",
+    "descriptionZh": "通过鼠标或键盘，输入范围内的数值。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Layout",
+    "nameZh": "布局",
+    "description": "Handling the overall layout of a page.",
+    "descriptionZh": "协助进行页面级整体布局。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "List",
+    "nameZh": "列表",
+    "description": "Basic list display, which can carry text, lists, pictures, paragraphs.",
+    "descriptionZh": "最基础的列表展示，可承载文字、列表、图片、段落。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Mentions",
+    "nameZh": "提及",
+    "description": "Used to mention someone or something in an input.",
+    "descriptionZh": "用于在输入中提及某人或某事。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Menu",
+    "nameZh": "导航菜单",
+    "description": "A versatile menu for navigation.",
+    "descriptionZh": "为页面和功能提供导航的菜单列表。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Message",
+    "nameZh": "全局提示",
+    "description": "Display global messages as feedback in response to user operations.",
+    "descriptionZh": "全局展示操作反馈信息。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Modal",
+    "nameZh": "对话框",
+    "description": "Display a modal dialog box, providing a title, content area, and action buttons.",
+    "descriptionZh": "展示一个对话框，提供标题、内容区、操作区。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Notification",
+    "nameZh": "通知提醒框",
+    "description": "Prompt notification message globally.",
+    "descriptionZh": "全局展示通知提醒信息。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Pagination",
+    "nameZh": "分页",
+    "description": "A long list can be divided into several pages, and only one page will be loaded at a time.",
+    "descriptionZh": "分页器用于分隔长列表，每次只加载一个页面。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Popconfirm",
+    "nameZh": "气泡确认框",
+    "description": "Pop up a bubble confirmation box for an action.",
+    "descriptionZh": "点击元素，弹出气泡式的确认框。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Popover",
+    "nameZh": "气泡卡片",
+    "description": "The floating card pops up when clicking/mouse hovering over an element.",
+    "descriptionZh": "点击/鼠标移入元素，弹出气泡式的卡片浮层。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Progress",
+    "nameZh": "进度条",
+    "description": "Display the current progress of the operation.",
+    "descriptionZh": "展示操作的当前进度。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "QRCode",
+    "nameZh": "二维码",
+    "description": "Components that can convert text into QR codes, and support custom color and logo.",
+    "descriptionZh": "能够将文本转换生成二维码的组件，支持自定义配色和 Logo 配置。",
+    "since": "5.1.0"
+  },
+  {
+    "name": "Radio",
+    "nameZh": "单选框",
+    "description": "Used to select a single state from multiple options.",
+    "descriptionZh": "用于在多个备选项中选中单个状态。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Rate",
+    "nameZh": "评分",
+    "description": "Used for rating operation on something.",
+    "descriptionZh": "用于对事物进行评分操作。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Result",
+    "nameZh": "结果",
+    "description": "Used to feedback the processing results of a series of operations.",
+    "descriptionZh": "用于反馈一系列操作任务的处理结果。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Segmented",
+    "nameZh": "分段控制器",
+    "description": "Display multiple options and allow users to select a single option.",
+    "descriptionZh": "用于展示多个选项并允许用户选择其中单个选项。",
+    "since": "4.20.0"
+  },
+  {
+    "name": "Select",
+    "nameZh": "选择器",
+    "description": "A dropdown menu for displaying choices.",
+    "descriptionZh": "下拉选择器。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Skeleton",
+    "nameZh": "骨架屏",
+    "description": "Provide a placeholder while you wait for content to load, or to visualize content that doesn't exist yet.",
+    "descriptionZh": "在需要等待加载内容的位置提供一个占位图形组合。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Slider",
+    "nameZh": "滑动输入条",
+    "description": "A Slider component for displaying current value and intervals in range.",
+    "descriptionZh": "滑动型输入器，展示当前值和可选范围。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Space",
+    "nameZh": "间距",
+    "description": "Set components spacing.",
+    "descriptionZh": "设置组件之间的间距。",
+    "since": "4.1.0"
+  },
+  {
+    "name": "Spin",
+    "nameZh": "加载中",
+    "description": "Used for the loading status of a page or a block.",
+    "descriptionZh": "用于页面和区块的加载中状态。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Splitter",
+    "nameZh": "分隔面板",
+    "description": "Split panels to isolate",
+    "descriptionZh": "自由切分指定区域",
+    "since": "5.21.0"
+  },
+  {
+    "name": "Statistic",
+    "nameZh": "统计数值",
+    "description": "Display statistic number.",
+    "descriptionZh": "展示统计数值。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Steps",
+    "nameZh": "步骤条",
+    "description": "A navigation bar that guides users through the steps of a task.",
+    "descriptionZh": "引导用户按照流程完成任务的导航条。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Switch",
+    "nameZh": "开关",
+    "description": "Used to toggle between two states.",
+    "descriptionZh": "使用开关切换两种状态之间。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Table",
+    "nameZh": "表格",
+    "description": "A table displays rows of data.",
+    "descriptionZh": "展示行列数据。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Tabs",
+    "nameZh": "标签页",
+    "description": "Tabs make it easy to explore and switch between different views.",
+    "descriptionZh": "选项卡切换组件。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Tag",
+    "nameZh": "标签",
+    "description": "Used for marking and categorization.",
+    "descriptionZh": "进行标记和分类的小标签。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Timeline",
+    "nameZh": "时间轴",
+    "description": "Vertical display timeline.",
+    "descriptionZh": "垂直展示的时间流信息。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "TimePicker",
+    "nameZh": "时间选择框",
+    "description": "To select/input a time.",
+    "descriptionZh": "输入或选择时间的控件。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Tooltip",
+    "nameZh": "文字提示",
+    "description": "Simple text popup box.",
+    "descriptionZh": "简单的文字提示气泡框。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Tour",
+    "nameZh": "漫游式引导",
+    "description": "A popup component for guiding users through a product.",
+    "descriptionZh": "用于分步引导用户了解产品功能的气泡组件。",
+    "since": "5.0.0"
+  },
+  {
+    "name": "Transfer",
+    "nameZh": "穿梭框",
+    "description": "Double column transfer choice box.",
+    "descriptionZh": "双栏穿梭选择框。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Tree",
+    "nameZh": "树形控件",
+    "description": "Multiple-level structure list.",
+    "descriptionZh": "多层次的结构列表。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "TreeSelect",
+    "nameZh": "树选择",
+    "description": "Tree selection control.",
+    "descriptionZh": "树型选择控件。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Typography",
+    "nameZh": "排版",
+    "description": "Basic text writing, including headings, body text, lists, and more.",
+    "descriptionZh": "文本的基本格式。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Upload",
+    "nameZh": "上传",
+    "description": "Used to select and upload files or drag and drop files.",
+    "descriptionZh": "文件选择上传和拖拽上传控件。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Watermark",
+    "nameZh": "水印",
+    "description": "Add specific text or patterns to the page.",
+    "descriptionZh": "给页面的某个区域加上水印。",
+    "since": "5.1.0"
+  }
+]"
+`;
+
+exports[`list > list --format json --lang zh 1`] = `
+"[
+  {
+    "name": "Affix",
+    "nameZh": "固钉",
+    "description": "Stick an element to the viewport.",
+    "descriptionZh": "将页面元素钉在可视范围。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Alert",
+    "nameZh": "警告提示",
+    "description": "Display warning messages that require attention.",
+    "descriptionZh": "警告提示，展现需要关注的信息。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Anchor",
+    "nameZh": "锚点",
+    "description": "Hyperlinks to scroll on one page.",
+    "descriptionZh": "用于跳转到页面指定位置。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "App",
+    "nameZh": "包裹组件",
+    "description": "Application wrapper for some global usages.",
+    "descriptionZh": "提供重置样式和提供消费上下文的默认环境。",
+    "since": "5.1.0"
+  },
+  {
+    "name": "AutoComplete",
+    "nameZh": "自动完成",
+    "description": "Autocomplete function of input field.",
+    "descriptionZh": "输入框自动完成功能。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Avatar",
+    "nameZh": "头像",
+    "description": "Used to represent users or things, supporting the display of images, icons, or characters.",
+    "descriptionZh": "用来代表用户或事物，支持图片、图标或字符展示。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Badge",
+    "nameZh": "徽标数",
+    "description": "Small numerical value or status descriptor for UI elements.",
+    "descriptionZh": "图标右上角的圆形徽标数字。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Breadcrumb",
+    "nameZh": "面包屑",
+    "description": "Display the current location within a hierarchy. And allow going back to states higher up in the hierarchy.",
+    "descriptionZh": "显示当前页面在系统层级结构中的位置，并能向上返回。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Button",
+    "nameZh": "按钮",
+    "description": "To trigger an operation.",
+    "descriptionZh": "按钮用于开始一个即时操作。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Calendar",
+    "nameZh": "日历",
+    "description": "A container that displays data in calendar form.",
+    "descriptionZh": "按照日历形式展示数据的容器。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Card",
+    "nameZh": "卡片",
+    "description": "A container for displaying information.",
+    "descriptionZh": "通用卡片容器。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Carousel",
+    "nameZh": "走马灯",
+    "description": "A set of carousel areas.",
+    "descriptionZh": "一组轮播的区域。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Cascader",
+    "nameZh": "级联选择",
+    "description": "Cascade selection box.",
+    "descriptionZh": "级联选择框。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Checkbox",
+    "nameZh": "多选框",
+    "description": "Collect user's choices.",
+    "descriptionZh": "收集用户的多项选择。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Collapse",
+    "nameZh": "折叠面板",
+    "description": "A content area which can be collapsed and expanded.",
+    "descriptionZh": "可以折叠/展开的内容区域。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "ColorPicker",
+    "nameZh": "颜色选择器",
+    "description": "Used for color selection.",
+    "descriptionZh": "用于选择颜色。",
+    "since": "5.5.0"
+  },
+  {
+    "name": "ConfigProvider",
+    "nameZh": "全局化配置",
+    "description": "Provide a uniform configuration support for components.",
+    "descriptionZh": "为组件提供统一的全局化配置。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "DatePicker",
+    "nameZh": "日期选择框",
+    "description": "To select or input a date.",
+    "descriptionZh": "输入或选择日期的控件。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Descriptions",
+    "nameZh": "描述列表",
+    "description": "Display multiple read-only fields in a group.",
+    "descriptionZh": "展示多个只读字段的组合。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Divider",
+    "nameZh": "分割线",
+    "description": "A divider line separates different content.",
+    "descriptionZh": "区隔内容的分割线。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Drawer",
+    "nameZh": "抽屉",
+    "description": "A panel that slides out from the edge of the screen.",
+    "descriptionZh": "屏幕边缘滑出的浮层面板。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Dropdown",
+    "nameZh": "下拉菜单",
+    "description": "A dropdown list.",
+    "descriptionZh": "向下弹出的列表。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Empty",
+    "nameZh": "空状态",
+    "description": "Empty state placeholder.",
+    "descriptionZh": "空状态时的展示占位图。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Flex",
+    "nameZh": "弹性布局",
+    "description": "A flex layout container for alignment.",
+    "descriptionZh": "用于对齐的弹性布局容器。",
+    "since": "5.10.0"
+  },
+  {
+    "name": "FloatButton",
+    "nameZh": "悬浮按钮",
+    "description": "A button that floats at the top of the page.",
+    "descriptionZh": "悬浮于页面上方的按钮。",
+    "since": "5.0.0"
+  },
+  {
+    "name": "Form",
+    "nameZh": "表单",
+    "description": "High-performance form component with data domain management. Includes data entry, validation, and corresponding styles.",
+    "descriptionZh": "高性能表单控件，自带数据域管理。包含数据录入、校验以及对应样式。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Grid",
+    "nameZh": "栅格",
+    "description": "24 Grids System.",
+    "descriptionZh": "24 栅格系统。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Icon",
+    "nameZh": "图标",
+    "description": "Semantic vector graphics.",
+    "descriptionZh": "语义化的矢量图形。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Image",
+    "nameZh": "图片",
+    "description": "Preview-able image.",
+    "descriptionZh": "可预览的图片。",
+    "since": "4.6.0"
+  },
+  {
+    "name": "Input",
+    "nameZh": "输入框",
+    "description": "Through mouse or keyboard input content, it is the most basic form field wrapper.",
+    "descriptionZh": "通过鼠标或键盘输入内容，是最基础的表单域的包装。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "InputNumber",
+    "nameZh": "数字输入框",
+    "description": "Enter a number within certain range with the mouse or keyboard.",
+    "descriptionZh": "通过鼠标或键盘，输入范围内的数值。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Layout",
+    "nameZh": "布局",
+    "description": "Handling the overall layout of a page.",
+    "descriptionZh": "协助进行页面级整体布局。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "List",
+    "nameZh": "列表",
+    "description": "Basic list display, which can carry text, lists, pictures, paragraphs.",
+    "descriptionZh": "最基础的列表展示，可承载文字、列表、图片、段落。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Mentions",
+    "nameZh": "提及",
+    "description": "Used to mention someone or something in an input.",
+    "descriptionZh": "用于在输入中提及某人或某事。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Menu",
+    "nameZh": "导航菜单",
+    "description": "A versatile menu for navigation.",
+    "descriptionZh": "为页面和功能提供导航的菜单列表。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Message",
+    "nameZh": "全局提示",
+    "description": "Display global messages as feedback in response to user operations.",
+    "descriptionZh": "全局展示操作反馈信息。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Modal",
+    "nameZh": "对话框",
+    "description": "Display a modal dialog box, providing a title, content area, and action buttons.",
+    "descriptionZh": "展示一个对话框，提供标题、内容区、操作区。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Notification",
+    "nameZh": "通知提醒框",
+    "description": "Prompt notification message globally.",
+    "descriptionZh": "全局展示通知提醒信息。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Pagination",
+    "nameZh": "分页",
+    "description": "A long list can be divided into several pages, and only one page will be loaded at a time.",
+    "descriptionZh": "分页器用于分隔长列表，每次只加载一个页面。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Popconfirm",
+    "nameZh": "气泡确认框",
+    "description": "Pop up a bubble confirmation box for an action.",
+    "descriptionZh": "点击元素，弹出气泡式的确认框。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Popover",
+    "nameZh": "气泡卡片",
+    "description": "The floating card pops up when clicking/mouse hovering over an element.",
+    "descriptionZh": "点击/鼠标移入元素，弹出气泡式的卡片浮层。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Progress",
+    "nameZh": "进度条",
+    "description": "Display the current progress of the operation.",
+    "descriptionZh": "展示操作的当前进度。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "QRCode",
+    "nameZh": "二维码",
+    "description": "Components that can convert text into QR codes, and support custom color and logo.",
+    "descriptionZh": "能够将文本转换生成二维码的组件，支持自定义配色和 Logo 配置。",
+    "since": "5.1.0"
+  },
+  {
+    "name": "Radio",
+    "nameZh": "单选框",
+    "description": "Used to select a single state from multiple options.",
+    "descriptionZh": "用于在多个备选项中选中单个状态。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Rate",
+    "nameZh": "评分",
+    "description": "Used for rating operation on something.",
+    "descriptionZh": "用于对事物进行评分操作。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Result",
+    "nameZh": "结果",
+    "description": "Used to feedback the processing results of a series of operations.",
+    "descriptionZh": "用于反馈一系列操作任务的处理结果。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Segmented",
+    "nameZh": "分段控制器",
+    "description": "Display multiple options and allow users to select a single option.",
+    "descriptionZh": "用于展示多个选项并允许用户选择其中单个选项。",
+    "since": "4.20.0"
+  },
+  {
+    "name": "Select",
+    "nameZh": "选择器",
+    "description": "A dropdown menu for displaying choices.",
+    "descriptionZh": "下拉选择器。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Skeleton",
+    "nameZh": "骨架屏",
+    "description": "Provide a placeholder while you wait for content to load, or to visualize content that doesn't exist yet.",
+    "descriptionZh": "在需要等待加载内容的位置提供一个占位图形组合。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Slider",
+    "nameZh": "滑动输入条",
+    "description": "A Slider component for displaying current value and intervals in range.",
+    "descriptionZh": "滑动型输入器，展示当前值和可选范围。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Space",
+    "nameZh": "间距",
+    "description": "Set components spacing.",
+    "descriptionZh": "设置组件之间的间距。",
+    "since": "4.1.0"
+  },
+  {
+    "name": "Spin",
+    "nameZh": "加载中",
+    "description": "Used for the loading status of a page or a block.",
+    "descriptionZh": "用于页面和区块的加载中状态。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Splitter",
+    "nameZh": "分隔面板",
+    "description": "Split panels to isolate",
+    "descriptionZh": "自由切分指定区域",
+    "since": "5.21.0"
+  },
+  {
+    "name": "Statistic",
+    "nameZh": "统计数值",
+    "description": "Display statistic number.",
+    "descriptionZh": "展示统计数值。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Steps",
+    "nameZh": "步骤条",
+    "description": "A navigation bar that guides users through the steps of a task.",
+    "descriptionZh": "引导用户按照流程完成任务的导航条。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Switch",
+    "nameZh": "开关",
+    "description": "Used to toggle between two states.",
+    "descriptionZh": "使用开关切换两种状态之间。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Table",
+    "nameZh": "表格",
+    "description": "A table displays rows of data.",
+    "descriptionZh": "展示行列数据。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Tabs",
+    "nameZh": "标签页",
+    "description": "Tabs make it easy to explore and switch between different views.",
+    "descriptionZh": "选项卡切换组件。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Tag",
+    "nameZh": "标签",
+    "description": "Used for marking and categorization.",
+    "descriptionZh": "进行标记和分类的小标签。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Timeline",
+    "nameZh": "时间轴",
+    "description": "Vertical display timeline.",
+    "descriptionZh": "垂直展示的时间流信息。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "TimePicker",
+    "nameZh": "时间选择框",
+    "description": "To select/input a time.",
+    "descriptionZh": "输入或选择时间的控件。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Tooltip",
+    "nameZh": "文字提示",
+    "description": "Simple text popup box.",
+    "descriptionZh": "简单的文字提示气泡框。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Tour",
+    "nameZh": "漫游式引导",
+    "description": "A popup component for guiding users through a product.",
+    "descriptionZh": "用于分步引导用户了解产品功能的气泡组件。",
+    "since": "5.0.0"
+  },
+  {
+    "name": "Transfer",
+    "nameZh": "穿梭框",
+    "description": "Double column transfer choice box.",
+    "descriptionZh": "双栏穿梭选择框。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Tree",
+    "nameZh": "树形控件",
+    "description": "Multiple-level structure list.",
+    "descriptionZh": "多层次的结构列表。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "TreeSelect",
+    "nameZh": "树选择",
+    "description": "Tree selection control.",
+    "descriptionZh": "树型选择控件。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Typography",
+    "nameZh": "排版",
+    "description": "Basic text writing, including headings, body text, lists, and more.",
+    "descriptionZh": "文本的基本格式。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Upload",
+    "nameZh": "上传",
+    "description": "Used to select and upload files or drag and drop files.",
+    "descriptionZh": "文件选择上传和拖拽上传控件。",
+    "since": "4.0.0"
+  },
+  {
+    "name": "Watermark",
+    "nameZh": "水印",
+    "description": "Add specific text or patterns to the page.",
+    "descriptionZh": "给页面的某个区域加上水印。",
+    "since": "5.1.0"
+  }
+]"
+`;
+
+exports[`list > list --format markdown --lang en 1`] = `
+"# antd Components (5.24.0)
+
+| Component | 组件名 | Description | Since |
+|-----------|--------|-------------|-------|
+| **Affix** | 固钉 | Stick an element to the viewport. | 4.0.0 |
+| **Alert** | 警告提示 | Display warning messages that require attention. | 4.0.0 |
+| **Anchor** | 锚点 | Hyperlinks to scroll on one page. | 4.0.0 |
+| **App** | 包裹组件 | Application wrapper for some global usages. | 5.1.0 |
+| **AutoComplete** | 自动完成 | Autocomplete function of input field. | 4.0.0 |
+| **Avatar** | 头像 | Used to represent users or things, supporting the display of images, icons, or characters. | 4.0.0 |
+| **Badge** | 徽标数 | Small numerical value or status descriptor for UI elements. | 4.0.0 |
+| **Breadcrumb** | 面包屑 | Display the current location within a hierarchy. And allow going back to states higher up in the hierarchy. | 4.0.0 |
+| **Button** | 按钮 | To trigger an operation. | 4.0.0 |
+| **Calendar** | 日历 | A container that displays data in calendar form. | 4.0.0 |
+| **Card** | 卡片 | A container for displaying information. | 4.0.0 |
+| **Carousel** | 走马灯 | A set of carousel areas. | 4.0.0 |
+| **Cascader** | 级联选择 | Cascade selection box. | 4.0.0 |
+| **Checkbox** | 多选框 | Collect user's choices. | 4.0.0 |
+| **Collapse** | 折叠面板 | A content area which can be collapsed and expanded. | 4.0.0 |
+| **ColorPicker** | 颜色选择器 | Used for color selection. | 5.5.0 |
+| **ConfigProvider** | 全局化配置 | Provide a uniform configuration support for components. | 4.0.0 |
+| **DatePicker** | 日期选择框 | To select or input a date. | 4.0.0 |
+| **Descriptions** | 描述列表 | Display multiple read-only fields in a group. | 4.0.0 |
+| **Divider** | 分割线 | A divider line separates different content. | 4.0.0 |
+| **Drawer** | 抽屉 | A panel that slides out from the edge of the screen. | 4.0.0 |
+| **Dropdown** | 下拉菜单 | A dropdown list. | 4.0.0 |
+| **Empty** | 空状态 | Empty state placeholder. | 4.0.0 |
+| **Flex** | 弹性布局 | A flex layout container for alignment. | 5.10.0 |
+| **FloatButton** | 悬浮按钮 | A button that floats at the top of the page. | 5.0.0 |
+| **Form** | 表单 | High-performance form component with data domain management. Includes data entry, validation, and corresponding styles. | 4.0.0 |
+| **Grid** | 栅格 | 24 Grids System. | 4.0.0 |
+| **Icon** | 图标 | Semantic vector graphics. | 4.0.0 |
+| **Image** | 图片 | Preview-able image. | 4.6.0 |
+| **Input** | 输入框 | Through mouse or keyboard input content, it is the most basic form field wrapper. | 4.0.0 |
+| **InputNumber** | 数字输入框 | Enter a number within certain range with the mouse or keyboard. | 4.0.0 |
+| **Layout** | 布局 | Handling the overall layout of a page. | 4.0.0 |
+| **List** | 列表 | Basic list display, which can carry text, lists, pictures, paragraphs. | 4.0.0 |
+| **Mentions** | 提及 | Used to mention someone or something in an input. | 4.0.0 |
+| **Menu** | 导航菜单 | A versatile menu for navigation. | 4.0.0 |
+| **Message** | 全局提示 | Display global messages as feedback in response to user operations. | 4.0.0 |
+| **Modal** | 对话框 | Display a modal dialog box, providing a title, content area, and action buttons. | 4.0.0 |
+| **Notification** | 通知提醒框 | Prompt notification message globally. | 4.0.0 |
+| **Pagination** | 分页 | A long list can be divided into several pages, and only one page will be loaded at a time. | 4.0.0 |
+| **Popconfirm** | 气泡确认框 | Pop up a bubble confirmation box for an action. | 4.0.0 |
+| **Popover** | 气泡卡片 | The floating card pops up when clicking/mouse hovering over an element. | 4.0.0 |
+| **Progress** | 进度条 | Display the current progress of the operation. | 4.0.0 |
+| **QRCode** | 二维码 | Components that can convert text into QR codes, and support custom color and logo. | 5.1.0 |
+| **Radio** | 单选框 | Used to select a single state from multiple options. | 4.0.0 |
+| **Rate** | 评分 | Used for rating operation on something. | 4.0.0 |
+| **Result** | 结果 | Used to feedback the processing results of a series of operations. | 4.0.0 |
+| **Segmented** | 分段控制器 | Display multiple options and allow users to select a single option. | 4.20.0 |
+| **Select** | 选择器 | A dropdown menu for displaying choices. | 4.0.0 |
+| **Skeleton** | 骨架屏 | Provide a placeholder while you wait for content to load, or to visualize content that doesn't exist yet. | 4.0.0 |
+| **Slider** | 滑动输入条 | A Slider component for displaying current value and intervals in range. | 4.0.0 |
+| **Space** | 间距 | Set components spacing. | 4.1.0 |
+| **Spin** | 加载中 | Used for the loading status of a page or a block. | 4.0.0 |
+| **Splitter** | 分隔面板 | Split panels to isolate | 5.21.0 |
+| **Statistic** | 统计数值 | Display statistic number. | 4.0.0 |
+| **Steps** | 步骤条 | A navigation bar that guides users through the steps of a task. | 4.0.0 |
+| **Switch** | 开关 | Used to toggle between two states. | 4.0.0 |
+| **Table** | 表格 | A table displays rows of data. | 4.0.0 |
+| **Tabs** | 标签页 | Tabs make it easy to explore and switch between different views. | 4.0.0 |
+| **Tag** | 标签 | Used for marking and categorization. | 4.0.0 |
+| **Timeline** | 时间轴 | Vertical display timeline. | 4.0.0 |
+| **TimePicker** | 时间选择框 | To select/input a time. | 4.0.0 |
+| **Tooltip** | 文字提示 | Simple text popup box. | 4.0.0 |
+| **Tour** | 漫游式引导 | A popup component for guiding users through a product. | 5.0.0 |
+| **Transfer** | 穿梭框 | Double column transfer choice box. | 4.0.0 |
+| **Tree** | 树形控件 | Multiple-level structure list. | 4.0.0 |
+| **TreeSelect** | 树选择 | Tree selection control. | 4.0.0 |
+| **Typography** | 排版 | Basic text writing, including headings, body text, lists, and more. | 4.0.0 |
+| **Upload** | 上传 | Used to select and upload files or drag and drop files. | 4.0.0 |
+| **Watermark** | 水印 | Add specific text or patterns to the page. | 5.1.0 |"
+`;
+
+exports[`list > list --format markdown --lang zh 1`] = `
+"# antd Components (5.24.0)
+
+| Component | 组件名 | Description | Since |
+|-----------|--------|-------------|-------|
+| **Affix** | 固钉 | Stick an element to the viewport. | 4.0.0 |
+| **Alert** | 警告提示 | Display warning messages that require attention. | 4.0.0 |
+| **Anchor** | 锚点 | Hyperlinks to scroll on one page. | 4.0.0 |
+| **App** | 包裹组件 | Application wrapper for some global usages. | 5.1.0 |
+| **AutoComplete** | 自动完成 | Autocomplete function of input field. | 4.0.0 |
+| **Avatar** | 头像 | Used to represent users or things, supporting the display of images, icons, or characters. | 4.0.0 |
+| **Badge** | 徽标数 | Small numerical value or status descriptor for UI elements. | 4.0.0 |
+| **Breadcrumb** | 面包屑 | Display the current location within a hierarchy. And allow going back to states higher up in the hierarchy. | 4.0.0 |
+| **Button** | 按钮 | To trigger an operation. | 4.0.0 |
+| **Calendar** | 日历 | A container that displays data in calendar form. | 4.0.0 |
+| **Card** | 卡片 | A container for displaying information. | 4.0.0 |
+| **Carousel** | 走马灯 | A set of carousel areas. | 4.0.0 |
+| **Cascader** | 级联选择 | Cascade selection box. | 4.0.0 |
+| **Checkbox** | 多选框 | Collect user's choices. | 4.0.0 |
+| **Collapse** | 折叠面板 | A content area which can be collapsed and expanded. | 4.0.0 |
+| **ColorPicker** | 颜色选择器 | Used for color selection. | 5.5.0 |
+| **ConfigProvider** | 全局化配置 | Provide a uniform configuration support for components. | 4.0.0 |
+| **DatePicker** | 日期选择框 | To select or input a date. | 4.0.0 |
+| **Descriptions** | 描述列表 | Display multiple read-only fields in a group. | 4.0.0 |
+| **Divider** | 分割线 | A divider line separates different content. | 4.0.0 |
+| **Drawer** | 抽屉 | A panel that slides out from the edge of the screen. | 4.0.0 |
+| **Dropdown** | 下拉菜单 | A dropdown list. | 4.0.0 |
+| **Empty** | 空状态 | Empty state placeholder. | 4.0.0 |
+| **Flex** | 弹性布局 | A flex layout container for alignment. | 5.10.0 |
+| **FloatButton** | 悬浮按钮 | A button that floats at the top of the page. | 5.0.0 |
+| **Form** | 表单 | High-performance form component with data domain management. Includes data entry, validation, and corresponding styles. | 4.0.0 |
+| **Grid** | 栅格 | 24 Grids System. | 4.0.0 |
+| **Icon** | 图标 | Semantic vector graphics. | 4.0.0 |
+| **Image** | 图片 | Preview-able image. | 4.6.0 |
+| **Input** | 输入框 | Through mouse or keyboard input content, it is the most basic form field wrapper. | 4.0.0 |
+| **InputNumber** | 数字输入框 | Enter a number within certain range with the mouse or keyboard. | 4.0.0 |
+| **Layout** | 布局 | Handling the overall layout of a page. | 4.0.0 |
+| **List** | 列表 | Basic list display, which can carry text, lists, pictures, paragraphs. | 4.0.0 |
+| **Mentions** | 提及 | Used to mention someone or something in an input. | 4.0.0 |
+| **Menu** | 导航菜单 | A versatile menu for navigation. | 4.0.0 |
+| **Message** | 全局提示 | Display global messages as feedback in response to user operations. | 4.0.0 |
+| **Modal** | 对话框 | Display a modal dialog box, providing a title, content area, and action buttons. | 4.0.0 |
+| **Notification** | 通知提醒框 | Prompt notification message globally. | 4.0.0 |
+| **Pagination** | 分页 | A long list can be divided into several pages, and only one page will be loaded at a time. | 4.0.0 |
+| **Popconfirm** | 气泡确认框 | Pop up a bubble confirmation box for an action. | 4.0.0 |
+| **Popover** | 气泡卡片 | The floating card pops up when clicking/mouse hovering over an element. | 4.0.0 |
+| **Progress** | 进度条 | Display the current progress of the operation. | 4.0.0 |
+| **QRCode** | 二维码 | Components that can convert text into QR codes, and support custom color and logo. | 5.1.0 |
+| **Radio** | 单选框 | Used to select a single state from multiple options. | 4.0.0 |
+| **Rate** | 评分 | Used for rating operation on something. | 4.0.0 |
+| **Result** | 结果 | Used to feedback the processing results of a series of operations. | 4.0.0 |
+| **Segmented** | 分段控制器 | Display multiple options and allow users to select a single option. | 4.20.0 |
+| **Select** | 选择器 | A dropdown menu for displaying choices. | 4.0.0 |
+| **Skeleton** | 骨架屏 | Provide a placeholder while you wait for content to load, or to visualize content that doesn't exist yet. | 4.0.0 |
+| **Slider** | 滑动输入条 | A Slider component for displaying current value and intervals in range. | 4.0.0 |
+| **Space** | 间距 | Set components spacing. | 4.1.0 |
+| **Spin** | 加载中 | Used for the loading status of a page or a block. | 4.0.0 |
+| **Splitter** | 分隔面板 | Split panels to isolate | 5.21.0 |
+| **Statistic** | 统计数值 | Display statistic number. | 4.0.0 |
+| **Steps** | 步骤条 | A navigation bar that guides users through the steps of a task. | 4.0.0 |
+| **Switch** | 开关 | Used to toggle between two states. | 4.0.0 |
+| **Table** | 表格 | A table displays rows of data. | 4.0.0 |
+| **Tabs** | 标签页 | Tabs make it easy to explore and switch between different views. | 4.0.0 |
+| **Tag** | 标签 | Used for marking and categorization. | 4.0.0 |
+| **Timeline** | 时间轴 | Vertical display timeline. | 4.0.0 |
+| **TimePicker** | 时间选择框 | To select/input a time. | 4.0.0 |
+| **Tooltip** | 文字提示 | Simple text popup box. | 4.0.0 |
+| **Tour** | 漫游式引导 | A popup component for guiding users through a product. | 5.0.0 |
+| **Transfer** | 穿梭框 | Double column transfer choice box. | 4.0.0 |
+| **Tree** | 树形控件 | Multiple-level structure list. | 4.0.0 |
+| **TreeSelect** | 树选择 | Tree selection control. | 4.0.0 |
+| **Typography** | 排版 | Basic text writing, including headings, body text, lists, and more. | 4.0.0 |
+| **Upload** | 上传 | Used to select and upload files or drag and drop files. | 4.0.0 |
+| **Watermark** | 水印 | Add specific text or patterns to the page. | 5.1.0 |"
+`;
+
+exports[`list > list --format text --lang en 1`] = `
+"Component       组件名    Description                                                                                                              Since 
+--------------  -----  -----------------------------------------------------------------------------------------------------------------------  ------
+Affix           固钉     Stick an element to the viewport.                                                                                        4.0.0 
+Alert           警告提示   Display warning messages that require attention.                                                                         4.0.0 
+Anchor          锚点     Hyperlinks to scroll on one page.                                                                                        4.0.0 
+App             包裹组件   Application wrapper for some global usages.                                                                              5.1.0 
+AutoComplete    自动完成   Autocomplete function of input field.                                                                                    4.0.0 
+Avatar          头像     Used to represent users or things, supporting the display of images, icons, or characters.                               4.0.0 
+Badge           徽标数    Small numerical value or status descriptor for UI elements.                                                              4.0.0 
+Breadcrumb      面包屑    Display the current location within a hierarchy. And allow going back to states higher up in the hierarchy.              4.0.0 
+Button          按钮     To trigger an operation.                                                                                                 4.0.0 
+Calendar        日历     A container that displays data in calendar form.                                                                         4.0.0 
+Card            卡片     A container for displaying information.                                                                                  4.0.0 
+Carousel        走马灯    A set of carousel areas.                                                                                                 4.0.0 
+Cascader        级联选择   Cascade selection box.                                                                                                   4.0.0 
+Checkbox        多选框    Collect user's choices.                                                                                                  4.0.0 
+Collapse        折叠面板   A content area which can be collapsed and expanded.                                                                      4.0.0 
+ColorPicker     颜色选择器  Used for color selection.                                                                                                5.5.0 
+ConfigProvider  全局化配置  Provide a uniform configuration support for components.                                                                  4.0.0 
+DatePicker      日期选择框  To select or input a date.                                                                                               4.0.0 
+Descriptions    描述列表   Display multiple read-only fields in a group.                                                                            4.0.0 
+Divider         分割线    A divider line separates different content.                                                                              4.0.0 
+Drawer          抽屉     A panel that slides out from the edge of the screen.                                                                     4.0.0 
+Dropdown        下拉菜单   A dropdown list.                                                                                                         4.0.0 
+Empty           空状态    Empty state placeholder.                                                                                                 4.0.0 
+Flex            弹性布局   A flex layout container for alignment.                                                                                   5.10.0
+FloatButton     悬浮按钮   A button that floats at the top of the page.                                                                             5.0.0 
+Form            表单     High-performance form component with data domain management. Includes data entry, validation, and corresponding styles.  4.0.0 
+Grid            栅格     24 Grids System.                                                                                                         4.0.0 
+Icon            图标     Semantic vector graphics.                                                                                                4.0.0 
+Image           图片     Preview-able image.                                                                                                      4.6.0 
+Input           输入框    Through mouse or keyboard input content, it is the most basic form field wrapper.                                        4.0.0 
+InputNumber     数字输入框  Enter a number within certain range with the mouse or keyboard.                                                          4.0.0 
+Layout          布局     Handling the overall layout of a page.                                                                                   4.0.0 
+List            列表     Basic list display, which can carry text, lists, pictures, paragraphs.                                                   4.0.0 
+Mentions        提及     Used to mention someone or something in an input.                                                                        4.0.0 
+Menu            导航菜单   A versatile menu for navigation.                                                                                         4.0.0 
+Message         全局提示   Display global messages as feedback in response to user operations.                                                      4.0.0 
+Modal           对话框    Display a modal dialog box, providing a title, content area, and action buttons.                                         4.0.0 
+Notification    通知提醒框  Prompt notification message globally.                                                                                    4.0.0 
+Pagination      分页     A long list can be divided into several pages, and only one page will be loaded at a time.                               4.0.0 
+Popconfirm      气泡确认框  Pop up a bubble confirmation box for an action.                                                                          4.0.0 
+Popover         气泡卡片   The floating card pops up when clicking/mouse hovering over an element.                                                  4.0.0 
+Progress        进度条    Display the current progress of the operation.                                                                           4.0.0 
+QRCode          二维码    Components that can convert text into QR codes, and support custom color and logo.                                       5.1.0 
+Radio           单选框    Used to select a single state from multiple options.                                                                     4.0.0 
+Rate            评分     Used for rating operation on something.                                                                                  4.0.0 
+Result          结果     Used to feedback the processing results of a series of operations.                                                       4.0.0 
+Segmented       分段控制器  Display multiple options and allow users to select a single option.                                                      4.20.0
+Select          选择器    A dropdown menu for displaying choices.                                                                                  4.0.0 
+Skeleton        骨架屏    Provide a placeholder while you wait for content to load, or to visualize content that doesn't exist yet.                4.0.0 
+Slider          滑动输入条  A Slider component for displaying current value and intervals in range.                                                  4.0.0 
+Space           间距     Set components spacing.                                                                                                  4.1.0 
+Spin            加载中    Used for the loading status of a page or a block.                                                                        4.0.0 
+Splitter        分隔面板   Split panels to isolate                                                                                                  5.21.0
+Statistic       统计数值   Display statistic number.                                                                                                4.0.0 
+Steps           步骤条    A navigation bar that guides users through the steps of a task.                                                          4.0.0 
+Switch          开关     Used to toggle between two states.                                                                                       4.0.0 
+Table           表格     A table displays rows of data.                                                                                           4.0.0 
+Tabs            标签页    Tabs make it easy to explore and switch between different views.                                                         4.0.0 
+Tag             标签     Used for marking and categorization.                                                                                     4.0.0 
+Timeline        时间轴    Vertical display timeline.                                                                                               4.0.0 
+TimePicker      时间选择框  To select/input a time.                                                                                                  4.0.0 
+Tooltip         文字提示   Simple text popup box.                                                                                                   4.0.0 
+Tour            漫游式引导  A popup component for guiding users through a product.                                                                   5.0.0 
+Transfer        穿梭框    Double column transfer choice box.                                                                                       4.0.0 
+Tree            树形控件   Multiple-level structure list.                                                                                           4.0.0 
+TreeSelect      树选择    Tree selection control.                                                                                                  4.0.0 
+Typography      排版     Basic text writing, including headings, body text, lists, and more.                                                      4.0.0 
+Upload          上传     Used to select and upload files or drag and drop files.                                                                  4.0.0 
+Watermark       水印     Add specific text or patterns to the page.                                                                               5.1.0"
+`;
+
+exports[`list > list --format text --lang zh 1`] = `
+"Component       组件名    Description                                                                                                              Since 
+--------------  -----  -----------------------------------------------------------------------------------------------------------------------  ------
+Affix           固钉     Stick an element to the viewport.                                                                                        4.0.0 
+Alert           警告提示   Display warning messages that require attention.                                                                         4.0.0 
+Anchor          锚点     Hyperlinks to scroll on one page.                                                                                        4.0.0 
+App             包裹组件   Application wrapper for some global usages.                                                                              5.1.0 
+AutoComplete    自动完成   Autocomplete function of input field.                                                                                    4.0.0 
+Avatar          头像     Used to represent users or things, supporting the display of images, icons, or characters.                               4.0.0 
+Badge           徽标数    Small numerical value or status descriptor for UI elements.                                                              4.0.0 
+Breadcrumb      面包屑    Display the current location within a hierarchy. And allow going back to states higher up in the hierarchy.              4.0.0 
+Button          按钮     To trigger an operation.                                                                                                 4.0.0 
+Calendar        日历     A container that displays data in calendar form.                                                                         4.0.0 
+Card            卡片     A container for displaying information.                                                                                  4.0.0 
+Carousel        走马灯    A set of carousel areas.                                                                                                 4.0.0 
+Cascader        级联选择   Cascade selection box.                                                                                                   4.0.0 
+Checkbox        多选框    Collect user's choices.                                                                                                  4.0.0 
+Collapse        折叠面板   A content area which can be collapsed and expanded.                                                                      4.0.0 
+ColorPicker     颜色选择器  Used for color selection.                                                                                                5.5.0 
+ConfigProvider  全局化配置  Provide a uniform configuration support for components.                                                                  4.0.0 
+DatePicker      日期选择框  To select or input a date.                                                                                               4.0.0 
+Descriptions    描述列表   Display multiple read-only fields in a group.                                                                            4.0.0 
+Divider         分割线    A divider line separates different content.                                                                              4.0.0 
+Drawer          抽屉     A panel that slides out from the edge of the screen.                                                                     4.0.0 
+Dropdown        下拉菜单   A dropdown list.                                                                                                         4.0.0 
+Empty           空状态    Empty state placeholder.                                                                                                 4.0.0 
+Flex            弹性布局   A flex layout container for alignment.                                                                                   5.10.0
+FloatButton     悬浮按钮   A button that floats at the top of the page.                                                                             5.0.0 
+Form            表单     High-performance form component with data domain management. Includes data entry, validation, and corresponding styles.  4.0.0 
+Grid            栅格     24 Grids System.                                                                                                         4.0.0 
+Icon            图标     Semantic vector graphics.                                                                                                4.0.0 
+Image           图片     Preview-able image.                                                                                                      4.6.0 
+Input           输入框    Through mouse or keyboard input content, it is the most basic form field wrapper.                                        4.0.0 
+InputNumber     数字输入框  Enter a number within certain range with the mouse or keyboard.                                                          4.0.0 
+Layout          布局     Handling the overall layout of a page.                                                                                   4.0.0 
+List            列表     Basic list display, which can carry text, lists, pictures, paragraphs.                                                   4.0.0 
+Mentions        提及     Used to mention someone or something in an input.                                                                        4.0.0 
+Menu            导航菜单   A versatile menu for navigation.                                                                                         4.0.0 
+Message         全局提示   Display global messages as feedback in response to user operations.                                                      4.0.0 
+Modal           对话框    Display a modal dialog box, providing a title, content area, and action buttons.                                         4.0.0 
+Notification    通知提醒框  Prompt notification message globally.                                                                                    4.0.0 
+Pagination      分页     A long list can be divided into several pages, and only one page will be loaded at a time.                               4.0.0 
+Popconfirm      气泡确认框  Pop up a bubble confirmation box for an action.                                                                          4.0.0 
+Popover         气泡卡片   The floating card pops up when clicking/mouse hovering over an element.                                                  4.0.0 
+Progress        进度条    Display the current progress of the operation.                                                                           4.0.0 
+QRCode          二维码    Components that can convert text into QR codes, and support custom color and logo.                                       5.1.0 
+Radio           单选框    Used to select a single state from multiple options.                                                                     4.0.0 
+Rate            评分     Used for rating operation on something.                                                                                  4.0.0 
+Result          结果     Used to feedback the processing results of a series of operations.                                                       4.0.0 
+Segmented       分段控制器  Display multiple options and allow users to select a single option.                                                      4.20.0
+Select          选择器    A dropdown menu for displaying choices.                                                                                  4.0.0 
+Skeleton        骨架屏    Provide a placeholder while you wait for content to load, or to visualize content that doesn't exist yet.                4.0.0 
+Slider          滑动输入条  A Slider component for displaying current value and intervals in range.                                                  4.0.0 
+Space           间距     Set components spacing.                                                                                                  4.1.0 
+Spin            加载中    Used for the loading status of a page or a block.                                                                        4.0.0 
+Splitter        分隔面板   Split panels to isolate                                                                                                  5.21.0
+Statistic       统计数值   Display statistic number.                                                                                                4.0.0 
+Steps           步骤条    A navigation bar that guides users through the steps of a task.                                                          4.0.0 
+Switch          开关     Used to toggle between two states.                                                                                       4.0.0 
+Table           表格     A table displays rows of data.                                                                                           4.0.0 
+Tabs            标签页    Tabs make it easy to explore and switch between different views.                                                         4.0.0 
+Tag             标签     Used for marking and categorization.                                                                                     4.0.0 
+Timeline        时间轴    Vertical display timeline.                                                                                               4.0.0 
+TimePicker      时间选择框  To select/input a time.                                                                                                  4.0.0 
+Tooltip         文字提示   Simple text popup box.                                                                                                   4.0.0 
+Tour            漫游式引导  A popup component for guiding users through a product.                                                                   5.0.0 
+Transfer        穿梭框    Double column transfer choice box.                                                                                       4.0.0 
+Tree            树形控件   Multiple-level structure list.                                                                                           4.0.0 
+TreeSelect      树选择    Tree selection control.                                                                                                  4.0.0 
+Typography      排版     Basic text writing, including headings, body text, lists, and more.                                                      4.0.0 
+Upload          上传     Used to select and upload files or drag and drop files.                                                                  4.0.0 
+Watermark       水印     Add specific text or patterns to the page.                                                                               5.1.0"
+`;
