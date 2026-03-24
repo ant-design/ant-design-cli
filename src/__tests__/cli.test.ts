@@ -36,7 +36,7 @@ function runWithStatus(...args: string[]): { stdout: string; stderr: string; exi
  * e.g. { 'antd': { version: '5.20.0' }, '@ant-design/pro-components': { version: '2.7.0', peerDependencies: { antd: '>=5.16.0' } } }
  */
 function runDoctorInTempDir(packages: Record<string, object>): any {
-  const tempDir = join(tmpdir(), `antd-cli-test-${Date.now()}`);
+  const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-test-'));
   try {
     mkdirSync(tempDir, { recursive: true });
     writeFileSync(join(tempDir, 'package.json'), JSON.stringify({ name: 'test-project', version: '1.0.0' }));
