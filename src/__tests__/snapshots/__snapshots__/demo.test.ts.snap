@@ -258,7 +258,7 @@ exports[`demo > demo Button basic --format json 1`] = `
   "demo": "basic",
   "title": "Syntactic sugar",
   "description": "Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons.",
-  "code": "import React from 'react';\\nimport { Button, Flex } from 'antd';\\n\\nconst App: React.FC = () => (\\n  <Flex gap=\\"small\\" wrap>\\n    <Button type=\\"primary\\">Primary Button</Button>\\n    <Button>Default Button</Button>\\n    <Button type=\\"dashed\\">Dashed Button</Button>\\n    <Button type=\\"text\\">Text Button</Button>\\n    <Button type=\\"link\\">Link Button</Button>\\n  </Flex>\\n);\\n\\nexport default App;\\n"
+  "code": "import React from 'react';\\nimport { Button, Flex } from 'antd';\\n\\nconst App: React.FC = () => (\\n <Flex gap=\\"small\\" wrap>\\n <Button type=\\"primary\\">Primary Button</Button>\\n <Button>Default Button</Button>\\n <Button type=\\"dashed\\">Dashed Button</Button>\\n <Button type=\\"text\\">Text Button</Button>\\n <Button type=\\"link\\">Link Button</Button>\\n </Flex>\\n);\\n\\nexport default App;\\n"
 }"
 `;
 
@@ -270,13 +270,13 @@ import React from 'react';
 import { Button, Flex } from 'antd';
 
 const App: React.FC = () => (
-  <Flex gap="small" wrap>
-    <Button type="primary">Primary Button</Button>
-    <Button>Default Button</Button>
-    <Button type="dashed">Dashed Button</Button>
-    <Button type="text">Text Button</Button>
-    <Button type="link">Link Button</Button>
-  </Flex>
+ <Flex gap="small" wrap>
+ <Button type="primary">Primary Button</Button>
+ <Button>Default Button</Button>
+ <Button type="dashed">Dashed Button</Button>
+ <Button type="text">Text Button</Button>
+ <Button type="link">Link Button</Button>
+ </Flex>
 );
 
 export default App;"
@@ -290,13 +290,13 @@ import React from 'react';
 import { Button, Flex } from 'antd';
 
 const App: React.FC = () => (
-  <Flex gap="small" wrap>
-    <Button type="primary">Primary Button</Button>
-    <Button>Default Button</Button>
-    <Button type="dashed">Dashed Button</Button>
-    <Button type="text">Text Button</Button>
-    <Button type="link">Link Button</Button>
-  </Flex>
+ <Flex gap="small" wrap>
+ <Button type="primary">Primary Button</Button>
+ <Button>Default Button</Button>
+ <Button type="dashed">Dashed Button</Button>
+ <Button type="text">Text Button</Button>
+ <Button type="link">Link Button</Button>
+ </Flex>
 );
 
 export default App;"
