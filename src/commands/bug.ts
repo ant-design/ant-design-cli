@@ -19,7 +19,7 @@ export function registerBugCommand(program: Command): void {
   program
     .command('bug')
     .description('Report a bug to the antd repository')
-    .requiredOption('--title <title>', 'Issue title')
+    .option('--title <title>', 'Issue title')
     .option('--reproduction <url>', 'Reproduction link')
     .option('--steps <text>', 'Steps to reproduce')
     .option('--expected <text>', 'Expected behavior')
@@ -28,6 +28,15 @@ export function registerBugCommand(program: Command): void {
     .option('--submit', 'Submit via gh CLI instead of previewing', false)
     .action((cmdOpts) => {
       const opts = program.opts<GlobalOptions>();
+
+      if (!cmdOpts.title) {
+        printError(
+          createError(ErrorCodes.TITLE_REQUIRED, '--title is required', 'Provide --title <title>'),
+          opts.format,
+        );
+        process.exit(1);
+      }
+
       const env = collectAntdEnv(process.cwd(), opts.version);
       const body = buildAntdIssueBody({
         reproduction: cmdOpts.reproduction,
@@ -88,7 +97,7 @@ export function registerBugCliCommand(program: Command): void {
   program
     .command('bug-cli')
     .description('Report a bug to the ant-design-cli repository')
-    .requiredOption('--title <title>', 'Issue title')
+    .option('--title <title>', 'Issue title')
     .option('--description <desc>', 'Problem description')
     .option('--steps <text>', 'Steps to reproduce')
     .option('--expected <text>', 'Expected behavior')
@@ -97,6 +106,15 @@ export function registerBugCliCommand(program: Command): void {
     .option('--submit', 'Submit via gh CLI instead of previewing', false)
     .action((cmdOpts) => {
       const opts = program.opts<GlobalOptions>();
+
+      if (!cmdOpts.title) {
+        printError(
+          createError(ErrorCodes.TITLE_REQUIRED, '--title is required', 'Provide --title <title>'),
+          opts.format,
+        );
+        process.exit(1);
+      }
+
       const env = collectCliEnv();
       const body = buildCliIssueBody({
         description: cmdOpts.description,

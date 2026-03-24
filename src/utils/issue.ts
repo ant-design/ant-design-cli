@@ -38,7 +38,8 @@ export function collectCliEnv(): CliEnv {
   let cliVersion: string;
   try {
     cliVersion = __CLI_VERSION__;
-  } catch {
+  } catch (err) {
+    console.error('Failed to get CLI version:', err);
     cliVersion = 'unknown';
   }
   return {
