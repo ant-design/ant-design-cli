@@ -171,11 +171,11 @@ exports[`info > info Button --detail --format json 1`] = `
   "faq": [
     {
       "question": "How to choose type and color & variant?",
-      "answer": "Type is essentially syntactic sugar for colors and variants. It internally provides a set of mapping relationships between colors and variants for the type. If both exist at the same time, the colors and variants will be used first.\\n\\n\`\`\`jsx\\n<Button type=\\"primary\\">click</Button>\\n\`\`\`\\n\\nEquivalent\\n\\n\`\`\`jsx\\n<Button color=\\"primary\\" variant=\\"solid\\">\\n  click\\n</Button>\\n\`\`\`"
+      "answer": "Type is essentially syntactic sugar for colors and variants. It internally provides a set of mapping relationships between colors and variants for the type. If both exist at the same time, the colors and variants will be used first.\\n\\n\`\`\`jsx\\n<Button type=\\"primary\\">click</Button>\\n\`\`\`\\n\\nEquivalent\\n\\n\`\`\`jsx\\n<Button color=\\"primary\\" variant=\\"solid\\">\\n click\\n</Button>\\n\`\`\`"
     },
     {
       "question": "How to close the click wave effect?",
-      "answer": "If you don't need this feature, you can set \`disabled\` of \`wave\` in [ConfigProvider](/components/config-provider#api) as \`true\`.\\n\\n\`\`\`jsx\\n<ConfigProvider wave={{ disabled: true }}>\\n  <Button>click</Button>\\n</ConfigProvider>\\n\`\`\`"
+      "answer": "If you don't need this feature, you can set \`disabled\` of \`wave\` in [ConfigProvider](/components/config-provider#api) as \`true\`.\\n\\n\`\`\`jsx\\n<ConfigProvider wave={{ disabled: true }}>\\n <Button>click</Button>\\n</ConfigProvider>\\n\`\`\`"
     }
   ]
 }"

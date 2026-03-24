@@ -26,6 +26,7 @@ function cleanDescription(line: string): string {
   return line
     .replace(/^-\s*/, '')
     .replace(/\[#\d+\]\([^)]+\)/g, '')
+    .replace(/\[@?\w+\]\(https?:\/\/github\.com\/[^)]+\)/g, '')
     .replace(/@\w+/g, '')
     .replace(/\s+/g, ' ')
     .trim();
