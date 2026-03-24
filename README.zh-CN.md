@@ -83,11 +83,11 @@ antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 | 命令 | 说明 |
 |---|---|
 | [`antd list`](#antd-list) | 列出所有组件，含双语名称、分类和引入版本 |
-| [`antd info <C>`](#antd-info-component) | Props 表格，含类型、默认值、引入版本和废弃状态 |
-| [`antd doc <C>`](#antd-doc-component) | 组件完整 Markdown 文档 |
-| [`antd demo <C> [name]`](#antd-demo-component-name) | 可运行的 Demo 源码（TSX） |
-| [`antd token [C]`](#antd-token-component) | 全局或组件级 Design Token |
-| [`antd semantic <C>`](#antd-semantic-component) | 语义化 `classNames` / `styles` 结构及用法示例 |
+| [`antd info <Component>`](#antd-info-component) | Props 表格，含类型、默认值、引入版本和废弃状态 |
+| [`antd doc <Component>`](#antd-doc-component) | 组件完整 Markdown 文档 |
+| [`antd demo <Component> [name]`](#antd-demo-component-name) | 可运行的 Demo 源码（TSX） |
+| [`antd token [Component]`](#antd-token-component) | 全局或组件级 Design Token |
+| [`antd semantic <Component>`](#antd-semantic-component) | 语义化 `classNames` / `styles` 结构及用法示例 |
 | [`antd changelog`](#antd-changelog-v1-v2-component) | Changelog 条目、版本范围或跨版本 API 对比 |
 
 ### 🔍 项目分析
