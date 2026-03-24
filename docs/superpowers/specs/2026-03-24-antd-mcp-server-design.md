@@ -22,32 +22,206 @@ IDE / Agent
 antd mcp  (long-running process, managed by IDE)
     │  reuses
     ▼
-Existing command logic (info, doc, demo, list, token, semantic, changelog)
+Core logic functions extracted from command modules
+(info, doc, demo, list, token, semantic, changelog)
 ```
 
 The process lifecycle is managed by the IDE — spawned on IDE start, killed on exit.
+
+## Critical Constraint: No stdout Writes in Core Logic
+
+The MCP server uses **stdout as the JSON-RPC transport channel**. Any `console.log` or `output()` call inside core logic will corrupt the protocol. All refactored core functions must **return data as JavaScript values** — never write to stdout. Only the MCP tool handler serializes and sends data.
+
+## Refactoring: Extract Core Logic
+
+All 7 command modules currently embed logic inside `commander` `.action()` callbacks. These must be refactored to export standalone core functions. The commander action becomes a thin wrapper that calls the core function and passes result to `output()`.
+
+### Extracted Function Signatures
+
+```typescript
+// src/commands/list.ts
+export function listComponents(opts: { lang: string; version: string }): ComponentSummary[]
+
+// src/commands/info.ts
+export function getComponentInfo(
+  component: string,
+  opts: { lang: string; version: string; detail: boolean }
+): ComponentInfoResult | CLIError
+
+// src/commands/doc.ts
+export function getComponentDoc(
+  component: string,
+  opts: { lang: string; version: string }
+): ComponentDocResult | CLIError
+
+// src/commands/demo.ts
+export function getComponentDemo(
+  component: string,
+  opts: { lang: string; version: string; name?: string }
+): DemoResult | DemoListResult | CLIError
+
+// src/commands/token.ts
+export function getTokens(
+  component: string | undefined,
+  opts: { lang: string; version: string }
+): TokenResult | CLIError
+
+// src/commands/semantic.ts
+export function getSemanticStructure(
+  component: string,
+  opts: { lang: string; version: string }
+): SemanticResult | CLIError
+
+// src/commands/changelog.ts
+// snapshotVersion: antd version used to load metadata (e.g. "5.20.0")
+// entryFilter: optional version or range to filter entries (e.g. "5.10.0" or "5.10.0..5.20.0")
+export function queryChangelog(
+  opts: { snapshotVersion: string; entryFilter?: string }
+): ChangelogResult | CLIError
+
+export function diffChangelog(
+  opts: { v1: string; v2: string; component?: string }
+): DiffResult | CLIError
+```
+
+### Error Handling Contract
+
+- Core functions **never call `process.exitCode`** or `process.exit()`
+- On user error (component not found, etc.), return a `CLIError` object: `{ error: true, code, message, suggestion? }`
+- On success, return the data object directly
+- Commander wrappers check `result.error` and call `printError()` + `process.exitCode = 1`
 
 ## MCP Tools
 
 7 tools exposed, mapping to knowledge query commands:
 
-| MCP Tool | Equivalent Command | Description |
+| MCP Tool | Core Function | Description for Agent |
 |---|---|---|
-| `antd_list` | `antd list` | List all components with categories |
-| `antd_info` | `antd info <Component>` | Query component props API |
-| `antd_doc` | `antd doc <Component>` | Get full component documentation |
-| `antd_demo` | `antd demo <Component> [name]` | Get component demo source code |
-| `antd_token` | `antd token [component]` | Query Design Tokens |
-| `antd_semantic` | `antd semantic <Component>` | Query semantic structure (classNames/styles keys) |
-| `antd_changelog` | `antd changelog` | Query version changelog |
+| `antd_list` | `listComponents` | List all antd components with names, categories, and descriptions. Call this first to discover available components. |
+| `antd_info` | `getComponentInfo` | Get props API for a specific component. Use when you need to know what props a component accepts. |
+| `antd_doc` | `getComponentDoc` | Get full markdown documentation for a component including When To Use, API tables, and FAQ. |
+| `antd_demo` | `getComponentDemo` | Get demo source code for a component. Omit `name` to list available demos; provide `name` to get specific demo code. |
+| `antd_token` | `getTokens` | Query Design Tokens. Omit `component` for global tokens; provide `component` for component-level tokens. |
+| `antd_semantic` | `getSemanticStructure` | Get semantic classNames/styles structure for a component. Use when customizing component appearance. |
+| `antd_changelog` | `queryChangelog` / `diffChangelog` | Query version changelog entries or diff API changes between two versions. |
 
-Each tool's `description` field clearly describes when to use it, enabling agents to auto-select the right tool.
+### Tool Input Schemas
 
-All tool outputs are JSON (reusing existing `--format json` logic).
+**`antd_list`**
+```json
+{ "type": "object", "properties": {}, "required": [] }
+```
+
+**`antd_info`**
+```json
+{
+  "type": "object",
+  "properties": {
+    "component": { "type": "string", "description": "Component name, e.g. \"Button\"" },
+    "detail": { "type": "boolean", "description": "Include full description, since, deprecated fields" }
+  },
+  "required": ["component"]
+}
+```
+
+**`antd_doc`**
+```json
+{
+  "type": "object",
+  "properties": {
+    "component": { "type": "string", "description": "Component name, e.g. \"Table\"" }
+  },
+  "required": ["component"]
+}
+```
+
+**`antd_demo`**
+```json
+{
+  "type": "object",
+  "properties": {
+    "component": { "type": "string" },
+    "name": { "type": "string", "description": "Demo name (e.g. \"basic\"). Omit to list available demos." }
+  },
+  "required": ["component"]
+}
+```
+
+**`antd_token`**
+```json
+{
+  "type": "object",
+  "properties": {
+    "component": { "type": "string", "description": "Component name. Omit for global tokens." }
+  },
+  "required": []
+}
+```
+
+**`antd_semantic`**
+```json
+{
+  "type": "object",
+  "properties": {
+    "component": { "type": "string" }
+  },
+  "required": ["component"]
+}
+```
+
+**`antd_changelog`**
+```json
+{
+  "type": "object",
+  "properties": {
+    "version": { "type": "string", "description": "Single version (\"5.10.0\") or range (\"5.10.0..5.20.0\"). Omit for last 5 entries." },
+    "v1": { "type": "string", "description": "For API diff: from-version (e.g. \"4.24.0\")" },
+    "v2": { "type": "string", "description": "For API diff: to-version (e.g. \"5.0.0\")" },
+    "component": { "type": "string", "description": "Filter diff to a specific component" }
+  },
+  "required": []
+}
+```
+
+### `antd_changelog` Dual-Mode Behavior and Parameter Mapping
+
+A single `antd_changelog` tool handles both modes. The handler branches on whether `v1`+`v2` are present:
+
+```typescript
+// In antd_changelog tool handler:
+if (params.v1 && params.v2) {
+  // diff mode
+  return diffChangelog({ v1: params.v1, v2: params.v2, component: params.component });
+} else {
+  // changelog query mode
+  // `snapshotVersion` comes from the server-level --version flag (resolved at startup)
+  // `entryFilter` maps to the `version` field in the MCP schema
+  return queryChangelog({ snapshotVersion: serverVersion, entryFilter: params.version });
+}
+```
+
+The `version` field in the schema is the entry filter (single version or range). The snapshot version used to load metadata is the server-level `--version` flag, not a per-call parameter.
+
+### `antd_list` Payload Size
+
+`antd_list` returns 100+ components. For MCP context, the response includes `name`, `nameZh`, `category`, and `description` only — no props or details. Agents should use `antd_info` or `antd_doc` for detailed component data.
+
+## MCP Error Response Format
+
+Tool errors use the MCP-native error shape:
+
+```typescript
+return {
+  content: [{ type: 'text', text: JSON.stringify(cliError) }],
+  isError: true
+}
+```
+
+This allows agents to distinguish tool failures from successful output while still receiving structured error info (code, message, suggestion).
 
 ## Global Parameters
 
-`--version` and `--lang` are passed at server startup (not per tool call):
+`--version` and `--lang` are passed at server startup:
 
 ```json
 {
@@ -60,54 +234,42 @@ All tool outputs are JSON (reusing existing `--format json` logic).
 }
 ```
 
-If omitted, version auto-detection and `en` lang defaults apply.
+**Note:** `--version` is strongly recommended for reproducible behavior. If omitted, auto-detection reads `node_modules/antd/package.json` relative to the IDE's working directory, which is environment-dependent and may not reflect the intended project.
 
-## Implementation
-
-### Dependencies
-
-Add `@modelcontextprotocol/sdk` — the official MCP SDK. Use `Server` + `StdioServerTransport`.
+## Implementation Plan
 
 ### New Files
 
-- `src/commands/mcp.ts` — registers the `antd mcp` command, initializes the MCP Server, registers all 7 tools
-- `src/mcp/tools.ts` — tool definitions (name, description, inputSchema) and handlers (call existing command logic)
+- `src/commands/mcp.ts` — registers `antd mcp` command, initializes `Server` + `StdioServerTransport`, registers 7 tools
+- `src/mcp/tools.ts` — tool definitions and handlers
 
 ### Modified Files
 
-- `src/index.ts` — import and register the new `mcp` command
-- `package.json` — add `@modelcontextprotocol/sdk` dependency
+- `src/commands/info.ts` — extract `getComponentInfo()`, keep commander wrapper
+- `src/commands/doc.ts` — extract `getComponentDoc()`. **Critical:** current code has a direct `process.stdout.write(doc + '\n')` call at line 51 (for non-JSON text/markdown format) that bypasses the `output()` abstraction. The extracted core function must return the doc string as a value; the commander wrapper handles printing.
+- `src/commands/demo.ts` — extract `getComponentDemo()`
+- `src/commands/list.ts` — extract `listComponents()`
+- `src/commands/token.ts` — extract `getTokens()`
+- `src/commands/semantic.ts` — extract `getSemanticStructure()`
+- `src/commands/changelog.ts` — extract `queryChangelog()` and `diffChangelog()`
+- `src/index.ts` — register `mcp` command
+- `package.json` — add `@modelcontextprotocol/sdk` as production dependency
 
-### Reuse Pattern
+**Note on stderr:** `console.error` and `process.stderr.write` in the codebase (used by `printError`, loader warnings) write to stderr, which is **safe** in MCP stdio transport — only stdout is the JSON-RPC channel. Core functions must never write to stdout; stderr is fine for debug/warning output.
 
-Each tool handler calls the existing command module's core function directly:
+### Build / Bundling
 
-```typescript
-// Example: antd_info tool handler
-import { getComponentInfo } from '../commands/info.js';
-
-server.tool('antd_info', schema, async ({ component, detail }) => {
-  const result = await getComponentInfo(component, { detail, format: 'json', lang, version });
-  return { content: [{ type: 'text', text: JSON.stringify(result) }] };
-});
-```
-
-This requires refactoring command modules to export their core logic as callable functions (currently they are registered as commander actions).
+`tsup` currently externalizes all `dependencies`. `@modelcontextprotocol/sdk` must be listed in `package.json` `dependencies` (not devDependencies) so it is installed when users run `npm i -g @ant-design/cli`. No tsup config change needed.
 
 ### Testing
 
-New `src/__tests__/mcp.test.ts`:
-- All 7 tools are registered
-- Each handler returns valid JSON matching expected schema
-- Error cases (component not found) return proper error structure
+`src/__tests__/mcp.test.ts`:
+- All 7 tools registered with correct names
+- Each handler returns valid JSON for a known-good input
+- Error case (component not found) returns `{ isError: true }` shape
+- `antd_changelog` dual-mode: query mode and diff mode both work
 
 ## Out of Scope
 
-Project analysis commands are excluded from this version:
-- `antd doctor`
-- `antd usage`
-- `antd lint`
-- `antd migrate`
-- `antd bug` / `antd bug-cli`
-
-These can be added as MCP tools in a future version.
+Project analysis commands excluded from this version:
+- `antd doctor`, `antd usage`, `antd lint`, `antd migrate`, `antd bug` / `antd bug-cli`
