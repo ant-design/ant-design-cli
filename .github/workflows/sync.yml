@@ -74,5 +74,13 @@ jobs:
           git tag "v${CLI_VERSION}"
           git push origin main --tags
 
+          # Create GitHub Release
+          npx tsx scripts/extract-changelog.ts "$CLI_VERSION" > /tmp/release-notes.md
+          gh release create "v${CLI_VERSION}" \
+            --title "v${CLI_VERSION}" \
+            --notes-file /tmp/release-notes.md
+
           # Publish to npm
           npm publish --provenance --access public
+        env:
+          GH_TOKEN: ${{ github.token }}
