@@ -7,9 +7,9 @@
 [![npm downloads](https://img.shields.io/npm/dm/@ant-design/cli)](https://www.npmjs.com/package/@ant-design/cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-**用于查询 antd 组件知识、分析项目中 antd 用法的命令行工具。**
+**查询 Ant Design 组件知识、分析项目中 antd 用法的命令行工具。**
 
-专为 Code Agent（Claude Code、Cursor、Copilot 等）设计，通过 Shell 调用并解析结构化输出。
+为 Code Agent（Claude Code、Cursor、Copilot、Codex、Gemini CLI）而生 — 结构化输出，完全离线，零配置。
 
 [English](./README.md) · [中文](./README.zh-CN.md)
 
@@ -17,89 +17,68 @@
 
 ---
 
-## ✨ 功能特性
+## 功能特性
 
-| 功能 | 说明 |
-|---|---|
-| 🤖 **Agent 就绪** | 每条命令均支持 `--format json`，输出结构化数据与标准错误码，为 Claude Code、Cursor、Copilot 等工具调用而生 |
-| 📦 **完全离线** | v4/v5/v6 的 Props、Token、Demo、Changelog 全部随包安装，无需网络，零延迟 |
-| 🔀 **多版本支持** | 查询任意 antd 版本；对比两个版本间的 API 变更；浏览按类型分类的 Changelog（新功能 / 修复 / 破坏性变更 / 废弃） |
-| 🧠 **深度组件数据** | Props 类型与默认值；Design Token；可运行的 Demo 源码；`classNames` / `styles` 语义结构——均可从终端直接查询 |
-| 🔍 **项目分析** | 扫描组件用量统计；检查废弃 Props、无障碍缺陷和性能问题；`doctor` 诊断 React 兼容性、重复安装及配置错误 |
-| 🚚 **迁移指南** | 详细的 v4→v5 和 v5→v6 迁移清单，区分可自动修复与手动处理；`--apply` 生成供 Agent 执行的结构化迁移提示 |
+- **Agent 就绪** — 所有命令支持 `--format json`，输出结构化数据与标准错误码
+- **完全离线** — v4 / v5 / v6 的 Props、Token、Demo、Changelog 全部随包安装
+- **多版本支持** — 查询任意 antd 版本，支持按小版本快照精确匹配；对比版本间 API 差异
+- **深度组件数据** — Props、Design Token、Demo 源码、语义化 `classNames` / `styles` 结构
+- **项目分析** — 用量扫描、废弃 API 检查、无障碍检查、`doctor` 诊断
+- **迁移指南** — v4→v5 和 v5→v6 迁移清单，区分可自动修复与手动处理
 
-## 📦 安装
+## 安装
 
 ```bash
-# npm
 npm install -g @ant-design/cli
-
-# pnpm
-pnpm add -g @ant-design/cli
-
-# bun
-bun add -g @ant-design/cli
 ```
 
-**或者直接告诉 agent**
-
-最简单的方式 — 直接告诉你的 agent 去用它：
-
-> 使用 antd CLI 来帮我写 antd 代码。运行 `npx skills add ant-design/ant-design-cli` 来安装。
-
-**安装为 skill**
-
-获得更丰富的上下文，安装为 [skill](https://github.com/vercel-labs/skills)：
+或安装为 Code Agent 的 [skill](https://github.com/nicepkg/agent-skills)：
 
 ```bash
 npx skills add ant-design/ant-design-cli
 ```
 
-## 🚀 快速开始
+## 快速开始
 
 ```bash
-# 查询组件 API
-antd info Button
-
-# 列出所有组件
-antd list
-
-# 扫描项目中的 antd 用法
-antd usage ./src
-
-# 从 v4 迁移到 v5
-antd migrate 4 5
+antd info Button                    # 查询组件 API
+antd list                           # 列出所有组件
+antd demo Button basic              # 获取 Demo 源码
+antd token Button                   # 查询 Design Token
+antd changelog 4.24.0 5.0.0 Select  # 对比版本间 API 差异
+antd usage ./src                    # 扫描项目 antd 用量
+antd doctor                         # 诊断项目配置
+antd migrate 4 5                    # v4 → v5 迁移指南
 ```
 
-## 📖 命令
+## 命令
 
 ### 知识查询
 
 #### `antd list`
 
-列出所有组件及其简介与分类。
+列出所有组件及其描述与分类。
 
 ```bash
 antd list
-antd list --format json
 antd list --version 5.0.0
+antd list --format json
 ```
 
 <details>
 <summary>示例输出</summary>
 
 ```
-Component  Category      Description
----------  ------------  -----------------------------------------------------------
-Button     General       To trigger an operation.
-Table      Data Display  A table displays rows of data.
-Select     Data Entry    Select component to select value from options.
-Input      Data Entry    A basic widget for getting the user input as a text field.
-Form       Data Entry    High performance Form component with data scope management.
-Modal      Feedback      Modal dialogs.
-Space      Layout        Set components spacing.
-Flex       Layout        Flex layout container.
-Grid       Layout        24 Grids System.
+Component       组件名    Description                                               Since
+--------------  -----  -------------------------------------------------------  ------
+Button          按钮     To trigger an operation.                                  4.0.0
+Table           表格     A table displays rows of data.                            4.0.0
+Form            表单     High performance Form component with data scope management. 4.0.0
+Select          选择器    Select component to select value from options.            4.0.0
+Modal           对话框    Modal dialogs.                                            4.0.0
+DatePicker      日期选择框  To select or input a date.                               4.0.0
+Input           输入框    A basic widget for getting the user input.                4.0.0
+...
 ```
 
 </details>
@@ -108,7 +87,7 @@ Grid       Layout        24 Grids System.
 
 #### `antd info <Component>`
 
-查询组件 API：Props、类型定义、默认值。
+查询组件 API：Props、类型定义、默认值。使用 `--detail` 获取完整文档，包含描述、版本信息、废弃状态和 FAQ。
 
 ```bash
 antd info Button
@@ -121,28 +100,27 @@ antd info Button --format json
 <summary>示例输出</summary>
 
 ```
-Button — To trigger an operation.
+Button (按钮) — To trigger an operation.
 
-Property      Type                                              Default
-------------  ------------------------------------------------  -------
-block         boolean                                           false
-classNames    Record<SemanticDOM, string>                       -
-color         default | primary | danger                        default
-danger        boolean                                           false
-disabled      boolean                                           false
-ghost         boolean                                           false
-href          string                                            -
-htmlType      submit | reset | button                           button
-icon          ReactNode                                         -
-iconPosition  start | end                                       start
-loading       boolean | { delay: number }                       false
-shape         default | circle | round                          default
-size          large | middle | small                            middle
-styles        Record<SemanticDOM, CSSProperties>                -
-target        string                                            -
-type          primary | default | dashed | text | link          default
-variant       outlined | dashed | solid | filled | text | link  -
-onClick       (event: React.MouseEvent) => void                 -
+Property         Type                                                        Default   Since
+---------------  ----------------------------------------------------------  --------  ------
+autoInsertSpace  boolean                                                     true      5.17.0
+block            boolean                                                     false     -
+classNames       Record<SemanticDOM, string>                                 -         5.4.0
+danger           boolean                                                     false     -
+disabled         boolean                                                     false     -
+ghost            boolean                                                     false     -
+href             string                                                      -         -
+htmlType         submit | reset | button                                     button    -
+icon             ReactNode                                                   -         -
+iconPosition     start | end                                                 start     5.17.0
+loading          boolean | { delay: number, icon: ReactNode }                false     -
+shape            default | circle | round                                    default   -
+size             large | middle | small                                      middle    -
+styles           Record<SemanticDOM, CSSProperties>                          -         5.4.0
+type             primary | default | dashed | text | link                    default   -
+variant          outlined | dashed | solid | filled | text | link            -         5.13.0
+onClick          (event: React.MouseEvent) => void                           -         -
 ```
 
 </details>
@@ -163,7 +141,7 @@ antd doc Button --lang zh           # 中文文档
 
 #### `antd demo <Component> [name]`
 
-获取 Demo 源码。
+获取 Demo 源码。不指定名称时列出所有可用 Demo。
 
 ```bash
 antd demo Button                    # 列出 Button 的所有 Demo
@@ -175,12 +153,12 @@ antd demo Button basic --format json
 
 #### `antd token [component]`
 
-查询 Design Token。
+查询 Design Token（仅 v5+）。
 
 ```bash
 antd token                          # 列出所有全局 Token
 antd token Button                   # 组件级 Token
-antd token --version 4.24.0
+antd token --format json
 ```
 
 <details>
@@ -189,16 +167,18 @@ antd token --version 4.24.0
 ```
 Button Component Tokens:
 
-Token                Type    Default
--------------------  ------  ----------------
-borderColorDisabled  string  #d9d9d9
-colorPrimaryHover    string  #4096ff
-contentFontSize      number  14
-defaultBg            string  #ffffff
-defaultBorderColor   string  #d9d9d9
-defaultColor         string  rgba(0,0,0,0.88)
-paddingBlock         number  4
-paddingInline        number  15
+Token                     Type    Default
+------------------------  ------  -------
+contentFontSize           number
+contentFontSizeLG         number
+contentFontSizeSM         number
+dangerColor               string
+dangerShadow              string
+defaultActiveBg           string
+defaultActiveBorderColor  string
+defaultActiveColor        string
+defaultBg                 string
+...
 ```
 
 </details>
@@ -207,7 +187,7 @@ paddingInline        number  15
 
 #### `antd semantic <Component>`
 
-查询语义化定制结构（`classNames` 和 `styles` 的键名）。
+查询语义化定制结构 — 可用的 `classNames` 和 `styles` 键名。
 
 ```bash
 antd semantic Table
@@ -235,13 +215,15 @@ Usage:
 
 ---
 
-#### `antd changelog [version]`
+#### `antd changelog [v1] [v2] [component]`
 
-查询 Changelog 条目，对比版本间 API 差异。
+查询 Changelog 条目、版本范围，或对比两个版本间的 API 差异。
 
 ```bash
-antd changelog 5.22.0              # 精确版本
-antd changelog 5.21.0..5.24.0     # 版本范围（两端均包含）
+antd changelog 5.22.0               # 单个版本 Changelog
+antd changelog 5.21.0..5.24.0       # 版本范围（两端均包含）
+antd changelog 4.24.0 5.0.0         # 对比两个版本的所有 API 变更
+antd changelog 4.24.0 5.0.0 Select  # 只对比 Select 的 API
 antd changelog --format json
 ```
 
@@ -251,7 +233,7 @@ antd changelog --format json
 
 #### `antd doctor`
 
-诊断项目级配置问题。
+诊断项目级配置问题：React 兼容性、重复安装、主题配置、babel 插件、CSS-in-JS 配置。
 
 ```bash
 antd doctor
@@ -262,11 +244,12 @@ antd doctor --format json
 
 #### `antd usage [dir]`
 
-扫描项目中 antd 组件/API 的使用情况统计。
+扫描项目中 antd 组件/API 的使用统计。检测导入、子组件（`Form.Item`）和非组件导出（`message`、`theme`）。
 
 ```bash
 antd usage                          # 扫描当前目录
 antd usage ./src                    # 扫描指定目录
+antd usage -f Button                # 过滤特定组件
 antd usage --format json
 ```
 
@@ -274,7 +257,7 @@ antd usage --format json
 
 #### `antd lint [file/dir]`
 
-按最佳实践检查 antd 用法。
+检查 antd 用法最佳实践。ESLint 的补充，聚焦 antd 特有的知识。
 
 ```bash
 antd lint ./src
@@ -290,13 +273,13 @@ antd lint --format json
 
 #### `antd migrate <from> <to>`
 
-版本迁移指南，支持自动修复输出。
+版本迁移指南，区分可自动修复与手动处理。
 
 ```bash
-antd migrate 4 5                          # 完整迁移清单
-antd migrate 4 5 --component Select       # 指定组件迁移
-antd migrate 4 5 --apply ./src            # 为 ./src 输出 Agent 迁移提示
-antd migrate 4 5 --format json            # 结构化输出，适合 Agent 解析
+antd migrate 4 5                    # 完整迁移清单
+antd migrate 4 5 --component Select # 指定组件迁移
+antd migrate 4 5 --apply ./src      # 输出 Agent 迁移提示
+antd migrate 4 5 --format json
 ```
 
 <details>
@@ -320,50 +303,46 @@ Total: 2 steps (2 auto-fixable, 0 manual)
 
 #### `antd bug`
 
-向 antd 仓库报告 Bug。自动收集环境信息，生成符合 [antd-issue-helper](https://new-issue.ant.design) 格式的 Issue。
+向 `ant-design/ant-design` 报告 Bug，自动收集环境信息。
 
 ```bash
 antd bug --title "DatePicker 选择日期时崩溃"
 antd bug --title "..." --steps "1. 点击按钮" --expected "正常工作" --actual "崩溃"
 antd bug --title "..." --reproduction "https://codesandbox.io/s/xxx"
 antd bug --title "..." --submit          # 通过 gh CLI 直接提交
-antd bug --format json                   # 预览结构化输出
 ```
-
----
 
 #### `antd bug-cli`
 
-向 [ant-design-cli](https://github.com/ant-design/ant-design-cli) 仓库报告 Bug。
+向 `ant-design/ant-design-cli` 报告 Bug。
 
 ```bash
 antd bug-cli --title "antd info 在 v4 组件上崩溃"
-antd bug-cli --title "..." --description "详细描述..."
 antd bug-cli --title "..." --submit
 ```
 
 ---
 
-## ⚙️ 全局参数
+## 全局参数
 
 | 参数 | 说明 | 默认值 |
 |---|---|---|
 | `--format json\|text\|markdown` | 输出格式 | `text` |
-| `--version <v>` | 目标 antd 版本 | 自动检测 |
+| `--version <v>` | 目标 antd 版本（如 `5.20.0`） | 自动检测 |
 | `--lang en\|zh` | 输出语言 | `en` |
 | `--detail` | 完整信息输出 | `false` |
 | `-V, --cli-version` | 打印 CLI 版本号 | — |
 
-## 🤖 与 Code Agent 配合使用
+## 与 Code Agent 配合使用
 
-CLI 内置了一份 [skill 文件](./skills/antd/SKILL.md)，教会 Code Agent 在何时、如何使用每条命令 — 不仅是命令列表，而是完整的工作流指南，让 agent 在正确的时机主动调用正确的命令。
-
-一条命令安装（支持 Claude Code、Cursor、Codex、Gemini CLI 等）：
+CLI 内置 [skill 文件](./skills/antd/SKILL.md)，让 Code Agent 知道在何时、如何使用每条命令。一条命令安装：
 
 ```bash
 npx skills add ant-design/ant-design-cli
 ```
 
-## 📄 开源协议
+支持 Claude Code、Cursor、Codex、Gemini CLI 等所有兼容 [skills](https://github.com/nicepkg/agent-skills) 协议的 Agent。
+
+## 开源协议
 
 [MIT](./LICENSE) © Ant Design
