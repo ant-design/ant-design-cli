@@ -20,7 +20,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "extract": "tsx scripts/extract.ts",
-    "prepublishOnly": "npm run build"
+    "prepack": "npm run build && tsx scripts/compress-data.ts",
+    "postpack": "tsx scripts/compress-data.ts --undo"
   },
   "engines": {
     "node": ">=18.0.0"
