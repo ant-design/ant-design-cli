@@ -22,7 +22,7 @@ Query component knowledge, analyze project usage, and guide migrations — fully
 
 <br>
 
-## Why
+## 🤔 Why
 
 Code agents (Claude Code, Cursor, Copilot, Codex, Gemini CLI) write better antd code when they have instant access to the right API data. This CLI gives them exactly that — **every prop, token, demo, and changelog entry for antd v4 / v5 / v6**, bundled locally, queryable in milliseconds.
 
@@ -32,18 +32,18 @@ npx skills add ant-design/ant-design-cli    # install as an agent skill
 
 <br>
 
-## Highlights
+## ✨ Highlights
 
-- **Fully offline** — All metadata ships with the package. No network calls, no latency, no API keys.
-- **Version-accurate** — 55+ per-minor snapshots across v4/v5/v6. Query the exact API surface of `antd@5.3.0`, not just "latest v5".
-- **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
-- **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
-- **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
-- **14 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
+- 📦 **Fully offline** — All metadata ships with the package. No network calls, no latency, no API keys.
+- 🎯 **Version-accurate** — 55+ per-minor snapshots across v4/v5/v6. Query the exact API surface of `antd@5.3.0`, not just "latest v5".
+- 🤖 **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
+- 🌍 **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
+- 🔮 **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
+- 🧩 **14 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
 
 <br>
 
-## Install
+## 📦 Install
 
 ```bash
 npm install -g @ant-design/cli
@@ -61,7 +61,7 @@ bun add -g @ant-design/cli
 
 <br>
 
-## Quick Start
+## 🚀 Quick Start
 
 ```bash
 antd info Button                    # Component props, types, defaults
@@ -76,9 +76,9 @@ antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 
 <br>
 
-## Commands
+## 📖 Commands
 
-### Knowledge Query
+### 📚 Knowledge Query
 
 | Command | Description |
 |---|---|
@@ -90,7 +90,7 @@ antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 | [`antd semantic <C>`](#antd-semantic-component) | Semantic `classNames` / `styles` structure with usage examples |
 | [`antd changelog`](#antd-changelog-v1-v2-component) | Changelog entries, version ranges, or cross-version API diff |
 
-### Project Analysis
+### 🔍 Project Analysis
 
 | Command | Description |
 |---|---|
@@ -99,7 +99,7 @@ antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 | [`antd lint [target]`](#antd-lint-target) | Deprecated APIs, accessibility gaps, performance issues, best practices |
 | [`antd migrate <from> <to>`](#antd-migrate-from-to) | Migration checklist with auto-fixable/manual split and `--apply` agent prompt |
 
-### Issue Reporting
+### 🐛 Issue Reporting
 
 | Command | Description |
 |---|---|
@@ -292,7 +292,7 @@ antd bug-cli --title "..." --submit
 
 <br>
 
-## Global Flags
+## ⚙️ Global Flags
 
 | Flag | Description | Default |
 |---|---|---|
@@ -306,7 +306,7 @@ antd bug-cli --title "..." --submit
 
 <br>
 
-## Agent Integration
+## 🤖 Agent Integration
 
 The CLI ships with a [skill file](./skills/antd/SKILL.md) that teaches code agents *when* and *how* to use each command:
 
@@ -318,6 +318,6 @@ Works with [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [
 
 <br>
 
-## License
+## 📄 License
 
 [MIT](./LICENSE) © [Ant Design](https://ant.design)

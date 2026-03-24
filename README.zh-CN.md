@@ -22,7 +22,7 @@
 
 <br>
 
-## 为什么
+## 🤔 为什么
 
 Code Agent（Claude Code、Cursor、Copilot、Codex、Gemini CLI）在拥有即时 API 数据访问能力时，能写出更好的 antd 代码。这个 CLI 正是为此而生 — **antd v4 / v5 / v6 的每个 Prop、Token、Demo 和 Changelog 条目**，本地打包，毫秒级查询。
 
@@ -32,18 +32,18 @@ npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
 
 <br>
 
-## 亮点
+## ✨ 亮点
 
-- **完全离线** — 所有元数据随包安装，无需网络请求，无延迟，无 API Key。
-- **版本精确** — 跨 v4/v5/v6 的 55+ 小版本快照。查询 `antd@5.3.0` 的精确 API，而非仅 "最新 v5"。
-- **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
-- **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
-- **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
-- **14 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
+- 📦 **完全离线** — 所有元数据随包安装，无需网络请求，无延迟，无 API Key。
+- 🎯 **版本精确** — 跨 v4/v5/v6 的 55+ 小版本快照。查询 `antd@5.3.0` 的精确 API，而非仅 "最新 v5"。
+- 🤖 **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
+- 🌍 **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
+- 🔮 **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
+- 🧩 **14 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
 
 <br>
 
-## 安装
+## 📦 安装
 
 ```bash
 npm install -g @ant-design/cli
@@ -61,7 +61,7 @@ bun add -g @ant-design/cli
 
 <br>
 
-## 快速开始
+## 🚀 快速开始
 
 ```bash
 antd info Button                    # 组件 Props、类型、默认值
@@ -76,9 +76,9 @@ antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 
 <br>
 
-## 命令
+## 📖 命令
 
-### 知识查询
+### 📚 知识查询
 
 | 命令 | 说明 |
 |---|---|
@@ -90,7 +90,7 @@ antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 | [`antd semantic <C>`](#antd-semantic-component) | 语义化 `classNames` / `styles` 结构及用法示例 |
 | [`antd changelog`](#antd-changelog-v1-v2-component) | Changelog 条目、版本范围或跨版本 API 对比 |
 
-### 项目分析
+### 🔍 项目分析
 
 | 命令 | 说明 |
 |---|---|
@@ -99,7 +99,7 @@ antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 | [`antd lint [target]`](#antd-lint-target) | 废弃 API、无障碍缺陷、性能问题、最佳实践 |
 | [`antd migrate <from> <to>`](#antd-migrate-from-to) | 迁移清单，区分自动修复/手动处理，`--apply` 生成 Agent 提示 |
 
-### 问题反馈
+### 🐛 问题反馈
 
 | 命令 | 说明 |
 |---|---|
@@ -292,7 +292,7 @@ antd bug-cli --title "..." --submit
 
 <br>
 
-## 全局参数
+## ⚙️ 全局参数
 
 | 参数 | 说明 | 默认值 |
 |---|---|---|
@@ -306,7 +306,7 @@ antd bug-cli --title "..." --submit
 
 <br>
 
-## Agent 集成
+## 🤖 Agent 集成
 
 CLI 内置 [Skill 文件](./skills/antd/SKILL.md)，指导 Code Agent 在正确的时机调用正确的命令：
 
@@ -318,6 +318,6 @@ npx skills add ant-design/ant-design-cli
 
 <br>
 
-## 开源协议
+## 📄 开源协议
 
 [MIT](./LICENSE) © [Ant Design](https://ant.design)
