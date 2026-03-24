@@ -51,6 +51,13 @@ jobs:
           # Update package.json version
           npm version "$CLI_VERSION" --no-git-tag-version
 
+          # Prepend changelog entry
+          DATE=$(date -u +%Y-%m-%d)
+          ENTRY_EN="## ${CLI_VERSION} (${DATE})\n\n- Update antd metadata (${VERSIONS})\n"
+          ENTRY_ZH="## ${CLI_VERSION} (${DATE})\n\n- 同步 antd 元数据 (${VERSIONS})\n"
+          sed -i "1s/^# Changelog\$/# Changelog\n\n${ENTRY_EN}/" CHANGELOG.md
+          sed -i "1s/^# 更新日志\$/# 更新日志\n\n${ENTRY_ZH}/" CHANGELOG.zh-CN.md
+
           # Build and test
           npm run build
           npm test
@@ -58,7 +65,7 @@ jobs:
           # Commit, tag and push
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ package.json package-lock.json
+          git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md
           git commit -m "data: sync antd metadata (${VERSIONS})"
           git tag "v${CLI_VERSION}"
           git push origin main --tags
