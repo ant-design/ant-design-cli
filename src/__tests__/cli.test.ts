@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { writeFileSync, mkdirSync, rmSync, mkdtempSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import type { LintIssue } from '../commands/lint.js';
 
 const CLI = join(__dirname, '..', '..', 'dist', 'index.js');
 
@@ -383,18 +384,49 @@ describe('CLI e2e', () => {
     expect(data).toHaveProperty('issues');
   });
 
-  it('lint deprecated message includes replacement hint from description', () => {
-    const tmpDir = join(__dirname, '__tmp_lint_deprecated__');
-    const fixture = join(tmpDir, 'card-test.tsx');
+  /** Create a temp fixture, run lint, and clean up. */
+  function lintFixture(name: string, content: string, extraArgs: string[] = []): string {
+    const tmpDir = join(__dirname, `__tmp_lint_${name}__`);
+    const fixture = join(tmpDir, `${name}.tsx`);
     try {
       mkdirSync(tmpDir, { recursive: true });
-      writeFileSync(fixture, `import { Card } from 'antd';\nconst App = () => <Card bordered={false}>x</Card>;\n`);
-      const out = run('lint', fixture, '--version', '6.3.1');
-      expect(out).toMatch(/bordered.*deprecated/i);
-      expect(out).toMatch(/variant/i);
+      writeFileSync(fixture, content);
+      return run('lint', fixture, '--version', '6.3.1', ...extraArgs);
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
     }
+  }
+
+  it('lint deprecated message includes replacement hint from description', () => {
+    const out = lintFixture('card', `import { Card } from 'antd';\nconst App = () => <Card bordered={false}>x</Card>;\n`);
+    expect(out).toMatch(/bordered.*deprecated/i);
+    expect(out).toMatch(/variant/i);
+  });
+
+  it('lint deprecated prop should not flag same prop name on unrelated components', () => {
+    const out = lintFixture(
+      'button',
+      `import { Button, Divider } from 'antd';\nconst App = () => <Button type="primary">Click</Button>;\n`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    const dividerTypeIssues = data.issues.filter(
+      (i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Divider') && i.message.includes('type'),
+    );
+    expect(dividerTypeIssues).toHaveLength(0);
+  });
+
+  it('lint deprecated prop should still flag when used on the correct component', () => {
+    const out = lintFixture(
+      'divider',
+      `import { Divider } from 'antd';\nconst App = () => <Divider type="vertical" />;\n`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    const dividerTypeIssues = data.issues.filter(
+      (i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Divider') && i.message.includes('type'),
+    );
+    expect(dividerTypeIssues.length).toBeGreaterThan(0);
   });
 
   it('changelog should error when from > to', () => {
