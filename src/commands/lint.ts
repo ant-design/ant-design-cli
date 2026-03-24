@@ -166,7 +166,7 @@ function lintFile(
     // Usage checks (prop combination mistakes)
     if (!only || only === 'usage') {
       // Form.Item: shouldUpdate and dependencies should not be used together
-      if (/Form\.Item\b/.test(line) || /<Form\.Item\b/.test(line)) {
+      if (/Form\.Item\b/.test(line)) {
         if (hasNearbyMatch(lines, i, 10, /shouldUpdate\s*[=]/) && hasNearbyMatch(lines, i, 10, /dependencies\s*[=]/)) {
           issues.push({
             file: filePath,
@@ -194,7 +194,7 @@ function lintFile(
 
       // Checkbox: value is not a valid prop, did you mean checked?
       if (hasCheckbox && /<Checkbox\b/.test(line) && !/Checkbox\.Group/.test(line)) {
-        if (hasNearbyMatch(lines, i, 5, /\bvalue\s*=/) && !hasNearbyMatch(lines, i, 5, /\bchecked\s*=/)) {
+        if (hasNearbyMatch(lines, i, 5, /\bvalue\s*=/)) {
           issues.push({
             file: filePath,
             line: i + 1,
@@ -208,7 +208,7 @@ function lintFile(
       // Divider: children not working in vertical mode
       if (hasDivider && /<Divider\b/.test(line)) {
         if (hasNearbyMatch(lines, i, 5, /type\s*=\s*['"{]vertical['"}]/) &&
-            !hasNearbyMatch(lines, i, 3, /\/>/)) {
+            (!hasNearbyMatch(lines, i, 3, /\/>/) || hasNearbyMatch(lines, i, 5, /\bchildren\s*=/))) {
           issues.push({
             file: filePath,
             line: i + 1,

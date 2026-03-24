@@ -331,7 +331,7 @@ JSON output:
 
 #### `antd lint [file/dir]`
 
-Check antd usage against best practices. Uses AST parsing (TypeScript compiler API) to analyze source files.
+Check antd usage against best practices. Uses pattern-based analysis (regex + line scanning) on source files.
 
 ```bash
 antd lint ./src
