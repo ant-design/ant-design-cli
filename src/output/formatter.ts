@@ -1,6 +1,6 @@
 import type { OutputFormat } from '../types.js';
 
-export function formatOutput(data: unknown, format: OutputFormat): string {
+function formatOutput(data: unknown, format: OutputFormat): string {
   switch (format) {
     case 'json':
       return JSON.stringify(data, null, 2);
