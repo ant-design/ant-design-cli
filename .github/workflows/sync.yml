@@ -46,17 +46,28 @@ jobs:
           done
 
           # Use antd v6 version as CLI version
+          OLD_VERSION=$(node -p "require('./package.json').version")
           CLI_VERSION=$(node -p "JSON.parse(require('fs').readFileSync('data/v6.json','utf8')).version")
 
           # Update package.json version
           npm version "$CLI_VERSION" --no-git-tag-version
 
-          # Prepend changelog entry
-          DATE=$(date -u +%Y-%m-%d)
-          ENTRY_EN="## ${CLI_VERSION} (${DATE})\n\n- Update antd metadata (${VERSIONS})\n"
-          ENTRY_ZH="## ${CLI_VERSION} (${DATE})\n\n- 同步 antd 元数据 (${VERSIONS})\n"
-          sed -i "1s/^# Changelog\$/# Changelog\n\n${ENTRY_EN}/" CHANGELOG.md
-          sed -i "1s/^# 更新日志\$/# 更新日志\n\n${ENTRY_ZH}/" CHANGELOG.zh-CN.md
+          # Prepend changelog entry with compare link
+          node -e "
+            const fs = require('fs');
+            const date = new Date().toISOString().slice(0, 10);
+            const repo = 'https://github.com/ant-design/ant-design-cli';
+            const compare = '[${CLI_VERSION}](' + repo + '/compare/v${OLD_VERSION}...v${CLI_VERSION})';
+            const versions = '${VERSIONS}';
+            for (const [file, title, msg] of [
+              ['CHANGELOG.md', '# Changelog', 'Update antd metadata'],
+              ['CHANGELOG.zh-CN.md', '# 更新日志', '同步 antd 元数据'],
+            ]) {
+              const content = fs.readFileSync(file, 'utf8');
+              const entry = '## ' + compare + ' (' + date + ')\n\n- ' + msg + ' (' + versions + ')\n';
+              fs.writeFileSync(file, content.replace(title, title + '\n\n' + entry));
+            }
+          "
 
           # Build and test
           npm run build
