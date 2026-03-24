@@ -6,7 +6,7 @@ import { detectVersion } from '../data/version.js';
 import { output } from '../output/formatter.js';
 import { collectFiles, parseAntdImports } from '../utils/scan.js';
 
-interface LintIssue {
+export interface LintIssue {
   file: string;
   line: number;
   rule: string;
@@ -40,10 +40,11 @@ function getDeprecatedProps(store: ReturnType<typeof loadMetadataForVersion>): M
   return result;
 }
 
-/** Check if a pattern exists within `lookahead` lines starting from index `i`. */
-function hasNearbyMatch(lines: string[], i: number, lookahead: number, pattern: RegExp): boolean {
+/** Check if a pattern exists within a window around index `i`. */
+function hasNearbyMatch(lines: string[], i: number, lookahead: number, pattern: RegExp, lookbehind = 0): boolean {
+  const start = Math.max(0, i - lookbehind);
   const end = Math.min(i + lookahead, lines.length);
-  for (let j = i; j < end; j++) {
+  for (let j = start; j < end; j++) {
     if (pattern.test(lines[j])) return true;
   }
   return false;
@@ -68,13 +69,19 @@ function lintFile(
   if (importedComponents.length === 0) return [];
 
   // Build per-component deprecated prop regexes once
-  const deprecatedChecks: { compName: string; dep: { prop: string; since: string; message: string }; regex: RegExp }[] = [];
+  const deprecatedChecks: { compName: string; dep: { prop: string; since: string; message: string }; regex: RegExp; compRegex: RegExp }[] = [];
   if (!only || only === 'deprecated') {
     for (const compName of importedComponents) {
       const deprecations = deprecatedMap.get(compName);
       if (!deprecations) continue;
+      const compRegex = new RegExp(`<${escapeRegExp(compName)}[\\s/>]`);
       for (const dep of deprecations) {
-        deprecatedChecks.push({ compName, dep, regex: new RegExp(`\\b${escapeRegExp(dep.prop)}\\b\\s*[=({]`) });
+        deprecatedChecks.push({
+          compName,
+          dep,
+          regex: new RegExp(`\\b${escapeRegExp(dep.prop)}\\b\\s*[=({]`),
+          compRegex,
+        });
       }
     }
   }
@@ -95,8 +102,8 @@ function lintFile(
     const line = lines[i];
 
     // Deprecated prop checks
-    for (const { compName, dep, regex } of deprecatedChecks) {
-      if (regex.test(line)) {
+    for (const { compName, dep, regex, compRegex } of deprecatedChecks) {
+      if (regex.test(line) && hasNearbyMatch(lines, i, 3, compRegex, 10)) {
         issues.push({
           file: filePath,
           line: i + 1,
