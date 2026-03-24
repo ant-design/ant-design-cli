@@ -140,58 +140,68 @@ antd list --format json
 antd list --version 5.0.0 --format json
 ```
 
-### 8. Reporting issues
+### 8. Reporting antd bugs
 
-When you encounter a confirmed antd or CLI bug that can't be resolved locally, use the agentic feedback flow:
+When you encounter a confirmed antd component bug that can't be resolved locally:
+
+```bash
+# Step 1: Preview for user review
+antd bug --title "DatePicker crashes when selecting date" \
+  --reproduction "https://codesandbox.io/s/xxx" \
+  --steps "1. Open DatePicker 2. Click a date" \
+  --expected "Date is selected" \
+  --actual "Component crashes with error" \
+  --format json
+
+# Step 2: Show to user, ask for confirmation
+
+# Step 3: Submit after user confirms
+antd bug --title "DatePicker crashes when selecting date" \
+  --reproduction "https://codesandbox.io/s/xxx" \
+  --steps "1. Open DatePicker 2. Click a date" \
+  --expected "Date is selected" \
+  --actual "Component crashes with error" \
+  --submit
+```
+
+### 9. Auto-reporting CLI issues
+
+**IMPORTANT: Whenever you use any `antd` CLI command and notice something wrong, you should proactively initiate a bug report using `antd bug-cli`.**
+
+Trigger conditions — report a CLI bug when you observe any of these:
+- A command **crashes or exits with an unexpected error**
+- A command **returns clearly incorrect data** (e.g. `antd info Button` shows wrong props, missing props, or props from the wrong version)
+- A command's **output doesn't match its documented behavior** (e.g. `--format json` returns non-JSON, `--version X` is ignored)
+- A command **returns empty or missing data** when it shouldn't (e.g. `antd demo Button` returns no demos, `antd token Button` returns no tokens for v5+)
+- **Inconsistencies between commands** (e.g. `antd list` shows a component but `antd info` says it doesn't exist)
 
 **Workflow:**
-1. First diagnose using `antd doctor`, `antd info`, `antd lint`
-2. If it's a genuine bug, assemble the report and preview it:
+1. You notice something wrong while using the CLI
+2. Gather evidence: the exact command you ran, what was returned, and what you expected
+3. Preview the bug report for the user:
 
 ```bash
-# Preview antd bug report for user review
-antd bug --title "DatePicker crashes when selecting date" \
-  --reproduction "https://codesandbox.io/s/xxx" \
-  --steps "1. Open DatePicker 2. Click a date" \
-  --expected "Date is selected" \
-  --actual "Component crashes with error" \
-  --format json
-
-# Preview CLI bug report for user review
-antd bug-cli --title "antd info shows wrong props for Select" \
-  --description "Running antd info Select shows incorrect data" \
-  --steps "1. Run antd info Select --version 5.0.0" \
-  --expected "Shows 5.0.0 props" \
-  --actual "Shows latest props instead" \
+antd bug-cli --title "antd info Button returns wrong props for v5.12.0" \
+  --description "When querying Button props for version 5.12.0, the output includes props that don't exist in that version" \
+  --steps "1. Run: antd info Button --version 5.12.0 --format json" \
+  --expected "Props matching antd 5.12.0 Button API" \
+  --actual "Props include 'classNames' which was added in 5.16.0" \
   --format json
 ```
 
-3. Show the assembled issue content to the user and ask for confirmation
-4. After user confirms, submit:
+4. Show the report to the user: "I noticed an issue with the CLI while working. Here's a bug report — shall I submit it?"
+5. Submit after user confirms:
 
 ```bash
-# Submit antd bug
-antd bug --title "DatePicker crashes when selecting date" \
-  --reproduction "https://codesandbox.io/s/xxx" \
-  --steps "1. Open DatePicker 2. Click a date" \
-  --expected "Date is selected" \
-  --actual "Component crashes with error" \
-  --submit
-
-# Submit CLI bug
-antd bug-cli --title "antd info shows wrong props for Select" \
-  --description "Running antd info Select shows incorrect data" \
-  --steps "1. Run antd info Select --version 5.0.0" \
-  --expected "Shows 5.0.0 props" \
-  --actual "Shows latest props instead" \
+antd bug-cli --title "antd info Button returns wrong props for v5.12.0" \
+  --description "..." \
+  --steps "..." \
+  --expected "..." \
+  --actual "..." \
   --submit
 ```
 
-**Key rules:**
-- Always diagnose first before reporting — don't report issues that can be resolved locally
-- Always preview and get user confirmation before submitting with `--submit`
-- Include reproduction links when possible for antd bugs
-- Provide clear, specific steps to reproduce
+**Key principle:** You are a quality feedback loop for the CLI. Don't silently work around CLI issues — report them so they get fixed. Always confirm with the user before submitting.
 
 ## Global Flags
 
@@ -209,4 +219,5 @@ antd bug-cli --title "antd info shows wrong props for Select" \
 3. **Use `--format json`** — Every command supports it. Parse the JSON output rather than regex-matching text output.
 4. **Check before suggesting migration** — Run `antd changelog <v1> <v2>` and `antd migrate` before advising on version upgrades.
 5. **Lint after changes** — After writing or modifying antd code, run `antd lint` on the changed files to catch deprecated or problematic usage.
-6. **Report bugs through the CLI** — When you encounter an antd or CLI bug that can't be resolved, use `antd bug` / `antd bug-cli` to report it. Always preview first, get user confirmation, then submit.
+6. **Report antd bugs** — When you encounter an antd component bug, use `antd bug` to report it. Always preview first, get user confirmation, then submit.
+7. **Auto-report CLI issues** — If any `antd` command crashes, returns wrong data, or behaves inconsistently, proactively use `antd bug-cli` to report it. You are the quality feedback loop for the CLI — don't silently work around issues.
