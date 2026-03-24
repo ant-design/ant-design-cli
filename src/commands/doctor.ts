@@ -380,28 +380,33 @@ function checkEcosystemPeerDeps(ctx: DoctorContext): CheckResult[] {
   return ctx.ecosystemPackages.map((pkg) => {
     const failures: string[] = [];  // installed but version doesn't satisfy range
     const warnings: string[] = [];  // not installed at all
-    const suggestions: string[] = [];
+    const failureSuggestions: string[] = [];
+    const warningSuggestions: string[] = [];
 
     for (const [dep, range] of Object.entries(pkg.peerDependencies)) {
       const installedVersion = getInstalledVersion(ctx.cwd, dep);
 
       if (installedVersion === null) {
         warnings.push(`${dep} is not installed (requires ${range})`);
-        suggestions.push(`npm install ${dep}`);
+        warningSuggestions.push(dep);
       } else if (!satisfies(installedVersion, range)) {
         failures.push(`${dep} requires ${range} (installed: ${installedVersion})`);
-        suggestions.push(`npm install ${dep}@"${range}"`);
+        failureSuggestions.push(`npm install ${dep}@"${range}"`);
       }
     }
 
     if (failures.length > 0) {
       const allIssues = [...failures, ...warnings].join('; ');
+      const suggestionCmds = [...failureSuggestions];
+      if (warningSuggestions.length > 0) {
+        suggestionCmds.push(`npm install ${warningSuggestions.join(' ')}`);
+      }
       return {
         name: `ecosystem-compat:${pkg.shortName}`,
         status: 'fail' as const,
         severity: 'error' as const,
         message: `${pkg.name} ${pkg.version} peerDep issues: ${allIssues}`,
-        suggestion: `Run \`${suggestions[0]}\``,
+        suggestion: `Run: ${suggestionCmds.join(' && ')}`,
       };
     }
 
@@ -411,7 +416,7 @@ function checkEcosystemPeerDeps(ctx: DoctorContext): CheckResult[] {
         status: 'warn' as const,
         severity: 'warning' as const,
         message: `${pkg.name} ${pkg.version} peerDep issues: ${warnings.join('; ')}`,
-        suggestion: `Run \`${suggestions[0]}\``,
+        suggestion: `Run \`npm install ${warningSuggestions.join(' ')}\``,
       };
     }
 
