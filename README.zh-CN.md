@@ -61,6 +61,18 @@ bun add -g @ant-design/cli
 
 <br>
 
+## 🤖 Agent 集成
+
+CLI 内置 [Skill 文件](./skills/antd/SKILL.md)，指导 Code Agent 在正确的时机调用正确的命令：
+
+```bash
+npx skills add ant-design/ant-design-cli
+```
+
+支持 [Claude Code](https://claude.ai/code)、[Cursor](https://cursor.sh)、[Codex](https://openai.com/codex)、[Gemini CLI](https://github.com/google-gemini/gemini-cli) 等所有兼容 [skills](https://github.com/nicepkg/agent-skills) 协议的 Agent。
+
+<br>
+
 ## 🚀 快速开始
 
 ```bash
@@ -303,18 +315,6 @@ antd bug-cli --title "..." --submit
 | `-V, --cli-version` | 打印 CLI 版本号 | — |
 
 **版本自动检测**：`--version` 参数 → `node_modules/antd` → `package.json` 依赖声明 → 回退 `5.24.0`
-
-<br>
-
-## 🤖 Agent 集成
-
-CLI 内置 [Skill 文件](./skills/antd/SKILL.md)，指导 Code Agent 在正确的时机调用正确的命令：
-
-```bash
-npx skills add ant-design/ant-design-cli
-```
-
-支持 [Claude Code](https://claude.ai/code)、[Cursor](https://cursor.sh)、[Codex](https://openai.com/codex)、[Gemini CLI](https://github.com/google-gemini/gemini-cli) 等所有兼容 [skills](https://github.com/nicepkg/agent-skills) 协议的 Agent。
 
 <br>
 

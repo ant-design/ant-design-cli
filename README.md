@@ -61,6 +61,18 @@ bun add -g @ant-design/cli
 
 <br>
 
+## 🤖 Agent Integration
+
+The CLI ships with a [skill file](./skills/antd/SKILL.md) that teaches code agents *when* and *how* to use each command:
+
+```bash
+npx skills add ant-design/ant-design-cli
+```
+
+Works with [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [Codex](https://openai.com/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli), and any agent supporting the [skills](https://github.com/nicepkg/agent-skills) protocol.
+
+<br>
+
 ## 🚀 Quick Start
 
 ```bash
@@ -303,18 +315,6 @@ antd bug-cli --title "..." --submit
 | `-V, --cli-version` | Print CLI version | — |
 
 **Version auto-detection**: `--version` flag → `node_modules/antd` → `package.json` dependencies → fallback `5.24.0`
-
-<br>
-
-## 🤖 Agent Integration
-
-The CLI ships with a [skill file](./skills/antd/SKILL.md) that teaches code agents *when* and *how* to use each command:
-
-```bash
-npx skills add ant-design/ant-design-cli
-```
-
-Works with [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [Codex](https://openai.com/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli), and any agent supporting the [skills](https://github.com/nicepkg/agent-skills) protocol.
 
 <br>
 
