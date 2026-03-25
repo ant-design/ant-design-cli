@@ -1,59 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { parseAntdImports, collectFiles, readJson, SCAN_EXTENSIONS, SKIP_DIRS } from '../scan.js';
+import { collectFiles, readJson, SCAN_EXTENSIONS, SKIP_DIRS } from '../scan.js';
 import { join } from 'node:path';
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
-
-describe('parseAntdImports', () => {
-  it('should parse basic antd imports', () => {
-    const code = `import { Button, Table } from 'antd';`;
-    expect(parseAntdImports(code)).toEqual(['Button', 'Table']);
-  });
-
-  it('should parse imports from antd sub-paths', () => {
-    const code = `import { DatePicker } from 'antd/es/date-picker';`;
-    expect(parseAntdImports(code)).toEqual(['DatePicker']);
-  });
-
-  it('should parse multiple import statements', () => {
-    const code = `
-import { Button } from 'antd';
-import { Form, Input } from 'antd';
-    `;
-    expect(parseAntdImports(code)).toEqual(['Button', 'Form', 'Input']);
-  });
-
-  it('should return empty for non-antd imports', () => {
-    const code = `import { useState } from 'react';`;
-    expect(parseAntdImports(code)).toEqual([]);
-  });
-
-  it('should handle imports with extra whitespace', () => {
-    const code = `import {  Button ,  Table  } from 'antd';`;
-    expect(parseAntdImports(code)).toEqual(['Button', 'Table']);
-  });
-
-  it('should return empty for empty string', () => {
-    expect(parseAntdImports('')).toEqual([]);
-  });
-
-  it('should handle double-quoted imports', () => {
-    const code = `import { Select } from "antd";`;
-    expect(parseAntdImports(code)).toEqual(['Select']);
-  });
-
-  it('excludes type-only imports entirely', () => {
-    const code = `import { type InputRef, Button } from 'antd';`;
-    const result = parseAntdImports(code);
-    expect(result).toEqual(['Button']);
-    expect(result).not.toContain('InputRef');
-    expect(result).not.toContain('type InputRef');
-  });
-
-  it('excludes all type-only imports when entire import is types', () => {
-    const code = `import { type FormInstance, type InputRef } from 'antd';`;
-    expect(parseAntdImports(code)).toEqual([]);
-  });
-});
 
 describe('collectFiles', () => {
   const tmpDir = join(__dirname, '__tmp_scan_test__');

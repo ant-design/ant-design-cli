@@ -51,7 +51,7 @@ CLI invocation
 - **`src/data/version.ts`** — `detectVersion(flagVersion?)` returns `{ version, majorVersion, source }`; also exports `compare()` and `valid()` semver helpers
 - **`src/output/error.ts`** — `createError()`, `printError()`, `fuzzyMatch()` (Levenshtein-based typo suggestions), and `ErrorCodes` constants
 - **`src/output/formatter.ts`** — `output(data, format)` and `formatTable(headers, rows, format)` for aligned text/markdown/json tables
-- **`src/utils/scan.ts`** — `collectFiles(dir)` and `parseAntdImports(content)` used by `lint` and `usage` commands
+- **`src/utils/scan.ts`** — `collectFiles(dir)` and `getJSXElementName(node)` used by `lint` and `usage` commands
 
 ## Project Structure
 

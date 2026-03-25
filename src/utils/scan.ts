@@ -4,9 +4,6 @@ import { join, extname } from 'node:path';
 export const SCAN_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx']);
 export const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next']);
 
-/** Match: import { Button, Form } from 'antd' or 'antd/es/...' */
-export const ANTD_IMPORT_RE = /import\s+\{([^}]+)\}\s+from\s+['"]antd(?:\/[^'"]*)?['"]/g;
-
 /**
  * Recursively collect source files from a directory or return a single file.
  */
@@ -33,22 +30,6 @@ export function collectFiles(dir: string): string[] {
     // ignore permission errors etc
   }
   return files;
-}
-
-/**
- * Extract antd component names from import statements in source code.
- */
-export function parseAntdImports(content: string): string[] {
-  const names: string[] = [];
-  ANTD_IMPORT_RE.lastIndex = 0;
-  let match: RegExpExecArray | null;
-  while ((match = ANTD_IMPORT_RE.exec(content)) !== null) {
-    const parsed = match[1].split(',')
-      .map((n) => n.trim())
-      .filter((n) => Boolean(n) && !/^type\s/.test(n));
-    names.push(...parsed);
-  }
-  return names;
 }
 
 /** Get the component name from a JSX element name AST node (e.g. "Button", "Typography.Text"). */
