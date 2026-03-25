@@ -1,8 +1,9 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { readFileSync } from 'node:fs';
+import { parseSync, Visitor } from 'oxc-parser';
 import { output } from '../output/formatter.js';
-import { collectFiles, parseAntdImports } from '../utils/scan.js';
+import { collectFiles, getJSXElementName } from '../utils/scan.js';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 
@@ -12,9 +13,6 @@ interface ComponentUsage {
   files: string[];
   subComponents?: Record<string, number>;
 }
-
-// Match: Form.Item, Table.Column etc
-const SUB_COMPONENT_RE = /\b(\w+)\.(\w+)\b/g;
 
 function scanFile(filePath: string): Map<string, { count: number; subComponents: Map<string, number> }> {
   const result = new Map<string, { count: number; subComponents: Map<string, number> }>();
@@ -26,27 +24,48 @@ function scanFile(filePath: string): Map<string, { count: number; subComponents:
     return result;
   }
 
-  const importedNames = parseAntdImports(content);
+  if (!content.includes('antd')) return result;
 
-  for (const name of importedNames) {
-    if (!result.has(name)) {
-      result.set(name, { count: 0, subComponents: new Map() });
-    }
-    result.get(name)!.count++;
-  }
+  const parsed = parseSync(filePath, content);
+  if (parsed.errors.length > 0) return result;
 
-  // Find sub-component usage (e.g. Form.Item) — only count capitalized children
-  // to exclude method/hook calls like Form.useForm, Modal.confirm, App.useApp
-  SUB_COMPONENT_RE.lastIndex = 0;
-  let match: RegExpExecArray | null;
-  while ((match = SUB_COMPONENT_RE.exec(content)) !== null) {
-    const [, parent, child] = match;
-    if (importedNames.includes(parent) && /^[A-Z]/.test(child)) {
-      const entry = result.get(parent)!;
-      const subKey = `${parent}.${child}`;
-      entry.subComponents.set(subKey, (entry.subComponents.get(subKey) || 0) + 1);
-    }
-  }
+  const importedNames = new Set<string>();
+
+  const visitor = new Visitor({
+    ImportDeclaration(node: any) {
+      const source = node.source.value;
+      if (source !== 'antd' && !source.startsWith('antd/')) return;
+      if (node.importKind === 'type') return;
+
+      for (const spec of node.specifiers) {
+        if (spec.type === 'ImportSpecifier') {
+          if (spec.importKind === 'type') continue;
+          const name = spec.imported?.name || spec.local?.name;
+          if (name) {
+            importedNames.add(name);
+            if (!result.has(name)) {
+              result.set(name, { count: 0, subComponents: new Map() });
+            }
+            result.get(name)!.count++;
+          }
+        }
+      }
+    },
+
+    // Detect sub-component JSX usage: <Form.Item>, <Table.Column>, etc.
+    JSXOpeningElement(node: any) {
+      const fullName = getJSXElementName(node.name);
+      if (!fullName.includes('.')) return;
+      const [parent] = fullName.split('.');
+      if (importedNames.has(parent)) {
+        const entry = result.get(parent);
+        if (entry) {
+          entry.subComponents.set(fullName, (entry.subComponents.get(fullName) || 0) + 1);
+        }
+      }
+    },
+  });
+  visitor.visit(parsed.program);
 
   return result;
 }
@@ -64,8 +83,6 @@ export function registerUsageCommand(program: Command): void {
       const versionInfo = detectVersion(opts.version);
       const store = loadMetadataForVersion(versionInfo.version);
       const knownComponents = new Set(store.components.map((c) => c.name));
-      // Also include sub-component leaf names that are directly importable
-      // (e.g. Row, Col from Grid.Row, Grid.Col)
       for (const comp of store.components) {
         for (const subKey of Object.keys(comp.subComponentProps ?? {})) {
           const leaf = subKey.split('.').pop();

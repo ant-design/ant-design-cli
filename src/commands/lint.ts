@@ -5,7 +5,7 @@ import { parseSync, Visitor } from 'oxc-parser';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { output } from '../output/formatter.js';
-import { collectFiles } from '../utils/scan.js';
+import { collectFiles, getJSXElementName } from '../utils/scan.js';
 
 export interface LintIssue {
   file: string;
@@ -37,16 +37,6 @@ function getDeprecatedProps(store: ReturnType<typeof loadMetadataForVersion>): M
 }
 
 // --- AST helpers ---
-
-function getJSXElementName(name: any): string {
-  if (name.type === 'JSXMemberExpression') {
-    return getJSXElementName(name.object) + '.' + name.property.name;
-  }
-  if (name.type === 'JSXIdentifier') {
-    return name.name;
-  }
-  return '';
-}
 
 function findAttr(attrs: any[], name: string): any | null {
   return attrs.find((a: any) => a.type === 'JSXAttribute' && a.name?.name === name) ?? null;

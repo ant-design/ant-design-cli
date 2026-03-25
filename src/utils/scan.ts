@@ -51,6 +51,17 @@ export function parseAntdImports(content: string): string[] {
   return names;
 }
 
+/** Get the component name from a JSX element name AST node (e.g. "Button", "Typography.Text"). */
+export function getJSXElementName(name: any): string {
+  if (name.type === 'JSXMemberExpression') {
+    return getJSXElementName(name.object) + '.' + name.property.name;
+  }
+  if (name.type === 'JSXIdentifier') {
+    return name.name;
+  }
+  return '';
+}
+
 /**
  * Read and parse a JSON file, returning null on failure.
  */
