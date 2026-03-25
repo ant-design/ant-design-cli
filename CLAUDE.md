@@ -88,6 +88,18 @@ scripts/
 
 - **Never commit directly to main.** Always create a feature branch and submit a PR.
 
+## Release Workflow
+
+Every publish (including beta/pre-release) must follow this checklist:
+
+1. Update `CHANGELOG.md` with a version section describing all changes
+2. Run tests (`npm run test`)
+3. `npm publish --otp=<code>` (add `--tag beta` for pre-releases)
+4. `git tag v{version} && git push origin v{version}`
+5. Create GitHub Release: `gh release create v{version} --title "v{version}" --notes "<changelog content>"` (add `--prerelease` for beta)
+
+**CHANGELOG.md and GitHub Release notes must have identical content.** Never use auto-generated release notes — always write them manually to match the CHANGELOG.
+
 ## Key Conventions
 
 - All commands support `--format json|text|markdown` and `--lang en|zh`

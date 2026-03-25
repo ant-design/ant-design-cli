@@ -1,8 +1,29 @@
 # Changelog
 
+## [6.3.5-beta.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.4...v6.3.5-beta.0) (2026-03-25)
+
+### Bug Fixes
+
+- fix: run update check when using `-V` flag — previously the update notifier was skipped because `-V` bypassed the commander `postAction` hook (#42)
+
+### Other Changes
+
+- Update skill to instruct code agents to auto-update CLI when "Update available" notice appears (#42)
+
 ## [6.3.4](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4) (2026-03-24)
 
+### Bug Fixes
+
+- fix: show nameZh and since in info command output (#5)
+- fix: restore missing name field in globalTokens for token command (#10)
+
+### Other Changes
+
 - Update antd metadata ([v4@4.24.16](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4#diff-0f73f4b6da46cd62e857a1f41ea51e697389f2c62a0775fcfc545edd653c5e2c), [v5@5.29.3](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4#diff-6b390e384eeea7f593730f71f071bf947ec0fac7a19f6d32b91e13191b177a58), [v6@6.3.4](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+- ci: switch to GitHub Actions OIDC publishing, remove NPM_TOKEN (#7)
+- ci: migrate to semantic-release for automated versioning and publishing (#14)
+- chore: simplify sync workflow (#11)
+- chore: remove unused sample-data directory (#12)
 
 
 ## 6.3.3 (2026-03-24)
