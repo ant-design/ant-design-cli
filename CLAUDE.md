@@ -59,11 +59,12 @@ CLI invocation
 src/
   index.ts          # CLI entry point, registers all commands
   types.ts          # Shared TypeScript types + localize() helper
-  commands/         # One file per command (list, info, demo, token, semantic, changelog/diff, doctor, usage, lint, migrate)
+  commands/         # One file per command (list, info, demo, token, semantic, changelog/diff, doctor, usage, lint, migrate, mcp)
+  mcp/              # MCP server: tools.ts (7 tool definitions + handlers), prompts.ts (prompt constants)
   data/             # loader.ts, version.ts, cache.ts
   output/           # formatter.ts, error.ts
   utils/            # scan.ts (file collection + antd import parsing)
-  __tests__/        # e2e CLI tests (require built dist/)
+  __tests__/        # e2e CLI tests (require built dist/), unit tests in commands/ subdir
 
 data/
   v4.json           # Bundled antd v4 metadata

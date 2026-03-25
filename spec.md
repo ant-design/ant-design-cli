@@ -255,6 +255,50 @@ Version range uses `<from>..<to>` syntax (inclusive on both ends). Both `from` a
 
 API diff mode (`changelog <v1> <v2>`) output includes: added props, removed props, changed types, renamed props. Cross-major-version diffing (e.g. v4 vs v5) is supported because the components schema is consistent across versions.
 
+### Agent Integration
+
+#### `antd mcp`
+
+Start an MCP (Model Context Protocol) stdio server for IDE agent integration. Exposes antd knowledge-query tools directly to agents in Claude Desktop, Cursor, and other MCP-compatible IDEs.
+
+```bash
+antd mcp                                # start with auto-detected version
+antd mcp --version 5.20.0 --lang zh     # pin version and language at startup
+```
+
+IDE configuration (`claude_desktop_config.json`):
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "antd",
+      "args": ["mcp", "--version", "5.20.0"]
+    }
+  }
+}
+```
+
+**MCP Tools (7):**
+
+| Tool | Description |
+|---|---|
+| `antd_list` | List all components with names, categories, descriptions |
+| `antd_info` | Get component props API |
+| `antd_doc` | Get full markdown documentation |
+| `antd_demo` | Get demo source code |
+| `antd_token` | Query Design Tokens |
+| `antd_semantic` | Query semantic classNames/styles structure |
+| `antd_changelog` | Query changelog or diff API changes between versions |
+
+**MCP Prompts (2):**
+
+| Prompt | Description |
+|---|---|
+| `antd-expert` | General antd expert — tool usage workflow, avoid duplicate calls, query-before-generate |
+| `antd-page-generator` | Page generation assistant — fetch all relevant docs before coding |
+
+Global `--version` and `--lang` are resolved once at server startup (not per tool call). All tool outputs are JSON. The server uses `@modelcontextprotocol/sdk` with stdio transport.
+
 ### Project Analysis
 
 #### `antd doctor`

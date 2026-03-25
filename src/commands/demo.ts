@@ -1,9 +1,71 @@
 import type { Command } from 'commander';
-import type { GlobalOptions } from '../types.js';
-import { loadMetadataForVersion, findComponent, getAllComponentNames } from '../data/loader.js';
+import type { GlobalOptions, CLIError } from '../types.js';
+import { resolveComponent } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { createError, printError, fuzzyMatch, ErrorCodes } from '../output/error.js';
 import { output } from '../output/formatter.js';
+
+export interface DemoListResult {
+  component: string;
+  demos: { name: string; title: string; description: string }[];
+}
+
+export interface DemoResult {
+  component: string;
+  demo: string;
+  title: string;
+  description: string;
+  code: string;
+}
+
+/**
+ * Core function: get component demos.
+ * If name is omitted, returns list of all demos.
+ * If name is provided, returns specific demo with code.
+ * Returns data or CLIError. Never writes to stdout.
+ */
+export function getComponentDemo(
+  component: string,
+  opts: { version: string; name?: string },
+): DemoListResult | DemoResult | CLIError {
+  const resolved = resolveComponent(component, opts.version);
+  if ('error' in resolved) return resolved;
+  const { comp } = resolved;
+
+  const demos = comp.demos || [];
+
+  if (!opts.name) {
+    return {
+      component: comp.name,
+      demos: demos.map((d) => ({
+        name: d.name,
+        title: d.title,
+        description: d.description,
+      })),
+    };
+  }
+
+  const demo = demos.find((d) => d.name.toLowerCase() === opts.name!.toLowerCase());
+  if (!demo) {
+    const demoNames = demos.map((d) => d.name);
+    const suggestion = fuzzyMatch(opts.name, demoNames);
+    return createError(
+      ErrorCodes.DEMO_NOT_FOUND,
+      `Demo '${opts.name}' not found for ${comp.name}`,
+      suggestion
+        ? `Did you mean '${suggestion}'?`
+        : `Available demos: ${demoNames.join(', ') || 'none'}`,
+    );
+  }
+
+  return {
+    component: comp.name,
+    demo: demo.name,
+    title: demo.title,
+    description: demo.description,
+    code: demo.code,
+  };
+}
 
 export function registerDemoCommand(program: Command): void {
   program
@@ -12,85 +74,42 @@ export function registerDemoCommand(program: Command): void {
     .action((component: string, name?: string) => {
       const opts = program.opts<GlobalOptions>();
       const versionInfo = detectVersion(opts.version);
-      const store = loadMetadataForVersion(versionInfo.version);
-      const comp = findComponent(store, component);
+      const result = getComponentDemo(component, {
+        version: versionInfo.version,
+        name,
+      });
 
-      if (!comp) {
-        const names = getAllComponentNames(store);
-        const suggestion = fuzzyMatch(component, names);
-        const err = createError(
-          ErrorCodes.COMPONENT_NOT_FOUND,
-          `Component '${component}' not found`,
-          suggestion ? `Did you mean '${suggestion}'?` : undefined,
-        );
-        printError(err, opts.format);
+      if ('error' in result) {
+        printError(result, opts.format);
         process.exitCode = 1;
         return;
       }
 
-      const demos = comp.demos || [];
-
-      if (!name) {
-        // List all demos
+      if ('code' in result) {
+        // Single demo result
         if (opts.format === 'json') {
-          output(
-            {
-              component: comp.name,
-              demos: demos.map((d) => ({
-                name: d.name,
-                title: d.title,
-                description: d.description,
-              })),
-            },
-            'json',
-          );
+          output(result, 'json');
         } else {
-          console.log(`${comp.name} Demos:`);
+          console.log(`${result.component} / ${result.title}`);
+          console.log(`${result.description}`);
           console.log('');
-          for (const demo of demos) {
+          console.log(result.code);
+        }
+      } else {
+        // Demo list result
+        if (opts.format === 'json') {
+          output(result, 'json');
+        } else {
+          console.log(`${result.component} Demos:`);
+          console.log('');
+          for (const demo of result.demos) {
             console.log(`  ${demo.name} — ${demo.title}`);
             console.log(`    ${demo.description}`);
           }
-          if (demos.length === 0) {
+          if (result.demos.length === 0) {
             console.log('  No demos available.');
           }
         }
-        return;
-      }
-
-      // Find specific demo
-      const demo = demos.find((d) => d.name.toLowerCase() === name.toLowerCase());
-      if (!demo) {
-        const demoNames = demos.map((d) => d.name);
-        const suggestion = fuzzyMatch(name, demoNames);
-        const err = createError(
-          ErrorCodes.DEMO_NOT_FOUND,
-          `Demo '${name}' not found for ${comp.name}`,
-          suggestion
-            ? `Did you mean '${suggestion}'?`
-            : `Available demos: ${demoNames.join(', ') || 'none'}`,
-        );
-        printError(err, opts.format);
-        process.exitCode = 1;
-        return;
-      }
-
-      if (opts.format === 'json') {
-        output(
-          {
-            component: comp.name,
-            demo: demo.name,
-            title: demo.title,
-            description: demo.description,
-            code: demo.code,
-          },
-          'json',
-        );
-      } else {
-        console.log(`${comp.name} / ${demo.title}`);
-        console.log(`${demo.description}`);
-        console.log('');
-        console.log(demo.code);
       }
     });
 }

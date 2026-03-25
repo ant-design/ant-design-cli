@@ -2,11 +2,15 @@ import { readFileSync, existsSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { MetadataStore, ComponentData } from '../types.js';
+import type { MetadataStore, ComponentData, CLIError } from '../types.js';
+import { createError, fuzzyMatch, ErrorCodes } from '../output/error.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+let cachedDataPath: string | undefined;
+
 function getDataPath(): string {
+  if (cachedDataPath) return cachedDataPath;
   // Check for a known file to confirm the correct directory
   // Works from both dist/ and src/data/
   // Probe for both .json.gz (published package) and .json (local dev) formats
@@ -14,9 +18,10 @@ function getDataPath(): string {
     join(__dirname, '..', 'data'),       // from dist/
     join(__dirname, '..', '..', 'data'), // from src/data/
   ];
-  return candidates.find((p) =>
+  cachedDataPath = candidates.find((p) =>
     existsSync(join(p, 'v5.json.gz')) || existsSync(join(p, 'v5.json'))
   ) ?? candidates[0];
+  return cachedDataPath;
 }
 
 /** Read a JSON data file, supporting both .json.gz and plain .json formats. */
@@ -65,7 +70,18 @@ export function loadMetadata(majorVersion: string): MetadataStore {
  * 2. Nearest earlier minor               (e.g. requested 4.2.5 but only 4.1.x exists → use 4.1.x)
  * 3. Fall back to loadMetadata(majorVersion) (i.e. data/v4.json)
  */
+const metadataCache = new Map<string, MetadataStore>();
+
 export function loadMetadataForVersion(version: string): MetadataStore {
+  const cached = metadataCache.get(version);
+  if (cached) return cached;
+
+  const result = loadMetadataForVersionUncached(version);
+  metadataCache.set(version, result);
+  return result;
+}
+
+function loadMetadataForVersionUncached(version: string): MetadataStore {
   const parts = version.split('.');
   const major = parts[0];
   const majorVersion = `v${major}`;
@@ -138,4 +154,26 @@ export function findComponent(
 
 export function getAllComponentNames(store: MetadataStore): string[] {
   return store.components.map((c) => c.name);
+}
+
+/**
+ * Load metadata for a version, find a component, and return both.
+ * Returns CLIError with fuzzy-match suggestion if the component is not found.
+ */
+export function resolveComponent(
+  component: string,
+  version: string,
+): { store: MetadataStore; comp: ComponentData } | CLIError {
+  const store = loadMetadataForVersion(version);
+  const comp = findComponent(store, component);
+  if (!comp) {
+    const names = getAllComponentNames(store);
+    const suggestion = fuzzyMatch(component, names);
+    return createError(
+      ErrorCodes.COMPONENT_NOT_FOUND,
+      `Component '${component}' not found`,
+      suggestion ? `Did you mean '${suggestion}'?` : undefined,
+    );
+  }
+  return { store, comp };
 }

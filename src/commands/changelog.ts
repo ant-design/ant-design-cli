@@ -1,5 +1,5 @@
 import type { Command } from 'commander';
-import type { GlobalOptions, ComponentData, PropData, ChangelogEntry } from '../types.js';
+import type { GlobalOptions, ComponentData, PropData, ChangelogEntry, CLIError } from '../types.js';
 import { loadMetadataForVersion, findComponent, getAllComponentNames } from '../data/loader.js';
 import { detectVersion, compare } from '../data/version.js';
 import { output } from '../output/formatter.js';
@@ -36,36 +36,32 @@ const EMOJI_MAP: Record<string, string> = {
   other: '🛠',
 };
 
-function printChangelog(entries: ChangelogEntry[], format: string, versionArg?: string): void {
-  if (format === 'json') {
-    output(versionArg ? entries : { latest: entries }, 'json');
-    return;
-  }
-  for (const entry of entries) {
-    console.log(`## ${entry.version} (${entry.date})`);
-    console.log('');
-    for (const change of entry.changes) {
-      const emoji = EMOJI_MAP[change.type] || '•';
-      console.log(`  ${emoji} ${change.component} ${change.description}`);
-    }
-    console.log('');
-  }
-}
-
 // ── API diff logic ──
 
-interface PropDiff {
+export interface PropDiff {
   name: string;
   type?: string;
   replacement?: string;
   change?: string;
 }
 
-interface ComponentDiff {
+export interface ComponentDiff {
   component: string;
   added: PropDiff[];
   removed: PropDiff[];
   changed: PropDiff[];
+}
+
+export interface ChangelogResult {
+  entries: ChangelogEntry[];
+  versionArg?: string;
+}
+
+export interface DiffResult {
+  from: string;
+  to: string;
+  diffs: ComponentDiff[];
+  component?: string;
 }
 
 function diffProps(
@@ -102,42 +98,79 @@ function diffProps(
   return { added, removed, changed };
 }
 
-function runApiDiff(
-  v1: string,
-  v2: string,
-  component: string | undefined,
-  opts: GlobalOptions,
-): void {
-  const store1 = loadMetadataForVersion(v1);
-  const store2 = loadMetadataForVersion(v2);
+/**
+ * Core function: query changelog entries.
+ * Returns changelog data or CLIError. Never writes to stdout.
+ */
+export function queryChangelog(opts: {
+  snapshotVersion: string;
+  entryFilter?: string;
+}): ChangelogResult | CLIError {
+  const store = loadMetadataForVersion(opts.snapshotVersion);
+  const changelog = store.changelog || [];
+
+  if (changelog.length === 0) {
+    return createError(
+      ErrorCodes.VERSION_NOT_FOUND,
+      'No changelog data available',
+    );
+  }
+
+  const entries = filterEntries(changelog, opts.entryFilter);
+  if (entries.length === 0) {
+    return createError(
+      ErrorCodes.VERSION_NOT_FOUND,
+      `No changelog entries found for "${opts.entryFilter}"`,
+      `Available versions: ${changelog.map((e) => e.version).join(', ')}`,
+    );
+  }
+
+  return { entries, versionArg: opts.entryFilter };
+}
+
+/**
+ * Core function: diff API between two versions.
+ * Returns diff data or CLIError. Never writes to stdout.
+ */
+export function diffChangelog(opts: {
+  v1: string;
+  v2: string;
+  component?: string;
+}): DiffResult | CLIError {
+  // Validate version order
+  if (compare(opts.v1, opts.v2) > 0) {
+    return createError(
+      ErrorCodes.INVALID_ARGUMENT,
+      `Version order is invalid: "${opts.v1}" is newer than "${opts.v2}"`,
+      `Swap the versions: v1=${opts.v2}, v2=${opts.v1}`,
+    );
+  }
+
+  const store1 = loadMetadataForVersion(opts.v1);
+  const store2 = loadMetadataForVersion(opts.v2);
 
   if (store1.components.length === 0) {
-    printError(createError(ErrorCodes.VERSION_NOT_FOUND, `No data available for version ${v1}`), opts.format);
-    process.exitCode = 1;
-    return;
+    return createError(ErrorCodes.VERSION_NOT_FOUND, `No data available for version ${opts.v1}`);
   }
   if (store2.components.length === 0) {
-    printError(createError(ErrorCodes.VERSION_NOT_FOUND, `No data available for version ${v2}`), opts.format);
-    process.exitCode = 1;
-    return;
+    return createError(ErrorCodes.VERSION_NOT_FOUND, `No data available for version ${opts.v2}`);
   }
 
-  const componentsToCompare: string[] = component
-    ? [component]
+  const componentsToCompare: string[] = opts.component
+    ? [opts.component]
     : [...new Set([...getAllComponentNames(store1), ...getAllComponentNames(store2)])];
 
-  if (component) {
-    const c1 = findComponent(store1, component);
-    const c2 = findComponent(store2, component);
+  if (opts.component) {
+    const c1 = findComponent(store1, opts.component);
+    const c2 = findComponent(store2, opts.component);
     if (!c1 && !c2) {
       const allNames = [...new Set([...getAllComponentNames(store1), ...getAllComponentNames(store2)])];
-      const suggestion = fuzzyMatch(component, allNames);
-      printError(
-        createError(ErrorCodes.COMPONENT_NOT_FOUND, `Component '${component}' not found in either version`, suggestion ? `Did you mean '${suggestion}'?` : undefined),
-        opts.format,
+      const suggestion = fuzzyMatch(opts.component, allNames);
+      return createError(
+        ErrorCodes.COMPONENT_NOT_FOUND,
+        `Component '${opts.component}' not found in either version`,
+        suggestion ? `Did you mean '${suggestion}'?` : undefined,
       );
-      process.exitCode = 1;
-      return;
     }
   }
 
@@ -158,22 +191,44 @@ function runApiDiff(
     }
   }
 
-  if (opts.format === 'json') {
-    const result = component && diffs.length > 0
-      ? { from: v1, to: v2, ...diffs[0] }
-      : { from: v1, to: v2, diffs };
-    output(result, 'json');
+  return { from: opts.v1, to: opts.v2, diffs, component: opts.component };
+}
+
+// ── Printing helpers (CLI only) ──
+
+function printChangelogEntries(entries: ChangelogEntry[], format: string, versionArg?: string): void {
+  if (format === 'json') {
+    output(versionArg ? entries : { latest: entries }, 'json');
+    return;
+  }
+  for (const entry of entries) {
+    console.log(`## ${entry.version} (${entry.date})`);
+    console.log('');
+    for (const change of entry.changes) {
+      const emoji = EMOJI_MAP[change.type] || '•';
+      console.log(`  ${emoji} ${change.component} ${change.description}`);
+    }
+    console.log('');
+  }
+}
+
+function printApiDiff(result: DiffResult, format: string): void {
+  if (format === 'json') {
+    const jsonResult = result.component && result.diffs.length > 0
+      ? { from: result.from, to: result.to, ...result.diffs[0] }
+      : { from: result.from, to: result.to, diffs: result.diffs };
+    output(jsonResult, 'json');
     return;
   }
 
-  if (diffs.length === 0) {
-    console.log(`No API differences found between ${v1} and ${v2}.`);
+  if (result.diffs.length === 0) {
+    console.log(`No API differences found between ${result.from} and ${result.to}.`);
     return;
   }
 
-  console.log(`API Diff: ${v1} → ${v2}`);
+  console.log(`API Diff: ${result.from} → ${result.to}`);
   console.log('');
-  for (const diff of diffs) {
+  for (const diff of result.diffs) {
     console.log(`  ${diff.component}:`);
     for (const p of diff.added) console.log(`    + ${p.name}: ${p.type}`);
     for (const p of diff.removed) {
@@ -194,57 +249,40 @@ export function registerChangelogCommand(program: Command): void {
     .action((v1?: string, v2?: string, component?: string) => {
       const opts = program.opts<GlobalOptions>();
 
-      // Determine mode:
-      //   antd changelog                    → latest changelog
-      //   antd changelog 5.21.0             → single version changelog
-      //   antd changelog 5.20.0..5.22.0     → version range changelog
-      //   antd changelog 5.20.0 5.22.0      → API diff between two versions
-      //   antd changelog 5.20.0 5.22.0 Btn  → API diff for specific component
-
       const isChangelogMode = !v2 || (v1 && v1.includes('..'));
 
       if (isChangelogMode) {
-        // Changelog mode — infer major version from the version argument if not explicitly overridden
-        // For ranges like "6.1.0..6.3.0", extract the left-hand version to determine major
-        // For ranges like "5.20.0..5.22.0", use the "to" version (right side) so we load
-        // a snapshot that contains all entries up to that version.
         const v1ForDetect = v1?.includes('..') ? v1.split('..')[1] : v1;
         const versionForDetect = opts.version ?? (v1ForDetect && /^\d+\.\d+\.\d+$/.test(v1ForDetect) ? v1ForDetect : undefined);
         const versionInfo = detectVersion(versionForDetect);
-        const store = loadMetadataForVersion(versionInfo.version);
-        const changelog = store.changelog || [];
 
-        if (changelog.length === 0) {
-          console.log('No changelog data available.');
-          return;
-        }
+        const result = queryChangelog({
+          snapshotVersion: versionInfo.version,
+          entryFilter: v1,
+        });
 
-        const entries = filterEntries(changelog, v1);
-        if (entries.length === 0) {
-          const err = createError(
-            ErrorCodes.VERSION_NOT_FOUND,
-            `No changelog entries found for "${v1}"`,
-            `Available versions: ${changelog.map((e) => e.version).join(', ')}`,
-          );
-          printError(err, opts.format);
+        if ('error' in result) {
+          // Special case: "No changelog data available" should just print a message, not a structured error
+          if (result.code === ErrorCodes.VERSION_NOT_FOUND && !result.suggestion) {
+            console.log('No changelog data available.');
+            return;
+          }
+          printError(result, opts.format);
           process.exitCode = 1;
           return;
         }
 
-        printChangelog(entries, opts.format, v1);
+        printChangelogEntries(result.entries, opts.format, result.versionArg);
       } else {
-        // API diff mode — validate version order
-        if (compare(v1!, v2!) > 0) {
-          const err = createError(
-            ErrorCodes.INVALID_ARGUMENT,
-            `Version order is invalid: "${v1}" is newer than "${v2}"`,
-            `Did you mean: antd changelog ${v2} ${v1}${component ? ' ' + component : ''}?`,
-          );
-          printError(err, opts.format);
+        const result = diffChangelog({ v1: v1!, v2: v2!, component });
+
+        if ('error' in result) {
+          printError(result, opts.format);
           process.exitCode = 1;
           return;
         }
-        runApiDiff(v1!, v2!, component, opts);
+
+        printApiDiff(result, opts.format);
       }
     });
 }

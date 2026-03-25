@@ -43,6 +43,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
     "commander": "~13.1.0"
   },
   "devDependencies": {

@@ -11,6 +11,8 @@ export const ErrorCodes = {
   TITLE_REQUIRED: 'TITLE_REQUIRED',
   GH_NOT_FOUND: 'GH_NOT_FOUND',
   GH_SUBMIT_FAILED: 'GH_SUBMIT_FAILED',
+  DOC_NOT_AVAILABLE: 'DOC_NOT_AVAILABLE',
+  UNKNOWN_TOOL: 'UNKNOWN_TOOL',
 } as const;
 
 export function createError(code: string, message: string, suggestion?: string): CLIError {

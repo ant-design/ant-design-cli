@@ -203,6 +203,23 @@ antd bug-cli --title "antd info Button returns wrong props for v5.12.0" \
 
 **Key principle:** You are a quality feedback loop for the CLI. Don't silently work around CLI issues — report them so they get fixed. Always confirm with the user before submitting.
 
+### 10. Using as MCP server
+
+If working in an IDE that supports MCP (Claude Desktop, Cursor, etc.), the CLI can also run as an MCP server, exposing all knowledge-query tools directly:
+
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "antd",
+      "args": ["mcp", "--version", "5.20.0"]
+    }
+  }
+}
+```
+
+This provides 7 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_semantic`, `antd_changelog`) and 2 prompts (`antd-expert`, `antd-page-generator`) via MCP protocol.
+
 ## Global Flags
 
 | Flag | Purpose |
