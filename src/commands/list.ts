@@ -1,5 +1,5 @@
 import type { Command } from 'commander';
-import type { GlobalOptions, CLIError } from '../types.js';
+import type { GlobalOptions } from '../types.js';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { formatTable, output } from '../output/formatter.js';

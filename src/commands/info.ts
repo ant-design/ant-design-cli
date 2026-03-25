@@ -124,10 +124,11 @@ export function registerInfoCommand(program: Command): void {
         ? ['Property', 'Type', 'Default', 'Since', 'Description']
         : ['Property', 'Type', 'Default', 'Since'];
 
+      const since = (p: Record<string, unknown>) => (('since' in p && p.since) ? String(p.since) : '-');
       const rows: string[][] = result.props.map((p): string[] =>
         opts.detail && 'description' in p
-          ? [p.name, p.type, p.default, p.since ?? '-', (p as { description: string }).description || '-']
-          : [p.name, p.type, p.default, 'since' in p ? (p.since ?? '-') : '-'],
+          ? [p.name, p.type, p.default, since(p), (p as { description: string }).description || '-']
+          : [p.name, p.type, p.default, since(p)],
       );
       console.log(formatTable(headers, rows, fmt));
 
@@ -138,8 +139,8 @@ export function registerInfoCommand(program: Command): void {
           const subRows: string[][] = subProps.map((p): string[] => {
             const prop = p as { name: string; type: string; default: string; since?: string; description?: string };
             return opts.detail
-              ? [prop.name, prop.type, prop.default, prop.since ?? '-', prop.description || '-']
-              : [prop.name, prop.type, prop.default, prop.since ?? '-'];
+              ? [prop.name, prop.type, prop.default, prop.since || '-', prop.description || '-']
+              : [prop.name, prop.type, prop.default, prop.since || '-'];
           });
           console.log(formatTable(headers, subRows, fmt));
         }

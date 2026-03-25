@@ -2,7 +2,7 @@
 
 exports[`changelog > changelog 5.5.0 5.1.0 (from > to) 1`] = `
 "Error: Version order is invalid: "5.5.0" is newer than "5.1.0"
-Suggestion: Did you mean: antd changelog 5.1.0 5.5.0?"
+Suggestion: Swap the versions: v1=5.1.0, v2=5.5.0"
 `;
 
 exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
