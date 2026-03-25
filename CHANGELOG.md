@@ -2,12 +2,21 @@
 
 ## [6.3.5-beta.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.4...v6.3.5-beta.0) (2026-03-25)
 
+### New Features
+
+- feat: add `antd mcp` command — MCP server with 7 tools and 2 prompts for IDE integration (#38)
+
 ### Bug Fixes
 
-- fix: run update check when using `-V` flag — previously the update notifier was skipped because `-V` bypassed the commander `postAction` hook (#42)
+- fix: run update check when using `-V` flag (#42)
+- fix(lint): rewrite all rules with oxc-parser AST analysis (#40)
+- fix(lint): avoid false positives for deprecated prop rule on unrelated components (#36)
 
 ### Other Changes
 
+- refactor: extract core functions from 7 command modules (#38)
+- chore: keep JSON in git, exclude from npm via .npmignore (#41)
+- ci: add npm pack size detection workflow and badge (#39)
 - Update skill to instruct code agents to auto-update CLI when "Update available" notice appears (#42)
 
 ## [6.3.4](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4) (2026-03-24)
