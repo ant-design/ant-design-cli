@@ -39,7 +39,8 @@ npx skills add ant-design/ant-design-cli    # install as an agent skill
 - 🤖 **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
 - 🌍 **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
 - 🔮 **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
-- 🧩 **13 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
+- 🧩 **14 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
+- 🔌 **MCP server** — `antd mcp` starts a stdio server for native IDE integration (Claude Desktop, Cursor).
 
 <br>
 
@@ -76,6 +77,23 @@ Or simply tell your code agent:
 The agent will handle `npm install`, `npx skills add`, and start using the CLI automatically.
 
 Works with [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [Codex](https://openai.com/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli), and any agent supporting the [skills](https://github.com/nicepkg/agent-skills) protocol.
+
+### MCP Server
+
+For IDEs that support [Model Context Protocol](https://modelcontextprotocol.io), the CLI can run as an MCP server:
+
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "antd",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+This exposes 7 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_semantic`, `antd_changelog`) and 2 prompts (`antd-expert`, `antd-page-generator`) for native IDE integration.
 
 <br>
 

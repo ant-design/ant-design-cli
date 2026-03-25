@@ -13,17 +13,7 @@ export interface McpContext {
   lang: string;
 }
 
-interface McpTextContent {
-  type: 'text';
-  text: string;
-}
-
-interface McpResult {
-  content: McpTextContent[];
-  isError?: boolean;
-}
-
-function toMcpResult(data: unknown): McpResult {
+function toMcpResult(data: unknown) {
   if (data && typeof data === 'object' && 'error' in data) {
     return { content: [{ type: 'text' as const, text: JSON.stringify(data) }], isError: true };
   }
@@ -114,7 +104,7 @@ export const TOOL_DEFINITIONS = [
 ];
 
 export function createToolHandler(ctx: McpContext) {
-  return async (name: string, params: Record<string, unknown>): Promise<McpResult> => {
+  return async (name: string, params: Record<string, unknown>) => {
     switch (name) {
       case 'antd_list': {
         const components = listComponents({ version: ctx.version });

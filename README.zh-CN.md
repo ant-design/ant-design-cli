@@ -39,7 +39,8 @@ npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
 - 🤖 **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
 - 🌍 **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
 - 🔮 **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
-- 🧩 **13 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
+- 🧩 **14 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
+- 🔌 **MCP 服务** — `antd mcp` 启动 stdio 服务，原生集成 Claude Desktop、Cursor 等 IDE。
 
 <br>
 
@@ -74,6 +75,23 @@ npx skills add ant-design/ant-design-cli
 > 安装 `@ant-design/cli` 和 `ant-design/ant-design-cli` 的 antd skill
 
 Agent 会自动完成 `npm install`、`npx skills add`，并开始使用 CLI。
+
+### MCP 服务
+
+支持 [Model Context Protocol](https://modelcontextprotocol.io) 的 IDE 可直接将 CLI 作为 MCP 服务使用：
+
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "antd",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+提供 7 个工具（`antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_semantic`、`antd_changelog`）和 2 个提示词（`antd-expert`、`antd-page-generator`）。
 
 支持 [Claude Code](https://claude.ai/code)、[Cursor](https://cursor.sh)、[Codex](https://openai.com/codex)、[Gemini CLI](https://github.com/google-gemini/gemini-cli) 等所有兼容 [skills](https://github.com/nicepkg/agent-skills) 协议的 Agent。
 
