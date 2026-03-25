@@ -343,7 +343,7 @@ JSON output:
 
 #### `antd usage [dir]`
 
-Scan project for antd component/API usage statistics. Detects direct imports (`import { Button } from 'antd'`), sub-component usage (`Form.Item`, `Table.Column`), and named imports from sub-paths.
+Scan project for antd component/API usage statistics using AST-based analysis (powered by `oxc-parser`). Detects direct imports (`import { Button } from 'antd'`), sub-component JSX usage (`<Form.Item>`, `<Table.Column>`), and named imports from sub-paths.
 
 ```bash
 antd usage                          # scan current directory
@@ -353,7 +353,7 @@ antd usage ./src -f Form            # combine directory and filter
 antd usage --format json
 ```
 
-Imports are cross-referenced against the antd metadata for the detected version. Known antd component exports (e.g. `Button`, `Form`, `Row`, `Col`) appear in `components`. Non-component antd exports (e.g. `message`, `notification`, `theme`) are reported separately in `nonComponents`. TypeScript `import { type X }` syntax is handled — type-only imports are excluded entirely (they are not runtime values and have no component usage to track). Sub-component usage detection only counts JSX sub-components with capitalized names (e.g. `Form.Item`, `Table.Column`), not method or hook calls (e.g. `Form.useForm`, `Modal.confirm`).
+Imports are cross-referenced against the antd metadata for the detected version. Known antd component exports (e.g. `Button`, `Form`, `Row`, `Col`) appear in `components`. Non-component antd exports (e.g. `message`, `notification`, `theme`) are reported separately in `nonComponents`. TypeScript `import { type X }` syntax is handled — type-only imports are excluded entirely (they are not runtime values and have no component usage to track). Sub-component usage detection uses AST traversal to precisely identify JSX elements (e.g. `<Form.Item>`, `<Table.Column>`), automatically excluding method or hook calls (e.g. `Form.useForm()`, `Modal.confirm()`).
 
 The scanner skips directories named `node_modules`, `dist`, `build`, `.next`, `.git`, and any directory whose name starts with `.umi` (covers `.umi`, `.umi-production`, `.umi-test`, etc.).
 
@@ -376,7 +376,7 @@ JSON output:
 
 #### `antd lint [file/dir]`
 
-Check antd usage against best practices. Uses pattern-based analysis (regex + line scanning) on source files.
+Check antd usage against best practices. Uses AST-based analysis (powered by `oxc-parser`) on source files for precise detection.
 
 ```bash
 antd lint ./src
@@ -408,7 +408,7 @@ Note: This is complementary to ESLint. `antd lint` focuses on antd-specific know
 
 **Rule categories:**
 
-- **deprecated** — Deprecated props (with replacement info from metadata) and deprecated components (`BackTop` → `FloatButton.BackTop`, `Button.Group` / `Input.Group` → `Space.Compact`). Deprecated prop detection is scoped to the owning component's JSX tag (within ±10 lines) to avoid false positives when the same prop name appears on unrelated components.
+- **deprecated** — Deprecated props (with replacement info from metadata) and deprecated components (`BackTop` → `FloatButton.BackTop`, `Button.Group` / `Input.Group` → `Space.Compact`). Deprecated prop detection uses AST traversal to precisely match props to their owning JSX element, eliminating false positives from sibling components.
 - **a11y** — Accessibility: missing `alt` on Image, missing `aria-label` on clickable icons
 - **usage** — Prop combination mistakes detected from antd runtime warnings:
   - Form.Item `shouldUpdate` + `dependencies` conflict
