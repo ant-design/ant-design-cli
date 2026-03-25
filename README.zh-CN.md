@@ -91,6 +91,8 @@ Agent 会自动完成 `npm install`、`npx skills add`，并开始使用 CLI。
 }
 ```
 
+如需固定 antd 版本，在 `args` 数组中添加 `"--version", "5.20.0"`。
+
 提供 7 个工具（`antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_semantic`、`antd_changelog`）和 2 个提示词（`antd-expert`、`antd-page-generator`）。
 
 支持 [Claude Code](https://claude.ai/code)、[Cursor](https://cursor.sh)、[Codex](https://openai.com/codex)、[Gemini CLI](https://github.com/google-gemini/gemini-cli) 等所有兼容 [skills](https://github.com/nicepkg/agent-skills) 协议的 Agent。

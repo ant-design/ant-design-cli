@@ -39,13 +39,16 @@ export function registerListCommand(program: Command): void {
       const components = listComponents({ version: versionInfo.version });
 
       if (components.length === 0) {
-        console.log('No component data available.');
+        if (opts.format === 'json') {
+          output([], 'json');
+        } else {
+          console.log('No component data available.');
+        }
         return;
       }
 
       if (opts.format === 'json') {
-        const data = components.map(({ category, ...rest }) => rest);
-        output(data, 'json');
+        output(components, 'json');
         return;
       }
 

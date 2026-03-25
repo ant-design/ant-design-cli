@@ -13,7 +13,7 @@ export interface McpContext {
 }
 
 function toMcpResult(data: unknown) {
-  if (data && typeof data === 'object' && 'error' in data) {
+  if (data && typeof data === 'object' && 'error' in data && (data as { error: unknown }).error === true) {
     return { content: [{ type: 'text' as const, text: JSON.stringify(data) }], isError: true };
   }
   return { content: [{ type: 'text' as const, text: JSON.stringify(data) }] };
@@ -160,6 +160,16 @@ export function createToolHandler(ctx: McpContext) {
       case 'antd_changelog': {
         const v1 = params.v1 as string | undefined;
         const v2 = params.v2 as string | undefined;
+
+        if ((v1 && !v2) || (!v1 && v2)) {
+          return toMcpResult(
+            createError(
+              ErrorCodes.INVALID_ARGUMENT,
+              'Both v1 and v2 are required for diff mode',
+              'Provide both versions (v1 + v2), or omit both to use query mode',
+            ),
+          );
+        }
 
         if (v1 && v2) {
           const result = diffChangelog({

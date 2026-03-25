@@ -124,12 +124,12 @@ export function registerInfoCommand(program: Command): void {
         ? ['Property', 'Type', 'Default', 'Since', 'Description']
         : ['Property', 'Type', 'Default', 'Since'];
 
-      const since = (p: Record<string, unknown>) => (('since' in p && p.since) ? String(p.since) : '-');
-      const rows: string[][] = result.props.map((p): string[] =>
-        opts.detail && 'description' in p
-          ? [p.name, p.type, p.default, since(p), (p as { description: string }).description || '-']
-          : [p.name, p.type, p.default, since(p)],
-      );
+      const rows: string[][] = result.props.map((p): string[] => {
+        const s = ('since' in p && p.since) ? String(p.since) : '-';
+        return opts.detail && 'description' in p
+          ? [p.name, p.type, p.default, s, (p as { description: string }).description || '-']
+          : [p.name, p.type, p.default, s];
+      });
       console.log(formatTable(headers, rows, fmt));
 
       if (result.subComponentProps) {

@@ -7,6 +7,7 @@ const SHARED_TOOL_WORKFLOW = `## Tool usage workflow
 ## Additional tools
 - Use **antd_token** for querying design tokens (global or component-level) for theming
 - Use **antd_semantic** for querying semantic classNames/styles customization structure
+- Use **antd_changelog** for querying version changes and cross-version API diffs
 
 ## Rules
 - Avoid duplicate tool calls — do not call the same tool with the same parameters twice

@@ -294,7 +294,7 @@ IDE configuration (`claude_desktop_config.json`):
 
 | Prompt | Description |
 |---|---|
-| `antd-expert` | General antd expert — tool usage workflow, dedup, query-before-generate |
+| `antd-expert` | General antd expert — tool usage workflow, avoid duplicate calls, query-before-generate |
 | `antd-page-generator` | Page generation assistant — fetch all relevant docs before coding |
 
 Global `--version` and `--lang` are resolved once at server startup (not per tool call). All tool outputs are JSON. The server uses `@modelcontextprotocol/sdk` with stdio transport.

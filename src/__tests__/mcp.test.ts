@@ -117,6 +117,14 @@ describe('antd_token', () => {
 });
 
 describe('antd_semantic', () => {
+  it('returns semantic structure for Button', async () => {
+    const result = await handler('antd_semantic', { component: 'Button' });
+    expect(result.isError).toBeUndefined();
+    const data = parse(result);
+    expect(data.name).toBe('Button');
+    expect(Array.isArray(data.semanticStructure)).toBe(true);
+  });
+
   it('returns isError for unknown component', async () => {
     const result = await handler('antd_semantic', { component: 'NonExistentXyz' });
     expect(result.isError).toBe(true);
@@ -143,6 +151,13 @@ describe('antd_changelog', () => {
     expect(data.from).toBe('5.20.0');
     expect(data.to).toBe('5.20.0');
     expect(Array.isArray(data.diffs)).toBe(true);
+  });
+
+  it('returns isError when only v1 is provided', async () => {
+    const result = await handler('antd_changelog', { v1: '5.20.0' });
+    expect(result.isError).toBe(true);
+    const data = parse(result);
+    expect(data.code).toBe('INVALID_ARGUMENT');
   });
 
   it('returns isError when v1 > v2', async () => {

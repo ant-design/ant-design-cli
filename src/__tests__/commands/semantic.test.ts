@@ -20,8 +20,7 @@ describe('getSemanticStructure', () => {
   });
 
   it('returns empty structure array for component without semantic data', () => {
-    // Some components may not have semantic structure data
-    const result = getSemanticStructure('Button', { version: '5.20.0' });
+    const result = getSemanticStructure('Affix', { version: '5.20.0' });
     expect('error' in result).toBe(false);
     if (!('error' in result)) {
       expect(Array.isArray(result.semanticStructure)).toBe(true);

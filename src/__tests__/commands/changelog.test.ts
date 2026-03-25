@@ -44,6 +44,24 @@ describe('diffChangelog', () => {
     expect(err.code).toBe('COMPONENT_NOT_FOUND');
   });
 
+  it('returns non-empty diffs between different versions', () => {
+    const result = diffChangelog({ v1: '5.18.0', v2: '5.20.0' });
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.from).toBe('5.18.0');
+      expect(result.to).toBe('5.20.0');
+      expect(Array.isArray(result.diffs)).toBe(true);
+    }
+  });
+
+  it('returns error when v1 > v2', () => {
+    const result = diffChangelog({ v1: '5.22.0', v2: '5.20.0' });
+    expect('error' in result).toBe(true);
+    if ('error' in result) {
+      expect(result.code).toBe('INVALID_ARGUMENT');
+    }
+  });
+
   it('returns diff with component filter', () => {
     const result = diffChangelog({ v1: '5.20.0', v2: '5.20.0', component: 'Button' });
     expect('error' in result).toBe(false);
