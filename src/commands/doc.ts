@@ -1,9 +1,9 @@
 import type { Command } from 'commander';
 import type { GlobalOptions, CLIError } from '../types.js';
 import { localize } from '../types.js';
-import { loadMetadataForVersion, findComponent, getAllComponentNames } from '../data/loader.js';
+import { resolveComponent } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
-import { createError, printError, fuzzyMatch, ErrorCodes } from '../output/error.js';
+import { createError, printError, ErrorCodes } from '../output/error.js';
 import { output } from '../output/formatter.js';
 
 export interface ComponentDoc {
@@ -19,24 +19,15 @@ export function getComponentDoc(
   component: string,
   opts: { lang: string; version: string },
 ): ComponentDoc | CLIError {
-  const store = loadMetadataForVersion(opts.version);
-  const comp = findComponent(store, component);
-
-  if (!comp) {
-    const names = getAllComponentNames(store);
-    const suggestion = fuzzyMatch(component, names);
-    return createError(
-      ErrorCodes.COMPONENT_NOT_FOUND,
-      `Component '${component}' not found`,
-      suggestion ? `Did you mean '${suggestion}'?` : undefined,
-    );
-  }
+  const resolved = resolveComponent(component, opts.version);
+  if ('error' in resolved) return resolved;
+  const { comp } = resolved;
 
   const doc = localize(comp.doc, comp.docZh, opts.lang);
 
   if (!doc) {
     return createError(
-      'DOC_NOT_AVAILABLE',
+      ErrorCodes.DOC_NOT_AVAILABLE,
       `Documentation not available for '${comp.name}'`,
       'Try upgrading to a newer version of the CLI',
     );

@@ -32,18 +32,15 @@ export function registerMcpCommand(program: Command): void {
         lang: opts.lang,
       });
 
-      // List tools
       server.setRequestHandler(ListToolsRequestSchema, async () => ({
         tools: TOOL_DEFINITIONS,
       }));
 
-      // Call tool
       server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const { name, arguments: params } = request.params;
         return handleTool(name, (params as Record<string, unknown>) ?? {});
       });
 
-      // List prompts
       server.setRequestHandler(ListPromptsRequestSchema, async () => ({
         prompts: [
           {
@@ -57,7 +54,6 @@ export function registerMcpCommand(program: Command): void {
         ],
       }));
 
-      // Get prompt
       server.setRequestHandler(GetPromptRequestSchema, async (request) => {
         const { name } = request.params;
         if (name === 'antd-expert') {

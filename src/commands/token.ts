@@ -1,9 +1,9 @@
 import type { Command } from 'commander';
 import type { GlobalOptions, CLIError, TokenData } from '../types.js';
 import { localize } from '../types.js';
-import { loadMetadataForVersion, findComponent, getAllComponentNames } from '../data/loader.js';
+import { loadMetadataForVersion, resolveComponent } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
-import { createError, printError, fuzzyMatch, ErrorCodes } from '../output/error.js';
+import { createError, printError, ErrorCodes } from '../output/error.js';
 import { formatTable, output } from '../output/formatter.js';
 
 export interface GlobalTokensResult {
@@ -33,23 +33,15 @@ export function getTokens(
     );
   }
 
-  const store = loadMetadataForVersion(opts.version);
-
   if (!component) {
+    const store = loadMetadataForVersion(opts.version);
     const globalTokens = store.globalTokens || [];
     return { tokens: globalTokens };
   }
 
-  const comp = findComponent(store, component);
-  if (!comp) {
-    const names = getAllComponentNames(store);
-    const suggestion = fuzzyMatch(component, names);
-    return createError(
-      ErrorCodes.COMPONENT_NOT_FOUND,
-      `Component '${component}' not found`,
-      suggestion ? `Did you mean '${suggestion}'?` : undefined,
-    );
-  }
+  const resolved = resolveComponent(component, opts.version);
+  if ('error' in resolved) return resolved;
+  const { comp } = resolved;
 
   const tokens = comp.tokens || [];
   return { component: comp.name, tokens };

@@ -137,6 +137,15 @@ export function diffChangelog(opts: {
   v2: string;
   component?: string;
 }): DiffResult | CLIError {
+  // Validate version order
+  if (compare(opts.v1, opts.v2) > 0) {
+    return createError(
+      ErrorCodes.INVALID_ARGUMENT,
+      `Version order is invalid: "${opts.v1}" is newer than "${opts.v2}"`,
+      `Swap the versions: v1=${opts.v2}, v2=${opts.v1}`,
+    );
+  }
+
   const store1 = loadMetadataForVersion(opts.v1);
   const store2 = loadMetadataForVersion(opts.v2);
 
@@ -265,18 +274,6 @@ export function registerChangelogCommand(program: Command): void {
 
         printChangelogEntries(result.entries, opts.format, result.versionArg);
       } else {
-        // API diff mode — validate version order
-        if (compare(v1!, v2!) > 0) {
-          const err = createError(
-            ErrorCodes.INVALID_ARGUMENT,
-            `Version order is invalid: "${v1}" is newer than "${v2}"`,
-            `Did you mean: antd changelog ${v2} ${v1}${component ? ' ' + component : ''}?`,
-          );
-          printError(err, opts.format);
-          process.exitCode = 1;
-          return;
-        }
-
         const result = diffChangelog({ v1: v1!, v2: v2!, component });
 
         if ('error' in result) {

@@ -5,7 +5,6 @@ import { getComponentDemo } from '../commands/demo.js';
 import { getTokens } from '../commands/token.js';
 import { getSemanticStructure } from '../commands/semantic.js';
 import { queryChangelog, diffChangelog } from '../commands/changelog.js';
-import { compare } from '../data/version.js';
 import { createError, ErrorCodes } from '../output/error.js';
 
 export interface McpContext {
@@ -163,16 +162,6 @@ export function createToolHandler(ctx: McpContext) {
         const v2 = params.v2 as string | undefined;
 
         if (v1 && v2) {
-          // Diff mode — validate version order
-          if (compare(v1, v2) > 0) {
-            return toMcpResult(
-              createError(
-                ErrorCodes.INVALID_ARGUMENT,
-                `Version order is invalid: "${v1}" is newer than "${v2}"`,
-                `Swap the versions: v1=${v2}, v2=${v1}`,
-              ),
-            );
-          }
           const result = diffChangelog({
             v1,
             v2,
@@ -191,7 +180,7 @@ export function createToolHandler(ctx: McpContext) {
 
       default:
         return toMcpResult(
-          createError('UNKNOWN_TOOL', `Unknown tool: ${name}`),
+          createError(ErrorCodes.UNKNOWN_TOOL, `Unknown tool: ${name}`),
         );
     }
   };
