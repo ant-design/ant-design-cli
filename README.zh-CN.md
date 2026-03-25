@@ -14,7 +14,7 @@
 [![npm version](https://img.shields.io/npm/v/@ant-design/cli?color=blue&label=npm)](https://www.npmjs.com/package/@ant-design/cli)
 [![npm downloads](https://img.shields.io/npm/dm/@ant-design/cli?color=blue)](https://www.npmjs.com/package/@ant-design/cli)
 [![CI](https://github.com/ant-design/ant-design-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/ant-design/ant-design-cli/actions/workflows/ci.yml)
-[![npm unpacked size](https://img.shields.io/npm/unpacked-size/@ant-design/cli?color=blue)](https://www.npmjs.com/package/@ant-design/cli)
+[![install size](https://packagephobia.com/badge?p=@ant-design/cli)](https://packagephobia.com/result?p=@ant-design/cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
 [English](./README.md) · [中文](./README.zh-CN.md) · [更新日志](./CHANGELOG.zh-CN.md)
