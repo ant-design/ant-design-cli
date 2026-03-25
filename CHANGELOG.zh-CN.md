@@ -1,8 +1,38 @@
 # 更新日志
 
+## [6.3.5-beta.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.4...v6.3.5-beta.0) (2026-03-25)
+
+### 新功能
+
+- 新增 `antd mcp` 命令 — 提供 7 个工具和 2 个提示词的 MCP 服务器，支持 IDE 集成 (#38)
+
+### Bug 修复
+
+- 修复使用 `-V` 时不触发更新检查的问题 (#42)
+- 重写 lint 规则，基于 oxc-parser AST 分析 (#40)
+- 修复废弃属性规则对无关组件的误报 (#36)
+
+### 其他变更
+
+- 重构：从 7 个命令模块中提取核心函数 (#38)
+- 将 JSON 数据保留在 git 中，通过 .npmignore 排除 (#41)
+- CI：新增 npm 包体积检测和 badge (#39)
+- 更新 Skill 文件，指导 Code Agent 在出现更新提示时自动更新 CLI (#42)
+
 ## [6.3.4](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4) (2026-03-24)
 
+### Bug 修复
+
+- 修复 info 命令输出缺少 nameZh 和 since 字段的问题 (#5)
+- 修复 token 命令 globalTokens 缺少 name 字段的问题 (#10)
+
+### 其他变更
+
 - 同步 antd 元数据 ([v4@4.24.16](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4#diff-0f73f4b6da46cd62e857a1f41ea51e697389f2c62a0775fcfc545edd653c5e2c), [v5@5.29.3](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4#diff-6b390e384eeea7f593730f71f071bf947ec0fac7a19f6d32b91e13191b177a58), [v6@6.3.4](https://github.com/ant-design/ant-design-cli/compare/v6.3.3...v6.3.4#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+- CI：切换到 GitHub Actions OIDC 发布 (#7)
+- CI：迁移到 semantic-release 自动版本管理 (#14)
+- 简化同步工作流 (#11)
+- 移除未使用的 sample-data 目录 (#12)
 
 
 ## 6.3.3 (2026-03-24)
