@@ -144,13 +144,13 @@ function lintFile(
 
       // --- Deprecated checks ---
       if (!only || only === 'deprecated') {
-        if (compName === 'BackTop') {
+        if (compName === 'BackTop' && importedComponents.has('BackTop')) {
           report('deprecated', 'warning', line, '`BackTop` is deprecated, use `FloatButton.BackTop` instead');
         }
         if (compName === 'Button.Group' && importedComponents.has('Button')) {
           report('deprecated', 'warning', line, '`Button.Group` is deprecated, use `Space.Compact` instead');
         }
-        if (compName === 'Input.Group') {
+        if (compName === 'Input.Group' && importedComponents.has('Input')) {
           report('deprecated', 'warning', line, '`Input.Group` is deprecated, use `Space.Compact` instead');
         }
 
