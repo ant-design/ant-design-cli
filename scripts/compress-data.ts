@@ -4,32 +4,28 @@
  * Compress or decompress data/*.json files.
  *
  * Usage:
- *   npx tsx scripts/compress-data.ts          # compress: .json → .json.gz
- *   npx tsx scripts/compress-data.ts --undo   # decompress: .json.gz → .json
+ *   npx tsx scripts/compress-data.ts          # compress: create .json.gz alongside .json
+ *   npx tsx scripts/compress-data.ts --undo   # clean up: remove .json.gz files
  *
- * Used by npm prepack/postpack hooks to ship .gz in the npm package
- * while keeping .json in the git repository.
+ * Used by npm prepack/postpack hooks to generate .gz files for the npm package.
+ * JSON files are kept in git; .gz files are gitignored but included in npm via .npmignore.
  */
 
 import { readdirSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
-import { gzipSync, gunzipSync } from 'node:zlib';
+import { gzipSync } from 'node:zlib';
 
 const dataDir = join(import.meta.dirname, '..', 'data');
 const undo = process.argv.includes('--undo');
 
 if (undo) {
-  // Decompress: .json.gz → .json
+  // Clean up: remove .json.gz files (json files are kept in place)
   const files = readdirSync(dataDir).filter((f) => f.endsWith('.json.gz'));
   for (const file of files) {
-    const gzPath = join(dataDir, file);
-    const jsonPath = gzPath.slice(0, -3); // remove .gz
-    const content = gunzipSync(readFileSync(gzPath));
-    writeFileSync(jsonPath, content);
-    unlinkSync(gzPath);
-    console.log(`${file} → ${file.slice(0, -3)}`);
+    unlinkSync(join(dataDir, file));
+    console.log(`Removed ${file}`);
   }
-  console.log(`\nDecompressed ${files.length} files.`);
+  console.log(`\nCleaned up ${files.length} .gz files.`);
 } else {
   // Compress: .json → .json.gz
   const files = readdirSync(dataDir).filter(
@@ -48,7 +44,6 @@ if (undo) {
     totalCompressed += compressed.length;
 
     writeFileSync(filePath + '.gz', compressed);
-    unlinkSync(filePath);
 
     const ratio = ((1 - compressed.length / content.length) * 100).toFixed(1);
     console.log(`${file} → ${file}.gz  (${(content.length / 1024 / 1024).toFixed(1)}MB → ${(compressed.length / 1024 / 1024).toFixed(1)}MB, -${ratio}%)`);

@@ -1,0 +1,4 @@
+# Exclude raw JSON data files from npm package (use .gz instead)
+# versions.json is kept as it's small and needed for version resolution
+*.json
+!versions.json
