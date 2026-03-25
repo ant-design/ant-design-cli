@@ -6,7 +6,7 @@ export const CLI = join(__dirname, '..', '..', 'dist', 'index.js');
 export const formats = ['text', 'json', 'markdown'] as const;
 export const langs = ['en', 'zh'] as const;
 
-const env = { ...process.env, NO_UPDATE_CHECK: '1' };
+export const env = { ...process.env, NO_UPDATE_CHECK: '1' };
 
 export function run(...args: string[]): string {
   return execFileSync('node', [CLI, ...args], {
