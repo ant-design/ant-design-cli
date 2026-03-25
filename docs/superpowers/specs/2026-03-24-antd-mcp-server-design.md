@@ -16,7 +16,7 @@ Add `antd mcp` command that starts a Model Context Protocol (MCP) stdio server. 
 
 ## Architecture
 
-```
+```text
 IDE / Agent
     │  MCP stdio (JSON-RPC)
     ▼
@@ -41,7 +41,7 @@ All 7 command modules currently embed logic inside `commander` `.action()` callb
 
 ```typescript
 // src/commands/list.ts
-export function listComponents(opts: { lang: string; version: string }): ComponentSummary[]
+export function listComponents(opts: { version: string }): ComponentSummary[]
 
 // src/commands/info.ts
 export function getComponentInfo(
@@ -58,7 +58,7 @@ export function getComponentDoc(
 // src/commands/demo.ts
 export function getComponentDemo(
   component: string,
-  opts: { lang: string; version: string; name?: string }
+  opts: { version: string; name?: string }
 ): DemoResult | DemoListResult | CLIError
 
 // src/commands/token.ts
@@ -70,7 +70,7 @@ export function getTokens(
 // src/commands/semantic.ts
 export function getSemanticStructure(
   component: string,
-  opts: { lang: string; version: string }
+  opts: { version: string }
 ): SemanticResult | CLIError
 
 // src/commands/changelog.ts
