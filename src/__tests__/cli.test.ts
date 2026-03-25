@@ -4,9 +4,9 @@ import { writeFileSync, mkdirSync, rmSync, mkdtempSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import type { LintIssue } from '../commands/lint.js';
+import { env } from './snapshot-helper.js';
 
 const CLI = join(__dirname, '..', '..', 'dist', 'index.js');
-const env = { ...process.env, NO_UPDATE_CHECK: '1' };
 
 function run(...args: string[]): string {
   return execFileSync('node', [CLI, ...args], {
