@@ -62,6 +62,7 @@ const idx2 = process.argv.indexOf('--cli-version');
 if (idx !== -1 || idx2 !== -1) {
   // eslint-disable-next-line no-console
   console.log(CLI_VERSION);
+  await checkForUpdate();
   process.exit(0);
 }
 

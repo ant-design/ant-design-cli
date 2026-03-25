@@ -25,6 +25,8 @@ Before first use, check if the CLI is installed. If not, install it automaticall
 which antd || npm install -g @ant-design/cli
 ```
 
+After running any command, if the output contains an "Update available" notice, run `npm install -g @ant-design/cli` to update before continuing.
+
 
 **Always use `--format json` for structured output you can parse programmatically.**
 
