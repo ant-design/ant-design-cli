@@ -5,32 +5,16 @@
 ### New Features
 
 - feat: add `antd mcp` command — MCP server with 7 tools and 2 prompts for IDE integration (#38)
-- feat: add `antd bug` and `antd bug-cli` commands for issue reporting
-- feat: add `antd doc <component>` command for full markdown documentation (#16)
-- feat: add ecosystem peerDeps compatibility check to `antd doctor` (#30)
-- feat: add `--filter` / `-f` option to `antd usage` command
-- feat(info): show sub-component props separately (e.g. Splitter.Panel)
 
 ### Bug Fixes
 
 - fix: run update check when using `-V` flag (#42)
 - fix(lint): rewrite all rules with oxc-parser AST analysis (#40)
 - fix(lint): avoid false positives for deprecated prop rule on unrelated components (#36)
-- fix(lint): improve lint rules accuracy and add usage category (#29)
-- fix(lint): include replacement hint in deprecated prop warning
-- fix(info): parse multi-section API docs (Form.FormInstance, useWatch, etc.)
-- fix(scan): exclude type-only imports instead of stripping type keyword
-- fix(usage): exclude method calls from sub-components, classify Row/Col as components
-- fix: use ant-design-issue-helper marker in antd bug report body (#32)
-- fix: remove empty author links in changelog descriptions (#31)
-- fix: normalize v prefix in migrate, fix cssinjs-compat message
-
-### Performance
-
-- perf: gzip data files at pack time to reduce npm package size by 81% (#28)
 
 ### Other Changes
 
+- refactor: extract core functions from 7 command modules (#38)
 - chore: keep JSON in git, exclude from npm via .npmignore (#41)
 - ci: add npm pack size detection workflow and badge (#39)
 - Update skill to instruct code agents to auto-update CLI when "Update available" notice appears (#42)
