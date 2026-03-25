@@ -6,11 +6,13 @@ import { tmpdir } from 'node:os';
 import type { LintIssue } from '../commands/lint.js';
 
 const CLI = join(__dirname, '..', '..', 'dist', 'index.js');
+const env = { ...process.env, NO_UPDATE_CHECK: '1' };
 
 function run(...args: string[]): string {
   return execFileSync('node', [CLI, ...args], {
     encoding: 'utf-8',
     timeout: 5000,
+    env,
   }).trim();
 }
 
@@ -20,6 +22,7 @@ function runWithStatus(...args: string[]): { stdout: string; stderr: string; exi
       encoding: 'utf-8',
       timeout: 5000,
       stdio: ['pipe', 'pipe', 'pipe'],
+      env,
     }).trim();
     return { stdout, stderr: '', exitCode: 0 };
   } catch (err: any) {
@@ -52,6 +55,7 @@ function runDoctorInTempDir(packages: Record<string, object>): any {
       encoding: 'utf-8',
       timeout: 5000,
       cwd: tempDir,
+      env,
     }).trim();
     return JSON.parse(stdout);
   } finally {
@@ -229,7 +233,7 @@ describe('CLI e2e', () => {
 
   it('should show CLI version with -V', () => {
     const out = run('-V');
-    expect(out).toMatch(/^\d+\.\d+\.\d+$/);
+    expect(out).toMatch(/^\d+\.\d+\.\d+[-\w.]*$/);
   });
 
   it('should support --lang zh', () => {

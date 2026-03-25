@@ -10,7 +10,7 @@ function normalizeEnv(s: string): string {
   return s
     .replace(/\b(darwin|linux|win32)[\s+]+[\w.\-]+/g, '<system>')
     .replace(/v\d+\.\d+\.\d+/g, '<node-version>')
-    .replace(/\d+\.\d+\.\d+/g, '<version>');
+    .replace(/\d+\.\d+\.\d+[-\w.]*/g, '<version>');
 }
 
 describe('bug', () => {
