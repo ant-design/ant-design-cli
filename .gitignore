@@ -2,6 +2,7 @@ node_modules/
 dist/
 *.tsbuildinfo
 .DS_Store
+data/*.json.gz
 settings.local.json
 .worktrees/
 .claude/
