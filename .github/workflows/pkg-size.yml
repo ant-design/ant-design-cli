@@ -25,10 +25,9 @@ jobs:
       - name: Get pack size
         id: size
         run: |
-          npm pack --dry-run --json > /tmp/pack.json 2>&1 || true
-          PACK_JSON=$(grep -o '\[.*\]' /tmp/pack.json | tail -1)
-          echo "size=$(echo "$PACK_JSON" | jq '.[0].size')" >> "$GITHUB_OUTPUT"
-          echo "unpack_size=$(echo "$PACK_JSON" | jq '.[0].unpackedSize')" >> "$GITHUB_OUTPUT"
+          PACK=$(npm pack --dry-run --json 2>&1 | sed -n '/^\[/,/^\]/p' | jq '.[0]')
+          echo "size=$(echo "$PACK" | jq '.size')" >> "$GITHUB_OUTPUT"
+          echo "unpack_size=$(echo "$PACK" | jq '.unpackedSize')" >> "$GITHUB_OUTPUT"
 
       - name: Get base branch size
         if: github.event_name == 'pull_request'
@@ -38,17 +37,16 @@ jobs:
           git checkout FETCH_HEAD -- . 2>/dev/null || true
           npm ci
           npm run build
-          npm pack --dry-run --json > /tmp/base_pack.json 2>&1 || true
-          PACK_JSON=$(grep -o '\[.*\]' /tmp/base_pack.json | tail -1)
-          echo "size=$(echo "$PACK_JSON" | jq '.[0].size')" >> "$GITHUB_OUTPUT"
-          echo "unpack_size=$(echo "$PACK_JSON" | jq '.[0].unpackedSize')" >> "$GITHUB_OUTPUT"
+          PACK=$(npm pack --dry-run --json 2>&1 | sed -n '/^\[/,/^\]/p' | jq '.[0]')
+          echo "size=$(echo "$PACK" | jq '.size')" >> "$GITHUB_OUTPUT"
+          echo "unpack_size=$(echo "$PACK" | jq '.unpackedSize')" >> "$GITHUB_OUTPUT"
 
       - name: Comment on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
-            const run = require('./scripts/pkg-size-comment.js');
+            const run = require('./scripts/pkg-size-comment.cjs');
             await run({
               github, context,
               size: parseInt('${{ steps.size.outputs.size }}'),
