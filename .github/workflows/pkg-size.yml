@@ -25,7 +25,9 @@ jobs:
       - name: Get pack size
         id: size
         run: |
-          PACK_JSON=$(npm pack --dry-run --json 2>/dev/null)
+          npm pack --dry-run --json > /tmp/pack.json 2>&1 || true
+          # Extract the JSON array from output (skip non-JSON lines from prepack/postpack scripts)
+          PACK_JSON=$(grep -o '\[.*\]' /tmp/pack.json | tail -1)
           SIZE=$(echo "$PACK_JSON" | jq '.[0].size')
           UNPACK_SIZE=$(echo "$PACK_JSON" | jq '.[0].unpackedSize')
 
@@ -51,7 +53,8 @@ jobs:
           git checkout FETCH_HEAD -- . 2>/dev/null || true
           npm ci
           npm run build
-          PACK_JSON=$(npm pack --dry-run --json 2>/dev/null)
+          npm pack --dry-run --json > /tmp/base_pack.json 2>&1 || true
+          PACK_JSON=$(grep -o '\[.*\]' /tmp/base_pack.json | tail -1)
           BASE_SIZE=$(echo "$PACK_JSON" | jq '.[0].size')
           BASE_UNPACK_SIZE=$(echo "$PACK_JSON" | jq '.[0].unpackedSize')
           echo "size=$BASE_SIZE" >> "$GITHUB_OUTPUT"
