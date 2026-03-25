@@ -1,6 +1,6 @@
 {
   "name": "@ant-design/cli",
-  "version": "6.3.4",
+  "version": "6.3.5-beta.0",
   "description": "CLI tool for querying antd knowledge and analyzing antd usage in projects",
   "type": "module",
   "bin": {
