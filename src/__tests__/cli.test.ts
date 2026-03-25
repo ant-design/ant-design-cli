@@ -430,10 +430,10 @@ describe('CLI e2e', () => {
   });
 
   // Issue #35: false positives when sibling components share prop names
-  it('lint should not flag type on Button as deprecated Divider.type (issue #35 example 1)', () => {
-    const out = lintFixture(
-      'issue35-1',
-      `import { Button, Divider, Dropdown } from 'antd';
+  it.each([
+    {
+      name: 'Button sibling',
+      code: `import { Button, Divider, Dropdown } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 const App = () => (
   <>
@@ -442,21 +442,11 @@ const App = () => (
       <Button icon={<MenuOutlined />} type="text" />
     </Dropdown>
   </>
-);
-`,
-      ['--format', 'json'],
-    );
-    const data = JSON.parse(out);
-    const dividerTypeIssues = data.issues.filter(
-      (i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Divider') && i.message.includes('type'),
-    );
-    expect(dividerTypeIssues).toHaveLength(0);
-  });
-
-  it('lint should not flag type on Typography.Text as deprecated Divider.type (issue #35 example 2)', () => {
-    const out = lintFixture(
-      'issue35-2',
-      `import { Divider, Typography } from 'antd';
+);`,
+    },
+    {
+      name: 'Typography.Text sibling',
+      code: `import { Divider, Typography } from 'antd';
 const App = () => (
   <>
     <Divider plain style={{ marginTop: 2, marginBottom: 2 }}>
@@ -466,21 +456,11 @@ const App = () => (
       Some text
     </Typography.Text>
   </>
-);
-`,
-      ['--format', 'json'],
-    );
-    const data = JSON.parse(out);
-    const dividerTypeIssues = data.issues.filter(
-      (i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Divider') && i.message.includes('type'),
-    );
-    expect(dividerTypeIssues).toHaveLength(0);
-  });
-
-  it('lint should not flag type on Button as deprecated Divider.type (issue #35 example 3)', () => {
-    const out = lintFixture(
-      'issue35-3',
-      `import { Button, Divider } from 'antd';
+);`,
+    },
+    {
+      name: 'Button sibling (dashed)',
+      code: `import { Button, Divider } from 'antd';
 import { EyeFilled } from '@ant-design/icons';
 const App = () => (
   <>
@@ -489,10 +469,11 @@ const App = () => (
       Preview
     </Button>
   </>
-);
-`,
-      ['--format', 'json'],
-    );
+);`,
+    },
+  ])('lint should not flag deprecated Divider.type on siblings: $name (#35)', ({ name, code }) => {
+    const fixture = name.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+    const out = lintFixture(`issue35-${fixture}`, code, ['--format', 'json']);
     const data = JSON.parse(out);
     const dividerTypeIssues = data.issues.filter(
       (i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Divider') && i.message.includes('type'),
