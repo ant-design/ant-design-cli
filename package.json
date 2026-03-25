@@ -44,7 +44,8 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.27.1",
-    "commander": "~13.1.0"
+    "commander": "~13.1.0",
+    "oxc-parser": "^0.121.0"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",

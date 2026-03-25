@@ -429,6 +429,77 @@ describe('CLI e2e', () => {
     expect(dividerTypeIssues.length).toBeGreaterThan(0);
   });
 
+  // Issue #35: false positives when sibling components share prop names
+  it('lint should not flag type on Button as deprecated Divider.type (issue #35 example 1)', () => {
+    const out = lintFixture(
+      'issue35-1',
+      `import { Button, Divider, Dropdown } from 'antd';
+import { MenuOutlined } from '@ant-design/icons';
+const App = () => (
+  <>
+    <Divider orientation="vertical" />
+    <Dropdown arrow placement="bottomRight" trigger={['click']} menu={{ items: [] }}>
+      <Button icon={<MenuOutlined />} type="text" />
+    </Dropdown>
+  </>
+);
+`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    const dividerTypeIssues = data.issues.filter(
+      (i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Divider') && i.message.includes('type'),
+    );
+    expect(dividerTypeIssues).toHaveLength(0);
+  });
+
+  it('lint should not flag type on Typography.Text as deprecated Divider.type (issue #35 example 2)', () => {
+    const out = lintFixture(
+      'issue35-2',
+      `import { Divider, Typography } from 'antd';
+const App = () => (
+  <>
+    <Divider plain style={{ marginTop: 2, marginBottom: 2 }}>
+      Section
+    </Divider>
+    <Typography.Text type="secondary">
+      Some text
+    </Typography.Text>
+  </>
+);
+`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    const dividerTypeIssues = data.issues.filter(
+      (i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Divider') && i.message.includes('type'),
+    );
+    expect(dividerTypeIssues).toHaveLength(0);
+  });
+
+  it('lint should not flag type on Button as deprecated Divider.type (issue #35 example 3)', () => {
+    const out = lintFixture(
+      'issue35-3',
+      `import { Button, Divider } from 'antd';
+import { EyeFilled } from '@ant-design/icons';
+const App = () => (
+  <>
+    <Divider style={{ margin: '10px 0' }} />
+    <Button block type="dashed" icon={<EyeFilled />}>
+      Preview
+    </Button>
+  </>
+);
+`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    const dividerTypeIssues = data.issues.filter(
+      (i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Divider') && i.message.includes('type'),
+    );
+    expect(dividerTypeIssues).toHaveLength(0);
+  });
+
   it('changelog should error when from > to', () => {
     const result = runWithStatus('changelog', '5.5.0', '5.1.0');
     expect(result.exitCode).toBe(1);

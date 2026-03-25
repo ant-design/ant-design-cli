@@ -1,10 +1,11 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { readFileSync } from 'node:fs';
+import { parseSync, Visitor } from 'oxc-parser';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { output } from '../output/formatter.js';
-import { collectFiles, parseAntdImports } from '../utils/scan.js';
+import { collectFiles } from '../utils/scan.js';
 
 export interface LintIssue {
   file: string;
@@ -14,20 +15,15 @@ export interface LintIssue {
   message: string;
 }
 
-/** Escape special RegExp characters in a string. */
-function escapeRegExp(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+type DeprecatedInfo = { prop: string; since: string; message: string };
 
-// Build a map of deprecated props from metadata
-function getDeprecatedProps(store: ReturnType<typeof loadMetadataForVersion>): Map<string, { prop: string; since: string; message: string }[]> {
-  const result = new Map<string, { prop: string; since: string; message: string }[]>();
+function getDeprecatedProps(store: ReturnType<typeof loadMetadataForVersion>): Map<string, DeprecatedInfo[]> {
+  const result = new Map<string, DeprecatedInfo[]>();
   for (const comp of store.components) {
     const deprecated = comp.props.filter((p) => p.deprecated);
     if (deprecated.length > 0) {
       result.set(comp.name, deprecated.map((p) => {
         const sinceStr = typeof p.deprecated === 'string' ? ` (since ${p.deprecated})` : '';
-        // Use description directly as it contains replacement info like "use X instead"
         const desc = p.description ? `. ${p.description}` : '';
         return {
           prop: p.name,
@@ -40,22 +36,73 @@ function getDeprecatedProps(store: ReturnType<typeof loadMetadataForVersion>): M
   return result;
 }
 
-/** Check if a pattern exists within a window around index `i`. */
-function hasNearbyMatch(lines: string[], i: number, lookahead: number, pattern: RegExp, lookbehind = 0): boolean {
-  const start = Math.max(0, i - lookbehind);
-  const end = Math.min(i + lookahead, lines.length);
-  for (let j = start; j < end; j++) {
-    if (pattern.test(lines[j])) return true;
+// --- AST helpers ---
+
+function getJSXElementName(name: any): string {
+  if (name.type === 'JSXMemberExpression') {
+    return getJSXElementName(name.object) + '.' + name.property.name;
   }
-  return false;
+  if (name.type === 'JSXIdentifier') {
+    return name.name;
+  }
+  return '';
+}
+
+function findAttr(attrs: any[], name: string): any | null {
+  return attrs.find((a: any) => a.type === 'JSXAttribute' && a.name?.name === name) ?? null;
+}
+
+function hasAttr(attrs: any[], name: string): boolean {
+  return findAttr(attrs, name) !== null;
+}
+
+function getStringAttrValue(attrs: any[], name: string): string | null {
+  const a = findAttr(attrs, name);
+  if (!a) return null;
+  if (a.value?.type === 'Literal' && typeof a.value.value === 'string') {
+    return a.value.value;
+  }
+  if (a.value?.type === 'JSXExpressionContainer' &&
+      a.value.expression?.type === 'Literal' &&
+      typeof a.value.expression.value === 'string') {
+    return a.value.expression.value;
+  }
+  return null;
+}
+
+function isBooleanFalse(attrs: any[], name: string): boolean {
+  const a = findAttr(attrs, name);
+  if (!a) return false;
+  return a.value?.type === 'JSXExpressionContainer' &&
+    a.value.expression?.type === 'Literal' &&
+    a.value.expression.value === false;
+}
+
+function isObjectExpression(attrs: any[], name: string): boolean {
+  const a = findAttr(attrs, name);
+  if (!a) return false;
+  return a.value?.type === 'JSXExpressionContainer' &&
+    a.value.expression?.type === 'ObjectExpression';
+}
+
+function getObjectExpressionKeys(attrs: any[], name: string): string[] {
+  const a = findAttr(attrs, name);
+  if (!a) return [];
+  if (a.value?.type === 'JSXExpressionContainer' &&
+      a.value.expression?.type === 'ObjectExpression') {
+    return a.value.expression.properties
+      .filter((p: any) => p.type === 'Property' && p.key)
+      .map((p: any) => p.key.name || p.key.value)
+      .filter(Boolean);
+  }
+  return [];
 }
 
 function lintFile(
   filePath: string,
-  deprecatedMap: Map<string, { prop: string; since: string; message: string }[]>,
+  deprecatedMap: Map<string, DeprecatedInfo[]>,
   only?: string,
 ): LintIssue[] {
-  const issues: LintIssue[] = [];
   let content: string;
   try {
     content = readFileSync(filePath, 'utf-8');
@@ -63,286 +110,183 @@ function lintFile(
     return [];
   }
 
-  const lines = content.split('\n');
-  const importedComponents = parseAntdImports(content);
+  // Fast pre-check: skip files that don't reference antd at all
+  if (!content.includes('antd')) return [];
 
-  if (importedComponents.length === 0) return [];
+  const result = parseSync(filePath, content);
+  if (result.errors.length > 0) return [];
 
-  // Build per-component deprecated prop regexes once
-  const deprecatedChecks: { compName: string; dep: { prop: string; since: string; message: string }; regex: RegExp; compRegex: RegExp }[] = [];
-  if (!only || only === 'deprecated') {
-    for (const compName of importedComponents) {
-      const deprecations = deprecatedMap.get(compName);
-      if (!deprecations) continue;
-      const compRegex = new RegExp(`<${escapeRegExp(compName)}[\\s/>]`);
-      for (const dep of deprecations) {
-        deprecatedChecks.push({
-          compName,
-          dep,
-          regex: new RegExp(`\\b${escapeRegExp(dep.prop)}\\b\\s*[=({]`),
-          compRegex,
-        });
+  const issues: LintIssue[] = [];
+  const importedComponents = new Set<string>();
+
+  const report = (rule: string, severity: LintIssue['severity'], line: number, message: string) => {
+    issues.push({ file: filePath, line, rule, severity, message });
+  };
+
+  // Single pass: collect imports and check all rules
+  const visitor = new Visitor({
+    ImportDeclaration(node: any) {
+      const source = node.source.value;
+      if (source !== 'antd' && !source.startsWith('antd/')) return;
+
+      if (node.importKind === 'type') return;
+
+      for (const spec of node.specifiers) {
+        if (spec.type === 'ImportSpecifier') {
+          if (spec.importKind === 'type') continue;
+          const name = spec.imported?.name || spec.local?.name;
+          if (name) importedComponents.add(name);
+        }
+
+        if ((!only || only === 'performance') &&
+            (spec.type === 'ImportDefaultSpecifier' || spec.type === 'ImportNamespaceSpecifier')) {
+          report('performance', 'error', node.loc?.start?.line ?? 0,
+            'Avoid wildcard import from antd. Use named imports: `import { Button } from \'antd\'`');
+        }
       }
-    }
-  }
+    },
 
-  const hasImage = importedComponents.includes('Image');
-  const hasSelect = importedComponents.includes('Select') || importedComponents.includes('TreeSelect');
-  const hasButton = importedComponents.includes('Button');
-  const hasCheckbox = importedComponents.includes('Checkbox');
-  const hasDivider = importedComponents.includes('Divider');
-  const hasMenu = importedComponents.includes('Menu');
-  const hasQRCode = importedComponents.includes('QRCode');
-  const hasRadio = importedComponents.includes('Radio');
-  const hasTreeSelect = importedComponents.includes('TreeSelect');
-  const hasTypography = importedComponents.includes('Typography');
+    JSXOpeningElement(node: any) {
+      const compName = getJSXElementName(node.name);
+      if (!compName) return;
+      const attrs = node.attributes || [];
+      const line = node.loc?.start?.line ?? 0;
 
-  // Single pass over all lines
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+      // --- Deprecated checks ---
+      if (!only || only === 'deprecated') {
+        if (compName === 'BackTop') {
+          report('deprecated', 'warning', line, '`BackTop` is deprecated, use `FloatButton.BackTop` instead');
+        }
+        if (compName === 'Button.Group' && importedComponents.has('Button')) {
+          report('deprecated', 'warning', line, '`Button.Group` is deprecated, use `Space.Compact` instead');
+        }
+        if (compName === 'Input.Group') {
+          report('deprecated', 'warning', line, '`Input.Group` is deprecated, use `Space.Compact` instead');
+        }
 
-    // Deprecated prop checks
-    for (const { compName, dep, regex, compRegex } of deprecatedChecks) {
-      if (regex.test(line) && hasNearbyMatch(lines, i, 3, compRegex, 10)) {
-        issues.push({
-          file: filePath,
-          line: i + 1,
-          rule: 'deprecated',
-          severity: 'warning',
-          message: `${compName} ${dep.message}`,
-        });
-      }
-    }
-
-    // Deprecated component checks
-    if (!only || only === 'deprecated') {
-      if (/<BackTop\b/.test(line)) {
-        issues.push({
-          file: filePath,
-          line: i + 1,
-          rule: 'deprecated',
-          severity: 'warning',
-          message: '`BackTop` is deprecated, use `FloatButton.BackTop` instead',
-        });
-      }
-
-      if (hasButton && /<Button\.Group\b/.test(line)) {
-        issues.push({
-          file: filePath,
-          line: i + 1,
-          rule: 'deprecated',
-          severity: 'warning',
-          message: '`Button.Group` is deprecated, use `Space.Compact` instead',
-        });
-      }
-
-      if (/<Input\.Group\b/.test(line)) {
-        issues.push({
-          file: filePath,
-          line: i + 1,
-          rule: 'deprecated',
-          severity: 'warning',
-          message: '`Input.Group` is deprecated, use `Space.Compact` instead',
-        });
-      }
-    }
-
-    // Accessibility checks
-    if (!only || only === 'a11y') {
-      if (hasImage && /<Image\b/.test(line) && !hasNearbyMatch(lines, i, 5, /alt\s*=/)) {
-        issues.push({
-          file: filePath,
-          line: i + 1,
-          rule: 'a11y',
-          severity: 'warning',
-          message: 'Image component is missing `alt` prop for accessibility',
-        });
-      }
-
-      if (/<\w+Icon\b/.test(line) && /onClick\s*=/.test(line) && !hasNearbyMatch(lines, i, 3, /aria-label\s*=/)) {
-        issues.push({
-          file: filePath,
-          line: i + 1,
-          rule: 'a11y',
-          severity: 'warning',
-          message: 'Clickable icon should have `aria-label` for screen readers',
-        });
-      }
-    }
-
-    // Usage checks (prop combination mistakes)
-    if (!only || only === 'usage') {
-      // Form.Item: shouldUpdate and dependencies should not be used together
-      if (/Form\.Item\b/.test(line)) {
-        if (hasNearbyMatch(lines, i, 10, /shouldUpdate\s*[=]/) && hasNearbyMatch(lines, i, 10, /dependencies\s*[=]/)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'usage',
-            severity: 'warning',
-            message: '`shouldUpdate` and `dependencies` should not be used together on Form.Item',
-          });
+        const baseName = compName.includes('.') ? compName.split('.')[0] : compName;
+        if (importedComponents.has(baseName) || importedComponents.has(compName)) {
+          const deprecations = deprecatedMap.get(compName);
+          if (deprecations) {
+            for (const attr of attrs) {
+              if (attr.type !== 'JSXAttribute') continue;
+              const propName = attr.name?.name;
+              const dep = deprecations.find((d) => d.prop === propName);
+              if (dep) {
+                report('deprecated', 'warning', attr.loc?.start?.line ?? line, `${compName} ${dep.message}`);
+              }
+            }
+          }
         }
       }
 
-      // Button: ghost cannot be used with type="link" or type="text"
-      if (hasButton && /<Button\b/.test(line)) {
-        if (hasNearbyMatch(lines, i, 5, /\bghost\b/) &&
-            hasNearbyMatch(lines, i, 5, /type\s*=\s*['"{](?:link|text)['"}\s]/)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'usage',
-            severity: 'warning',
-            message: 'Button `ghost` prop cannot be used with `type="link"` or `type="text"`',
-          });
+      // --- Accessibility checks ---
+      if (!only || only === 'a11y') {
+        if (compName === 'Image' && importedComponents.has('Image')) {
+          if (!hasAttr(attrs, 'alt')) {
+            report('a11y', 'warning', line, 'Image component is missing `alt` prop for accessibility');
+          }
+        }
+
+        if (compName.endsWith('Icon') && hasAttr(attrs, 'onClick') && !hasAttr(attrs, 'aria-label')) {
+          report('a11y', 'warning', line, 'Clickable icon should have `aria-label` for screen readers');
         }
       }
 
-      // Checkbox: value is not a valid prop, did you mean checked?
-      if (hasCheckbox && /<Checkbox\b/.test(line) && !/Checkbox\.Group/.test(line)) {
-        if (hasNearbyMatch(lines, i, 5, /\bvalue\s*=/)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'usage',
-            severity: 'warning',
-            message: 'Checkbox `value` is not a valid prop outside Checkbox.Group, did you mean `checked`?',
-          });
+      // --- Usage checks ---
+      if (!only || only === 'usage') {
+        if (compName === 'Form.Item' && importedComponents.has('Form')) {
+          if (hasAttr(attrs, 'shouldUpdate') && hasAttr(attrs, 'dependencies')) {
+            report('usage', 'warning', line, '`shouldUpdate` and `dependencies` should not be used together on Form.Item');
+          }
+        }
+
+        if (compName === 'Button' && importedComponents.has('Button')) {
+          if (hasAttr(attrs, 'ghost')) {
+            const typeVal = getStringAttrValue(attrs, 'type');
+            if (typeVal === 'link' || typeVal === 'text') {
+              report('usage', 'warning', line, 'Button `ghost` prop cannot be used with `type="link"` or `type="text"`');
+            }
+          }
+        }
+
+        if (compName === 'Checkbox' && importedComponents.has('Checkbox')) {
+          if (hasAttr(attrs, 'value')) {
+            report('usage', 'warning', line, 'Checkbox `value` is not a valid prop outside Checkbox.Group, did you mean `checked`?');
+          }
+        }
+
+        if (compName === 'Divider' && importedComponents.has('Divider')) {
+          const typeVal = getStringAttrValue(attrs, 'type');
+          if (typeVal === 'vertical' && (!node.selfClosing || hasAttr(attrs, 'children'))) {
+            report('usage', 'warning', line, 'Divider `children` are not supported in `type="vertical"` mode');
+          }
+        }
+
+        if (compName === 'Select' && (importedComponents.has('Select') || importedComponents.has('TreeSelect'))) {
+          if (hasAttr(attrs, 'maxCount')) {
+            const modeVal = getStringAttrValue(attrs, 'mode');
+            if (modeVal !== 'multiple' && modeVal !== 'tags') {
+              report('usage', 'warning', line, 'Select `maxCount` only works with `mode="multiple"` or `mode="tags"`');
+            }
+          }
+        }
+
+        if (compName === 'Menu' && importedComponents.has('Menu')) {
+          if (hasAttr(attrs, 'inlineCollapsed')) {
+            const modeVal = getStringAttrValue(attrs, 'mode');
+            if (modeVal !== 'inline') {
+              report('usage', 'warning', line, 'Menu `inlineCollapsed` should only be used with `mode="inline"`');
+            }
+          }
+        }
+
+        if (compName === 'QRCode' && importedComponents.has('QRCode')) {
+          if (!hasAttr(attrs, 'value')) {
+            report('usage', 'warning', line, 'QRCode is missing required `value` prop');
+          }
+        }
+
+        if (compName === 'Typography.Link' && importedComponents.has('Typography')) {
+          if (isObjectExpression(attrs, 'ellipsis')) {
+            report('usage', 'warning', line, 'Typography.Link `ellipsis` only supports boolean value, not object config');
+          }
+        }
+
+        if (compName === 'Typography.Text' && importedComponents.has('Typography')) {
+          if (isObjectExpression(attrs, 'ellipsis')) {
+            const keys = getObjectExpressionKeys(attrs, 'ellipsis');
+            if (keys.includes('expandable') || keys.includes('rows')) {
+              report('usage', 'warning', line, 'Typography.Text `ellipsis` does not support `expandable` or `rows`');
+            }
+          }
+        }
+
+        if (compName === 'Radio' && importedComponents.has('Radio')) {
+          if (hasAttr(attrs, 'optionType')) {
+            report('usage', 'warning', line, '`optionType` is only supported on Radio.Group, not Radio');
+          }
+        }
+
+        if (compName === 'TreeSelect' && importedComponents.has('TreeSelect')) {
+          if (isBooleanFalse(attrs, 'multiple') && hasAttr(attrs, 'treeCheckable')) {
+            report('usage', 'warning', line, 'TreeSelect `multiple={false}` is ignored when `treeCheckable` is true');
+          }
         }
       }
 
-      // Divider: children not working in vertical mode
-      if (hasDivider && /<Divider\b/.test(line)) {
-        if (hasNearbyMatch(lines, i, 5, /type\s*=\s*['"{]vertical['"}]/) &&
-            (!hasNearbyMatch(lines, i, 3, /\/>/) || hasNearbyMatch(lines, i, 5, /\bchildren\s*=/))) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'usage',
-            severity: 'warning',
-            message: 'Divider `children` are not supported in `type="vertical"` mode',
-          });
+      // --- Performance checks ---
+      if (!only || only === 'performance') {
+        if ((compName === 'Select' || compName === 'TreeSelect') &&
+            (importedComponents.has('Select') || importedComponents.has('TreeSelect'))) {
+          if (isBooleanFalse(attrs, 'virtual')) {
+            report('performance', 'warning', line, 'Disabling `virtual` scroll on Select may cause performance issues with large datasets');
+          }
         }
       }
-
-      // Select: maxCount only works with mode="multiple" or mode="tags"
-      if (hasSelect && /<Select\b/.test(line)) {
-        if (hasNearbyMatch(lines, i, 10, /maxCount\s*=/) &&
-            !hasNearbyMatch(lines, i, 10, /mode\s*=\s*['"{](?:multiple|tags)['"}]/)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'usage',
-            severity: 'warning',
-            message: 'Select `maxCount` only works with `mode="multiple"` or `mode="tags"`',
-          });
-        }
-      }
-
-      // Menu: inlineCollapsed should only be used when mode is inline
-      if (hasMenu && /<Menu\b/.test(line)) {
-        if (hasNearbyMatch(lines, i, 10, /inlineCollapsed\s*=/) &&
-            !hasNearbyMatch(lines, i, 10, /mode\s*=\s*['"{]inline['"}]/)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'usage',
-            severity: 'warning',
-            message: 'Menu `inlineCollapsed` should only be used with `mode="inline"`',
-          });
-        }
-      }
-
-      // QRCode: missing value prop
-      if (hasQRCode && /<QRCode\b/.test(line) && !hasNearbyMatch(lines, i, 10, /\bvalue\s*=/)) {
-        issues.push({
-          file: filePath,
-          line: i + 1,
-          rule: 'usage',
-          severity: 'warning',
-          message: 'QRCode is missing required `value` prop',
-        });
-      }
-
-      // Typography.Link: ellipsis only supports boolean
-      if (hasTypography && /<Typography\.Link\b/.test(line)) {
-        if (hasNearbyMatch(lines, i, 5, /ellipsis\s*=\s*\{\{/)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'usage',
-            severity: 'warning',
-            message: 'Typography.Link `ellipsis` only supports boolean value, not object config',
-          });
-        }
-      }
-
-      // Typography.Text: ellipsis does not support expandable or rows
-      if (hasTypography && /<Typography\.Text\b/.test(line)) {
-        if (hasNearbyMatch(lines, i, 10, /ellipsis\s*=\s*\{\{/) &&
-            hasNearbyMatch(lines, i, 10, /\b(?:expandable|rows)\s*[=:]/)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'usage',
-            severity: 'warning',
-            message: 'Typography.Text `ellipsis` does not support `expandable` or `rows`',
-          });
-        }
-      }
-
-      // Radio: optionType is only supported on Radio.Group
-      if (hasRadio && /<Radio\b/.test(line) && !/<Radio\.Group\b/.test(line)) {
-        if (hasNearbyMatch(lines, i, 5, /optionType\s*=/)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'usage',
-            severity: 'warning',
-            message: '`optionType` is only supported on Radio.Group, not Radio',
-          });
-        }
-      }
-
-      // TreeSelect: multiple={false} is ignored when treeCheckable is true
-      if (hasTreeSelect && /<TreeSelect\b/.test(line)) {
-        if (hasNearbyMatch(lines, i, 10, /multiple\s*=\s*\{?\s*false/) &&
-            hasNearbyMatch(lines, i, 10, /treeCheckable\b/)) {
-          issues.push({
-            file: filePath,
-            line: i + 1,
-            rule: 'usage',
-            severity: 'warning',
-            message: 'TreeSelect `multiple={false}` is ignored when `treeCheckable` is true',
-          });
-        }
-      }
-    }
-
-    // Performance checks
-    if (!only || only === 'performance') {
-      if (hasSelect && /<(?:Select|TreeSelect)\b/.test(line) && hasNearbyMatch(lines, i, 10, /virtual\s*=\s*\{?\s*false/)) {
-        issues.push({
-          file: filePath,
-          line: i + 1,
-          rule: 'performance',
-          severity: 'warning',
-          message: 'Disabling `virtual` scroll on Select may cause performance issues with large datasets',
-        });
-      }
-
-      if (/import\s+antd\b/.test(line) || /import\s+\*\s+as\s+\w+\s+from\s+['"]antd['"]/.test(line)) {
-        issues.push({
-          file: filePath,
-          line: i + 1,
-          rule: 'performance',
-          severity: 'error',
-          message: 'Avoid wildcard import from antd. Use named imports: `import { Button } from \'antd\'`',
-        });
-      }
-    }
-  }
+    },
+  });
+  visitor.visit(result.program);
 
   return issues;
 }

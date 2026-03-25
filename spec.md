@@ -376,7 +376,7 @@ JSON output:
 
 #### `antd lint [file/dir]`
 
-Check antd usage against best practices. Uses pattern-based analysis (regex + line scanning) on source files.
+Check antd usage against best practices. Uses AST-based analysis (powered by `oxc-parser`) on source files for precise detection.
 
 ```bash
 antd lint ./src
@@ -408,7 +408,7 @@ Note: This is complementary to ESLint. `antd lint` focuses on antd-specific know
 
 **Rule categories:**
 
-- **deprecated** — Deprecated props (with replacement info from metadata) and deprecated components (`BackTop` → `FloatButton.BackTop`, `Button.Group` / `Input.Group` → `Space.Compact`). Deprecated prop detection is scoped to the owning component's JSX tag (within ±10 lines) to avoid false positives when the same prop name appears on unrelated components.
+- **deprecated** — Deprecated props (with replacement info from metadata) and deprecated components (`BackTop` → `FloatButton.BackTop`, `Button.Group` / `Input.Group` → `Space.Compact`). Deprecated prop detection uses AST traversal to precisely match props to their owning JSX element, eliminating false positives from sibling components.
 - **a11y** — Accessibility: missing `alt` on Image, missing `aria-label` on clickable icons
 - **usage** — Prop combination mistakes detected from antd runtime warnings:
   - Form.Item `shouldUpdate` + `dependencies` conflict
