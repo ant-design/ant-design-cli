@@ -213,7 +213,7 @@ function lintFile(
           }
         }
 
-        if (compName === 'Select' && (importedComponents.has('Select') || importedComponents.has('TreeSelect'))) {
+        if (compName === 'Select' && importedComponents.has('Select')) {
           if (hasAttr(attrs, 'maxCount')) {
             const modeVal = getStringAttrValue(attrs, 'mode');
             if (modeVal !== 'multiple' && modeVal !== 'tags') {
@@ -267,8 +267,8 @@ function lintFile(
 
       // --- Performance checks ---
       if (!only || only === 'performance') {
-        if ((compName === 'Select' || compName === 'TreeSelect') &&
-            (importedComponents.has('Select') || importedComponents.has('TreeSelect'))) {
+        if ((compName === 'Select' && importedComponents.has('Select')) ||
+            (compName === 'TreeSelect' && importedComponents.has('TreeSelect'))) {
           if (isBooleanFalse(attrs, 'virtual')) {
             report('performance', 'warning', line, 'Disabling `virtual` scroll on Select may cause performance issues with large datasets');
           }
