@@ -26,24 +26,9 @@ jobs:
         id: size
         run: |
           npm pack --dry-run --json > /tmp/pack.json 2>&1 || true
-          # Extract the JSON array from output (skip non-JSON lines from prepack/postpack scripts)
           PACK_JSON=$(grep -o '\[.*\]' /tmp/pack.json | tail -1)
-          SIZE=$(echo "$PACK_JSON" | jq '.[0].size')
-          UNPACK_SIZE=$(echo "$PACK_JSON" | jq '.[0].unpackedSize')
-
-          format_size() {
-            local bytes=$1
-            if [ "$bytes" -ge 1048576 ]; then
-              echo "$(echo "scale=2; $bytes / 1048576" | bc) MB"
-            else
-              echo "$(echo "scale=2; $bytes / 1024" | bc) KB"
-            fi
-          }
-
-          echo "size=$SIZE" >> "$GITHUB_OUTPUT"
-          echo "unpack_size=$UNPACK_SIZE" >> "$GITHUB_OUTPUT"
-          echo "size_hr=$(format_size $SIZE)" >> "$GITHUB_OUTPUT"
-          echo "unpack_size_hr=$(format_size $UNPACK_SIZE)" >> "$GITHUB_OUTPUT"
+          echo "size=$(echo "$PACK_JSON" | jq '.[0].size')" >> "$GITHUB_OUTPUT"
+          echo "unpack_size=$(echo "$PACK_JSON" | jq '.[0].unpackedSize')" >> "$GITHUB_OUTPUT"
 
       - name: Get base branch size
         if: github.event_name == 'pull_request'
@@ -55,62 +40,19 @@ jobs:
           npm run build
           npm pack --dry-run --json > /tmp/base_pack.json 2>&1 || true
           PACK_JSON=$(grep -o '\[.*\]' /tmp/base_pack.json | tail -1)
-          BASE_SIZE=$(echo "$PACK_JSON" | jq '.[0].size')
-          BASE_UNPACK_SIZE=$(echo "$PACK_JSON" | jq '.[0].unpackedSize')
-          echo "size=$BASE_SIZE" >> "$GITHUB_OUTPUT"
-          echo "unpack_size=$BASE_UNPACK_SIZE" >> "$GITHUB_OUTPUT"
+          echo "size=$(echo "$PACK_JSON" | jq '.[0].size')" >> "$GITHUB_OUTPUT"
+          echo "unpack_size=$(echo "$PACK_JSON" | jq '.[0].unpackedSize')" >> "$GITHUB_OUTPUT"
 
       - name: Comment on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
-            const size = parseInt('${{ steps.size.outputs.size }}');
-            const unpackSize = parseInt('${{ steps.size.outputs.unpack_size }}');
-            const baseSize = parseInt('${{ steps.base_size.outputs.size }}') || size;
-            const baseUnpackSize = parseInt('${{ steps.base_size.outputs.unpack_size }}') || unpackSize;
-
-            function formatBytes(bytes) {
-              if (bytes >= 1048576) return (bytes / 1048576).toFixed(2) + ' MB';
-              return (bytes / 1024).toFixed(2) + ' KB';
-            }
-
-            function formatDiff(current, base) {
-              const diff = current - base;
-              if (diff === 0) return '±0';
-              const sign = diff > 0 ? '+' : '';
-              return `${sign}${formatBytes(Math.abs(diff))} (${sign}${((diff / base) * 100).toFixed(1)}%)`;
-            }
-
-            const body = [
-              '## 📦 Package Size Report',
-              '',
-              '| Metric | Size | Diff |',
-              '| --- | --- | --- |',
-              `| Packed | ${formatBytes(size)} | ${formatDiff(size, baseSize)} |`,
-              `| Unpacked | ${formatBytes(unpackSize)} | ${formatDiff(unpackSize, baseUnpackSize)} |`,
-            ].join('\n');
-
-            // Find existing comment
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
+            const run = require('./scripts/pkg-size-comment.js');
+            await run({
+              github, context,
+              size: parseInt('${{ steps.size.outputs.size }}'),
+              unpackSize: parseInt('${{ steps.size.outputs.unpack_size }}'),
+              baseSize: parseInt('${{ steps.base_size.outputs.size }}') || parseInt('${{ steps.size.outputs.size }}'),
+              baseUnpackSize: parseInt('${{ steps.base_size.outputs.unpack_size }}') || parseInt('${{ steps.size.outputs.unpack_size }}'),
             });
-            const existing = comments.find(c => c.body.includes('📦 Package Size Report'));
-
-            if (existing) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: existing.id,
-                body,
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body,
-              });
-            }
