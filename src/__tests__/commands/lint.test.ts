@@ -234,10 +234,9 @@ describe('lint command', () => {
     it('handles dynamic expression attr values gracefully', async () => {
       const out = await runLint([join(tmpDir, 'usage-dynamic.tsx')]);
       const data = parseJson(out);
-      // Should detect ghost usage but not crash on dynamic type value
+      // ghost attr exists but type is dynamic (not "link"/"text"), so no ghost warning
       const ghostIssues = data.issues.filter((i: any) => i.message.includes('ghost'));
-      // ghost is detected, but type is dynamic so no "link"/"text" match
-      expect(Array.isArray(ghostIssues)).toBe(true);
+      expect(ghostIssues.length).toBe(0);
     });
 
     it('detects Button ghost + link type via JSX expression container', async () => {

@@ -177,9 +177,14 @@ describe('usage command', () => {
     logSpy.mockRestore();
     const result = JSON.parse(logged);
 
-    // Should still work and classify components correctly
-    expect(result).toHaveProperty('components');
-    expect(result).toHaveProperty('nonComponents');
+    // With subComponentProps resolved, Form.Item's leaf "Item" is added to knownComponents,
+    // so Form (which has subComponent Form.Item) should be classified as a component
+    const formComp = result.components.find((c: any) => c.name === 'Form');
+    expect(formComp).toBeDefined();
+    expect(formComp.subComponents).toHaveProperty('Form.Item');
+    // Form.Item should NOT appear as a nonComponent
+    const nonCompNames = result.nonComponents.map((c: any) => c.name);
+    expect(nonCompNames).not.toContain('Form.Item');
   });
 
   it('aggregates usage across multiple files', async () => {

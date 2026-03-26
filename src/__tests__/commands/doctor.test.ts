@@ -144,12 +144,13 @@ async function runDoctor(tmpDir: string, format: string = 'text'): Promise<strin
   const cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(tmpDir);
   const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
-  await program.parseAsync(['doctor'], { from: 'user' });
-
-  const calls = logSpy.mock.calls.map((args) => args.map(String).join(' '));
-  cwdSpy.mockRestore();
-  logSpy.mockRestore();
-  return calls;
+  try {
+    await program.parseAsync(['doctor'], { from: 'user' });
+    return logSpy.mock.calls.map((args) => args.map(String).join(' '));
+  } finally {
+    cwdSpy.mockRestore();
+    logSpy.mockRestore();
+  }
 }
 
 async function runDoctorJson(tmpDir: string): Promise<{ checks: any[]; summary: any }> {

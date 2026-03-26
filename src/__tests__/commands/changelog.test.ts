@@ -119,14 +119,19 @@ describe('diffChangelog', () => {
     const result = queryChangelog({ snapshotVersion: '5.20.0', entryFilter: '5.19.0..5.20.0' });
     expect('error' in result).toBe(false);
     if (!('error' in result)) {
-      expect(Array.isArray(result.entries)).toBe(true);
+      expect(result.entries.length).toBeGreaterThan(0);
+      for (const e of result.entries) {
+        expect(e.version >= '5.19.0').toBe(true);
+        expect(e.version <= '5.20.0').toBe(true);
+      }
     }
   });
 
   it('returns specific version filter', () => {
     const result = queryChangelog({ snapshotVersion: '5.20.0', entryFilter: '5.20.0' });
-    // May or may not find exact match
+    expect('error' in result).toBe(false);
     if (!('error' in result)) {
+      expect(result.entries.length).toBeGreaterThan(0);
       for (const e of result.entries) {
         expect(e.version).toBe('5.20.0');
       }
@@ -209,9 +214,7 @@ describe('registerChangelogCommand', () => {
     expect(parsed.from).toBe('4.24.0');
     expect(parsed.to).toBe('5.20.0');
     // With diffs, single component should be flattened (component field at top level)
-    if (parsed.component) {
-      expect(parsed.component).toBe('Button');
-    }
+    expect(parsed.component).toBe('Button');
   });
 
   it('should handle "no changelog data" gracefully', async () => {
