@@ -3,7 +3,7 @@ import type { GlobalOptions } from '../types.js';
 import { platform, release } from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, isAbsolute } from 'node:path';
 import { output } from '../output/formatter.js';
 import { readJson } from '../utils/scan.js';
 
@@ -205,7 +205,7 @@ export function registerEnvCommand(program: Command): void {
     .description('Collect antd-related environment information for bug reporting')
     .action(async (dir?: string) => {
       const opts = program.opts<GlobalOptions>();
-      const cwd = dir ? (dir.startsWith('/') ? dir : join(process.cwd(), dir)) : process.cwd();
+      const cwd = dir ? (isAbsolute(dir) ? dir : join(process.cwd(), dir)) : process.cwd();
 
       const data: EnvResult = {
         system: collectSystem(),
