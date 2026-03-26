@@ -183,7 +183,7 @@ function lintFile(
               const propName = attr.name?.name;
               const dep = deprecations.find((d) => d.prop === propName);
               if (dep) {
-                report('deprecated', 'warning', lineOf(attr), `${compName} ${dep.message}`);
+                report('deprecated', 'warning', lineOf(attr) || line, `${compName} ${dep.message}`);
               }
             }
           }
