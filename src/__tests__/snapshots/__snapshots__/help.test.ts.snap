@@ -35,6 +35,8 @@ Commands:
   lint [options] [target]          Check antd usage against best practices
   migrate [options] <from> <to>    Version migration guide with optional
                                    auto-fix
+  env [dir]                        Collect antd-related environment information
+                                   for bug reporting
   mcp                              Start MCP (Model Context Protocol) server for
                                    AI assistant integration
   bug [options]                    Report a bug to the antd repository
