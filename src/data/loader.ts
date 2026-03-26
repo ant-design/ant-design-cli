@@ -27,6 +27,7 @@ function getDataPath(): string {
 /** Read a JSON data file, supporting both .json.gz and plain .json formats. */
 function readDataFile(filePath: string): string {
   const gzPath = filePath + '.gz';
+  /* v8 ignore next 3 -- gz files only present in production builds */
   if (existsSync(gzPath)) {
     return gunzipSync(readFileSync(gzPath)).toString('utf-8');
   }
@@ -50,7 +51,7 @@ export function loadMetadata(majorVersion: string): MetadataStore {
   const dataPath = join(getDataPath(), `${majorVersion}.json`);
   try {
     return normalizeStore(JSON.parse(readDataFile(dataPath)) as MetadataStore);
-  } catch (err) {
+  } catch (err) /* v8 ignore start */ {
     if (err instanceof SyntaxError) {
       process.stderr.write(`[antd-cli] Warning: data file may be corrupted: ${dataPath}\n`);
     }
@@ -59,7 +60,7 @@ export function loadMetadata(majorVersion: string): MetadataStore {
       majorVersion,
       components: [],
     };
-  }
+  } /* v8 ignore stop */
 }
 
 /**

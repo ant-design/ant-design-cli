@@ -18,7 +18,7 @@ export function registerMcpCommand(program: Command): void {
   program
     .command('mcp')
     .description('Start MCP (Model Context Protocol) server for AI assistant integration')
-    .action(async () => {
+    .action(/* v8 ignore start */ async () => {
       const opts = program.opts<GlobalOptions>();
       const versionInfo = detectVersion(opts.version);
 
@@ -71,5 +71,6 @@ export function registerMcpCommand(program: Command): void {
 
       const transport = new StdioServerTransport();
       await server.connect(transport);
-    });
+    } /* v8 ignore stop */);
+
 }

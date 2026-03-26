@@ -1,24 +1,166 @@
-import { describe, it, expect } from 'vitest';
-import { detectVersion, satisfies } from '../version.js';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { valid, compare, satisfies } from '../version.js';
+
+// We need to test detectVersion with mocked fs, so we use vi.mock + dynamic import
+vi.mock('node:fs', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('node:fs')>();
+  return {
+    ...actual,
+    existsSync: vi.fn(actual.existsSync),
+    readFileSync: vi.fn(actual.readFileSync),
+  };
+});
+
+import { existsSync, readFileSync } from 'node:fs';
+
+const mockedExistsSync = vi.mocked(existsSync);
+const mockedReadFileSync = vi.mocked(readFileSync);
 
 describe('detectVersion', () => {
-  it('should use flag version when provided', () => {
+  let origCwd: typeof process.cwd;
+
+  beforeEach(() => {
+    origCwd = process.cwd;
+    // Reset mocks to call through by default
+    mockedExistsSync.mockReset();
+    mockedReadFileSync.mockReset();
+  });
+
+  afterEach(() => {
+    process.cwd = origCwd;
+    vi.resetModules();
+  });
+
+  async function freshDetectVersion(flag?: string) {
+    // Re-import to get fresh module with our mocks
+    const mod = await import('../version.js');
+    return mod.detectVersion(flag);
+  }
+
+  it('should use flag version when provided', async () => {
+    const { detectVersion } = await import('../version.js');
     const info = detectVersion('5.20.0');
     expect(info.version).toBe('5.20.0');
     expect(info.majorVersion).toBe('v5');
     expect(info.source).toBe('flag');
   });
 
-  it('should map v4 correctly', () => {
+  it('should map v4 correctly', async () => {
+    const { detectVersion } = await import('../version.js');
     const info = detectVersion('4.24.0');
     expect(info.majorVersion).toBe('v4');
   });
 
-  it('should fallback when no flag', () => {
+  it('should fallback when no flag', async () => {
+    const { detectVersion } = await import('../version.js');
     const info = detectVersion(undefined);
     expect(info.source).not.toBe('flag');
     expect(info.version).toBeTruthy();
     expect(info.majorVersion).toMatch(/^v\d+$/);
+  });
+
+  it('should detect version from node_modules/antd/package.json', async () => {
+    process.cwd = () => '/fake/project';
+    mockedExistsSync.mockImplementation((p: any) => {
+      if (String(p) === '/fake/project/node_modules/antd/package.json') return true;
+      return false;
+    });
+    mockedReadFileSync.mockImplementation((p: any, _opts?: any) => {
+      if (String(p) === '/fake/project/node_modules/antd/package.json') {
+        return JSON.stringify({ version: '4.24.0' });
+      }
+      throw new Error('not found');
+    });
+
+    const info = await freshDetectVersion(undefined);
+    expect(info.version).toBe('4.24.0');
+    expect(info.majorVersion).toBe('v4');
+    expect(info.source).toBe('node_modules');
+  });
+
+  it('should handle node_modules parse error and fall through', async () => {
+    process.cwd = () => '/fake/project';
+    mockedExistsSync.mockImplementation((p: any) => {
+      if (String(p) === '/fake/project/node_modules/antd/package.json') return true;
+      return false;
+    });
+    mockedReadFileSync.mockImplementation((p: any, _opts?: any) => {
+      if (String(p) === '/fake/project/node_modules/antd/package.json') {
+        return 'not valid json';
+      }
+      throw new Error('not found');
+    });
+
+    const info = await freshDetectVersion(undefined);
+    expect(info.source).toBe('fallback');
+  });
+
+  it('should detect version from package.json dependencies', async () => {
+    process.cwd = () => '/fake/project2';
+    mockedExistsSync.mockImplementation((p: any) => {
+      if (String(p) === '/fake/project2/package.json') return true;
+      return false;
+    });
+    mockedReadFileSync.mockImplementation((p: any, _opts?: any) => {
+      if (String(p) === '/fake/project2/package.json') {
+        return JSON.stringify({ dependencies: { antd: '^5.10.0' } });
+      }
+      throw new Error('not found');
+    });
+
+    const info = await freshDetectVersion(undefined);
+    expect(info.version).toBe('5.10.0');
+    expect(info.majorVersion).toBe('v5');
+    expect(info.source).toBe('package.json');
+  });
+
+  it('should handle package.json parse error and fall to fallback', async () => {
+    process.cwd = () => '/fake/project3';
+    mockedExistsSync.mockImplementation((p: any) => {
+      if (String(p) === '/fake/project3/package.json') return true;
+      return false;
+    });
+    mockedReadFileSync.mockImplementation((p: any, _opts?: any) => {
+      if (String(p) === '/fake/project3/package.json') {
+        return 'invalid json{{{';
+      }
+      throw new Error('not found');
+    });
+
+    const info = await freshDetectVersion(undefined);
+    expect(info.source).toBe('fallback');
+  });
+});
+
+describe('compare', () => {
+  it('should return 0 for equal versions', () => {
+    expect(compare('1.0.0', '1.0.0')).toBe(0);
+  });
+  it('should return -1 when first is less', () => {
+    expect(compare('1.0.0', '2.0.0')).toBe(-1);
+    expect(compare('1.0.0', '1.1.0')).toBe(-1);
+    expect(compare('1.0.0', '1.0.1')).toBe(-1);
+  });
+  it('should return 1 when first is greater', () => {
+    expect(compare('2.0.0', '1.0.0')).toBe(1);
+    expect(compare('1.1.0', '1.0.0')).toBe(1);
+    expect(compare('1.0.1', '1.0.0')).toBe(1);
+  });
+  it('should handle missing parts as zero', () => {
+    expect(compare('1.0', '1.0.0')).toBe(0);
+    expect(compare('1', '1.0.0')).toBe(0);
+  });
+});
+
+describe('valid', () => {
+  it('should return true for valid semver', () => {
+    expect(valid('1.0.0')).toBe(true);
+    expect(valid('5.20.3')).toBe(true);
+  });
+  it('should return false for invalid semver', () => {
+    expect(valid('1.0')).toBe(false);
+    expect(valid('abc')).toBe(false);
+    expect(valid('')).toBe(false);
   });
 });
 

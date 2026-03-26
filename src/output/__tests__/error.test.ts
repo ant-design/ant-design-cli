@@ -12,6 +12,32 @@ describe('printError', () => {
     stderrSpy.mockRestore();
     stdoutSpy.mockRestore();
   });
+
+  it('should output text error with message to stderr', () => {
+    const stderrSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const err = createError(ErrorCodes.COMPONENT_NOT_FOUND, 'Component not found');
+    printError(err, 'text');
+    expect(stderrSpy).toHaveBeenCalledWith('Error: Component not found');
+    stderrSpy.mockRestore();
+  });
+
+  it('should output suggestion when present in text format', () => {
+    const stderrSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const err = createError(ErrorCodes.COMPONENT_NOT_FOUND, 'Not found', 'Did you mean Button?');
+    printError(err, 'text');
+    expect(stderrSpy).toHaveBeenCalledWith('Error: Not found');
+    expect(stderrSpy).toHaveBeenCalledWith('Suggestion: Did you mean Button?');
+    stderrSpy.mockRestore();
+  });
+
+  it('should not output suggestion when absent in text format', () => {
+    const stderrSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const err = createError(ErrorCodes.COMPONENT_NOT_FOUND, 'Not found');
+    printError(err, 'text');
+    const calls = stderrSpy.mock.calls.map(c => c[0]);
+    expect(calls).not.toContain(expect.stringContaining('Suggestion'));
+    stderrSpy.mockRestore();
+  });
 });
 
 describe('createError', () => {

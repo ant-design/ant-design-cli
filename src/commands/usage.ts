@@ -20,9 +20,11 @@ function scanFile(filePath: string): Map<string, { count: number; subComponents:
   let content: string;
   try {
     content = readFileSync(filePath, 'utf-8');
+  /* v8 ignore start -- fs read error */
   } catch {
     return result;
   }
+  /* v8 ignore stop */
 
   if (!content.includes('antd')) return result;
 

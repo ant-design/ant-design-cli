@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { collectFiles, readJson, SCAN_EXTENSIONS, SKIP_DIRS } from '../scan.js';
+import { collectFiles, readJson, getJSXElementName, SCAN_EXTENSIONS, SKIP_DIRS } from '../scan.js';
 import { join } from 'node:path';
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 
@@ -54,11 +54,67 @@ describe('collectFiles', () => {
   it('should return empty for non-existent path', () => {
     expect(collectFiles('/nonexistent/path')).toEqual([]);
   });
+
+  it('should return empty when directory cannot be read (permission error)', () => {
+    // Create a directory, then mock readdirSync to throw for it
+    const permDir = join(tmpDir, 'noperm');
+    mkdirSync(permDir, { recursive: true });
+    // Make it unreadable - on macOS/Linux we can chmod 000
+    const { chmodSync } = require('node:fs');
+    try {
+      chmodSync(permDir, 0o000);
+      const files = collectFiles(permDir);
+      expect(files).toEqual([]);
+    } finally {
+      chmodSync(permDir, 0o755);
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
 });
 
 describe('readJson', () => {
   it('should return null for non-existent file', () => {
     expect(readJson('/nonexistent/file.json')).toBeNull();
+  });
+
+  it('should return parsed JSON for valid file', () => {
+    const tmpPath = join(__dirname, '__tmp_readjson_test__.json');
+    writeFileSync(tmpPath, JSON.stringify({ name: 'test' }));
+    try {
+      const result = readJson(tmpPath);
+      expect(result).toEqual({ name: 'test' });
+    } finally {
+      rmSync(tmpPath);
+    }
+  });
+
+  it('should return null for invalid JSON', () => {
+    const tmpPath = join(__dirname, '__tmp_readjson_bad__.json');
+    writeFileSync(tmpPath, 'not json');
+    try {
+      expect(readJson(tmpPath)).toBeNull();
+    } finally {
+      rmSync(tmpPath);
+    }
+  });
+});
+
+describe('getJSXElementName', () => {
+  it('should handle JSXIdentifier', () => {
+    expect(getJSXElementName({ type: 'JSXIdentifier', name: 'Button' })).toBe('Button');
+  });
+
+  it('should handle JSXMemberExpression', () => {
+    const node = {
+      type: 'JSXMemberExpression',
+      object: { type: 'JSXIdentifier', name: 'Form' },
+      property: { name: 'Item' },
+    };
+    expect(getJSXElementName(node)).toBe('Form.Item');
+  });
+
+  it('should return empty string for unknown type', () => {
+    expect(getJSXElementName({ type: 'Unknown' })).toBe('');
   });
 });
 
