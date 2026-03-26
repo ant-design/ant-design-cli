@@ -460,7 +460,7 @@ const App = () => (
     async function runLintV6(
       file: string,
       args: string[] = [],
-    ): Promise<{ issues: any[]; summary: any }> {
+    ): Promise<{ issues: LintIssue[]; summary: any }> {
       const program = new Command();
       program.option('--format <format>', '', 'json');
       program.option('--version <version>', '', '6.0.0');
