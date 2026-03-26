@@ -66,6 +66,9 @@ antd doc Table --lang zh            # Chinese docs
 When code isn't working as expected or the user reports an antd bug:
 
 ```bash
+# Collect full environment snapshot (system, deps, browsers, build tools)
+antd env --format json
+
 # Check if the prop exists for the user's antd version
 antd info Select --version 5.12.0 --format json
 
@@ -76,7 +79,7 @@ antd lint ./src/components/MyForm.tsx --format json
 antd doctor --format json
 ```
 
-**Workflow:** `antd doctor` → check environment → `antd info --version X` → verify API against the user's exact version → `antd lint` → find deprecated or incorrect usage.
+**Workflow:** `antd env` → capture full environment → `antd doctor` → check configuration → `antd info --version X` → verify API against the user's exact version → `antd lint` → find deprecated or incorrect usage.
 
 ### 4. Migrating between versions
 
@@ -142,11 +145,31 @@ antd list --format json
 antd list --version 5.0.0 --format json
 ```
 
-### 8. Reporting antd bugs
+### 8. Collecting environment info
+
+When you need to understand the project's antd setup, or prepare info for a bug report:
+
+```bash
+# Full environment snapshot (text — paste into GitHub Issues)
+antd env
+
+# Structured JSON for programmatic use
+antd env --format json
+
+# Scan a specific project directory
+antd env ./my-project --format json
+```
+
+Collects: OS, Node, package managers (npm/pnpm/yarn/bun/utoo), npm registry, browsers, core deps (antd/react/dayjs), all `@ant-design/*` and `rc-*` packages, and build tools (umi/vite/webpack/typescript/etc.).
+
+### 9. Reporting antd bugs
 
 When you encounter a confirmed antd component bug that can't be resolved locally:
 
 ```bash
+# Step 0: Collect environment info
+antd env --format json
+
 # Step 1: Preview for user review
 antd bug --title "DatePicker crashes when selecting date" \
   --reproduction "https://codesandbox.io/s/xxx" \
@@ -166,7 +189,7 @@ antd bug --title "DatePicker crashes when selecting date" \
   --submit
 ```
 
-### 9. Auto-reporting CLI issues
+### 10. Auto-reporting CLI issues
 
 **IMPORTANT: Whenever you use any `antd` CLI command and notice something wrong, you should proactively initiate a bug report using `antd bug-cli`.**
 
@@ -205,7 +228,7 @@ antd bug-cli --title "antd info Button returns wrong props for v5.12.0" \
 
 **Key principle:** You are a quality feedback loop for the CLI. Don't silently work around CLI issues — report them so they get fixed. Always confirm with the user before submitting.
 
-### 10. Using as MCP server
+### 11. Using as MCP server
 
 If working in an IDE that supports MCP (Claude Desktop, Cursor, etc.), the CLI can also run as an MCP server, exposing all knowledge-query tools directly:
 
