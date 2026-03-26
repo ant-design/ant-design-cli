@@ -41,7 +41,7 @@ npx skills add ant-design/ant-design-cli    # install as an agent skill
 - 🤖 **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
 - 🌍 **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
 - 🔮 **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
-- 🧩 **14 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
+- 🧩 **15 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
 - 🔌 **MCP server** — `antd mcp` starts a stdio server for native IDE integration (Claude Desktop, Cursor).
 
 <br>
@@ -135,6 +135,7 @@ antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 | Command | Description |
 |---|---|
 | [`antd doctor`](#antd-doctor) | 10 diagnostic checks: React compat, duplicates, peer deps, SSR, babel plugins |
+| [`antd env [dir]`](#antd-env-dir) | Collect all antd-related environment info for bug reporting or AI diagnosis |
 | [`antd usage [dir]`](#antd-usage-dir) | Import stats, sub-component breakdown (`Form.Item`), non-component exports |
 | [`antd lint [target]`](#antd-lint-target) | Deprecated APIs, accessibility gaps, performance issues, best practices |
 | [`antd migrate <from> <to>`](#antd-migrate-from-to) | Migration checklist with auto-fixable/manual split and `--apply` agent prompt |
@@ -271,6 +272,54 @@ Runs 10 checks against your project: antd installed, React version compat, dupli
 antd doctor
 antd doctor --format json
 ```
+
+### `antd env [dir]`
+
+Collect all antd-related environment information — system, Node, package managers, browsers, dependencies, ecosystem packages (`@ant-design/*`, `rc-*`), and build tools — in one shot.
+
+```bash
+antd env                            # text output (paste into GitHub Issues)
+antd env --format json              # structured JSON for AI consumption
+antd env ./my-project               # scan a specific project directory
+```
+
+<details>
+<summary>Example output</summary>
+
+```
+Environment
+
+  System:
+    OS        macOS 15.3
+
+  Binaries:
+    Node      20.11.0
+    pnpm      9.1.0
+    Registry  https://registry.npmmirror.com/
+
+  Browsers:
+    Chrome    131.0.6778.86
+    Safari    18.3
+
+  Dependencies:
+    antd                 5.22.0
+    react                18.3.1
+    react-dom            18.3.1
+    dayjs                1.11.13
+    @ant-design/cssinjs  1.22.1
+    @ant-design/icons    5.5.2
+
+  Ecosystem:
+    @ant-design/pro-components  2.8.1
+    rc-field-form               2.7.0
+
+  Build Tools:
+    umi         4.3.0
+    typescript  5.6.3
+    less        4.2.0
+```
+
+</details>
 
 ### `antd usage [dir]`
 
