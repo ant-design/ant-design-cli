@@ -90,6 +90,15 @@ function getObjectExpressionKeys(attrs: any[], name: string): string[] {
 }
 /* v8 ignore stop */
 
+/** Convert a byte offset to a 1-based line number. */
+function offsetToLine(source: string, offset: number): number {
+  let line = 1;
+  for (let i = 0; i < offset && i < source.length; i++) {
+    if (source[i] === '\n') line++;
+  }
+  return line;
+}
+
 function lintFile(
   filePath: string,
   deprecatedMap: Map<string, DeprecatedInfo[]>,
@@ -113,6 +122,13 @@ function lintFile(
   const issues: LintIssue[] = [];
   const importedComponents = new Set<string>();
 
+  // oxc-parser Visitor provides byte offsets (start/end) instead of loc,
+  // so we convert offsets to line numbers for accurate reporting.
+  const lineOf = (node: any): number => {
+    if (typeof node.start === 'number') return offsetToLine(content, node.start);
+    return node.loc?.start?.line ?? 0;
+  };
+
   const report = (rule: string, severity: LintIssue['severity'], line: number, message: string) => {
     issues.push({ file: filePath, line, rule, severity, message });
   };
@@ -134,7 +150,7 @@ function lintFile(
 
         if ((!only || only === 'performance') &&
             (spec.type === 'ImportDefaultSpecifier' || spec.type === 'ImportNamespaceSpecifier')) {
-          report('performance', 'error', node.loc?.start?.line ?? 0,
+          report('performance', 'error', lineOf(node),
             'Avoid wildcard import from antd. Use named imports: `import { Button } from \'antd\'`');
         }
       }
@@ -144,7 +160,7 @@ function lintFile(
       const compName = getJSXElementName(node.name);
       if (!compName) return;
       const attrs = node.attributes || [];
-      const line = node.loc?.start?.line ?? 0;
+      const line = lineOf(node);
 
       // --- Deprecated checks ---
       if (!only || only === 'deprecated') {
@@ -167,7 +183,7 @@ function lintFile(
               const propName = attr.name?.name;
               const dep = deprecations.find((d) => d.prop === propName);
               if (dep) {
-                report('deprecated', 'warning', attr.loc?.start?.line ?? line, `${compName} ${dep.message}`);
+                report('deprecated', 'warning', lineOf(attr), `${compName} ${dep.message}`);
               }
             }
           }
