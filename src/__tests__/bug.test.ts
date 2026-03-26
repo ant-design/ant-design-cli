@@ -252,8 +252,8 @@ vi.mock('../utils/issue.js', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../utils/issue.js')>();
   return {
     ...actual,
-    checkGhAvailable: vi.fn(actual.checkGhAvailable),
-    submitViaGh: vi.fn(actual.submitViaGh),
+    checkGhAvailable: vi.fn(() => false),
+    submitViaGh: vi.fn(() => ({ issueNumber: 0, url: '' })),
   };
 });
 
