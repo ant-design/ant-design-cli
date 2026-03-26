@@ -129,9 +129,14 @@ export function scanEcosystem(cwd: string): Record<string, string> {
 }
 
 const BUILD_TOOLS = [
-  'umi', 'next', '@umijs/max', 'create-react-app', 'ice',
-  'webpack', 'vite', 'esbuild', 'rollup', '@rspack/core',
+  // Frameworks
+  'umi', '@umijs/max', 'next', 'remix', 'gatsby', 'create-react-app', 'ice',
+  'rax', 'taro', 'remax', 'modern-js', 'utoo',
+  // Bundlers
+  'webpack', 'vite', 'esbuild', 'rollup', '@rspack/core', 'turbopack', 'farm',
+  // Compilers
   'typescript', '@babel/core', '@swc/core',
+  // CSS
   'less', 'sass', 'tailwindcss', 'styled-components', 'postcss',
 ];
 
