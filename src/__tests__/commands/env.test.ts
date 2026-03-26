@@ -5,9 +5,12 @@ import { tmpdir } from 'node:os';
 import {
   collectSystem,
   collectBinaries,
+  collectBrowsers,
   collectDependencies,
   scanEcosystem,
   collectBuildTools,
+  tryExec,
+  getVersion,
   formatText,
   formatMarkdown,
   type EnvResult,
@@ -19,6 +22,45 @@ describe('collectSystem', () => {
     expect(result).toHaveProperty('OS');
     expect(typeof result.OS).toBe('string');
     expect(result.OS.length).toBeGreaterThan(0);
+  });
+});
+
+describe('tryExec', () => {
+  it('returns output for a valid command', () => {
+    const result = tryExec('node', ['--version']);
+    expect(result).toBeTruthy();
+    expect(result).toMatch(/^\d+\.\d+\.\d+$|^v\d+/);
+  });
+
+  it('returns null for an invalid command', () => {
+    const result = tryExec('nonexistent-command-xyz', ['--version']);
+    expect(result).toBeNull();
+  });
+});
+
+describe('getVersion', () => {
+  it('extracts version from node', () => {
+    const result = getVersion('node');
+    expect(result).toMatch(/^\d+\.\d+\.\d+$/);
+  });
+
+  it('returns null for non-existent command', () => {
+    const result = getVersion('nonexistent-command-xyz');
+    expect(result).toBeNull();
+  });
+});
+
+describe('collectBrowsers', () => {
+  it('returns an object', async () => {
+    const result = await collectBrowsers();
+    expect(typeof result).toBe('object');
+  });
+
+  it('detects at least one browser on macOS', async () => {
+    const result = await collectBrowsers();
+    if (process.platform === 'darwin') {
+      expect(Object.keys(result).length).toBeGreaterThan(0);
+    }
   });
 });
 

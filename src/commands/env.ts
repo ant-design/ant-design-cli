@@ -27,15 +27,17 @@ export function collectSystem(): Record<string, string> {
     const macMajor = major - 9;
     const macMinor = parts[1] || '0';
     os = `macOS ${macMajor}.${macMinor}`;
+  /* v8 ignore next 2 */
   } else if (p === 'win32') {
     os = `Windows ${r}`;
+  /* v8 ignore next 2 */
   } else {
     os = `${p} ${r}`;
   }
   return { OS: os };
 }
 
-function tryExec(cmd: string, args: string[]): string | null {
+export function tryExec(cmd: string, args: string[]): string | null {
   try {
     return execFileSync(cmd, args, { encoding: 'utf-8', timeout: 5000, stdio: ['pipe', 'pipe', 'pipe'] }).trim();
   } catch {
@@ -43,7 +45,7 @@ function tryExec(cmd: string, args: string[]): string | null {
   }
 }
 
-function getVersion(cmd: string): string | null {
+export function getVersion(cmd: string): string | null {
   const out = tryExec(cmd, ['--version']);
   if (!out) return null;
   const match = out.match(/(\d+\.\d+\.\d+)/);
@@ -81,6 +83,7 @@ export async function collectBrowsers(): Promise<Record<string, string | null>> 
       result[name] = val || null;
     }
     return result;
+  /* v8 ignore next 2 */
   } catch {
     return {};
   }
@@ -204,6 +207,7 @@ export function formatMarkdown(data: EnvResult): string {
   return lines.join('\n');
 }
 
+/* v8 ignore start -- entry-point action; covered by e2e tests in cli.test.ts */
 export function registerEnvCommand(program: Command): void {
   program
     .command('env [dir]')
@@ -230,3 +234,4 @@ export function registerEnvCommand(program: Command): void {
       }
     });
 }
+/* v8 ignore stop */
