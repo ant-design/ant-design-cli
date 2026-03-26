@@ -167,10 +167,10 @@ Collects: OS, Node, package managers (npm/pnpm/yarn/bun/utoo), npm registry, bro
 When you encounter a confirmed antd component bug that can't be resolved locally:
 
 ```bash
-# Step 0: Collect environment info
+# Step 0: Always collect environment info first — include relevant details in the bug report
 antd env --format json
 
-# Step 1: Preview for user review
+# Step 1: Preview for user review (use env output to provide version/system context)
 antd bug --title "DatePicker crashes when selecting date" \
   --reproduction "https://codesandbox.io/s/xxx" \
   --steps "1. Open DatePicker 2. Click a date" \
@@ -261,5 +261,5 @@ This provides 7 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_
 3. **Use `--format json`** — Every command supports it. Parse the JSON output rather than regex-matching text output.
 4. **Check before suggesting migration** — Run `antd changelog <v1> <v2>` and `antd migrate` before advising on version upgrades.
 5. **Lint after changes** — After writing or modifying antd code, run `antd lint` on the changed files to catch deprecated or problematic usage.
-6. **Report antd bugs** — When you encounter an antd component bug, use `antd bug` to report it. Always preview first, get user confirmation, then submit.
+6. **Report antd bugs** — First run `antd env` to capture the full environment, then use `antd bug` to report. Always preview first, get user confirmation, then submit.
 7. **Auto-report CLI issues** — If any `antd` command crashes, returns wrong data, or behaves inconsistently, proactively use `antd bug-cli` to report it. You are the quality feedback loop for the CLI — don't silently work around issues.
