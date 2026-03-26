@@ -12,6 +12,7 @@ import { registerUsageCommand } from './commands/usage.js';
 import { registerLintCommand } from './commands/lint.js';
 import { registerMigrateCommand } from './commands/migrate.js';
 import { registerBugCommand, registerBugCliCommand } from './commands/bug.js';
+import { registerEnvCommand } from './commands/env.js';
 import { registerMcpCommand } from './commands/mcp.js';
 import { checkForUpdate } from './utils/update-check.js';
 declare const __CLI_VERSION__: string;
@@ -44,6 +45,7 @@ registerDoctorCommand(program);
 registerUsageCommand(program);
 registerLintCommand(program);
 registerMigrateCommand(program);
+registerEnvCommand(program);
 
 // MCP server
 registerMcpCommand(program);
