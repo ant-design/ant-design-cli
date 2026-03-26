@@ -167,10 +167,11 @@ Collects: OS, Node, package managers (npm/pnpm/yarn/bun/utoo), npm registry, bro
 When you encounter a confirmed antd component bug that can't be resolved locally:
 
 ```bash
-# Step 0: Always collect environment info first — include relevant details in the bug report
+# Step 0: Collect environment info for reference (optional — antd bug already embeds basic env)
+# Use the output to cross-check versions or attach extra details to the bug report
 antd env --format json
 
-# Step 1: Preview for user review (use env output to provide version/system context)
+# Step 1: Preview for user review
 antd bug --title "DatePicker crashes when selecting date" \
   --reproduction "https://codesandbox.io/s/xxx" \
   --steps "1. Open DatePicker 2. Click a date" \
