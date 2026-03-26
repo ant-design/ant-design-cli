@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
 import { Command } from 'commander';
-import { registerLintCommand } from '../../commands/lint.js';
+import { registerLintCommand, type LintIssue } from '../../commands/lint.js';
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
