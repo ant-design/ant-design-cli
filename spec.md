@@ -487,7 +487,7 @@ Collects six categories of information:
 3. **Browsers** — Installed system browser versions (Chrome, Firefox, Safari, Edge)
 4. **Dependencies** — Core antd-related packages (antd, react, react-dom, dayjs, @ant-design/cssinjs, @ant-design/icons)
 5. **Ecosystem** — All installed `@ant-design/*` and `rc-*` packages
-6. **Build Tools** — Frameworks (umi, next, vite), compilers (typescript, babel, swc), CSS tools (less, sass, tailwindcss)
+6. **Build Tools** — Frameworks (umi, next, remix, gatsby, taro, utoo, etc.), bundlers (webpack, vite, rspack, turbopack, farm), compilers (typescript, babel, swc), CSS tools (less, sass, tailwindcss)
 
 Text output example:
 ```
