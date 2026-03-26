@@ -90,6 +90,24 @@ function getObjectExpressionKeys(attrs: any[], name: string): string[] {
 }
 /* v8 ignore stop */
 
+/** Create a stateful offset-to-line converter that exploits monotonically increasing offsets. */
+function createLineMapper(source: string): (offset: number) => number {
+  let lastOffset = 0;
+  let lastLine = 1;
+  return (offset: number) => {
+    /* v8 ignore next 4 -- defensive: AST visitor offsets are monotonically increasing */
+    if (offset < lastOffset) {
+      lastOffset = 0;
+      lastLine = 1;
+    }
+    for (let i = lastOffset; i < offset && i < source.length; i++) {
+      if (source[i] === '\n') lastLine++;
+    }
+    lastOffset = offset;
+    return lastLine;
+  };
+}
+
 function lintFile(
   filePath: string,
   deprecatedMap: Map<string, DeprecatedInfo[]>,
@@ -112,6 +130,12 @@ function lintFile(
 
   const issues: LintIssue[] = [];
   const importedComponents = new Set<string>();
+  const offsetToLine = createLineMapper(content);
+
+  const lineOf = (node: any): number => {
+    if (typeof node.start === 'number') return offsetToLine(node.start);
+    return node.loc?.start?.line ?? 0;
+  };
 
   const report = (rule: string, severity: LintIssue['severity'], line: number, message: string) => {
     issues.push({ file: filePath, line, rule, severity, message });
@@ -134,7 +158,7 @@ function lintFile(
 
         if ((!only || only === 'performance') &&
             (spec.type === 'ImportDefaultSpecifier' || spec.type === 'ImportNamespaceSpecifier')) {
-          report('performance', 'error', node.loc?.start?.line ?? 0,
+          report('performance', 'error', lineOf(node),
             'Avoid wildcard import from antd. Use named imports: `import { Button } from \'antd\'`');
         }
       }
@@ -144,7 +168,7 @@ function lintFile(
       const compName = getJSXElementName(node.name);
       if (!compName) return;
       const attrs = node.attributes || [];
-      const line = node.loc?.start?.line ?? 0;
+      const line = lineOf(node);
 
       // --- Deprecated checks ---
       if (!only || only === 'deprecated') {
@@ -167,7 +191,7 @@ function lintFile(
               const propName = attr.name?.name;
               const dep = deprecations.find((d) => d.prop === propName);
               if (dep) {
-                report('deprecated', 'warning', attr.loc?.start?.line ?? line, `${compName} ${dep.message}`);
+                report('deprecated', 'warning', lineOf(attr) || line, `${compName} ${dep.message}`);
               }
             }
           }

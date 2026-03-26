@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
 import { Command } from 'commander';
-import { registerLintCommand } from '../../commands/lint.js';
+import { registerLintCommand, type LintIssue } from '../../commands/lint.js';
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -14,10 +14,11 @@ function makeTmpFile(name: string, content: string): void {
 async function runLint(
   args: string[] = [],
   format: string = 'json',
+  version: string = '5.20.0',
 ): Promise<string> {
   const program = new Command();
   program.option('--format <format>', '', format);
-  program.option('--version <version>', '', '5.20.0');
+  program.option('--version <version>', '', version);
   program.option('--lang <lang>', '', 'en');
   registerLintCommand(program);
   const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -452,6 +453,153 @@ const App = () => (
       const data = parseJson(out);
       const depIssues = data.issues.filter((i: any) => i.rule === 'deprecated' && i.message.includes('popupClassName'));
       expect(depIssues.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  // --- False positive regression tests (issue #45) ---
+  describe('deprecated false positives (#45)', () => {
+    async function runLintV6(
+      file: string,
+      args: string[] = [],
+    ): Promise<{ issues: LintIssue[]; summary: any }> {
+      return parseJson(await runLint([file, ...args], 'json', '6.0.0'));
+    }
+
+    it('should not flag non-antd component props as deprecated (SendTo message)', async () => {
+      // Alert.message is deprecated in v6, but SendTo is a custom component
+      makeTmpFile(
+        'false-pos-1.tsx',
+        `import { Alert } from 'antd';
+
+const SendTo = ({ message }: { message: string }) => <div>{message}</div>;
+
+const App = () => (
+  <div>
+    <SendTo message="hello" />
+    <Alert title="Warning" />
+  </div>
+);
+`,
+      );
+      const data = await runLintV6(join(tmpDir, 'false-pos-1.tsx'), ['--only', 'deprecated']);
+      // SendTo is not an antd component, so no deprecation should be reported
+      const messageIssues = data.issues.filter((i: any) => i.message.includes('message'));
+      expect(messageIssues).toHaveLength(0);
+    });
+
+    it('should not flag Button type as Divider deprecated type', async () => {
+      // Divider.type is deprecated in v6, but Button.type is NOT
+      makeTmpFile(
+        'false-pos-2.tsx',
+        `import { Button, Divider } from 'antd';
+
+const App = () => (
+  <div>
+    <Button type="dashed">Click</Button>
+    <Button type="primary">OK</Button>
+    <Divider />
+  </div>
+);
+`,
+      );
+      const data = await runLintV6(join(tmpDir, 'false-pos-2.tsx'), ['--only', 'deprecated']);
+      // Button.type is NOT deprecated, should not be flagged
+      const typeIssues = data.issues.filter((i: any) => i.message.includes('type'));
+      expect(typeIssues).toHaveLength(0);
+    });
+
+    it('should correctly flag Divider deprecated type prop', async () => {
+      // Divider.type IS deprecated in v6
+      makeTmpFile(
+        'false-pos-2b.tsx',
+        `import { Divider } from 'antd';
+
+const App = () => <Divider type="vertical" />;
+`,
+      );
+      const data = await runLintV6(join(tmpDir, 'false-pos-2b.tsx'), ['--only', 'deprecated']);
+      const typeIssues = data.issues.filter((i: any) => i.message.includes('type'));
+      expect(typeIssues).toHaveLength(1);
+      expect(typeIssues[0].message).toContain('Divider');
+    });
+
+    it('should correctly flag Alert deprecated message prop', async () => {
+      // Alert.message IS deprecated in v6
+      makeTmpFile(
+        'false-pos-1b.tsx',
+        `import { Alert } from 'antd';
+
+const App = () => <Alert message="Warning" />;
+`,
+      );
+      const data = await runLintV6(join(tmpDir, 'false-pos-1b.tsx'), ['--only', 'deprecated']);
+      const messageIssues = data.issues.filter((i: any) => i.message.includes('message'));
+      expect(messageIssues).toHaveLength(1);
+      expect(messageIssues[0].message).toContain('Alert');
+    });
+
+    it('should not flag Space split when only JS .split() method is used', async () => {
+      // Space.split is deprecated in v6, but JS .split() is a method call
+      makeTmpFile(
+        'false-pos-3.tsx',
+        `import { Space, List } from 'antd';
+
+const items = "a,b,c".split(",");
+const App = () => (
+  <Space>
+    <List split={false} />
+  </Space>
+);
+`,
+      );
+      const data = await runLintV6(join(tmpDir, 'false-pos-3.tsx'), ['--only', 'deprecated']);
+      // List.split is NOT deprecated, Space doesn't use split prop here
+      // JS .split() method call should not be flagged
+      const splitIssues = data.issues.filter((i: any) => i.message.includes('split'));
+      expect(splitIssues).toHaveLength(0);
+    });
+
+    it('should correctly flag Space deprecated split prop', async () => {
+      // Space.split IS deprecated in v6
+      makeTmpFile(
+        'false-pos-3b.tsx',
+        `import { Space } from 'antd';
+
+const App = () => <Space split="|">items</Space>;
+`,
+      );
+      const data = await runLintV6(join(tmpDir, 'false-pos-3b.tsx'), ['--only', 'deprecated']);
+      const splitIssues = data.issues.filter((i: any) => i.message.includes('split'));
+      expect(splitIssues).toHaveLength(1);
+      expect(splitIssues[0].message).toContain('Space');
+    });
+
+    it('should report correct line numbers for deprecated props', async () => {
+      makeTmpFile(
+        'false-pos-lines.tsx',
+        `import { Alert, Divider, Space } from 'antd';
+
+const App = () => (
+  <div>
+    <Alert message="Warning" />
+    <Divider type="vertical" />
+    <Space split="|">items</Space>
+  </div>
+);
+`,
+      );
+      const data = await runLintV6(join(tmpDir, 'false-pos-lines.tsx'), ['--only', 'deprecated']);
+      expect(data.issues).toHaveLength(3);
+      // Line numbers should be non-zero and correctly point to each element
+      for (const issue of data.issues) {
+        expect(issue.line).toBeGreaterThan(0);
+      }
+      const alertIssue = data.issues.find((i: any) => i.message.includes('Alert'));
+      const dividerIssue = data.issues.find((i: any) => i.message.includes('Divider'));
+      const spaceIssue = data.issues.find((i: any) => i.message.includes('Space'));
+      expect(alertIssue!.line).toBe(5);
+      expect(dividerIssue!.line).toBe(6);
+      expect(spaceIssue!.line).toBe(7);
     });
   });
 
