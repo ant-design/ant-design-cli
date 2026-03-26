@@ -16,8 +16,8 @@ export default defineConfig({
   banner: {
     js: [
       '#!/usr/bin/env node',
-      'import { createRequire as __createRequire } from "node:module";',
-      'const require = __createRequire(import.meta.url);',
+      'import { createRequire } from "node:module";',
+      'const require = createRequire(import.meta.url);',
     ].join('\n'),
   },
   define: {
