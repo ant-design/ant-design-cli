@@ -90,7 +90,7 @@ function getObjectExpressionKeys(attrs: any[], name: string): string[] {
 }
 /* v8 ignore stop */
 
-/** Convert a byte offset to a 1-based line number. */
+/** Convert a character offset to a 1-based line number. */
 function offsetToLine(source: string, offset: number): number {
   let line = 1;
   for (let i = 0; i < offset && i < source.length; i++) {
@@ -122,8 +122,6 @@ function lintFile(
   const issues: LintIssue[] = [];
   const importedComponents = new Set<string>();
 
-  // oxc-parser Visitor provides byte offsets (start/end) instead of loc,
-  // so we convert offsets to line numbers for accurate reporting.
   const lineOf = (node: any): number => {
     if (typeof node.start === 'number') return offsetToLine(content, node.start);
     return node.loc?.start?.line ?? 0;

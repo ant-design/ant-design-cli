@@ -14,10 +14,11 @@ function makeTmpFile(name: string, content: string): void {
 async function runLint(
   args: string[] = [],
   format: string = 'json',
+  version: string = '5.20.0',
 ): Promise<string> {
   const program = new Command();
   program.option('--format <format>', '', format);
-  program.option('--version <version>', '', '5.20.0');
+  program.option('--version <version>', '', version);
   program.option('--lang <lang>', '', 'en');
   registerLintCommand(program);
   const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -461,16 +462,7 @@ const App = () => (
       file: string,
       args: string[] = [],
     ): Promise<{ issues: LintIssue[]; summary: any }> {
-      const program = new Command();
-      program.option('--format <format>', '', 'json');
-      program.option('--version <version>', '', '6.0.0');
-      program.option('--lang <lang>', '', 'en');
-      registerLintCommand(program);
-      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-      await program.parseAsync(['node', 'test', 'lint', file, ...args]);
-      const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
-      logSpy.mockRestore();
-      return JSON.parse(output);
+      return parseJson(await runLint([file, ...args], 'json', '6.0.0'));
     }
 
     it('should not flag non-antd component props as deprecated (SendTo message)', async () => {
