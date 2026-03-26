@@ -7,7 +7,7 @@ import { join, isAbsolute } from 'node:path';
 import { output } from '../output/formatter.js';
 import { readJson } from '../utils/scan.js';
 
-interface EnvResult {
+export interface EnvResult {
   system: Record<string, string>;
   binaries: Record<string, string>;
   browsers: Record<string, string | null>;
@@ -16,7 +16,7 @@ interface EnvResult {
   buildTools: Record<string, string>;
 }
 
-function collectSystem(): Record<string, string> {
+export function collectSystem(): Record<string, string> {
   const p = platform();
   const r = release();
   let os: string;
@@ -50,7 +50,7 @@ function getVersion(cmd: string): string | null {
   return match ? match[1] : out;
 }
 
-function collectBinaries(): Record<string, string> {
+export function collectBinaries(): Record<string, string> {
   const result: Record<string, string> = {};
   result.Node = process.version.replace(/^v/, '');
 
@@ -66,7 +66,7 @@ function collectBinaries(): Record<string, string> {
   return result;
 }
 
-async function collectBrowsers(): Promise<Record<string, string | null>> {
+export async function collectBrowsers(): Promise<Record<string, string | null>> {
   try {
     const envinfo = await import('envinfo');
     const raw = await envinfo.default.run(
@@ -88,7 +88,7 @@ async function collectBrowsers(): Promise<Record<string, string | null>> {
 
 const CORE_DEPS = ['antd', 'react', 'react-dom', 'dayjs', '@ant-design/cssinjs', '@ant-design/icons'];
 
-function collectDependencies(cwd: string): Record<string, string | null> {
+export function collectDependencies(cwd: string): Record<string, string | null> {
   const result: Record<string, string | null> = {};
   for (const dep of CORE_DEPS) {
     const pkg = readJson(join(cwd, 'node_modules', dep, 'package.json'));
@@ -97,7 +97,7 @@ function collectDependencies(cwd: string): Record<string, string | null> {
   return result;
 }
 
-function scanEcosystem(cwd: string): Record<string, string> {
+export function scanEcosystem(cwd: string): Record<string, string> {
   const result: Record<string, string> = {};
   const coreSet = new Set(CORE_DEPS);
 
@@ -135,7 +135,7 @@ const BUILD_TOOLS = [
   'less', 'sass', 'tailwindcss', 'styled-components', 'postcss',
 ];
 
-function collectBuildTools(cwd: string): Record<string, string> {
+export function collectBuildTools(cwd: string): Record<string, string> {
   const result: Record<string, string> = {};
   for (const tool of BUILD_TOOLS) {
     const pkg = readJson(join(cwd, 'node_modules', tool, 'package.json'));
@@ -144,7 +144,7 @@ function collectBuildTools(cwd: string): Record<string, string> {
   return result;
 }
 
-function formatText(data: EnvResult): string {
+export function formatText(data: EnvResult): string {
   const lines: string[] = ['Environment', ''];
 
   const section = (title: string, entries: Record<string, string | null>, showNull: boolean) => {
@@ -171,7 +171,7 @@ function formatText(data: EnvResult): string {
   return lines.join('\n');
 }
 
-function formatMarkdown(data: EnvResult): string {
+export function formatMarkdown(data: EnvResult): string {
   const lines: string[] = ['## Environment', ''];
 
   const table = (title: string, col1: string, col2: string, entries: Record<string, string | null>, showNull: boolean) => {
