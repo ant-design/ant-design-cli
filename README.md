@@ -280,13 +280,14 @@ Collect all antd-related environment information — system, Node, package manag
 ```bash
 antd env                            # text output (paste into GitHub Issues)
 antd env --format json              # structured JSON for AI consumption
+antd env --format markdown          # markdown tables
 antd env ./my-project               # scan a specific project directory
 ```
 
 <details>
 <summary>Example output</summary>
 
-```
+```text
 Environment
 
   System:
