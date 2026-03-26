@@ -584,6 +584,120 @@ const App = () => (
   });
 });
 
+function runEnvInTempDir(packages: Record<string, object>): any {
+  const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-env-'));
+  try {
+    mkdirSync(tempDir, { recursive: true });
+    writeFileSync(join(tempDir, 'package.json'), JSON.stringify({ name: 'test-project', version: '1.0.0' }));
+
+    for (const [pkgName, pkgJson] of Object.entries(packages)) {
+      const pkgDir = join(tempDir, 'node_modules', pkgName);
+      mkdirSync(pkgDir, { recursive: true });
+      writeFileSync(join(pkgDir, 'package.json'), JSON.stringify(pkgJson));
+    }
+
+    const stdout = execFileSync('node', [CLI, 'env', '--format', 'json', tempDir], {
+      encoding: 'utf-8',
+      timeout: 15000,
+      env,
+    }).trim();
+    return JSON.parse(stdout);
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
+}
+
+describe('env command', () => {
+  it('should output text format with Environment header', { timeout: 20000 }, () => {
+    const out = execFileSync('node', [CLI, 'env'], {
+      encoding: 'utf-8',
+      timeout: 15000,
+      env,
+    }).trim();
+    expect(out).toContain('Environment');
+    expect(out).toContain('System:');
+    expect(out).toContain('Binaries:');
+    expect(out).toContain('Node');
+  });
+
+  it('should output valid JSON', () => {
+    const out = execFileSync('node', [CLI, 'env', '--format', 'json'], {
+      encoding: 'utf-8',
+      timeout: 15000,
+      env,
+    }).trim();
+    const data = JSON.parse(out);
+    expect(data).toHaveProperty('system');
+    expect(data).toHaveProperty('binaries');
+    expect(data).toHaveProperty('browsers');
+    expect(data).toHaveProperty('dependencies');
+    expect(data).toHaveProperty('ecosystem');
+    expect(data).toHaveProperty('buildTools');
+    expect(data.system.OS).toBeTruthy();
+    expect(data.binaries.Node).toBeTruthy();
+  });
+
+  it('should output markdown format', () => {
+    const out = execFileSync('node', [CLI, 'env', '--format', 'markdown'], {
+      encoding: 'utf-8',
+      timeout: 15000,
+      env,
+    }).trim();
+    expect(out).toContain('## Environment');
+    expect(out).toContain('### System');
+    expect(out).toContain('| Item | Version |');
+  });
+
+  it('should detect dependencies from target dir', () => {
+    const data = runEnvInTempDir({
+      'antd': { name: 'antd', version: '5.22.0' },
+      'react': { name: 'react', version: '18.3.1' },
+      'react-dom': { name: 'react-dom', version: '18.3.1' },
+    });
+    expect(data.dependencies.antd).toBe('5.22.0');
+    expect(data.dependencies.react).toBe('18.3.1');
+    expect(data.dependencies['react-dom']).toBe('18.3.1');
+    expect(data.dependencies.dayjs).toBeNull();
+  });
+
+  it('should scan ecosystem packages', () => {
+    const data = runEnvInTempDir({
+      'antd': { name: 'antd', version: '5.22.0' },
+      '@ant-design/pro-components': { name: '@ant-design/pro-components', version: '2.8.1' },
+      '@ant-design/charts': { name: '@ant-design/charts', version: '2.2.1' },
+      'rc-field-form': { name: 'rc-field-form', version: '2.7.0' },
+    });
+    expect(data.ecosystem['@ant-design/pro-components']).toBe('2.8.1');
+    expect(data.ecosystem['@ant-design/charts']).toBe('2.2.1');
+    expect(data.ecosystem['rc-field-form']).toBe('2.7.0');
+  });
+
+  it('should not include core deps in ecosystem', () => {
+    const data = runEnvInTempDir({
+      'antd': { name: 'antd', version: '5.22.0' },
+      '@ant-design/cssinjs': { name: '@ant-design/cssinjs', version: '1.22.1' },
+      '@ant-design/icons': { name: '@ant-design/icons', version: '5.5.2' },
+      '@ant-design/pro-components': { name: '@ant-design/pro-components', version: '2.8.1' },
+    });
+    // cssinjs and icons should be in dependencies, not ecosystem
+    expect(data.dependencies['@ant-design/cssinjs']).toBe('1.22.1');
+    expect(data.dependencies['@ant-design/icons']).toBe('5.5.2');
+    expect(data.ecosystem['@ant-design/cssinjs']).toBeUndefined();
+    expect(data.ecosystem['@ant-design/icons']).toBeUndefined();
+    expect(data.ecosystem['@ant-design/pro-components']).toBe('2.8.1');
+  });
+
+  it('should detect build tools', () => {
+    const data = runEnvInTempDir({
+      'antd': { name: 'antd', version: '5.22.0' },
+      'typescript': { name: 'typescript', version: '5.6.3' },
+      'vite': { name: 'vite', version: '6.0.0' },
+    });
+    expect(data.buildTools.typescript).toBe('5.6.3');
+    expect(data.buildTools.vite).toBe('6.0.0');
+  });
+});
+
 describe('doctor ecosystem peerDeps', () => {
   it('should report pass when all peerDeps are satisfied', () => {
     const data = runDoctorInTempDir({
