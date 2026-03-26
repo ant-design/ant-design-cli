@@ -469,6 +469,78 @@ JSON output (guide mode):
 }
 ```
 
+#### `antd env`
+
+Collect all antd-related environment information for bug reporting or AI-assisted diagnosis.
+
+```bash
+antd env                           # text output (copy-paste to GitHub Issues)
+antd env --format json             # structured JSON for AI consumption
+antd env --format markdown         # markdown tables
+antd env /path/to/project          # scan a specific project directory
+```
+
+Collects six categories of information:
+
+1. **System** — OS name and version
+2. **Binaries** — Node.js version, package managers (npm/pnpm/yarn/bun/utoo), npm registry URL
+3. **Browsers** — Installed system browser versions (Chrome, Firefox, Safari, Edge)
+4. **Dependencies** — Core antd-related packages (antd, react, react-dom, dayjs, @ant-design/cssinjs, @ant-design/icons)
+5. **Ecosystem** — All installed `@ant-design/*` and `rc-*` packages
+6. **Build Tools** — Frameworks (umi, next, vite), compilers (typescript, babel, swc), CSS tools (less, sass, tailwindcss)
+
+Text output example:
+```
+Environment
+
+  System:
+    OS        macOS 15.3
+
+  Binaries:
+    Node      20.11.0
+    pnpm      9.1.0
+    Registry  https://registry.npmmirror.com/
+
+  Browsers:
+    Chrome    131.0.6778.86
+    Safari    18.3
+
+  Dependencies:
+    antd                 5.22.0
+    react                18.3.1
+    react-dom            18.3.1
+    dayjs                1.11.13
+    @ant-design/cssinjs  1.22.1
+    @ant-design/icons    5.5.2
+
+  Ecosystem:
+    @ant-design/pro-components  2.8.1
+    rc-field-form               2.7.0
+
+  Build Tools:
+    umi         4.3.0
+    typescript  5.6.3
+    less        4.2.0
+```
+
+JSON output:
+```json
+{
+  "system": {"OS": "macOS 15.3"},
+  "binaries": {"Node": "20.11.0", "pnpm": "9.1.0", "Registry": "https://registry.npmmirror.com/"},
+  "browsers": {"Chrome": "131.0.6778.86", "Safari": "18.3"},
+  "dependencies": {"antd": "5.22.0", "react": "18.3.1", "react-dom": "18.3.1", "dayjs": "1.11.13", "@ant-design/cssinjs": "1.22.1", "@ant-design/icons": "5.5.2"},
+  "ecosystem": {"@ant-design/pro-components": "2.8.1", "rc-field-form": "2.7.0"},
+  "buildTools": {"umi": "4.3.0", "typescript": "5.6.3", "less": "4.2.0"}
+}
+```
+
+Notes:
+- Does not run project code — purely static scanning of `node_modules` and system
+- Uninstalled core deps show as "Not found" (text) or `null` (JSON)
+- Ecosystem/rc-* packages only list installed ones
+- Uses `envinfo` for cross-platform browser detection
+
 ### Issue Reporting
 
 #### `antd bug`
