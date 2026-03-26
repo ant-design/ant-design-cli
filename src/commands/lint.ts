@@ -95,6 +95,7 @@ function createLineMapper(source: string): (offset: number) => number {
   let lastOffset = 0;
   let lastLine = 1;
   return (offset: number) => {
+    /* v8 ignore next 4 -- defensive: AST visitor offsets are monotonically increasing */
     if (offset < lastOffset) {
       lastOffset = 0;
       lastLine = 1;
