@@ -8,11 +8,7 @@ function createProgram(opts: { format?: string; version?: string; lang?: string;
   program.exitOverride();
   program.configureOutput({ writeOut: () => {}, writeErr: () => {} });
   program.option('--format <format>', 'Output format', opts.format ?? 'text');
-  if (opts.version) {
-    program.option('--version <version>', 'Target antd version', opts.version);
-  } else {
-    program.option('--version <version>', 'Target antd version');
-  }
+  program.option('--version <version>', 'Target antd version', opts.version);
   program.option('--lang <lang>', 'Output language', opts.lang ?? 'en');
   program.option('--detail', 'Full information output', opts.detail ?? false);
   return program;
