@@ -469,7 +469,7 @@ JSON output (guide mode):
 }
 ```
 
-#### `antd env`
+#### `antd env [dir]`
 
 Collect all antd-related environment information for bug reporting or AI-assisted diagnosis.
 
@@ -490,7 +490,7 @@ Collects six categories of information:
 6. **Build Tools** — Frameworks (umi, next, remix, gatsby, taro, utoo, etc.), bundlers (webpack, vite, rspack, turbopack, farm), compilers (typescript, babel, swc), CSS tools (less, sass, tailwindcss)
 
 Text output example:
-```
+```text
 Environment
 
   System:

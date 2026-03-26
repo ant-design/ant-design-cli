@@ -280,13 +280,14 @@ antd doctor --format json
 ```bash
 antd env                            # 文本输出（粘贴到 GitHub Issue）
 antd env --format json              # 结构化 JSON，供 AI 消费
+antd env --format markdown          # Markdown 表格输出
 antd env ./my-project               # 扫描指定项目目录
 ```
 
 <details>
 <summary>示例输出</summary>
 
-```
+```text
 Environment
 
   System:
