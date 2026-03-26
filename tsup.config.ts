@@ -10,12 +10,17 @@ export default defineConfig({
   outDir: 'dist',
   clean: true,
   splitting: false,
-  sourcemap: true,
+  sourcemap: false,
   dts: true,
   banner: {
-    js: '#!/usr/bin/env node',
+    js: [
+      '#!/usr/bin/env node',
+      'import { createRequire } from "node:module";',
+      'const require = createRequire(import.meta.url);',
+    ].join('\n'),
   },
   define: {
     __CLI_VERSION__: JSON.stringify(version),
   },
+  noExternal: ['commander', '@modelcontextprotocol/sdk'],
 });
