@@ -43,6 +43,7 @@
     "access": "public"
   },
   "dependencies": {
+    "envinfo": "^7.21.0",
     "oxc-parser": "^0.121.0"
   },
   "devDependencies": {
