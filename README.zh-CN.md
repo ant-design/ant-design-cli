@@ -41,7 +41,7 @@ npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
 - 🤖 **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
 - 🌍 **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
 - 🔮 **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
-- 🧩 **14 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
+- 🧩 **15 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
 - 🔌 **MCP 服务** — `antd mcp` 启动 stdio 服务，原生集成 Claude Desktop、Cursor 等 IDE。
 
 <br>
@@ -135,6 +135,7 @@ antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 | 命令 | 说明 |
 |---|---|
 | [`antd doctor`](#antd-doctor) | 10 项诊断检查：React 兼容性、重复安装、peer 依赖、SSR、babel 插件 |
+| [`antd env [dir]`](#antd-env-dir) | 一键收集 antd 相关环境信息，用于 Bug 报告或 AI 辅助诊断 |
 | [`antd usage [dir]`](#antd-usage-dir) | 导入统计、子组件分布（`Form.Item`）、非组件导出 |
 | [`antd lint [target]`](#antd-lint-target) | 废弃 API、无障碍缺陷、性能问题、最佳实践 |
 | [`antd migrate <from> <to>`](#antd-migrate-from-to) | 迁移清单，区分自动修复/手动处理，`--apply` 生成 Agent 提示 |
@@ -271,6 +272,54 @@ antd changelog 4.24.0 5.0.0 Select  # 仅对比 Select 的 API
 antd doctor
 antd doctor --format json
 ```
+
+### `antd env [dir]`
+
+一键收集 antd 相关的所有环境信息 — 系统、Node、包管理器、浏览器、依赖包、生态包（`@ant-design/*`、`rc-*`）和构建工具。
+
+```bash
+antd env                            # 文本输出（粘贴到 GitHub Issue）
+antd env --format json              # 结构化 JSON，供 AI 消费
+antd env ./my-project               # 扫描指定项目目录
+```
+
+<details>
+<summary>示例输出</summary>
+
+```
+Environment
+
+  System:
+    OS        macOS 15.3
+
+  Binaries:
+    Node      20.11.0
+    pnpm      9.1.0
+    Registry  https://registry.npmmirror.com/
+
+  Browsers:
+    Chrome    131.0.6778.86
+    Safari    18.3
+
+  Dependencies:
+    antd                 5.22.0
+    react                18.3.1
+    react-dom            18.3.1
+    dayjs                1.11.13
+    @ant-design/cssinjs  1.22.1
+    @ant-design/icons    5.5.2
+
+  Ecosystem:
+    @ant-design/pro-components  2.8.1
+    rc-field-form               2.7.0
+
+  Build Tools:
+    umi         4.3.0
+    typescript  5.6.3
+    less        4.2.0
+```
+
+</details>
 
 ### `antd usage [dir]`
 
