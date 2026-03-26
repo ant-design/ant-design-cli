@@ -34,8 +34,7 @@ Six sections, organized from system-level down to project-specific:
 ### 3. Browsers
 
 - Chrome, Firefox, Safari (macOS only), Edge — installed system versions
-- Detection: macOS reads plist files, Linux/Windows runs `--version` commands
-- Uses `envinfo` for browser detection (the one area where it adds significant value over manual implementation)
+- Uses `envinfo` for browser detection, which abstracts platform-specific checks (plist on macOS, `--version` on Linux, registry on Windows)
 
 ### 4. Core Dependencies
 
