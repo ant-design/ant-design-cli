@@ -100,6 +100,15 @@ Every publish (including beta/pre-release) must follow this checklist:
 
 **CHANGELOG.md and GitHub Release notes must have identical content.** Never use auto-generated release notes — always write them manually to match the CHANGELOG.
 
+## Testing Safety
+
+**Tests must NEVER cause real-world side effects.** Any function that interacts with external services (GitHub API, npm registry, network requests, file system outside temp dirs, etc.) must be fully mocked in tests. Specifically:
+
+- **`submitViaGh`**, **`checkGhAvailable`** and any function that calls `gh` CLI or creates GitHub issues must use `vi.fn()` with a safe default implementation (e.g. `vi.fn(() => false)`), **never** `vi.fn(actualFunction)` which would use the real function as fallback
+- **`vi.restoreAllMocks()`** resets mocks to their default implementation — if the default is the real function, it will execute after restore. Always use safe no-op defaults in `vi.mock()` factories
+- Network-calling functions (`node:https`, `fetch`, etc.) must be mocked to prevent real HTTP requests
+- Tests that create temp files/directories must clean up in `finally` blocks or `afterEach`
+
 ## Key Conventions
 
 - All commands support `--format json|text|markdown` and `--lang en|zh`

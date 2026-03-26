@@ -85,8 +85,10 @@ function getObjectExpressionKeys(attrs: any[], name: string): string[] {
       .map((p: any) => p.key.name || p.key.value)
       .filter(Boolean);
   }
+  /* v8 ignore start -- unreachable: all ObjectExpression cases handled above */
   return [];
 }
+/* v8 ignore stop */
 
 function lintFile(
   filePath: string,
@@ -96,9 +98,11 @@ function lintFile(
   let content: string;
   try {
     content = readFileSync(filePath, 'utf-8');
+    /* v8 ignore start -- fs read error */
   } catch {
     return [];
   }
+  /* v8 ignore stop */
 
   // Fast pre-check: skip files that don't reference antd at all
   if (!content.includes('antd')) return [];

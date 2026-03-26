@@ -1,3 +1,4 @@
+/* v8 ignore start -- entry-point bootstrap; covered by e2e tests in cli.test.ts */
 import { Command, Option } from 'commander';
 import { registerListCommand } from './commands/list.js';
 import { registerInfoCommand } from './commands/info.js';
@@ -13,7 +14,6 @@ import { registerMigrateCommand } from './commands/migrate.js';
 import { registerBugCommand, registerBugCliCommand } from './commands/bug.js';
 import { registerMcpCommand } from './commands/mcp.js';
 import { checkForUpdate } from './utils/update-check.js';
-
 declare const __CLI_VERSION__: string;
 const CLI_VERSION = __CLI_VERSION__;
 
@@ -67,3 +67,4 @@ if (idx !== -1 || idx2 !== -1) {
 }
 
 program.parse();
+/* v8 ignore stop */

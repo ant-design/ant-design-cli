@@ -168,3 +168,14 @@ describe('antd_changelog', () => {
     expect(data.code).toBe('INVALID_ARGUMENT');
   });
 });
+
+describe('unknown tool', () => {
+  it('returns UNKNOWN_TOOL error for unknown tool name', async () => {
+    const result = await handler('nonexistent_tool', {});
+    expect(result.isError).toBe(true);
+    const data = parse(result);
+    expect(data.error).toBe(true);
+    expect(data.code).toBe('UNKNOWN_TOOL');
+    expect(data.message).toContain('nonexistent_tool');
+  });
+});

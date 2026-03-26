@@ -1,6 +1,18 @@
-import { describe, it, expect } from 'vitest';
-import { getTokens } from '../../commands/token.js';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { Command } from 'commander';
+import { getTokens, registerTokenCommand } from '../../commands/token.js';
 import type { CLIError } from '../../types.js';
+
+function createProgram(opts: { format?: string; version?: string; lang?: string; detail?: boolean } = {}) {
+  const program = new Command();
+  program.exitOverride();
+  program.configureOutput({ writeOut: () => {}, writeErr: () => {} });
+  program.option('--format <format>', 'Output format', opts.format ?? 'text');
+  program.option('--version <version>', 'Target antd version', opts.version);
+  program.option('--lang <lang>', 'Output language', opts.lang ?? 'en');
+  program.option('--detail', 'Full information output', opts.detail ?? false);
+  return program;
+}
 
 describe('getTokens', () => {
   it('returns global tokens for v5', () => {
@@ -33,5 +45,98 @@ describe('getTokens', () => {
     expect('error' in result).toBe(true);
     const err = result as CLIError;
     expect(err.code).toBe('COMPONENT_NOT_FOUND');
+  });
+});
+
+describe('registerTokenCommand', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    process.exitCode = undefined;
+  });
+
+  it('should output global tokens in JSON format', async () => {
+    const program = createProgram({ format: 'json', version: '5.20.0' });
+    registerTokenCommand(program);
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'token'], );
+    const parsed = JSON.parse(logSpy.mock.calls[0][0]);
+    expect(parsed.tokens).toBeDefined();
+  });
+
+  it('should output global tokens in text format', async () => {
+    const program = createProgram({ format: 'text', version: '5.20.0' });
+    registerTokenCommand(program);
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'token'], );
+    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(allOutput).toContain('Global Design Tokens');
+  });
+
+  it('should output global tokens in markdown format', async () => {
+    const program = createProgram({ format: 'markdown', version: '5.20.0' });
+    registerTokenCommand(program);
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'token'], );
+    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(allOutput).toContain('Global Design Tokens');
+  });
+
+  it('should output component tokens in JSON format', async () => {
+    const program = createProgram({ format: 'json', version: '5.20.0' });
+    registerTokenCommand(program);
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'token', 'Button'], );
+    const parsed = JSON.parse(logSpy.mock.calls[0][0]);
+    expect(parsed.component).toBe('Button');
+  });
+
+  it('should output component tokens in text format', async () => {
+    const program = createProgram({ format: 'text', version: '5.20.0' });
+    registerTokenCommand(program);
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'token', 'Button'], );
+    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(allOutput).toContain('Button Component Tokens');
+  });
+
+  it('should handle error for v4', async () => {
+    const program = createProgram({ format: 'text', version: '4.24.0' });
+    registerTokenCommand(program);
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'token'], );
+    expect(errSpy).toHaveBeenCalled();
+    expect(process.exitCode).toBe(1);
+  });
+
+  it('should show "No component tokens" for component without tokens', async () => {
+    // Mock resolveComponent to return a component with no tokens
+    const loader = await import('../../data/loader.js');
+    vi.spyOn(loader, 'resolveComponent').mockReturnValue({
+      comp: { name: 'NoTokenComp', tokens: [] } as any,
+    });
+    const program = createProgram({ format: 'text', version: '5.20.0' });
+    registerTokenCommand(program);
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'token', 'NoTokenComp'], );
+    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(allOutput).toContain('No component tokens available');
+    vi.restoreAllMocks();
+  });
+
+  it('should show "No global token data" when store has no global tokens', async () => {
+    // Mock loadMetadataForVersion to return empty global tokens
+    const loader = await import('../../data/loader.js');
+    vi.spyOn(loader, 'loadMetadataForVersion').mockReturnValue({
+      components: [],
+      globalTokens: [],
+      changelog: [],
+    } as any);
+    const program = createProgram({ format: 'text', version: '5.20.0' });
+    registerTokenCommand(program);
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'token'], );
+    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(allOutput).toContain('No global token data available');
+    vi.restoreAllMocks();
   });
 });
