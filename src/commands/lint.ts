@@ -90,13 +90,21 @@ function getObjectExpressionKeys(attrs: any[], name: string): string[] {
 }
 /* v8 ignore stop */
 
-/** Convert a character offset to a 1-based line number. */
-function offsetToLine(source: string, offset: number): number {
-  let line = 1;
-  for (let i = 0; i < offset && i < source.length; i++) {
-    if (source[i] === '\n') line++;
-  }
-  return line;
+/** Create a stateful offset-to-line converter that exploits monotonically increasing offsets. */
+function createLineMapper(source: string): (offset: number) => number {
+  let lastOffset = 0;
+  let lastLine = 1;
+  return (offset: number) => {
+    if (offset < lastOffset) {
+      lastOffset = 0;
+      lastLine = 1;
+    }
+    for (let i = lastOffset; i < offset && i < source.length; i++) {
+      if (source[i] === '\n') lastLine++;
+    }
+    lastOffset = offset;
+    return lastLine;
+  };
 }
 
 function lintFile(
@@ -121,9 +129,10 @@ function lintFile(
 
   const issues: LintIssue[] = [];
   const importedComponents = new Set<string>();
+  const offsetToLine = createLineMapper(content);
 
   const lineOf = (node: any): number => {
-    if (typeof node.start === 'number') return offsetToLine(content, node.start);
+    if (typeof node.start === 'number') return offsetToLine(node.start);
     return node.loc?.start?.line ?? 0;
   };
 
