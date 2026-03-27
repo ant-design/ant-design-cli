@@ -49,7 +49,7 @@ export function getVersion(cmd: string): string | null {
   const out = tryExec(cmd, ['--version']);
   if (!out) return null;
   const match = out.match(/(\d+\.\d+\.\d+)/);
-  return match ? match[1] : out;
+  return match ? match[1] : null;
 }
 
 export function collectBinaries(): Record<string, string> {
