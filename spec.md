@@ -483,11 +483,11 @@ antd env /path/to/project          # scan a specific project directory
 Collects six categories of information:
 
 1. **System** — OS name and version
-2. **Binaries** — Node.js version, package managers (npm/pnpm/yarn/bun/utoo), npm registry URL
+2. **Binaries** — Node.js version, package managers (npm/pnpm/yarn/bun), npm registry URL
 3. **Browsers** — Installed system browser versions (Chrome, Firefox, Safari, Edge)
 4. **Dependencies** — Core antd-related packages (antd, react, react-dom, dayjs, @ant-design/cssinjs, @ant-design/icons)
 5. **Ecosystem** — All installed `@ant-design/*` and `rc-*` packages
-6. **Build Tools** — Frameworks (umi, next, remix, gatsby, taro, utoo, etc.), bundlers (webpack, vite, rspack, turbopack, farm), compilers (typescript, babel, swc), CSS tools (less, sass, tailwindcss)
+6. **Build Tools** — Frameworks (umi, next, remix, gatsby, taro, etc.), bundlers (webpack, vite, rspack, turbopack, farm), compilers (typescript, babel, swc), CSS tools (less, sass, tailwindcss)
 
 Text output example:
 ```text
