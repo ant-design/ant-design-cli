@@ -28,7 +28,7 @@ Six sections, organized from system-level down to project-specific:
 ### 2. Binaries
 
 - Node.js version (via `process.version`)
-- Package manager: detect which of npm/pnpm/yarn/bun/utoo is available and their versions (via `execFileSync`)
+- Package manager: detect which of npm/pnpm/yarn/bun is available and their versions (via `execFileSync`)
 - npm registry: current configured registry URL (via `npm config get registry` or equivalent)
 
 ### 3. Browsers
@@ -230,14 +230,13 @@ src/commands/env.ts
 
 ### Key Implementation Details
 
-1. **System/Binaries**: Use `node:os` for OS, `process.version` for Node, `execFileSync` to detect package manager versions (npm/pnpm/yarn/bun/utoo), `npm config get registry` for registry URL
+1. **System/Binaries**: Use `node:os` for OS, `process.version` for Node, `execFileSync` to detect package manager versions (npm/pnpm/yarn/bun), `npm config get registry` for registry URL
 2. **Browsers**: Use `envinfo` — the one dependency that provides real value here (cross-platform browser detection logic is non-trivial)
 3. **Core Dependencies**: Read `node_modules/<pkg>/package.json` using the existing `readJson()` utility from `scan.ts`
 4. **Ecosystem scan**: `readdirSync('node_modules/@ant-design')` and filter `node_modules/rc-*`, read each `package.json` for version
 5. **Build Tools**: Predefined list, check `node_modules/<pkg>/package.json` existence and version
 6. **Not-found core deps**: Show `Not found` in text, `null` in JSON
 7. **Ecosystem/rc-* packages**: Only list installed ones (no "Not found" noise)
-8. **`--detail` flag**: When set, also shows the version range from `package.json` dependencies alongside the installed version (e.g., `antd: 5.22.0 (^5.20.0)`)
 
 ### What This Command Does NOT Do
 
