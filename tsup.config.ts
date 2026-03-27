@@ -22,5 +22,5 @@ export default defineConfig({
   define: {
     __CLI_VERSION__: JSON.stringify(version),
   },
-  noExternal: ['commander', '@modelcontextprotocol/sdk'],
+  noExternal: ['commander', '@modelcontextprotocol/sdk', 'envinfo'],
 });
