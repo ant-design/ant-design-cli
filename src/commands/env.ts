@@ -48,7 +48,7 @@ export function tryExec(cmd: string, args: string[]): string | null {
 export function getVersion(cmd: string): string | null {
   const out = tryExec(cmd, ['--version']);
   if (!out) return null;
-  const match = out.match(/(\d+\.\d+\.\d+)/);
+  const match = out.match(/(\d+\.\d+\.\d+[-\w.]*)/);
   return match ? match[1] : null;
 }
 
@@ -56,7 +56,7 @@ export function collectBinaries(): Record<string, string> {
   const result: Record<string, string> = {};
   result.Node = process.version.replace(/^v/, '');
 
-  const managers = ['npm', 'pnpm', 'yarn', 'bun', 'utoo'];
+  const managers = ['npm', 'pnpm', 'yarn', 'bun'];
   for (const mgr of managers) {
     const ver = getVersion(mgr);
     if (ver) result[mgr] = ver;
@@ -134,7 +134,7 @@ export function scanEcosystem(cwd: string): Record<string, string> {
 const BUILD_TOOLS = [
   // Frameworks
   'umi', '@umijs/max', 'next', 'remix', 'gatsby', 'create-react-app', 'ice',
-  'rax', 'taro', 'remax', 'modern-js', 'utoo',
+  'rax', 'taro', 'remax', 'modern-js',
   // Bundlers
   'webpack', 'vite', 'esbuild', 'rollup', '@rspack/core', 'turbopack', 'farm',
   // Compilers
