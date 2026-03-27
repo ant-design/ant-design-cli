@@ -1,5 +1,19 @@
 # Changelog
 
+## 6.3.5 (TBD)
+
+### New Features
+
+- Add `antd env` command — prints a full environment snapshot including Node.js, OS, browser, antd version, package manager, and build tool. Useful for bug reports and AI agent context.
+
+### Bug Fixes
+
+- Fix `antd lint` reporting incorrect line numbers (always showing line 0) (#65)
+
+### Other Changes
+
+- Bundle all dependencies into the package — eliminates 180+ transitive packages from your `node_modules` (#64)
+
 ## [6.3.5-beta.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.4...v6.3.5-beta.0) (2026-03-25)
 
 ### New Features
