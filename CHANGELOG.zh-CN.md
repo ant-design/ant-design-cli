@@ -1,9 +1,19 @@
 # 更新日志
 
-## [6.3.5](https://github.com/ant-design/ant-design-cli/compare/v6.3.5-beta.0...v6.3.5) (2026-03-30)
+## 6.3.5
+
+### 新功能
+
+- 新增 `antd env` 命令 — 输出完整的环境快照，包括 Node.js、操作系统、浏览器、antd 版本、包管理器和构建工具，方便提交 Bug 报告或为 AI Agent 提供上下文
+
+### Bug 修复
+
+- 修复 `antd lint` 报告的行号始终为 0 的问题 ([#65](https://github.com/ant-design/ant-design-cli/pull/65))
+
+### 其他变更
 
 - 同步 antd 元数据 ([v6@6.3.5](https://github.com/ant-design/ant-design-cli/compare/v6.3.5-beta.0...v6.3.5#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
-
+- 将所有依赖打包进 dist，安装后 `node_modules` 中不再出现 180+ 个传递依赖 ([#64](https://github.com/ant-design/ant-design-cli/pull/64))
 
 ## [6.3.5-beta.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.4...v6.3.5-beta.0) (2026-03-25)
 
