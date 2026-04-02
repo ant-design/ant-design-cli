@@ -20,7 +20,7 @@ Add support for antd 3.x to enable migration assistance and legacy project queri
 ### 1. Data Layer
 
 **File structure:**
-```
+```text
 data/
 ├── v3.json              # v3 entry point (identical to v3.26.20)
 ├── v3.26.20.json        # v3 final version snapshot
@@ -72,7 +72,7 @@ Return friendly error messages for v3-incompatible commands:
   "error": true,
   "code": "UNSUPPORTED_VERSION_FEATURE",
   "message": "Design Tokens are only available in antd v5+",
-  "suggestion": "v3 uses Less variables for theming. See: https://ant.design/docs/react/customize-theme-v3"
+  "suggestion": "v3 uses Less variables for theming. See: https://3x.ant.design/docs/react/customize-theme"
 }
 ```
 
