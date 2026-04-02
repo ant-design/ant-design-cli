@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.3.5 (TBD)
+## [6.3.5](https://github.com/ant-design/ant-design-cli/compare/v6.3.5-beta.0...v6.3.5) (2026-03-30)
 
 ### New Features
 
