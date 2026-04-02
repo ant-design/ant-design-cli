@@ -104,12 +104,16 @@ This exposes 7 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_t
 ## 🚀 Quick Start
 
 ```bash
+antd list                           # All components with versions
 antd info Button                    # Component props, types, defaults
+antd doc Button                     # Full markdown documentation
 antd demo Select basic              # Runnable demo source code
 antd token DatePicker               # Design Token values (v5+)
 antd semantic Table                 # classNames / styles structure
 antd changelog 4.24.0 5.0.0 Select  # API diff across versions
 antd doctor                         # Diagnose project issues
+antd env                            # Collect env info for bug reports
+antd usage ./src                    # Analyze antd imports in project
 antd lint ./src                     # Check deprecated APIs & best practices
 antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 ```
