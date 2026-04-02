@@ -627,14 +627,12 @@ describe('env command', () => {
       env,
     }).trim();
     const data = JSON.parse(out);
-    expect(data).toHaveProperty('system');
-    expect(data).toHaveProperty('binaries');
-    expect(data).toHaveProperty('browsers');
+    expect(data).toHaveProperty('envinfo');
     expect(data).toHaveProperty('dependencies');
     expect(data).toHaveProperty('ecosystem');
     expect(data).toHaveProperty('buildTools');
-    expect(data.system.OS).toBeTruthy();
-    expect(data.binaries.Node).toBeTruthy();
+    expect(data.envinfo.System).toBeTruthy();
+    expect(data.envinfo.Binaries.Node).toBeTruthy();
   });
 
   it('should output markdown format', () => {

@@ -1,89 +1,73 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
-import { platform, release } from 'node:os';
-import { execFileSync } from 'node:child_process';
 import { readdirSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { join, isAbsolute } from 'node:path';
 import { output } from '../output/formatter.js';
 import { readJson } from '../utils/scan.js';
 
+export type EnvinfoValue = string | { version?: string; path?: string } | null;
+export type EnvinfoData = Record<string, Record<string, EnvinfoValue>>;
+
 export interface EnvResult {
-  system: Record<string, string>;
-  binaries: Record<string, string>;
-  browsers: Record<string, string | null>;
+  envinfo: EnvinfoData;
   dependencies: Record<string, string | null>;
   ecosystem: Record<string, string>;
   buildTools: Record<string, string>;
 }
 
-export function collectSystem(): Record<string, string> {
-  const p = platform();
-  const r = release();
-  let os: string;
-  if (p === 'darwin') {
-    const parts = r.split('.');
-    const major = parseInt(parts[0], 10);
-    // Darwin 24.x = macOS 15.x, Darwin 23.x = macOS 14.x, etc.
-    const macMajor = major - 9;
-    const macMinor = parts[1] || '0';
-    os = `macOS ${macMajor}.${macMinor}`;
-  /* v8 ignore next 2 */
-  } else if (p === 'win32') {
-    os = `Windows ${r}`;
-  /* v8 ignore next 2 */
-  } else {
-    os = `${p} ${r}`;
-  }
-  return { OS: os };
-}
-
-export function tryExec(cmd: string, args: string[]): string | null {
-  try {
-    return execFileSync(cmd, args, { encoding: 'utf-8', timeout: 5000, stdio: ['pipe', 'pipe', 'pipe'] }).trim();
-  } catch {
-    return null;
-  }
-}
-
-export function getVersion(cmd: string): string | null {
-  const out = tryExec(cmd, ['--version']);
-  if (!out) return null;
-  const match = out.match(/(\d+\.\d+\.\d+[-\w.]*)/);
-  return match ? match[1] : null;
-}
-
-export function collectBinaries(): Record<string, string> {
-  const result: Record<string, string> = {};
-  result.Node = process.version.replace(/^v/, '');
-
-  const managers = ['npm', 'pnpm', 'yarn', 'bun'];
-  for (const mgr of managers) {
-    const ver = getVersion(mgr);
-    if (ver) result[mgr] = ver;
-  }
-
-  const registry = tryExec('npm', ['config', 'get', 'registry']);
-  if (registry) result.Registry = registry;
-
-  return result;
-}
-
-export async function collectBrowsers(): Promise<Record<string, string | null>> {
+/**
+ * Run envinfo to collect full system environment information.
+ * This includes: System, Binaries, Managers, Utilities, Servers, IDEs, Languages, Databases, Browsers
+ */
+export async function collectEnvinfo(cwd?: string): Promise<EnvinfoData> {
   try {
     const envinfo = await import('envinfo');
     const raw = await envinfo.default.run(
-      { Browsers: ['Chrome', 'Firefox', 'Safari', 'Edge'] },
+      {
+        System: ['OS', 'CPU', 'Memory', 'Shell'],
+        Binaries: ['Node', 'Yarn', 'npm', 'pnpm', 'bun', 'Deno'],
+        Managers: ['Cargo', 'Homebrew', 'pip3', 'RubyGems'],
+        Utilities: ['Make', 'GCC', 'Git', 'Clang', 'FFmpeg', 'Curl', 'OpenSSL'],
+        Servers: ['Apache'],
+        IDEs: ['VSCode', 'Claude Code', 'Vim', 'Xcode'],
+        Languages: ['Bash', 'Perl', 'Python3', 'Ruby', 'Rust'],
+        Databases: ['SQLite'],
+        Browsers: ['Chrome', 'Firefox', 'Safari', 'Edge'],
+      },
       { json: true },
     );
     const parsed = JSON.parse(raw);
-    const browsers = parsed.Browsers || {};
-    const result: Record<string, string | null> = {};
-    for (const [name, info] of Object.entries(browsers)) {
-      const val = (info as { version: string })?.version;
-      result[name] = val || null;
+    const result: EnvinfoData = {};
+
+    for (const [category, items] of Object.entries(parsed)) {
+      result[category] = {};
+      for (const [name, info] of Object.entries(items as Record<string, unknown>)) {
+        if (typeof info === 'string') {
+          result[category][name] = info;
+        } else if (info && typeof info === 'object') {
+          result[category][name] = info as { version?: string; path?: string };
+        } else {
+          result[category][name] = null;
+        }
+      }
     }
+
+    // Add npm registry to Binaries (use cwd to respect project-level .npmrc)
+    result.Binaries = result.Binaries || {};
+    try {
+      const registry = execFileSync('npm', ['config', 'get', 'registry'], {
+        cwd,
+        encoding: 'utf-8',
+        timeout: 5000,
+        stdio: ['pipe', 'pipe', 'pipe'],
+      }).trim();
+      result.Binaries['Registry'] = registry;
+    } catch {
+      result.Binaries['Registry'] = null;
+    }
+
     return result;
-  /* v8 ignore next 2 */
   } catch {
     return {};
   }
@@ -143,6 +127,8 @@ const BUILD_TOOLS = [
   'less', 'sass', 'tailwindcss', 'styled-components', 'postcss',
 ];
 
+const ENVINFO_ORDER = ['System', 'Binaries', 'Managers', 'Utilities', 'Servers', 'IDEs', 'Languages', 'Databases', 'Browsers'];
+
 export function collectBuildTools(cwd: string): Record<string, string> {
   const result: Record<string, string> = {};
   for (const tool of BUILD_TOOLS) {
@@ -152,26 +138,37 @@ export function collectBuildTools(cwd: string): Record<string, string> {
   return result;
 }
 
+/** Extract version string from EnvinfoValue (string or {version, path} object) */
+function getDisplayValue(value: EnvinfoValue): string | null {
+  if (value === null) return null;
+  if (typeof value === 'string') return value;
+  return value.version || null;
+}
+
 export function formatText(data: EnvResult): string {
   const lines: string[] = ['Environment', ''];
 
-  const section = (title: string, entries: Record<string, string | null>, showNull: boolean) => {
+  const section = (title: string, entries: Record<string, EnvinfoValue>, showNull: boolean) => {
     const filtered = showNull
       ? Object.entries(entries)
-      : Object.entries(entries).filter(([, v]) => v !== null);
+      : Object.entries(entries).filter(([, v]) => getDisplayValue(v) !== null);
     if (filtered.length === 0) return;
 
     lines.push(`  ${title}:`);
     const maxKey = Math.max(...filtered.map(([k]) => k.length));
     for (const [key, value] of filtered) {
-      lines.push(`    ${key.padEnd(maxKey + 1)} ${value ?? 'Not found'}`);
+      const display = getDisplayValue(value);
+      lines.push(`    ${key.padEnd(maxKey + 1)} ${display ?? 'Not found'}`);
     }
     lines.push('');
   };
 
-  section('System', data.system, true);
-  section('Binaries', data.binaries, false);
-  section('Browsers', data.browsers, false);
+  for (const cat of ENVINFO_ORDER) {
+    if (data.envinfo[cat]) {
+      section(cat, data.envinfo[cat], false);
+    }
+  }
+
   section('Dependencies', data.dependencies, true);
   section('Ecosystem', data.ecosystem, false);
   section('Build Tools', data.buildTools, false);
@@ -182,24 +179,28 @@ export function formatText(data: EnvResult): string {
 export function formatMarkdown(data: EnvResult): string {
   const lines: string[] = ['## Environment', ''];
 
-  const table = (title: string, col1: string, col2: string, entries: Record<string, string | null>, showNull: boolean) => {
+  const table = (title: string, col1: string, col2: string, entries: Record<string, EnvinfoValue>, showNull: boolean) => {
     const filtered = showNull
       ? Object.entries(entries)
-      : Object.entries(entries).filter(([, v]) => v !== null);
+      : Object.entries(entries).filter(([, v]) => getDisplayValue(v) !== null);
     if (filtered.length === 0) return;
 
     lines.push(`### ${title}`, '');
     lines.push(`| ${col1} | ${col2} |`);
     lines.push('|------|---------|');
     for (const [key, value] of filtered) {
-      lines.push(`| ${key} | ${value ?? 'Not found'} |`);
+      const display = getDisplayValue(value);
+      lines.push(`| ${key} | ${display ?? 'Not found'} |`);
     }
     lines.push('');
   };
 
-  table('System', 'Item', 'Version', data.system, true);
-  table('Binaries', 'Item', 'Version', data.binaries, false);
-  table('Browsers', 'Browser', 'Version', data.browsers, false);
+  for (const cat of ENVINFO_ORDER) {
+    if (data.envinfo[cat]) {
+      table(cat, 'Item', 'Version', data.envinfo[cat], false);
+    }
+  }
+
   table('Dependencies', 'Package', 'Version', data.dependencies, true);
   table('Ecosystem', 'Package', 'Version', data.ecosystem, false);
   table('Build Tools', 'Package', 'Version', data.buildTools, false);
@@ -217,9 +218,7 @@ export function registerEnvCommand(program: Command): void {
       const cwd = dir ? (isAbsolute(dir) ? dir : join(process.cwd(), dir)) : process.cwd();
 
       const data: EnvResult = {
-        system: collectSystem(),
-        binaries: collectBinaries(),
-        browsers: await collectBrowsers(),
+        envinfo: await collectEnvinfo(cwd),
         dependencies: collectDependencies(cwd),
         ecosystem: scanEcosystem(cwd),
         buildTools: collectBuildTools(cwd),
