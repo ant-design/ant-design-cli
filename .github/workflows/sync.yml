@@ -50,30 +50,34 @@ jobs:
 
           OLD_VERSION=$(node -p "require('./package.json').version")
 
-          # Update package.json version
-          npm version "$CLI_VERSION" --no-git-tag-version
+          # Update package.json version if needed
+          if [ "$CLI_VERSION" != "$OLD_VERSION" ]; then
+            npm version "$CLI_VERSION" --no-git-tag-version
 
-          # Prepend changelog entry with compare link
-          npx tsx scripts/update-changelog.ts \
-            --old "$OLD_VERSION" --new "$CLI_VERSION" --versions "$VERSIONS"
+            # Prepend changelog entry with compare link
+            npx tsx scripts/update-changelog.ts \
+              --old "$OLD_VERSION" --new "$CLI_VERSION" --versions "$VERSIONS"
+
+            # Commit, tag and push
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md
+            git commit -m "data: sync antd metadata (${VERSIONS})"
+            git tag "v${CLI_VERSION}"
+            git push origin main --tags
+
+            # Create GitHub Release
+            npx tsx scripts/extract-changelog.ts "$CLI_VERSION" > /tmp/release-notes.md
+            gh release create "v${CLI_VERSION}" \
+              --title "v${CLI_VERSION}" \
+              --notes-file /tmp/release-notes.md
+          else
+            echo "package.json already has version ${CLI_VERSION}, proceeding with publish"
+          fi
 
           # Build and test
           npm run build
           npm test
-
-          # Commit, tag and push
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md
-          git commit -m "data: sync antd metadata (${VERSIONS})"
-          git tag "v${CLI_VERSION}"
-          git push origin main --tags
-
-          # Create GitHub Release
-          npx tsx scripts/extract-changelog.ts "$CLI_VERSION" > /tmp/release-notes.md
-          gh release create "v${CLI_VERSION}" \
-            --title "v${CLI_VERSION}" \
-            --notes-file /tmp/release-notes.md
 
           # Publish to npm
           npm publish --provenance --access public
