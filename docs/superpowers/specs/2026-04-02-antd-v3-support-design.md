@@ -78,16 +78,15 @@ Return friendly error messages for v3-incompatible commands:
 
 ### 4. Enhanced Migration Support (v3→v4)
 
-**New migration knowledge module** (`src/commands/migrate/v3-to-v4.ts`):
+**New migration knowledge module** (`src/commands/migrate-v3-to-v4.ts`):
 
 Key migration items:
 - **Icon**: String `type` prop removed → Use `@ant-design/icons` components
-- **BackTop**: Removed → Use `FloatButton.BackTop`
 - **Mention**: Removed → Use `Mentions`
 - **Form.create()**: Removed → Use `Form.useForm()` hook
 - **Form.getFieldDecorator**: Removed → Use `Form.Item name` prop
-- **Affix offsetTop**: Changed behavior in v4
-- **Less variables**: Replaced by CSS-in-JS in v4
+- **BackTop**: Works in v4, deprecated in v5 → Use `FloatButton.BackTop` in v5+
+- **Less variables**: Supported in v4, replaced by CSS-in-JS in v5
 
 **Migration output example** (`antd migrate 3 4`):
 ```json

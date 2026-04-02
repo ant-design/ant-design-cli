@@ -31,13 +31,13 @@ function parseV3DemoMd(content: string): {
 
   // Extract zh-CN and en-US sections
   const zhMatch = parsed.content.match(/^## zh-CN\s*\n([\s\S]*?)(?=^## en-US|$)/m);
-  const enMatch = parsed.content.match(/^## en-US\s*\n([\s\S]*?)$/m);
+  const enMatch = parsed.content.match(/^## en-US\s*\n([\s\S]*?)(?=^## zh-CN|$)/m);
 
   const descZh = zhMatch ? zhMatch[1].trim() : '';
   const descEn = enMatch ? enMatch[1].trim() : '';
 
   // Extract JSX code block
-  const codeMatch = parsed.content.match(/```jsx\n([\s\S]*?)```/);
+  const codeMatch = parsed.content.match(/```jsx?\s*\n([\s\S]*?)```/);
   const code = codeMatch ? codeMatch[1].trim() : '';
 
   return { titleEn, titleZh, descEn, descZh, code };

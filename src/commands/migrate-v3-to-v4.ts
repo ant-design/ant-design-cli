@@ -341,10 +341,15 @@ Default locales are bundled correctly.`,
   // ConfigProvider
   {
     component: 'ConfigProvider',
-    breaking: true,
-    description: 'ConfigProvider now uses `prefixCls` and `iconPrefixCls` for configuration.',
+    breaking: false,
+    description: 'ConfigProvider is introduced in v4 to replace LocaleProvider for global configuration.',
     autoFixable: false,
-    before: `<ConfigProvider prefixCls="my-ant">`,
-    after: `<ConfigProvider prefixCls="my-ant" iconPrefixCls="my-icon">`,
+    migrationGuide: `v3: Use LocaleProvider for locale configuration
+v4: Use ConfigProvider for all global configuration (locale, prefixCls, etc.)
+ConfigProvider replaces LocaleProvider with enhanced capabilities.`,
+    before: `import { LocaleProvider } from 'antd';
+<LocaleProvider locale={enUS}>`,
+    after: `import { ConfigProvider } from 'antd';
+<ConfigProvider locale={enUS}>`,
   },
 ];
