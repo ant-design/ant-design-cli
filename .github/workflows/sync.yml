@@ -90,10 +90,7 @@ jobs:
           npm view @ant-design/cli || true
           echo "==== DEBUG END ===="
 
-          # Clear NODE_AUTH_TOKEN to allow OIDC Trusted Publishing to work
-          unset NODE_AUTH_TOKEN
-
-          # Publish to npm
-          npm publish --provenance --access public
+          # Publish to npm (clear NODE_AUTH_TOKEN for OIDC Trusted Publishing)
+          NODE_AUTH_TOKEN="" npm publish --provenance --access public
         env:
           GH_TOKEN: ${{ github.token }}
