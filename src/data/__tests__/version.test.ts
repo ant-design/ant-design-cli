@@ -51,6 +51,20 @@ describe('detectVersion', () => {
     expect(info.majorVersion).toBe('v4');
   });
 
+  it('should map v3 correctly', async () => {
+    const { detectVersion } = await import('../version.js');
+    const info = detectVersion('3.26.20');
+    expect(info.version).toBe('3.26.20');
+    expect(info.majorVersion).toBe('v3');
+    expect(info.source).toBe('flag');
+  });
+
+  it('should map v3.x to v3', async () => {
+    const { detectVersion } = await import('../version.js');
+    const info = detectVersion('3.0.0');
+    expect(info.majorVersion).toBe('v3');
+  });
+
   it('should fallback when no flag', async () => {
     const { detectVersion } = await import('../version.js');
     const info = detectVersion(undefined);
@@ -75,6 +89,25 @@ describe('detectVersion', () => {
     const info = await freshDetectVersion(undefined);
     expect(info.version).toBe('4.24.0');
     expect(info.majorVersion).toBe('v4');
+    expect(info.source).toBe('node_modules');
+  });
+
+  it('should detect v3 version from node_modules/antd/package.json', async () => {
+    process.cwd = () => '/fake/project-v3';
+    mockedExistsSync.mockImplementation((p: any) => {
+      if (String(p) === '/fake/project-v3/node_modules/antd/package.json') return true;
+      return false;
+    });
+    mockedReadFileSync.mockImplementation((p: any, _opts?: any) => {
+      if (String(p) === '/fake/project-v3/node_modules/antd/package.json') {
+        return JSON.stringify({ version: '3.26.20' });
+      }
+      throw new Error('not found');
+    });
+
+    const info = await freshDetectVersion(undefined);
+    expect(info.version).toBe('3.26.20');
+    expect(info.majorVersion).toBe('v3');
     expect(info.source).toBe('node_modules');
   });
 

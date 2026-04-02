@@ -47,6 +47,38 @@ describe('loadMetadataForVersion', () => {
     const store = loadMetadataForVersion('4.24.0');
     expect(store.components.length).toBeGreaterThan(0);
   });
+
+  it('should load v3 data', () => {
+    const store = loadMetadata('v3');
+    expect(store.components.length).toBeGreaterThan(0);
+    expect(store.majorVersion).toBe('v3');
+  });
+
+  it('should load v3 snapshot', () => {
+    const store = loadMetadataForVersion('3.26.20');
+    expect(store.components.length).toBeGreaterThan(0);
+    expect(store.majorVersion).toBe('v3');
+  });
+
+  it('should load v3.26.x via version resolution', () => {
+    const store = loadMetadataForVersion('3.26.0');
+    expect(store.components.length).toBeGreaterThan(0);
+    expect(store.majorVersion).toBe('v3');
+  });
+
+  it('v3 data should have expected components', () => {
+    const store = loadMetadata('v3');
+    const names = getAllComponentNames(store);
+    // v3-specific components (Mention was deprecated in v3, replaced by Mentions)
+    expect(names.some(n => n.includes('Mention'))).toBe(true);
+    expect(names).toContain('Icon'); // v3 has string type prop
+    // Common components that exist in v3
+    expect(names).toContain('Button');
+    expect(names).toContain('Table');
+    expect(names).toContain('Form');
+    // v3 should have LocaleProvider (deprecated in v4)
+    expect(names.some(n => n.includes('LocaleProvider'))).toBe(true);
+  });
 });
 
 describe('findComponent', () => {

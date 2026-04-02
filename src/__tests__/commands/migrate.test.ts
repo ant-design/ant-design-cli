@@ -17,6 +17,36 @@ function createProgram(format = 'text') {
 }
 
 describe('migrate command', () => {
+  it('valid migration 3 to 4 in text format', async () => {
+    const program = createProgram('text');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'migrate', '3', '4']);
+
+    const logged = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    logSpy.mockRestore();
+
+    expect(logged).toContain('Migration Guide');
+    expect(logged).toContain('v3');
+    expect(logged).toContain('v4');
+    expect(logged).toContain('Total:');
+  });
+
+  it('valid migration 3 to 4 in json format', async () => {
+    const program = createProgram('json');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'migrate', '3', '4']);
+
+    const logged = logSpy.mock.calls.map((c) => c[0]).join('');
+    logSpy.mockRestore();
+    const result = JSON.parse(logged);
+
+    expect(result.from).toBe('3');
+    expect(result.to).toBe('4');
+    expect(Array.isArray(result.steps)).toBe(true);
+    expect(result.steps.length).toBeGreaterThan(20); // v3→v4 has many steps
+    expect(result).toHaveProperty('summary');
+  });
+
   it('valid migration 4 to 5 in text format', async () => {
     const program = createProgram('text');
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
