@@ -104,12 +104,16 @@ Agent 会自动完成 `npm install`、`npx skills add`，并开始使用 CLI。
 ## 🚀 快速开始
 
 ```bash
+antd list                           # 所有组件及版本信息
 antd info Button                    # 组件 Props、类型、默认值
+antd doc Button                     # 完整 Markdown 文档
 antd demo Select basic              # 可运行的 Demo 源码
 antd token DatePicker               # Design Token 值（v5+）
 antd semantic Table                 # classNames / styles 结构
 antd changelog 4.24.0 5.0.0 Select  # 跨版本 API 差异对比
 antd doctor                         # 诊断项目配置问题
+antd env                            # 收集环境信息用于 Bug 报告
+antd usage ./src                    # 分析项目中的 antd 导入
 antd lint ./src                     # 检查废弃 API 和最佳实践
 antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 ```
