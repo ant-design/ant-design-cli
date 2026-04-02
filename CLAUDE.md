@@ -82,7 +82,7 @@ scripts/
 - CLI framework: `commander`
 - Build: `tsup`
 - Tests: `vitest`
-- Node minimum: 18+
+- Node minimum: 20+
 
 ## Git Workflow
 

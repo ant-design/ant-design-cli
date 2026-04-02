@@ -635,7 +635,7 @@ Common error codes: `COMPONENT_NOT_FOUND`, `VERSION_NOT_FOUND`, `NO_PROJECT_DETE
 
 - Language: TypeScript + Node.js
 - CLI framework: `commander`
-- Minimum Node version: 18+
+- Minimum Node version: 20+
 - Package name: `@ant-design/cli`
 - Global command: `antd`
 
