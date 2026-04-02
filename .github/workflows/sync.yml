@@ -30,55 +30,54 @@ jobs:
       - name: Sync v4, v5, v6 metadata
         run: npx tsx scripts/sync.ts --antd-dir antd-source
 
-      - name: Commit, publish and tag if antd version changed
+      - name: Publish to npm if version not yet published
         run: |
-          if [ -z "$(git status --porcelain data/)" ]; then
-            echo "No changes in data/, skipping release"
-            exit 0
-          fi
-
-          VERSIONS=""
-          for major in 4 5 6; do
-            if ! git diff --quiet "data/v${major}.json"; then
-              VER=$(node -p "JSON.parse(require('fs').readFileSync(\"data/v${major}.json\",'utf8')).version")
-              VERSIONS="${VERSIONS:+${VERSIONS}, }v${major}@${VER}"
-            fi
-          done
-
           # Use antd v6 version as CLI version
-          OLD_VERSION=$(node -p "require('./package.json').version")
           CLI_VERSION=$(node -p "JSON.parse(require('fs').readFileSync('data/v6.json','utf8')).version")
 
-          # Skip release if version hasn't changed
-          if [ "$CLI_VERSION" = "$OLD_VERSION" ]; then
-            echo "antd version unchanged (${CLI_VERSION}), skipping release"
+          # Check if this version already exists on npm
+          if npm view "@ant-design/cli@${CLI_VERSION}" version >/dev/null 2>&1; then
+            echo "Version ${CLI_VERSION} already published to npm, skipping release"
             exit 0
           fi
 
-          # Update package.json version
-          npm version "$CLI_VERSION" --no-git-tag-version
+          # Collect version info for changelog
+          VERSIONS=""
+          for major in 4 5 6; do
+            VER=$(node -p "JSON.parse(require('fs').readFileSync(\"data/v${major}.json\",'utf8')).version")
+            VERSIONS="${VERSIONS:+${VERSIONS}, }v${major}@${VER}"
+          done
 
-          # Prepend changelog entry with compare link
-          npx tsx scripts/update-changelog.ts \
-            --old "$OLD_VERSION" --new "$CLI_VERSION" --versions "$VERSIONS"
+          OLD_VERSION=$(node -p "require('./package.json').version")
+
+          # Update package.json version if needed
+          if [ "$CLI_VERSION" != "$OLD_VERSION" ]; then
+            npm version "$CLI_VERSION" --no-git-tag-version
+
+            # Prepend changelog entry with compare link
+            npx tsx scripts/update-changelog.ts \
+              --old "$OLD_VERSION" --new "$CLI_VERSION" --versions "$VERSIONS"
+
+            # Commit, tag and push
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md
+            git commit -m "data: sync antd metadata (${VERSIONS})"
+            git tag "v${CLI_VERSION}"
+            git push origin main --tags
+
+            # Create GitHub Release
+            npx tsx scripts/extract-changelog.ts "$CLI_VERSION" > /tmp/release-notes.md
+            gh release create "v${CLI_VERSION}" \
+              --title "v${CLI_VERSION}" \
+              --notes-file /tmp/release-notes.md
+          else
+            echo "package.json already has version ${CLI_VERSION}, proceeding with publish"
+          fi
 
           # Build and test
           npm run build
           npm test
-
-          # Commit, tag and push
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md
-          git commit -m "data: sync antd metadata (${VERSIONS})"
-          git tag "v${CLI_VERSION}"
-          git push origin main --tags
-
-          # Create GitHub Release
-          npx tsx scripts/extract-changelog.ts "$CLI_VERSION" > /tmp/release-notes.md
-          gh release create "v${CLI_VERSION}" \
-            --title "v${CLI_VERSION}" \
-            --notes-file /tmp/release-notes.md
 
           # Publish to npm
           npm publish --provenance --access public
