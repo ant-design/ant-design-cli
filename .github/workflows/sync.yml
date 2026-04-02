@@ -13,9 +13,9 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           registry-url: 'https://registry.npmjs.org'
@@ -78,6 +78,17 @@ jobs:
           # Build and test
           npm run build
           npm test
+
+          # Debug info before publish
+          echo "==== DEBUG START ===="
+          npm whoami || true
+          echo "event: $GITHUB_EVENT_NAME"
+          echo "actor: $GITHUB_ACTOR"
+          echo "ref: $GITHUB_REF"
+          npm config get registry
+          echo "check package:"
+          npm view @ant-design/cli || true
+          echo "==== DEBUG END ===="
 
           # Publish to npm
           npm publish --provenance --access public
