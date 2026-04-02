@@ -12,6 +12,7 @@
 
 ### Other Changes
 
+- Update antd metadata ([v6@6.3.5](https://github.com/ant-design/ant-design-cli/compare/v6.3.5-beta.0...v6.3.5#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 - Bundle all dependencies into the package — eliminates 180+ transitive packages from your `node_modules` ([#64](https://github.com/ant-design/ant-design-cli/pull/64))
 
 ## [6.3.5-beta.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.4...v6.3.5-beta.0) (2026-03-25)
