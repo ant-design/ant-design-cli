@@ -8,11 +8,11 @@
 
 ### Bug Fixes
 
-- Fix `antd lint` reporting incorrect line numbers (always showing line 0) (#65)
+- Fix `antd lint` reporting incorrect line numbers (always showing line 0) ([#65](https://github.com/ant-design/ant-design-cli/pull/65))
 
 ### Other Changes
 
-- Bundle all dependencies into the package — eliminates 180+ transitive packages from your `node_modules` (#64)
+- Bundle all dependencies into the package — eliminates 180+ transitive packages from your `node_modules` ([#64](https://github.com/ant-design/ant-design-cli/pull/64))
 
 ## [6.3.5-beta.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.4...v6.3.5-beta.0) (2026-03-25)
 
