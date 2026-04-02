@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { Command } from 'commander';
 import { registerMigrateCommand } from '../../commands/migrate.js';
+import { V3_TO_V4_STEPS } from '../../commands/migrate-v3-to-v4.js';
 import { V4_TO_V5_STEPS } from '../../commands/migrate-v4-to-v5.js';
 import { V5_TO_V6_STEPS } from '../../commands/migrate-v5-to-v6.js';
 
@@ -16,6 +17,36 @@ function createProgram(format = 'text') {
 }
 
 describe('migrate command', () => {
+  it('valid migration 3 to 4 in text format', async () => {
+    const program = createProgram('text');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'migrate', '3', '4']);
+
+    const logged = logSpy.mock.calls.map((c) => c[0]).join('\n');
+    logSpy.mockRestore();
+
+    expect(logged).toContain('Migration Guide');
+    expect(logged).toContain('v3');
+    expect(logged).toContain('v4');
+    expect(logged).toContain('Total:');
+  });
+
+  it('valid migration 3 to 4 in json format', async () => {
+    const program = createProgram('json');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'migrate', '3', '4']);
+
+    const logged = logSpy.mock.calls.map((c) => c[0]).join('');
+    logSpy.mockRestore();
+    const result = JSON.parse(logged);
+
+    expect(result.from).toBe('3');
+    expect(result.to).toBe('4');
+    expect(Array.isArray(result.steps)).toBe(true);
+    expect(result.steps.length).toBeGreaterThan(20); // v3→v4 has many steps
+    expect(result).toHaveProperty('summary');
+  });
+
   it('valid migration 4 to 5 in text format', async () => {
     const program = createProgram('text');
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -60,11 +91,11 @@ describe('migrate command', () => {
     expect(logged).toContain('# Migration Guide');
   });
 
-  it('invalid migration 3 to 4 shows error with available migrations', async () => {
+  it('invalid migration 2 to 3 shows error with available migrations', async () => {
     const program = createProgram('text');
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '3', '4']);
+    await program.parseAsync(['node', 'test', 'migrate', '2', '3']);
 
     const errOutput = errSpy.mock.calls.map((c) => c[0]).join('\n');
     logSpy.mockRestore();
@@ -134,6 +165,22 @@ describe('migrate command', () => {
     expect(result).toHaveProperty('summary');
     expect(result.summary).toHaveProperty('totalAutoFix');
     expect(result.summary).toHaveProperty('totalManual');
+  });
+
+  it('V3_TO_V4_STEPS has valid structure', () => {
+    expect(Array.isArray(V3_TO_V4_STEPS)).toBe(true);
+    expect(V3_TO_V4_STEPS.length).toBeGreaterThan(0);
+
+    for (const step of V3_TO_V4_STEPS) {
+      expect(step).toHaveProperty('component');
+      expect(step).toHaveProperty('breaking');
+      expect(step).toHaveProperty('description');
+      expect(step).toHaveProperty('autoFixable');
+      expect(typeof step.component).toBe('string');
+      expect(typeof step.breaking).toBe('boolean');
+      expect(typeof step.description).toBe('string');
+      expect(typeof step.autoFixable).toBe('boolean');
+    }
   });
 
   it('V4_TO_V5_STEPS has valid structure', () => {

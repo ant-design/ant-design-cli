@@ -2,6 +2,7 @@ import type { Command } from 'commander';
 import type { GlobalOptions, OutputFormat } from '../types.js';
 import { output } from '../output/formatter.js';
 import { printError, createError, ErrorCodes } from '../output/error.js';
+import { V3_TO_V4_STEPS } from './migrate-v3-to-v4.js';
 import { V4_TO_V5_STEPS } from './migrate-v4-to-v5.js';
 import { V5_TO_V6_STEPS } from './migrate-v5-to-v6.js';
 
@@ -24,6 +25,7 @@ export interface MigrationStep {
 // ─── Migration Guide Registry ────────────────────────────────────────────────
 
 const MIGRATION_GUIDES: Record<string, MigrationStep[]> = {
+  '3-4': V3_TO_V4_STEPS,
   '4-5': V4_TO_V5_STEPS,
   '5-6': V5_TO_V6_STEPS,
 };

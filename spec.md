@@ -27,6 +27,8 @@ Metadata for all major versions is bundled inside `@ant-design/cli`:
 @ant-design/cli
 └── data/
     ├── versions.json        # version index: minor series → snapshot tag (always plain JSON)
+    ├── v3.json.gz           # latest v3 (final version 3.26.20)
+    ├── v3.26.20.json.gz     # snapshot for 3.26.x series
     ├── v4.json.gz           # latest v4 (gzip-compressed in published package)
     ├── v4.0.9.json.gz       # snapshot for 4.0.x series
     ├── v4.1.5.json.gz       # snapshot for 4.1.x series
@@ -45,6 +47,7 @@ Metadata for all major versions is bundled inside `@ant-design/cli`:
 
 ```json
 {
+  "v3": { "3.26": "3.26.20" },
   "v4": { "4.0": "4.0.9", "4.1": "4.1.5", "4.24": "4.24.16" },
   "v5": { "5.0": "5.0.7", "5.29": "5.29.3" },
   "v6": { "6.3": "6.3.2" }
@@ -197,7 +200,10 @@ Query Design Tokens.
 antd token                          # list all global tokens
 antd token Button                   # component-level tokens with defaults
 antd token --version 4.24.0         # v4 has no token system, shows a hint
+antd token --version 3.26.0         # v3 uses Less variables, shows a hint
 ```
+
+**Note:** Design Tokens are only available in antd v5+. For v3 and v4, the command returns `UNSUPPORTED_VERSION_FEATURE` with a suggestion to use Less variables or upgrade to v5.
 
 
 #### `antd semantic <Component>`
@@ -208,6 +214,8 @@ Query the semantic customization structure of a component — the available `cla
 antd semantic Table
 antd semantic Table --format json
 ```
+
+**Note:** Semantic structure is only available in antd v5+. For v3 and v4, the command returns `UNSUPPORTED_VERSION_FEATURE`.
 
 Output (text):
 ```
@@ -429,12 +437,16 @@ Note: This is complementary to ESLint. `antd lint` focuses on antd-specific know
 Version migration guide with optional auto-fix.
 
 ```bash
-antd migrate 4 5                    # full migration checklist
+antd migrate 3 4                    # v3 → v4 migration checklist
+antd migrate 4 5                    # v4 → v5 migration checklist
+antd migrate 5 6                    # v5 → v6 migration checklist
 antd migrate v4 v5                  # v prefix is accepted and normalized
 antd migrate 4 5 --component Select # Select-specific migration
 antd migrate 4 5 --apply ./src      # auto-fix what can be auto-fixed
 antd migrate --format json
 ```
+
+**Available migration paths:** v3→v4, v4→v5, v5→v6. Multi-version migrations (e.g., v3→v6) are not supported directly — migrate step by step.
 
 Safety model for `--apply`:
 - Always runs in **dry-run mode** first, printing changes before applying
@@ -617,7 +629,7 @@ Exit codes:
 - `1` — user error (invalid args, component not found)
 - `2` — system error (file read failure, data corruption)
 
-Common error codes: `COMPONENT_NOT_FOUND`, `VERSION_NOT_FOUND`, `NO_PROJECT_DETECTED`, `UNSUPPORTED_VERSION_FEATURE` (e.g. tokens for v4).
+Common error codes: `COMPONENT_NOT_FOUND`, `VERSION_NOT_FOUND`, `NO_PROJECT_DETECTED`, `UNSUPPORTED_VERSION_FEATURE` (e.g. tokens for v3/v4).
 
 ## Technical Architecture
 

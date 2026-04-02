@@ -40,6 +40,15 @@ describe('getTokens', () => {
     expect(err.message).toContain('v4');
   });
 
+  it('returns CLIError for v3 (unsupported)', () => {
+    const result = getTokens(undefined, { lang: 'en', version: '3.26.20' });
+    expect('error' in result).toBe(true);
+    const err = result as CLIError;
+    expect(err.code).toBe('UNSUPPORTED_VERSION_FEATURE');
+    expect(err.message).toContain('v5+');
+    expect(err.suggestion).toContain('Less variables');
+  });
+
   it('returns CLIError for non-existent component', () => {
     const result = getTokens('NonExistent', { lang: 'en', version: '5.20.0' });
     expect('error' in result).toBe(true);
@@ -106,6 +115,17 @@ describe('registerTokenCommand', () => {
     await program.parseAsync(['node', 'test', 'token'], );
     expect(errSpy).toHaveBeenCalled();
     expect(process.exitCode).toBe(1);
+  });
+
+  it('should handle error for v3', async () => {
+    const program = createProgram({ format: 'text', version: '3.26.20' });
+    registerTokenCommand(program);
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'token'], );
+    expect(errSpy).toHaveBeenCalled();
+    expect(process.exitCode).toBe(1);
+    const errOutput = errSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(errOutput).toContain('Less variables');
   });
 
   it('should show "No component tokens" for component without tokens', async () => {

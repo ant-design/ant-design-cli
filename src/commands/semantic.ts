@@ -2,7 +2,7 @@ import type { Command } from 'commander';
 import type { GlobalOptions, CLIError, SemanticKey } from '../types.js';
 import { resolveComponent } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
-import { printError } from '../output/error.js';
+import { createError, printError, ErrorCodes } from '../output/error.js';
 import { output } from '../output/formatter.js';
 
 export interface SemanticStructureResult {
@@ -18,6 +18,16 @@ export function getSemanticStructure(
   component: string,
   opts: { version: string },
 ): SemanticStructureResult | CLIError {
+  const major = `v${opts.version.split('.')[0]}`;
+
+  if (major === 'v3' || major === 'v4') {
+    return createError(
+      ErrorCodes.UNSUPPORTED_VERSION_FEATURE,
+      'Semantic structure is only available in antd v5+',
+      'The classNames/styles customization API was introduced in antd v5. See: https://ant.design/docs/react/customize-theme#use-classnames-and-styles',
+    );
+  }
+
   const resolved = resolveComponent(component, opts.version);
   if ('error' in resolved) return resolved;
   const { comp } = resolved;

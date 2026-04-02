@@ -80,7 +80,7 @@ function main() {
   // 2. Build full ComponentData for each
   const components: ComponentData[] = componentMetas.map((meta) => {
     const { props, subComponentProps } = extractProps(antdDir, meta.dirName, meta.name);
-    const demos = extractDemos(antdDir, meta.dirName);
+    const demos = extractDemos(antdDir, meta.dirName, majorVersion);
     const tokens = extractTokens(antdDir, meta.name);
     const semantic = extractSemantic(antdDir, meta.dirName);
     const faq = extractFaq(antdDir, meta.dirName);

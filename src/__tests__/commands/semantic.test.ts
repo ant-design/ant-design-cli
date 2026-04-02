@@ -38,6 +38,23 @@ describe('getSemanticStructure', () => {
       expect(Array.isArray(result.semanticStructure)).toBe(true);
     }
   });
+
+  it('returns CLIError for v4 (unsupported)', () => {
+    const result = getSemanticStructure('Button', { version: '4.24.0' });
+    expect('error' in result).toBe(true);
+    const err = result as CLIError;
+    expect(err.code).toBe('UNSUPPORTED_VERSION_FEATURE');
+    expect(err.message).toContain('v5+');
+  });
+
+  it('returns CLIError for v3 (unsupported)', () => {
+    const result = getSemanticStructure('Button', { version: '3.26.20' });
+    expect('error' in result).toBe(true);
+    const err = result as CLIError;
+    expect(err.code).toBe('UNSUPPORTED_VERSION_FEATURE');
+    expect(err.message).toContain('v5+');
+    expect(err.suggestion).toContain('classNames/styles');
+  });
 });
 
 describe('registerSemanticCommand', () => {
@@ -85,5 +102,27 @@ describe('registerSemanticCommand', () => {
     await program.parseAsync(['node', 'test', 'semantic', 'NonExistent'], );
     expect(errSpy).toHaveBeenCalled();
     expect(process.exitCode).toBe(1);
+  });
+
+  it('should handle error for v4', async () => {
+    const program = createProgram({ format: 'text', version: '4.24.0' });
+    registerSemanticCommand(program);
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'semantic', 'Button'], );
+    expect(errSpy).toHaveBeenCalled();
+    expect(process.exitCode).toBe(1);
+    const errOutput = errSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(errOutput).toContain('v5+');
+  });
+
+  it('should handle error for v3', async () => {
+    const program = createProgram({ format: 'text', version: '3.26.20' });
+    registerSemanticCommand(program);
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    await program.parseAsync(['node', 'test', 'semantic', 'Button'], );
+    expect(errSpy).toHaveBeenCalled();
+    expect(process.exitCode).toBe(1);
+    const errOutput = errSpy.mock.calls.map((c) => c[0]).join('\n');
+    expect(errOutput).toContain('classNames/styles');
   });
 });
