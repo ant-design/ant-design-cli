@@ -1,81 +1,83 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync, mkdtempSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import {
-  collectSystem,
-  collectBinaries,
-  collectBrowsers,
+  collectEnvinfo,
   collectDependencies,
   scanEcosystem,
   collectBuildTools,
-  tryExec,
-  getVersion,
   formatText,
   formatMarkdown,
   type EnvResult,
+  type EnvinfoData,
 } from '../../commands/env.js';
 
-describe('collectSystem', () => {
-  it('returns an object with OS key', () => {
-    const result = collectSystem();
-    expect(result).toHaveProperty('OS');
-    expect(typeof result.OS).toBe('string');
-    expect(result.OS.length).toBeGreaterThan(0);
-  });
-});
+// Mock envinfo module
+vi.mock('envinfo', () => ({
+  default: {
+    run: vi.fn(async () => JSON.stringify({
+      System: {
+        OS: 'macOS 15.3',
+        CPU: '(10) arm64 Apple M1 Pro',
+        Memory: '500 MB / 16 GB',
+        Shell: { version: '5.9', path: '/bin/zsh' },
+      },
+      Binaries: {
+        Node: { version: '20.11.0', path: '/usr/local/bin/node' },
+        npm: { version: '10.2.0', path: '/usr/local/bin/npm' },
+      },
+      Browsers: {
+        Chrome: '131.0.6778.86',
+        Firefox: null,
+        Safari: { version: '18.0' },
+      },
+    })),
+  },
+}));
 
-describe('tryExec', () => {
-  it('returns output for a valid command', () => {
-    const result = tryExec('node', ['--version']);
-    expect(result).toBeTruthy();
-    expect(result).toMatch(/^\d+\.\d+\.\d+$|^v\d+/);
-  });
+// Mock child_process.execFileSync
+vi.mock('node:child_process', () => ({
+  execFileSync: vi.fn(() => 'https://registry.npmjs.org/\n'),
+}));
 
-  it('returns null for an invalid command', () => {
-    const result = tryExec('nonexistent-command-xyz', ['--version']);
-    expect(result).toBeNull();
-  });
-});
+describe('collectEnvinfo', () => {
+  let envinfoResult: EnvinfoData;
 
-describe('getVersion', () => {
-  it('extracts version from node', () => {
-    const result = getVersion('node');
-    expect(result).toMatch(/^\d+\.\d+\.\d+$/);
-  });
-
-  it('returns null for non-existent command', () => {
-    const result = getVersion('nonexistent-command-xyz');
-    expect(result).toBeNull();
-  });
-});
-
-describe('collectBrowsers', () => {
-  it('returns an object', async () => {
-    const result = await collectBrowsers();
-    expect(typeof result).toBe('object');
+  beforeAll(async () => {
+    envinfoResult = await collectEnvinfo('/tmp/test-cwd');
   });
 
-  it('detects at least one browser on macOS', async () => {
-    const result = await collectBrowsers();
-    if (process.platform === 'darwin') {
-      expect(Object.keys(result).length).toBeGreaterThan(0);
-    }
-  });
-});
-
-describe('collectBinaries', () => {
-  it('returns Node version', () => {
-    const result = collectBinaries();
-    expect(result).toHaveProperty('Node');
-    expect(result.Node).toMatch(/^\d+\.\d+\.\d+$/);
+  afterAll(() => {
+    vi.restoreAllMocks();
   });
 
-  it('detects at least one package manager', () => {
-    const result = collectBinaries();
-    const managers = ['npm', 'pnpm', 'yarn', 'bun', 'utoo'];
-    const found = managers.some((m) => m in result);
-    expect(found).toBe(true);
+  it('returns an object with System category', () => {
+    expect(envinfoResult).toHaveProperty('System');
+    expect(typeof envinfoResult.System).toBe('object');
+  });
+
+  it('returns Binaries with Node version', () => {
+    expect(envinfoResult).toHaveProperty('Binaries');
+    expect(envinfoResult.Binaries).toHaveProperty('Node');
+    // Node is an object with version property
+    expect((envinfoResult.Binaries.Node as { version: string }).version).toMatch(/^\d+\.\d+\.\d+$/);
+  });
+
+  it('detects at least one browser on macOS', () => {
+    expect(envinfoResult).toHaveProperty('Browsers');
+    const browsers = envinfoResult.Browsers || {};
+    expect(Object.keys(browsers).length).toBeGreaterThan(0);
+  });
+
+  it('preserves object structure for Shell', () => {
+    expect(envinfoResult.System.Shell).toHaveProperty('version');
+    expect(envinfoResult.System.Shell).toHaveProperty('path');
+  });
+
+  it('adds Registry to Binaries', () => {
+    expect(envinfoResult.Binaries).toHaveProperty('Registry');
+    expect(envinfoResult.Binaries.Registry).toBe('https://registry.npmjs.org/');
   });
 });
 
@@ -180,9 +182,11 @@ describe('collectBuildTools', () => {
 
 describe('formatText', () => {
   const data: EnvResult = {
-    system: { OS: 'macOS 15.3' },
-    binaries: { Node: '20.11.0', pnpm: '9.1.0', Registry: 'https://registry.npmjs.org/' },
-    browsers: { Chrome: '131.0.6778.86', Firefox: null },
+    envinfo: {
+      System: { OS: 'macOS 15.3', CPU: '(10) arm64 Apple M1 Pro', Memory: '500 MB / 16 GB', Shell: { version: '5.9', path: '/bin/zsh' } },
+      Binaries: { Node: { version: '20.11.0', path: '/usr/local/bin/node' }, pnpm: '9.1.0', Registry: 'https://registry.npmjs.org/' },
+      Browsers: { Chrome: '131.0.6778.86', Firefox: null },
+    },
     dependencies: { antd: '5.22.0', react: '18.3.1', 'react-dom': '18.3.1', dayjs: null, '@ant-design/cssinjs': null, '@ant-design/icons': null },
     ecosystem: { '@ant-design/pro-components': '2.8.1' },
     buildTools: { typescript: '5.6.3' },
@@ -193,11 +197,14 @@ describe('formatText', () => {
     expect(text).toMatch(/^Environment/);
   });
 
-  it('contains all sections', () => {
+  it('contains System and Binaries sections', () => {
     const text = formatText(data);
     expect(text).toContain('System:');
     expect(text).toContain('Binaries:');
-    expect(text).toContain('Browsers:');
+  });
+
+  it('contains antd-specific sections', () => {
+    const text = formatText(data);
     expect(text).toContain('Dependencies:');
     expect(text).toContain('Ecosystem:');
     expect(text).toContain('Build Tools:');
@@ -208,23 +215,29 @@ describe('formatText', () => {
     expect(text).toContain('Not found');
   });
 
-  it('hides null browsers', () => {
+  it('hides null values in envinfo sections', () => {
     const text = formatText(data);
     expect(text).toContain('Chrome');
     expect(text).not.toContain('Firefox');
   });
 
+  it('extracts version from object values', () => {
+    const text = formatText(data);
+    expect(text).toContain('5.9'); // Shell version
+    expect(text).toContain('20.11.0'); // Node version
+  });
+
   it('skips empty sections', () => {
     const empty: EnvResult = {
-      system: { OS: 'test' },
-      binaries: { Node: '20.0.0' },
-      browsers: {},
+      envinfo: {
+        System: { OS: 'test' },
+        Binaries: { Node: '20.0.0' },
+      },
       dependencies: { antd: null, react: null, 'react-dom': null, dayjs: null, '@ant-design/cssinjs': null, '@ant-design/icons': null },
       ecosystem: {},
       buildTools: {},
     };
     const text = formatText(empty);
-    expect(text).not.toContain('Browsers:');
     expect(text).not.toContain('Ecosystem:');
     expect(text).not.toContain('Build Tools:');
   });
@@ -232,9 +245,11 @@ describe('formatText', () => {
 
 describe('formatMarkdown', () => {
   const data: EnvResult = {
-    system: { OS: 'macOS 15.3' },
-    binaries: { Node: '20.11.0' },
-    browsers: { Chrome: '131.0.6778.86' },
+    envinfo: {
+      System: { OS: 'macOS 15.3' },
+      Binaries: { Node: { version: '20.11.0', path: '/usr/local/bin/node' } },
+      Browsers: { Chrome: '131.0.6778.86' },
+    },
     dependencies: { antd: '5.22.0', react: null, 'react-dom': null, dayjs: null, '@ant-design/cssinjs': null, '@ant-design/icons': null },
     ecosystem: { '@ant-design/pro-components': '2.8.1' },
     buildTools: { typescript: '5.6.3' },
@@ -249,7 +264,6 @@ describe('formatMarkdown', () => {
     const md = formatMarkdown(data);
     expect(md).toContain('| Item | Version |');
     expect(md).toContain('| Package | Version |');
-    expect(md).toContain('| Browser | Version |');
   });
 
   it('contains section headers', () => {
