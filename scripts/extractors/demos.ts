@@ -7,7 +7,7 @@ import type { DemoData } from '../../src/types.js';
 function parseDemoMd(content: string): { titleZh: string; titleEn: string; descZh: string; descEn: string } {
   const result = { titleZh: '', titleEn: '', descZh: '', descEn: '' };
 
-  const zhMatch = content.match(/^## zh-CN\s*\n([\s\S]*?)(?=^## en-US|\Z)/m);
+  const zhMatch = content.match(/^## zh-CN\s*\n([\s\S]*?)(?=^## en-US|$)/m);
   const enMatch = content.match(/^## en-US\s*\n([\s\S]*?)$/m);
 
   if (zhMatch) result.descZh = zhMatch[1].trim();
@@ -30,7 +30,7 @@ function parseV3DemoMd(content: string): {
   const titleZh = typeof titleObj === 'string' ? '' : titleObj['zh-CN'] || '';
 
   // Extract zh-CN and en-US sections
-  const zhMatch = parsed.content.match(/^## zh-CN\s*\n([\s\S]*?)(?=^## en-US|\Z)/m);
+  const zhMatch = parsed.content.match(/^## zh-CN\s*\n([\s\S]*?)(?=^## en-US|$)/m);
   const enMatch = parsed.content.match(/^## en-US\s*\n([\s\S]*?)$/m);
 
   const descZh = zhMatch ? zhMatch[1].trim() : '';

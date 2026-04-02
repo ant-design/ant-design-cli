@@ -228,12 +228,11 @@ v5: Input.Group removed, use Space.Compact instead.`,
   // Table
   {
     component: 'Table',
-    breaking: true,
-    description: 'Column render callback signature changed: text, record, index are now passed via object.',
+    breaking: false,
+    description: 'Column render callback signature unchanged. Internal pagination and filtering logic improved.',
     autoFixable: false,
-    searchPattern: `render:\\s*\\(.*=>`,
-    migrationGuide: `In v3: render: (text, record, index) => {}
-In v4: the signature is the same but be aware of internal changes to pagination and filtering.`,
+    migrationGuide: `The render callback signature (text, record, index) => {} remains unchanged from v3 to v4.
+The main differences are internal improvements to pagination and filtering behavior.`,
   },
   {
     component: 'Table',
@@ -251,12 +250,6 @@ In v4: the signature is the same but be aware of internal changes to pagination 
     before: `import { Tree, TreeNode } from 'antd';`,
     after: `import { Tree } from 'antd';
 const { TreeNode } = Tree;`,
-  },
-  {
-    component: 'Tree',
-    breaking: true,
-    description: '`filterTreeNode` prop renamed to `filterTreeNode` (no change, just noting API stabilization).',
-    autoFixable: false,
   },
 
   // Upload
