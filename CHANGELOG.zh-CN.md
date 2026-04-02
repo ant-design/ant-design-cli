@@ -8,11 +8,11 @@
 
 ### Bug 修复
 
-- 修复 `antd lint` 报告的行号始终为 0 的问题 (#65)
+- 修复 `antd lint` 报告的行号始终为 0 的问题 ([#65](https://github.com/ant-design/ant-design-cli/pull/65))
 
 ### 其他变更
 
-- 将所有依赖打包进 dist，安装后 `node_modules` 中不再出现 180+ 个传递依赖 (#64)
+- 将所有依赖打包进 dist，安装后 `node_modules` 中不再出现 180+ 个传递依赖 ([#64](https://github.com/ant-design/ant-design-cli/pull/64))
 
 ## [6.3.5-beta.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.4...v6.3.5-beta.0) (2026-03-25)
 
