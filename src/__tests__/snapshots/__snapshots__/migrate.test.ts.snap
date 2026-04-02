@@ -2,7 +2,7 @@
 
 exports[`migrate > migrate 3 6 (invalid) 1`] = `
 "Error: No migration guide available for v3 → v6
-Suggestion: Available migrations: v4 → v5, v5 → v6"
+Suggestion: Available migrations: v3 → v4, v4 → v5, v5 → v6"
 `;
 
 exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `

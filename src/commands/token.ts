@@ -25,6 +25,14 @@ export function getTokens(
 ): GlobalTokensResult | ComponentTokensResult | CLIError {
   const major = `v${opts.version.split('.')[0]}`;
 
+  if (major === 'v3') {
+    return createError(
+      ErrorCodes.UNSUPPORTED_VERSION_FEATURE,
+      'Design Tokens are only available in antd v5+',
+      'v3 uses Less variables for theming. See: https://ant.design/docs/react/customize-theme-v3',
+    );
+  }
+
   if (major === 'v4') {
     return createError(
       ErrorCodes.UNSUPPORTED_VERSION_FEATURE,
