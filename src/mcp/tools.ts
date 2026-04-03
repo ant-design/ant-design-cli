@@ -19,6 +19,14 @@ function toMcpResult(data: unknown) {
   return { content: [{ type: 'text' as const, text: JSON.stringify(data) }] };
 }
 
+/** Common annotations for all antd tools: read-only, non-destructive, idempotent, no external access. */
+const TOOL_ANNOTATIONS = {
+  readOnlyHint: true,
+  destructiveHint: false,
+  idempotentHint: true,
+  openWorldHint: false,
+} as const;
+
 export const TOOL_DEFINITIONS = [
   {
     name: 'antd_list',
@@ -28,6 +36,7 @@ export const TOOL_DEFINITIONS = [
       properties: {},
       required: [] as string[],
     },
+    annotations: { title: 'List Components', ...TOOL_ANNOTATIONS },
   },
   {
     name: 'antd_info',
@@ -40,6 +49,7 @@ export const TOOL_DEFINITIONS = [
       },
       required: ['component'],
     },
+    annotations: { title: 'Get Component Info', ...TOOL_ANNOTATIONS },
   },
   {
     name: 'antd_doc',
@@ -51,6 +61,7 @@ export const TOOL_DEFINITIONS = [
       },
       required: ['component'],
     },
+    annotations: { title: 'Get Component Doc', ...TOOL_ANNOTATIONS },
   },
   {
     name: 'antd_demo',
@@ -63,6 +74,7 @@ export const TOOL_DEFINITIONS = [
       },
       required: ['component'],
     },
+    annotations: { title: 'Get Component Demo', ...TOOL_ANNOTATIONS },
   },
   {
     name: 'antd_token',
@@ -74,6 +86,7 @@ export const TOOL_DEFINITIONS = [
       },
       required: [] as string[],
     },
+    annotations: { title: 'Query Design Tokens', ...TOOL_ANNOTATIONS },
   },
   {
     name: 'antd_semantic',
@@ -85,6 +98,7 @@ export const TOOL_DEFINITIONS = [
       },
       required: ['component'],
     },
+    annotations: { title: 'Query Semantic Structure', ...TOOL_ANNOTATIONS },
   },
   {
     name: 'antd_changelog',
@@ -99,6 +113,7 @@ export const TOOL_DEFINITIONS = [
       },
       required: [] as string[],
     },
+    annotations: { title: 'Query Changelog', ...TOOL_ANNOTATIONS },
   },
 ];
 
