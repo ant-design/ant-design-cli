@@ -298,6 +298,8 @@ IDE configuration (`claude_desktop_config.json`):
 | `antd_semantic` | Query semantic classNames/styles structure |
 | `antd_changelog` | Query changelog or diff API changes between versions |
 
+All tools include MCP annotations: `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false` — indicating they are read-only queries against bundled data with no side effects.
+
 **MCP Prompts (2):**
 
 | Prompt | Description |
