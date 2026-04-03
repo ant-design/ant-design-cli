@@ -1,19 +1,12 @@
 import type { Command } from 'commander';
 import type { GlobalOptions, CLIError, TokenData } from '../types.js';
-import { localize } from '../types.js';
 import { loadMetadataForVersion, resolveComponent } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { createError, printError, ErrorCodes } from '../output/error.js';
-import { formatTable, output } from '../output/formatter.js';
+import { outputTokens, type GlobalTokensResult, type ComponentTokensResult } from '../output/formatter.js';
 
-export interface GlobalTokensResult {
-  tokens: TokenData[];
-}
-
-export interface ComponentTokensResult {
-  component: string;
-  tokens: TokenData[];
-}
+// Re-export types for external use
+export type { GlobalTokensResult, ComponentTokensResult };
 
 /**
  * Core function: get design tokens (global or component-level).
@@ -73,41 +66,6 @@ export function registerTokenCommand(program: Command): void {
         return;
       }
 
-      if ('component' in result) {
-        // Component tokens
-        if (result.tokens.length === 0) {
-          console.log(`No component tokens available for ${result.component}.`);
-          return;
-        }
-        if (opts.format === 'json') {
-          output(result, 'json');
-          return;
-        }
-        console.log(`${result.component} Component Tokens:`);
-        console.log('');
-        const headers = ['Token', 'Type', 'Default'];
-        const rows = result.tokens.map((t) => [t.name, t.type, t.default]);
-        console.log(formatTable(headers, rows, opts.format === 'markdown' ? 'markdown' : 'text'));
-      } else {
-        // Global tokens
-        if (result.tokens.length === 0) {
-          console.log('No global token data available.');
-          return;
-        }
-        if (opts.format === 'json') {
-          output(result, 'json');
-          return;
-        }
-        console.log('Global Design Tokens:');
-        console.log('');
-        const headers = ['Token', 'Type', 'Default', 'Description'];
-        const rows = result.tokens.map((t) => [
-          t.name,
-          t.type,
-          t.default,
-          localize(t.description, t.descriptionZh, opts.lang) || '-',
-        ]);
-        console.log(formatTable(headers, rows, opts.format === 'markdown' ? 'markdown' : 'text'));
-      }
+      outputTokens(result, { format: opts.format, lang: opts.lang });
     });
 }

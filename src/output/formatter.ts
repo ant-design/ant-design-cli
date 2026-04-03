@@ -1,4 +1,81 @@
-import type { OutputFormat } from '../types.js';
+import type { OutputFormat, TokenData } from '../types.js';
+import { localize } from '../types.js';
+
+export interface TokenOutputOptions {
+  format: OutputFormat;
+  lang: string;
+}
+
+export interface GlobalTokensResult {
+  tokens: TokenData[];
+}
+
+export interface ComponentTokensResult {
+  component: string;
+  tokens: TokenData[];
+}
+
+/** Output token data in the specified format */
+export function outputTokens(
+  result: GlobalTokensResult | ComponentTokensResult,
+  options: TokenOutputOptions,
+): void {
+  const { format, lang } = options;
+
+  // JSON handles both cases uniformly
+  if (format === 'json') {
+    output(result, 'json');
+    return;
+  }
+
+  const isEmpty = result.tokens.length === 0;
+  const isComponent = 'component' in result;
+
+  // Handle empty tokens
+  if (isEmpty) {
+    const emptyMsg = isComponent
+      ? localize(
+          `No component tokens available for ${result.component}.`,
+          `${result.component} 组件暂无可用 Token。`,
+          lang,
+        )
+      : localize('No global token data available.', '暂无全局 Token 数据。', lang);
+    console.log(emptyMsg);
+    return;
+  }
+
+  // Table output for text/markdown
+  const title = isComponent
+    ? localize(
+        `${result.component} Component Tokens:`,
+        `${result.component} 组件 Token：`,
+        lang,
+      )
+    : localize('Global Design Tokens:', '全局 Design Tokens：', lang);
+  console.log(title);
+  console.log('');
+
+  const headers = isComponent
+    ? [
+        localize('Token', 'Token', lang),
+        localize('Type', '类型', lang),
+        localize('Default', '默认值', lang),
+      ]
+    : [
+        localize('Token', 'Token', lang),
+        localize('Type', '类型', lang),
+        localize('Default', '默认值', lang),
+        localize('Description', '描述', lang),
+      ];
+
+  const rows = result.tokens.map((t) =>
+    isComponent
+      ? [t.name, t.type, t.default]
+      : [t.name, t.type, t.default, localize(t.description, t.descriptionZh, lang) || '-'],
+  );
+
+  console.log(formatTable(headers, rows, format === 'markdown' ? 'markdown' : 'text'));
+}
 
 function formatOutput(data: unknown, format: OutputFormat): string {
   switch (format) {
