@@ -2664,9 +2664,9 @@ exports[`token > token Button --format markdown --lang en 1`] = `
 `;
 
 exports[`token > token Button --format markdown --lang zh 1`] = `
-"Button Component Tokens:
+"Button 组件 Token：
 
-| Token | Type | Default |
+| Token | 类型 | 默认值 |
 | --- | --- | --- |
 | contentFontSize | number |  |
 | contentFontSizeLG | number |  |
@@ -2750,45 +2750,45 @@ textTextHoverColor        string"
 `;
 
 exports[`token > token Button --format text --lang zh 1`] = `
-"Button Component Tokens:
+"Button 组件 Token：
 
-Token                     Type                                        Default
-------------------------  ------------------------------------------  -------
-contentFontSize           number                                             
-contentFontSizeLG         number                                             
-contentFontSizeSM         number                                             
-dangerColor               string                                             
-dangerShadow              string                                             
-dashedBgDisabled          string                                             
-defaultActiveBg           string                                             
-defaultActiveBorderColor  string                                             
-defaultActiveColor        string                                             
-defaultBg                 string                                             
-defaultBgDisabled         string                                             
-defaultBorderColor        string                                             
-defaultColor              string                                             
-defaultGhostBorderColor   string                                             
-defaultGhostColor         string                                             
-defaultHoverBg            string                                             
-defaultHoverBorderColor   string                                             
-defaultHoverColor         string                                             
-defaultShadow             string                                             
-fontWeight                FontWeight | undefined                             
-ghostBg                   string                                             
-iconGap                   Gap<string | number> | undefined                   
-linkHoverBg               string                                             
-onlyIconSize              string | number                                    
-onlyIconSizeLG            string | number                                    
-onlyIconSizeSM            string | number                                    
-paddingInline             PaddingInline<string | number> | undefined         
-paddingInlineLG           PaddingInline<string | number> | undefined         
-paddingInlineSM           PaddingInline<string | number> | undefined         
-primaryColor              string                                             
-primaryShadow             string                                             
-solidTextColor            string                                             
-textHoverBg               string                                             
-textTextActiveColor       string                                             
-textTextColor             string                                             
+Token                     类型                                          默认值
+------------------------  ------------------------------------------  ---
+contentFontSize           number                                         
+contentFontSizeLG         number                                         
+contentFontSizeSM         number                                         
+dangerColor               string                                         
+dangerShadow              string                                         
+dashedBgDisabled          string                                         
+defaultActiveBg           string                                         
+defaultActiveBorderColor  string                                         
+defaultActiveColor        string                                         
+defaultBg                 string                                         
+defaultBgDisabled         string                                         
+defaultBorderColor        string                                         
+defaultColor              string                                         
+defaultGhostBorderColor   string                                         
+defaultGhostColor         string                                         
+defaultHoverBg            string                                         
+defaultHoverBorderColor   string                                         
+defaultHoverColor         string                                         
+defaultShadow             string                                         
+fontWeight                FontWeight | undefined                         
+ghostBg                   string                                         
+iconGap                   Gap<string | number> | undefined               
+linkHoverBg               string                                         
+onlyIconSize              string | number                                
+onlyIconSizeLG            string | number                                
+onlyIconSizeSM            string | number                                
+paddingInline             PaddingInline<string | number> | undefined     
+paddingInlineLG           PaddingInline<string | number> | undefined     
+paddingInlineSM           PaddingInline<string | number> | undefined     
+primaryColor              string                                         
+primaryShadow             string                                         
+solidTextColor            string                                         
+textHoverBg               string                                         
+textTextActiveColor       string                                         
+textTextColor             string                                         
 textTextHoverColor        string"
 `;
 
