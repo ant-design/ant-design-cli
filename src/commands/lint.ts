@@ -179,7 +179,6 @@ function lintFile(
         }
 
         if ((!only || only === 'performance') &&
-            source === 'antd' &&
             (spec.type === 'ImportDefaultSpecifier' || spec.type === 'ImportNamespaceSpecifier')) {
           report('performance', 'error', lineOf(node),
             'Avoid wildcard import from antd. Use named imports: `import { Button } from \'antd\'`');
