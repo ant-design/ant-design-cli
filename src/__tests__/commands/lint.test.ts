@@ -620,7 +620,21 @@ const App = () => <DatePicker popupClassName="custom" />;
       expect(issues).toHaveLength(1);
     });
 
-    it('skips wrapper subpath default import in minimal mode', async () => {
+    it('detects wildcard import from configured wrapper root', async () => {
+      makeTmpFile(
+        'wrapper-wildcard.tsx',
+        `import * as Shared from '@shared-components';
+
+const App = () => <Shared.Button />;
+`,
+      );
+      const data = parseJson(await runLint([join(tmpDir, 'wrapper-wildcard.tsx')], 'json', '5.29.0', ['@shared-components']));
+      const issues = data.issues.filter((i: any) => i.rule === 'performance' && i.message.includes('@shared-components'));
+      expect(issues).toHaveLength(1);
+      expect(issues[0].severity).toBe('error');
+    });
+
+    it('detects wildcard import from configured wrapper subpath', async () => {
       makeTmpFile(
         'wrapper-subpath.tsx',
         `import DatePicker from '@shared-components/DatePicker';
@@ -629,7 +643,9 @@ const App = () => <DatePicker popupClassName="custom" />;
 `,
       );
       const data = parseJson(await runLint([join(tmpDir, 'wrapper-subpath.tsx')], 'json', '5.29.0', ['@shared-components']));
-      expect(data.issues).toHaveLength(0);
+      const issues = data.issues.filter((i: any) => i.rule === 'performance' && i.message.includes('@shared-components/DatePicker'));
+      expect(issues).toHaveLength(1);
+      expect(issues[0].severity).toBe('error');
     });
 
     it('skips wrapper imports by default when no import source is configured', async () => {

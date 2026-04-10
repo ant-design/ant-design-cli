@@ -437,7 +437,7 @@ Note: This is complementary to ESLint. `antd lint` focuses on antd-specific know
   - Typography.Text `ellipsis` with `expandable` / `rows` (not supported)
   - Radio `optionType` on Radio (only on Radio.Group)
   - TreeSelect `multiple={false}` + `treeCheckable` conflict
-- **performance** — Wildcard imports, disabling virtual scroll on Select
+- **performance** — Wildcard imports from `antd`, `antd/*`, configured `--import-source` roots, or their subpaths, disabling virtual scroll on Select
 
 #### `antd migrate <from> <to>`
 
