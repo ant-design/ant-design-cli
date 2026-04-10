@@ -396,7 +396,12 @@ antd lint --only a11y               # only check accessibility
 antd lint --only usage              # only check usage mistakes
 antd lint --only performance        # only check performance
 antd lint --format json
+antd lint --only deprecated --format json --import-source @shared-components
 ```
+
+Options:
+- `--only <category>` — limit checks to `deprecated`, `a11y`, `usage`, or `performance`
+- `--import-source <source>` — treat additional import source roots as antd component entrypoints; repeat the flag for multiple wrapper roots. `antd` remains enabled by default.
 
 JSON output:
 ```json

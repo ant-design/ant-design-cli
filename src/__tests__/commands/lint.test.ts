@@ -15,6 +15,7 @@ async function runLint(
   args: string[] = [],
   format: string = 'json',
   version: string = '5.20.0',
+  importSources: string[] = [],
 ): Promise<string> {
   const program = new Command();
   program.option('--format <format>', '', format);
@@ -22,7 +23,8 @@ async function runLint(
   program.option('--lang <lang>', '', 'en');
   registerLintCommand(program);
   const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-  await program.parseAsync(['node', 'test', 'lint', ...args]);
+  const importArgs = importSources.flatMap((source) => ['--import-source', source]);
+  await program.parseAsync(['node', 'test', 'lint', ...args, ...importArgs]);
   const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
   logSpy.mockRestore();
   return output;
@@ -600,6 +602,67 @@ const App = () => (
       expect(alertIssue!.line).toBe(5);
       expect(dividerIssue!.line).toBe(6);
       expect(spaceIssue!.line).toBe(7);
+    });
+  });
+
+  // --- Configurable import sources ---
+  describe('configurable import sources', () => {
+    it('detects deprecated props from configured wrapper root import', async () => {
+      makeTmpFile(
+        'wrapper-root.tsx',
+        `import { DatePicker } from '@shared-components';
+
+const App = () => <DatePicker popupClassName="custom" />;
+`,
+      );
+      const data = parseJson(await runLint([join(tmpDir, 'wrapper-root.tsx')], 'json', '5.29.0', ['@shared-components']));
+      const issues = data.issues.filter((i: any) => i.rule === 'deprecated' && i.message.includes('DatePicker') && i.message.includes('popupClassName'));
+      expect(issues).toHaveLength(1);
+    });
+
+    it('skips wrapper subpath default import in minimal mode', async () => {
+      makeTmpFile(
+        'wrapper-subpath.tsx',
+        `import DatePicker from '@shared-components/DatePicker';
+
+const App = () => <DatePicker popupClassName="custom" />;
+`,
+      );
+      const data = parseJson(await runLint([join(tmpDir, 'wrapper-subpath.tsx')], 'json', '5.29.0', ['@shared-components']));
+      expect(data.issues).toHaveLength(0);
+    });
+
+    it('skips wrapper imports by default when no import source is configured', async () => {
+      makeTmpFile(
+        'wrapper-default-skip.tsx',
+        `import { DatePicker } from '@shared-components';
+
+const App = () => <DatePicker popupClassName="custom" />;
+`,
+      );
+      const data = parseJson(await runLint([join(tmpDir, 'wrapper-default-skip.tsx')], 'json', '5.29.0'));
+      expect(data.issues).toHaveLength(0);
+    });
+
+    it('supports multiple configured import sources', async () => {
+      makeTmpFile(
+        'wrapper-multiple.tsx',
+        `import { DatePicker } from '@shared-components';
+import { Divider } from '@another-ui';
+
+const App = () => (
+  <>
+    <DatePicker popupClassName="custom" />
+    <Divider type="vertical" />
+  </>
+);
+`,
+      );
+      const data = parseJson(await runLint([join(tmpDir, 'wrapper-multiple.tsx'), '--only', 'deprecated'], 'json', '6.0.0', ['@shared-components', '@another-ui']));
+      const datePickerIssues = data.issues.filter((i: any) => i.message.includes('DatePicker') && i.message.includes('popupClassName'));
+      const dividerIssues = data.issues.filter((i: any) => i.message.includes('Divider') && i.message.includes('type'));
+      expect(datePickerIssues).toHaveLength(1);
+      expect(dividerIssues).toHaveLength(1);
     });
   });
 
