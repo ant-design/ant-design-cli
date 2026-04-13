@@ -342,7 +342,10 @@ antd usage -f Button                # 过滤特定组件
 antd lint ./src
 antd lint ./src --only deprecated
 antd lint ./src --only a11y
+antd lint ./src --only deprecated --format json --antd-alias @shared-components
 ```
+
+使用 `--antd-alias <source>` 可以把额外包名视为 `antd` 的别名；可重复传入多个包装包名，且默认仍会匹配 `antd`。
 
 ### `antd migrate <from> <to>`
 

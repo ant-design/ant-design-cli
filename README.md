@@ -342,7 +342,10 @@ Four rule categories: `deprecated`, `a11y`, `performance`, `best-practice`. Depr
 antd lint ./src
 antd lint ./src --only deprecated
 antd lint ./src --only a11y
+antd lint ./src --only deprecated --format json --antd-alias @shared-components
 ```
+
+Use `--antd-alias <source>` to treat additional package names as aliases of `antd`. Repeat the flag for multiple wrapper packages; `antd` remains enabled by default.
 
 ### `antd migrate <from> <to>`
 
