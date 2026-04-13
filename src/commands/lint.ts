@@ -108,9 +108,31 @@ function createLineMapper(source: string): (offset: number) => number {
   };
 }
 
+function normalizeAntdAliases(antdAliases?: string[]): string[] {
+  const normalized = (antdAliases ?? [])
+    .flatMap((source) => source.split(','))
+    .map((source) => source.trim())
+    .filter(Boolean);
+
+  return Array.from(new Set(['antd', ...normalized]));
+}
+
+function matchesAntdAlias(source: string, antdAliases: string[]): boolean {
+  return antdAliases.some((antdAlias) => source === antdAlias || source.startsWith(`${antdAlias}/`));
+}
+
+function mayContainAntdAlias(content: string, antdAliases: string[]): boolean {
+  return antdAliases.some((antdAlias) => content.includes(antdAlias));
+}
+
+function collectAntdAlias(source: string, previous: string[]): string[] {
+  return [...previous, source];
+}
+
 function lintFile(
   filePath: string,
   deprecatedMap: Map<string, DeprecatedInfo[]>,
+  antdAliases: string[],
   only?: string,
 ): LintIssue[] {
   let content: string;
@@ -122,8 +144,8 @@ function lintFile(
   }
   /* v8 ignore stop */
 
-  // Fast pre-check: skip files that don't reference antd at all
-  if (!content.includes('antd')) return [];
+  // Fast pre-check: skip files that don't reference configured antd aliases
+  if (!mayContainAntdAlias(content, antdAliases)) return [];
 
   const result = parseSync(filePath, content);
   if (result.errors.length > 0) return [];
@@ -145,7 +167,7 @@ function lintFile(
   const visitor = new Visitor({
     ImportDeclaration(node: any) {
       const source = node.source.value;
-      if (source !== 'antd' && !source.startsWith('antd/')) return;
+      if (!matchesAntdAlias(source, antdAliases)) return;
 
       if (node.importKind === 'type') return;
 
@@ -159,7 +181,7 @@ function lintFile(
         if ((!only || only === 'performance') &&
             (spec.type === 'ImportDefaultSpecifier' || spec.type === 'ImportNamespaceSpecifier')) {
           report('performance', 'error', lineOf(node),
-            'Avoid wildcard import from antd. Use named imports: `import { Button } from \'antd\'`');
+            `Avoid wildcard import from ${source}. Use named imports: \`import { Button } from '${source}'\``);
         }
       }
     },
@@ -314,18 +336,20 @@ export function registerLintCommand(program: Command): void {
     .command('lint [target]')
     .description('Check antd usage against best practices')
     .option('--only <category>', 'Only check specific category (deprecated, a11y, usage, performance)')
-    .action((target: string | undefined, cmdOpts: { only?: string }) => {
+    .option('--antd-alias <source>', 'Treat additional package names as aliases of antd imports', collectAntdAlias, [])
+    .action((target: string | undefined, cmdOpts: { only?: string; antdAlias?: string[] }) => {
       const opts = program.opts<GlobalOptions>();
       const targetPath = target || '.';
       const versionInfo = detectVersion(opts.version);
       const store = loadMetadataForVersion(versionInfo.version);
       const deprecatedMap = getDeprecatedProps(store);
+      const antdAliases = normalizeAntdAliases(cmdOpts.antdAlias);
 
       const files = collectFiles(targetPath);
       const allIssues: LintIssue[] = [];
 
       for (const file of files) {
-        allIssues.push(...lintFile(file, deprecatedMap, cmdOpts.only));
+        allIssues.push(...lintFile(file, deprecatedMap, antdAliases, cmdOpts.only));
       }
 
       const summary = {

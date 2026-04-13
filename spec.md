@@ -396,7 +396,12 @@ antd lint --only a11y               # only check accessibility
 antd lint --only usage              # only check usage mistakes
 antd lint --only performance        # only check performance
 antd lint --format json
+antd lint --only deprecated --format json --antd-alias @shared-components
 ```
+
+Options:
+- `--only <category>` — limit checks to `deprecated`, `a11y`, `usage`, or `performance`
+- `--antd-alias <source>` — treat additional package names as aliases of `antd`; repeat the flag for multiple wrapper packages. `antd` remains enabled by default.
 
 JSON output:
 ```json
@@ -432,7 +437,7 @@ Note: This is complementary to ESLint. `antd lint` focuses on antd-specific know
   - Typography.Text `ellipsis` with `expandable` / `rows` (not supported)
   - Radio `optionType` on Radio (only on Radio.Group)
   - TreeSelect `multiple={false}` + `treeCheckable` conflict
-- **performance** — Wildcard imports, disabling virtual scroll on Select
+- **performance** — Wildcard imports from `antd`, `antd/*`, configured `--antd-alias` packages, or their subpaths, disabling virtual scroll on Select
 
 #### `antd migrate <from> <to>`
 
