@@ -108,8 +108,8 @@ function createLineMapper(source: string): (offset: number) => number {
   };
 }
 
-function normalizeImportSources(importSources?: string[]): string[] {
-  const normalized = (importSources ?? [])
+function normalizeAntdAliases(antdAliases?: string[]): string[] {
+  const normalized = (antdAliases ?? [])
     .flatMap((source) => source.split(','))
     .map((source) => source.trim())
     .filter(Boolean);
@@ -117,22 +117,22 @@ function normalizeImportSources(importSources?: string[]): string[] {
   return Array.from(new Set(['antd', ...normalized]));
 }
 
-function matchesImportSource(source: string, importSources: string[]): boolean {
-  return importSources.some((importSource) => source === importSource || source.startsWith(`${importSource}/`));
+function matchesAntdAlias(source: string, antdAliases: string[]): boolean {
+  return antdAliases.some((antdAlias) => source === antdAlias || source.startsWith(`${antdAlias}/`));
 }
 
-function mayContainImportSource(content: string, importSources: string[]): boolean {
-  return importSources.some((importSource) => content.includes(importSource));
+function mayContainAntdAlias(content: string, antdAliases: string[]): boolean {
+  return antdAliases.some((antdAlias) => content.includes(antdAlias));
 }
 
-function collectImportSource(source: string, previous: string[]): string[] {
+function collectAntdAlias(source: string, previous: string[]): string[] {
   return [...previous, source];
 }
 
 function lintFile(
   filePath: string,
   deprecatedMap: Map<string, DeprecatedInfo[]>,
-  importSources: string[],
+  antdAliases: string[],
   only?: string,
 ): LintIssue[] {
   let content: string;
@@ -144,8 +144,8 @@ function lintFile(
   }
   /* v8 ignore stop */
 
-  // Fast pre-check: skip files that don't reference configured import sources
-  if (!mayContainImportSource(content, importSources)) return [];
+  // Fast pre-check: skip files that don't reference configured antd aliases
+  if (!mayContainAntdAlias(content, antdAliases)) return [];
 
   const result = parseSync(filePath, content);
   if (result.errors.length > 0) return [];
@@ -167,7 +167,7 @@ function lintFile(
   const visitor = new Visitor({
     ImportDeclaration(node: any) {
       const source = node.source.value;
-      if (!matchesImportSource(source, importSources)) return;
+      if (!matchesAntdAlias(source, antdAliases)) return;
 
       if (node.importKind === 'type') return;
 
@@ -336,20 +336,20 @@ export function registerLintCommand(program: Command): void {
     .command('lint [target]')
     .description('Check antd usage against best practices')
     .option('--only <category>', 'Only check specific category (deprecated, a11y, usage, performance)')
-    .option('--import-source <source>', 'Treat additional import source roots as antd component entrypoints', collectImportSource, [])
-    .action((target: string | undefined, cmdOpts: { only?: string; importSource?: string[] }) => {
+    .option('--antd-alias <source>', 'Treat additional package names as aliases of antd imports', collectAntdAlias, [])
+    .action((target: string | undefined, cmdOpts: { only?: string; antdAlias?: string[] }) => {
       const opts = program.opts<GlobalOptions>();
       const targetPath = target || '.';
       const versionInfo = detectVersion(opts.version);
       const store = loadMetadataForVersion(versionInfo.version);
       const deprecatedMap = getDeprecatedProps(store);
-      const importSources = normalizeImportSources(cmdOpts.importSource);
+      const antdAliases = normalizeAntdAliases(cmdOpts.antdAlias);
 
       const files = collectFiles(targetPath);
       const allIssues: LintIssue[] = [];
 
       for (const file of files) {
-        allIssues.push(...lintFile(file, deprecatedMap, importSources, cmdOpts.only));
+        allIssues.push(...lintFile(file, deprecatedMap, antdAliases, cmdOpts.only));
       }
 
       const summary = {

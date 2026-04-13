@@ -15,7 +15,7 @@ async function runLint(
   args: string[] = [],
   format: string = 'json',
   version: string = '5.20.0',
-  importSources: string[] = [],
+  antdAliases: string[] = [],
 ): Promise<string> {
   const program = new Command();
   program.option('--format <format>', '', format);
@@ -23,8 +23,8 @@ async function runLint(
   program.option('--lang <lang>', '', 'en');
   registerLintCommand(program);
   const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-  const importArgs = importSources.flatMap((source) => ['--import-source', source]);
-  await program.parseAsync(['node', 'test', 'lint', ...args, ...importArgs]);
+  const aliasArgs = antdAliases.flatMap((source) => ['--antd-alias', source]);
+  await program.parseAsync(['node', 'test', 'lint', ...args, ...aliasArgs]);
   const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
   logSpy.mockRestore();
   return output;
