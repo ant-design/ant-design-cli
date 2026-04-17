@@ -401,6 +401,14 @@ antd bug-cli --title "..." --submit
 
 **Version auto-detection**: `--version` flag → `node_modules/antd` → `package.json` dependencies → fallback `5.24.0`
 
+### Environment Variables
+
+| Variable | Description |
+|---|---|
+| `ANTD_NO_AUTO_REPORT=1` | Disable bug-reporting suggestions from AI agents (see [#82](https://github.com/ant-design/ant-design-cli/issues/82)) |
+| `NO_UPDATE_CHECK=1` | Skip the silent version update check |
+| `CI=1` | Skip the silent version update check (same as `NO_UPDATE_CHECK=1`) |
+
 <br>
 
 ## 📄 License

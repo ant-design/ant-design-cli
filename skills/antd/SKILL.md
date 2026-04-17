@@ -164,7 +164,7 @@ Collects: OS, Node, package managers (npm/pnpm/yarn/bun/utoo), npm registry, bro
 
 ### 9. Reporting antd bugs
 
-When you encounter a confirmed antd component bug that can't be resolved locally:
+When the user asks you to report an antd bug:
 
 ```bash
 # Step 0: Collect environment info for reference (optional — antd bug already embeds basic env)
@@ -190,23 +190,12 @@ antd bug --title "DatePicker crashes when selecting date" \
   --submit
 ```
 
-### 10. Auto-reporting CLI issues
+### 10. Reporting CLI issues
 
-**IMPORTANT: Whenever you use any `antd` CLI command and notice something wrong, you should proactively initiate a bug report using `antd bug-cli`.**
-
-Trigger conditions — report a CLI bug when you observe any of these:
-- A command **crashes or exits with an unexpected error**
-- A command **returns clearly incorrect data** (e.g. `antd info Button` shows wrong props, missing props, or props from the wrong version)
-- A command's **output doesn't match its documented behavior** (e.g. `--format json` returns non-JSON, `--version X` is ignored)
-- A command **returns empty or missing data** when it shouldn't (e.g. `antd demo Button` returns no demos, `antd token Button` returns no tokens for v5+)
-- **Inconsistencies between commands** (e.g. `antd list` shows a component but `antd info` says it doesn't exist)
-
-**Workflow:**
-1. You notice something wrong while using the CLI
-2. Gather evidence: the exact command you ran, what was returned, and what you expected
-3. Preview the bug report for the user:
+When the user asks you to report a CLI bug, or explicitly requests help filing one:
 
 ```bash
+# Preview the bug report for the user
 antd bug-cli --title "antd info Button returns wrong props for v5.12.0" \
   --description "When querying Button props for version 5.12.0, the output includes props that don't exist in that version" \
   --steps "1. Run: antd info Button --version 5.12.0 --format json" \
@@ -215,8 +204,7 @@ antd bug-cli --title "antd info Button returns wrong props for v5.12.0" \
   --format json
 ```
 
-4. Show the report to the user: "I noticed an issue with the CLI while working. Here's a bug report — shall I submit it?"
-5. Submit after user confirms:
+Show the report to the user and confirm before submitting:
 
 ```bash
 antd bug-cli --title "antd info Button returns wrong props for v5.12.0" \
@@ -227,7 +215,7 @@ antd bug-cli --title "antd info Button returns wrong props for v5.12.0" \
   --submit
 ```
 
-**Key principle:** You are a quality feedback loop for the CLI. Don't silently work around CLI issues — report them so they get fixed. Always confirm with the user before submitting.
+**Opt-out:** If the environment variable `ANTD_NO_AUTO_REPORT=1` is set, skip all bug-reporting suggestions entirely — do not suggest `antd bug` or `antd bug-cli` unless the user directly asks.
 
 ### 11. Using as MCP server
 
@@ -262,5 +250,5 @@ This provides 7 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_
 3. **Use `--format json`** — Every command supports it. Parse the JSON output rather than regex-matching text output.
 4. **Check before suggesting migration** — Run `antd changelog <v1> <v2>` and `antd migrate` before advising on version upgrades.
 5. **Lint after changes** — After writing or modifying antd code, run `antd lint` on the changed files to catch deprecated or problematic usage.
-6. **Report antd bugs** — First run `antd env` to capture the full environment, then use `antd bug` to report. Always preview first, get user confirmation, then submit.
-7. **Auto-report CLI issues** — If any `antd` command crashes, returns wrong data, or behaves inconsistently, proactively use `antd bug-cli` to report it. You are the quality feedback loop for the CLI — don't silently work around issues.
+6. **Report antd bugs** — When the user asks to report an antd bug, use `antd bug`. Always preview first, get user confirmation, then submit.
+7. **Report CLI issues** — When the user asks about a CLI problem, use `antd bug-cli` to help them file a report. Always preview first, get user confirmation, then submit.

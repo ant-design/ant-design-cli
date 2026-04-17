@@ -401,6 +401,14 @@ antd bug-cli --title "..." --submit
 
 **版本自动检测**：`--version` 参数 → `node_modules/antd` → `package.json` 依赖声明 → 回退 `5.24.0`
 
+### 环境变量
+
+| 变量 | 说明 |
+|---|---|
+| `ANTD_NO_AUTO_REPORT=1` | 禁用 AI Agent 的 Bug 上报建议（详见 [#82](https://github.com/ant-design/ant-design-cli/issues/82)） |
+| `NO_UPDATE_CHECK=1` | 跳过静默版本更新检查 |
+| `CI=1` | 跳过静默版本更新检查（同 `NO_UPDATE_CHECK=1`） |
+
 <br>
 
 ## 📄 开源协议

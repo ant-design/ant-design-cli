@@ -12,7 +12,8 @@ const SHARED_TOOL_WORKFLOW = `## Tool usage workflow
 ## Rules
 - Avoid duplicate tool calls — do not call the same tool with the same parameters twice
 - Always query component docs before generating code that uses the component
-- Prefer reading real documentation over guessing API usage`;
+- Prefer reading real documentation over guessing API usage
+- Do not suggest filing bug reports (antd bug / antd bug-cli) unless the user explicitly asks. If the user has set ANTD_NO_AUTO_REPORT=1, never suggest reporting.`;
 
 export const ANTD_EXPERT_PROMPT = `You are an expert assistant for Ant Design (antd), a React UI component library.
 

@@ -703,6 +703,7 @@ After each command completes, the CLI silently checks whether a newer version is
 **Behavior details:**
 
 - Skipped when `CI=1` or `NO_UPDATE_CHECK=1` is set
+- Bug-reporting suggestions in SKILL.md and MCP prompts are skipped when `ANTD_NO_AUTO_REPORT=1` is set
 - Uses `registry.npmjs.org` with a 3 s timeout; failures are silent
 - Output goes to **stderr**, so `--format json` stdout is never polluted
 - No new production dependencies — uses only built-in Node modules (`node:https`, `node:fs`, `node:os`, `node:path`)
