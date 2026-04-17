@@ -2,7 +2,23 @@
 
 ## [6.3.6](https://github.com/ant-design/ant-design-cli/compare/v6.3.5...v6.3.6) (2026-04-17)
 
-- Update antd metadata ([v4@4.24.16](https://github.com/ant-design/ant-design-cli/compare/v6.3.5...v6.3.6#diff-0f73f4b6da46cd62e857a1f41ea51e697389f2c62a0775fcfc545edd653c5e2c), [v5@5.29.3](https://github.com/ant-design/ant-design-cli/compare/v6.3.5...v6.3.6#diff-6b390e384eeea7f593730f71f071bf947ec0fac7a19f6d32b91e13191b177a58), [v6@6.3.6](https://github.com/ant-design/ant-design-cli/compare/v6.3.5...v6.3.6#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+### New Features
+
+- Add antd v3 support — `antd list`, `antd info`, `antd doc`, `antd demo`, `antd migrate 3 4` now work with v3 projects ([#77](https://github.com/ant-design/ant-design-cli/pull/77))
+- Add `--antd-alias` flag to `antd lint` for recognizing wrapper import sources ([#81](https://github.com/ant-design/ant-design-cli/pull/81))
+- Enhance `antd env` with full envinfo output ([#75](https://github.com/ant-design/ant-design-cli/pull/75))
+- Add MCP tool annotations for better IDE integration ([#79](https://github.com/ant-design/ant-design-cli/pull/79))
+
+### Bug Fixes
+
+- Fix `antd token` outputting plain text instead of valid JSON when no tokens available ([#80](https://github.com/ant-design/ant-design-cli/pull/80))
+- Fix sync workflow never detecting new antd versions ([#83](https://github.com/ant-design/ant-design-cli/pull/83))
+- Fix AI assistant proactively suggesting bug reports; bug reporting is now user-initiated only, with `ANTD_NO_AUTO_REPORT=1` to fully opt out ([#85](https://github.com/ant-design/ant-design-cli/pull/85), closes [#82](https://github.com/ant-design/ant-design-cli/issues/82))
+
+### Other Changes
+
+- Update antd metadata ([v6@6.3.6](https://github.com/ant-design/ant-design-cli/compare/v6.3.5...v6.3.6#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+- Require Node.js >= 20 (Commander v14 compatibility) ([#76](https://github.com/ant-design/ant-design-cli/pull/76))
 
 
 ## [6.3.5](https://github.com/ant-design/ant-design-cli/compare/v6.3.5-beta.0...v6.3.5) (2026-03-30)

@@ -11,11 +11,13 @@ import { resolve } from 'node:path';
 const GH_TOKEN = process.env.GH_TOKEN;
 
 function run(cmd: string, options?: { cwd?: string; stdio?: 'pipe' | 'inherit' }): string {
-  return execSync(cmd, {
+  const result = execSync(cmd, {
     encoding: 'utf-8',
     stdio: options?.stdio ?? 'pipe',
     cwd: options?.cwd,
-  }).trim();
+  });
+  // execSync returns null when stdio is 'inherit'
+  return result?.trim() ?? '';
 }
 
 function getNpmVersion(pkgName: string, version: string): string | null {
@@ -38,10 +40,16 @@ function main() {
     process.exit(0);
   }
 
-  // Collect version info for changelog
+  // Collect version info for changelog — only include versions that actually changed
   const versions: string[] = [];
   for (const major of [4, 5, 6]) {
     const data = JSON.parse(readFileSync(`data/v${major}.json`, 'utf-8'));
+    try {
+      const oldData = JSON.parse(run(`git show HEAD:data/v${major}.json`));
+      if (data.version === oldData.version) continue;
+    } catch {
+      // New file, include it
+    }
     versions.push(`v${major}@${data.version}`);
   }
   const versionsStr = versions.join(', ');
