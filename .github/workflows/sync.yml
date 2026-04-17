@@ -22,24 +22,18 @@ jobs:
 
       - run: npm ci
 
-      - name: Check if version already published
+      - name: Check if sync needed
         id: check-version
-        run: |
-          CLI_VERSION=$(node -p "JSON.parse(require('fs').readFileSync('data/v6.json','utf8')).version")
-          if npm view "@ant-design/cli@${CLI_VERSION}" version >/dev/null 2>&1; then
-            echo "Version ${CLI_VERSION} already published to npm, exiting"
-            exit 0
-          fi
-          echo "needs_publish=true" >> $GITHUB_OUTPUT
+        run: npx tsx scripts/check-sync-needed.ts
 
       - name: Clone antd repo (shallow, filter tree)
-        if: steps.check-version.outputs.needs_publish == 'true'
+        if: steps.check-version.outputs.needs_sync == 'true'
         run: |
           git clone --filter=tree:0 --no-checkout \
             https://github.com/ant-design/ant-design.git antd-source
 
       - name: Sync v4, v5, v6 metadata
-        if: steps.check-version.outputs.needs_publish == 'true'
+        if: steps.check-version.outputs.needs_sync == 'true'
         run: npx tsx scripts/sync.ts --antd-dir antd-source
 
       - name: Build and publish
