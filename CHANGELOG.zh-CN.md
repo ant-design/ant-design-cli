@@ -2,7 +2,23 @@
 
 ## [6.3.6](https://github.com/ant-design/ant-design-cli/compare/v6.3.5...v6.3.6) (2026-04-17)
 
-- 同步 antd 元数据 ([v4@4.24.16](https://github.com/ant-design/ant-design-cli/compare/v6.3.5...v6.3.6#diff-0f73f4b6da46cd62e857a1f41ea51e697389f2c62a0775fcfc545edd653c5e2c), [v5@5.29.3](https://github.com/ant-design/ant-design-cli/compare/v6.3.5...v6.3.6#diff-6b390e384eeea7f593730f71f071bf947ec0fac7a19f6d32b91e13191b177a58), [v6@6.3.6](https://github.com/ant-design/ant-design-cli/compare/v6.3.5...v6.3.6#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+### 新功能
+
+- 新增 antd v3 支持 — `antd list`、`antd info`、`antd doc`、`antd demo`、`antd migrate 3 4` 现可用于 v3 项目 ([#77](https://github.com/ant-design/ant-design-cli/pull/77))
+- `antd lint` 新增 `--antd-alias` 参数，支持识别二次封装的 import 来源 ([#81](https://github.com/ant-design/ant-design-cli/pull/81))
+- `antd env` 增强为完整的环境信息输出 ([#75](https://github.com/ant-design/ant-design-cli/pull/75))
+- MCP 工具新增 annotations，改善 IDE 集成体验 ([#79](https://github.com/ant-design/ant-design-cli/pull/79))
+
+### Bug 修复
+
+- 修复 `antd token` 在无组件 token 时输出纯文本而非有效 JSON 的问题 ([#80](https://github.com/ant-design/ant-design-cli/pull/80))
+- 修复同步工作流无法检测 antd 新版本的问题 ([#83](https://github.com/ant-design/ant-design-cli/pull/83))
+- 修复 AI 助手主动建议提交 Bug 报告的问题；Bug 报告改为仅用户主动触发，新增 `ANTD_NO_AUTO_REPORT=1` 环境变量可完全关闭提示 ([#85](https://github.com/ant-design/ant-design-cli/pull/85), closes [#82](https://github.com/ant-design/ant-design-cli/issues/82))
+
+### 其他变更
+
+- 同步 antd 元数据 ([v6@6.3.6](https://github.com/ant-design/ant-design-cli/compare/v6.3.5...v6.3.6#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+- 最低 Node.js 版本要求提升至 20（Commander v14 兼容性） ([#76](https://github.com/ant-design/ant-design-cli/pull/76))
 
 
 ## 6.3.5
