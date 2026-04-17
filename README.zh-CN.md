@@ -26,7 +26,7 @@
 
 ## 🤔 为什么
 
-Code Agent（Claude Code、Codex、Gemini CLI）在拥有即时 API 数据访问能力时，能写出更好的 antd 代码。这个 CLI 正是为此而生 — **antd v4 / v5 / v6 的每个 Prop、Token、Demo 和 Changelog 条目**，本地打包，毫秒级查询。
+Code Agent（Claude Code、Codex、Gemini CLI）在拥有即时 API 数据访问能力时，能写出更好的 antd 代码。这个 CLI 正是为此而生 — **antd v3 / v4 / v5 / v6 的每个 Prop、Token、Demo 和 Changelog 条目**，本地打包，毫秒级查询。
 
 ```bash
 npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
@@ -37,7 +37,7 @@ npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
 ## ✨ 亮点
 
 - 📦 **完全离线** — 所有元数据随包安装，无需网络请求，无延迟，无 API Key。
-- 🎯 **版本精确** — 跨 v4/v5/v6 的 55+ 小版本快照。查询 `antd@5.3.0` 的精确 API，而非仅 "最新 v5"。
+- 🎯 **版本精确** — 跨 v3/v4/v5/v6 的 55+ 小版本快照。查询 `antd@5.3.0` 的精确 API，而非仅 "最新 v5"。
 - 🤖 **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
 - 🌍 **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
 - 🔮 **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
@@ -115,6 +115,7 @@ antd doctor                         # 诊断项目配置问题
 antd env                            # 收集环境信息用于 Bug 报告
 antd usage ./src                    # 分析项目中的 antd 导入
 antd lint ./src                     # 检查废弃 API 和最佳实践
+antd migrate 3 4                    # v3 → v4 迁移指南
 antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 ```
 
@@ -349,9 +350,10 @@ antd lint ./src --only deprecated --format json --antd-alias @shared-components
 
 ### `antd migrate <from> <to>`
 
-v4→v5 包含 25+ 迁移步骤，v5→v6 包含 30+。每个步骤包含组件名、破坏性标记、搜索正则和前后代码对比。
+v3→v4 包含 15+ 迁移步骤，v4→v5 包含 25+ 迁移步骤，v5→v6 包含 30+。每个步骤包含组件名、破坏性标记、搜索正则和前后代码对比。
 
 ```bash
+antd migrate 3 4                    # v3 → v4 迁移
 antd migrate 4 5                    # 完整迁移清单
 antd migrate 4 5 --component Select # 指定组件
 antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示

@@ -15,7 +15,7 @@ allowed-tools:
 
 # Ant Design CLI
 
-You have access to `@ant-design/cli` — a local CLI tool with bundled antd metadata for v4/v5/v6. Use it to query component knowledge, analyze projects, and guide migrations. All data is offline, no network needed.
+You have access to `@ant-design/cli` — a local CLI tool with bundled antd metadata for v3/v4/v5/v6. Use it to query component knowledge, analyze projects, and guide migrations. All data is offline, no network needed.
 
 ## Setup
 
@@ -83,11 +83,12 @@ antd doctor --format json
 
 ### 4. Migrating between versions
 
-When the user wants to upgrade antd (e.g., v4 → v5):
+When the user wants to upgrade antd (e.g., v3 → v4 or v4 → v5):
 
 ```bash
 # Get full migration checklist
-antd migrate 4 5 --format json
+antd migrate 3 4 --format json    # v3 → v4
+antd migrate 4 5 --format json    # v4 → v5
 
 # Check migration for a specific component
 antd migrate 4 5 --component Select --format json
@@ -258,7 +259,7 @@ This provides 7 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_
 ## Key Rules
 
 1. **Always query before writing** — Don't guess antd APIs from memory. Run `antd info` first.
-2. **Match the user's version** — If the project uses antd 4.x, pass `--version 4.24.0`. The CLI auto-detects from `node_modules` if no flag is given.
+2. **Match the user's version** — If the project uses antd 3.x or 4.x, pass `--version 3.26.0` or `--version 4.24.0`. The CLI auto-detects from `node_modules` if no flag is given.
 3. **Use `--format json`** — Every command supports it. Parse the JSON output rather than regex-matching text output.
 4. **Check before suggesting migration** — Run `antd changelog <v1> <v2>` and `antd migrate` before advising on version upgrades.
 5. **Lint after changes** — After writing or modifying antd code, run `antd lint` on the changed files to catch deprecated or problematic usage.
