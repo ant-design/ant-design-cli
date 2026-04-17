@@ -26,7 +26,7 @@ Query component knowledge, analyze project usage, and guide migrations — fully
 
 ## 🤔 Why
 
-Code agents (Claude Code, Codex, Gemini CLI) write better antd code when they have instant access to the right API data. This CLI gives them exactly that — **every prop, token, demo, and changelog entry for antd v4 / v5 / v6**, bundled locally, queryable in milliseconds.
+Code agents (Claude Code, Codex, Gemini CLI) write better antd code when they have instant access to the right API data. This CLI gives them exactly that — **every prop, token, demo, and changelog entry for antd v3 / v4 / v5 / v6**, bundled locally, queryable in milliseconds.
 
 ```bash
 npx skills add ant-design/ant-design-cli    # install as an agent skill
@@ -37,7 +37,7 @@ npx skills add ant-design/ant-design-cli    # install as an agent skill
 ## ✨ Highlights
 
 - 📦 **Fully offline** — All metadata ships with the package. No network calls, no latency, no API keys.
-- 🎯 **Version-accurate** — 55+ per-minor snapshots across v4/v5/v6. Query the exact API surface of `antd@5.3.0`, not just "latest v5".
+- 🎯 **Version-accurate** — 55+ per-minor snapshots across v3/v4/v5/v6. Query the exact API surface of `antd@5.3.0`, not just "latest v5".
 - 🤖 **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
 - 🌍 **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
 - 🔮 **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
@@ -115,6 +115,7 @@ antd doctor                         # Diagnose project issues
 antd env                            # Collect env info for bug reports
 antd usage ./src                    # Analyze antd imports in project
 antd lint ./src                     # Check deprecated APIs & best practices
+antd migrate 3 4                    # v3 → v4 migration guide
 antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 ```
 
@@ -349,9 +350,10 @@ Use `--antd-alias <source>` to treat additional package names as aliases of `ant
 
 ### `antd migrate <from> <to>`
 
-v4→v5 covers 25+ migration steps; v5→v6 covers 30+. Each step includes component name, breaking flag, search pattern, and before/after code.
+v3→v4 covers 15+ migration steps; v4→v5 covers 25+ migration steps; v5→v6 covers 30+. Each step includes component name, breaking flag, search pattern, and before/after code.
 
 ```bash
+antd migrate 3 4                    # v3 → v4 migration
 antd migrate 4 5                    # full checklist
 antd migrate 4 5 --component Select # component-specific
 antd migrate 4 5 --apply ./src      # generate agent migration prompt
