@@ -1,0 +1,38 @@
+import Conf, { type Options } from 'conf';
+import envPaths from 'env-paths';
+
+const paths = envPaths('antd-cli');
+
+const shardConfig: Options<any> = {
+  projectName: 'antd-cli',
+  projectSuffix: ''
+}
+
+// ==========================================
+// 1. User config store (stored in config dir)
+// ==========================================
+export interface AppConfig {
+  // Add other user preferences here
+}
+
+export const configStore = new Conf<AppConfig>({
+  ...shardConfig,
+  cwd: paths.config,
+  configName: 'config',
+});
+
+// ==========================================
+// 2. Runtime cache store (stored in cache dir)
+// ==========================================
+export interface AppCache {
+  updateCache?: {
+    lastChecked: number;
+    latestVersion: string;
+  };
+}
+
+export const cacheStore = new Conf<AppCache>({
+  ...shardConfig,
+  cwd: paths.cache,
+  configName: 'cache',
+});

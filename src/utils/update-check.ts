@@ -1,39 +1,10 @@
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
-import { homedir } from 'node:os';
 import { get } from 'node:https';
 import { compare, valid } from '../data/version.js';
+import { cacheStore } from './store.js';
 
 declare const __CLI_VERSION__: string;
 
-interface UpdateCache {
-  lastChecked: number;
-  latestVersion: string;
-}
-
-const CACHE_DIR = join(homedir(), '.config', 'antd-cli');
-const CACHE_FILE = join(CACHE_DIR, 'update-check.json');
 const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
-
-function readCache(): UpdateCache | null {
-  try {
-    if (!existsSync(CACHE_FILE)) return null;
-    return JSON.parse(readFileSync(CACHE_FILE, 'utf-8')) as UpdateCache;
-  } catch {
-    return null;
-  }
-}
-
-function writeCache(cache: UpdateCache): void {
-  try {
-    if (!existsSync(CACHE_DIR)) {
-      mkdirSync(CACHE_DIR, { recursive: true });
-    }
-    writeFileSync(CACHE_FILE, JSON.stringify(cache), 'utf-8');
-  } catch {
-    // ignore write errors
-  }
-}
 
 function fetchLatestVersion(): Promise<string | null> {
   return new Promise((resolve) => {
@@ -89,14 +60,14 @@ export async function checkForUpdate(): Promise<void> {
   if (!valid(currentVersion)) return;
 
   const now = Date.now();
-  const cache = readCache();
+  const cache = cacheStore.get('updateCache') ?? null;
 
   let latestVersion = cache?.latestVersion ?? null;
 
   // Fetch if no cache or cache is stale
   if (!cache || now - cache.lastChecked > CHECK_INTERVAL_MS) {
     const fetched = await fetchLatestVersion();
-    writeCache({
+    cacheStore.set('updateCache', {
       lastChecked: now,
       latestVersion: fetched ?? latestVersion ?? currentVersion,
     });
