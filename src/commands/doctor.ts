@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { output } from '../output/formatter.js';
 import { readJson } from '../utils/scan.js';
 import { satisfies } from '../data/version.js';
+import { getBugVersions, findBugInfo } from '../utils/bug-versions.js';
 
 interface CheckResult {
   name: string;
@@ -428,13 +429,34 @@ function checkEcosystemPeerDeps(ctx: DoctorContext): CheckResult[] {
   });
 }
 
+async function checkBugVersion(ctx: DoctorContext): Promise<CheckResult | null> {
+  if (!ctx.antdPkg?.version) return null;
+
+  const bugVersions = await getBugVersions();
+  if (!bugVersions) return null;
+
+  const hit = findBugInfo(ctx.antdPkg.version, bugVersions);
+  if (!hit) return null;
+
+  return {
+    name: 'bug-version',
+    status: 'fail',
+    severity: 'error',
+    message: `antd ${ctx.antdPkg.version} contains a known critical bug — do NOT use in production (affected range: ${hit.range})`,
+    suggestion: `Upgrade antd immediately to avoid UI breakage or unexpected behavior.\n    Related issues:\n    ${hit.urls.join('\n    ')}`,
+  };
+}
+
 export function registerDoctorCommand(program: Command): void {
   program
     .command('doctor')
     .description('Diagnose project-level antd configuration issues')
-    .action(() => {
+    .action(async () => {
       const opts = program.opts<GlobalOptions>();
       const ctx = buildContext(process.cwd());
+
+      // Start fetching bug versions concurrently while running sync checks
+      const bugVersionCheckPromise = checkBugVersion(ctx);
 
       const checks: CheckResult[] = [
         checkAntdInstalled(ctx),
@@ -449,6 +471,9 @@ export function registerDoctorCommand(program: Command): void {
         checkCssInJs(ctx),
         ...checkEcosystemPeerDeps(ctx),
       ];
+
+      const bugVersionResult = await bugVersionCheckPromise;
+      if (bugVersionResult) checks.unshift(bugVersionResult);
 
       const summary = {
         pass: checks.filter((c) => c.status === 'pass').length,

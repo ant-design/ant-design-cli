@@ -270,4 +270,40 @@ describe('satisfies()', () => {
     expect(satisfies('1.0.0', '||1.x')).toBe(true);
     expect(satisfies('1.0.0', '*')).toBe(true);
   });
+
+  // <= operator
+  it('passes when version is below or equal to <= bound', () => {
+    expect(satisfies('3.10.9', '<=3.10.9')).toBe(true);
+    expect(satisfies('3.10.0', '<= 3.10.9')).toBe(true);
+    expect(satisfies('3.9.0', '<= 3.10.9')).toBe(true);
+  });
+  it('fails when version exceeds <= bound', () => {
+    expect(satisfies('3.11.0', '<= 3.10.9')).toBe(false);
+    expect(satisfies('4.0.0', '<= 3.10.9')).toBe(false);
+  });
+
+  // Compound ranges (real patterns from BUG_VERSIONS.json)
+  it('passes when version falls within compound >= <= range', () => {
+    expect(satisfies('3.10.5', '>= 3.10.0 <=3.10.9')).toBe(true);
+    expect(satisfies('3.10.0', '>= 3.10.0 <=3.10.9')).toBe(true);  // lower bound inclusive
+    expect(satisfies('3.10.9', '>= 3.10.0 <=3.10.9')).toBe(true);  // upper bound inclusive
+    expect(satisfies('5.2.3', '>= 5.2.3 <= 5.3.0')).toBe(true);
+    expect(satisfies('5.3.0', '>= 5.2.3 <= 5.3.0')).toBe(true);
+    expect(satisfies('5.28.1', '>= 5.28.1 <= 5.29.0')).toBe(true);
+  });
+  it('fails when version is outside compound >= <= range', () => {
+    expect(satisfies('3.9.9', '>= 3.10.0 <=3.10.9')).toBe(false);   // below lower
+    expect(satisfies('3.11.0', '>= 3.10.0 <=3.10.9')).toBe(false);  // above upper
+    expect(satisfies('5.2.2', '>= 5.2.3 <= 5.3.0')).toBe(false);
+    expect(satisfies('5.3.1', '>= 5.2.3 <= 5.3.0')).toBe(false);
+    expect(satisfies('5.29.1', '>= 5.28.1 <= 5.29.0')).toBe(false);
+  });
+  it('passes when version falls within compound >= < range (exclusive upper)', () => {
+    expect(satisfies('4.21.6', '>= 4.21.6 < 4.22.0')).toBe(true);
+    expect(satisfies('4.21.9', '>= 4.21.6 < 4.22.0')).toBe(true);
+  });
+  it('fails when version hits exclusive upper bound of >= < range', () => {
+    expect(satisfies('4.22.0', '>= 4.21.6 < 4.22.0')).toBe(false);
+    expect(satisfies('4.21.5', '>= 4.21.6 < 4.22.0')).toBe(false);
+  });
 });

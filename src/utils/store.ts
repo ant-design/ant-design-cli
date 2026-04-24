@@ -29,6 +29,10 @@ export interface AppCache {
     lastChecked: number;
     latestVersion: string;
   };
+  bugVersionsCache?: {
+    lastChecked: number;
+    data: Record<string, string[]>;
+  };
 }
 
 export const cacheStore = new Conf<AppCache>({
