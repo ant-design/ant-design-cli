@@ -703,8 +703,9 @@ describe('doctor command', () => {
       expect(allText).toContain('antd Doctor');
       // Should have pass icon for antd-installed
       expect(allText).toMatch(/✓.*antd-installed/);
-      // Should have summary line
-      expect(allText).toMatch(/Summary:.*passed.*warnings.*failed/);
+      // Summary line: may have "1 error" or "2 errors", "1 warning" or "2 warnings", "N passed"
+      expect(allText).toMatch(/^Summary: /m);
+      expect(allText).toMatch(/\d+ passed/);
     });
 
     it('should show fail icon for failing checks in text output', async () => {

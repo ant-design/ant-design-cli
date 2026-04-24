@@ -494,9 +494,9 @@ export function registerDoctorCommand(program: Command): void {
 
       console.log('');
       const parts = [];
+      if (summary.pass > 0) parts.push(`${summary.pass} passed`);
       if (summary.fail > 0) parts.push(`${summary.fail} error${summary.fail > 1 ? 's' : ''}`);
       if (summary.warn > 0) parts.push(`${summary.warn} warning${summary.warn > 1 ? 's' : ''}`);
-      if (summary.pass > 0) parts.push(`${summary.pass} passed`);
-      console.log(parts.join(', '));
+      console.log(`Summary: ${parts.join(', ')}`);
     });
 }
