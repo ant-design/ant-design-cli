@@ -729,6 +729,23 @@ describe('doctor command', () => {
       expect(allText).toContain('npm install antd');
     });
 
+    it('should render multi-line suggestions with continuation indent', async () => {
+      setupProject(tmpDir, { antdVersion: '5.0.4', reactVersion: '18.2.0' });
+      mockGetBugVersions.mockResolvedValue({
+        '5.0.4': [
+          'https://github.com/ant-design/ant-design/issues/39284',
+          'https://github.com/ant-design/ant-design/issues/39285',
+        ],
+      });
+      const lines = await runDoctor(tmpDir, 'text');
+      const allText = lines.join('\n');
+      // First line of suggestion rendered with → prefix
+      expect(allText).toMatch(/→ Related issues:/);
+      // Continuation lines rendered with plain indent (no →)
+      expect(allText).toMatch(/  · https:\/\/github\.com\/ant-design\/ant-design\/issues\/39284/);
+      expect(allText).toMatch(/  · https:\/\/github\.com\/ant-design\/ant-design\/issues\/39285/);
+    });
+
     it('should produce correct summary counts', async () => {
       setupProject(tmpDir, { antdVersion: '5.12.0', reactVersion: '17.0.2' }); // react fail, cssinjs warn
       const result = await runDoctorJson(tmpDir);
