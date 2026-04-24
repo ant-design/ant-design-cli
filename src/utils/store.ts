@@ -3,7 +3,7 @@ import envPaths from 'env-paths';
 
 const paths = envPaths('antd-cli');
 
-const shardConfig: Options<any> = {
+const sharedConfig: Options<any> = {
   projectName: 'antd-cli',
   projectSuffix: ''
 }
@@ -16,7 +16,7 @@ export interface AppConfig {
 }
 
 export const configStore = new Conf<AppConfig>({
-  ...shardConfig,
+  ...sharedConfig,
   cwd: paths.config,
   configName: 'config',
 });
@@ -36,7 +36,7 @@ export interface AppCache {
 }
 
 export const cacheStore = new Conf<AppCache>({
-  ...shardConfig,
+  ...sharedConfig,
   cwd: paths.cache,
   configName: 'cache',
 });
