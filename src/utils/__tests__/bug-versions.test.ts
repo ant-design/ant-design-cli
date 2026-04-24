@@ -1,6 +1,8 @@
+import { EventEmitter } from 'node:events';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { findBugInfo } from '../bug-versions.js';
 import type { BugVersionsMap } from '../bug-versions.js';
+import { getBugVersions } from '../bug-versions.js';
 
 // Mock store so getBugVersions tests don't touch the filesystem
 const mockCacheGet = vi.fn();
@@ -102,9 +104,6 @@ describe('findBugInfo()', () => {
 });
 
 // ─── getBugVersions ─────────────────────────────────────────────────────────
-
-import { EventEmitter } from 'node:events';
-import { getBugVersions } from '../bug-versions.js';
 
 const SAMPLE_DATA: BugVersionsMap = { '5.0.4': ['https://github.com/example'] };
 
