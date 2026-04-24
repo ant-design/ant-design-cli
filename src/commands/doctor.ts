@@ -87,7 +87,7 @@ function buildContext(cwd: string): DoctorContext {
   return { cwd, antdPkg, antdMajor, projectPkg, reactPkg, cssinjsPkg, iconsPkg, ecosystemPackages };
 }
 
-function checkAntdInstalled(ctx: DoctorContext): CheckResult {
+async function checkAntdInstalled(ctx: DoctorContext): Promise<CheckResult> {
   if (!ctx.antdPkg) {
     return {
       name: 'antd-installed',
@@ -97,6 +97,20 @@ function checkAntdInstalled(ctx: DoctorContext): CheckResult {
       suggestion: 'Run `npm install antd` or `yarn add antd`',
     };
   }
+
+  const bugVersions = await getBugVersions();
+  const hit = bugVersions ? findBugInfo(ctx.antdPkg.version, bugVersions) : null;
+
+  if (hit) {
+    return {
+      name: 'antd-installed',
+      status: 'fail',
+      severity: 'error',
+      message: `antd ${ctx.antdPkg.version} has known bugs (affected range: ${hit.range}) — upgrading to the latest patch release is recommended`,
+      suggestion: `Related issues:\n${hit.urls.map((u) => `· ${u}`).join('\n')}`,
+    };
+  }
+
   return {
     name: 'antd-installed',
     status: 'pass',
@@ -429,24 +443,6 @@ function checkEcosystemPeerDeps(ctx: DoctorContext): CheckResult[] {
   });
 }
 
-async function checkBugVersion(ctx: DoctorContext): Promise<CheckResult | null> {
-  if (!ctx.antdPkg?.version) return null;
-
-  const bugVersions = await getBugVersions();
-  if (!bugVersions) return null;
-
-  const hit = findBugInfo(ctx.antdPkg.version, bugVersions);
-  if (!hit) return null;
-
-  return {
-    name: 'bug-version',
-    status: 'fail',
-    severity: 'error',
-    message: `antd ${ctx.antdPkg.version} contains a known critical bug — do NOT use in production (affected range: ${hit.range})`,
-    suggestion: `Upgrade antd immediately to avoid UI breakage or unexpected behavior.\n    Related issues:\n    ${hit.urls.join('\n    ')}`,
-  };
-}
-
 export function registerDoctorCommand(program: Command): void {
   program
     .command('doctor')
@@ -455,11 +451,8 @@ export function registerDoctorCommand(program: Command): void {
       const opts = program.opts<GlobalOptions>();
       const ctx = buildContext(process.cwd());
 
-      // Start fetching bug versions concurrently while running sync checks
-      const bugVersionCheckPromise = checkBugVersion(ctx);
-
       const checks: CheckResult[] = [
-        checkAntdInstalled(ctx),
+        await checkAntdInstalled(ctx),
         checkReactCompat(ctx),
         checkDuplicateInstall(ctx),
         checkDayjsDuplicate(ctx),
@@ -471,9 +464,6 @@ export function registerDoctorCommand(program: Command): void {
         checkCssInJs(ctx),
         ...checkEcosystemPeerDeps(ctx),
       ];
-
-      const bugVersionResult = await bugVersionCheckPromise;
-      if (bugVersionResult) checks.unshift(bugVersionResult);
 
       const summary = {
         pass: checks.filter((c) => c.status === 'pass').length,
@@ -489,15 +479,24 @@ export function registerDoctorCommand(program: Command): void {
       const ICONS = { pass: '✓', warn: '⚠', fail: '✗' };
       console.log('antd Doctor\n');
 
+      const INDENT = '  ';
       for (const check of checks) {
         const icon = ICONS[check.status];
-        console.log(`  ${icon} [${check.name}] ${check.message}`);
+        console.log(`${INDENT.repeat(1)}${icon} [${check.name}] ${check.message}`);
         if (check.suggestion) {
-          console.log(`    → ${check.suggestion}`);
+          const lines = check.suggestion.split('\n');
+          console.log(`${INDENT.repeat(2)}→ ${lines[0]}`);
+          for (const line of lines.slice(1)) {
+            console.log(`${INDENT.repeat(2)}  ${line}`);
+          }
         }
       }
 
       console.log('');
-      console.log(`Summary: ${summary.pass} passed, ${summary.warn} warnings, ${summary.fail} failed`);
+      const parts = [];
+      if (summary.fail > 0) parts.push(`${summary.fail} error${summary.fail > 1 ? 's' : ''}`);
+      if (summary.warn > 0) parts.push(`${summary.warn} warning${summary.warn > 1 ? 's' : ''}`);
+      if (summary.pass > 0) parts.push(`${summary.pass} passed`);
+      console.log(parts.join(', '));
     });
 }
