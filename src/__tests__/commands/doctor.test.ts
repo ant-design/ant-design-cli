@@ -5,6 +5,14 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { registerDoctorCommand } from '../../commands/doctor.js';
 
+// Mock getBugVersions so doctor tests don't make real network requests.
+// findBugInfo is kept real so compound range matching is exercised.
+const mockGetBugVersions = vi.fn<() => Promise<Record<string, string[]> | null>>();
+vi.mock('../../utils/bug-versions.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../utils/bug-versions.js')>();
+  return { ...actual, getBugVersions: () => mockGetBugVersions() };
+});
+
 function makeTmpDir(): string {
   const dir = join(tmpdir(), `doctor-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
   mkdirSync(dir, { recursive: true });
@@ -164,6 +172,8 @@ describe('doctor command', () => {
 
   beforeEach(() => {
     tmpDir = makeTmpDir();
+    // Default: network unavailable — no bug-version check so existing tests are unaffected
+    mockGetBugVersions.mockResolvedValue(null);
   });
 
   afterEach(() => {
@@ -180,12 +190,56 @@ describe('doctor command', () => {
       expect(check.suggestion).toContain('npm install antd');
     });
 
-    it('should pass when antd is installed', async () => {
+    it('should pass when antd is installed and has no known bugs', async () => {
       setupProject(tmpDir, { antdVersion: '5.12.0', reactVersion: '18.2.0' });
       const result = await runDoctorJson(tmpDir);
       const check = result.checks.find((c: any) => c.name === 'antd-installed');
       expect(check.status).toBe('pass');
       expect(check.message).toContain('5.12.0');
+    });
+
+    it('should fail when installed antd version has known bugs', async () => {
+      setupProject(tmpDir, { antdVersion: '5.0.4', reactVersion: '18.2.0' });
+      mockGetBugVersions.mockResolvedValue({
+        '5.0.4': ['https://github.com/ant-design/ant-design/issues/39284'],
+      });
+      const result = await runDoctorJson(tmpDir);
+      const check = result.checks.find((c: any) => c.name === 'antd-installed');
+      expect(check.status).toBe('fail');
+      expect(check.severity).toBe('error');
+      expect(check.message).toContain('5.0.4');
+      expect(check.message).toContain('known');
+      expect(check.suggestion).toContain('https://github.com/ant-design/ant-design/issues/39284');
+    });
+
+    it('should include the affected range when version matches a compound range', async () => {
+      setupProject(tmpDir, { antdVersion: '5.2.5', reactVersion: '18.2.0' });
+      mockGetBugVersions.mockResolvedValue({
+        '>= 5.2.3 <= 5.3.0': ['https://github.com/ant-design/ant-design/pull/40719'],
+      });
+      const result = await runDoctorJson(tmpDir);
+      const check = result.checks.find((c: any) => c.name === 'antd-installed');
+      expect(check.status).toBe('fail');
+      expect(check.message).toContain('>= 5.2.3 <= 5.3.0');
+    });
+
+    it('should pass when installed version is not in the bug list', async () => {
+      setupProject(tmpDir, { antdVersion: '5.12.0', reactVersion: '18.2.0' });
+      mockGetBugVersions.mockResolvedValue({
+        '5.0.4': ['https://github.com/ant-design/ant-design/issues/39284'],
+      });
+      const result = await runDoctorJson(tmpDir);
+      const check = result.checks.find((c: any) => c.name === 'antd-installed');
+      expect(check.status).toBe('pass');
+    });
+
+    it('should pass when bug version data is unavailable (network failure)', async () => {
+      setupProject(tmpDir, { antdVersion: '5.0.4', reactVersion: '18.2.0' });
+      mockGetBugVersions.mockResolvedValue(null);
+      const result = await runDoctorJson(tmpDir);
+      const check = result.checks.find((c: any) => c.name === 'antd-installed');
+      expect(check.status).toBe('pass');
+      expect(check.message).toContain('5.0.4');
     });
   });
 
@@ -649,8 +703,9 @@ describe('doctor command', () => {
       expect(allText).toContain('antd Doctor');
       // Should have pass icon for antd-installed
       expect(allText).toMatch(/✓.*antd-installed/);
-      // Should have summary line
-      expect(allText).toMatch(/Summary:.*passed.*warnings.*failed/);
+      // Summary line: may have "1 error" or "2 errors", "1 warning" or "2 warnings", "N passed"
+      expect(allText).toMatch(/^Summary: /m);
+      expect(allText).toMatch(/\d+ passed/);
     });
 
     it('should show fail icon for failing checks in text output', async () => {
@@ -672,6 +727,23 @@ describe('doctor command', () => {
       const lines = await runDoctor(tmpDir, 'text');
       const allText = lines.join('\n');
       expect(allText).toContain('npm install antd');
+    });
+
+    it('should render multi-line suggestions with continuation indent', async () => {
+      setupProject(tmpDir, { antdVersion: '5.0.4', reactVersion: '18.2.0' });
+      mockGetBugVersions.mockResolvedValue({
+        '5.0.4': [
+          'https://github.com/ant-design/ant-design/issues/39284',
+          'https://github.com/ant-design/ant-design/issues/39285',
+        ],
+      });
+      const lines = await runDoctor(tmpDir, 'text');
+      const allText = lines.join('\n');
+      // First line of suggestion rendered with → prefix
+      expect(allText).toMatch(/→ Related issues:/);
+      // Continuation lines rendered with plain indent (no →)
+      expect(allText).toMatch(/  · https:\/\/github\.com\/ant-design\/ant-design\/issues\/39284/);
+      expect(allText).toMatch(/  · https:\/\/github\.com\/ant-design\/ant-design\/issues\/39285/);
     });
 
     it('should produce correct summary counts', async () => {
@@ -713,4 +785,6 @@ describe('doctor command', () => {
       expect(result.summary.pass).toBe(result.checks.length);
     });
   });
+
+
 });
