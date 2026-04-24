@@ -190,12 +190,56 @@ describe('doctor command', () => {
       expect(check.suggestion).toContain('npm install antd');
     });
 
-    it('should pass when antd is installed', async () => {
+    it('should pass when antd is installed and has no known bugs', async () => {
       setupProject(tmpDir, { antdVersion: '5.12.0', reactVersion: '18.2.0' });
       const result = await runDoctorJson(tmpDir);
       const check = result.checks.find((c: any) => c.name === 'antd-installed');
       expect(check.status).toBe('pass');
       expect(check.message).toContain('5.12.0');
+    });
+
+    it('should fail when installed antd version has known bugs', async () => {
+      setupProject(tmpDir, { antdVersion: '5.0.4', reactVersion: '18.2.0' });
+      mockGetBugVersions.mockResolvedValue({
+        '5.0.4': ['https://github.com/ant-design/ant-design/issues/39284'],
+      });
+      const result = await runDoctorJson(tmpDir);
+      const check = result.checks.find((c: any) => c.name === 'antd-installed');
+      expect(check.status).toBe('fail');
+      expect(check.severity).toBe('error');
+      expect(check.message).toContain('5.0.4');
+      expect(check.message).toContain('known');
+      expect(check.suggestion).toContain('https://github.com/ant-design/ant-design/issues/39284');
+    });
+
+    it('should include the affected range when version matches a compound range', async () => {
+      setupProject(tmpDir, { antdVersion: '5.2.5', reactVersion: '18.2.0' });
+      mockGetBugVersions.mockResolvedValue({
+        '>= 5.2.3 <= 5.3.0': ['https://github.com/ant-design/ant-design/pull/40719'],
+      });
+      const result = await runDoctorJson(tmpDir);
+      const check = result.checks.find((c: any) => c.name === 'antd-installed');
+      expect(check.status).toBe('fail');
+      expect(check.message).toContain('>= 5.2.3 <= 5.3.0');
+    });
+
+    it('should pass when installed version is not in the bug list', async () => {
+      setupProject(tmpDir, { antdVersion: '5.12.0', reactVersion: '18.2.0' });
+      mockGetBugVersions.mockResolvedValue({
+        '5.0.4': ['https://github.com/ant-design/ant-design/issues/39284'],
+      });
+      const result = await runDoctorJson(tmpDir);
+      const check = result.checks.find((c: any) => c.name === 'antd-installed');
+      expect(check.status).toBe('pass');
+    });
+
+    it('should pass when bug version data is unavailable (network failure)', async () => {
+      setupProject(tmpDir, { antdVersion: '5.0.4', reactVersion: '18.2.0' });
+      mockGetBugVersions.mockResolvedValue(null);
+      const result = await runDoctorJson(tmpDir);
+      const check = result.checks.find((c: any) => c.name === 'antd-installed');
+      expect(check.status).toBe('pass');
+      expect(check.message).toContain('5.0.4');
     });
   });
 
@@ -724,69 +768,5 @@ describe('doctor command', () => {
     });
   });
 
-  describe('bug-version check', () => {
-    it('should fail when installed antd version is a known exact bug version', async () => {
-      setupProject(tmpDir, { antdVersion: '5.0.4', reactVersion: '18.2.0' });
-      mockGetBugVersions.mockResolvedValue({
-        '5.0.4': ['https://github.com/ant-design/ant-design/issues/39284'],
-      });
-      const result = await runDoctorJson(tmpDir);
-      const check = result.checks.find((c: any) => c.name === 'bug-version');
-      expect(check).toBeDefined();
-      expect(check.status).toBe('fail');
-      expect(check.severity).toBe('error');
-      expect(check.message).toContain('5.0.4');
-      expect(check.message).toContain('critical bug');
-      expect(check.suggestion).toContain('https://github.com/ant-design/ant-design/issues/39284');
-    });
 
-    it('should appear as the first check when triggered', async () => {
-      setupProject(tmpDir, { antdVersion: '5.0.4', reactVersion: '18.2.0' });
-      mockGetBugVersions.mockResolvedValue({
-        '5.0.4': ['https://github.com/ant-design/ant-design/issues/39284'],
-      });
-      const result = await runDoctorJson(tmpDir);
-      expect(result.checks[0].name).toBe('bug-version');
-    });
-
-    it('should match a version inside a compound range', async () => {
-      setupProject(tmpDir, { antdVersion: '5.2.5', reactVersion: '18.2.0' });
-      mockGetBugVersions.mockResolvedValue({
-        '>= 5.2.3 <= 5.3.0': ['https://github.com/ant-design/ant-design/pull/40719'],
-      });
-      const result = await runDoctorJson(tmpDir);
-      const check = result.checks.find((c: any) => c.name === 'bug-version');
-      expect(check).toBeDefined();
-      expect(check.status).toBe('fail');
-      expect(check.message).toContain('>= 5.2.3 <= 5.3.0');
-    });
-
-    it('should not appear when installed version is safe', async () => {
-      setupProject(tmpDir, { antdVersion: '5.12.0', reactVersion: '18.2.0' });
-      mockGetBugVersions.mockResolvedValue({
-        '5.0.4': ['https://github.com/ant-design/ant-design/issues/39284'],
-      });
-      const result = await runDoctorJson(tmpDir);
-      const check = result.checks.find((c: any) => c.name === 'bug-version');
-      expect(check).toBeUndefined();
-    });
-
-    it('should skip silently when getBugVersions returns null (network failure)', async () => {
-      setupProject(tmpDir, { antdVersion: '5.0.4', reactVersion: '18.2.0' });
-      mockGetBugVersions.mockResolvedValue(null);
-      const result = await runDoctorJson(tmpDir);
-      const check = result.checks.find((c: any) => c.name === 'bug-version');
-      expect(check).toBeUndefined();
-    });
-
-    it('should skip when antd is not installed', async () => {
-      setupProject(tmpDir, { reactVersion: '18.2.0' });
-      mockGetBugVersions.mockResolvedValue({
-        '5.0.4': ['https://github.com/ant-design/ant-design/issues/39284'],
-      });
-      const result = await runDoctorJson(tmpDir);
-      const check = result.checks.find((c: any) => c.name === 'bug-version');
-      expect(check).toBeUndefined();
-    });
-  });
 });
