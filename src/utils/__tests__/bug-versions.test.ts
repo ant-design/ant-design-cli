@@ -1,5 +1,4 @@
-import { EventEmitter } from 'node:events';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { findBugInfo } from '../bug-versions.js';
 import type { BugVersionsMap } from '../bug-versions.js';
 import { getBugVersions } from '../bug-versions.js';
@@ -15,10 +14,15 @@ vi.mock('../store.js', () => ({
   },
 }));
 
-const mockHttpsGet = vi.fn();
-vi.mock('node:https', () => ({
-  get: (...args: unknown[]) => mockHttpsGet(...args),
-}));
+function setupFetchMock(data: unknown, ok = true) {
+  const fetchMock = vi.fn().mockResolvedValue({
+    ok,
+    status: ok ? 200 : 500,
+    json: () => Promise.resolve(data),
+  });
+  vi.stubGlobal('fetch', fetchMock);
+  return fetchMock;
+}
 
 // ─── findBugInfo ────────────────────────────────────────────────────────────
 
@@ -107,32 +111,21 @@ describe('findBugInfo()', () => {
 
 const SAMPLE_DATA: BugVersionsMap = { '5.0.4': ['https://github.com/example'] };
 
-function setupHttpsMock(body: string, statusCode = 200) {
-  mockHttpsGet.mockImplementation((_url: unknown, _opts: unknown, cb: (res: unknown) => void) => {
-    const res = new EventEmitter() as EventEmitter & { statusCode: number; resume: () => void };
-    res.statusCode = statusCode;
-    res.resume = vi.fn();
-    setTimeout(() => {
-      res.emit('data', Buffer.from(body));
-      res.emit('end');
-    }, 5);
-    cb(res);
-    return new EventEmitter();
-  });
-}
-
 describe('getBugVersions()', () => {
   beforeEach(() => {
-    vi.resetModules();
     mockCacheGet.mockReset().mockReturnValue(undefined);
     mockCacheSet.mockReset();
-    mockHttpsGet.mockReset();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it('returns fetched data and writes cache when no cache exists', async () => {
-    setupHttpsMock(JSON.stringify(SAMPLE_DATA));
+    const fetchMock = setupFetchMock(SAMPLE_DATA);
     const result = await getBugVersions();
     expect(result).toEqual(SAMPLE_DATA);
+    expect(fetchMock).toHaveBeenCalled();
     expect(mockCacheSet).toHaveBeenCalledWith('bugVersionsCache', {
       lastChecked: expect.any(Number),
       data: SAMPLE_DATA,
@@ -140,26 +133,24 @@ describe('getBugVersions()', () => {
   });
 
   it('returns fresh cache without fetching', async () => {
-    mockCacheGet.mockReturnValue({
-      lastChecked: Date.now(),
-      data: SAMPLE_DATA,
-    });
+    const fetchMock = setupFetchMock(SAMPLE_DATA);
+    mockCacheGet.mockReturnValue({ lastChecked: Date.now(), data: SAMPLE_DATA });
     const result = await getBugVersions();
     expect(result).toEqual(SAMPLE_DATA);
-    expect(mockHttpsGet).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('fetches again when cache is stale (> 6h)', async () => {
     const staleData: BugVersionsMap = { '4.0.0': ['https://stale'] };
+    const freshData: BugVersionsMap = { '5.0.4': ['https://fresh'] };
     mockCacheGet.mockReturnValue({
       lastChecked: Date.now() - 7 * 60 * 60 * 1000, // 7 hours ago
       data: staleData,
     });
-    const freshData: BugVersionsMap = { '5.0.4': ['https://fresh'] };
-    setupHttpsMock(JSON.stringify(freshData));
+    const fetchMock = setupFetchMock(freshData);
     const result = await getBugVersions();
     expect(result).toEqual(freshData);
-    expect(mockHttpsGet).toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalled();
   });
 
   it('falls back to stale cache when all fetches fail', async () => {
@@ -168,22 +159,14 @@ describe('getBugVersions()', () => {
       lastChecked: Date.now() - 7 * 60 * 60 * 1000,
       data: staleData,
     });
-    mockHttpsGet.mockImplementation((_url: unknown, _opts: unknown, _cb: unknown) => {
-      const req = new EventEmitter();
-      setTimeout(() => req.emit('error', new Error('offline')), 5);
-      return req;
-    });
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
     const result = await getBugVersions();
     expect(result).toEqual(staleData);
     expect(mockCacheSet).not.toHaveBeenCalled();
   });
 
   it('returns null when no cache and all fetches fail', async () => {
-    mockHttpsGet.mockImplementation((_url: unknown, _opts: unknown, _cb: unknown) => {
-      const req = new EventEmitter();
-      setTimeout(() => req.emit('error', new Error('offline')), 5);
-      return req;
-    });
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
     const result = await getBugVersions();
     expect(result).toBeNull();
   });

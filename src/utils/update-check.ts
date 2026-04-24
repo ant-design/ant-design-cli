@@ -1,4 +1,3 @@
-import { get } from 'node:https';
 import { compare, valid } from '../data/version.js';
 import { cacheStore } from './store.js';
 
@@ -6,45 +5,18 @@ declare const __CLI_VERSION__: string;
 
 const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-function fetchVersionFromUrl(url: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const req = get(url, { timeout: 3000 }, (res) => {
-      // Handle unpkg 302 redirect quickly without downloading body
-      if (res.statusCode === 302 && res.headers.location) {
-        const match = res.headers.location.match(/@ant-design\/cli@([^/]+)/);
-        if (match && match[1]) {
-          resolve(match[1]);
-          return;
-        }
-      }
-
-      if (res.statusCode !== 200) {
-        res.resume();
-        reject(new Error(`HTTP ${res.statusCode}`));
-        return;
-      }
-
-      let data = '';
-      res.on('data', (chunk: Buffer) => {
-        data += chunk.toString();
-      });
-      res.on('end', () => {
-        try {
-          const json = JSON.parse(data) as { version?: string };
-          if (json.version) resolve(json.version);
-          else reject(new Error('No version provided'));
-        } catch (err) {
-          reject(err);
-        }
-      });
-    });
-    
-    req.on('error', reject);
-    req.on('timeout', () => {
-      req.destroy();
-      reject(new Error('Timeout'));
-    });
-  });
+async function fetchVersionFromUrl(url: string): Promise<string> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 3000);
+  try {
+    const res = await fetch(url, { signal: controller.signal, redirect: 'follow' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = (await res.json()) as { version?: string };
+    if (json.version) return json.version;
+    throw new Error('No version provided');
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function fetchLatestVersion(): Promise<string | null> {

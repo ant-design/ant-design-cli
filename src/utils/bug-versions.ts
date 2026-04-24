@@ -1,4 +1,3 @@
-import { get } from 'node:https';
 import { satisfies } from '../data/version.js';
 import { cacheStore } from './store.js';
 
@@ -11,27 +10,16 @@ export interface BugMatchResult {
   urls: string[];
 }
 
-function fetchBugVersionsFromUrl(url: string): Promise<BugVersionsMap> {
-  return new Promise((resolve, reject) => {
-    const req = get(url, { timeout: 5000 }, (res) => {
-      if (res.statusCode !== 200) {
-        res.resume();
-        reject(new Error(`HTTP ${res.statusCode}`));
-        return;
-      }
-      let data = '';
-      res.on('data', (chunk: Buffer) => { data += chunk.toString(); });
-      res.on('end', () => {
-        try {
-          resolve(JSON.parse(data) as BugVersionsMap);
-        } catch (err) {
-          reject(err);
-        }
-      });
-    });
-    req.on('error', reject);
-    req.on('timeout', () => { req.destroy(); reject(new Error('Timeout')); });
-  });
+async function fetchBugVersionsFromUrl(url: string): Promise<BugVersionsMap> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 5000);
+  try {
+    const res = await fetch(url, { signal: controller.signal, redirect: 'follow' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return (await res.json()) as BugVersionsMap;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function fetchBugVersions(): Promise<BugVersionsMap | null> {
