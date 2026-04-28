@@ -302,6 +302,24 @@ const App = () => (
       expect(issues).toHaveLength(0);
     });
 
+    it('maintains ancestor stack across namespaced elements', async () => {
+      makeTmpFile(
+        'checkbox-group-ns.tsx',
+        `import { Checkbox } from 'antd';
+const App = () => (
+  <Checkbox.Group>
+    <svg:path d="M0 0" />
+    <Checkbox value="a">A</Checkbox>
+  </Checkbox.Group>
+);
+`,
+      );
+      const out = await runLint([join(tmpDir, 'checkbox-group-ns.tsx')]);
+      const data = parseJson(out);
+      const issues = data.issues.filter((i: any) => i.message.includes('Checkbox') && i.message.includes('value'));
+      expect(issues).toHaveLength(0);
+    });
+
     it('detects Divider vertical with children', async () => {
       const out = await runLint([join(tmpDir, 'usage.tsx')]);
       const data = parseJson(out);

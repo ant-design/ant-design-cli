@@ -171,7 +171,7 @@ function lintFile(
   const visitor = new Visitor({
     JSXElement(node: any) {
       const elName = getJSXElementName(node.openingElement?.name);
-      if (elName) jsxAncestorStack.push(elName);
+      jsxAncestorStack.push(elName);
     },
     'JSXElement:exit'() {
       jsxAncestorStack.pop();
