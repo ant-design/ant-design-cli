@@ -1,4 +1,7 @@
-import { describe, it, expect, vi } from 'vitest';
+import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
+import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
 import { Command } from 'commander';
 import { registerMigrateCommand } from '../../commands/migrate.js';
 import { V3_TO_V4_STEPS } from '../../commands/migrate-v3-to-v4.js';
@@ -138,33 +141,90 @@ describe('migrate command', () => {
     process.exitCode = 0;
   });
 
-  it('apply mode: --apply ./src in text shows Auto-Migration Prompt', async () => {
-    const program = createProgram('text');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '4', '5', '--apply', './src']);
+  it('apply mode: --apply scans source dir and includes matched files', async () => {
+    const testDir = join(tmpdir(), 'antd-migrate-test-apply');
+    try {
+      mkdirSync(testDir, { recursive: true });
+      writeFileSync(join(testDir, 'App.tsx'), `import { Modal, Button } from 'antd';
+<Modal visible={show} onCancel={onClose}>Content</Modal>
+<Button type="primary">Submit</Button>
+`);
+      writeFileSync(join(testDir, 'utils.ts'), `// no antd usage here\n`);
 
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    logSpy.mockRestore();
+      const program = createProgram('text');
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      await program.parseAsync(['node', 'test', 'migrate', '4', '5', '--apply', testDir]);
 
-    expect(logged).toContain('Auto-Migration Prompt');
-    expect(logged).toContain('./src');
+      const logged = logSpy.mock.calls.map((c) => c[0]).join('\n');
+      logSpy.mockRestore();
+
+      expect(logged).toContain('Auto-Migration Prompt');
+      expect(logged).toContain('Scanned');
+      expect(logged).toContain('matched in your code');
+      // Modal visible → open should be matched
+      expect(logged).toContain('App.tsx');
+      expect(logged).toContain('Modal');
+    } finally {
+      rmSync(testDir, { recursive: true, force: true });
+    }
   });
 
-  it('apply mode in json includes autoFixSteps and manualSteps', async () => {
-    const program = createProgram('json');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '4', '5', '--apply', './src']);
+  it('apply mode in json includes scannedFiles, matchedFiles, and generalSteps', async () => {
+    const testDir = join(tmpdir(), 'antd-migrate-test-apply-json');
+    try {
+      mkdirSync(testDir, { recursive: true });
+      writeFileSync(join(testDir, 'App.tsx'), `import { Modal } from 'antd';\n<Modal visible={show}>Hi</Modal>\n`);
+      writeFileSync(join(testDir, 'noop.ts'), `export const x = 1;\n`);
 
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('');
-    logSpy.mockRestore();
-    const result = JSON.parse(logged);
+      const program = createProgram('json');
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      await program.parseAsync(['node', 'test', 'migrate', '4', '5', '--apply', testDir]);
 
-    expect(result).toHaveProperty('autoFixSteps');
-    expect(result).toHaveProperty('manualSteps');
-    expect(result).toHaveProperty('targetDir', './src');
-    expect(result).toHaveProperty('summary');
-    expect(result.summary).toHaveProperty('totalAutoFix');
-    expect(result.summary).toHaveProperty('totalManual');
+      const logged = logSpy.mock.calls.map((c) => c[0]).join('');
+      logSpy.mockRestore();
+      const result = JSON.parse(logged);
+
+      expect(result).toHaveProperty('autoFixSteps');
+      expect(result).toHaveProperty('manualSteps');
+      expect(result).toHaveProperty('generalSteps');
+      expect(result).toHaveProperty('targetDir', testDir);
+      expect(result).toHaveProperty('scannedFiles');
+      expect(result.scannedFiles).toBeGreaterThan(0);
+      expect(result).toHaveProperty('summary');
+      expect(result.summary).toHaveProperty('totalAutoFix');
+      expect(result.summary).toHaveProperty('totalManual');
+      expect(result.summary).toHaveProperty('matchedAutoFix');
+      expect(result.summary).toHaveProperty('matchedManual');
+
+      // Check that matchedFiles is present in step objects
+      const matchedAutoFix = result.autoFixSteps.filter((s: any) => s.matchedFiles?.length > 0);
+      expect(matchedAutoFix.length).toBeGreaterThan(0);
+      for (const step of matchedAutoFix) {
+        expect(step.matchedFiles).toContain('App.tsx');
+      }
+    } finally {
+      rmSync(testDir, { recursive: true, force: true });
+    }
+  });
+
+  it('apply mode with empty dir shows no matched steps', async () => {
+    const testDir = join(tmpdir(), 'antd-migrate-test-empty');
+    try {
+      mkdirSync(testDir, { recursive: true });
+
+      const program = createProgram('json');
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      await program.parseAsync(['node', 'test', 'migrate', '4', '5', '--apply', testDir]);
+
+      const logged = logSpy.mock.calls.map((c) => c[0]).join('');
+      logSpy.mockRestore();
+      const result = JSON.parse(logged);
+
+      expect(result.summary.matchedAutoFix).toBe(0);
+      expect(result.summary.matchedManual).toBe(0);
+    } finally {
+      rmSync(testDir, { recursive: true, force: true });
+    }
   });
 
   it('V3_TO_V4_STEPS has valid structure', () => {

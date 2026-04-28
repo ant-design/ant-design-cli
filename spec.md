@@ -449,19 +449,55 @@ antd migrate 4 5                    # v4 → v5 migration checklist
 antd migrate 5 6                    # v5 → v6 migration checklist
 antd migrate v4 v5                  # v prefix is accepted and normalized
 antd migrate 4 5 --component Select # Select-specific migration
-antd migrate 4 5 --apply ./src      # auto-fix what can be auto-fixed
+antd migrate 4 5 --apply ./src      # scan source dir and generate targeted migration prompts
 antd migrate --format json
 ```
 
 **Available migration paths:** v3→v4, v4→v5, v5→v6. Multi-version migrations (e.g., v3→v6) are not supported directly — migrate step by step.
 
-Safety model for `--apply`:
-- Always runs in **dry-run mode** first, printing changes before applying
-- Requires explicit `--apply --confirm` to actually write files
-- Creates a git stash backup before writing (`antd-migrate-backup-<timestamp>`)
-- Reports every file changed with before/after diff
-- Delegates to existing `@ant-design/codemod-v5` / `@ant-design/codemod-v6` packages for actual transforms
-- If no codemod package is available for the target version, falls back to guide-only mode
+Source scanning for `--apply <dir>`:
+- Scans all `.ts/.tsx/.js/.jsx` files in the target directory (skips `node_modules`, `.git`, `dist`, `build`, `.next`, `.umi*`)
+- Matches each migration step's `searchPattern` (regex) against source file contents
+- Only lists steps whose patterns match in the output (project-specific)
+- Shows matched file paths for each step
+- Steps without a `searchPattern` are listed under "General Changes" (always applicable)
+- Steps with patterns but no matches are listed separately as skippable
+
+JSON output (apply mode):
+```json
+{
+  "from": "4",
+  "to": "5",
+  "targetDir": "./src",
+  "scannedFiles": 42,
+  "autoFixSteps": [
+    {
+      "component": "Select",
+      "description": "Prop `dropdownClassName` renamed to `popupClassName`",
+      "searchPattern": "<Select[^>]*\\bdropdownClassName\\b",
+      "matchedFiles": ["pages/Home.tsx", "components/Filter.tsx"],
+      "before": "<Select dropdownClassName=\"my-dropdown\" />",
+      "after": "<Select popupClassName=\"my-dropdown\" />"
+    }
+  ],
+  "manualSteps": [
+    {
+      "component": "message",
+      "description": "Static methods `message.xxx()` deprecated. Use `App.useApp()` hook instead.",
+      "searchPattern": "\\bmessage\\.(success|error|warning|info|loading|open)\\(",
+      "matchedFiles": ["utils/request.ts"],
+      "guide": "https://ant.design/docs/react/migration-v5"
+    }
+  ],
+  "generalSteps": [
+    {
+      "component": "Global",
+      "description": "Design token system replaces Less variables.",
+      "guide": "https://ant.design/docs/react/migrate-less-variables"
+    }
+  ],
+  "summary": {"totalAutoFix": 15, "totalManual": 10, "totalGeneral": 3, "matchedAutoFix": 2, "matchedManual": 1}
+}
 
 JSON output (guide mode):
 ```json

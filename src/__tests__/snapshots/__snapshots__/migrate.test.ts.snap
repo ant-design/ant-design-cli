@@ -5,16 +5,18 @@ exports[`migrate > migrate 3 6 (invalid) 1`] = `
 Suggestion: Available migrations: v3 → v4, v4 → v5, v5 → v6"
 `;
 
-exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
+exports[`migrate > migrate 4 5 --apply <dir> --format json 1`] = `
 "{
   "from": "4",
   "to": "5",
-  "targetDir": "/tmp",
+  "targetDir": "/var/folders/g2/n072ldkx27317w93czvvnrx80000gp/T/antd-migrate-snapshot-test",
+  "scannedFiles": 2,
   "autoFixSteps": [
     {
       "component": "Global",
       "description": "Moment.js replaced by Day.js. All date-related components (DatePicker, TimePicker, Calendar) now use Day.js.",
       "searchPattern": "import\\\\s+moment\\\\s+from\\\\s+['\\"]moment['\\"]",
+      "matchedFiles": [],
       "before": "import moment from 'moment';\\n<DatePicker value={moment('2024-01-01')} />",
       "after": "import dayjs from 'dayjs';\\n<DatePicker value={dayjs('2024-01-01')} />",
       "migrationGuide": "1. Replace moment imports with dayjs\\n2. dayjs API is mostly compatible with moment\\n3. If you need locale support, import dayjs locale separately\\n4. If you need plugins (isBetween, etc.), import and extend dayjs"
@@ -23,6 +25,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Global",
       "description": "\`antd/dist/antd.css\` and \`antd/dist/antd.less\` removed. CSS-in-JS generates styles automatically.",
       "searchPattern": "import\\\\s+['\\"]antd/dist/antd\\\\.(css|less)['\\"]",
+      "matchedFiles": [],
       "before": "import 'antd/dist/antd.css';\\n// or\\nimport 'antd/dist/antd.less';",
       "after": "// No global import needed — styles are auto-injected",
       "migrationGuide": "Remove the global CSS/Less import. Styles are now injected via CSS-in-JS automatically."
@@ -31,6 +34,9 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Modal",
       "description": "Prop \`visible\` renamed to \`open\`",
       "searchPattern": "<Modal[^>]*\\\\bvisible\\\\b",
+      "matchedFiles": [
+        "App.tsx"
+      ],
       "before": "<Modal visible={show} onCancel={onClose}>",
       "after": "<Modal open={show} onCancel={onClose}>",
       "migrationGuide": "Search for \`<Modal\` with \`visible\` prop and rename to \`open\`. Also applies to Modal.confirm, Modal.info, etc."
@@ -39,6 +45,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Drawer",
       "description": "Prop \`visible\` renamed to \`open\`",
       "searchPattern": "<Drawer[^>]*\\\\bvisible\\\\b",
+      "matchedFiles": [],
       "before": "<Drawer visible={show} onClose={onClose}>",
       "after": "<Drawer open={show} onClose={onClose}>"
     },
@@ -46,6 +53,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Tooltip",
       "description": "Prop \`visible\` renamed to \`open\`",
       "searchPattern": "<Tooltip[^>]*\\\\bvisible\\\\b",
+      "matchedFiles": [],
       "before": "<Tooltip visible={show}>",
       "after": "<Tooltip open={show}>"
     },
@@ -53,6 +61,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Popover",
       "description": "Prop \`visible\` renamed to \`open\`",
       "searchPattern": "<Popover[^>]*\\\\bvisible\\\\b",
+      "matchedFiles": [],
       "before": "<Popover visible={show}>",
       "after": "<Popover open={show}>"
     },
@@ -60,6 +69,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Popconfirm",
       "description": "Prop \`visible\` renamed to \`open\`",
       "searchPattern": "<Popconfirm[^>]*\\\\bvisible\\\\b",
+      "matchedFiles": [],
       "before": "<Popconfirm visible={show}>",
       "after": "<Popconfirm open={show}>"
     },
@@ -67,6 +77,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Dropdown",
       "description": "Prop \`visible\` renamed to \`open\`",
       "searchPattern": "<Dropdown[^>]*\\\\bvisible\\\\b",
+      "matchedFiles": [],
       "before": "<Dropdown visible={show}>",
       "after": "<Dropdown open={show}>"
     },
@@ -74,6 +85,9 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Select",
       "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
       "searchPattern": "<Select[^>]*\\\\bdropdownClassName\\\\b",
+      "matchedFiles": [
+        "App.tsx"
+      ],
       "before": "<Select dropdownClassName=\\"my-dropdown\\" />",
       "after": "<Select popupClassName=\\"my-dropdown\\" />"
     },
@@ -81,6 +95,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Select",
       "description": "Prop \`dropdownMatchSelectWidth\` renamed to \`popupMatchSelectWidth\`",
       "searchPattern": "<Select[^>]*\\\\bdropdownMatchSelectWidth\\\\b",
+      "matchedFiles": [],
       "before": "<Select dropdownMatchSelectWidth={false} />",
       "after": "<Select popupMatchSelectWidth={false} />"
     },
@@ -88,6 +103,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "TreeSelect",
       "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
       "searchPattern": "<TreeSelect[^>]*\\\\bdropdownClassName\\\\b",
+      "matchedFiles": [],
       "before": "<TreeSelect dropdownClassName=\\"my-dropdown\\" />",
       "after": "<TreeSelect popupClassName=\\"my-dropdown\\" />"
     },
@@ -95,6 +111,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Cascader",
       "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
       "searchPattern": "<Cascader[^>]*\\\\bdropdownClassName\\\\b",
+      "matchedFiles": [],
       "before": "<Cascader dropdownClassName=\\"my-dropdown\\" />",
       "after": "<Cascader popupClassName=\\"my-dropdown\\" />"
     },
@@ -102,6 +119,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "AutoComplete",
       "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
       "searchPattern": "<AutoComplete[^>]*\\\\bdropdownClassName\\\\b",
+      "matchedFiles": [],
       "before": "<AutoComplete dropdownClassName=\\"my-dropdown\\" />",
       "after": "<AutoComplete popupClassName=\\"my-dropdown\\" />"
     },
@@ -109,6 +127,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "DatePicker",
       "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
       "searchPattern": "<DatePicker[^>]*\\\\bdropdownClassName\\\\b",
+      "matchedFiles": [],
       "before": "<DatePicker dropdownClassName=\\"my-popup\\" />",
       "after": "<DatePicker popupClassName=\\"my-popup\\" />"
     },
@@ -116,6 +135,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "TimePicker",
       "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
       "searchPattern": "<TimePicker[^>]*\\\\bdropdownClassName\\\\b",
+      "matchedFiles": [],
       "before": "<TimePicker dropdownClassName=\\"my-popup\\" />",
       "after": "<TimePicker popupClassName=\\"my-popup\\" />"
     },
@@ -123,6 +143,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Mentions",
       "description": "Prop \`dropdownClassName\` renamed to \`popupClassName\`",
       "searchPattern": "<Mentions[^>]*\\\\bdropdownClassName\\\\b",
+      "matchedFiles": [],
       "before": "<Mentions dropdownClassName=\\"my-dropdown\\" />",
       "after": "<Mentions popupClassName=\\"my-dropdown\\" />"
     },
@@ -130,6 +151,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "BackTop",
       "description": "Removed. Use FloatButton.BackTop instead.",
       "searchPattern": "import\\\\s*\\\\{[^}]*\\\\bBackTop\\\\b[^}]*\\\\}\\\\s*from\\\\s*['\\"]antd['\\"]",
+      "matchedFiles": [],
       "before": "import { BackTop } from 'antd';\\n<BackTop />",
       "after": "import { FloatButton } from 'antd';\\n<FloatButton.BackTop />"
     },
@@ -137,6 +159,7 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "Table",
       "description": "Column prop \`filterDropdownVisible\` renamed to \`filterDropdownOpen\`.",
       "searchPattern": "filterDropdownVisible",
+      "matchedFiles": [],
       "before": "{ title: 'Name', dataIndex: 'name', filterDropdownVisible: visible }",
       "after": "{ title: 'Name', dataIndex: 'name', filterDropdownOpen: visible }",
       "migrationGuide": "Search for \`filterDropdownVisible\` in Table column definitions and rename to \`filterDropdownOpen\`."
@@ -145,12 +168,126 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "component": "message",
       "description": "\`message.warn()\` completely removed. Use \`message.warning()\` instead.",
       "searchPattern": "\\\\bmessage\\\\.warn\\\\(",
+      "matchedFiles": [],
       "before": "message.warn('Something went wrong');",
       "after": "message.warning('Something went wrong');",
       "migrationGuide": "Search for \`message.warn(\` and replace with \`message.warning(\`."
     }
   ],
   "manualSteps": [
+    {
+      "component": "Global",
+      "description": "Component styles no longer include CSS reset. Wrap app with <App /> component to restore.",
+      "searchPattern": "import\\\\s*\\\\{[^}]*\\\\}\\\\s*from\\\\s*['\\"]antd['\\"]",
+      "matchedFiles": [
+        "App.tsx"
+      ],
+      "guide": "https://ant.design/components/app",
+      "migrationGuide": "1. Import App component from antd\\n2. Wrap your root component with <App />\\n3. Use App.useApp() hook to access message, notification, modal instances",
+      "before": "import { Button } from 'antd';\\n\\nconst MyApp = () => <Button>Click</Button>;",
+      "after": "import { App, Button } from 'antd';\\n\\nconst MyApp = () => (\\n  <App>\\n    <Button>Click</Button>\\n  </App>\\n);"
+    },
+    {
+      "component": "Global",
+      "description": "babel-plugin-import is no longer needed. antd v5 supports tree-shaking natively.",
+      "searchPattern": "babel-plugin-import",
+      "matchedFiles": [],
+      "migrationGuide": "1. Remove babel-plugin-import from babel config\\n2. Remove related configuration in .babelrc, babel.config.js, or package.json\\n3. Direct imports like \`import { Button } from 'antd'\` work without the plugin"
+    },
+    {
+      "component": "Tag",
+      "description": "Prop \`visible\` removed. Use conditional rendering instead.",
+      "searchPattern": "<Tag[^>]*\\\\bvisible\\\\b",
+      "matchedFiles": [],
+      "migrationGuide": "Replace \`visible\` prop with conditional rendering using \`{condition && <Tag>...</Tag>}\`.",
+      "before": "<Tag visible={show}>Tag</Tag>",
+      "after": "{show && <Tag>Tag</Tag>}"
+    },
+    {
+      "component": "Comment",
+      "description": "Removed from antd. Use @ant-design/compatible instead.",
+      "searchPattern": "import\\\\s*\\\\{[^}]*\\\\bComment\\\\b[^}]*\\\\}\\\\s*from\\\\s*['\\"]antd['\\"]",
+      "matchedFiles": [],
+      "guide": "https://ant.design/docs/react/migration-v5",
+      "migrationGuide": "1. Install @ant-design/compatible: npm install @ant-design/compatible\\n2. Change import from 'antd' to '@ant-design/compatible'",
+      "before": "import { Comment } from 'antd';",
+      "after": "import { Comment } from '@ant-design/compatible';"
+    },
+    {
+      "component": "PageHeader",
+      "description": "Removed from antd. Use @ant-design/pro-components instead.",
+      "searchPattern": "import\\\\s*\\\\{[^}]*\\\\bPageHeader\\\\b[^}]*\\\\}\\\\s*from\\\\s*['\\"]antd['\\"]",
+      "matchedFiles": [],
+      "guide": "https://ant.design/docs/react/migration-v5",
+      "migrationGuide": "1. Install @ant-design/pro-components: npm install @ant-design/pro-components\\n2. Change import from 'antd' to '@ant-design/pro-components'",
+      "before": "import { PageHeader } from 'antd';",
+      "after": "import { PageHeader } from '@ant-design/pro-components';"
+    },
+    {
+      "component": "message",
+      "description": "Static methods \`message.xxx()\` deprecated. Use \`App.useApp()\` hook instead for context support.",
+      "searchPattern": "\\\\bmessage\\\\.(success|error|warning|info|loading|open)\\\\(",
+      "matchedFiles": [],
+      "migrationGuide": "1. Wrap app with <App /> component\\n2. Use const { message } = App.useApp(); in functional components\\n3. Replace static message.xxx() calls with the hook-provided instance",
+      "before": "import { message } from 'antd';\\nmessage.success('Done!');",
+      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { message } = App.useApp();\\n  message.success('Done!');\\n};"
+    },
+    {
+      "component": "notification",
+      "description": "Static methods \`notification.xxx()\` deprecated. Use \`App.useApp()\` hook instead.",
+      "searchPattern": "\\\\bnotification\\\\.(success|error|warning|info|open)\\\\(",
+      "matchedFiles": [],
+      "migrationGuide": "Same pattern as message — use App.useApp() to get notification instance.",
+      "before": "import { notification } from 'antd';\\nnotification.success({ message: 'Done!' });",
+      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { notification } = App.useApp();\\n  notification.success({ message: 'Done!' });\\n};"
+    },
+    {
+      "component": "Modal",
+      "description": "Static methods \`Modal.confirm()\` etc. deprecated. Use \`App.useApp()\` hook instead.",
+      "searchPattern": "\\\\bModal\\\\.(confirm|info|success|error|warning)\\\\(",
+      "matchedFiles": [],
+      "migrationGuide": "Same pattern as message/notification — use App.useApp() to get modal instance.",
+      "before": "import { Modal } from 'antd';\\nModal.confirm({ title: 'Sure?' });",
+      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { modal } = App.useApp();\\n  modal.confirm({ title: 'Sure?' });\\n};"
+    },
+    {
+      "component": "Table",
+      "description": "Column \`filterDropdown\` render args changed. \`confirm({ closeDropdown: false })\` replaced by separate \`close\` function.",
+      "searchPattern": "filterDropdown.*closeDropdown",
+      "matchedFiles": [],
+      "migrationGuide": "Update filterDropdown render function signature to use the new \`close\` parameter instead of \`confirm({ closeDropdown: false })\`.",
+      "before": "filterDropdown: ({ confirm }) => (\\n  <Button onClick={() => confirm({ closeDropdown: false })}>Filter</Button>\\n)",
+      "after": "filterDropdown: ({ confirm, close }) => (\\n  <Button onClick={() => close()}>Filter</Button>\\n)"
+    },
+    {
+      "component": "Slider",
+      "description": "Tooltip-related APIs converged into \`tooltip\` property. \`tooltipVisible\` → \`tooltip.open\`, \`tipFormatter\` → \`tooltip.formatter\`, etc.",
+      "searchPattern": "<Slider[^>]*\\\\b(tooltipVisible|tipFormatter|tooltipPlacement|getTooltipPopupContainer)\\\\b",
+      "matchedFiles": [],
+      "migrationGuide": "Migrate Slider tooltip props:\\n- tooltipVisible → tooltip.open\\n- tipFormatter → tooltip.formatter\\n- tooltipPlacement → tooltip.placement\\n- getTooltipPopupContainer → tooltip.getPopupContainer",
+      "before": "<Slider tooltipVisible={show} tipFormatter={(v) => \`\${v}%\`} />",
+      "after": "<Slider tooltip={{ open: show, formatter: (v) => \`\${v}%\` }} />"
+    },
+    {
+      "component": "Drawer",
+      "description": "Drawer \`style\` and \`className\` now apply to the panel node. Use \`rootStyle\` and \`rootClassName\` for the wrapper.",
+      "searchPattern": "<Drawer[^>]*\\\\b(style|className)\\\\s*=",
+      "matchedFiles": [],
+      "migrationGuide": "In v5, Drawer \`style\` and \`className\` are migrated to the Drawer panel node.\\nIf you were using them to style the wrapper/mask, replace with \`rootStyle\` and \`rootClassName\`.",
+      "before": "<Drawer className=\\"my-drawer\\" style={{ zIndex: 1000 }}>",
+      "after": "<Drawer rootClassName=\\"my-drawer\\" rootStyle={{ zIndex: 1000 }}>"
+    },
+    {
+      "component": "notification",
+      "description": "Static method \`notification.close()\` renamed to \`notification.destroy()\`. Static config options restricted.",
+      "searchPattern": "\\\\bnotification\\\\.close\\\\(",
+      "matchedFiles": [],
+      "migrationGuide": "1. Rename notification.close() to notification.destroy()\\n2. Static methods no longer allow dynamic prefixCls, maxCount, top, bottom, getContainer in open()\\n3. Use useNotification hook if you need different configurations",
+      "before": "notification.close(key);",
+      "after": "notification.destroy(key);"
+    }
+  ],
+  "generalSteps": [
     {
       "component": "Global",
       "description": "Design token system replaces Less variables. All Less variable overrides must be migrated to CSS-in-JS tokens via ConfigProvider.",
@@ -160,94 +297,9 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
       "after": "import { ConfigProvider } from 'antd';\\n<ConfigProvider theme={{ token: { colorPrimary: '#1890ff' } }}>\\n  <App />\\n</ConfigProvider>"
     },
     {
-      "component": "Global",
-      "description": "Component styles no longer include CSS reset. Wrap app with <App /> component to restore.",
-      "guide": "https://ant.design/components/app",
-      "migrationGuide": "1. Import App component from antd\\n2. Wrap your root component with <App />\\n3. Use App.useApp() hook to access message, notification, modal instances",
-      "before": "import { Button } from 'antd';\\n\\nconst MyApp = () => <Button>Click</Button>;",
-      "after": "import { App, Button } from 'antd';\\n\\nconst MyApp = () => (\\n  <App>\\n    <Button>Click</Button>\\n  </App>\\n);"
-    },
-    {
-      "component": "Global",
-      "description": "babel-plugin-import is no longer needed. antd v5 supports tree-shaking natively.",
-      "migrationGuide": "1. Remove babel-plugin-import from babel config\\n2. Remove related configuration in .babelrc, babel.config.js, or package.json\\n3. Direct imports like \`import { Button } from 'antd'\` work without the plugin"
-    },
-    {
-      "component": "Tag",
-      "description": "Prop \`visible\` removed. Use conditional rendering instead.",
-      "migrationGuide": "Replace \`visible\` prop with conditional rendering using \`{condition && <Tag>...</Tag>}\`.",
-      "before": "<Tag visible={show}>Tag</Tag>",
-      "after": "{show && <Tag>Tag</Tag>}"
-    },
-    {
-      "component": "Comment",
-      "description": "Removed from antd. Use @ant-design/compatible instead.",
-      "guide": "https://ant.design/docs/react/migration-v5",
-      "migrationGuide": "1. Install @ant-design/compatible: npm install @ant-design/compatible\\n2. Change import from 'antd' to '@ant-design/compatible'",
-      "before": "import { Comment } from 'antd';",
-      "after": "import { Comment } from '@ant-design/compatible';"
-    },
-    {
-      "component": "PageHeader",
-      "description": "Removed from antd. Use @ant-design/pro-components instead.",
-      "guide": "https://ant.design/docs/react/migration-v5",
-      "migrationGuide": "1. Install @ant-design/pro-components: npm install @ant-design/pro-components\\n2. Change import from 'antd' to '@ant-design/pro-components'",
-      "before": "import { PageHeader } from 'antd';",
-      "after": "import { PageHeader } from '@ant-design/pro-components';"
-    },
-    {
-      "component": "message",
-      "description": "Static methods \`message.xxx()\` deprecated. Use \`App.useApp()\` hook instead for context support.",
-      "migrationGuide": "1. Wrap app with <App /> component\\n2. Use const { message } = App.useApp(); in functional components\\n3. Replace static message.xxx() calls with the hook-provided instance",
-      "before": "import { message } from 'antd';\\nmessage.success('Done!');",
-      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { message } = App.useApp();\\n  message.success('Done!');\\n};"
-    },
-    {
-      "component": "notification",
-      "description": "Static methods \`notification.xxx()\` deprecated. Use \`App.useApp()\` hook instead.",
-      "migrationGuide": "Same pattern as message — use App.useApp() to get notification instance.",
-      "before": "import { notification } from 'antd';\\nnotification.success({ message: 'Done!' });",
-      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { notification } = App.useApp();\\n  notification.success({ message: 'Done!' });\\n};"
-    },
-    {
-      "component": "Modal",
-      "description": "Static methods \`Modal.confirm()\` etc. deprecated. Use \`App.useApp()\` hook instead.",
-      "migrationGuide": "Same pattern as message/notification — use App.useApp() to get modal instance.",
-      "before": "import { Modal } from 'antd';\\nModal.confirm({ title: 'Sure?' });",
-      "after": "import { App } from 'antd';\\nconst MyComponent = () => {\\n  const { modal } = App.useApp();\\n  modal.confirm({ title: 'Sure?' });\\n};"
-    },
-    {
-      "component": "Table",
-      "description": "Column \`filterDropdown\` render args changed. \`confirm({ closeDropdown: false })\` replaced by separate \`close\` function.",
-      "migrationGuide": "Update filterDropdown render function signature to use the new \`close\` parameter instead of \`confirm({ closeDropdown: false })\`.",
-      "before": "filterDropdown: ({ confirm }) => (\\n  <Button onClick={() => confirm({ closeDropdown: false })}>Filter</Button>\\n)",
-      "after": "filterDropdown: ({ confirm, close }) => (\\n  <Button onClick={() => close()}>Filter</Button>\\n)"
-    },
-    {
       "component": "Form",
       "description": "Prop \`labelCol\` and \`wrapperCol\` can now be set globally via ConfigProvider.",
       "migrationGuide": "Optional improvement: move repeated labelCol/wrapperCol config to ConfigProvider for consistency."
-    },
-    {
-      "component": "Slider",
-      "description": "Tooltip-related APIs converged into \`tooltip\` property. \`tooltipVisible\` → \`tooltip.open\`, \`tipFormatter\` → \`tooltip.formatter\`, etc.",
-      "migrationGuide": "Migrate Slider tooltip props:\\n- tooltipVisible → tooltip.open\\n- tipFormatter → tooltip.formatter\\n- tooltipPlacement → tooltip.placement\\n- getTooltipPopupContainer → tooltip.getPopupContainer",
-      "before": "<Slider tooltipVisible={show} tipFormatter={(v) => \`\${v}%\`} />",
-      "after": "<Slider tooltip={{ open: show, formatter: (v) => \`\${v}%\` }} />"
-    },
-    {
-      "component": "Drawer",
-      "description": "Drawer \`style\` and \`className\` now apply to the panel node. Use \`rootStyle\` and \`rootClassName\` for the wrapper.",
-      "migrationGuide": "In v5, Drawer \`style\` and \`className\` are migrated to the Drawer panel node.\\nIf you were using them to style the wrapper/mask, replace with \`rootStyle\` and \`rootClassName\`.",
-      "before": "<Drawer className=\\"my-drawer\\" style={{ zIndex: 1000 }}>",
-      "after": "<Drawer rootClassName=\\"my-drawer\\" rootStyle={{ zIndex: 1000 }}>"
-    },
-    {
-      "component": "notification",
-      "description": "Static method \`notification.close()\` renamed to \`notification.destroy()\`. Static config options restricted.",
-      "migrationGuide": "1. Rename notification.close() to notification.destroy()\\n2. Static methods no longer allow dynamic prefixCls, maxCount, top, bottom, getContainer in open()\\n3. Use useNotification hook if you need different configurations",
-      "before": "notification.close(key);",
-      "after": "notification.destroy(key);"
     },
     {
       "component": "Global",
@@ -257,60 +309,30 @@ exports[`migrate > migrate 4 5 --apply /tmp --format json 1`] = `
   ],
   "summary": {
     "totalAutoFix": 19,
-    "totalManual": 15
+    "totalManual": 12,
+    "totalGeneral": 3,
+    "matchedAutoFix": 2,
+    "matchedManual": 1
   }
 }"
 `;
 
-exports[`migrate > migrate 4 5 --apply /tmp 1`] = `
+exports[`migrate > migrate 4 5 --apply <dir> 1`] = `
 "# Auto-Migration Prompt: antd v4 → v5
-# Target directory: /tmp
+# Target directory: /var/folders/g2/n072ldkx27317w93czvvnrx80000gp/T/antd-migrate-snapshot-test
+# Scanned 2 source files
 
 ## Instructions for Code Agent
 
-Scan all .ts/.tsx/.js/.jsx files in \`/tmp\` and apply the following migrations.
+The source files in \`/var/folders/g2/n072ldkx27317w93czvvnrx80000gp/T/antd-migrate-snapshot-test\` have been scanned. Only migration steps with matching patterns in your code are listed below.
 For each file changed, verify the fix compiles correctly before moving on.
 
-## Auto-fixable Changes
+## Auto-fixable Changes (matched in your code)
 
-### 1. Global: Moment.js replaced by Day.js. All date-related components (DatePicker, TimePicker, Calendar) now use Day.js.
+### 1. Modal: Prop \`visible\` renamed to \`open\`
 
-**Search regex:** \`import\\s+moment\\s+from\\s+['"]moment['"]\`
-
-1. Replace moment imports with dayjs
-2. dayjs API is mostly compatible with moment
-3. If you need locale support, import dayjs locale separately
-4. If you need plugins (isBetween, etc.), import and extend dayjs
-
-**Before:**
-\`\`\`tsx
-import moment from 'moment';
-<DatePicker value={moment('2024-01-01')} />
-\`\`\`
-**After:**
-\`\`\`tsx
-import dayjs from 'dayjs';
-<DatePicker value={dayjs('2024-01-01')} />
-\`\`\`
-
-### 2. Global: \`antd/dist/antd.css\` and \`antd/dist/antd.less\` removed. CSS-in-JS generates styles automatically.
-
-**Search regex:** \`import\\s+['"]antd/dist/antd\\.(css|less)['"]\`
-
-Remove the global CSS/Less import. Styles are now injected via CSS-in-JS automatically.
-
-**Before:**
-\`\`\`tsx
-import 'antd/dist/antd.css';
-// or
-import 'antd/dist/antd.less';
-\`\`\`
-**After:**
-\`\`\`tsx
-// No global import needed — styles are auto-injected
-\`\`\`
-
-### 3. Modal: Prop \`visible\` renamed to \`open\`
+**Matched files (1):**
+- \`App.tsx\`
 
 **Search regex:** \`<Modal[^>]*\\bvisible\\b\`
 
@@ -325,72 +347,10 @@ Search for \`<Modal\` with \`visible\` prop and rename to \`open\`. Also applies
 <Modal open={show} onCancel={onClose}>
 \`\`\`
 
-### 4. Drawer: Prop \`visible\` renamed to \`open\`
+### 2. Select: Prop \`dropdownClassName\` renamed to \`popupClassName\`
 
-**Search regex:** \`<Drawer[^>]*\\bvisible\\b\`
-
-**Before:**
-\`\`\`tsx
-<Drawer visible={show} onClose={onClose}>
-\`\`\`
-**After:**
-\`\`\`tsx
-<Drawer open={show} onClose={onClose}>
-\`\`\`
-
-### 5. Tooltip: Prop \`visible\` renamed to \`open\`
-
-**Search regex:** \`<Tooltip[^>]*\\bvisible\\b\`
-
-**Before:**
-\`\`\`tsx
-<Tooltip visible={show}>
-\`\`\`
-**After:**
-\`\`\`tsx
-<Tooltip open={show}>
-\`\`\`
-
-### 6. Popover: Prop \`visible\` renamed to \`open\`
-
-**Search regex:** \`<Popover[^>]*\\bvisible\\b\`
-
-**Before:**
-\`\`\`tsx
-<Popover visible={show}>
-\`\`\`
-**After:**
-\`\`\`tsx
-<Popover open={show}>
-\`\`\`
-
-### 7. Popconfirm: Prop \`visible\` renamed to \`open\`
-
-**Search regex:** \`<Popconfirm[^>]*\\bvisible\\b\`
-
-**Before:**
-\`\`\`tsx
-<Popconfirm visible={show}>
-\`\`\`
-**After:**
-\`\`\`tsx
-<Popconfirm open={show}>
-\`\`\`
-
-### 8. Dropdown: Prop \`visible\` renamed to \`open\`
-
-**Search regex:** \`<Dropdown[^>]*\\bvisible\\b\`
-
-**Before:**
-\`\`\`tsx
-<Dropdown visible={show}>
-\`\`\`
-**After:**
-\`\`\`tsx
-<Dropdown open={show}>
-\`\`\`
-
-### 9. Select: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+**Matched files (1):**
+- \`App.tsx\`
 
 **Search regex:** \`<Select[^>]*\\bdropdownClassName\\b\`
 
@@ -403,143 +363,79 @@ Search for \`<Modal\` with \`visible\` prop and rename to \`open\`. Also applies
 <Select popupClassName="my-dropdown" />
 \`\`\`
 
-### 10. Select: Prop \`dropdownMatchSelectWidth\` renamed to \`popupMatchSelectWidth\`
+## Auto-fixable Changes (not found in your code)
 
-**Search regex:** \`<Select[^>]*\\bdropdownMatchSelectWidth\\b\`
+The following patterns were not detected in your source files. You can skip these.
 
-**Before:**
-\`\`\`tsx
-<Select dropdownMatchSelectWidth={false} />
-\`\`\`
-**After:**
-\`\`\`tsx
-<Select popupMatchSelectWidth={false} />
-\`\`\`
+- Global: Moment.js replaced by Day.js. All date-related components (DatePicker, TimePicker, Calendar) now use Day.js.
+- Global: \`antd/dist/antd.css\` and \`antd/dist/antd.less\` removed. CSS-in-JS generates styles automatically.
+- Drawer: Prop \`visible\` renamed to \`open\`
+- Tooltip: Prop \`visible\` renamed to \`open\`
+- Popover: Prop \`visible\` renamed to \`open\`
+- Popconfirm: Prop \`visible\` renamed to \`open\`
+- Dropdown: Prop \`visible\` renamed to \`open\`
+- Select: Prop \`dropdownMatchSelectWidth\` renamed to \`popupMatchSelectWidth\`
+- TreeSelect: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+- Cascader: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+- AutoComplete: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+- DatePicker: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+- TimePicker: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+- Mentions: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+- BackTop: Removed. Use FloatButton.BackTop instead.
+- Table: Column prop \`filterDropdownVisible\` renamed to \`filterDropdownOpen\`.
+- message: \`message.warn()\` completely removed. Use \`message.warning()\` instead.
 
-### 11. TreeSelect: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+## Manual Changes (matched in your code — require human review)
 
-**Search regex:** \`<TreeSelect[^>]*\\bdropdownClassName\\b\`
+### 1. Global: Component styles no longer include CSS reset. Wrap app with <App /> component to restore.
 
-**Before:**
-\`\`\`tsx
-<TreeSelect dropdownClassName="my-dropdown" />
-\`\`\`
-**After:**
-\`\`\`tsx
-<TreeSelect popupClassName="my-dropdown" />
-\`\`\`
+**Matched files (1):**
+- \`App.tsx\`
 
-### 12. Cascader: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+**Search regex:** \`import\\s*\\{[^}]*\\}\\s*from\\s*['"]antd['"]\`
 
-**Search regex:** \`<Cascader[^>]*\\bdropdownClassName\\b\`
-
-**Before:**
-\`\`\`tsx
-<Cascader dropdownClassName="my-dropdown" />
-\`\`\`
-**After:**
-\`\`\`tsx
-<Cascader popupClassName="my-dropdown" />
-\`\`\`
-
-### 13. AutoComplete: Prop \`dropdownClassName\` renamed to \`popupClassName\`
-
-**Search regex:** \`<AutoComplete[^>]*\\bdropdownClassName\\b\`
+1. Import App component from antd
+2. Wrap your root component with <App />
+3. Use App.useApp() hook to access message, notification, modal instances
 
 **Before:**
 \`\`\`tsx
-<AutoComplete dropdownClassName="my-dropdown" />
+import { Button } from 'antd';
+
+const MyApp = () => <Button>Click</Button>;
 \`\`\`
 **After:**
 \`\`\`tsx
-<AutoComplete popupClassName="my-dropdown" />
+import { App, Button } from 'antd';
+
+const MyApp = () => (
+  <App>
+    <Button>Click</Button>
+  </App>
+);
 \`\`\`
 
-### 14. DatePicker: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+**Reference:** https://ant.design/components/app
 
-**Search regex:** \`<DatePicker[^>]*\\bdropdownClassName\\b\`
+## Manual Changes (not found in your code)
 
-**Before:**
-\`\`\`tsx
-<DatePicker dropdownClassName="my-popup" />
-\`\`\`
-**After:**
-\`\`\`tsx
-<DatePicker popupClassName="my-popup" />
-\`\`\`
+The following patterns were not detected. You can skip these.
 
-### 15. TimePicker: Prop \`dropdownClassName\` renamed to \`popupClassName\`
+- Global: babel-plugin-import is no longer needed. antd v5 supports tree-shaking natively.
+- Tag: Prop \`visible\` removed. Use conditional rendering instead.
+- Comment: Removed from antd. Use @ant-design/compatible instead.
+- PageHeader: Removed from antd. Use @ant-design/pro-components instead.
+- message: Static methods \`message.xxx()\` deprecated. Use \`App.useApp()\` hook instead for context support.
+- notification: Static methods \`notification.xxx()\` deprecated. Use \`App.useApp()\` hook instead.
+- Modal: Static methods \`Modal.confirm()\` etc. deprecated. Use \`App.useApp()\` hook instead.
+- Table: Column \`filterDropdown\` render args changed. \`confirm({ closeDropdown: false })\` replaced by separate \`close\` function.
+- Slider: Tooltip-related APIs converged into \`tooltip\` property. \`tooltipVisible\` → \`tooltip.open\`, \`tipFormatter\` → \`tooltip.formatter\`, etc.
+- Drawer: Drawer \`style\` and \`className\` now apply to the panel node. Use \`rootStyle\` and \`rootClassName\` for the wrapper.
+- notification: Static method \`notification.close()\` renamed to \`notification.destroy()\`. Static config options restricted.
 
-**Search regex:** \`<TimePicker[^>]*\\bdropdownClassName\\b\`
+## General Changes (always applicable)
 
-**Before:**
-\`\`\`tsx
-<TimePicker dropdownClassName="my-popup" />
-\`\`\`
-**After:**
-\`\`\`tsx
-<TimePicker popupClassName="my-popup" />
-\`\`\`
-
-### 16. Mentions: Prop \`dropdownClassName\` renamed to \`popupClassName\`
-
-**Search regex:** \`<Mentions[^>]*\\bdropdownClassName\\b\`
-
-**Before:**
-\`\`\`tsx
-<Mentions dropdownClassName="my-dropdown" />
-\`\`\`
-**After:**
-\`\`\`tsx
-<Mentions popupClassName="my-dropdown" />
-\`\`\`
-
-### 17. BackTop: Removed. Use FloatButton.BackTop instead.
-
-**Search regex:** \`import\\s*\\{[^}]*\\bBackTop\\b[^}]*\\}\\s*from\\s*['"]antd['"]\`
-
-**Before:**
-\`\`\`tsx
-import { BackTop } from 'antd';
-<BackTop />
-\`\`\`
-**After:**
-\`\`\`tsx
-import { FloatButton } from 'antd';
-<FloatButton.BackTop />
-\`\`\`
-
-### 18. Table: Column prop \`filterDropdownVisible\` renamed to \`filterDropdownOpen\`.
-
-**Search regex:** \`filterDropdownVisible\`
-
-Search for \`filterDropdownVisible\` in Table column definitions and rename to \`filterDropdownOpen\`.
-
-**Before:**
-\`\`\`tsx
-{ title: 'Name', dataIndex: 'name', filterDropdownVisible: visible }
-\`\`\`
-**After:**
-\`\`\`tsx
-{ title: 'Name', dataIndex: 'name', filterDropdownOpen: visible }
-\`\`\`
-
-### 19. message: \`message.warn()\` completely removed. Use \`message.warning()\` instead.
-
-**Search regex:** \`\\bmessage\\.warn\\(\`
-
-Search for \`message.warn(\` and replace with \`message.warning(\`.
-
-**Before:**
-\`\`\`tsx
-message.warn('Something went wrong');
-\`\`\`
-**After:**
-\`\`\`tsx
-message.warning('Something went wrong');
-\`\`\`
-
-## Manual Changes (require human review)
+These changes have no search pattern and may apply regardless of source code content:
 
 ### 1. Global: Design token system replaces Less variables. All Less variable overrides must be migrated to CSS-in-JS tokens via ConfigProvider.
 
@@ -567,206 +463,11 @@ import { ConfigProvider } from 'antd';
 
 **Reference:** https://ant.design/docs/react/migrate-less-variables
 
-### 2. Global: Component styles no longer include CSS reset. Wrap app with <App /> component to restore.
-
-1. Import App component from antd
-2. Wrap your root component with <App />
-3. Use App.useApp() hook to access message, notification, modal instances
-
-**Before:**
-\`\`\`tsx
-import { Button } from 'antd';
-
-const MyApp = () => <Button>Click</Button>;
-\`\`\`
-**After:**
-\`\`\`tsx
-import { App, Button } from 'antd';
-
-const MyApp = () => (
-  <App>
-    <Button>Click</Button>
-  </App>
-);
-\`\`\`
-
-**Reference:** https://ant.design/components/app
-
-### 3. Global: babel-plugin-import is no longer needed. antd v5 supports tree-shaking natively.
-
-1. Remove babel-plugin-import from babel config
-2. Remove related configuration in .babelrc, babel.config.js, or package.json
-3. Direct imports like \`import { Button } from 'antd'\` work without the plugin
-
-### 4. Tag: Prop \`visible\` removed. Use conditional rendering instead.
-
-Replace \`visible\` prop with conditional rendering using \`{condition && <Tag>...</Tag>}\`.
-
-**Before:**
-\`\`\`tsx
-<Tag visible={show}>Tag</Tag>
-\`\`\`
-**After:**
-\`\`\`tsx
-{show && <Tag>Tag</Tag>}
-\`\`\`
-
-### 5. Comment: Removed from antd. Use @ant-design/compatible instead.
-
-1. Install @ant-design/compatible: npm install @ant-design/compatible
-2. Change import from 'antd' to '@ant-design/compatible'
-
-**Before:**
-\`\`\`tsx
-import { Comment } from 'antd';
-\`\`\`
-**After:**
-\`\`\`tsx
-import { Comment } from '@ant-design/compatible';
-\`\`\`
-
-**Reference:** https://ant.design/docs/react/migration-v5
-
-### 6. PageHeader: Removed from antd. Use @ant-design/pro-components instead.
-
-1. Install @ant-design/pro-components: npm install @ant-design/pro-components
-2. Change import from 'antd' to '@ant-design/pro-components'
-
-**Before:**
-\`\`\`tsx
-import { PageHeader } from 'antd';
-\`\`\`
-**After:**
-\`\`\`tsx
-import { PageHeader } from '@ant-design/pro-components';
-\`\`\`
-
-**Reference:** https://ant.design/docs/react/migration-v5
-
-### 7. message: Static methods \`message.xxx()\` deprecated. Use \`App.useApp()\` hook instead for context support.
-
-1. Wrap app with <App /> component
-2. Use const { message } = App.useApp(); in functional components
-3. Replace static message.xxx() calls with the hook-provided instance
-
-**Before:**
-\`\`\`tsx
-import { message } from 'antd';
-message.success('Done!');
-\`\`\`
-**After:**
-\`\`\`tsx
-import { App } from 'antd';
-const MyComponent = () => {
-  const { message } = App.useApp();
-  message.success('Done!');
-};
-\`\`\`
-
-### 8. notification: Static methods \`notification.xxx()\` deprecated. Use \`App.useApp()\` hook instead.
-
-Same pattern as message — use App.useApp() to get notification instance.
-
-**Before:**
-\`\`\`tsx
-import { notification } from 'antd';
-notification.success({ message: 'Done!' });
-\`\`\`
-**After:**
-\`\`\`tsx
-import { App } from 'antd';
-const MyComponent = () => {
-  const { notification } = App.useApp();
-  notification.success({ message: 'Done!' });
-};
-\`\`\`
-
-### 9. Modal: Static methods \`Modal.confirm()\` etc. deprecated. Use \`App.useApp()\` hook instead.
-
-Same pattern as message/notification — use App.useApp() to get modal instance.
-
-**Before:**
-\`\`\`tsx
-import { Modal } from 'antd';
-Modal.confirm({ title: 'Sure?' });
-\`\`\`
-**After:**
-\`\`\`tsx
-import { App } from 'antd';
-const MyComponent = () => {
-  const { modal } = App.useApp();
-  modal.confirm({ title: 'Sure?' });
-};
-\`\`\`
-
-### 10. Table: Column \`filterDropdown\` render args changed. \`confirm({ closeDropdown: false })\` replaced by separate \`close\` function.
-
-Update filterDropdown render function signature to use the new \`close\` parameter instead of \`confirm({ closeDropdown: false })\`.
-
-**Before:**
-\`\`\`tsx
-filterDropdown: ({ confirm }) => (
-  <Button onClick={() => confirm({ closeDropdown: false })}>Filter</Button>
-)
-\`\`\`
-**After:**
-\`\`\`tsx
-filterDropdown: ({ confirm, close }) => (
-  <Button onClick={() => close()}>Filter</Button>
-)
-\`\`\`
-
-### 11. Form: Prop \`labelCol\` and \`wrapperCol\` can now be set globally via ConfigProvider.
+### 2. Form: Prop \`labelCol\` and \`wrapperCol\` can now be set globally via ConfigProvider.
 
 Optional improvement: move repeated labelCol/wrapperCol config to ConfigProvider for consistency.
 
-### 12. Slider: Tooltip-related APIs converged into \`tooltip\` property. \`tooltipVisible\` → \`tooltip.open\`, \`tipFormatter\` → \`tooltip.formatter\`, etc.
-
-Migrate Slider tooltip props:
-- tooltipVisible → tooltip.open
-- tipFormatter → tooltip.formatter
-- tooltipPlacement → tooltip.placement
-- getTooltipPopupContainer → tooltip.getPopupContainer
-
-**Before:**
-\`\`\`tsx
-<Slider tooltipVisible={show} tipFormatter={(v) => \`\${v}%\`} />
-\`\`\`
-**After:**
-\`\`\`tsx
-<Slider tooltip={{ open: show, formatter: (v) => \`\${v}%\` }} />
-\`\`\`
-
-### 13. Drawer: Drawer \`style\` and \`className\` now apply to the panel node. Use \`rootStyle\` and \`rootClassName\` for the wrapper.
-
-In v5, Drawer \`style\` and \`className\` are migrated to the Drawer panel node.
-If you were using them to style the wrapper/mask, replace with \`rootStyle\` and \`rootClassName\`.
-
-**Before:**
-\`\`\`tsx
-<Drawer className="my-drawer" style={{ zIndex: 1000 }}>
-\`\`\`
-**After:**
-\`\`\`tsx
-<Drawer rootClassName="my-drawer" rootStyle={{ zIndex: 1000 }}>
-\`\`\`
-
-### 14. notification: Static method \`notification.close()\` renamed to \`notification.destroy()\`. Static config options restricted.
-
-1. Rename notification.close() to notification.destroy()
-2. Static methods no longer allow dynamic prefixCls, maxCount, top, bottom, getContainer in open()
-3. Use useNotification hook if you need different configurations
-
-**Before:**
-\`\`\`tsx
-notification.close(key);
-\`\`\`
-**After:**
-\`\`\`tsx
-notification.destroy(key);
-\`\`\`
-
-### 15. Global: IE browser is no longer supported. v5 uses CSS-in-JS and modern CSS features.
+### 3. Global: IE browser is no longer supported. v5 uses CSS-in-JS and modern CSS features.
 
 If your project needs IE support, you cannot upgrade to v5. Consider using @ant-design/cssinjs StyleProvider for :where selector compatibility with older browsers."
 `;
