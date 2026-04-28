@@ -163,8 +163,20 @@ function lintFile(
     issues.push({ file: filePath, line, rule, severity, message });
   };
 
+  // Track JSX ancestor stack for context-aware rules (e.g. Checkbox inside Checkbox.Group)
+  const jsxAncestorStack: string[] = [];
+  const isInsideComponent = (name: string): boolean => jsxAncestorStack.includes(name);
+
   // Single pass: collect imports and check all rules
   const visitor = new Visitor({
+    JSXElement(node: any) {
+      const elName = getJSXElementName(node.openingElement?.name);
+      jsxAncestorStack.push(elName);
+    },
+    'JSXElement:exit'() {
+      jsxAncestorStack.pop();
+    },
+
     ImportDeclaration(node: any) {
       const source = node.source.value;
       if (!matchesAntdAlias(source, antdAliases)) return;
@@ -251,7 +263,7 @@ function lintFile(
         }
 
         if (compName === 'Checkbox' && importedComponents.has('Checkbox')) {
-          if (hasAttr(attrs, 'value')) {
+          if (hasAttr(attrs, 'value') && !isInsideComponent('Checkbox.Group')) {
             report('usage', 'warning', line, 'Checkbox `value` is not a valid prop outside Checkbox.Group, did you mean `checked`?');
           }
         }
@@ -303,7 +315,7 @@ function lintFile(
         }
 
         if (compName === 'Radio' && importedComponents.has('Radio')) {
-          if (hasAttr(attrs, 'optionType')) {
+          if (hasAttr(attrs, 'optionType') && !isInsideComponent('Radio.Group')) {
             report('usage', 'warning', line, '`optionType` is only supported on Radio.Group, not Radio');
           }
         }
