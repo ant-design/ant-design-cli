@@ -1,71 +1,33 @@
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
-import { homedir } from 'node:os';
-import { get } from 'node:https';
 import { compare, valid } from '../data/version.js';
+import { cacheStore } from './store.js';
 
 declare const __CLI_VERSION__: string;
 
-interface UpdateCache {
-  lastChecked: number;
-  latestVersion: string;
-}
-
-const CACHE_DIR = join(homedir(), '.config', 'antd-cli');
-const CACHE_FILE = join(CACHE_DIR, 'update-check.json');
 const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-function readCache(): UpdateCache | null {
+async function fetchVersionFromUrl(url: string): Promise<string> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 3000);
   try {
-    if (!existsSync(CACHE_FILE)) return null;
-    return JSON.parse(readFileSync(CACHE_FILE, 'utf-8')) as UpdateCache;
-  } catch {
-    return null;
-  }
-}
-
-function writeCache(cache: UpdateCache): void {
-  try {
-    if (!existsSync(CACHE_DIR)) {
-      mkdirSync(CACHE_DIR, { recursive: true });
-    }
-    writeFileSync(CACHE_FILE, JSON.stringify(cache), 'utf-8');
-  } catch {
-    // ignore write errors
+    const res = await fetch(url, { signal: controller.signal, redirect: 'follow' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = (await res.json()) as { version?: string };
+    if (json.version) return json.version;
+    throw new Error('No version provided');
+  } finally {
+    clearTimeout(timer);
   }
 }
 
 function fetchLatestVersion(): Promise<string | null> {
-  return new Promise((resolve) => {
-    const req = get(
-      'https://registry.npmjs.org/@ant-design/cli/latest',
-      { timeout: 3000 },
-      (res) => {
-        if (res.statusCode !== 200) {
-          res.resume();
-          resolve(null);
-          return;
-        }
-        let data = '';
-        res.on('data', (chunk: Buffer) => {
-          data += chunk.toString();
-        });
-        res.on('end', () => {
-          try {
-            const json = JSON.parse(data) as { version?: string };
-            resolve(json.version ?? null);
-          } catch {
-            resolve(null);
-          }
-        });
-      }
-    );
-    req.on('error', () => resolve(null));
-    req.on('timeout', () => {
-      req.destroy();
-      resolve(null);
-    });
-  });
+  const sources = [
+    'https://registry.npmjs.org/@ant-design/cli/latest', // Official npm
+    'https://registry.npmmirror.com/@ant-design/cli/latest', // China mirror
+    'https://unpkg.com/@ant-design/cli@latest/package.json', // Unpkg CDN
+  ];
+
+  // Return the fastest successful result. If all fail, return null.
+  return Promise.any(sources.map((url) => fetchVersionFromUrl(url))).catch(() => null);
 }
 
 function printUpdateNotice(currentVersion: string, latestVersion: string): void {
@@ -89,14 +51,14 @@ export async function checkForUpdate(): Promise<void> {
   if (!valid(currentVersion)) return;
 
   const now = Date.now();
-  const cache = readCache();
+  const cache = cacheStore.get('updateCache') ?? null;
 
   let latestVersion = cache?.latestVersion ?? null;
 
   // Fetch if no cache or cache is stale
   if (!cache || now - cache.lastChecked > CHECK_INTERVAL_MS) {
     const fetched = await fetchLatestVersion();
-    writeCache({
+    cacheStore.set('updateCache', {
       lastChecked: now,
       latestVersion: fetched ?? latestVersion ?? currentVersion,
     });
