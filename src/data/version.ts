@@ -90,16 +90,31 @@ export function valid(version: string): boolean {
 
 /**
  * Check if a version string satisfies a semver range.
- * Supports: >=, >, ^, ~, exact x.y.z, bare x, bare x.y
+ * Supports: >=, <=, >, <, ^, ~, exact x.y.z, bare x, bare x.y,
+ * and compound ranges (multiple space-separated constraints ANDed, e.g. ">= 5.2.3 <= 5.3.0").
  * Returns true for unrecognized range formats (fail-open).
  */
 export function satisfies(version: string, range: string): boolean {
   range = range.trim();
   version = version.trim();
 
+  // Compound range: multiple constraints ANDed (e.g. ">= 5.2.3 <= 5.3.0", ">= 4.21.6 < 4.22.0")
+  const constraints = range.match(/(?:>=|<=|>|<)\s*\d+[\d.]*/g);
+  if (constraints && constraints.length > 1) {
+    return constraints.every((c) => satisfies(version, c.trim()));
+  }
+
+  if (range.startsWith('<=')) {
+    const bound = range.slice(2).trim();
+    return compare(version, bound) <= 0;
+  }
   if (range.startsWith('>=')) {
     const bound = range.slice(2).trim();
     return compare(version, bound) >= 0;
+  }
+  if (range.startsWith('<')) {
+    const bound = range.slice(1).trim();
+    return compare(version, bound) < 0;
   }
   if (range.startsWith('>')) {
     const bound = range.slice(1).trim();
