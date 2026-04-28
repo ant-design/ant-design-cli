@@ -256,11 +256,50 @@ describe('lint command', () => {
       expect(issues.length).toBeGreaterThanOrEqual(2); // link and text
     });
 
-    it('detects Checkbox value prop', async () => {
+    it('detects Checkbox value prop outside Checkbox.Group', async () => {
       const out = await runLint([join(tmpDir, 'usage.tsx')]);
       const data = parseJson(out);
       const issues = data.issues.filter((i: any) => i.message.includes('Checkbox') && i.message.includes('value'));
       expect(issues.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('does not flag Checkbox value inside Checkbox.Group', async () => {
+      makeTmpFile(
+        'checkbox-group.tsx',
+        `import { Checkbox } from 'antd';
+const items = [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }];
+const App = ({ selected, onChange }: any) => (
+  <Checkbox.Group value={selected} onChange={onChange}>
+    {items.map(item => (
+      <Checkbox key={item.id} value={item.id}>{item.label}</Checkbox>
+    ))}
+  </Checkbox.Group>
+);
+`,
+      );
+      const out = await runLint([join(tmpDir, 'checkbox-group.tsx')]);
+      const data = parseJson(out);
+      const issues = data.issues.filter((i: any) => i.message.includes('Checkbox') && i.message.includes('value'));
+      expect(issues).toHaveLength(0);
+    });
+
+    it('does not flag Checkbox value in nested Checkbox.Group', async () => {
+      makeTmpFile(
+        'checkbox-group-nested.tsx',
+        `import { Checkbox, Space } from 'antd';
+const App = () => (
+  <Space>
+    <Checkbox.Group>
+      <Checkbox value="a">A</Checkbox>
+    </Checkbox.Group>
+  </Space>
+);
+`,
+      );
+      const out = await runLint([join(tmpDir, 'checkbox-group-nested.tsx')]);
+      const data = parseJson(out);
+      const issues = data.issues.filter((i: any) => i.message.includes('Checkbox') && i.message.includes('value'));
+      expect(issues).toHaveLength(0);
     });
 
     it('detects Divider vertical with children', async () => {
@@ -310,6 +349,24 @@ describe('lint command', () => {
       const data = parseJson(out);
       const issues = data.issues.filter((i: any) => i.message.includes('optionType'));
       expect(issues.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('does not flag Radio optionType inside Radio.Group', async () => {
+      makeTmpFile(
+        'radio-group.tsx',
+        `import { Radio } from 'antd';
+const App = () => (
+  <Radio.Group optionType="button">
+    <Radio value="a">A</Radio>
+    <Radio value="b">B</Radio>
+  </Radio.Group>
+);
+`,
+      );
+      const out = await runLint([join(tmpDir, 'radio-group.tsx')]);
+      const data = parseJson(out);
+      const issues = data.issues.filter((i: any) => i.message.includes('optionType'));
+      expect(issues).toHaveLength(0);
     });
 
     it('detects TreeSelect multiple={false} + treeCheckable', async () => {

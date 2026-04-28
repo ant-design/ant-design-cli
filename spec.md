@@ -428,14 +428,14 @@ Note: This is complementary to ESLint. `antd lint` focuses on antd-specific know
 - **usage** — Prop combination mistakes detected from antd runtime warnings:
   - Form.Item `shouldUpdate` + `dependencies` conflict
   - Button `ghost` + `type="link"` / `type="text"` conflict
-  - Checkbox `value` prop (should be `checked`)
+  - Checkbox `value` prop outside Checkbox.Group (should be `checked`; `value` is valid inside Checkbox.Group)
   - Divider `type="vertical"` with children
   - Select `maxCount` without `mode="multiple"` / `mode="tags"`
   - Menu `inlineCollapsed` without `mode="inline"`
   - QRCode missing `value` prop
   - Typography.Link `ellipsis` as object (only boolean supported)
   - Typography.Text `ellipsis` with `expandable` / `rows` (not supported)
-  - Radio `optionType` on Radio (only on Radio.Group)
+  - Radio `optionType` outside Radio.Group (only valid inside Radio.Group)
   - TreeSelect `multiple={false}` + `treeCheckable` conflict
 - **performance** — Wildcard imports from `antd`, `antd/*`, configured `--antd-alias` packages, or their subpaths, disabling virtual scroll on Select
 
