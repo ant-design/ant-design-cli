@@ -43,7 +43,7 @@
     "access": "public"
   },
   "dependencies": {
-    "oxc-parser": "^0.123.0"
+    "oxc-parser": "^0.128.0"
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
