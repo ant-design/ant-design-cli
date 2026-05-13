@@ -376,9 +376,7 @@ function lintFile(
     const importKind = pending.kind === 'namespace' ? 'wildcard' : 'default';
     const suggestion = memberList
       ? `Use named imports: \`import { ${memberList} } from '${pending.source}'\``
-      : pending.kind === 'namespace'
-        ? `Use named imports instead (e.g., \`import { Button } from '${pending.source}'\`)`
-        : `Use named imports instead`;
+      : 'Use named imports instead';
     report('performance', 'error', pending.line, `Avoid ${importKind} import from ${pending.source}. ${suggestion}`);
   }
 
