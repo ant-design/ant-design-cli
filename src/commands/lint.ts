@@ -176,6 +176,10 @@ function lintFile(
   const jsxAncestorStack: string[] = [];
   const isInsideComponent = (name: string): boolean => jsxAncestorStack.includes(name);
 
+  // Track namespace/default import usage for performance rule suggestions
+  const pendingPerformanceIssues: { line: number; source: string; localName: string; kind: 'namespace' | 'default' }[] = [];
+  const namespaceMemberUsage = new Map<string, Set<string>>();
+
   // Single pass: collect imports and check all rules
   const visitor = new Visitor({
     JSXElement(node: any) {
@@ -199,16 +203,18 @@ function lintFile(
           if (name) importedComponents.add(name);
         }
 
-        if ((!only || only === 'performance') && spec.type === 'ImportNamespaceSpecifier') {
-          report('performance', 'error', lineOf(node),
-            `Avoid wildcard import from ${source}. Use named imports: \`import { Button } from '${source}'\``);
-        }
+        if (!only || only === 'performance') {
+          if (spec.type === 'ImportNamespaceSpecifier') {
+            const localName = spec.local?.name ?? '';
+            pendingPerformanceIssues.push({ line: lineOf(node), source, localName, kind: 'namespace' });
+            namespaceMemberUsage.set(localName, new Set());
+          }
 
-        if ((!only || only === 'performance') &&
-            spec.type === 'ImportDefaultSpecifier' &&
-            !isLocalePath(source, antdAliases)) {
-          report('performance', 'error', lineOf(node),
-            `Avoid default import from ${source}. Use named imports instead`);
+          if (spec.type === 'ImportDefaultSpecifier' && !isLocalePath(source, antdAliases)) {
+            const localName = spec.local?.name ?? '';
+            pendingPerformanceIssues.push({ line: lineOf(node), source, localName, kind: 'default' });
+            namespaceMemberUsage.set(localName, new Set());
+          }
         }
       }
     },
@@ -218,6 +224,15 @@ function lintFile(
       if (!compName) return;
       const attrs = node.attributes || [];
       const line = lineOf(node);
+
+      // Collect member usage from namespace/default imports (e.g. <Antd.Button />)
+      if (compName.includes('.')) {
+        const [obj, prop] = compName.split('.');
+        if (obj && prop) {
+          const members = namespaceMemberUsage.get(obj);
+          if (members) members.add(prop);
+        }
+      }
 
       // --- Deprecated checks ---
       if (!only || only === 'deprecated') {
@@ -354,6 +369,23 @@ function lintFile(
     },
   });
   visitor.visit(result.program);
+
+  // Process deferred performance issues with actual member usage
+  for (const pending of pendingPerformanceIssues) {
+    const usedMembers = namespaceMemberUsage.get(pending.localName);
+    const memberList = usedMembers && usedMembers.size > 0 ? [...usedMembers].join(', ') : '';
+    if (pending.kind === 'namespace') {
+      const suggestion = memberList
+        ? `Use named imports: \`import { ${memberList} } from '${pending.source}'\``
+        : `Use named imports instead (e.g., \`import { Button } from '${pending.source}'\`)`;
+      report('performance', 'error', pending.line, `Avoid wildcard import from ${pending.source}. ${suggestion}`);
+    } else {
+      const suggestion = memberList
+        ? `Use named imports: \`import { ${memberList} } from '${pending.source}'\``
+        : `Use named imports instead`;
+      report('performance', 'error', pending.line, `Avoid default import from ${pending.source}. ${suggestion}`);
+    }
+  }
 
   return issues;
 }
