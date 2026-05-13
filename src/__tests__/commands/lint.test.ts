@@ -449,6 +449,19 @@ const App = () => <div />;
       const data = parseJson(out);
       expect(data.issues).toHaveLength(0);
     });
+
+    it('does not flag wildcard import from antd locale paths', async () => {
+      makeTmpFile(
+        'locale-wildcard.tsx',
+        `import * as enUS from 'antd/locale/en_US';
+
+const App = () => <div />;
+`,
+      );
+      const out = await runLint([join(tmpDir, 'locale-wildcard.tsx')]);
+      const data = parseJson(out);
+      expect(data.issues).toHaveLength(0);
+    });
   });
 
   // --- --only filter ---

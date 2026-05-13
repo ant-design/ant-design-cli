@@ -204,13 +204,13 @@ function lintFile(
         }
 
         if (!only || only === 'performance') {
-          const isNamespace = spec.type === 'ImportNamespaceSpecifier';
+          const isNonLocaleNamespace = spec.type === 'ImportNamespaceSpecifier' && !isLocalePath(source, antdAliases);
           const isNonLocaleDefault = spec.type === 'ImportDefaultSpecifier' && !isLocalePath(source, antdAliases);
-          if (isNamespace || isNonLocaleDefault) {
+          if (isNonLocaleNamespace || isNonLocaleDefault) {
             const localName = spec.local?.name ?? '';
             pendingPerformanceIssues.push({
               line: lineOf(node), source, localName,
-              kind: isNamespace ? 'namespace' : 'default',
+              kind: isNonLocaleNamespace ? 'namespace' : 'default',
             });
             namespaceMemberUsage.set(localName, new Set());
           }
