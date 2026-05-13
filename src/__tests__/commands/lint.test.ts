@@ -413,6 +413,55 @@ const App = () => (
       expect(issues[0].rule).toBe('performance');
       expect(issues[0].severity).toBe('error');
     });
+
+    it('suggests actual used members for wildcard import', async () => {
+      makeTmpFile(
+        'wildcard-usage.tsx',
+        `import * as Antd from 'antd';
+
+const App = () => (
+  <div>
+    <Antd.Button />
+    <Antd.Select />
+  </div>
+);
+`,
+      );
+      const out = await runLint([join(tmpDir, 'wildcard-usage.tsx')]);
+      const data = parseJson(out);
+      const issues = data.issues.filter((i: any) => i.message.includes('wildcard'));
+      expect(issues).toHaveLength(1);
+      expect(issues[0].message).toContain('Button');
+      expect(issues[0].message).toContain('Select');
+    });
+
+    it('does not flag default import from antd locale paths', async () => {
+      makeTmpFile(
+        'locale-import.tsx',
+        `import enUS from 'antd/locale/en_US';
+import jaJP from 'antd/es/locale/ja_JP';
+import zhCN from 'antd/lib/locale/zh_CN';
+
+const App = () => <div />;
+`,
+      );
+      const out = await runLint([join(tmpDir, 'locale-import.tsx')]);
+      const data = parseJson(out);
+      expect(data.issues).toHaveLength(0);
+    });
+
+    it('does not flag wildcard import from antd locale paths', async () => {
+      makeTmpFile(
+        'locale-wildcard.tsx',
+        `import * as enUS from 'antd/locale/en_US';
+
+const App = () => <div />;
+`,
+      );
+      const out = await runLint([join(tmpDir, 'locale-wildcard.tsx')]);
+      const data = parseJson(out);
+      expect(data.issues).toHaveLength(0);
+    });
   });
 
   // --- --only filter ---
