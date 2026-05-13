@@ -204,15 +204,14 @@ function lintFile(
         }
 
         if (!only || only === 'performance') {
-          if (spec.type === 'ImportNamespaceSpecifier') {
+          const isNamespace = spec.type === 'ImportNamespaceSpecifier';
+          const isNonLocaleDefault = spec.type === 'ImportDefaultSpecifier' && !isLocalePath(source, antdAliases);
+          if (isNamespace || isNonLocaleDefault) {
             const localName = spec.local?.name ?? '';
-            pendingPerformanceIssues.push({ line: lineOf(node), source, localName, kind: 'namespace' });
-            namespaceMemberUsage.set(localName, new Set());
-          }
-
-          if (spec.type === 'ImportDefaultSpecifier' && !isLocalePath(source, antdAliases)) {
-            const localName = spec.local?.name ?? '';
-            pendingPerformanceIssues.push({ line: lineOf(node), source, localName, kind: 'default' });
+            pendingPerformanceIssues.push({
+              line: lineOf(node), source, localName,
+              kind: isNamespace ? 'namespace' : 'default',
+            });
             namespaceMemberUsage.set(localName, new Set());
           }
         }
@@ -373,18 +372,14 @@ function lintFile(
   // Process deferred performance issues with actual member usage
   for (const pending of pendingPerformanceIssues) {
     const usedMembers = namespaceMemberUsage.get(pending.localName);
-    const memberList = usedMembers && usedMembers.size > 0 ? [...usedMembers].join(', ') : '';
-    if (pending.kind === 'namespace') {
-      const suggestion = memberList
-        ? `Use named imports: \`import { ${memberList} } from '${pending.source}'\``
-        : `Use named imports instead (e.g., \`import { Button } from '${pending.source}'\`)`;
-      report('performance', 'error', pending.line, `Avoid wildcard import from ${pending.source}. ${suggestion}`);
-    } else {
-      const suggestion = memberList
-        ? `Use named imports: \`import { ${memberList} } from '${pending.source}'\``
+    const memberList = usedMembers?.size ? [...usedMembers].join(', ') : '';
+    const importKind = pending.kind === 'namespace' ? 'wildcard' : 'default';
+    const suggestion = memberList
+      ? `Use named imports: \`import { ${memberList} } from '${pending.source}'\``
+      : pending.kind === 'namespace'
+        ? `Use named imports instead (e.g., \`import { Button } from '${pending.source}'\`)`
         : `Use named imports instead`;
-      report('performance', 'error', pending.line, `Avoid default import from ${pending.source}. ${suggestion}`);
-    }
+    report('performance', 'error', pending.line, `Avoid ${importKind} import from ${pending.source}. ${suggestion}`);
   }
 
   return issues;
