@@ -121,6 +121,15 @@ function matchesAntdAlias(source: string, antdAliases: string[]): boolean {
   return antdAliases.some((antdAlias) => source === antdAlias || source.startsWith(`${antdAlias}/`));
 }
 
+function isLocalePath(source: string, antdAliases: string[]): boolean {
+  return antdAliases.some(
+    (alias) =>
+      source.startsWith(`${alias}/locale/`) ||
+      source.startsWith(`${alias}/es/locale/`) ||
+      source.startsWith(`${alias}/lib/locale/`),
+  );
+}
+
 function mayContainAntdAlias(content: string, antdAliases: string[]): boolean {
   return antdAliases.some((antdAlias) => content.includes(antdAlias));
 }
@@ -190,10 +199,16 @@ function lintFile(
           if (name) importedComponents.add(name);
         }
 
-        if ((!only || only === 'performance') &&
-            (spec.type === 'ImportDefaultSpecifier' || spec.type === 'ImportNamespaceSpecifier')) {
+        if ((!only || only === 'performance') && spec.type === 'ImportNamespaceSpecifier') {
           report('performance', 'error', lineOf(node),
             `Avoid wildcard import from ${source}. Use named imports: \`import { Button } from '${source}'\``);
+        }
+
+        if ((!only || only === 'performance') &&
+            spec.type === 'ImportDefaultSpecifier' &&
+            !isLocalePath(source, antdAliases)) {
+          report('performance', 'error', lineOf(node),
+            `Avoid default import from ${source}. Use named imports instead`);
         }
       }
     },

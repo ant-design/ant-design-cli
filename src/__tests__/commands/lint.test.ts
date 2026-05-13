@@ -413,6 +413,21 @@ const App = () => (
       expect(issues[0].rule).toBe('performance');
       expect(issues[0].severity).toBe('error');
     });
+
+    it('does not flag default import from antd locale paths', async () => {
+      makeTmpFile(
+        'locale-import.tsx',
+        `import enUS from 'antd/locale/en_US';
+import jaJP from 'antd/es/locale/ja_JP';
+import zhCN from 'antd/lib/locale/zh_CN';
+
+const App = () => <div />;
+`,
+      );
+      const out = await runLint([join(tmpDir, 'locale-import.tsx')]);
+      const data = parseJson(out);
+      expect(data.issues).toHaveLength(0);
+    });
   });
 
   // --- --only filter ---
