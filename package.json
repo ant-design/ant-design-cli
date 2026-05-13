@@ -43,7 +43,7 @@
     "access": "public"
   },
   "dependencies": {
-    "oxc-parser": "^0.123.0"
+    "oxc-parser": "^0.130.0"
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -56,7 +56,7 @@
     "gray-matter": "^4.0.3",
     "tsup": "^8.4.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.2"
   }
 }
