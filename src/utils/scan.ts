@@ -1,5 +1,6 @@
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, extname } from 'node:path';
+import { statSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { globSync } from 'fast-glob';
 
 export const SCAN_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx']);
 export const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next']);
@@ -8,28 +9,19 @@ export const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.nex
  * Recursively collect source files from a directory or return a single file.
  */
 export function collectFiles(dir: string): string[] {
-  const files: string[] = [];
   try {
     const stat = statSync(dir);
     if (stat.isFile()) return [dir];
   } catch {
     return [];
   }
-  try {
-    const entries = readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      if (entry.name.startsWith('.umi') || SKIP_DIRS.has(entry.name)) continue;
-      const fullPath = join(dir, entry.name);
-      if (entry.isDirectory()) {
-        files.push(...collectFiles(fullPath));
-      } else if (SCAN_EXTENSIONS.has(extname(entry.name))) {
-        files.push(fullPath);
-      }
-    }
-  } catch {
-    // ignore permission errors etc
-  }
-  return files;
+
+  return globSync('**/*.{ts,tsx,js,jsx}', {
+    cwd: dir,
+    absolute: true,
+    ignore: ['**/node_modules/**', '**/.git/**', '**/dist/**', '**/build/**', '**/.next/**', '**/.umi*/**'],
+    onlyFiles: true,
+  });
 }
 
 /** Get the component name from a JSX element name AST node (e.g. "Button", "Typography.Text"). */

@@ -1,3 +1,4 @@
+import stringWidth from 'string-width';
 import type { OutputFormat, TokenData } from '../types.js';
 import { localize } from '../types.js';
 
@@ -141,14 +142,15 @@ export function formatTable(
     return [headerLine, separator, ...bodyLines].join('\n');
   }
 
-  // Text format: aligned columns
+  // Text format: aligned columns (CJK-aware)
   const colWidths = headers.map((h, i) =>
-    Math.max(h.length, ...rows.map((r) => (r[i] || '').length)),
+    Math.max(stringWidth(h), ...rows.map((r) => stringWidth(r[i] || ''))),
   );
-  const headerLine = headers.map((h, i) => h.padEnd(colWidths[i])).join('  ');
+  const padCell = (cell: string, width: number) => cell + ' '.repeat(width - stringWidth(cell));
+  const headerLine = headers.map((h, i) => padCell(h, colWidths[i])).join('  ');
   const separator = colWidths.map((w) => '-'.repeat(w)).join('  ');
   const bodyLines = rows.map((row) =>
-    row.map((cell, i) => (cell || '').padEnd(colWidths[i])).join('  '),
+    row.map((cell, i) => padCell(cell || '', colWidths[i])).join('  '),
   );
   return [headerLine, separator, ...bodyLines].join('\n');
 }

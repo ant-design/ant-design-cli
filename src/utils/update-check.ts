@@ -1,33 +1,28 @@
 import { compare, valid } from '../data/version.js';
 import { cacheStore } from './store.js';
+import { fetchWithTimeout } from './fetch.js';
 
 declare const __CLI_VERSION__: string;
 
 const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-async function fetchVersionFromUrl(url: string): Promise<string> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 3000);
-  try {
-    const res = await fetch(url, { signal: controller.signal, redirect: 'follow' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = (await res.json()) as { version?: string };
-    if (json.version) return json.version;
-    throw new Error('No version provided');
-  } finally {
-    clearTimeout(timer);
+const NPM_SOURCES = [
+  'https://registry.npmjs.org/@ant-design/cli/latest', // Official npm
+  'https://registry.npmmirror.com/@ant-design/cli/latest', // China mirror
+  'https://unpkg.com/@ant-design/cli@latest/package.json', // Unpkg CDN
+];
+
+async function fetchLatestVersion(): Promise<string | null> {
+  for (const url of NPM_SOURCES) {
+    try {
+      const res = await fetchWithTimeout(url, 3000);
+      const json = (await res.json()) as { version?: string };
+      if (json.version) return json.version;
+    } catch {
+      continue;
+    }
   }
-}
-
-function fetchLatestVersion(): Promise<string | null> {
-  const sources = [
-    'https://registry.npmjs.org/@ant-design/cli/latest', // Official npm
-    'https://registry.npmmirror.com/@ant-design/cli/latest', // China mirror
-    'https://unpkg.com/@ant-design/cli@latest/package.json', // Unpkg CDN
-  ];
-
-  // Return the fastest successful result. If all fail, return null.
-  return Promise.any(sources.map((url) => fetchVersionFromUrl(url))).catch(() => null);
+  return null;
 }
 
 function printUpdateNotice(currentVersion: string, latestVersion: string): void {

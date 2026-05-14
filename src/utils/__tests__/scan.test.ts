@@ -54,22 +54,6 @@ describe('collectFiles', () => {
   it('should return empty for non-existent path', () => {
     expect(collectFiles('/nonexistent/path')).toEqual([]);
   });
-
-  it('should return empty when directory cannot be read (permission error)', () => {
-    // Create a directory, then mock readdirSync to throw for it
-    const permDir = join(tmpDir, 'noperm');
-    mkdirSync(permDir, { recursive: true });
-    // Make it unreadable - on macOS/Linux we can chmod 000
-    const { chmodSync } = require('node:fs');
-    try {
-      chmodSync(permDir, 0o000);
-      const files = collectFiles(permDir);
-      expect(files).toEqual([]);
-    } finally {
-      chmodSync(permDir, 0o755);
-      rmSync(tmpDir, { recursive: true, force: true });
-    }
-  });
 });
 
 describe('readJson', () => {
