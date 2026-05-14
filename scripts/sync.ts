@@ -95,8 +95,13 @@ function cleanStaleSnapshots() {
     fs.readFileSync('data/versions.json', 'utf8'),
   );
 
+  if (Object.keys(index).length === 0) {
+    console.warn('  versions.json is empty, skipping stale snapshot cleanup');
+    return;
+  }
+
   // Collect all referenced snapshot filenames (e.g. "v6.3.7.json")
-  const referenced = new Set<string>(['versions.json']);
+  const referenced = new Set<string>();
   for (const [majorKey, minorIndex] of Object.entries(index)) {
     referenced.add(`${majorKey}.json`); // primary snapshot (e.g. v6.json)
     for (const tag of Object.values(minorIndex ?? {})) {
@@ -155,7 +160,7 @@ function main() {
         continue;
       }
       // Remove stale snapshot for this minor (e.g. v6.4.2.json when tag is now 6.4.3)
-      const stalePattern = new RegExp(`^v${minorKey.replace('.', '\\.')}\\.\\d+\\.json$`);
+      const stalePattern = new RegExp(`^v${minorKey.replaceAll('.', '\\.')}\\.\\d+\\.json$`);
       const staleFiles = fs.readdirSync('data').filter((f) => stalePattern.test(f));
       for (const stale of staleFiles) {
         fs.unlinkSync(path.join('data', stale));
