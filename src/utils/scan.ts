@@ -1,6 +1,6 @@
 import { statSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { globSync } from 'fast-glob';
+import fg from 'fast-glob';
 
 export const SCAN_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx']);
 export const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next']);
@@ -18,12 +18,16 @@ export function collectFiles(dir: string): string[] {
     return [];
   }
 
-  return globSync('**/*.{ts,tsx,js,jsx}', {
-    cwd: dir,
-    absolute: true,
-    ignore: GLOB_IGNORE,
-    onlyFiles: true,
-  });
+  try {
+    return fg.globSync('**/*.{ts,tsx,js,jsx}', {
+      cwd: dir,
+      absolute: true,
+      ignore: GLOB_IGNORE,
+      onlyFiles: true,
+    });
+  } catch {
+    return [];
+  }
 }
 
 /** Get the component name from a JSX element name AST node (e.g. "Button", "Typography.Text"). */

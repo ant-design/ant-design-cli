@@ -287,9 +287,12 @@ describe('satisfies()', () => {
     expect(satisfies('15.0.0', '>=16.0.0 || >=18.0.0')).toBe(false);
   });
 
-  // fail-open for unrecognized range
-  it('returns true (fail-open) for unrecognized range format', () => {
+  // wildcard and x-range
+  it('handles * wildcard', () => {
     expect(satisfies('1.0.0', '*')).toBe(true);
+  });
+  it('returns false for truly invalid ranges (semver returns false)', () => {
+    expect(satisfies('1.0.0', 'not-a-range')).toBe(false);
   });
 
   // <= operator

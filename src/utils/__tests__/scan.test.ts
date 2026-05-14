@@ -54,6 +54,19 @@ describe('collectFiles', () => {
   it('should return empty for non-existent path', () => {
     expect(collectFiles('/nonexistent/path')).toEqual([]);
   });
+
+  it('should return empty when directory cannot be read (permission error)', () => {
+    const permDir = join(tmpDir, 'noperm');
+    mkdirSync(permDir, { recursive: true });
+    const { chmodSync } = require('node:fs');
+    try {
+      chmodSync(permDir, 0o000);
+      expect(collectFiles(permDir)).toEqual([]);
+    } finally {
+      chmodSync(permDir, 0o755);
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
 });
 
 describe('readJson', () => {
