@@ -13,16 +13,15 @@ const NPM_SOURCES = [
 ];
 
 async function fetchLatestVersion(): Promise<string | null> {
-  for (const url of NPM_SOURCES) {
-    try {
+  // Race all registries — return the fastest successful response
+  return Promise.any(
+    NPM_SOURCES.map(async (url) => {
       const res = await fetchWithTimeout(url, 3000);
       const json = (await res.json()) as { version?: string };
       if (json.version) return json.version;
-    } catch {
-      continue;
-    }
-  }
-  return null;
+      throw new Error('No version provided');
+    }),
+  ).catch(() => null as string | null);
 }
 
 function printUpdateNotice(currentVersion: string, latestVersion: string): void {

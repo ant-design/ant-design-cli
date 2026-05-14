@@ -83,5 +83,5 @@ export function valid(version: string): boolean {
 
 /** Check if a version satisfies a semver range. */
 export function satisfies(version: string, range: string): boolean {
-  return semver.satisfies(version, range) ?? true;
+  return semver.satisfies(version, range, { includePrerelease: true }) ?? false;
 }
