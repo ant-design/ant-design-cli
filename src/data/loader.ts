@@ -4,7 +4,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { MetadataStore, ComponentData, CLIError } from '../types.js';
 import { createError, fuzzyMatch, ErrorCodes } from '../output/error.js';
-import { readJson } from '../utils/scan.js';
+import { readJson } from '../utils/json.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -97,7 +97,7 @@ function loadMetadataForVersionUncached(version: string): MetadataStore {
 
   // Load versions index
   const versionsPath = join(getDataPath(), 'versions.json');
-  const versionsIndex = readJson(versionsPath) as Record<string, Record<string, string>> | null;
+  const versionsIndex = readJson<Record<string, Record<string, string>>>(versionsPath);
   if (!versionsIndex) {
     return loadMetadata(majorVersion);
   }

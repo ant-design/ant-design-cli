@@ -143,14 +143,19 @@ export function formatTable(
   }
 
   // Text format: aligned columns (CJK-aware)
-  const colWidths = headers.map((h, i) =>
-    Math.max(stringWidth(h), ...rows.map((r) => stringWidth(r[i] || ''))),
+  // Pre-compute visual widths to avoid calling stringWidth twice per cell
+  const sw = (s: string) => stringWidth(s);
+  const headerWidths = headers.map(sw);
+  const cellWidths = rows.map((row) => row.map((cell) => sw(cell || '')));
+  const colWidths = headers.map((_, i) =>
+    Math.max(headerWidths[i], ...cellWidths.map((rw) => rw[i])),
   );
-  const padCell = (cell: string, width: number) => cell + ' '.repeat(width - stringWidth(cell));
-  const headerLine = headers.map((h, i) => padCell(h, colWidths[i])).join('  ');
+  const padCell = (cell: string, cellWidth: number, colWidth: number) =>
+    cell + ' '.repeat(colWidth - cellWidth);
+  const headerLine = headers.map((h, i) => padCell(h, headerWidths[i], colWidths[i])).join('  ');
   const separator = colWidths.map((w) => '-'.repeat(w)).join('  ');
-  const bodyLines = rows.map((row) =>
-    row.map((cell, i) => padCell(cell || '', colWidths[i])).join('  '),
+  const bodyLines = rows.map((row, ri) =>
+    row.map((cell, ci) => padCell(cell || '', cellWidths[ri][ci], colWidths[ci])).join('  '),
   );
   return [headerLine, separator, ...bodyLines].join('\n');
 }
