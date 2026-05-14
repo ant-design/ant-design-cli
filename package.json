@@ -42,6 +42,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "overrides": {
+    "fast-uri": "^3.1.2",
+    "hono": "^4.12.18",
+    "ip-address": "^10.1.1"
+  },
   "dependencies": {
     "oxc-parser": "^0.130.0"
   },
