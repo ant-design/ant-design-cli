@@ -41,7 +41,7 @@ function main() {
   }
 
   // Collect version info for changelog — only include versions whose data file actually changed
-  const changedFiles = new Set(run('git diff --name-only HEAD').split('\n').filter(Boolean));
+  const changedFiles = new Set(run('git diff --name-only HEAD -- data/').split(/\r?\n/).filter(Boolean));
   const versions: string[] = [];
   for (const major of [4, 5, 6]) {
     if (!changedFiles.has(`data/v${major}.json`)) continue;
