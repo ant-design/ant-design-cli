@@ -89,6 +89,37 @@ function updateVersionsJson(major: number, minorMap: Map<string, string>) {
   fs.writeFileSync(file, JSON.stringify(index, null, 2) + '\n');
 }
 
+/** Remove snapshot files no longer referenced by versions.json. */
+function cleanStaleSnapshots(majors: number[]) {
+  const index: Record<string, Record<string, string>> = JSON.parse(
+    fs.readFileSync('data/versions.json', 'utf8'),
+  );
+
+  // Collect all referenced snapshot filenames (e.g. "v6.3.7.json")
+  const referenced = new Set<string>(['versions.json']);
+  for (const major of majors) {
+    const majorKey = `v${major}`;
+    referenced.add(`${majorKey}.json`); // primary snapshot (e.g. v6.json)
+    for (const tag of Object.values(index[majorKey] ?? {})) {
+      referenced.add(`v${tag}.json`);
+    }
+  }
+
+  // Scan data/ for stale .json files matching the v{X}.{Y}.{Z}.json pattern
+  const files = fs.readdirSync('data').filter((f) => /^v\d+\.\d+\.\d+\.json$/.test(f));
+  let removed = 0;
+  for (const file of files) {
+    if (!referenced.has(file)) {
+      fs.unlinkSync(path.join('data', file));
+      console.log(`  Removed stale snapshot: data/${file}`);
+      removed++;
+    }
+  }
+  if (removed === 0) {
+    console.log('  No stale snapshots to remove');
+  }
+}
+
 function main() {
   const { antdDir } = parseArgs(process.argv.slice(2));
 
@@ -117,12 +148,19 @@ function main() {
       extract(antdDir, primaryFile);
     }
 
-    // Extract per-minor snapshots, skip ones that already exist
+    // Extract per-minor snapshots, replacing stale ones whose patch version changed
     for (const [minorKey, tag] of minorMap) {
       const snapshot = `data/v${tag}.json`;
       if (fs.existsSync(snapshot)) {
         console.log(`  Snapshot ${snapshot} already exists, skipping`);
         continue;
+      }
+      // Remove stale snapshot for this minor (e.g. v6.4.2.json when tag is now 6.4.3)
+      const stalePattern = new RegExp(`^v${minorKey.replace('.', '\\.')}\\.\\d+\\.json$`);
+      const staleFiles = fs.readdirSync('data').filter((f) => stalePattern.test(f));
+      for (const stale of staleFiles) {
+        fs.unlinkSync(path.join('data', stale));
+        console.log(`  Removed stale snapshot: data/${stale}`);
       }
       console.log(`  Extracting ${minorKey} → ${tag}`);
       checkout(antdDir, tag);
@@ -132,6 +170,10 @@ function main() {
     updateVersionsJson(major, minorMap);
     console.log(`  Updated versions.json for v${major}`);
   }
+
+  // Final sweep: remove any snapshot files not referenced by versions.json
+  console.log('\n=== Cleaning stale snapshots ===');
+  cleanStaleSnapshots(MAJORS);
 
   console.log('\nSync complete.');
 }
