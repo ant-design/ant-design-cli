@@ -2,7 +2,21 @@
 
 ## [6.4.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.7...v6.4.0) (2026-05-14)
 
-- 同步 antd 元数据 ([v4@4.24.16](https://github.com/ant-design/ant-design-cli/compare/v6.3.7...v6.4.0#diff-0f73f4b6da46cd62e857a1f41ea51e697389f2c62a0775fcfc545edd653c5e2c), [v5@5.29.3](https://github.com/ant-design/ant-design-cli/compare/v6.3.7...v6.4.0#diff-6b390e384eeea7f593730f71f071bf947ec0fac7a19f6d32b91e13191b177a58), [v6@6.4.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.7...v6.4.0#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+### 新功能
+
+- `doctor` 命令新增已知 Bug 检查，会检测当前安装的 antd 版本是否存在已知问题并显示相关 Issue 链接 ([#89](https://github.com/ant-design/ant-design-cli/pull/89))
+
+### Bug 修复
+
+- 修复 `Checkbox.Group`/`Radio.Group` 内 lint 误报 — `Checkbox.Group` 内的 `value` 属性和 `Radio.Group` 内的 `optionType` 属性不再被错误警告 ([#93](https://github.com/ant-design/ant-design-cli/pull/93), closes [#91](https://github.com/ant-design/ant-design-cli/issues/91))
+- 修复 lint 性能规则误判 locale 默认导入（如 `import enUS from 'antd/locale/en_US'`）为通配符导入，并改进建议信息使用实际组件名而非固定显示 `Button` ([#104](https://github.com/ant-design/ant-design-cli/pull/104), closes [#99](https://github.com/ant-design/ant-design-cli/issues/99), [#101](https://github.com/ant-design/ant-design-cli/issues/101))
+
+### 其他变更
+
+- 重构更新检查逻辑，并发查询多个来源以加快版本检测 ([#89](https://github.com/ant-design/ant-design-cli/pull/89))
+- 同步 antd 元数据 ([v6@6.4.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.7...v6.4.0#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+- 配置 Dependabot 分组更新及 npm 生态系统 ([#102](https://github.com/ant-design/ant-design-cli/pull/102))
+- 升级依赖并修复安全告警 ([#103](https://github.com/ant-design/ant-design-cli/pull/103), [#105](https://github.com/ant-design/ant-design-cli/pull/105))
 
 
 ## [6.3.7](https://github.com/ant-design/ant-design-cli/compare/v6.3.6...v6.3.7) (2026-04-27)

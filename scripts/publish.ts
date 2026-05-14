@@ -40,16 +40,12 @@ function main() {
     process.exit(0);
   }
 
-  // Collect version info for changelog — only include versions that actually changed
+  // Collect version info for changelog — only include versions whose data file actually changed
+  const changedFiles = new Set(run('git diff --name-only HEAD').split('\n').filter(Boolean));
   const versions: string[] = [];
   for (const major of [4, 5, 6]) {
+    if (!changedFiles.has(`data/v${major}.json`)) continue;
     const data = JSON.parse(readFileSync(`data/v${major}.json`, 'utf-8'));
-    try {
-      const oldData = JSON.parse(run(`git show HEAD:data/v${major}.json`));
-      if (data.version === oldData.version) continue;
-    } catch {
-      // New file, include it
-    }
     versions.push(`v${major}@${data.version}`);
   }
   const versionsStr = versions.join(', ');

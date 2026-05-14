@@ -2,7 +2,21 @@
 
 ## [6.4.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.7...v6.4.0) (2026-05-14)
 
-- Update antd metadata ([v4@4.24.16](https://github.com/ant-design/ant-design-cli/compare/v6.3.7...v6.4.0#diff-0f73f4b6da46cd62e857a1f41ea51e697389f2c62a0775fcfc545edd653c5e2c), [v5@5.29.3](https://github.com/ant-design/ant-design-cli/compare/v6.3.7...v6.4.0#diff-6b390e384eeea7f593730f71f071bf947ec0fac7a19f6d32b91e13191b177a58), [v6@6.4.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.7...v6.4.0#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+### New Features
+
+- `doctor` command now checks for known bugs in the installed antd version and displays related issue links ([#89](https://github.com/ant-design/ant-design-cli/pull/89))
+
+### Bug Fixes
+
+- Fix lint false positives for `Checkbox.Group`/`Radio.Group` — `value` on `Checkbox` inside `Checkbox.Group` and `optionType` on `Radio` inside `Radio.Group` are no longer incorrectly warned ([#93](https://github.com/ant-design/ant-design-cli/pull/93), closes [#91](https://github.com/ant-design/ant-design-cli/issues/91))
+- Fix lint performance rule incorrectly flagging locale default imports like `import enUS from 'antd/locale/en_US'` and improve suggestion to use actual component names instead of always suggesting `Button` ([#104](https://github.com/ant-design/ant-design-cli/pull/104), closes [#99](https://github.com/ant-design/ant-design-cli/issues/99), [#101](https://github.com/ant-design/ant-design-cli/issues/101))
+
+### Other Changes
+
+- Refactor update check to query multiple sources concurrently ([#89](https://github.com/ant-design/ant-design-cli/pull/89))
+- Update antd metadata ([v6@6.4.0](https://github.com/ant-design/ant-design-cli/compare/v6.3.7...v6.4.0#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+- Configure Dependabot for grouped updates as npm ecosystem ([#102](https://github.com/ant-design/ant-design-cli/pull/102))
+- Bump dependencies and resolve security alerts ([#103](https://github.com/ant-design/ant-design-cli/pull/103), [#105](https://github.com/ant-design/ant-design-cli/pull/105))
 
 
 ## [6.3.7](https://github.com/ant-design/ant-design-cli/compare/v6.3.6...v6.3.7) (2026-04-27)
