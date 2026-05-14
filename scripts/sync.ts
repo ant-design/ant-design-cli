@@ -90,17 +90,16 @@ function updateVersionsJson(major: number, minorMap: Map<string, string>) {
 }
 
 /** Remove snapshot files no longer referenced by versions.json. */
-function cleanStaleSnapshots(majors: number[]) {
+function cleanStaleSnapshots() {
   const index: Record<string, Record<string, string>> = JSON.parse(
     fs.readFileSync('data/versions.json', 'utf8'),
   );
 
   // Collect all referenced snapshot filenames (e.g. "v6.3.7.json")
   const referenced = new Set<string>(['versions.json']);
-  for (const major of majors) {
-    const majorKey = `v${major}`;
+  for (const [majorKey, minorIndex] of Object.entries(index)) {
     referenced.add(`${majorKey}.json`); // primary snapshot (e.g. v6.json)
-    for (const tag of Object.values(index[majorKey] ?? {})) {
+    for (const tag of Object.values(minorIndex ?? {})) {
       referenced.add(`v${tag}.json`);
     }
   }
@@ -173,7 +172,7 @@ function main() {
 
   // Final sweep: remove any snapshot files not referenced by versions.json
   console.log('\n=== Cleaning stale snapshots ===');
-  cleanStaleSnapshots(MAJORS);
+  cleanStaleSnapshots();
 
   console.log('\nSync complete.');
 }
