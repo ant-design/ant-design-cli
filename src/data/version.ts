@@ -1,5 +1,6 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import semver from 'semver';
 
 export interface VersionInfo {
   version: string;
@@ -70,83 +71,20 @@ function toMajor(version: string): string {
   return `v${major}`;
 }
 
-/** Simple semver comparison. Returns -1, 0, or 1. */
+/** Semver comparison. Returns -1, 0, or 1. */
 export function compare(a: string, b: string): number {
-  const pa = a.split('.').map(Number);
-  const pb = b.split('.').map(Number);
-  for (let i = 0; i < 3; i++) {
-    const na = pa[i] || 0;
-    const nb = pb[i] || 0;
-    if (na < nb) return -1;
-    if (na > nb) return 1;
-  }
-  return 0;
+  const sa = semver.coerce(a);
+  const sb = semver.coerce(b);
+  if (!sa || !sb) return 0;
+  return semver.compare(sa, sb);
 }
 
-/** Check if a string looks like a valid semver. */
+/** Check if a string is a valid semver version. */
 export function valid(version: string): boolean {
-  return /^\d+\.\d+\.\d+/.test(version);
+  return semver.valid(version) !== null;
 }
 
-/**
- * Check if a version string satisfies a semver range.
- * Supports: >=, <=, >, <, ^, ~, exact x.y.z, bare x, bare x.y,
- * and compound ranges (multiple space-separated constraints ANDed, e.g. ">= 5.2.3 <= 5.3.0").
- * Returns true for unrecognized range formats (fail-open).
- */
+/** Check if a version satisfies a semver range. Delegates to the `semver` package. */
 export function satisfies(version: string, range: string): boolean {
-  range = range.trim();
-  version = version.trim();
-
-  // Compound range: multiple constraints ANDed (e.g. ">= 5.2.3 <= 5.3.0", ">= 4.21.6 < 4.22.0")
-  const constraints = range.match(/(?:>=|<=|>|<)\s*\d+[\d.]*/g);
-  if (constraints && constraints.length > 1) {
-    return constraints.every((c) => satisfies(version, c.trim()));
-  }
-
-  if (range.startsWith('<=')) {
-    const bound = range.slice(2).trim();
-    return compare(version, bound) <= 0;
-  }
-  if (range.startsWith('>=')) {
-    const bound = range.slice(2).trim();
-    return compare(version, bound) >= 0;
-  }
-  if (range.startsWith('<')) {
-    const bound = range.slice(1).trim();
-    return compare(version, bound) < 0;
-  }
-  if (range.startsWith('>')) {
-    const bound = range.slice(1).trim();
-    return compare(version, bound) > 0;
-  }
-  if (range.startsWith('^')) {
-    const bound = range.slice(1).trim();
-    const vParts = version.split('.').map(Number);
-    const bParts = bound.split('.').map(Number);
-    if (vParts[0] !== bParts[0]) return false;
-    return compare(version, bound) >= 0;
-  }
-  if (range.startsWith('~')) {
-    const bound = range.slice(1).trim();
-    const vParts = version.split('.').map(Number);
-    const bParts = bound.split('.').map(Number);
-    if (vParts[0] !== bParts[0] || vParts[1] !== bParts[1]) return false;
-    return compare(version, bound) >= 0;
-  }
-  // bare major (e.g. "5") or major.minor (e.g. "5.1")
-  const parts = range.split('.');
-  if (parts.length <= 2 && parts.every(p => /^\d+$/.test(p))) {
-    const vParts = version.split('.').map(Number);
-    const rParts = parts.map(Number);
-    if (vParts[0] !== rParts[0]) return false;
-    if (rParts.length === 2 && vParts[1] !== rParts[1]) return false;
-    return true;
-  }
-  // exact version (x.y.z)
-  if (/^\d+\.\d+\.\d+/.test(range)) {
-    return compare(version, range) === 0;
-  }
-  // Unrecognized range — fail-open
-  return true;
+  return semver.satisfies(version, range) ?? true;
 }
