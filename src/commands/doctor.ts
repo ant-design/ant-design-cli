@@ -3,7 +3,9 @@ import type { GlobalOptions } from '../types.js';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { output } from '../output/formatter.js';
-import { readJson } from '../utils/scan.js';
+import { readJson } from '../utils/json.js';
+
+interface PkgJson { version?: string; peerDependencies?: Record<string, string>; peerDependenciesMeta?: Record<string, { optional?: boolean }>; theme?: unknown; babel?: unknown }
 import { satisfies } from '../data/version.js';
 import { getBugVersions, findBugInfo } from '../utils/bug-versions.js';
 
@@ -40,7 +42,7 @@ interface EcosystemPackage {
  * Returns null if not installed. Handles scoped packages (e.g. "@ant-design/cssinjs").
  */
 function getInstalledVersion(cwd: string, pkgName: string): string | null {
-  const pkg = readJson(join(cwd, 'node_modules', pkgName, 'package.json'));
+  const pkg = readJson<PkgJson>(join(cwd, 'node_modules', pkgName, 'package.json'));
   return pkg?.version ?? null;
 }
 
@@ -61,7 +63,7 @@ function scanEcosystemPackages(cwd: string): EcosystemPackage[] {
   const result: EcosystemPackage[] = [];
   for (const entry of entries) {
     if (entry.startsWith('.')) continue;
-    const pkg = readJson(join(scopeDir, entry, 'package.json'));
+    const pkg = readJson<PkgJson>(join(scopeDir, entry, 'package.json'));
     if (!pkg?.version) continue;
     const peerDeps: Record<string, string> = pkg.peerDependencies ?? {};
     if (Object.keys(peerDeps).length === 0) continue;
@@ -77,12 +79,12 @@ function scanEcosystemPackages(cwd: string): EcosystemPackage[] {
 }
 
 function buildContext(cwd: string): DoctorContext {
-  const antdPkg = readJson(join(cwd, 'node_modules', 'antd', 'package.json'));
-  const antdMajor = antdPkg ? parseInt(antdPkg.version.split('.')[0], 10) : 0;
-  const projectPkg = readJson(join(cwd, 'package.json'));
-  const reactPkg = readJson(join(cwd, 'node_modules', 'react', 'package.json'));
-  const cssinjsPkg = readJson(join(cwd, 'node_modules', '@ant-design', 'cssinjs', 'package.json'));
-  const iconsPkg = readJson(join(cwd, 'node_modules', '@ant-design', 'icons', 'package.json'));
+  const antdPkg = readJson<PkgJson>(join(cwd, 'node_modules', 'antd', 'package.json'));
+  const antdMajor = antdPkg?.version ? parseInt(antdPkg.version.split('.')[0], 10) : 0;
+  const projectPkg = readJson<PkgJson>(join(cwd, 'package.json'));
+  const reactPkg = readJson<PkgJson>(join(cwd, 'node_modules', 'react', 'package.json'));
+  const cssinjsPkg = readJson<PkgJson>(join(cwd, 'node_modules', '@ant-design', 'cssinjs', 'package.json'));
+  const iconsPkg = readJson<PkgJson>(join(cwd, 'node_modules', '@ant-design', 'icons', 'package.json'));
   const ecosystemPackages = scanEcosystemPackages(cwd);
   return { cwd, antdPkg, antdMajor, projectPkg, reactPkg, cssinjsPkg, iconsPkg, ecosystemPackages };
 }
@@ -157,7 +159,7 @@ function findDuplicateVersions(cwd: string, pkgPath: string): string[] {
   const versions: string[] = [];
 
   // 1. Top-level install
-  const topPkg = readJson(join(cwd, 'node_modules', pkgPath, 'package.json'));
+  const topPkg = readJson<PkgJson>(join(cwd, 'node_modules', pkgPath, 'package.json'));
   if (topPkg?.version) versions.push(topPkg.version);
 
   // 2. One level of nesting: node_modules/*/node_modules/<pkgPath>
@@ -166,7 +168,7 @@ function findDuplicateVersions(cwd: string, pkgPath: string): string[] {
     const entries = readdirSync(nmDir);
     for (const entry of entries) {
       if (entry.startsWith('.') || entry === pkgPath) continue;
-      const nestedPkg = readJson(join(nmDir, entry, 'node_modules', pkgPath, 'package.json'));
+      const nestedPkg = readJson<PkgJson>(join(nmDir, entry, 'node_modules', pkgPath, 'package.json'));
       if (nestedPkg?.version) versions.push(nestedPkg.version);
     }
   } catch {
@@ -200,7 +202,7 @@ function checkDuplicateInstall(ctx: DoctorContext): CheckResult {
 function checkThemeConfig(ctx: DoctorContext): CheckResult {
   if (ctx.antdMajor >= 5) {
     // Check for old Less variable customization (should not exist in v5+)
-    const lessOverrides = readJson(join(ctx.cwd, 'theme', 'antd.less'));
+    const lessOverrides = readJson<unknown>(join(ctx.cwd, 'theme', 'antd.less'));
     const modifyVars = ctx.projectPkg?.theme;
     if (lessOverrides !== null || modifyVars) {
       return {

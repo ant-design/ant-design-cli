@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import semver from 'semver';
-import { readJson } from '../utils/scan.js';
+import { readJson } from '../utils/json.js';
 
 export interface VersionInfo {
   version: string;
@@ -25,7 +25,7 @@ export function detectVersion(flagVersion?: string): VersionInfo {
   // 2. node_modules/antd/package.json
   const nmPath = join(process.cwd(), 'node_modules', 'antd', 'package.json');
   if (existsSync(nmPath)) {
-    const pkg = readJson(nmPath) as { version?: string } | null;
+    const pkg = readJson<{ version?: string }>(nmPath);
     if (pkg?.version) {
       return {
         version: pkg.version,
@@ -38,11 +38,11 @@ export function detectVersion(flagVersion?: string): VersionInfo {
   // 3. Project package.json dependencies
   const pkgPath = join(process.cwd(), 'package.json');
   if (existsSync(pkgPath)) {
-    const pkg = readJson(pkgPath) as {
+    const pkg = readJson<{
       dependencies?: { antd?: string };
       devDependencies?: { antd?: string };
       peerDependencies?: { antd?: string };
-    } | null;
+    }>(pkgPath);
     const depVersion =
       pkg?.dependencies?.antd || pkg?.devDependencies?.antd || pkg?.peerDependencies?.antd;
     if (depVersion) {
@@ -68,11 +68,11 @@ function toMajor(version: string): string {
   return `v${major}`;
 }
 
-/** Semver comparison using the `semver` package. Returns -1, 0, or 1. */
-export function compare(a: string, b: string): number {
+/** Semver comparison using the `semver` package. Returns -1, 0, or 1, or null if either version is unparseable. */
+export function compare(a: string, b: string): number | null {
   const sa = semver.coerce(a);
   const sb = semver.coerce(b);
-  if (!sa || !sb) return 0;
+  if (!sa || !sb) return null;
   return semver.compare(sa, sb);
 }
 
