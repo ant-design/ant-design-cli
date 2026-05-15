@@ -70,5 +70,5 @@ export function createProgram(): Command {
 
 // Auto-run when executed as CLI (skip when imported by tests)
 if (!process.env.VITEST) {
-  createProgram().parse();
+  createProgram().parseAsync();
 }
