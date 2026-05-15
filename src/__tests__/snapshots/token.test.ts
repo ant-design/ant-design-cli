@@ -4,22 +4,22 @@ import { run, runStderr, formats, langs } from '../snapshot-helper.js';
 describe('token', () => {
   // global tokens
   for (const format of formats) {
-    it(`token --format ${format} (global)`, () => {
-      expect(run('token', '--format', format)).toMatchSnapshot();
+    it(`token --format ${format} (global)`, async () => {
+      expect(await run('token', '--format', format)).toMatchSnapshot();
     });
   }
 
   // component tokens
   for (const format of formats) {
     for (const lang of langs) {
-      it(`token Button --format ${format} --lang ${lang}`, () => {
-        expect(run('token', 'Button', '--format', format, '--lang', lang)).toMatchSnapshot();
+      it(`token Button --format ${format} --lang ${lang}`, async () => {
+        expect(await run('token', 'Button', '--format', format, '--lang', lang)).toMatchSnapshot();
       });
     }
   }
 
   // error
-  it('token NonExistent', () => {
-    expect(runStderr('token', 'NonExistent')).toMatchSnapshot();
+  it('token NonExistent', async () => {
+    expect(await runStderr('token', 'NonExistent')).toMatchSnapshot();
   });
 });

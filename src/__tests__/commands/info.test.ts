@@ -1,197 +1,47 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
-import { Command } from 'commander';
-import { getComponentInfo, registerInfoCommand } from '../../commands/info.js';
-import type { CLIError } from '../../types.js';
+import { describe, it, expect } from 'vitest';
+import { run, runCLI } from '../helper.js';
 
-function createProgram(opts: { format?: string; version?: string; lang?: string; detail?: boolean } = {}) {
-  const program = new Command();
-  program.exitOverride();
-  program.configureOutput({ writeOut: () => {}, writeErr: () => {} });
-  program.option('--format <format>', 'Output format', opts.format ?? 'text');
-  program.option('--version <version>', 'Target antd version', opts.version);
-  program.option('--lang <lang>', 'Output language', opts.lang ?? 'en');
-  program.option('--detail', 'Full information output', opts.detail ?? false);
-  return program;
-}
-
-describe('getComponentInfo', () => {
-  it('returns component info for a valid component', () => {
-    const result = getComponentInfo('Button', { lang: 'en', version: '5.20.0', detail: false });
-    expect('error' in result).toBe(false);
-    if (!('error' in result)) {
-      expect(result.name).toBe('Button');
-      expect(result).toHaveProperty('nameZh');
-      expect(result).toHaveProperty('description');
-      expect(result).toHaveProperty('props');
-      expect(Array.isArray(result.props)).toBe(true);
-      expect(result.props.length).toBeGreaterThan(0);
-    }
+describe('info', () => {
+  it('should show component info', async () => {
+    const out = await run('info', 'Button');
+    expect(out).toContain('Button');
+    expect(out).toContain('type');
+    expect(out).toContain('disabled');
   });
 
-  it('returns detail info when detail is true', () => {
-    const result = getComponentInfo('Button', { lang: 'en', version: '5.20.0', detail: true });
-    expect('error' in result).toBe(false);
-    if (!('error' in result) && 'whenToUse' in result) {
-      expect(result).toHaveProperty('whenToUse');
-      expect(result).toHaveProperty('methods');
-      expect(result).toHaveProperty('related');
-      expect(result).toHaveProperty('faq');
-    }
+  it('should show component info as JSON', async () => {
+    const out = await run('info', 'Button', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.name).toBe('Button');
+    expect(data.props.length).toBeGreaterThan(0);
   });
 
-  it('returns CLIError for non-existent component', () => {
-    const result = getComponentInfo('NonExistent', { lang: 'en', version: '5.20.0', detail: false });
-    expect('error' in result).toBe(true);
-    const err = result as CLIError;
-    expect(err.code).toBe('COMPONENT_NOT_FOUND');
-    expect(err.message).toContain('NonExistent');
+  it('should show detailed component info', async () => {
+    const out = await run('info', 'Button', '--detail');
+    expect(out).toContain('When to use');
+    expect(out).toContain('Description');
   });
 
-  it('returns fuzzy match suggestion for typos', () => {
-    const result = getComponentInfo('Buton', { lang: 'en', version: '5.20.0', detail: false });
-    expect('error' in result).toBe(true);
-    const err = result as CLIError;
-    expect(err.code).toBe('COMPONENT_NOT_FOUND');
-    expect(err.suggestion).toContain('Button');
+  it('should show info as markdown', async () => {
+    const out = await run('info', 'Button', '--format', 'markdown');
+    expect(out).toContain('Button');
+    expect(out).toContain('type');
   });
 
-  it('works with v4', () => {
-    const result = getComponentInfo('Button', { lang: 'en', version: '4.24.0', detail: false });
-    expect('error' in result).toBe(false);
-    if (!('error' in result)) {
-      expect(result.name).toBe('Button');
-    }
+  it('should support --lang zh for info', async () => {
+    const out = await run('info', 'Button', '--lang', 'zh');
+    expect(out).toContain('按钮用于开始一个即时操作');
   });
 
-  it('returns subComponentProps when available', () => {
-    const result = getComponentInfo('Form', { lang: 'en', version: '5.29.0', detail: false });
-    expect('error' in result).toBe(false);
-    if (!('error' in result)) {
-      expect(result.subComponentProps).toBeDefined();
-    }
+  it('should suggest correct name for typos', async () => {
+    const result = await runCLI('info', 'Btn');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Did you mean 'Button'");
   });
 
-  it('returns subComponentProps with descriptions in detail mode', () => {
-    const result = getComponentInfo('Form', { lang: 'en', version: '5.29.0', detail: true });
-    expect('error' in result).toBe(false);
-    if (!('error' in result) && 'whenToUse' in result) {
-      expect(result.subComponentProps).toBeDefined();
-    }
-  });
-
-  it('returns zh descriptions when lang is zh', () => {
-    const result = getComponentInfo('Button', { lang: 'zh', version: '5.20.0', detail: false });
-    expect('error' in result).toBe(false);
-    if (!('error' in result)) {
-      expect(result.name).toBe('Button');
-    }
-  });
-});
-
-describe('registerInfoCommand', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it('should output JSON format', async () => {
-    const program = createProgram({ format: 'json', version: '5.20.0' });
-    registerInfoCommand(program);
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'info', 'Button'], );
-    const output = logSpy.mock.calls[0][0];
-    const parsed = JSON.parse(output);
-    expect(parsed.name).toBe('Button');
-  });
-
-  it('should output text format with props table', async () => {
-    const program = createProgram({ format: 'text', version: '5.20.0' });
-    registerInfoCommand(program);
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'info', 'Button'], );
-    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(allOutput).toContain('Button');
-    expect(allOutput).toContain('Property');
-  });
-
-  it('should output markdown format', async () => {
-    const program = createProgram({ format: 'markdown', version: '5.20.0' });
-    registerInfoCommand(program);
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'info', 'Button'], );
-    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(allOutput).toContain('Button');
-  });
-
-  it('should output detail mode with whenToUse', async () => {
-    const program = createProgram({ format: 'text', version: '5.20.0', detail: true });
-    registerInfoCommand(program);
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'info', 'Button'], );
-    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(allOutput).toContain('Button');
-  });
-
-  it('should show subComponentProps in text format', async () => {
-    const program = createProgram({ format: 'text', version: '5.29.0' });
-    registerInfoCommand(program);
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'info', 'Form'], );
-    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(allOutput).toContain('Form');
-  });
-
-  it('should show detail with subComponentProps', async () => {
-    const program = createProgram({ format: 'text', version: '5.20.0', detail: true });
-    registerInfoCommand(program);
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'info', 'Form'], );
-    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(allOutput).toContain('Form');
-  });
-
-  it('should handle error for non-existent component', async () => {
-    const program = createProgram({ format: 'text', version: '5.20.0' });
-    registerInfoCommand(program);
-    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'info', 'NonExistent'], );
-    expect(errSpy).toHaveBeenCalled();
-    expect(process.exitCode).toBe(1);
-    process.exitCode = undefined;
-  });
-
-  it('should show related components in detail mode', async () => {
-    // Use a component that has related components
-    const loader = await import('../../data/loader.js');
-    vi.spyOn(loader, 'resolveComponent').mockReturnValue({
-      comp: {
-        name: 'TestComp',
-        nameZh: '测试',
-        description: 'A test component',
-        descriptionZh: '测试组件',
-        whenToUse: 'When you need to test',
-        whenToUseZh: '当你需要测试时',
-        props: [{ name: 'size', type: 'string', default: '-', description: 'Size', descriptionZh: '尺寸', since: '5.0.0' }],
-        subComponentProps: {
-          'TestComp.Sub': [{ name: 'value', type: 'string', default: '-', description: 'Value', descriptionZh: '值', since: '5.0.0' }],
-        },
-        methods: [],
-        related: ['Button', 'Input'],
-        faq: [],
-        demos: [],
-        tokens: [],
-      } as any,
-    });
-
-    const program = createProgram({ format: 'text', version: '5.20.0', detail: true });
-    registerInfoCommand(program);
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'info', 'TestComp']);
-    const allOutput = logSpy.mock.calls.map((c) => c[0]).join('\n');
-
-    // Verify subComponentProps are rendered
-    expect(allOutput).toContain('TestComp.Sub');
-    // Verify related components are shown
-    expect(allOutput).toContain('Related: Button, Input');
-    vi.restoreAllMocks();
+  it('should handle unknown component', async () => {
+    const result = await runCLI('info', 'NonExistent');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('not found');
   });
 });

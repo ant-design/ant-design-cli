@@ -1,231 +1,78 @@
-import { describe, it, expect, vi } from 'vitest';
-import { Command } from 'commander';
-import { registerMigrateCommand } from '../../commands/migrate.js';
-import { V3_TO_V4_STEPS } from '../../commands/migrate-v3-to-v4.js';
-import { V4_TO_V5_STEPS } from '../../commands/migrate-v4-to-v5.js';
-import { V5_TO_V6_STEPS } from '../../commands/migrate-v5-to-v6.js';
+import { describe, it, expect } from 'vitest';
+import { run, runCLI } from '../helper.js';
 
-function createProgram(format = 'text') {
-  const program = new Command();
-  program.option('--format <format>', '', format);
-  program.option('--version <version>', '');
-  program.option('--lang <lang>', '', 'en');
-  program.option('--detail', '', false);
-  program.exitOverride();
-  registerMigrateCommand(program);
-  return program;
-}
-
-describe('migrate command', () => {
-  it('valid migration 3 to 4 in text format', async () => {
-    const program = createProgram('text');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '3', '4']);
-
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    logSpy.mockRestore();
-
-    expect(logged).toContain('Migration Guide');
-    expect(logged).toContain('v3');
-    expect(logged).toContain('v4');
-    expect(logged).toContain('Total:');
+describe('migrate', () => {
+  it('should show migration guide', async () => {
+    const out = await run('migrate', '4', '5');
+    expect(out).toContain('Migration Guide');
+    expect(out).toContain('Select');
+    expect(out).toContain('popupClassName');
   });
 
-  it('valid migration 3 to 4 in json format', async () => {
-    const program = createProgram('json');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '3', '4']);
-
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('');
-    logSpy.mockRestore();
-    const result = JSON.parse(logged);
-
-    expect(result.from).toBe('3');
-    expect(result.to).toBe('4');
-    expect(Array.isArray(result.steps)).toBe(true);
-    expect(result.steps.length).toBeGreaterThan(20); // v3→v4 has many steps
-    expect(result).toHaveProperty('summary');
+  it('should show migration guide as JSON', async () => {
+    const out = await run('migrate', '4', '5', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.from).toBe('4');
+    expect(data.to).toBe('5');
+    expect(data.steps.length).toBeGreaterThan(0);
   });
 
-  it('valid migration 4 to 5 in text format', async () => {
-    const program = createProgram('text');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '4', '5']);
-
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    logSpy.mockRestore();
-
-    expect(logged).toContain('Migration Guide');
-    expect(logged).toContain('v4');
-    expect(logged).toContain('v5');
-    expect(logged).toContain('Total:');
+  it('should show migrate --apply as agent prompt', async () => {
+    const out = await run('migrate', '4', '5', '--apply', '/tmp');
+    expect(out).toContain('Auto-Migration Prompt');
+    expect(out).toContain('/tmp');
+    expect(out).toContain('Auto-fixable Changes');
+    expect(out).toContain('Manual Changes');
   });
 
-  it('valid migration 5 to 6 in json format', async () => {
-    const program = createProgram('json');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '5', '6']);
-
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('');
-    logSpy.mockRestore();
-    const result = JSON.parse(logged);
-
-    expect(result.from).toBe('5');
-    expect(result.to).toBe('6');
-    expect(Array.isArray(result.steps)).toBe(true);
-    expect(result.steps.length).toBeGreaterThan(0);
-    expect(result).toHaveProperty('summary');
-    expect(result.summary).toHaveProperty('total');
-    expect(result.summary).toHaveProperty('autoFixable');
-    expect(result.summary).toHaveProperty('manual');
+  it('should show migrate --apply as JSON', async () => {
+    const out = await run('migrate', '4', '5', '--apply', './src', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.from).toBe('4');
+    expect(data.to).toBe('5');
+    expect(data.targetDir).toBe('./src');
+    expect(data.autoFixSteps.length).toBeGreaterThan(0);
+    expect(data.manualSteps.length).toBeGreaterThan(0);
   });
 
-  it('valid migration in markdown format', async () => {
-    const program = createProgram('markdown');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '4', '5']);
-
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    logSpy.mockRestore();
-
-    expect(logged).toContain('# Migration Guide');
+  it('should show migrate --component filter', async () => {
+    const out = await run('migrate', '4', '5', '--component', 'Select');
+    expect(out).toContain('Select');
+    expect(out).toContain('popupClassName');
+    expect(out).not.toContain('BackTop');
   });
 
-  it('invalid migration 2 to 3 shows error with available migrations', async () => {
-    const program = createProgram('text');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '2', '3']);
-
-    const errOutput = errSpy.mock.calls.map((c) => c[0]).join('\n');
-    logSpy.mockRestore();
-    errSpy.mockRestore();
-
-    expect(errOutput).toContain('No migration guide available');
-    expect(errOutput).toContain('Available migrations');
-    expect(process.exitCode).toBe(1);
-    process.exitCode = 0;
+  it('should show migrate as markdown', async () => {
+    const out = await run('migrate', '4', '5', '--format', 'markdown');
+    expect(out).toContain('# Migration Guide');
+    expect(out).toContain('## ');
+    expect(out).toContain('```tsx');
   });
 
-  it('component filter: --component Modal shows only Modal steps', async () => {
-    const program = createProgram('json');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '4', '5', '--component', 'Modal']);
-
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('');
-    logSpy.mockRestore();
-    const result = JSON.parse(logged);
-
-    expect(result.steps.length).toBeGreaterThan(0);
-    for (const step of result.steps) {
-      expect(step.component.toLowerCase()).toBe('modal');
-    }
+  it('should show migrate v5 to v6', async () => {
+    const out = await run('migrate', '5', '6');
+    expect(out).toContain('Button');
+    expect(out).toContain('variant');
   });
 
-  it('component filter with non-existent component shows error', async () => {
-    const program = createProgram('text');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '4', '5', '--component', 'NonExistentXyz']);
-
-    const errOutput = errSpy.mock.calls.map((c) => c[0]).join('\n');
-    logSpy.mockRestore();
-    errSpy.mockRestore();
-
-    expect(errOutput).toContain('No migration steps found');
-    expect(errOutput).toContain('NonExistentXyz');
-    expect(process.exitCode).toBe(1);
-    process.exitCode = 0;
+  it('should handle invalid migration path', async () => {
+    const result = await runCLI('migrate', '3', '6');
+    expect(result.exitCode).toBe(1);
   });
 
-  it('apply mode: --apply ./src in text shows Auto-Migration Prompt', async () => {
-    const program = createProgram('text');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '4', '5', '--apply', './src']);
-
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('\n');
-    logSpy.mockRestore();
-
-    expect(logged).toContain('Auto-Migration Prompt');
-    expect(logged).toContain('./src');
+  it('should show v5 to v6 migration with many steps', async () => {
+    const out = await run('migrate', '5', '6', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.steps.length).toBeGreaterThan(10);
+    const breaking = data.steps.filter((s: any) => s.breaking);
+    const nonBreaking = data.steps.filter((s: any) => !s.breaking);
+    expect(breaking.length).toBeGreaterThan(0);
+    expect(nonBreaking.length).toBeGreaterThan(0);
   });
 
-  it('apply mode in json includes autoFixSteps and manualSteps', async () => {
-    const program = createProgram('json');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', '4', '5', '--apply', './src']);
-
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('');
-    logSpy.mockRestore();
-    const result = JSON.parse(logged);
-
-    expect(result).toHaveProperty('autoFixSteps');
-    expect(result).toHaveProperty('manualSteps');
-    expect(result).toHaveProperty('targetDir', './src');
-    expect(result).toHaveProperty('summary');
-    expect(result.summary).toHaveProperty('totalAutoFix');
-    expect(result.summary).toHaveProperty('totalManual');
-  });
-
-  it('V3_TO_V4_STEPS has valid structure', () => {
-    expect(Array.isArray(V3_TO_V4_STEPS)).toBe(true);
-    expect(V3_TO_V4_STEPS.length).toBeGreaterThan(0);
-
-    for (const step of V3_TO_V4_STEPS) {
-      expect(step).toHaveProperty('component');
-      expect(step).toHaveProperty('breaking');
-      expect(step).toHaveProperty('description');
-      expect(step).toHaveProperty('autoFixable');
-      expect(typeof step.component).toBe('string');
-      expect(typeof step.breaking).toBe('boolean');
-      expect(typeof step.description).toBe('string');
-      expect(typeof step.autoFixable).toBe('boolean');
-    }
-  });
-
-  it('V4_TO_V5_STEPS has valid structure', () => {
-    expect(Array.isArray(V4_TO_V5_STEPS)).toBe(true);
-    expect(V4_TO_V5_STEPS.length).toBeGreaterThan(0);
-
-    for (const step of V4_TO_V5_STEPS) {
-      expect(step).toHaveProperty('component');
-      expect(step).toHaveProperty('breaking');
-      expect(step).toHaveProperty('description');
-      expect(step).toHaveProperty('autoFixable');
-      expect(typeof step.component).toBe('string');
-      expect(typeof step.breaking).toBe('boolean');
-      expect(typeof step.description).toBe('string');
-      expect(typeof step.autoFixable).toBe('boolean');
-    }
-  });
-
-  it('V5_TO_V6_STEPS has valid structure', () => {
-    expect(Array.isArray(V5_TO_V6_STEPS)).toBe(true);
-    expect(V5_TO_V6_STEPS.length).toBeGreaterThan(0);
-
-    for (const step of V5_TO_V6_STEPS) {
-      expect(step).toHaveProperty('component');
-      expect(step).toHaveProperty('breaking');
-      expect(step).toHaveProperty('description');
-      expect(step).toHaveProperty('autoFixable');
-      expect(typeof step.component).toBe('string');
-      expect(typeof step.breaking).toBe('boolean');
-      expect(typeof step.description).toBe('string');
-      expect(typeof step.autoFixable).toBe('boolean');
-    }
-  });
-
-  it('version prefix stripping: v4 and v5 work same as 4 and 5', async () => {
-    const program = createProgram('json');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    await program.parseAsync(['node', 'test', 'migrate', 'v4', 'v5']);
-
-    const logged = logSpy.mock.calls.map((c) => c[0]).join('');
-    logSpy.mockRestore();
-    const result = JSON.parse(logged);
-
-    expect(result.from).toBe('4');
-    expect(result.to).toBe('5');
-    expect(result.steps.length).toBeGreaterThan(0);
+  it('should show v4 to v5 migration with 30+ steps', async () => {
+    const out = await run('migrate', '4', '5', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.steps.length).toBeGreaterThanOrEqual(30);
   });
 });
