@@ -15,37 +15,37 @@ function normalizeEnv(s: string): string {
 
 describe('bug', () => {
   for (const format of formats) {
-    it(`bug --title Test --format ${format}`, () => {
-      expect(normalizeEnv(run('bug', '--title', 'Test', '--format', format))).toMatchSnapshot();
+    it(`bug --title Test --format ${format}`, async () => {
+      expect(normalizeEnv(await run('bug', '--title', 'Test', '--format', format))).toMatchSnapshot();
     });
   }
 
-  it('bug --title Test --steps "Click" --expected "OK" --actual "Crash"', () => {
+  it('bug --title Test --steps "Click" --expected "OK" --actual "Crash"', async () => {
     expect(
-      normalizeEnv(run('bug', '--title', 'Test', '--steps', 'Click', '--expected', 'OK', '--actual', 'Crash')),
+      normalizeEnv(await run('bug', '--title', 'Test', '--steps', 'Click', '--expected', 'OK', '--actual', 'Crash')),
     ).toMatchSnapshot();
   });
 
   // error: no title
-  it('bug (no title)', () => {
-    expect(runStderr('bug')).toMatchSnapshot();
+  it('bug (no title)', async () => {
+    expect(await runStderr('bug')).toMatchSnapshot();
   });
 
-  it('bug --format json (no title)', () => {
-    expect(runStderr('bug', '--format', 'json')).toMatchSnapshot();
+  it('bug --format json (no title)', async () => {
+    expect(await runStderr('bug', '--format', 'json')).toMatchSnapshot();
   });
 });
 
 describe('bug-cli', () => {
   for (const format of formats) {
-    it(`bug-cli --title Test --format ${format}`, () => {
-      expect(normalizeEnv(run('bug-cli', '--title', 'Test', '--format', format))).toMatchSnapshot();
+    it(`bug-cli --title Test --format ${format}`, async () => {
+      expect(normalizeEnv(await run('bug-cli', '--title', 'Test', '--format', format))).toMatchSnapshot();
     });
   }
 
-  it('bug-cli --title Test --description "Info crashes"', () => {
+  it('bug-cli --title Test --description "Info crashes"', async () => {
     expect(
-      normalizeEnv(run('bug-cli', '--title', 'Test', '--description', 'Info crashes')),
+      normalizeEnv(await run('bug-cli', '--title', 'Test', '--description', 'Info crashes')),
     ).toMatchSnapshot();
   });
 });

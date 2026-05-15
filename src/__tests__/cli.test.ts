@@ -1,45 +1,24 @@
-import { describe, it, expect } from 'vitest';
-import { execFileSync } from 'node:child_process';
+import { describe, it, expect, vi } from 'vitest';
 import { writeFileSync, mkdirSync, rmSync, mkdtempSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import type { LintIssue } from '../commands/lint.js';
-import { env } from './snapshot-helper.js';
+import { runCLI } from './helper.js';
 
-const CLI = join(__dirname, '..', '..', 'dist', 'index.js');
-
-function run(...args: string[]): string {
-  return execFileSync('node', [CLI, ...args], {
-    encoding: 'utf-8',
-    timeout: 5000,
-    env,
-  }).trim();
+async function run(...args: string[]): Promise<string> {
+  const result = await runCLI(...args);
+  return result.stdout;
 }
 
-function runWithStatus(...args: string[]): { stdout: string; stderr: string; exitCode: number } {
-  try {
-    const stdout = execFileSync('node', [CLI, ...args], {
-      encoding: 'utf-8',
-      timeout: 5000,
-      stdio: ['pipe', 'pipe', 'pipe'],
-      env,
-    }).trim();
-    return { stdout, stderr: '', exitCode: 0 };
-  } catch (err: any) {
-    return {
-      stdout: (err.stdout || '').trim(),
-      stderr: (err.stderr || '').trim(),
-      exitCode: err.status ?? 1,
-    };
-  }
+async function runWithStatus(...args: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
+  return runCLI(...args);
 }
 
 /**
  * Run `doctor --format json` in a temp directory with a controlled node_modules layout.
  * `packages` maps package path → package.json content.
- * e.g. { 'antd': { version: '5.20.0' }, '@ant-design/pro-components': { version: '2.7.0', peerDependencies: { antd: '>=5.16.0' } } }
  */
-function runDoctorInTempDir(packages: Record<string, object>): any {
+async function runDoctorInTempDir(packages: Record<string, object>): Promise<any> {
   const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-test-'));
   try {
     mkdirSync(tempDir, { recursive: true });
@@ -51,103 +30,103 @@ function runDoctorInTempDir(packages: Record<string, object>): any {
       writeFileSync(join(pkgDir, 'package.json'), JSON.stringify(pkgJson));
     }
 
-    const stdout = execFileSync('node', [CLI, 'doctor', '--format', 'json'], {
-      encoding: 'utf-8',
-      timeout: 5000,
-      cwd: tempDir,
-      env,
-    }).trim();
-    return JSON.parse(stdout);
+    const cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(tempDir);
+    try {
+      const result = await runCLI('doctor', '--format', 'json');
+      return JSON.parse(result.stdout);
+    } finally {
+      cwdSpy.mockRestore();
+    }
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }
 }
 
 describe('CLI e2e', () => {
-  it('should show help', () => {
-    const out = run('--help');
+  it('should show help', async () => {
+    const out = await run('--help');
     expect(out).toContain('antd');
     expect(out).toContain('list');
     expect(out).toContain('info');
     expect(out).toContain('demo');
   });
 
-  it('should list components', () => {
-    const out = run('list');
+  it('should list components', async () => {
+    const out = await run('list');
     expect(out).toContain('Button');
     expect(out).toContain('Table');
     expect(out).toContain('Select');
   });
 
-  it('should list components as JSON', () => {
-    const out = run('list', '--format', 'json');
+  it('should list components as JSON', async () => {
+    const out = await run('list', '--format', 'json');
     const data = JSON.parse(out);
     expect(Array.isArray(data)).toBe(true);
     expect(data.length).toBeGreaterThan(0);
     expect(data[0]).toHaveProperty('name');
   });
 
-  it('should show component info', () => {
-    const out = run('info', 'Button');
+  it('should show component info', async () => {
+    const out = await run('info', 'Button');
     expect(out).toContain('Button');
     expect(out).toContain('type');
     expect(out).toContain('disabled');
   });
 
-  it('should show component info as JSON', () => {
-    const out = run('info', 'Button', '--format', 'json');
+  it('should show component info as JSON', async () => {
+    const out = await run('info', 'Button', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.name).toBe('Button');
     expect(data.props.length).toBeGreaterThan(0);
   });
 
-  it('should show detailed component info', () => {
-    const out = run('info', 'Button', '--detail');
+  it('should show detailed component info', async () => {
+    const out = await run('info', 'Button', '--detail');
     expect(out).toContain('When to use');
     expect(out).toContain('Description');
   });
 
-  it('should list demos', () => {
-    const out = run('demo', 'Button');
+  it('should list demos', async () => {
+    const out = await run('demo', 'Button');
     expect(out).toContain('basic');
     expect(out).toContain('Syntactic sugar');
   });
 
-  it('should get specific demo code', () => {
-    const out = run('demo', 'Button', 'basic');
+  it('should get specific demo code', async () => {
+    const out = await run('demo', 'Button', 'basic');
     expect(out).toContain('import');
     expect(out).toContain('Button');
   });
 
-  it('should show demo as JSON', () => {
-    const out = run('demo', 'Button', 'basic', '--format', 'json');
+  it('should show demo as JSON', async () => {
+    const out = await run('demo', 'Button', 'basic', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.component).toBe('Button');
     expect(data.demo).toBe('basic');
     expect(data.code).toContain('import');
   });
 
-  it('should show component tokens', () => {
-    const out = run('token', 'Button');
+  it('should show component tokens', async () => {
+    const out = await run('token', 'Button');
     expect(out).toContain('contentFontSize');
     expect(out).toContain('defaultBg');
   });
 
-  it('should show semantic structure', () => {
-    const out = run('semantic', 'Drawer');
+  it('should show semantic structure', async () => {
+    const out = await run('semantic', 'Drawer');
     expect(out).toContain('header');
     expect(out).toContain('body');
     expect(out).toContain('classNames');
   });
 
-  it('should suggest correct name for typos', () => {
-    const result = runWithStatus('info', 'Btn');
+  it('should suggest correct name for typos', async () => {
+    const result = await runWithStatus('info', 'Btn');
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain("Did you mean 'Button'");
   });
 
-  it('should handle unknown component', () => {
-    const result = runWithStatus('info', 'NonExistent');
+  it('should handle unknown component', async () => {
+    const result = await runWithStatus('info', 'NonExistent');
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain('not found');
   });
@@ -155,74 +134,74 @@ describe('CLI e2e', () => {
 
   // ─── Doc command ────────────────────────────────────────────────────
 
-  it('should show full doc for a component', () => {
-    const out = run('doc', 'Button');
+  it('should show full doc for a component', async () => {
+    const out = await run('doc', 'Button');
     expect(out).toContain('Button');
     expect(out).toContain('API');
   });
 
-  it('should show doc as JSON', () => {
-    const out = run('doc', 'Button', '--format', 'json');
+  it('should show doc as JSON', async () => {
+    const out = await run('doc', 'Button', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.name).toBe('Button');
     expect(typeof data.doc).toBe('string');
     expect(data.doc.length).toBeGreaterThan(0);
   });
 
-  it('should show doc in Chinese', () => {
-    const out = run('doc', 'Button', '--lang', 'zh');
+  it('should show doc in Chinese', async () => {
+    const out = await run('doc', 'Button', '--lang', 'zh');
     expect(out).toContain('按钮');
   });
 
-  it('should handle doc not found for unknown component', () => {
-    const result = runWithStatus('doc', 'NonExistent');
+  it('should handle doc not found for unknown component', async () => {
+    const result = await runWithStatus('doc', 'NonExistent');
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain('not found');
   });
 
-  it('should suggest correct name for doc typo', () => {
-    const result = runWithStatus('doc', 'Btn');
+  it('should suggest correct name for doc typo', async () => {
+    const result = await runWithStatus('doc', 'Btn');
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain("Did you mean 'Button'");
   });
 
-  it('should show changelog', () => {
-    const out = run('changelog', '5.21.0');
+  it('should show changelog', async () => {
+    const out = await run('changelog', '5.21.0');
     expect(out).toContain('5.21.0');
     expect(out).toContain('Segmented');
   });
 
-  it('should show changelog range', () => {
-    const out = run('changelog', '5.20.0..5.22.0');
+  it('should show changelog range', async () => {
+    const out = await run('changelog', '5.20.0..5.22.0');
     expect(out).toContain('5.20.0');
     expect(out).toContain('5.21.0');
     expect(out).toContain('5.22.0');
   });
 
-  it('should show migration guide', () => {
-    const out = run('migrate', '4', '5');
+  it('should show migration guide', async () => {
+    const out = await run('migrate', '4', '5');
     expect(out).toContain('Migration Guide');
     expect(out).toContain('Select');
     expect(out).toContain('popupClassName');
   });
 
-  it('should show migration guide as JSON', () => {
-    const out = run('migrate', '4', '5', '--format', 'json');
+  it('should show migration guide as JSON', async () => {
+    const out = await run('migrate', '4', '5', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.from).toBe('4');
     expect(data.to).toBe('5');
     expect(data.steps.length).toBeGreaterThan(0);
   });
 
-  it('should run doctor', () => {
-    const out = run('doctor');
+  it('should run doctor', async () => {
+    const out = await run('doctor');
     expect(out).toContain('antd Doctor');
     expect(out).toContain('Summary');
   });
 
 
-  it('should output error as JSON to stderr', () => {
-    const result = runWithStatus('info', 'Btn', '--format', 'json');
+  it('should output error as JSON to stderr', async () => {
+    const result = await runWithStatus('info', 'Btn', '--format', 'json');
     // JSON errors go to stderr, stdout should be empty
     expect(result.stdout).toBe('');
     const data = JSON.parse(result.stderr);
@@ -231,61 +210,61 @@ describe('CLI e2e', () => {
     expect(data.suggestion).toContain('Button');
   });
 
-  it('should show CLI version with -V', () => {
-    const out = run('-V');
+  it('should show CLI version with -V', async () => {
+    const out = await run('-V');
     expect(out).toMatch(/^\d+\.\d+\.\d+[-\w.]*$/);
   });
 
-  it('should support --lang zh', () => {
-    const out = run('list', '--lang', 'zh');
+  it('should support --lang zh', async () => {
+    const out = await run('list', '--lang', 'zh');
     expect(out).toContain('按钮');
   });
 
-  it('should support --lang zh for info', () => {
-    const out = run('info', 'Button', '--lang', 'zh');
+  it('should support --lang zh for info', async () => {
+    const out = await run('info', 'Button', '--lang', 'zh');
     expect(out).toContain('按钮用于开始一个即时操作');
   });
 
-  it('should show list as markdown', () => {
-    const out = run('list', '--format', 'markdown');
+  it('should show list as markdown', async () => {
+    const out = await run('list', '--format', 'markdown');
     expect(out).toContain('# antd Components');
     expect(out).toContain('**Button**');
   });
 
-  it('should show token as JSON', () => {
-    const out = run('token', 'Button', '--format', 'json');
+  it('should show token as JSON', async () => {
+    const out = await run('token', 'Button', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.component).toBe('Button');
     expect(data.tokens.length).toBeGreaterThan(0);
   });
 
-  it('should show semantic as JSON', () => {
-    const out = run('semantic', 'Drawer', '--format', 'json');
+  it('should show semantic as JSON', async () => {
+    const out = await run('semantic', 'Drawer', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.name).toBe('Drawer');
     expect(data.semanticStructure.length).toBeGreaterThan(0);
   });
 
-  it('should handle demo not found', () => {
-    const result = runWithStatus('demo', 'Button', 'nonexistent');
+  it('should handle demo not found', async () => {
+    const result = await runWithStatus('demo', 'Button', 'nonexistent');
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain('not found');
   });
 
-  it('should handle changelog version not found', () => {
-    const result = runWithStatus('changelog', '5.99.99');
+  it('should handle changelog version not found', async () => {
+    const result = await runWithStatus('changelog', '5.99.99');
     expect(result.exitCode).toBe(1);
   });
 
-  it('should show changelog as JSON', () => {
-    const out = run('changelog', '5.21.0', '--format', 'json');
+  it('should show changelog as JSON', async () => {
+    const out = await run('changelog', '5.21.0', '--format', 'json');
     const data = JSON.parse(out);
     expect(Array.isArray(data)).toBe(true);
     expect(data[0].version).toBe('5.21.0');
   });
 
-  it('should show doctor as JSON', () => {
-    const out = run('doctor', '--format', 'json');
+  it('should show doctor as JSON', async () => {
+    const out = await run('doctor', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.checks).toBeDefined();
     expect(data.summary).toBeDefined();
@@ -297,16 +276,16 @@ describe('CLI e2e', () => {
     expect(names).toContain('icons-compat');
   });
 
-  it('should show migrate --apply as agent prompt', () => {
-    const out = run('migrate', '4', '5', '--apply', '/tmp');
+  it('should show migrate --apply as agent prompt', async () => {
+    const out = await run('migrate', '4', '5', '--apply', '/tmp');
     expect(out).toContain('Auto-Migration Prompt');
     expect(out).toContain('/tmp');
     expect(out).toContain('Auto-fixable Changes');
     expect(out).toContain('Manual Changes');
   });
 
-  it('should show migrate --apply as JSON', () => {
-    const out = run('migrate', '4', '5', '--apply', './src', '--format', 'json');
+  it('should show migrate --apply as JSON', async () => {
+    const out = await run('migrate', '4', '5', '--apply', './src', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.from).toBe('4');
     expect(data.to).toBe('5');
@@ -315,28 +294,28 @@ describe('CLI e2e', () => {
     expect(data.manualSteps.length).toBeGreaterThan(0);
   });
 
-  it('should show migrate --component filter', () => {
-    const out = run('migrate', '4', '5', '--component', 'Select');
+  it('should show migrate --component filter', async () => {
+    const out = await run('migrate', '4', '5', '--component', 'Select');
     expect(out).toContain('Select');
     expect(out).toContain('popupClassName');
     expect(out).not.toContain('BackTop');
   });
 
-  it('should show migrate as markdown', () => {
-    const out = run('migrate', '4', '5', '--format', 'markdown');
+  it('should show migrate as markdown', async () => {
+    const out = await run('migrate', '4', '5', '--format', 'markdown');
     expect(out).toContain('# Migration Guide');
     expect(out).toContain('## ');
     expect(out).toContain('```tsx');
   });
 
-  it('should show migrate v5 to v6', () => {
-    const out = run('migrate', '5', '6');
+  it('should show migrate v5 to v6', async () => {
+    const out = await run('migrate', '5', '6');
     expect(out).toContain('Button');
     expect(out).toContain('variant');
   });
 
-  it('should handle invalid migration path', () => {
-    const result = runWithStatus('migrate', '3', '6');
+  it('should handle invalid migration path', async () => {
+    const result = await runWithStatus('migrate', '3', '6');
     expect(result.exitCode).toBe(1);
   });
 
@@ -344,71 +323,72 @@ describe('CLI e2e', () => {
 
 
   // Doctor edge cases
-  it('should run doctor as markdown', () => {
-    const out = run('doctor', '--format', 'markdown');
+  it('should run doctor as markdown', async () => {
+    const out = await run('doctor', '--format', 'markdown');
     expect(out).toContain('antd Doctor');
   });
 
   // Token edge cases
-  it('should show global tokens', () => {
-    const out = run('token');
+  it('should show global tokens', async () => {
+    const out = await run('token');
     expect(out).toContain('Global Design Tokens');
     expect(out).toContain('Type');
   });
 
-  it('should handle unknown component for token', () => {
-    const result = runWithStatus('token', 'NonExistent');
+  it('should handle unknown component for token', async () => {
+    const result = await runWithStatus('token', 'NonExistent');
     expect(result.exitCode).toBe(1);
   });
 
   // Semantic edge cases
-  it('should handle unknown component for semantic', () => {
-    const result = runWithStatus('semantic', 'NonExistent');
+  it('should handle unknown component for semantic', async () => {
+    const result = await runWithStatus('semantic', 'NonExistent');
     expect(result.exitCode).toBe(1);
   });
 
   // Info edge cases
-  it('should show info as markdown', () => {
-    const out = run('info', 'Button', '--format', 'markdown');
+  it('should show info as markdown', async () => {
+    const out = await run('info', 'Button', '--format', 'markdown');
     expect(out).toContain('Button');
     expect(out).toContain('type');
   });
 
   // Usage command
-  it('should scan usage in current directory', () => {
-    const out = run('usage', '--format', 'json');
+  it('should scan usage in current directory', async () => {
+    const out = await run('usage', '--format', 'json');
     const data = JSON.parse(out);
     expect(data).toHaveProperty('components');
   });
 
   // Lint command
-  it('should lint current directory', () => {
-    const out = run('lint', '--format', 'json');
+  it('should lint current directory', async () => {
+    const out = await run('lint', '--format', 'json');
     const data = JSON.parse(out);
     expect(data).toHaveProperty('issues');
   });
 
   /** Create a temp fixture, run lint, and clean up. */
-  function lintFixture(name: string, content: string, extraArgs: string[] = []): string {
+  async function lintFixture(name: string, content: string, extraArgs: string[] = []): Promise<string> {
     const tmpDir = join(__dirname, `__tmp_lint_${name}__`);
     const fixture = join(tmpDir, `${name}.tsx`);
     try {
       mkdirSync(tmpDir, { recursive: true });
       writeFileSync(fixture, content);
-      return run('lint', fixture, '--version', '6.3.1', ...extraArgs);
+      const result = await runCLI('lint', fixture, '--version', '6.3.1', ...extraArgs);
+      return result.stdout;
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
     }
   }
 
-  it('lint deprecated message includes replacement hint from description', () => {
-    const out = lintFixture('card', `import { Card } from 'antd';\nconst App = () => <Card bordered={false}>x</Card>;\n`);
+  it('lint deprecated message includes replacement hint from description', async () => {
+    const out = await lintFixture('card', `import { Card } from 'antd';\nconst App = () => <Card bordered={false}>x</Card>;\n`);
     expect(out).toMatch(/bordered.*deprecated/i);
     expect(out).toMatch(/variant/i);
   });
 
-  it('lint deprecated prop should not flag same prop name on unrelated components', () => {
-    const out = lintFixture(
+  it('lint deprecated prop should not flag same prop name on unrelated components', async () => {
+    const out = await lintFixture(
       'button',
       `import { Button, Divider } from 'antd';\nconst App = () => <Button type="primary">Click</Button>;\n`,
       ['--format', 'json'],
@@ -420,8 +400,8 @@ describe('CLI e2e', () => {
     expect(dividerTypeIssues).toHaveLength(0);
   });
 
-  it('lint deprecated prop should still flag when used on the correct component', () => {
-    const out = lintFixture(
+  it('lint deprecated prop should still flag when used on the correct component', async () => {
+    const out = await lintFixture(
       'divider',
       `import { Divider } from 'antd';\nconst App = () => <Divider type="vertical" />;\n`,
       ['--format', 'json'],
@@ -475,9 +455,9 @@ const App = () => (
   </>
 );`,
     },
-  ])('lint should not flag deprecated Divider.type on siblings: $name (#35)', ({ name, code }) => {
+  ])('lint should not flag deprecated Divider.type on siblings: $name (#35)', async ({ name, code }) => {
     const fixture = name.replace(/[^a-z0-9]/gi, '-').toLowerCase();
-    const out = lintFixture(`issue35-${fixture}`, code, ['--format', 'json']);
+    const out = await lintFixture(`issue35-${fixture}`, code, ['--format', 'json']);
     const data = JSON.parse(out);
     const dividerTypeIssues = data.issues.filter(
       (i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Divider') && i.message.includes('type'),
@@ -485,23 +465,23 @@ const App = () => (
     expect(dividerTypeIssues).toHaveLength(0);
   });
 
-  it('changelog should error when from > to', () => {
-    const result = runWithStatus('changelog', '5.5.0', '5.1.0');
+  it('changelog should error when from > to', async () => {
+    const result = await runWithStatus('changelog', '5.5.0', '5.1.0');
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain('newer than');
   });
 
   // Changelog edge cases
-  it('should show API diff between versions', () => {
-    const out = run('changelog', '5.0.0', '5.24.0', '--format', 'json');
+  it('should show API diff between versions', async () => {
+    const out = await run('changelog', '5.0.0', '5.24.0', '--format', 'json');
     const data = JSON.parse(out);
     expect(data).toHaveProperty('from');
     expect(data).toHaveProperty('to');
   });
 
   // v5→v6 migration completeness
-  it('should show v5 to v6 migration with many steps', () => {
-    const out = run('migrate', '5', '6', '--format', 'json');
+  it('should show v5 to v6 migration with many steps', async () => {
+    const out = await run('migrate', '5', '6', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.steps.length).toBeGreaterThan(10);
     // Should include both breaking and non-breaking
@@ -512,15 +492,15 @@ const App = () => (
   });
 
   // v4→v5 migration completeness
-  it('should show v4 to v5 migration with 30+ steps', () => {
-    const out = run('migrate', '4', '5', '--format', 'json');
+  it('should show v4 to v5 migration with 30+ steps', async () => {
+    const out = await run('migrate', '4', '5', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.steps.length).toBeGreaterThanOrEqual(30);
   });
 
   // antd bug command
-  it('should preview a bug report as text', () => {
-    const out = run('bug', '--title', 'Test bug');
+  it('should preview a bug report as text', async () => {
+    const out = await run('bug', '--title', 'Test bug');
     expect(out).toContain('Repository: ant-design/ant-design');
     expect(out).toContain('Title: Test bug');
     expect(out).toContain('--- Issue Body ---');
@@ -528,8 +508,8 @@ const App = () => (
     expect(out).toContain('To submit, re-run with --submit flag.');
   });
 
-  it('should preview a bug report as JSON', () => {
-    const out = run('bug', '--title', 'Test bug', '--format', 'json');
+  it('should preview a bug report as JSON', async () => {
+    const out = await run('bug', '--title', 'Test bug', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.repo).toBe('ant-design/ant-design');
     expect(data.title).toBe('Test bug');
@@ -537,22 +517,22 @@ const App = () => (
     expect(data.url).toContain('https://github.com/ant-design/ant-design/issues/new');
   });
 
-  it('should include provided fields in bug report', () => {
-    const out = run('bug', '--title', 'Test', '--steps', 'Click button', '--expected', 'Works', '--actual', 'Crashes', '--format', 'json');
+  it('should include provided fields in bug report', async () => {
+    const out = await run('bug', '--title', 'Test', '--steps', 'Click button', '--expected', 'Works', '--actual', 'Crashes', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.body).toContain('Click button');
     expect(data.body).toContain('Works');
     expect(data.body).toContain('Crashes');
   });
 
-  it('should preview bug report as markdown (raw body)', () => {
-    const out = run('bug', '--title', 'Test', '--format', 'markdown');
+  it('should preview bug report as markdown (raw body)', async () => {
+    const out = await run('bug', '--title', 'Test', '--format', 'markdown');
     expect(out).toContain('<!-- generated by ant-design-issue-helper');
     expect(out).not.toContain('Repository:');
   });
 
-  it('should error when --title is missing for bug', () => {
-    const result = runWithStatus('bug', '--format', 'json');
+  it('should error when --title is missing for bug', async () => {
+    const result = await runWithStatus('bug', '--format', 'json');
     expect(result.exitCode).not.toBe(0);
     const err = JSON.parse(result.stderr);
     expect(err.code).toBe('TITLE_REQUIRED');
@@ -560,15 +540,15 @@ const App = () => (
   });
 
   // antd bug-cli command
-  it('should preview a bug-cli report as text', () => {
-    const out = run('bug-cli', '--title', 'CLI test bug');
+  it('should preview a bug-cli report as text', async () => {
+    const out = await run('bug-cli', '--title', 'CLI test bug');
     expect(out).toContain('Repository: ant-design/ant-design-cli');
     expect(out).toContain('Title: CLI test bug');
     expect(out).toContain('### Description');
   });
 
-  it('should preview a bug-cli report as JSON', () => {
-    const out = run('bug-cli', '--title', 'CLI test bug', '--format', 'json');
+  it('should preview a bug-cli report as JSON', async () => {
+    const out = await run('bug-cli', '--title', 'CLI test bug', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.repo).toBe('ant-design/ant-design-cli');
     expect(data.title).toBe('CLI test bug');
@@ -577,14 +557,14 @@ const App = () => (
     expect(data.url).toContain('https://github.com/ant-design/ant-design-cli/issues/new');
   });
 
-  it('should include description in bug-cli report', () => {
-    const out = run('bug-cli', '--title', 'Test', '--description', 'Info crashes', '--format', 'json');
+  it('should include description in bug-cli report', async () => {
+    const out = await run('bug-cli', '--title', 'Test', '--description', 'Info crashes', '--format', 'json');
     const data = JSON.parse(out);
     expect(data.body).toContain('Info crashes');
   });
 });
 
-function runEnvInTempDir(packages: Record<string, object>): any {
+async function runEnvInTempDir(packages: Record<string, object>): Promise<any> {
   const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-env-'));
   try {
     mkdirSync(tempDir, { recursive: true });
@@ -596,37 +576,30 @@ function runEnvInTempDir(packages: Record<string, object>): any {
       writeFileSync(join(pkgDir, 'package.json'), JSON.stringify(pkgJson));
     }
 
-    const stdout = execFileSync('node', [CLI, 'env', '--format', 'json', tempDir], {
-      encoding: 'utf-8',
-      timeout: 15000,
-      env,
-    }).trim();
-    return JSON.parse(stdout);
+    const cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(tempDir);
+    try {
+      const result = await runCLI('env', '--format', 'json', tempDir);
+      return JSON.parse(result.stdout);
+    } finally {
+      cwdSpy.mockRestore();
+    }
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }
 }
 
 describe('env command', () => {
-  it('should output text format with Environment header', { timeout: 20000 }, () => {
-    const out = execFileSync('node', [CLI, 'env'], {
-      encoding: 'utf-8',
-      timeout: 15000,
-      env,
-    }).trim();
-    expect(out).toContain('Environment');
-    expect(out).toContain('System:');
-    expect(out).toContain('Binaries:');
-    expect(out).toContain('Node');
+  it('should output text format with Environment header', { timeout: 20000 }, async () => {
+    const result = await runCLI('env');
+    expect(result.stdout).toContain('Environment');
+    expect(result.stdout).toContain('System:');
+    expect(result.stdout).toContain('Binaries:');
+    expect(result.stdout).toContain('Node');
   });
 
-  it('should output valid JSON', () => {
-    const out = execFileSync('node', [CLI, 'env', '--format', 'json'], {
-      encoding: 'utf-8',
-      timeout: 15000,
-      env,
-    }).trim();
-    const data = JSON.parse(out);
+  it('should output valid JSON', async () => {
+    const result = await runCLI('env', '--format', 'json');
+    const data = JSON.parse(result.stdout);
     expect(data).toHaveProperty('envinfo');
     expect(data).toHaveProperty('dependencies');
     expect(data).toHaveProperty('ecosystem');
@@ -635,19 +608,15 @@ describe('env command', () => {
     expect(data.envinfo.Binaries.Node).toBeTruthy();
   });
 
-  it('should output markdown format', () => {
-    const out = execFileSync('node', [CLI, 'env', '--format', 'markdown'], {
-      encoding: 'utf-8',
-      timeout: 15000,
-      env,
-    }).trim();
-    expect(out).toContain('## Environment');
-    expect(out).toContain('### System');
-    expect(out).toContain('| Item | Version |');
+  it('should output markdown format', async () => {
+    const result = await runCLI('env', '--format', 'markdown');
+    expect(result.stdout).toContain('## Environment');
+    expect(result.stdout).toContain('### System');
+    expect(result.stdout).toContain('| Item | Version |');
   });
 
-  it('should detect dependencies from target dir', () => {
-    const data = runEnvInTempDir({
+  it('should detect dependencies from target dir', async () => {
+    const data = await runEnvInTempDir({
       'antd': { name: 'antd', version: '5.22.0' },
       'react': { name: 'react', version: '18.3.1' },
       'react-dom': { name: 'react-dom', version: '18.3.1' },
@@ -658,8 +627,8 @@ describe('env command', () => {
     expect(data.dependencies.dayjs).toBeNull();
   });
 
-  it('should scan ecosystem packages', () => {
-    const data = runEnvInTempDir({
+  it('should scan ecosystem packages', async () => {
+    const data = await runEnvInTempDir({
       'antd': { name: 'antd', version: '5.22.0' },
       '@ant-design/pro-components': { name: '@ant-design/pro-components', version: '2.8.1' },
       '@ant-design/charts': { name: '@ant-design/charts', version: '2.2.1' },
@@ -670,8 +639,8 @@ describe('env command', () => {
     expect(data.ecosystem['rc-field-form']).toBe('2.7.0');
   });
 
-  it('should not include core deps in ecosystem', () => {
-    const data = runEnvInTempDir({
+  it('should not include core deps in ecosystem', async () => {
+    const data = await runEnvInTempDir({
       'antd': { name: 'antd', version: '5.22.0' },
       '@ant-design/cssinjs': { name: '@ant-design/cssinjs', version: '1.22.1' },
       '@ant-design/icons': { name: '@ant-design/icons', version: '5.5.2' },
@@ -685,8 +654,8 @@ describe('env command', () => {
     expect(data.ecosystem['@ant-design/pro-components']).toBe('2.8.1');
   });
 
-  it('should detect build tools', () => {
-    const data = runEnvInTempDir({
+  it('should detect build tools', async () => {
+    const data = await runEnvInTempDir({
       'antd': { name: 'antd', version: '5.22.0' },
       'typescript': { name: 'typescript', version: '5.6.3' },
       'vite': { name: 'vite', version: '6.0.0' },
@@ -697,8 +666,8 @@ describe('env command', () => {
 });
 
 describe('doctor ecosystem peerDeps', () => {
-  it('should report pass when all peerDeps are satisfied', () => {
-    const data = runDoctorInTempDir({
+  it('should report pass when all peerDeps are satisfied', async () => {
+    const data = await runDoctorInTempDir({
       'antd': { version: '5.20.0', peerDependencies: {} },
       'react': { version: '18.2.0' },
       '@ant-design/pro-components': {
@@ -715,8 +684,8 @@ describe('doctor ecosystem peerDeps', () => {
     expect(check.message).toContain('satisfies all peerDependencies');
   });
 
-  it('should report fail when an installed dep does not satisfy peerDep range', () => {
-    const data = runDoctorInTempDir({
+  it('should report fail when an installed dep does not satisfy peerDep range', async () => {
+    const data = await runDoctorInTempDir({
       'antd': { version: '5.10.0', peerDependencies: {} },
       'react': { version: '18.2.0' },
       '@ant-design/pro-components': {
@@ -735,8 +704,8 @@ describe('doctor ecosystem peerDeps', () => {
     expect(check.message).toContain('installed: 5.10.0');
   });
 
-  it('should report warn when a peerDep is not installed at all', () => {
-    const data = runDoctorInTempDir({
+  it('should report warn when a peerDep is not installed at all', async () => {
+    const data = await runDoctorInTempDir({
       'antd': { version: '5.20.0', peerDependencies: {} },
       // react is NOT installed
       '@ant-design/pro-components': {
@@ -753,8 +722,8 @@ describe('doctor ecosystem peerDeps', () => {
     expect(check.message).toContain('react is not installed');
   });
 
-  it('should not emit a check for packages with no peerDependencies', () => {
-    const data = runDoctorInTempDir({
+  it('should not emit a check for packages with no peerDependencies', async () => {
+    const data = await runDoctorInTempDir({
       'antd': { version: '5.20.0', peerDependencies: {} },
       '@ant-design/colors': {
         version: '7.0.0',
@@ -765,20 +734,16 @@ describe('doctor ecosystem peerDeps', () => {
     expect(names).not.toContain('ecosystem-compat:colors');
   });
 
-  it('should emit no ecosystem checks when no @ant-design/* packages are installed', () => {
-    const data = runDoctorInTempDir({
+  it('should emit no ecosystem checks when no @ant-design/* packages are installed', async () => {
+    const data = await runDoctorInTempDir({
       'antd': { version: '5.20.0', peerDependencies: {} },
     });
     const ecosystemChecks = (data.checks as any[]).filter((c) => c.name.startsWith('ecosystem-compat:'));
     expect(ecosystemChecks).toHaveLength(0);
   });
 
-  it('should treat compound ranges as compatible (fail-open)', () => {
-    // satisfies() processes ">=5.0.0 <6.0.0" by slicing off ">=" and passing "5.0.0 <6.0.0"
-    // as the bound to compare(). The bound splits as [5, 0, NaN] — the NaN comparison
-    // resolves before reaching it (10 > 0 at index 1), so compare returns 1 (>=0) → pass.
-    // Upper bound <6.0.0 is effectively ignored. This is the intended fail-open behavior.
-    const data = runDoctorInTempDir({
+  it('should treat compound ranges as compatible (fail-open)', async () => {
+    const data = await runDoctorInTempDir({
       'antd': { version: '5.10.0', peerDependencies: {} },
       'react': { version: '18.2.0' },
       '@ant-design/pro-components': {
@@ -794,8 +759,8 @@ describe('doctor ecosystem peerDeps', () => {
     expect(check.status).toBe('pass'); // fail-open: compound range treated as satisfied
   });
 
-  it('should check multiple ecosystem packages independently', () => {
-    const data = runDoctorInTempDir({
+  it('should check multiple ecosystem packages independently', async () => {
+    const data = await runDoctorInTempDir({
       'antd': { version: '5.20.0', peerDependencies: {} },
       'react': { version: '18.2.0' },
       '@ant-design/pro-components': {

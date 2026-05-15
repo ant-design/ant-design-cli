@@ -1,4 +1,3 @@
-/* v8 ignore start -- entry-point bootstrap; covered by e2e tests in cli.test.ts */
 import { Command, Option } from 'commander';
 import { registerListCommand } from './commands/list.js';
 import { registerInfoCommand } from './commands/info.js';
@@ -18,55 +17,59 @@ import { checkForUpdate } from './utils/update-check.js';
 declare const __CLI_VERSION__: string;
 const CLI_VERSION = __CLI_VERSION__;
 
-const program = new Command();
+export function createProgram(): Command {
+  const program = new Command();
 
-program
-  .name('antd')
-  .description('CLI tool for querying antd knowledge and analyzing antd usage')
-  .option('--format <format>', 'Output format: json, text, or markdown', 'text')
-  .option('--version <version>', 'Target antd version (e.g. 5.20.0)')
-  .option('--lang <lang>', 'Output language: en or zh', 'en')
-  .option('--detail', 'Full information output', false);
+  program
+    .name('antd')
+    .description('CLI tool for querying antd knowledge and analyzing antd usage')
+    .option('--format <format>', 'Output format: json, text, or markdown', 'text')
+    .option('--version <version>', 'Target antd version (e.g. 5.20.0)')
+    .option('--lang <lang>', 'Output language: en or zh', 'en')
+    .option('--detail', 'Full information output', false);
 
-// -V for CLI version (--version is used for antd version targeting)
-program.addOption(new Option('-V, --cli-version', 'Output the CLI version number'));
+  // -V for CLI version (--version is used for antd version targeting)
+  program.addOption(new Option('-V, --cli-version', 'Output the CLI version number'));
 
-// Knowledge Query commands
-registerListCommand(program);
-registerInfoCommand(program);
-registerDocCommand(program);
-registerDemoCommand(program);
-registerTokenCommand(program);
-registerSemanticCommand(program);
-registerChangelogCommand(program);
+  // Handle -V/--cli-version via Commander event (fires before subcommand dispatch)
+  program.on('option:cli-version', () => {
+    // eslint-disable-next-line no-console
+    console.log(CLI_VERSION);
+    void checkForUpdate();
+    process.exit(0);
+  });
 
-// Project Analysis commands
-registerDoctorCommand(program);
-registerUsageCommand(program);
-registerLintCommand(program);
-registerMigrateCommand(program);
-registerEnvCommand(program);
+  // Knowledge Query commands
+  registerListCommand(program);
+  registerInfoCommand(program);
+  registerDocCommand(program);
+  registerDemoCommand(program);
+  registerTokenCommand(program);
+  registerSemanticCommand(program);
+  registerChangelogCommand(program);
 
-// MCP server
-registerMcpCommand(program);
+  // Project Analysis commands
+  registerDoctorCommand(program);
+  registerUsageCommand(program);
+  registerLintCommand(program);
+  registerMigrateCommand(program);
+  registerEnvCommand(program);
 
-// Issue Reporting commands
-registerBugCommand(program);
-registerBugCliCommand(program);
+  // MCP server
+  registerMcpCommand(program);
 
-program.hook('postAction', async () => {
-  await checkForUpdate();
-});
+  // Issue Reporting commands
+  registerBugCommand(program);
+  registerBugCliCommand(program);
 
-// Handle -V before subcommand dispatch
-const idx = process.argv.indexOf('-V');
-const idx2 = process.argv.indexOf('--cli-version');
-if (idx !== -1 || idx2 !== -1) {
-  // eslint-disable-next-line no-console
-  console.log(CLI_VERSION);
-  await checkForUpdate();
-  process.exit(0);
+  program.hook('postAction', async () => {
+    await checkForUpdate();
+  });
+
+  return program;
 }
 
-program.parse();
-/* v8 ignore stop */
+// Auto-run when executed as CLI (skip when imported by tests)
+if (!process.env.VITEST) {
+  createProgram().parse();
+}
