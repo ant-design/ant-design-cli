@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { collectFiles, readJson, getJSXElementName, SCAN_EXTENSIONS, SKIP_DIRS } from '../scan.js';
+import { collectFiles, getJSXElementName, SCAN_EXTENSIONS, SKIP_DIRS } from '../scan.js';
 import { join } from 'node:path';
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 
@@ -69,32 +69,6 @@ describe('collectFiles', () => {
   });
 });
 
-describe('readJson', () => {
-  it('should return null for non-existent file', () => {
-    expect(readJson('/nonexistent/file.json')).toBeNull();
-  });
-
-  it('should return parsed JSON for valid file', () => {
-    const tmpPath = join(__dirname, '__tmp_readjson_test__.json');
-    writeFileSync(tmpPath, JSON.stringify({ name: 'test' }));
-    try {
-      const result = readJson(tmpPath);
-      expect(result).toEqual({ name: 'test' });
-    } finally {
-      rmSync(tmpPath);
-    }
-  });
-
-  it('should return null for invalid JSON', () => {
-    const tmpPath = join(__dirname, '__tmp_readjson_bad__.json');
-    writeFileSync(tmpPath, 'not json');
-    try {
-      expect(readJson(tmpPath)).toBeNull();
-    } finally {
-      rmSync(tmpPath);
-    }
-  });
-});
 
 describe('getJSXElementName', () => {
   it('should handle JSXIdentifier', () => {

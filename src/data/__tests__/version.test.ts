@@ -183,6 +183,10 @@ describe('compare', () => {
     expect(compare('1.0', '1.0.0')).toBe(0);
     expect(compare('1', '1.0.0')).toBe(0);
   });
+  it('should return null for unparseable versions', () => {
+    expect(compare('abc', '1.0.0')).toBeNull();
+    expect(compare('1.0.0', '')).toBeNull();
+  });
 });
 
 describe('valid', () => {

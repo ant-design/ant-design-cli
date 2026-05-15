@@ -1,6 +1,6 @@
 import { platform, release } from 'node:os';
 import { execFileSync } from 'node:child_process';
-import { readJson } from './scan.js';
+import { readJson, type PackageJson } from './json.js';
 import { join } from 'node:path';
 
 declare const __CLI_VERSION__: string;
@@ -23,8 +23,8 @@ function getSystem(): string {
 }
 
 export function collectAntdEnv(cwd: string, versionOverride?: string): AntdEnv {
-  const antdPkg = readJson(join(cwd, 'node_modules', 'antd', 'package.json'));
-  const reactPkg = readJson(join(cwd, 'node_modules', 'react', 'package.json'));
+  const antdPkg = readJson<PackageJson>(join(cwd, 'node_modules', 'antd', 'package.json'));
+  const reactPkg = readJson<PackageJson>(join(cwd, 'node_modules', 'react', 'package.json'));
 
   return {
     antd: versionOverride || antdPkg?.version || 'unknown',

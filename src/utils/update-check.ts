@@ -1,6 +1,6 @@
 import { compare, valid } from '../data/version.js';
 import { cacheStore } from './store.js';
-import { fetchWithTimeout } from './fetch.js';
+import { fetchFirstJson } from './fetch.js';
 
 declare const __CLI_VERSION__: string;
 
@@ -13,15 +13,8 @@ const NPM_SOURCES = [
 ];
 
 async function fetchLatestVersion(): Promise<string | null> {
-  // Race all registries — return the fastest successful response
-  return Promise.any(
-    NPM_SOURCES.map(async (url) => {
-      const res = await fetchWithTimeout(url, 3000);
-      const json = (await res.json()) as { version?: string };
-      if (json.version) return json.version;
-      throw new Error('No version provided');
-    }),
-  ).catch(() => null as string | null);
+  const json = await fetchFirstJson<{ version?: string }>(NPM_SOURCES, 3000);
+  return json?.version ?? null;
 }
 
 function printUpdateNotice(currentVersion: string, latestVersion: string): void {
@@ -59,7 +52,7 @@ export async function checkForUpdate(): Promise<void> {
     if (fetched) latestVersion = fetched;
   }
 
-  if (latestVersion && valid(latestVersion) && compare(currentVersion, latestVersion) < 0) {
+  if (latestVersion && valid(latestVersion) && (compare(currentVersion, latestVersion) ?? 0) < 0) {
     printUpdateNotice(currentVersion, latestVersion);
   }
 }

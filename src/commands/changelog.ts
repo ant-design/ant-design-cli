@@ -23,7 +23,7 @@ function filterEntries(changelog: ChangelogEntry[], versionArg?: string): Change
     return changelog.filter((e) => e.version === parsed.exact);
   }
   return changelog.filter(
-    (e) => compare(e.version, parsed.from) >= 0 && compare(e.version, parsed.to) <= 0,
+    (e) => (compare(e.version, parsed.from) ?? -1) >= 0 && (compare(e.version, parsed.to) ?? 1) <= 0,
   );
 }
 
@@ -138,7 +138,7 @@ export function diffChangelog(opts: {
   component?: string;
 }): DiffResult | CLIError {
   // Validate version order
-  if (compare(opts.v1, opts.v2) > 0) {
+  if ((compare(opts.v1, opts.v2) ?? 0) > 0) {
     return createError(
       ErrorCodes.INVALID_ARGUMENT,
       `Version order is invalid: "${opts.v1}" is newer than "${opts.v2}"`,

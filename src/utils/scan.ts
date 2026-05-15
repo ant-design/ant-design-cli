@@ -1,11 +1,15 @@
-import { statSync, readFileSync } from 'node:fs';
+import { statSync } from 'node:fs';
 import { join } from 'node:path';
 import fg from 'fast-glob';
 
 export const SCAN_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx']);
 export const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next']);
 
+// .umi* matches umi's generated temp dirs (.umi, .umi-production, etc.)
 const GLOB_IGNORE = [...SKIP_DIRS, '.umi*'].map((d) => `**/${d}/**`);
+
+// Derive glob pattern from SCAN_EXTENSIONS to keep them in sync
+const SOURCE_GLOB = `**/*.{${[...SCAN_EXTENSIONS].map((e) => e.slice(1)).join(',')}}`;
 
 /**
  * Recursively collect source files from a directory or return a single file.
@@ -19,7 +23,7 @@ export function collectFiles(dir: string): string[] {
   }
 
   try {
-    return fg.globSync('**/*.{ts,tsx,js,jsx}', {
+    return fg.globSync(SOURCE_GLOB, {
       cwd: dir,
       absolute: true,
       ignore: GLOB_IGNORE,
@@ -41,13 +45,3 @@ export function getJSXElementName(name: any): string {
   return '';
 }
 
-/**
- * Read and parse a JSON file, returning null on failure.
- */
-export function readJson(path: string): any | null {
-  try {
-    return JSON.parse(readFileSync(path, 'utf-8'));
-  } catch {
-    return null;
-  }
-}
