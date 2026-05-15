@@ -35,7 +35,6 @@ export function createProgram(): Command {
   program.on('option:cli-version', () => {
     // eslint-disable-next-line no-console
     console.log(CLI_VERSION);
-    void checkForUpdate();
     process.exit(0);
   });
 

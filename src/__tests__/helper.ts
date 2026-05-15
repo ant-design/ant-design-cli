@@ -44,21 +44,21 @@ export async function runCLI(...args: string[]): Promise<CLIRunResult> {
     if (!(e instanceof Error) || !/^EXIT:\d+$/.test(e.message)) {
       throw e;
     }
+  } finally {
+    const capturedExitCode = forcedExitCode ?? (process.exitCode as number) ?? 0;
+    logSpy.mockRestore();
+    errSpy.mockRestore();
+    writeSpy.mockRestore();
+    exitSpy.mockRestore();
+    process.exitCode = origExitCode as number | undefined;
+    forcedExitCode = capturedExitCode;
   }
 
-  const result: CLIRunResult = {
+  return {
     stdout: stdout.trim(),
     stderr: stderr.trim(),
-    exitCode: forcedExitCode ?? (process.exitCode as number) ?? 0,
+    exitCode: forcedExitCode,
   };
-
-  logSpy.mockRestore();
-  errSpy.mockRestore();
-  writeSpy.mockRestore();
-  exitSpy.mockRestore();
-  process.exitCode = origExitCode as number | undefined;
-
-  return result;
 }
 
 /** Run CLI and return trimmed stdout. */

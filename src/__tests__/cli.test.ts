@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { run } from './helper.js';
+import { run, runCLI } from './helper.js';
 
 describe('CLI', () => {
   it('should show help', async () => {
@@ -16,7 +16,6 @@ describe('CLI', () => {
   });
 
   it('should output error as JSON to stderr', async () => {
-    const { runCLI } = await import('./helper.js');
     const result = await runCLI('info', 'Btn', '--format', 'json');
     expect(result.stdout).toBe('');
     const data = JSON.parse(result.stderr);
