@@ -1,5 +1,6 @@
 import { satisfies } from '../data/version.js';
 import { cacheStore } from './store.js';
+import { fetchFirstJson } from './fetch.js';
 
 const BUG_VERSIONS_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
 
@@ -10,26 +11,11 @@ export interface BugMatchResult {
   urls: string[];
 }
 
-async function fetchBugVersionsFromUrl(url: string): Promise<BugVersionsMap> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 5000);
-  try {
-    const res = await fetch(url, { signal: controller.signal, redirect: 'follow' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return (await res.json()) as BugVersionsMap;
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-async function fetchBugVersions(): Promise<BugVersionsMap | null> {
-  const sources = [
-    'https://registry.npmmirror.com/antd/latest/files/BUG_VERSIONS.json', // China mirror (fast in CN)
-    'https://unpkg.com/antd/BUG_VERSIONS.json',                           // Unpkg CDN
-    'https://cdn.jsdelivr.net/npm/antd/BUG_VERSIONS.json',                // jsDelivr CDN
-  ];
-  return Promise.any(sources.map((url) => fetchBugVersionsFromUrl(url))).catch(() => null);
-}
+const BUG_VERSIONS_SOURCES = [
+  'https://registry.npmmirror.com/antd/latest/files/BUG_VERSIONS.json', // China mirror (fast in CN)
+  'https://unpkg.com/antd/BUG_VERSIONS.json',                           // Unpkg CDN
+  'https://cdn.jsdelivr.net/npm/antd/BUG_VERSIONS.json',                // jsDelivr CDN
+];
 
 /** Find the first bug range that the given antd version matches. */
 export function findBugInfo(version: string, bugVersions: BugVersionsMap): BugMatchResult | null {
@@ -54,7 +40,7 @@ export async function getBugVersions(): Promise<BugVersionsMap | null> {
     return cached.data;
   }
 
-  const fetched = await fetchBugVersions();
+  const fetched = await fetchFirstJson<BugVersionsMap>(BUG_VERSIONS_SOURCES, 5000);
 
   if (fetched) {
     cacheStore.set('bugVersionsCache', { lastChecked: now, data: fetched });

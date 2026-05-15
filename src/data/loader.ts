@@ -1,9 +1,10 @@
-import { readFileSync, existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { MetadataStore, ComponentData, CLIError } from '../types.js';
 import { createError, fuzzyMatch, ErrorCodes } from '../output/error.js';
+import { readJson } from '../utils/scan.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -96,10 +97,8 @@ function loadMetadataForVersionUncached(version: string): MetadataStore {
 
   // Load versions index
   const versionsPath = join(getDataPath(), 'versions.json');
-  let versionsIndex: Record<string, Record<string, string>> = {};
-  try {
-    versionsIndex = JSON.parse(readFileSync(versionsPath, 'utf-8'));
-  } catch {
+  const versionsIndex = readJson(versionsPath) as Record<string, Record<string, string>> | null;
+  if (!versionsIndex) {
     return loadMetadata(majorVersion);
   }
 

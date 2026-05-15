@@ -179,7 +179,7 @@ describe('compare', () => {
     expect(compare('1.1.0', '1.0.0')).toBe(1);
     expect(compare('1.0.1', '1.0.0')).toBe(1);
   });
-  it('should handle missing parts as zero', () => {
+  it('should coerce partial versions', () => {
     expect(compare('1.0', '1.0.0')).toBe(0);
     expect(compare('1', '1.0.0')).toBe(0);
   });
@@ -217,7 +217,7 @@ describe('satisfies()', () => {
     expect(satisfies('1.21.0', '>1.21.0')).toBe(false);
   });
 
-  // ^ operator (same major, >= minor.patch)
+  // ^ operator (same major for >=1.x, locks minor for 0.x)
   it('passes for ^ when same major and >= bound', () => {
     expect(satisfies('1.21.0', '^1.21.0')).toBe(true);
     expect(satisfies('1.22.0', '^1.21.0')).toBe(true);
@@ -228,6 +228,11 @@ describe('satisfies()', () => {
   });
   it('fails for ^ when below bound within same major', () => {
     expect(satisfies('1.20.0', '^1.21.0')).toBe(false);
+  });
+  it('handles ^0.x ranges per semver spec (locks minor)', () => {
+    expect(satisfies('0.14.0', '^0.14.0')).toBe(true);
+    expect(satisfies('0.14.5', '^0.14.0')).toBe(true);
+    expect(satisfies('0.15.0', '^0.14.0')).toBe(false);
   });
 
   // ~ operator (same major+minor, >= patch)
@@ -265,10 +270,29 @@ describe('satisfies()', () => {
     expect(satisfies('5.2.0', '5.1')).toBe(false);
   });
 
-  // fail-open for unrecognized range
-  it('returns true (fail-open) for unrecognized range format', () => {
-    expect(satisfies('1.0.0', '||1.x')).toBe(true);
+  // OR ranges (||)
+  it('passes when version satisfies any OR alternative', () => {
+    expect(satisfies('19.2.5', '^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0')).toBe(true);
+    expect(satisfies('18.0.0', '^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0')).toBe(true);
+    expect(satisfies('0.14.0', '^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0')).toBe(true);
+    expect(satisfies('16.5.3', '^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0')).toBe(true);
+  });
+  it('fails when version satisfies no OR alternative', () => {
+    expect(satisfies('14.0.0', '^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0')).toBe(false);
+    expect(satisfies('20.0.0', '^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0')).toBe(false);
+  });
+  it('handles OR with comparison operators', () => {
+    expect(satisfies('17.0.0', '>=16.0.0 || >=18.0.0')).toBe(true);
+    expect(satisfies('19.0.0', '>=16.0.0 || >=18.0.0')).toBe(true);
+    expect(satisfies('15.0.0', '>=16.0.0 || >=18.0.0')).toBe(false);
+  });
+
+  // wildcard and x-range
+  it('handles * wildcard', () => {
     expect(satisfies('1.0.0', '*')).toBe(true);
+  });
+  it('returns false for truly invalid ranges (semver returns false)', () => {
+    expect(satisfies('1.0.0', 'not-a-range')).toBe(false);
   });
 
   // <= operator
