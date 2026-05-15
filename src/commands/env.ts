@@ -5,9 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { join, isAbsolute } from 'node:path';
 import stringWidth from 'string-width';
 import { output } from '../output/formatter.js';
-import { readJson } from '../utils/json.js';
-
-interface PkgJson { version?: string }
+import { readJson, type PackageJson } from '../utils/json.js';
 
 export type EnvinfoValue = string | { version?: string; path?: string } | null;
 export type EnvinfoData = Record<string, Record<string, EnvinfoValue>>;
@@ -81,7 +79,7 @@ const CORE_DEPS = ['antd', 'react', 'react-dom', 'dayjs', '@ant-design/cssinjs',
 export function collectDependencies(cwd: string): Record<string, string | null> {
   const result: Record<string, string | null> = {};
   for (const dep of CORE_DEPS) {
-    const pkg = readJson<PkgJson>(join(cwd, 'node_modules', dep, 'package.json'));
+    const pkg = readJson<PackageJson>(join(cwd, 'node_modules', dep, 'package.json'));
     result[dep] = pkg?.version ?? null;
   }
   return result;
@@ -99,7 +97,7 @@ export function scanEcosystem(cwd: string): Record<string, string> {
       if (entry.startsWith('.')) continue;
       const fullName = `@ant-design/${entry}`;
       if (coreSet.has(fullName)) continue;
-      const pkg = readJson<PkgJson>(join(scopeDir, entry, 'package.json'));
+      const pkg = readJson<PackageJson>(join(scopeDir, entry, 'package.json'));
       if (pkg?.version) result[fullName] = pkg.version;
     }
   } catch { /* scope dir doesn't exist */ }
@@ -110,7 +108,7 @@ export function scanEcosystem(cwd: string): Record<string, string> {
     const entries = readdirSync(nmDir);
     for (const entry of entries) {
       if (!entry.startsWith('rc-')) continue;
-      const pkg = readJson<PkgJson>(join(nmDir, entry, 'package.json'));
+      const pkg = readJson<PackageJson>(join(nmDir, entry, 'package.json'));
       if (pkg?.version) result[entry] = pkg.version;
     }
   } catch { /* node_modules doesn't exist */ }
@@ -135,7 +133,7 @@ const ENVINFO_ORDER = ['System', 'Binaries', 'Managers', 'Utilities', 'Servers',
 export function collectBuildTools(cwd: string): Record<string, string> {
   const result: Record<string, string> = {};
   for (const tool of BUILD_TOOLS) {
-    const pkg = readJson<PkgJson>(join(cwd, 'node_modules', tool, 'package.json'));
+    const pkg = readJson<PackageJson>(join(cwd, 'node_modules', tool, 'package.json'));
     if (pkg?.version) result[tool] = pkg.version;
   }
   return result;

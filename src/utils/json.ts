@@ -1,5 +1,10 @@
 import { readFileSync } from 'node:fs';
 
+/** Minimal package.json shape for versioned packages. */
+export interface PackageJson {
+  version?: string;
+}
+
 /**
  * Read and parse a JSON file, returning null on failure.
  */

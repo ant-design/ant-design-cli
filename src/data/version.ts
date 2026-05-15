@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import semver from 'semver';
-import { readJson } from '../utils/json.js';
+import { readJson, type PackageJson } from '../utils/json.js';
 
 export interface VersionInfo {
   version: string;
@@ -25,7 +25,7 @@ export function detectVersion(flagVersion?: string): VersionInfo {
   // 2. node_modules/antd/package.json
   const nmPath = join(process.cwd(), 'node_modules', 'antd', 'package.json');
   if (existsSync(nmPath)) {
-    const pkg = readJson<{ version?: string }>(nmPath);
+    const pkg = readJson<PackageJson>(nmPath);
     if (pkg?.version) {
       return {
         version: pkg.version,
