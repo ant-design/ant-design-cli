@@ -66,4 +66,18 @@ describe('bug-cli', () => {
     const data = JSON.parse(out);
     expect(data.body).toContain('Info crashes');
   });
+
+  it('should error when --title is missing for bug-cli', async () => {
+    const result = await runCLI('bug-cli', '--format', 'json');
+    expect(result.exitCode).not.toBe(0);
+    const err = JSON.parse(result.stderr);
+    expect(err.code).toBe('TITLE_REQUIRED');
+    expect(err.message).toContain('--title');
+  });
+
+  it('should preview bug-cli report as markdown (raw body)', async () => {
+    const out = await run('bug-cli', '--title', 'CLI Test', '--format', 'markdown');
+    expect(out).toContain('### Description');
+    expect(out).not.toContain('Repository:');
+  });
 });

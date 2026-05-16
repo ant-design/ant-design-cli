@@ -25,4 +25,26 @@ describe('token', () => {
     const result = await runCLI('token', 'NonExistent');
     expect(result.exitCode).toBe(1);
   });
+
+  it('should show global tokens in markdown format', async () => {
+    const out = await run('token', '--format', 'markdown');
+    expect(out).toContain('Global Design Tokens');
+    expect(out).toContain('|');
+  });
+
+  it('should show component tokens in markdown format', async () => {
+    const out = await run('token', 'Button', '--format', 'markdown');
+    expect(out).toContain('Button');
+    expect(out).toContain('|');
+  });
+
+  it('should support --lang zh for tokens', async () => {
+    const out = await run('token', '--lang', 'zh');
+    expect(out).toContain('全局');
+  });
+
+  it('should support --lang zh for component tokens', async () => {
+    const out = await run('token', 'Button', '--lang', 'zh');
+    expect(out).toContain('组件');
+  });
 });

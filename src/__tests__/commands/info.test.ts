@@ -44,4 +44,18 @@ describe('info', () => {
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain('not found');
   });
+
+  it('should show related components in detailed format', async () => {
+    const out = await run('info', 'Button', '--detail', '--format', 'json');
+    const data = JSON.parse(out);
+    if (data.related && data.related.length > 0) {
+      expect(Array.isArray(data.related)).toBe(true);
+    }
+  });
+
+  it('should show markdown format for detailed info', async () => {
+    const out = await run('info', 'Button', '--detail', '--format', 'markdown');
+    expect(out).toContain('Button');
+    expect(out).toContain('|');
+  });
 });

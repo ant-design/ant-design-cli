@@ -108,4 +108,43 @@ const App = () => (
     );
     expect(dividerTypeIssues).toHaveLength(0);
   });
+
+  it('should support --only flag for filtering specific rule categories', async () => {
+    const out = await lintFixture(
+      'only-deprecated',
+      `import { BackTop, Button } from 'antd';\nconst App = () => <><BackTop /><Button ghost type="link" /></>;`,
+      ['--only', 'deprecated', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.every((i: LintIssue) => i.rule === 'deprecated')).toBe(true);
+    expect(data.issues.some((i: LintIssue) => i.message.includes('BackTop'))).toBe(true);
+  });
+
+  it('should show no issues message when no issues found', async () => {
+    const out = await lintFixture(
+      'clean',
+      `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;`,
+    );
+    expect(out).toContain('No issues found');
+  });
+
+  it('should support --antd-alias flag for custom import paths', async () => {
+    const out = await lintFixture(
+      'alias',
+      `import { Button } from '@my/antd';\nconst App = () => <Button ghost type="link" />;`,
+      ['--antd-alias', '@my/antd', '--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage')).toBe(true);
+  });
+
+  it('should detect namespace import performance issues', async () => {
+    const out = await lintFixture(
+      'namespace',
+      `import * as Antd from 'antd';\nconst App = () => <Antd.Button>Test</Antd.Button>;`,
+      ['--only', 'performance', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'performance' && i.message.includes('wildcard'))).toBe(true);
+  });
 });
