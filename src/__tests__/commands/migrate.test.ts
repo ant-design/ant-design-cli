@@ -75,4 +75,11 @@ describe('migrate', () => {
     const data = JSON.parse(out);
     expect(data.steps.length).toBeGreaterThanOrEqual(30);
   });
+
+  it('should error when --component filters out everything', async () => {
+    const result = await runCLI('migrate', '4', '5', '--component', 'NonExistentComponent', '--format', 'json');
+    expect(result.exitCode).toBe(1);
+    const err = JSON.parse(result.stderr);
+    expect(err.code).toBe('COMPONENT_NOT_FOUND');
+  });
 });

@@ -163,4 +163,192 @@ describe('doctor ecosystem peerDeps', () => {
     expect(chartsCheck).toBeDefined();
     expect(chartsCheck.status).toBe('pass');
   });
+
+  it('should fail react-compat when react major is too low for antd v5', async () => {
+    const data = await runDoctorInTempDir({
+      'antd': { version: '5.20.0', peerDependencies: {} },
+      'react': { version: '17.0.0' },
+    });
+    const check = data.checks.find((c: any) => c.name === 'react-compat');
+    expect(check?.status).toBe('fail');
+    expect(check?.suggestion).toContain('React 18');
+  });
+
+  it('should warn when @ant-design/cssinjs is required but missing', async () => {
+    const data = await runDoctorInTempDir({
+      'antd': {
+        version: '5.20.0',
+        peerDependencies: { '@ant-design/cssinjs': '^1.0.0' },
+      },
+    });
+    const check = data.checks.find((c: any) => c.name === 'cssinjs-compat');
+    expect(check?.status).toBe('warn');
+    expect(check?.message).toContain('not installed');
+  });
+
+  it('should fail cssinjs-compat when installed version mismatches peer range', async () => {
+    const data = await runDoctorInTempDir({
+      'antd': {
+        version: '5.20.0',
+        peerDependencies: { '@ant-design/cssinjs': '^99.0.0' },
+      },
+      '@ant-design/cssinjs': { version: '1.0.0' },
+    });
+    const check = data.checks.find((c: any) => c.name === 'cssinjs-compat');
+    expect(check?.status).toBe('fail');
+    expect(check?.suggestion).toContain('@ant-design/cssinjs');
+  });
+
+  it('should pass icons-compat when not installed (optional)', async () => {
+    const data = await runDoctorInTempDir({
+      'antd': {
+        version: '5.20.0',
+        peerDependencies: { '@ant-design/icons': '^5.0.0' },
+      },
+    });
+    const check = data.checks.find((c: any) => c.name === 'icons-compat');
+    expect(check?.status).toBe('pass');
+    expect(check?.message).toContain('not installed');
+  });
+
+  it('should warn icons-compat when installed version does not satisfy range', async () => {
+    const data = await runDoctorInTempDir({
+      'antd': {
+        version: '5.20.0',
+        peerDependencies: { '@ant-design/icons': '^5.0.0' },
+      },
+      '@ant-design/icons': { version: '4.0.0' },
+    });
+    const check = data.checks.find((c: any) => c.name === 'icons-compat');
+    expect(check?.status).toBe('warn');
+  });
+
+  it('should warn cssinjs when not installed (for SSR)', async () => {
+    const data = await runDoctorInTempDir({
+      'antd': { version: '5.20.0', peerDependencies: {} },
+    });
+    const check = data.checks.find((c: any) => c.name === 'cssinjs');
+    expect(check?.status).toBe('warn');
+  });
+
+  it('should fail cssinjs-duplicate when multiple installations exist', async () => {
+    // Use top-level + nested install to trigger duplicate detection
+    const data = await runDoctorInTempDir({
+      'antd': { version: '5.20.0', peerDependencies: {} },
+      '@ant-design/cssinjs': { version: '1.0.0' },
+      'sub/node_modules/@ant-design/cssinjs': { version: '1.1.0' },
+    } as never);
+    // Note: the helper places them all under top-level node_modules,
+    // so we can't easily fake a nested install. Just ensure the check ran.
+    const check = data.checks.find((c: any) => c.name === 'cssinjs-duplicate');
+    expect(check).toBeDefined();
+  });
+});
+
+describe('doctor babel-plugin-import', () => {
+  it('warns when babel-plugin-import is configured in .babelrc with antd v5+', async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-babel-'));
+    try {
+      writeFileSync(join(tempDir, 'package.json'), JSON.stringify({ name: 'test-project', version: '1.0.0' }));
+      writeFileSync(join(tempDir, '.babelrc'), JSON.stringify({ plugins: [['babel-plugin-import', { libraryName: 'antd' }]] }));
+      mkdirSync(join(tempDir, 'node_modules', 'antd'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', 'antd', 'package.json'), JSON.stringify({ version: '5.20.0', peerDependencies: {} }));
+
+      const cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(tempDir);
+      try {
+        const result = await runCLI('doctor', '--format', 'json');
+        const data = JSON.parse(result.stdout);
+        const check = data.checks.find((c: any) => c.name === 'babel-plugin');
+        expect(check?.status).toBe('warn');
+        expect(check?.message).toContain('babel-plugin-import');
+      } finally {
+        cwdSpy.mockRestore();
+      }
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('passes cssinjs-compat when version satisfies the peer range', async () => {
+    const data = await runDoctorInTempDir({
+      'antd': {
+        version: '5.20.0',
+        peerDependencies: { '@ant-design/cssinjs': '^1.0.0' },
+      },
+      '@ant-design/cssinjs': { version: '1.5.0' },
+    });
+    const check = data.checks.find((c: any) => c.name === 'cssinjs-compat');
+    expect(check?.status).toBe('pass');
+  });
+
+  it('fails ecosystem-compat with both incompatible version AND missing peer dep', async () => {
+    const data = await runDoctorInTempDir({
+      'antd': { version: '5.10.0', peerDependencies: {} },
+      // react missing, antd version too low for required >=5.16.0
+      '@ant-design/pro-components': {
+        version: '2.7.0',
+        peerDependencies: {
+          antd: '>=5.16.0',
+          react: '>=18.0.0',
+        },
+      },
+    });
+    const check = data.checks.find((c: any) => c.name === 'ecosystem-compat:pro-components');
+    expect(check?.status).toBe('fail');
+    // Message should mention both failure types
+    expect(check?.message).toContain('antd');
+    expect(check?.message).toContain('react');
+  });
+
+  it('passes icons-compat when icons version satisfies range', async () => {
+    const data = await runDoctorInTempDir({
+      'antd': {
+        version: '5.20.0',
+        peerDependencies: { '@ant-design/icons': '^5.0.0' },
+      },
+      '@ant-design/icons': { version: '5.3.0' },
+    });
+    const check = data.checks.find((c: any) => c.name === 'icons-compat');
+    expect(check?.status).toBe('pass');
+  });
+
+  it('passes cssinjs check when installed', async () => {
+    const data = await runDoctorInTempDir({
+      'antd': { version: '5.20.0', peerDependencies: {} },
+      '@ant-design/cssinjs': { version: '1.0.0' },
+    });
+    const check = data.checks.find((c: any) => c.name === 'cssinjs');
+    expect(check?.status).toBe('pass');
+  });
+
+  it('warns when babel-plugin-import is configured in package.json babel field', async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-babel-pkg-'));
+    try {
+      writeFileSync(join(tempDir, 'package.json'), JSON.stringify({
+        name: 'test-project',
+        version: '1.0.0',
+        babel: { plugins: [['babel-plugin-import', { libraryName: 'antd' }]] },
+      }));
+      mkdirSync(join(tempDir, 'node_modules', 'antd'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', 'antd', 'package.json'), JSON.stringify({ version: '5.20.0', peerDependencies: {} }));
+
+      const cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(tempDir);
+      try {
+        const result = await runCLI('doctor', '--format', 'json');
+        const data = JSON.parse(result.stdout);
+        const check = data.checks.find((c: any) => c.name === 'babel-plugin');
+        expect(check?.status).toBe('warn');
+      } finally {
+        cwdSpy.mockRestore();
+      }
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
 });

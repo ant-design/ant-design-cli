@@ -47,4 +47,18 @@ describe('token', () => {
     const out = await run('token', 'Button', '--lang', 'zh');
     expect(out).toContain('组件');
   });
+
+  it('should error on antd v3 (tokens not supported)', async () => {
+    const result = await runCLI('token', '--version', '3.26.0', '--format', 'json');
+    expect(result.exitCode).toBe(1);
+    const err = JSON.parse(result.stderr);
+    expect(err.code).toBe('UNSUPPORTED_VERSION_FEATURE');
+  });
+
+  it('should error on antd v4 (tokens not supported)', async () => {
+    const result = await runCLI('token', '--version', '4.24.0', '--format', 'json');
+    expect(result.exitCode).toBe(1);
+    const err = JSON.parse(result.stderr);
+    expect(err.code).toBe('UNSUPPORTED_VERSION_FEATURE');
+  });
 });
