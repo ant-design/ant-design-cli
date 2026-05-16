@@ -493,6 +493,7 @@ export function registerDoctorCommand(program: Command): void {
         if (check.suggestion) {
           const lines = check.suggestion.split('\n');
           console.log(`${INDENT.repeat(2)}→ ${lines[0]}`);
+          /* v8 ignore next 3 -- defensive: no built-in check currently emits multi-line suggestions */
           for (const line of lines.slice(1)) {
             console.log(`${INDENT.repeat(2)}  ${line}`);
           }

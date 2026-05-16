@@ -76,4 +76,20 @@ describe('changelog', () => {
     const out = await run('changelog', '5.20.0', '5.20.0');
     expect(out).toContain('No API differences');
   });
+
+  it('should diff a component removed between major versions', async () => {
+    // BackTop existed in v4 but was removed in v5
+    const out = await run('changelog', '4.24.0', '5.24.0', 'BackTop', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.component).toBe('BackTop');
+    expect(data.removed.length).toBeGreaterThan(0);
+  });
+
+  it('should diff a component added between major versions', async () => {
+    // FloatButton was added in v5
+    const out = await run('changelog', '4.24.0', '5.24.0', 'FloatButton', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.component).toBe('FloatButton');
+    expect(data.added.length).toBeGreaterThan(0);
+  });
 });

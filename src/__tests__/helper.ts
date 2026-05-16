@@ -41,6 +41,7 @@ export async function runCLI(...args: string[]): Promise<CLIRunResult> {
     await program.parseAsync(args, { from: 'user' });
   } catch (e: unknown) {
     // Re-throw unexpected errors; swallow process.exit throws
+    /* v8 ignore next 3 -- test helper safety net: no current test triggers a non-EXIT throw */
     if (!(e instanceof Error) || !/^EXIT:\d+$/.test(e.message)) {
       throw e;
     }

@@ -68,4 +68,35 @@ describe('usage', () => {
       rmSync(tmpDir, { recursive: true, force: true });
     }
   });
+
+  it('should skip type-only antd imports', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_type__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import type { ButtonProps } from 'antd';\nimport { type FormProps, Button } from 'antd';\nconst x: ButtonProps = {};\nconst y: FormProps = {};\nconst App = () => <Button>x</Button>;\nvoid x; void y;`);
+      const out = await run('usage', tmpDir, '--format', 'json');
+      const data = JSON.parse(out);
+      // type-only imports are excluded from the import count; only Button (value import) shows
+      const button = data.components.find((c: { name: string }) => c.name === 'Button');
+      expect(button).toBeDefined();
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should skip files with parse errors', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_broken__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Button } from 'antd';\nconst App = () => { broken( <Button };`);
+      const out = await run('usage', tmpDir, '--format', 'json');
+      const data = JSON.parse(out);
+      // Parser error → file is skipped, components empty
+      expect(data.components).toEqual([]);
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
 });

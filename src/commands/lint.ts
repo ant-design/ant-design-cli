@@ -77,6 +77,7 @@ function isObjectExpression(attrs: any[], name: string): boolean {
 
 function getObjectExpressionKeys(attrs: any[], name: string): string[] {
   const a = findAttr(attrs, name);
+  /* v8 ignore next -- guarded by isObjectExpression() check at every call site */
   if (!a) return [];
   if (a.value?.type === 'JSXExpressionContainer' &&
       a.value.expression?.type === 'ObjectExpression') {
@@ -165,6 +166,7 @@ function lintFile(
 
   const lineOf = (node: any): number => {
     if (typeof node.start === 'number') return offsetToLine(node.start);
+    /* v8 ignore next -- oxc-parser always emits numeric start offsets; loc fallback is defensive */
     return node.loc?.start?.line ?? 0;
   };
 

@@ -130,5 +130,6 @@ describe('issue helpers', () => {
       expect(env.node).toBe(process.version);
       expect(env.system).toMatch(/.+\s.+/);
     });
+
   });
 });

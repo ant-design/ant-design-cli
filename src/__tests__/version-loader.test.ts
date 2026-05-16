@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -10,7 +10,9 @@ import {
   getAllComponentNames,
   resolveComponent,
 } from '../data/loader.js';
+import * as jsonModule from '../utils/json.js';
 import { collectFiles, getJSXElementName } from '../utils/scan.js';
+import * as fg from 'fast-glob';
 
 describe('data/version', () => {
   let workdir: string;
@@ -177,6 +179,29 @@ describe('data/loader', () => {
       expect(result.comp.name).toBe('Button');
     }
   });
+
+  it('falls back to loadMetadata when versions.json cannot be read', () => {
+    // First call: returns null (simulating unreadable versions.json)
+    // Subsequent calls (loadMetadata reads no JSON files, only readDataFile) — but
+    // resolveComponent uses readJson elsewhere. Use a unique version to bypass cache.
+    const spy = vi.spyOn(jsonModule, 'readJson').mockReturnValueOnce(null);
+    const store = loadMetadataForVersion(`5.${Date.now()}.0`);
+    expect(store).toBeDefined();
+    spy.mockRestore();
+  });
+
+  it('falls back to loadMetadata when versions index points to a non-existent snapshot file', () => {
+    // Stub readJson to return an index pointing to a snapshot that doesn't exist on disk.
+    // Use a unique requested version to bypass the in-memory cache.
+    const fakeVersion = `5.998.${Date.now()}`;
+    const spy = vi.spyOn(jsonModule, 'readJson').mockReturnValueOnce({
+      v5: { '5.998': '5.998.0' },
+    } as never);
+    const store = loadMetadataForVersion(fakeVersion);
+    // Snapshot doesn't exist → tryLoadSnapshot returns null; falls back to v5.json
+    expect(store.components.length).toBeGreaterThan(0);
+    spy.mockRestore();
+  });
 });
 
 describe('utils/scan', () => {
@@ -223,5 +248,20 @@ describe('utils/scan', () => {
     it('returns empty string for unknown node type', () => {
       expect(getJSXElementName({ type: 'Other' })).toBe('');
     });
+  });
+
+  it('collectFiles returns [] when fast-glob throws', () => {
+    const dir = join(tmpdir(), `scan-throw-${Date.now()}`);
+    mkdirSync(dir, { recursive: true });
+    try {
+      const spy = vi.spyOn(fg.default, 'globSync').mockImplementation(() => {
+        throw new Error('boom');
+      });
+      const result = collectFiles(dir);
+      expect(result).toEqual([]);
+      spy.mockRestore();
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

@@ -38,10 +38,10 @@ export function collectCliEnv(): CliEnv {
   let cliVersion: string;
   try {
     cliVersion = __CLI_VERSION__;
-  } catch (err) {
+  } catch (err) /* v8 ignore start -- __CLI_VERSION__ is a compile-time constant injected by tsup; cannot throw at runtime */ {
     console.error('Failed to get CLI version:', err);
     cliVersion = 'unknown';
-  }
+  } /* v8 ignore stop */
   return {
     cli: cliVersion,
     node: process.version,

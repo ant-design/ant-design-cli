@@ -324,6 +324,126 @@ describe('doctor babel-plugin-import', () => {
     expect(check?.status).toBe('pass');
   });
 
+  it('fails duplicate-install when antd is installed at two nested paths', async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-dup-'));
+    try {
+      writeFileSync(join(tempDir, 'package.json'), JSON.stringify({ name: 'p', version: '1.0.0' }));
+      // Top-level antd
+      mkdirSync(join(tempDir, 'node_modules', 'antd'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', 'antd', 'package.json'), JSON.stringify({ version: '5.10.0', peerDependencies: {} }));
+      // Nested antd at node_modules/x/node_modules/antd with different version
+      mkdirSync(join(tempDir, 'node_modules', 'some-dep', 'node_modules', 'antd'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', 'some-dep', 'node_modules', 'antd', 'package.json'), JSON.stringify({ version: '5.20.0' }));
+
+      const cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(tempDir);
+      try {
+        const result = await runCLI('doctor', '--format', 'json');
+        const data = JSON.parse(result.stdout);
+        const check = data.checks.find((c: any) => c.name === 'duplicate-install');
+        expect(check?.status).toBe('fail');
+        expect(check?.message).toContain('5.10.0');
+        expect(check?.message).toContain('5.20.0');
+      } finally {
+        cwdSpy.mockRestore();
+      }
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('fails dayjs-duplicate when dayjs is installed at two paths', async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-dayjs-'));
+    try {
+      writeFileSync(join(tempDir, 'package.json'), JSON.stringify({ name: 'p', version: '1.0.0' }));
+      mkdirSync(join(tempDir, 'node_modules', 'antd'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', 'antd', 'package.json'), JSON.stringify({ version: '5.20.0', peerDependencies: {} }));
+      mkdirSync(join(tempDir, 'node_modules', 'dayjs'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', 'dayjs', 'package.json'), JSON.stringify({ version: '1.11.0' }));
+      mkdirSync(join(tempDir, 'node_modules', 'some-dep', 'node_modules', 'dayjs'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', 'some-dep', 'node_modules', 'dayjs', 'package.json'), JSON.stringify({ version: '1.12.0' }));
+
+      const cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(tempDir);
+      try {
+        const result = await runCLI('doctor', '--format', 'json');
+        const data = JSON.parse(result.stdout);
+        const check = data.checks.find((c: any) => c.name === 'dayjs-duplicate');
+        expect(check?.status).toBe('fail');
+      } finally {
+        cwdSpy.mockRestore();
+      }
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('warns theme-config when package.json has theme field on antd v5+', async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-theme-'));
+    try {
+      writeFileSync(join(tempDir, 'package.json'), JSON.stringify({
+        name: 'p',
+        version: '1.0.0',
+        theme: { primaryColor: '#000' },
+      }));
+      mkdirSync(join(tempDir, 'node_modules', 'antd'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', 'antd', 'package.json'), JSON.stringify({ version: '5.20.0', peerDependencies: {} }));
+
+      const cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(tempDir);
+      try {
+        const result = await runCLI('doctor', '--format', 'json');
+        const data = JSON.parse(result.stdout);
+        const check = data.checks.find((c: any) => c.name === 'theme-config');
+        expect(check?.status).toBe('warn');
+      } finally {
+        cwdSpy.mockRestore();
+      }
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('skips dotfile entries and version-less packages inside @ant-design scope dir', async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-scope-'));
+    try {
+      writeFileSync(join(tempDir, 'package.json'), JSON.stringify({ name: 'p', version: '1.0.0' }));
+      mkdirSync(join(tempDir, 'node_modules', 'antd'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', 'antd', 'package.json'), JSON.stringify({ version: '5.20.0', peerDependencies: {} }));
+
+      // Dotfile-style nested entry (e.g. .package-lock or .pnpm) — should be skipped
+      mkdirSync(join(tempDir, 'node_modules', '@ant-design', '.bin'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', '@ant-design', '.bin', 'package.json'), JSON.stringify({ version: '0.0.0' }));
+
+      // Versionless package — should be skipped at line 72
+      mkdirSync(join(tempDir, 'node_modules', '@ant-design', 'broken'), { recursive: true });
+      writeFileSync(join(tempDir, 'node_modules', '@ant-design', 'broken', 'package.json'), JSON.stringify({ name: 'no-version' }));
+
+      const cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(tempDir);
+      try {
+        const result = await runCLI('doctor', '--format', 'json');
+        const data = JSON.parse(result.stdout);
+        // No ecosystem check should reference the .bin or broken entries
+        const names = (data.checks as { name: string }[]).map((c) => c.name);
+        expect(names).not.toContain('ecosystem-compat:.bin');
+        expect(names).not.toContain('ecosystem-compat:broken');
+      } finally {
+        cwdSpy.mockRestore();
+      }
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it('warns when babel-plugin-import is configured in package.json babel field', async () => {
     const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import('node:fs');
     const { tmpdir } = await import('node:os');

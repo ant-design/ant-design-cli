@@ -3,6 +3,19 @@ import { fetchWithTimeout, fetchFirstJson } from '../utils/fetch.js';
 import { findBugInfo, getBugVersions } from '../utils/bug-versions.js';
 import { cacheStore } from '../utils/store.js';
 
+// Use an in-memory shim for cacheStore to avoid cross-test on-disk Conf races.
+let memStore: Record<string, unknown> = {};
+beforeEach(() => {
+  memStore = {};
+});
+vi.spyOn(cacheStore, 'get').mockImplementation(((key: string) => memStore[key]) as never);
+vi.spyOn(cacheStore, 'set').mockImplementation(((key: string, value: unknown) => {
+  memStore[key] = value;
+}) as never);
+vi.spyOn(cacheStore, 'delete').mockImplementation(((key: string) => {
+  delete memStore[key];
+}) as never);
+
 describe('utils/fetch', () => {
   let fetchSpy: ReturnType<typeof vi.spyOn>;
 
@@ -42,12 +55,10 @@ describe('utils/fetch', () => {
 
 describe('utils/bug-versions', () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
     cacheStore.delete('bugVersionsCache');
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
     cacheStore.delete('bugVersionsCache');
   });
 
@@ -68,7 +79,9 @@ describe('utils/bug-versions', () => {
       lastChecked: Date.now(),
       data: { '>=5.0.0': ['cached'] },
     });
-    const fetchSpy = vi.spyOn(globalThis, 'fetch');
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(
+      async () => new Response('{"unexpected":[]}', { status: 200 }),
+    );
     const result = await getBugVersions();
     expect(result?.['>=5.0.0']).toEqual(['cached']);
     expect(fetchSpy).not.toHaveBeenCalled();
@@ -76,8 +89,9 @@ describe('utils/bug-versions', () => {
   });
 
   it('getBugVersions fetches when no cache, then caches', async () => {
-    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-      new Response('{">=6.0.0":["url"]}', { status: 200 }),
+    // Use mockImplementation so each parallel fetch gets a fresh Response (body can only be read once)
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(
+      async () => new Response('{">=6.0.0":["url"]}', { status: 200 }),
     );
     const result = await getBugVersions();
     expect(result?.['>=6.0.0']).toEqual(['url']);

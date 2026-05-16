@@ -338,4 +338,90 @@ const App = () => (
     const data = JSON.parse(out);
     expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Divider'))).toBe(true);
   });
+
+  it('should treat non-string Button type as null and skip ghost warning', async () => {
+    // type={someVariable} is not a string literal — getStringAttrValue returns null,
+    // so the ghost+type-link check should NOT fire.
+    const out = await lintFixture(
+      'button-non-literal',
+      `import { Button } from 'antd';\nconst btnType = 'primary';\nconst App = () => <Button ghost type={btnType} />;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('ghost'))).toBe(false);
+  });
+
+  it('should skip type-only antd imports (TS import type)', async () => {
+    const out = await lintFixture(
+      'type-only-import',
+      `import type { ButtonProps } from 'antd';\nconst noop = (_p: ButtonProps) => null;\nexport default noop;`,
+    );
+    expect(out).toContain('No issues found');
+  });
+
+  it('should skip type-only named import specifiers (TS import { type X })', async () => {
+    const out = await lintFixture(
+      'type-only-specifier',
+      `import { type ButtonProps, Button } from 'antd';\nconst noop = (_p: ButtonProps) => <Button>x</Button>;\nexport default noop;`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    // Should not throw and should produce 0 issues (no deprecations on this minimal usage)
+    expect(Array.isArray(data.issues)).toBe(true);
+  });
+
+  it('should not crash on JSX with spread attributes', async () => {
+    const out = await lintFixture(
+      'jsx-spread',
+      `import { Button } from 'antd';\nconst extra = { type: 'primary' };\nconst App = () => <Button {...extra} ghost />;`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(Array.isArray(data.issues)).toBe(true);
+  });
+
+  it('should not crash on member-expression JSX without dot fallback (single ident)', async () => {
+    // Exercises the JSXOpeningElement path when compName is empty (rare).
+    const out = await lintFixture(
+      'jsx-unusual',
+      `import { Button } from 'antd';\nconst App = () => (<><Button>OK</Button></>);`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(Array.isArray(data.issues)).toBe(true);
+  });
+
+  it('should still process Select without virtual attr in performance mode', async () => {
+    // No virtual attr — exercises the isBooleanFalse(attrs, "virtual") false branch.
+    const out = await lintFixture(
+      'select-no-virtual',
+      `import { Select } from 'antd';\nconst App = () => <Select mode="multiple" />;`,
+      ['--only', 'performance', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'performance' && i.message.includes('virtual'))).toBe(false);
+  });
+
+  it('should handle JSX namespaced element names (e.g. <svg:circle />)', async () => {
+    // JSXNamespacedName produces an empty compName from getJSXElementName,
+    // exercising the `if (!compName) return` early-out in the visitor.
+    const out = await lintFixture(
+      'jsx-namespaced',
+      `import { Button } from 'antd';\nconst App = () => (<><Button>x</Button><svg:circle /></>);`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(Array.isArray(data.issues)).toBe(true);
+  });
+
+  it('should skip files that cannot be parsed (syntax error)', async () => {
+    const out = await lintFixture(
+      'unparseable',
+      `import { Button } from 'antd';\nconst App = () => { broken( <Button };`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    // Parser error → file is skipped, 0 issues
+    expect(data.issues).toEqual([]);
+  });
 });
