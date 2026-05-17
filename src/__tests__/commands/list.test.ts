@@ -27,4 +27,14 @@ describe('list', () => {
     expect(out).toContain('# antd Components');
     expect(out).toContain('**Button**');
   });
+
+  it('should show empty message when no components for an unknown major', async () => {
+    const out = await run('list', '--version', '999.0.0');
+    expect(out).toContain('No component data available');
+  });
+
+  it('should output empty JSON array when no components', async () => {
+    const out = await run('list', '--version', '999.0.0', '--format', 'json');
+    expect(JSON.parse(out)).toEqual([]);
+  });
 });

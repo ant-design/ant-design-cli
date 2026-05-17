@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { run, runCLI } from '../helper.js';
+import * as issueModule from '../../utils/issue.js';
 
 describe('bug', () => {
   it('should preview a bug report as text', async () => {
@@ -79,5 +80,133 @@ describe('bug-cli', () => {
     const out = await run('bug-cli', '--title', 'CLI Test', '--format', 'markdown');
     expect(out).toContain('### Description');
     expect(out).not.toContain('Repository:');
+  });
+});
+
+describe('bug --submit', () => {
+  it('errors when gh is missing', async () => {
+    const ghSpy = vi.spyOn(issueModule, 'checkGhAvailable').mockReturnValue(false);
+    try {
+      const result = await runCLI('bug', '--title', 'X', '--submit', '--format', 'json');
+      expect(result.exitCode).toBe(1);
+      const err = JSON.parse(result.stderr);
+      expect(err.code).toBe('GH_NOT_FOUND');
+    } finally {
+      ghSpy.mockRestore();
+    }
+  });
+
+  it('prints created issue URL on success (text)', async () => {
+    const ghSpy = vi.spyOn(issueModule, 'checkGhAvailable').mockReturnValue(true);
+    const submitSpy = vi.spyOn(issueModule, 'submitViaGh').mockReturnValue({
+      issueNumber: 123,
+      url: 'https://github.com/ant-design/ant-design/issues/123',
+    });
+    try {
+      const out = await run('bug', '--title', 'X', '--submit');
+      expect(out).toContain('Issue created:');
+      expect(out).toContain('/issues/123');
+    } finally {
+      ghSpy.mockRestore();
+      submitSpy.mockRestore();
+    }
+  });
+
+  it('returns JSON when --format json on success', async () => {
+    const ghSpy = vi.spyOn(issueModule, 'checkGhAvailable').mockReturnValue(true);
+    const submitSpy = vi.spyOn(issueModule, 'submitViaGh').mockReturnValue({
+      issueNumber: 42,
+      url: 'https://github.com/ant-design/ant-design/issues/42',
+    });
+    try {
+      const out = await run('bug', '--title', 'X', '--submit', '--format', 'json');
+      const data = JSON.parse(out);
+      expect(data.issueNumber).toBe(42);
+      expect(data.repo).toBe('ant-design/ant-design');
+    } finally {
+      ghSpy.mockRestore();
+      submitSpy.mockRestore();
+    }
+  });
+
+  it('reports failure with exit code 2 when gh throws', async () => {
+    const ghSpy = vi.spyOn(issueModule, 'checkGhAvailable').mockReturnValue(true);
+    const submitSpy = vi.spyOn(issueModule, 'submitViaGh').mockImplementation(() => {
+      throw new Error('auth failed');
+    });
+    try {
+      const result = await runCLI('bug', '--title', 'X', '--submit', '--format', 'json');
+      expect(result.exitCode).toBe(2);
+      const err = JSON.parse(result.stderr);
+      expect(err.code).toBe('GH_SUBMIT_FAILED');
+      expect(err.message).toContain('auth failed');
+    } finally {
+      ghSpy.mockRestore();
+      submitSpy.mockRestore();
+    }
+  });
+});
+
+describe('bug-cli --submit', () => {
+  it('errors when gh is missing', async () => {
+    const ghSpy = vi.spyOn(issueModule, 'checkGhAvailable').mockReturnValue(false);
+    try {
+      const result = await runCLI('bug-cli', '--title', 'X', '--submit', '--format', 'json');
+      expect(result.exitCode).toBe(1);
+      const err = JSON.parse(result.stderr);
+      expect(err.code).toBe('GH_NOT_FOUND');
+    } finally {
+      ghSpy.mockRestore();
+    }
+  });
+
+  it('prints created issue URL on success (text)', async () => {
+    const ghSpy = vi.spyOn(issueModule, 'checkGhAvailable').mockReturnValue(true);
+    const submitSpy = vi.spyOn(issueModule, 'submitViaGh').mockReturnValue({
+      issueNumber: 7,
+      url: 'https://github.com/ant-design/ant-design-cli/issues/7',
+    });
+    try {
+      const out = await run('bug-cli', '--title', 'X', '--submit');
+      expect(out).toContain('Issue created:');
+      expect(out).toContain('/issues/7');
+    } finally {
+      ghSpy.mockRestore();
+      submitSpy.mockRestore();
+    }
+  });
+
+  it('returns JSON when --format json on success', async () => {
+    const ghSpy = vi.spyOn(issueModule, 'checkGhAvailable').mockReturnValue(true);
+    const submitSpy = vi.spyOn(issueModule, 'submitViaGh').mockReturnValue({
+      issueNumber: 9,
+      url: 'https://github.com/ant-design/ant-design-cli/issues/9',
+    });
+    try {
+      const out = await run('bug-cli', '--title', 'X', '--submit', '--format', 'json');
+      const data = JSON.parse(out);
+      expect(data.issueNumber).toBe(9);
+      expect(data.repo).toBe('ant-design/ant-design-cli');
+    } finally {
+      ghSpy.mockRestore();
+      submitSpy.mockRestore();
+    }
+  });
+
+  it('reports failure with exit code 2 when gh throws', async () => {
+    const ghSpy = vi.spyOn(issueModule, 'checkGhAvailable').mockReturnValue(true);
+    const submitSpy = vi.spyOn(issueModule, 'submitViaGh').mockImplementation(() => {
+      throw new Error('auth failed');
+    });
+    try {
+      const result = await runCLI('bug-cli', '--title', 'X', '--submit', '--format', 'json');
+      expect(result.exitCode).toBe(2);
+      const err = JSON.parse(result.stderr);
+      expect(err.code).toBe('GH_SUBMIT_FAILED');
+      expect(err.message).toContain('auth failed');
+    } finally {
+      ghSpy.mockRestore();
+      submitSpy.mockRestore();
+    }
   });
 });

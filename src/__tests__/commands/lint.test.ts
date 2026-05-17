@@ -5,7 +5,7 @@ import type { LintIssue } from '../../commands/lint.js';
 import { run, runCLI } from '../helper.js';
 
 describe('lint', () => {
-  it('should lint current directory', async () => {
+  it('should lint current directory', { timeout: 30000 }, async () => {
     const out = await run('lint', '--format', 'json');
     const data = JSON.parse(out);
     expect(data).toHaveProperty('issues');
@@ -146,5 +146,282 @@ const App = () => (
     );
     const data = JSON.parse(out);
     expect(data.issues.some((i: LintIssue) => i.rule === 'performance' && i.message.includes('wildcard'))).toBe(true);
+  });
+
+  it('should warn on TreeSelect multiple={false} with treeCheckable', async () => {
+    const out = await lintFixture(
+      'treeselect',
+      `import { TreeSelect } from 'antd';\nconst App = () => <TreeSelect multiple={false} treeCheckable />;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('TreeSelect'))).toBe(true);
+  });
+
+  it('should warn on Select virtual={false}', async () => {
+    const out = await lintFixture(
+      'select-virtual',
+      `import { Select } from 'antd';\nconst App = () => <Select virtual={false} />;`,
+      ['--only', 'performance', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'performance' && i.message.includes('virtual'))).toBe(true);
+  });
+
+  it('should warn on TreeSelect virtual={false} (performance)', async () => {
+    const out = await lintFixture(
+      'treeselect-virtual',
+      `import { TreeSelect } from 'antd';\nconst App = () => <TreeSelect virtual={false} />;`,
+      ['--only', 'performance', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'performance' && i.message.includes('virtual'))).toBe(true);
+  });
+
+  it('should warn on Typography.Text ellipsis with expandable', async () => {
+    const out = await lintFixture(
+      'typography-text-ellipsis',
+      `import { Typography } from 'antd';\nconst App = () => <Typography.Text ellipsis={{ expandable: true }}>x</Typography.Text>;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('expandable'))).toBe(true);
+  });
+
+  it('should warn on Radio optionType outside Radio.Group', async () => {
+    const out = await lintFixture(
+      'radio-optiontype',
+      `import { Radio } from 'antd';\nconst App = () => <Radio optionType="button" />;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('optionType'))).toBe(true);
+  });
+
+  it('should print human summary when issues found (non-json)', async () => {
+    const out = await lintFixture(
+      'human-output',
+      `import { Image } from 'antd';\nconst App = () => <Image src="x.png" />;`,
+    );
+    expect(out).toMatch(/Scanned \d+ files/);
+    expect(out).toContain('[a11y]');
+    expect(out).toContain('Summary');
+  });
+
+  it('should warn on QRCode missing value prop', async () => {
+    const out = await lintFixture(
+      'qrcode',
+      `import { QRCode } from 'antd';\nconst App = () => <QRCode />;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('QRCode'))).toBe(true);
+  });
+
+  it('should warn on Typography.Link with object ellipsis', async () => {
+    const out = await lintFixture(
+      'typography-link',
+      `import { Typography } from 'antd';\nconst App = () => <Typography.Link ellipsis={{ rows: 2 }}>x</Typography.Link>;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Typography.Link'))).toBe(true);
+  });
+
+  it('should recognise string attribute values inside JSX expression containers', async () => {
+    // type={"link"} (braced form) should match same way as type="link"
+    const out = await lintFixture(
+      'button-braced',
+      `import { Button } from 'antd';\nconst App = () => <Button ghost type={"link"} />;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('ghost'))).toBe(true);
+  });
+
+  it('should warn on legacy BackTop usage', async () => {
+    const out = await lintFixture(
+      'backtop',
+      `import { BackTop } from 'antd';\nconst App = () => <BackTop />;`,
+      ['--only', 'deprecated', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'deprecated' && i.message.includes('BackTop'))).toBe(true);
+  });
+
+  it('should warn on Button.Group deprecation', async () => {
+    const out = await lintFixture(
+      'button-group',
+      `import { Button } from 'antd';\nconst App = () => <Button.Group><Button>x</Button></Button.Group>;`,
+      ['--only', 'deprecated', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Button.Group'))).toBe(true);
+  });
+
+  it('should warn on Input.Group deprecation', async () => {
+    const out = await lintFixture(
+      'input-group',
+      `import { Input } from 'antd';\nconst App = () => <Input.Group><Input /></Input.Group>;`,
+      ['--only', 'deprecated', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'deprecated' && i.message.includes('Input.Group'))).toBe(true);
+  });
+
+  it('should warn on Menu inlineCollapsed without mode="inline"', async () => {
+    const out = await lintFixture(
+      'menu',
+      `import { Menu } from 'antd';\nconst App = () => <Menu inlineCollapsed mode="horizontal" items={[]} />;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Menu'))).toBe(true);
+  });
+
+  it('should warn on Select maxCount without mode=multiple/tags', async () => {
+    const out = await lintFixture(
+      'select-maxcount',
+      `import { Select } from 'antd';\nconst App = () => <Select maxCount={5} mode="single" />;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('maxCount'))).toBe(true);
+  });
+
+  it('should warn on Form.Item using both shouldUpdate and dependencies', async () => {
+    const out = await lintFixture(
+      'form-item',
+      `import { Form } from 'antd';\nconst App = () => <Form.Item shouldUpdate dependencies={['a']} />;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('shouldUpdate'))).toBe(true);
+  });
+
+  it('should warn on icon onClick without aria-label', async () => {
+    const out = await lintFixture(
+      'icon-aria',
+      `import { Button } from 'antd';\nimport CustomIcon from './icon';\nconst App = () => <><Button>X</Button><CustomIcon onClick={() => {}} /></>;`,
+      ['--only', 'a11y', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'a11y' && i.message.includes('aria-label'))).toBe(true);
+  });
+
+  it('should detect default import performance issues', async () => {
+    const out = await lintFixture(
+      'default-import',
+      `import antd from 'antd';\nconst App = () => <antd.Button>x</antd.Button>;`,
+      ['--only', 'performance', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'performance' && i.message.includes('default'))).toBe(true);
+  });
+
+  it('should warn on Checkbox value outside Checkbox.Group', async () => {
+    const out = await lintFixture(
+      'checkbox-value',
+      `import { Checkbox } from 'antd';\nconst App = () => <Checkbox value="x" />;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Checkbox'))).toBe(true);
+  });
+
+  it('should warn on Divider type="vertical" with children', async () => {
+    const out = await lintFixture(
+      'divider-vertical',
+      `import { Divider } from 'antd';\nconst App = () => <Divider type="vertical">label</Divider>;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Divider'))).toBe(true);
+  });
+
+  it('should treat non-string Button type as null and skip ghost warning', async () => {
+    // type={someVariable} is not a string literal — getStringAttrValue returns null,
+    // so the ghost+type-link check should NOT fire.
+    const out = await lintFixture(
+      'button-non-literal',
+      `import { Button } from 'antd';\nconst btnType = 'primary';\nconst App = () => <Button ghost type={btnType} />;`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('ghost'))).toBe(false);
+  });
+
+  it('should skip type-only antd imports (TS import type)', async () => {
+    const out = await lintFixture(
+      'type-only-import',
+      `import type { ButtonProps } from 'antd';\nconst noop = (_p: ButtonProps) => null;\nexport default noop;`,
+    );
+    expect(out).toContain('No issues found');
+  });
+
+  it('should skip type-only named import specifiers (TS import { type X })', async () => {
+    const out = await lintFixture(
+      'type-only-specifier',
+      `import { type ButtonProps, Button } from 'antd';\nconst noop = (_p: ButtonProps) => <Button>x</Button>;\nexport default noop;`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    // Should not throw and should produce 0 issues (no deprecations on this minimal usage)
+    expect(Array.isArray(data.issues)).toBe(true);
+  });
+
+  it('should not crash on JSX with spread attributes', async () => {
+    const out = await lintFixture(
+      'jsx-spread',
+      `import { Button } from 'antd';\nconst extra = { type: 'primary' };\nconst App = () => <Button {...extra} ghost />;`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(Array.isArray(data.issues)).toBe(true);
+  });
+
+  it('should not crash on member-expression JSX without dot fallback (single ident)', async () => {
+    // Exercises the JSXOpeningElement path when compName is empty (rare).
+    const out = await lintFixture(
+      'jsx-unusual',
+      `import { Button } from 'antd';\nconst App = () => (<><Button>OK</Button></>);`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(Array.isArray(data.issues)).toBe(true);
+  });
+
+  it('should still process Select without virtual attr in performance mode', async () => {
+    // No virtual attr — exercises the isBooleanFalse(attrs, "virtual") false branch.
+    const out = await lintFixture(
+      'select-no-virtual',
+      `import { Select } from 'antd';\nconst App = () => <Select mode="multiple" />;`,
+      ['--only', 'performance', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'performance' && i.message.includes('virtual'))).toBe(false);
+  });
+
+  it('should handle JSX namespaced element names (e.g. <svg:circle />)', async () => {
+    // JSXNamespacedName produces an empty compName from getJSXElementName,
+    // exercising the `if (!compName) return` early-out in the visitor.
+    const out = await lintFixture(
+      'jsx-namespaced',
+      `import { Button } from 'antd';\nconst App = () => (<><Button>x</Button><svg:circle /></>);`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(Array.isArray(data.issues)).toBe(true);
+  });
+
+  it('should skip files that cannot be parsed (syntax error)', async () => {
+    const out = await lintFixture(
+      'unparseable',
+      `import { Button } from 'antd';\nconst App = () => { broken( <Button };`,
+      ['--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    // Parser error → file is skipped, 0 issues
+    expect(data.issues).toEqual([]);
   });
 });

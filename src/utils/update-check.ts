@@ -35,6 +35,7 @@ export async function checkForUpdate(): Promise<void> {
   if (process.env.CI || process.env.NO_UPDATE_CHECK) return;
 
   const currentVersion = __CLI_VERSION__;
+  /* v8 ignore next -- __CLI_VERSION__ is a tsup-injected compile-time constant always a valid semver */
   if (!valid(currentVersion)) return;
 
   const now = Date.now();

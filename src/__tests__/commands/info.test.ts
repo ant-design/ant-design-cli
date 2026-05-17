@@ -58,4 +58,36 @@ describe('info', () => {
     expect(out).toContain('Button');
     expect(out).toContain('|');
   });
+
+  it('should include subComponentProps in concise JSON output', async () => {
+    const out = await run('info', 'Alert', '--version', '5.30.0', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.subComponentProps).toBeDefined();
+    expect(Object.keys(data.subComponentProps).length).toBeGreaterThan(0);
+    const firstSub = Object.values(data.subComponentProps)[0] as unknown[];
+    expect(Array.isArray(firstSub)).toBe(true);
+  });
+
+  it('should print sub-component sections in text output', async () => {
+    const out = await run('info', 'Alert', '--version', '5.30.0');
+    expect(out).toContain('Alert.ErrorBoundary');
+  });
+
+  it('should print sub-component sections in markdown output', async () => {
+    const out = await run('info', 'Alert', '--version', '5.30.0', '--format', 'markdown');
+    expect(out).toContain('Alert.ErrorBoundary');
+    expect(out).toContain('|');
+  });
+
+  it('should print sub-component sections in detail text output', async () => {
+    const out = await run('info', 'Alert', '--version', '5.30.0', '--detail');
+    expect(out).toContain('Alert.ErrorBoundary');
+    expect(out).toContain('Description');
+  });
+
+  it('should include subComponentProps in detailed JSON output', async () => {
+    const out = await run('info', 'Alert', '--version', '5.30.0', '--detail', '--format', 'json');
+    const data = JSON.parse(out);
+    expect(data.subComponentProps).toBeDefined();
+  });
 });

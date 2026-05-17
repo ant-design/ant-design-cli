@@ -8,6 +8,7 @@ export async function fetchWithTimeout(
   init?: RequestInit,
 ): Promise<Response> {
   const controller = new AbortController();
+  /* v8 ignore next -- timeout callback only fires when fetch exceeds timeoutMs; tests use mocked fetch */
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const res = await fetch(url, { ...init, signal: controller.signal, redirect: 'follow' });

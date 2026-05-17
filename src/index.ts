@@ -69,6 +69,7 @@ export function createProgram(): Command {
 }
 
 // Auto-run when executed as CLI (skip when imported by tests)
+/* v8 ignore next 3 -- entry point; only runs when invoked as a binary, not under vitest */
 if (!process.env.VITEST) {
   createProgram().parseAsync();
 }

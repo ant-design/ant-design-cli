@@ -110,9 +110,11 @@ function loadMetadataForVersionUncached(version: string): MetadataStore {
     if (!existsSync(snapshotPath) && !existsSync(snapshotPath + '.gz')) return null;
     try {
       return normalizeStore(JSON.parse(readDataFile(snapshotPath)) as MetadataStore);
+      /* v8 ignore start -- defensive: bundled snapshot files are always valid JSON */
     } catch {
       return null;
     }
+    /* v8 ignore stop */
   }
 
   // 1. Exact minor match
