@@ -232,16 +232,18 @@ describe('doctor ecosystem peerDeps', () => {
   });
 
   it('should fail cssinjs-duplicate when multiple installations exist', async () => {
-    // Use top-level + nested install to trigger duplicate detection
+    // The helper's mkdirSync(..., { recursive: true }) creates nested paths verbatim,
+    // so 'sub/node_modules/@ant-design/cssinjs' lands at the nested location
+    // findDuplicateVersions() scans.
     const data = await runDoctorInTempDir({
       'antd': { version: '5.20.0', peerDependencies: {} },
       '@ant-design/cssinjs': { version: '1.0.0' },
       'sub/node_modules/@ant-design/cssinjs': { version: '1.1.0' },
     } as never);
-    // Note: the helper places them all under top-level node_modules,
-    // so we can't easily fake a nested install. Just ensure the check ran.
     const check = data.checks.find((c: any) => c.name === 'cssinjs-duplicate');
-    expect(check).toBeDefined();
+    expect(check?.status).toBe('fail');
+    expect(check?.message).toContain('1.0.0');
+    expect(check?.message).toContain('1.1.0');
   });
 });
 

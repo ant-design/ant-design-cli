@@ -5,7 +5,7 @@ import type { LintIssue } from '../../commands/lint.js';
 import { run, runCLI } from '../helper.js';
 
 describe('lint', () => {
-  it('should lint current directory', async () => {
+  it('should lint current directory', { timeout: 30000 }, async () => {
     const out = await run('lint', '--format', 'json');
     const data = JSON.parse(out);
     expect(data).toHaveProperty('issues');

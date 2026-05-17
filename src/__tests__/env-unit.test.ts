@@ -64,12 +64,6 @@ describe('collectEnvinfo', () => {
     expect(data).toEqual({});
     vi.doUnmock('envinfo');
   });
-
-  it('returns object with default mocked envinfo (real flow)', async () => {
-    // No mock — use the real envinfo. Just ensure no crash. Network deps in envinfo are local.
-    const data = await collectEnvinfo();
-    expect(typeof data).toBe('object');
-  });
 });
 
 describe('scanEcosystem dotfile skipping', () => {

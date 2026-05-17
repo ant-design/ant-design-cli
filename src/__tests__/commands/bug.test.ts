@@ -203,6 +203,7 @@ describe('bug-cli --submit', () => {
       expect(result.exitCode).toBe(2);
       const err = JSON.parse(result.stderr);
       expect(err.code).toBe('GH_SUBMIT_FAILED');
+      expect(err.message).toContain('auth failed');
     } finally {
       ghSpy.mockRestore();
       submitSpy.mockRestore();

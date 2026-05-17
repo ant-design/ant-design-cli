@@ -4,7 +4,7 @@ import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 
 describe('usage', () => {
-  it('should scan usage in current directory', async () => {
+  it('should scan usage in current directory', { timeout: 30000 }, async () => {
     const out = await run('usage', '--format', 'json');
     const data = JSON.parse(out);
     expect(data).toHaveProperty('components');

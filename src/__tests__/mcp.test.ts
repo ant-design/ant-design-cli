@@ -60,60 +60,74 @@ describe('mcp tools', () => {
 
   it('antd_demo without name lists demos', async () => {
     const result = await handle('antd_demo', { component: 'Button' });
-    const data = parseResult(result);
-    expect(data).toBeDefined();
+    const data = parseResult(result) as { component: string; demos: { name: string }[] };
+    expect(data.component).toBe('Button');
+    expect(Array.isArray(data.demos)).toBe(true);
+    expect(data.demos.length).toBeGreaterThan(0);
   });
 
   it('antd_demo with name returns specific demo', async () => {
     const list = parseResult(await handle('antd_demo', { component: 'Button' })) as { demos: { name: string }[] };
-    const firstName = list.demos?.[0]?.name;
-    if (firstName) {
-      const result = await handle('antd_demo', { component: 'Button', name: firstName });
-      const data = parseResult(result);
-      expect(data).toBeDefined();
-    }
+    expect(list.demos.length).toBeGreaterThan(0);
+    const firstName = list.demos[0].name;
+    const result = await handle('antd_demo', { component: 'Button', name: firstName });
+    const data = parseResult(result) as { component: string; demo: string; code: string };
+    expect(data.component).toBe('Button');
+    expect(data.demo).toBe(firstName);
+    expect(typeof data.code).toBe('string');
+    expect(data.code.length).toBeGreaterThan(0);
   });
 
   it('antd_token returns global tokens without component', async () => {
     const result = await handle('antd_token', {});
     const data = parseResult(result) as { tokens: unknown[] };
     expect(Array.isArray(data.tokens)).toBe(true);
+    expect(data.tokens.length).toBeGreaterThan(0);
   });
 
   it('antd_token returns component tokens with component name', async () => {
     const result = await handle('antd_token', { component: 'Button' });
-    const data = parseResult(result);
-    expect(data).toBeDefined();
+    const data = parseResult(result) as { component: string; tokens: unknown[] };
+    expect(data.component).toBe('Button');
+    expect(Array.isArray(data.tokens)).toBe(true);
   });
 
   it('antd_semantic returns semantic structure', async () => {
-    const result = await handle('antd_semantic', { component: 'Button' });
-    const data = parseResult(result);
-    expect(data).toBeDefined();
+    const result = await handle('antd_semantic', { component: 'Drawer' });
+    const data = parseResult(result) as { name: string; semanticStructure: unknown[] };
+    expect(data.name).toBe('Drawer');
+    expect(Array.isArray(data.semanticStructure)).toBe(true);
+    expect(data.semanticStructure.length).toBeGreaterThan(0);
   });
 
-  it('antd_changelog query mode without args', async () => {
+  it('antd_changelog query mode without args returns entries array', async () => {
     const result = await handle('antd_changelog', {});
-    const data = parseResult(result);
-    expect(data).toBeDefined();
+    const data = parseResult(result) as { entries: { version: string }[] };
+    expect(Array.isArray(data.entries)).toBe(true);
+    expect(data.entries.length).toBeGreaterThan(0);
   });
 
-  it('antd_changelog query mode with version filter', async () => {
+  it('antd_changelog query mode with version filter returns matching entry', async () => {
     const result = await handle('antd_changelog', { version: '5.20.0' });
-    const data = parseResult(result);
-    expect(data).toBeDefined();
+    const data = parseResult(result) as { entries: { version: string }[] };
+    expect(Array.isArray(data.entries)).toBe(true);
+    expect(data.entries.some((e) => e.version === '5.20.0')).toBe(true);
   });
 
-  it('antd_changelog diff mode with v1 and v2', async () => {
+  it('antd_changelog diff mode with v1 and v2 returns from/to/diffs', async () => {
     const result = await handle('antd_changelog', { v1: '5.18.0', v2: '5.20.0' });
-    const data = parseResult(result);
-    expect(data).toBeDefined();
+    const data = parseResult(result) as { from: string; to: string; diffs: unknown[] };
+    expect(data.from).toBe('5.18.0');
+    expect(data.to).toBe('5.20.0');
+    expect(Array.isArray(data.diffs)).toBe(true);
   });
 
-  it('antd_changelog diff mode with component filter', async () => {
+  it('antd_changelog diff mode with component filter returns single-component diff', async () => {
     const result = await handle('antd_changelog', { v1: '5.18.0', v2: '5.20.0', component: 'Button' });
-    const data = parseResult(result);
-    expect(data).toBeDefined();
+    const data = parseResult(result) as { from: string; to: string; component: string };
+    expect(data.from).toBe('5.18.0');
+    expect(data.to).toBe('5.20.0');
+    expect(data.component).toBe('Button');
   });
 
   it('antd_changelog errors when only v1 is provided', async () => {
