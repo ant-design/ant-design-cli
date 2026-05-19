@@ -2,6 +2,21 @@
 
 ## [6.4.3](https://github.com/ant-design/ant-design-cli/compare/v6.4.2...v6.4.3) (2026-05-18)
 
+### Bug 修复
+
+- 修复异步 `postAction` 钩子未被正确等待的问题 — 使用 `parseAsync()` 替代同步 `parse()` ([#113](https://github.com/ant-design/ant-design-cli/pull/113))
+- 修复 semver OR 范围（`||`）在 peerDependency 检查中的误报以及 `^0.x` 次版本锁定行为不正确的问题，改用 `semver` 包替换手写解析 ([#109](https://github.com/ant-design/ant-design-cli/pull/109))
+- 修复表格输出中 CJK 字符宽度导致的列对齐问题（如 `antd list --lang zh`），使用 `string-width` 处理 ([#109](https://github.com/ant-design/ant-design-cli/pull/109))
+- 修复 `compare()` 对 null/undefined 输入返回错误结果的问题 ([#111](https://github.com/ant-design/ant-design-cli/pull/111))
+
+### 其他变更
+
+- 使用 `fast-levenshtein` 和 `fast-glob` 包替换手写的 Levenshtein 距离计算和递归目录遍历 ([#109](https://github.com/ant-design/ant-design-cli/pull/109))
+- 提取公共 `fetchWithTimeout` 和 `fetchFirstJson` 辅助函数，消除重复的 HTTP 请求模式 ([#109](https://github.com/ant-design/ant-design-cli/pull/109))
+- 同步内置的 antd CLI Skill 文件至当前命令集 ([#114](https://github.com/ant-design/ant-design-cli/pull/114))
+- 清理 7 个过时的 v6 快照并防止再次积累，包体积减少约 4.3 MB（29.6 MB → 25.3 MB） ([#107](https://github.com/ant-design/ant-design-cli/pull/107))
+- 将 e2e 测试改为进程内执行以提升性能 ([#112](https://github.com/ant-design/ant-design-cli/pull/112))
+- 测试覆盖率达到 100% 的行、语句和函数覆盖 ([#115](https://github.com/ant-design/ant-design-cli/pull/115), [#116](https://github.com/ant-design/ant-design-cli/pull/116))
 - 同步 antd 元数据 ([v6@6.4.3](https://github.com/ant-design/ant-design-cli/compare/v6.4.2...v6.4.3#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
 

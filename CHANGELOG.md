@@ -2,6 +2,21 @@
 
 ## [6.4.3](https://github.com/ant-design/ant-design-cli/compare/v6.4.2...v6.4.3) (2026-05-18)
 
+### Bug Fixes
+
+- Fix async `postAction` hook not being properly awaited — use `parseAsync()` instead of synchronous `parse()` ([#113](https://github.com/ant-design/ant-design-cli/pull/113))
+- Fix semver OR-range (`||`) false positives in peer dependency checks and incorrect `^0.x` minor-locking behavior by replacing hand-rolled semver parser with the `semver` package ([#109](https://github.com/ant-design/ant-design-cli/pull/109))
+- Fix CJK character width misalignment in table output (e.g. `antd list --lang zh`) using `string-width` ([#109](https://github.com/ant-design/ant-design-cli/pull/109))
+- Fix `compare()` returning incorrect results for null/undefined inputs ([#111](https://github.com/ant-design/ant-design-cli/pull/111))
+
+### Other Changes
+
+- Replace custom Levenshtein distance and recursive directory walker with `fast-levenshtein` and `fast-glob` packages ([#109](https://github.com/ant-design/ant-design-cli/pull/109))
+- Extract shared `fetchWithTimeout` and `fetchFirstJson` helpers to eliminate duplicated HTTP patterns ([#109](https://github.com/ant-design/ant-design-cli/pull/109))
+- Sync bundled antd CLI skill with current command surface ([#114](https://github.com/ant-design/ant-design-cli/pull/114))
+- Remove stale v6 snapshots and prevent re-accumulation, reducing package size by ~4.3 MB (29.6 MB → 25.3 MB) ([#107](https://github.com/ant-design/ant-design-cli/pull/107))
+- Convert e2e tests to in-process execution for better performance ([#112](https://github.com/ant-design/ant-design-cli/pull/112))
+- Reach 100% line, statement, and function test coverage ([#115](https://github.com/ant-design/ant-design-cli/pull/115), [#116](https://github.com/ant-design/ant-design-cli/pull/116))
 - Update antd metadata ([v6@6.4.3](https://github.com/ant-design/ant-design-cli/compare/v6.4.2...v6.4.3#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
 
