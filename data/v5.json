@@ -344,7 +344,7 @@
         },
         {
           "name": "items",
-          "type": "{ key, href, title, target, children }\\[] [see](#anchoritem)",
+          "type": "{ key, href, title, target, children }[] [see](#anchoritem)",
           "default": "-",
           "description": "Data configuration option content, support nesting through children",
           "since": "5.1.0",
@@ -471,7 +471,7 @@
           },
           {
             "name": "children",
-            "type": "[AnchorItem](#anchoritem)\\[]",
+            "type": "[AnchorItem](#anchoritem)[]",
             "default": "-",
             "description": "Nested Anchor Link, `Attention: This attribute does not support horizontal orientation`",
             "descriptionZh": "嵌套的 Anchor Link，`注意：水平方向该属性不支持`"
@@ -719,7 +719,7 @@
         },
         {
           "name": "options",
-          "type": "{ label, value }\\[]",
+          "type": "{ label, value }[]",
           "default": "-",
           "description": "Select options. Will get better perf than jsx definition",
           "descriptionZh": "数据化配置选项内容，相比 jsx 定义会获得更好的渲染性能"
@@ -1163,7 +1163,7 @@
         },
         {
           "name": "offset",
-          "type": "\\[number, number]",
+          "type": "[number, number]",
           "default": "-",
           "description": "Set offset of the badge dot",
           "descriptionZh": "设置状态点的位置偏移"
@@ -1379,7 +1379,7 @@
         },
         {
           "name": "items",
-          "type": "[ItemType\\[\\]](#itemtype)",
+          "type": "[ItemType[]](#itemtype)",
           "default": "-",
           "description": "The routing stack information of router",
           "since": "5.3.0",
@@ -1880,7 +1880,7 @@
         },
         {
           "name": "validRange",
-          "type": "\\[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
+          "type": "[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
           "default": "-",
           "description": "To set valid range",
           "descriptionZh": "设置可以显示的日期"
@@ -2584,8 +2584,8 @@
         },
         {
           "name": "defaultValue",
-          "type": "string\\[] | number\\[]",
-          "default": "\\[]",
+          "type": "string[] | number[]",
+          "default": "[]",
           "description": "Initial selected value",
           "descriptionZh": "默认的选中项"
         },
@@ -2721,7 +2721,7 @@
         },
         {
           "name": "options",
-          "type": "[Option](#option)\\[]",
+          "type": "[Option](#option)[]",
           "default": "-",
           "description": "The data options of cascade",
           "descriptionZh": "可选项数据源"
@@ -2788,7 +2788,7 @@
         },
         {
           "name": "value",
-          "type": "string\\[] | number\\[]",
+          "type": "string[] | number[]",
           "default": "-",
           "description": "The selected value",
           "descriptionZh": "指定选中项"
@@ -3181,8 +3181,8 @@
         },
         {
           "name": "defaultValue",
-          "type": "(string | number)\\[]",
-          "default": "\\[]",
+          "type": "(string | number)[]",
+          "default": "[]",
           "description": "Default selected value",
           "descriptionZh": "默认选中的选项"
         },
@@ -3202,15 +3202,15 @@
         },
         {
           "name": "options",
-          "type": "string\\[] | number\\[] | Option\\[]",
-          "default": "\\[]",
+          "type": "string[] | number[] | Option[]",
+          "default": "[]",
           "description": "Specifies options",
           "descriptionZh": "指定可选项"
         },
         {
           "name": "value",
-          "type": "(string | number | boolean)\\[]",
-          "default": "\\[]",
+          "type": "(string | number | boolean)[]",
+          "default": "[]",
           "description": "Used for setting the currently selected value",
           "descriptionZh": "指定选中的选项"
         },
@@ -3348,7 +3348,7 @@
         },
         {
           "name": "activeKey",
-          "type": "string\\[] | string <br/> number\\[] | number",
+          "type": "string[] | string <br/> number[] | number",
           "default": "No default value. In [accordion mode](#collapse-demo-accordion), it's the key of the first panel",
           "description": "Key of the active panel",
           "descriptionZh": "当前激活 tab 面板的 key"
@@ -3370,7 +3370,7 @@
         },
         {
           "name": "defaultActiveKey",
-          "type": "string\\[] | string <br/> number\\[] | number",
+          "type": "string[] | string <br/> number[] | number",
           "default": "-",
           "description": "Key of the initial active panel",
           "descriptionZh": "初始化选中面板的 key"
@@ -4278,7 +4278,7 @@
           },
           {
             "name": "badge",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [BadgeProps\\[\"classNames\"\\]](/components/badge#api), styles?: [BadgeProps\\[\"styles\"\\]](/components/badge#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [BadgeProps[\"classNames\"]](/components/badge#api), styles?: [BadgeProps[\"styles\"]](/components/badge#api) }",
             "default": "-",
             "description": "Set Badge common props",
             "since": "5.7.0",
@@ -4294,7 +4294,7 @@
           },
           {
             "name": "button",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [ButtonProps\\[\"classNames\"\\]](/components/button#api), styles?: [ButtonProps\\[\"styles\"\\]](/components/button#api), autoInsertSpace?: boolean, variant?: ButtonVariantType, color?: ButtonColorType, shape?: [ButtonProps\\[\"shape\"\\]](/components/button#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [ButtonProps[\"classNames\"]](/components/button#api), styles?: [ButtonProps[\"styles\"]](/components/button#api), autoInsertSpace?: boolean, variant?: ButtonVariantType, color?: ButtonColorType, shape?: [ButtonProps[\"shape\"]](/components/button#api) }",
             "default": "-",
             "description": "Set Button common props",
             "since": "5.6.0, `autoInsertSpace`: 5.17.0, `variant` and `color`: 5.25.0, `shape`: 5.27.0",
@@ -4302,7 +4302,7 @@
           },
           {
             "name": "card",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CardProps\\[\"classNames\"\\]](/components/card#api), styles?: [CardProps\\[\"styles\"\\]](/components/card#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CardProps[\"classNames\"]](/components/card#api), styles?: [CardProps[\"styles\"]](/components/card#api) }",
             "default": "-",
             "description": "Set Card common props",
             "since": "5.7.0, `classNames` and `styles`: 5.14.0",
@@ -4326,7 +4326,7 @@
           },
           {
             "name": "cascader",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CascaderProps\\[\"classNames\"\\]](/components/cascader#semantic-dom), styles?: [CascaderProps\\[\"styles\"\\]](/components/cascader#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CascaderProps[\"classNames\"]](/components/cascader#semantic-dom), styles?: [CascaderProps[\"styles\"]](/components/cascader#semantic-dom) }",
             "default": "-",
             "description": "Set Cascader common props",
             "since": "5.7.0, `classNames` and `styles`: 5.25.0",
@@ -4358,7 +4358,7 @@
           },
           {
             "name": "datePicker",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DatePickerConfig\\[\"classNames\"\\]](/components/date-picker#semantic-dom), styles?: [DatePickerConfig\\[\"styles\"\\]](/components/date-picker#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DatePickerConfig[\"classNames\"]](/components/date-picker#semantic-dom), styles?: [DatePickerConfig[\"styles\"]](/components/date-picker#semantic-dom) }",
             "default": "-",
             "description": "Set datePicker common props",
             "since": "5.7.0, `classNames` and `styles`: 5.25.0",
@@ -4374,7 +4374,7 @@
           },
           {
             "name": "descriptions",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DescriptionsProps\\[\"classNames\"\\]](/components/descriptions#api), styles?: [DescriptionsProps\\[\"styles\"\\]](/components/descriptions#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DescriptionsProps[\"classNames\"]](/components/descriptions#api), styles?: [DescriptionsProps[\"styles\"]](/components/descriptions#api) }",
             "default": "-",
             "description": "Set Descriptions common props",
             "since": "5.7.0, `classNames` and `styles`: 5.23.0",
@@ -4390,7 +4390,7 @@
           },
           {
             "name": "drawer",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DrawerProps\\[\"classNames\"\\]](/components/drawer#api), styles?: [DrawerProps\\[\"styles\"\\]](/components/drawer#api), closeIcon?: ReactNode }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DrawerProps[\"classNames\"]](/components/drawer#api), styles?: [DrawerProps[\"styles\"]](/components/drawer#api), closeIcon?: ReactNode }",
             "default": "-",
             "description": "Set Drawer common props",
             "since": "5.7.0, `classNames` and `styles`: 5.10.0, `closeIcon`: 5.14.0",
@@ -4406,7 +4406,7 @@
           },
           {
             "name": "empty",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [EmptyProps\\[\"classNames\"\\]](/components/empty#api), styles?: [EmptyProps\\[\"styles\"\\]](/components/empty#api), image?: ReactNode }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [EmptyProps[\"classNames\"]](/components/empty#api), styles?: [EmptyProps[\"styles\"]](/components/empty#api), image?: ReactNode }",
             "default": "-",
             "description": "Set Empty common props",
             "since": "5.7.0, `classNames` and `styles`: 5.23.0, `image`: 5.27.0",
@@ -4478,7 +4478,7 @@
           },
           {
             "name": "list",
-            "type": "{ className?: string, style?: React.CSSProperties, item?:{ classNames: [ListItemProps\\[\"classNames\"\\]](/components/list#listitem), styles: [ListItemProps\\[\"styles\"\\]](/components/list#listitem) } }",
+            "type": "{ className?: string, style?: React.CSSProperties, item?:{ classNames: [ListItemProps[\"classNames\"]](/components/list#listitem), styles: [ListItemProps[\"styles\"]](/components/list#listitem) } }",
             "default": "-",
             "description": "Set List common props",
             "since": "5.7.0",
@@ -4510,7 +4510,7 @@
           },
           {
             "name": "modal",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [ModalProps\\[\"classNames\"\\]](/components/modal#api), styles?: [ModalProps\\[\"styles\"\\]](/components/modal#api), closeIcon?: React.ReactNode }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [ModalProps[\"classNames\"]](/components/modal#api), styles?: [ModalProps[\"styles\"]](/components/modal#api), closeIcon?: React.ReactNode }",
             "default": "-",
             "description": "Set Modal common props",
             "since": "5.7.0, `classNames` and `styles`: 5.10.0, `closeIcon`: 5.14.0",
@@ -4582,7 +4582,7 @@
           },
           {
             "name": "select",
-            "type": "{ className?: string, showSearch?: boolean, style?: React.CSSProperties, classNames?: [SelectProps\\[\"classNames\"\\]](/components/select#api), styles?: [SelectProps\\[\"styles\"\\]](/components/select#api) }",
+            "type": "{ className?: string, showSearch?: boolean, style?: React.CSSProperties, classNames?: [SelectProps[\"classNames\"]](/components/select#api), styles?: [SelectProps[\"styles\"]](/components/select#api) }",
             "default": "-",
             "description": "Set Select common props",
             "since": "5.7.0, `classNames` and `styles`: 5.25.0",
@@ -4590,7 +4590,7 @@
           },
           {
             "name": "slider",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [SliderProps\\[\"classNames\"\\]](/components/slider#api), styles?: [SliderProps\\[\"styles\"\\]](/components/slider#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [SliderProps[\"classNames\"]](/components/slider#api), styles?: [SliderProps[\"styles\"]](/components/slider#api) }",
             "default": "-",
             "description": "Set Slider common props",
             "since": "5.7.0, `classNames` and `styles`: 5.23.0",
@@ -4606,7 +4606,7 @@
           },
           {
             "name": "space",
-            "type": "{ size: `small` | `middle` | `large` | `number`, className?: string, style?: React.CSSProperties, classNames?: [SpaceProps\\[\"classNames\"\\]](/components/space#api), styles?: [SpaceProps\\[\"styles\"\\]](/components/space#api) }",
+            "type": "{ size: `small` | `middle` | `large` | `number`, className?: string, style?: React.CSSProperties, classNames?: [SpaceProps[\"classNames\"]](/components/space#api), styles?: [SpaceProps[\"styles\"]](/components/space#api) }",
             "default": "-",
             "description": "Set Space common props, ref [Space](/components/space)",
             "since": "5.6.0",
@@ -4678,7 +4678,7 @@
           },
           {
             "name": "timePicker",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TimePickerConfig\\[\"classNames\"\\]](/components/time-picker#semantic-dom), styles?: [TimePickerConfig\\[\"styles\"\\]](/components/time-picker#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TimePickerConfig[\"classNames\"]](/components/time-picker#semantic-dom), styles?: [TimePickerConfig[\"styles\"]](/components/time-picker#semantic-dom) }",
             "default": "-",
             "description": "Set TimePicker common props",
             "since": "5.7.0, `classNames` and `styles`: 5.25.0",
@@ -4694,7 +4694,7 @@
           },
           {
             "name": "tooltip",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Tooltip\\[\"classNames\"\\]](/components/tooltip#api), styles?: [Tooltip\\[\"styles\"\\]](/components/tooltip#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Tooltip[\"classNames\"]](/components/tooltip#api), styles?: [Tooltip[\"styles\"]](/components/tooltip#api) }",
             "default": "-",
             "description": "Set Tooltip common props",
             "since": "5.23.0",
@@ -4702,7 +4702,7 @@
           },
           {
             "name": "popover",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Popover\\[\"classNames\"\\]](/components/popover#api), styles?: [Popover\\[\"styles\"\\]](/components/popover#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Popover[\"classNames\"]](/components/popover#api), styles?: [Popover[\"styles\"]](/components/popover#api) }",
             "default": "-",
             "description": "Set Popover common props",
             "since": "5.23.0",
@@ -4710,7 +4710,7 @@
           },
           {
             "name": "popconfirm",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Popconfirm\\[\"classNames\"\\]](/components/popconfirm#api), styles?: [Popconfirm\\[\"styles\"\\]](/components/popconfirm#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Popconfirm[\"classNames\"]](/components/popconfirm#api), styles?: [Popconfirm[\"styles\"]](/components/popconfirm#api) }",
             "default": "-",
             "description": "Set Popconfirm common props",
             "since": "5.23.0",
@@ -4734,7 +4734,7 @@
           },
           {
             "name": "treeSelect",
-            "type": "{ classNames?:[TreeSelect\\[\"classNames\"\\]](/components/tree-select#api), styles?: [TreeSelect\\[\"styles\"\\]](/components/tree-select#api), switcherIcon?: [TreeSelect\\[\"switcherIcon\"\\]](/components/tree-select#api) }",
+            "type": "{ classNames?:[TreeSelect[\"classNames\"]](/components/tree-select#api), styles?: [TreeSelect[\"styles\"]](/components/tree-select#api), switcherIcon?: [TreeSelect[\"switcherIcon\"]](/components/tree-select#api) }",
             "default": "-",
             "description": "Set TreeSelect common props",
             "since": "5.25.0, `switcherIcon`: 5.28.0",
@@ -4750,7 +4750,7 @@
           },
           {
             "name": "upload",
-            "type": "{ className?: string, style?: React.CSSProperties, customRequest?: [Upload\\[\"customRequest\"\\]](/components/upload#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, customRequest?: [Upload[\"customRequest\"]](/components/upload#api) }",
             "default": "-",
             "description": "Set Upload common props",
             "since": "5.7.0, `customRequest`: 5.27.0",
@@ -4964,7 +4964,7 @@
         },
         {
           "name": "placeholder",
-          "type": "string | \\[string,string]",
+          "type": "string | [string,string]",
           "default": "-",
           "description": "The placeholder of date input",
           "descriptionZh": ""
@@ -4994,7 +4994,7 @@
         },
         {
           "name": "presets",
-          "type": "{ label: React.ReactNode, value: Dayjs | (() => Dayjs) }\\[]",
+          "type": "{ label: React.ReactNode, value: Dayjs | (() => Dayjs) }[]",
           "default": "-",
           "description": "The preset ranges for quick selection, Since `5.8.0`, preset value supports callback function.",
           "descriptionZh": ""
@@ -5633,8 +5633,8 @@
         "DatePicker.RangePicker": [
           {
             "name": "allowEmpty",
-            "type": "\\[boolean, boolean]",
-            "default": "\\[false, false]",
+            "type": "[boolean, boolean]",
+            "default": "[false, false]",
             "description": "Allow start or end input leave empty",
             "descriptionZh": "允许起始项部分为空"
           },
@@ -5664,14 +5664,14 @@
           },
           {
             "name": "defaultValue",
-            "type": "\\[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
+            "type": "[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
             "default": "-",
             "description": "To set default date",
             "descriptionZh": "默认日期"
           },
           {
             "name": "disabled",
-            "type": "\\[boolean, boolean]",
+            "type": "[boolean, boolean]",
             "default": "-",
             "description": "If disable start or end",
             "descriptionZh": "禁用起始项"
@@ -5709,7 +5709,7 @@
           },
           {
             "name": "presets",
-            "type": "{ label: React.ReactNode, value: (Dayjs | (() => Dayjs))\\[] }\\[]",
+            "type": "{ label: React.ReactNode, value: (Dayjs | (() => Dayjs))[] }[]",
             "default": "-",
             "description": "The preset ranges for quick selection, Since `5.8.0`, preset value supports callback function.",
             "descriptionZh": "预设时间范围快捷选择，自 `5.8.0` 起 value 支持函数返回值"
@@ -5737,8 +5737,8 @@
           },
           {
             "name": "showTime.defaultValue",
-            "type": "[dayjs](https://day.js.org/)\\[]",
-            "default": "\\[dayjs(), dayjs()]",
+            "type": "[dayjs](https://day.js.org/)[]",
+            "default": "[dayjs(), dayjs()]",
             "description": "Use `showTime.defaultOpenValue` instead",
             "since": "5.27.3",
             "deprecated": true,
@@ -5746,28 +5746,28 @@
           },
           {
             "name": "showTime.defaultOpenValue",
-            "type": "[dayjs](https://day.js.org/)\\[]",
-            "default": "\\[dayjs(), dayjs()]",
+            "type": "[dayjs](https://day.js.org/)[]",
+            "default": "[dayjs(), dayjs()]",
             "description": "To set default time of selected date, [demo](#date-picker-demo-disabled-date)",
             "descriptionZh": "设置用户选择日期时默认的时分秒，[例子](#date-picker-demo-disabled-date)"
           },
           {
             "name": "value",
-            "type": "\\[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
+            "type": "[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
             "default": "-",
             "description": "To set date",
             "descriptionZh": "日期"
           },
           {
             "name": "onCalendarChange",
-            "type": "function(dates: \\[dayjs, dayjs], dateStrings: \\[string, string], info: { range:`start`|`end` })",
+            "type": "function(dates: [dayjs, dayjs], dateStrings: [string, string], info: { range:`start`|`end` })",
             "default": "-",
             "description": "Callback function, can be executed when the start time or the end time of the range is changing. `info` argument is added in 4.4.0",
             "descriptionZh": "待选日期发生变化的回调。`info` 参数自 4.4.0 添加"
           },
           {
             "name": "onChange",
-            "type": "function(dates: \\[dayjs, dayjs], dateStrings: \\[string, string])",
+            "type": "function(dates: [dayjs, dayjs], dateStrings: [string, string])",
             "default": "-",
             "description": "Callback function, can be executed when the selected time is changing",
             "descriptionZh": "日期范围发生变化的回调"
@@ -6406,7 +6406,7 @@
         {
           "name": "trigger",
           "type": "Array&lt;`click`|`hover`|`contextMenu`>",
-          "default": "\\[`hover`]",
+          "default": "[`hover`]",
           "description": "The trigger mode which executes the dropdown action. Note that hover can't be used on touchscreens",
           "descriptionZh": "触发下拉的行为，移动端不支持 hover"
         },
@@ -6562,7 +6562,7 @@
         "Dropdown.Button": [
           {
             "name": "buttonsRender",
-            "type": "(buttons: ReactNode\\[]) => ReactNode\\[]",
+            "type": "(buttons: ReactNode[]) => ReactNode[]",
             "default": "-",
             "description": "Custom buttons inside Dropdown.Button",
             "descriptionZh": "自定义左右两个按钮"
@@ -7120,7 +7120,7 @@
         },
         {
           "name": "fields",
-          "type": "[FieldData](#fielddata)\\[]",
+          "type": "[FieldData](#fielddata)[]",
           "default": "-",
           "description": "Control of form fields through state management (such as redux). Not recommended for non-strong demand. View [example](#form-demo-global-state)",
           "descriptionZh": "通过状态管理（如 redux）控制表单字段，如非强需求不推荐使用。查看[示例](#form-demo-global-state)"
@@ -7223,7 +7223,7 @@
         },
         {
           "name": "validateTrigger",
-          "type": "string | string\\[]",
+          "type": "string | string[]",
           "default": "`onChange`",
           "description": "Config field validate trigger",
           "since": "4.3.0",
@@ -7654,7 +7654,7 @@
           },
           {
             "name": "dependencies",
-            "type": "[NamePath](#namepath)\\[]",
+            "type": "[NamePath](#namepath)[]",
             "default": "-",
             "description": "Set the dependency field. See [below](#dependencies)",
             "descriptionZh": "设置依赖字段，说明[见下](#dependencies)"
@@ -7668,7 +7668,7 @@
           },
           {
             "name": "getValueFromEvent",
-            "type": "(..args: any\\[]) => any",
+            "type": "(..args: any[]) => any",
             "default": "-",
             "description": "Specify how to get value from event or other onChange arguments",
             "descriptionZh": "设置如何将 event 的值转换成字段值"
@@ -7787,7 +7787,7 @@
           },
           {
             "name": "rules",
-            "type": "[Rule](#rule)\\[]",
+            "type": "[Rule](#rule)[]",
             "default": "-",
             "description": "Rules for field validation. Click [here](#form-demo-basic) to see an example",
             "descriptionZh": "校验规则，设置字段的校验逻辑。点击[此处](#form-demo-basic)查看示例"
@@ -7839,7 +7839,7 @@
           },
           {
             "name": "validateTrigger",
-            "type": "string | string\\[]",
+            "type": "string | string[]",
             "default": "`onChange`",
             "description": "When to validate the value of children node",
             "descriptionZh": "设置字段校验的时机"
@@ -7870,14 +7870,14 @@
         "Form.List": [
           {
             "name": "children",
-            "type": "(fields: Field\\[], operation: { add, remove, move }, meta: { errors }) => React.ReactNode",
+            "type": "(fields: Field[], operation: { add, remove, move }, meta: { errors }) => React.ReactNode",
             "default": "-",
             "description": "Render function",
             "descriptionZh": "渲染函数"
           },
           {
             "name": "initialValue",
-            "type": "any\\[]",
+            "type": "any[]",
             "default": "-",
             "description": "Config sub default value. Form `initialValues` get higher priority when conflict",
             "since": "4.9.0",
@@ -7892,7 +7892,7 @@
           },
           {
             "name": "rules",
-            "type": "{ validator, message }\\[]",
+            "type": "{ validator, message }[]",
             "default": "-",
             "description": "Validate rules, only support customize validator. Should work with [ErrorList](#formerrorlist)",
             "since": "4.7.0",
@@ -7917,8 +7917,8 @@
           },
           {
             "name": "remove",
-            "type": "(index: number | number\\[]) => void",
-            "default": "number\\[]",
+            "type": "(index: number | number[]) => void",
+            "default": "number[]",
             "description": "remove form item",
             "since": "4.5.0",
             "descriptionZh": "删除表单项"
@@ -7927,7 +7927,7 @@
         "Form.ErrorList": [
           {
             "name": "errors",
-            "type": "ReactNode\\[]",
+            "type": "ReactNode[]",
             "default": "-",
             "description": "Error list",
             "descriptionZh": "错误列表"
@@ -7952,7 +7952,7 @@
         "Form.FormInstance": [
           {
             "name": "getFieldError",
-            "type": "(name: [NamePath](#namepath)) => string\\[]",
+            "type": "(name: [NamePath](#namepath)) => string[]",
             "default": "-",
             "description": "Get the error messages by the field name",
             "descriptionZh": ""
@@ -7967,7 +7967,7 @@
           },
           {
             "name": "getFieldsError",
-            "type": "(nameList?: [NamePath](#namepath)\\[]) => FieldError\\[]",
+            "type": "(nameList?: [NamePath](#namepath)[]) => FieldError[]",
             "default": "-",
             "description": "Get the error messages by the fields name. Return as an array",
             "descriptionZh": ""
@@ -7988,7 +7988,7 @@
           },
           {
             "name": "isFieldsTouched",
-            "type": "(nameList?: [NamePath](#namepath)\\[], allTouched?: boolean) => boolean",
+            "type": "(nameList?: [NamePath](#namepath)[], allTouched?: boolean) => boolean",
             "default": "-",
             "description": "Check if fields have been operated. Check if all fields is touched when `allTouched` is `true`",
             "descriptionZh": ""
@@ -8009,7 +8009,7 @@
           },
           {
             "name": "resetFields",
-            "type": "(fields?: [NamePath](#namepath)\\[]) => void",
+            "type": "(fields?: [NamePath](#namepath)[]) => void",
             "default": "-",
             "description": "Reset fields to `initialValues`",
             "descriptionZh": ""
@@ -8024,7 +8024,7 @@
           },
           {
             "name": "setFields",
-            "type": "(fields: [FieldData](#fielddata)\\[]) => void",
+            "type": "(fields: [FieldData](#fielddata)[]) => void",
             "default": "-",
             "description": "Set fields status",
             "descriptionZh": ""
@@ -8053,7 +8053,7 @@
           },
           {
             "name": "validateFields",
-            "type": "(nameList?: [NamePath](#namepath)\\[], config?: [ValidateConfig](#validatefields)) => Promise",
+            "type": "(nameList?: [NamePath](#namepath)[], config?: [ValidateConfig](#validatefields)) => Promise",
             "default": "-",
             "description": "Validate fields. Use `recursive` to validate all the field in the path",
             "descriptionZh": ""
@@ -8062,21 +8062,21 @@
         "Form.FieldData": [
           {
             "name": "errors",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Error messages",
             "descriptionZh": ""
           },
           {
             "name": "warnings",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Warning messages",
             "descriptionZh": ""
           },
           {
             "name": "name",
-            "type": "[NamePath](#namepath)\\[]",
+            "type": "[NamePath](#namepath)[]",
             "default": "-",
             "description": "Field name path",
             "descriptionZh": ""
@@ -8113,7 +8113,7 @@
           },
           {
             "name": "enum",
-            "type": "any\\[]",
+            "type": "any[]",
             "default": "-",
             "description": "Match enum value. You need to set `type` to `enum` to enable this",
             "descriptionZh": ""
@@ -8183,7 +8183,7 @@
           },
           {
             "name": "validateTrigger",
-            "type": "string | string\\[]",
+            "type": "string | string[]",
             "default": "-",
             "description": "Set validate trigger event. Must be the sub set of `validateTrigger` in Form.Item",
             "descriptionZh": ""
@@ -8599,14 +8599,14 @@
         "Icon.Custom Font Icon": [
           {
             "name": "extraCommonProps",
-            "type": "{ \\[key: string]: any }",
+            "type": "{ [key: string]: any }",
             "default": "{}",
             "description": "Define extra properties to the component",
             "descriptionZh": ""
           },
           {
             "name": "scriptUrl",
-            "type": "string | string\\[]",
+            "type": "string | string[]",
             "default": "-",
             "description": "The URL generated by [iconfont.cn](http://iconfont.cn/) project. Support `string[]` after `@ant-design/icons@4.1.0`",
             "descriptionZh": ""
@@ -10267,7 +10267,7 @@
         },
         {
           "name": "dataSource",
-          "type": "any\\[]",
+          "type": "any[]",
           "default": "-",
           "description": "DataSource array for list",
           "descriptionZh": "列表数据源"
@@ -10682,7 +10682,7 @@
         },
         {
           "name": "prefix",
-          "type": "string | string\\[]",
+          "type": "string | string[]",
           "default": "`@`",
           "description": "Set trigger prefix keyword",
           "descriptionZh": ""
@@ -10785,7 +10785,7 @@
         {
           "name": "options",
           "type": "[Options](#option)",
-          "default": "\\[]",
+          "default": "[]",
           "description": "Option Configuration",
           "since": "5.1.0",
           "descriptionZh": ""
@@ -10941,14 +10941,14 @@
       "props": [
         {
           "name": "defaultOpenKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Array with the keys of default opened sub menus",
           "descriptionZh": "初始展开的 SubMenu 菜单项 key 数组"
         },
         {
           "name": "defaultSelectedKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Array with the keys of default selected menu items",
           "descriptionZh": "初始选中的菜单项 key 数组"
@@ -10984,7 +10984,7 @@
         },
         {
           "name": "items",
-          "type": "[ItemType\\[\\]](#itemtype)",
+          "type": "[ItemType[]](#itemtype)",
           "default": "-",
           "description": "Menu item content",
           "since": "4.20.0",
@@ -11006,7 +11006,7 @@
         },
         {
           "name": "openKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Array with the keys of currently opened sub-menus",
           "descriptionZh": "当前展开的 SubMenu 菜单项 key 数组"
@@ -11027,7 +11027,7 @@
         },
         {
           "name": "selectedKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Array with the keys of currently selected menu items",
           "descriptionZh": "当前选中的菜单项 key 数组"
@@ -11083,7 +11083,7 @@
         },
         {
           "name": "onOpenChange",
-          "type": "function(openKeys: string\\[])",
+          "type": "function(openKeys: string[])",
           "default": "-",
           "description": "Called when sub-menus are opened or closed",
           "descriptionZh": "SubMenu 展开/关闭的回调"
@@ -11226,7 +11226,7 @@
           },
           {
             "name": "children",
-            "type": "[ItemType\\[\\]](#itemtype)",
+            "type": "[ItemType[]](#itemtype)",
             "default": "-",
             "description": "Sub-menus or sub-menu items",
             "descriptionZh": "分组的菜单项"
@@ -11268,7 +11268,7 @@
           },
           {
             "name": "popupOffset",
-            "type": "\\[number, number]",
+            "type": "[number, number]",
             "default": "-",
             "description": "Sub-menu offset, not working when `mode=\"inline\"`",
             "descriptionZh": "子菜单偏移量，`mode=\"inline\"` 时无效"
@@ -11290,7 +11290,7 @@
           },
           {
             "name": "children",
-            "type": "[MenuItemType\\[\\]](#menuitemtype)",
+            "type": "[MenuItemType[]](#menuitemtype)",
             "default": "-",
             "description": "Sub-menu items",
             "descriptionZh": "分组的菜单项"
@@ -12544,8 +12544,8 @@
         },
         {
           "name": "pageSizeOptions",
-          "type": "number\\[]",
-          "default": "\\[`10`, `20`, `50`, `100`]",
+          "type": "number[]",
+          "default": "[`10`, `20`, `50`, `100`]",
           "description": "Specify the sizeChanger options",
           "descriptionZh": "指定每页可以显示多少条"
         },
@@ -13086,7 +13086,7 @@
         },
         {
           "name": "size",
-          "type": "number | \\[number | string, number] | { width: number, height: number } | \"small\" | \"default\"",
+          "type": "number | [number | string, number] | { width: number, height: number } | \"small\" | \"default\"",
           "default": "\"default\"",
           "description": "Progress size",
           "since": "5.3.0, Object: 5.18.0",
@@ -13406,7 +13406,7 @@
         },
         {
           "name": "statusRender",
-          "type": "`(info: \\[StatusRenderInfo](/components/qr-code-cn#statusrenderinfo)) => React.ReactNode`",
+          "type": "`(info: [StatusRenderInfo](/components/qr-code-cn#statusrenderinfo)) => React.ReactNode`",
           "default": "5.20.0",
           "description": "custom status render",
           "descriptionZh": "自定义状态渲染器"
@@ -13691,7 +13691,7 @@
           },
           {
             "name": "options",
-            "type": "string\\[] | number\\[] | Array&lt;[CheckboxOptionType](#checkboxoptiontype)>",
+            "type": "string[] | number[] | Array&lt;[CheckboxOptionType](#checkboxoptiontype)>",
             "default": "-",
             "description": "Set children optional",
             "descriptionZh": "以配置形式设置子元素"
@@ -14178,7 +14178,7 @@
         },
         {
           "name": "options",
-          "type": "string\\[] | number\\[] | SegmentedItemType\\[]",
+          "type": "string[] | number[] | SegmentedItemType[]",
           "default": "[]",
           "description": "Set children optional",
           "descriptionZh": ""
@@ -14410,7 +14410,7 @@
         },
         {
           "name": "defaultValue",
-          "type": "string | string\\[] | <br />number | number\\[] | <br />LabeledValue | LabeledValue\\[]",
+          "type": "string | string[] | <br />number | number[] | <br />LabeledValue | LabeledValue[]",
           "default": "-",
           "description": "Initial selected option",
           "descriptionZh": "指定默认选中的条目"
@@ -14588,14 +14588,14 @@
         },
         {
           "name": "options",
-          "type": "{ label, value }\\[]",
+          "type": "{ label, value }[]",
           "default": "-",
           "description": "Select options. Will get better perf than jsx definition",
           "descriptionZh": "数据化配置选项内容，相比 jsx 定义会获得更好的渲染性能"
         },
         {
           "name": "optionRender",
-          "type": "(option: FlattenOptionData\\<BaseOptionType\\> , info: { index: number }) => React.ReactNode",
+          "type": "(option: FlattenOptionData<BaseOptionType> , info: { index: number }) => React.ReactNode",
           "default": "-",
           "description": "Customize the rendering dropdown options",
           "since": "5.11.0",
@@ -14683,14 +14683,14 @@
         },
         {
           "name": "tokenSeparators",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Separator used to tokenize, only applies when `mode=\"tags\"`",
           "descriptionZh": "自动分词的分隔符，仅在 `mode=\"tags\"` 时生效"
         },
         {
           "name": "value",
-          "type": "string | string\\[] | <br />number | number\\[] | <br />LabeledValue | LabeledValue\\[]",
+          "type": "string | string[] | <br />number | number[] | <br />LabeledValue | LabeledValue[]",
           "default": "-",
           "description": "Current selected option (considered as a immutable array)",
           "descriptionZh": "指定当前选中的条目，多选时为一个数组。（value 数组引用未变化时，Select 不会更新）"
@@ -15344,10 +15344,10 @@
         },
         {
           "name": "defaultValue",
-          "type": "number | \\[number, number]",
-          "default": "0 | \\[0, 0]",
-          "description": "The default value of the slider. When `range` is false, use number, otherwise, use \\[number, number]",
-          "descriptionZh": "设置初始取值。当 `range` 为 false 时，使用 number，否则用 \\[number, number]"
+          "type": "number | [number, number]",
+          "default": "0 | [0, 0]",
+          "description": "The default value of the slider. When `range` is false, use number, otherwise, use [number, number]",
+          "descriptionZh": "设置初始取值。当 `range` 为 false 时，使用 number，否则用 [number, number]"
         },
         {
           "name": "disabled",
@@ -15382,8 +15382,8 @@
           "name": "marks",
           "type": "object",
           "default": "{ number: ReactNode } | { number: { style: CSSProperties, label: ReactNode } }",
-          "description": "Tick marks of Slider. The type of key must be `number`, and must be in closed interval \\[min, max]. Each mark can declare its own style",
-          "descriptionZh": "刻度标记，key 的类型必须为 `number` 且取值在闭区间 \\[min, max] 内，每个标签可以单独设置样式"
+          "description": "Tick marks of Slider. The type of key must be `number`, and must be in closed interval [min, max]. Each mark can declare its own style",
+          "descriptionZh": "刻度标记，key 的类型必须为 `number` 且取值在闭区间 [min, max] 内，每个标签可以单独设置样式"
         },
         {
           "name": "max",
@@ -15438,10 +15438,10 @@
         },
         {
           "name": "value",
-          "type": "number | \\[number, number]",
+          "type": "number | [number, number]",
           "default": "-",
-          "description": "The value of slider. When `range` is false, use number, otherwise, use \\[number, number]",
-          "descriptionZh": "设置当前取值。当 `range` 为 false 时，使用 number，否则用 \\[number, number]"
+          "description": "The value of slider. When `range` is false, use number, otherwise, use [number, number]",
+          "descriptionZh": "设置当前取值。当 `range` 为 false 时，使用 number，否则用 [number, number]"
         },
         {
           "name": "vertical",
@@ -15722,7 +15722,7 @@
         },
         {
           "name": "size",
-          "type": "[Size](#size) | [Size\\[\\]](#size)",
+          "type": "[Size](#size) | [Size[]](#size)",
           "default": "`small`",
           "description": "The space size",
           "since": "4.1.0 | Array: 4.9.0",
@@ -16948,7 +16948,7 @@
         },
         {
           "name": "columns",
-          "type": "[ColumnsType](#column)\\[]",
+          "type": "[ColumnsType](#column)[]",
           "default": "-",
           "description": "Columns of table",
           "descriptionZh": "表格列的配置描述，具体项见下表"
@@ -16962,7 +16962,7 @@
         },
         {
           "name": "dataSource",
-          "type": "object\\[]",
+          "type": "object[]",
           "default": "-",
           "description": "Data record array to be displayed",
           "descriptionZh": "数据数组"
@@ -17070,7 +17070,7 @@
         {
           "name": "sortDirections",
           "type": "Array",
-          "default": "\\[`ascend`, `descend`]",
+          "default": "[`ascend`, `descend`]",
           "description": "Supported sort way, could be `ascend`, `descend`",
           "descriptionZh": "支持的排序方式，取值为 `ascend` `descend`"
         },
@@ -17113,7 +17113,7 @@
         },
         {
           "name": "onChange",
-          "type": "function(pagination, filters, sorter, extra: { currentDataSource: \\[], action: `paginate` | `sort` | `filter` })",
+          "type": "function(pagination, filters, sorter, extra: { currentDataSource: [], action: `paginate` | `sort` | `filter` })",
           "default": "-",
           "description": "Callback executed when pagination, filters or sorter is changed",
           "descriptionZh": "分页、排序、筛选变化时触发"
@@ -17526,14 +17526,14 @@
           },
           {
             "name": "dataIndex",
-            "type": "string | string\\[]",
+            "type": "string | string[]",
             "default": "-",
             "description": "Display field of the data record, support nest path by string array",
             "descriptionZh": "列数据在数据项中对应的路径，支持通过数组查询嵌套路径"
           },
           {
             "name": "defaultFilteredValue",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Default filtered values",
             "descriptionZh": "默认筛选值"
@@ -17576,7 +17576,7 @@
           },
           {
             "name": "filteredValue",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Controlled filtered value, filter icon will highlight",
             "descriptionZh": "筛选的受控属性，外界可用此控制列的筛选状态，值为已筛选的 value 数组"
@@ -17621,7 +17621,7 @@
           },
           {
             "name": "filters",
-            "type": "object\\[]",
+            "type": "object[]",
             "default": "-",
             "description": "Filter menu config",
             "descriptionZh": "表头的筛选菜单项"
@@ -17657,7 +17657,7 @@
           },
           {
             "name": "responsive",
-            "type": "[Breakpoint](https://github.com/ant-design/ant-design/blob/015109b42b85c63146371b4e32b883cf97b088e8/components/_util/responsiveObserve.ts#L1)\\[]",
+            "type": "[Breakpoint](https://github.com/ant-design/ant-design/blob/015109b42b85c63146371b4e32b883cf97b088e8/components/_util/responsiveObserve.ts#L1)[]",
             "default": "-",
             "description": "The list of breakpoints at which to display this column. Always visible if not set",
             "since": "4.2.0",
@@ -17690,7 +17690,7 @@
           {
             "name": "sortDirections",
             "type": "Array",
-            "default": "\\[`ascend`, `descend`]",
+            "default": "[`ascend`, `descend`]",
             "description": "Supported sort way, override `sortDirections` in `Table`, could be `ascend`, `descend`",
             "descriptionZh": "支持的排序方式，覆盖 `Table` 中 `sortDirections`， 取值为 `ascend` `descend`"
           },
@@ -17781,7 +17781,7 @@
           {
             "name": "position",
             "type": "Array",
-            "default": "\\[`bottomRight`]",
+            "default": "[`bottomRight`]",
             "description": "Specify the position of `Pagination`, could be`topLeft` | `topCenter` | `topRight` |`bottomLeft` | `bottomCenter` | `bottomRight` | `none`",
             "descriptionZh": "指定分页显示的位置， 取值为`topLeft` | `topCenter` | `topRight` |`bottomLeft` | `bottomCenter` | `bottomRight` | `none`"
           }
@@ -17818,7 +17818,7 @@
           },
           {
             "name": "defaultExpandedRowKeys",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Initial expanded row keys",
             "descriptionZh": "默认展开的行"
@@ -17833,7 +17833,7 @@
           },
           {
             "name": "expandedRowKeys",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Current expanded row keys",
             "descriptionZh": "展开的行，控制属性"
@@ -17991,14 +17991,14 @@
           },
           {
             "name": "selectedRowKeys",
-            "type": "string\\[] | number\\[]",
-            "default": "\\[]",
+            "type": "string[] | number[]",
+            "default": "[]",
             "description": "Controlled selected row keys",
             "descriptionZh": "指定选中项的 key 数组，需要和 onChange 进行配合"
           },
           {
             "name": "selections",
-            "type": "object\\[] | boolean",
+            "type": "object[] | boolean",
             "default": "-",
             "description": "Custom selection [config](#selection), only displays default selections when set to `true`",
             "descriptionZh": "自定义选择项 [配置项](#selection), 设为 `true` 时使用默认选择项"
@@ -18941,7 +18941,7 @@
         },
         {
           "name": "placeholder",
-          "type": "string | \\[string, string]",
+          "type": "string | [string, string]",
           "default": "`Select a time`",
           "description": "Display when there's no value",
           "descriptionZh": "没有值的时候显示的内容"
@@ -19043,7 +19043,7 @@
         },
         {
           "name": "onCalendarChange",
-          "type": "function(dates: \\[dayjs, dayjs], dateStrings: \\[string, string], info: { range:`start`|`end` })",
+          "type": "function(dates: [dayjs, dayjs], dateStrings: [string, string], info: { range:`start`|`end` })",
           "default": "-",
           "description": "Callback function, can be executed when the start time or the end time of the range is changing. `info` argument is added in 4.4.0",
           "descriptionZh": "待选日期发生变化的回调。`info` 参数自 4.4.0 添加"
@@ -19623,8 +19623,8 @@
       "props": [
         {
           "name": "dataSource",
-          "type": "[RecordType extends TransferItem = TransferItem](https://github.com/ant-design/ant-design/blob/1bf0bab2a7bc0a774119f501806e3e0e3a6ba283/components/transfer/index.tsx#L12)\\[]",
-          "default": "\\[]",
+          "type": "[RecordType extends TransferItem = TransferItem](https://github.com/ant-design/ant-design/blob/1bf0bab2a7bc0a774119f501806e3e0e3a6ba283/components/transfer/index.tsx#L12)[]",
+          "default": "[]",
           "description": "Used for setting the source data. The elements that are part of this array will be present the left column. Except the elements whose keys are included in `targetKeys` prop",
           "descriptionZh": ""
         },
@@ -19682,8 +19682,8 @@
         },
         {
           "name": "operations",
-          "type": "string\\[]",
-          "default": "\\[`>`, `<`]",
+          "type": "string[]",
+          "default": "[`>`, `<`]",
           "description": "A set of operations that are sorted from top to bottom",
           "descriptionZh": ""
         },
@@ -19711,15 +19711,15 @@
         },
         {
           "name": "selectAllLabels",
-          "type": "(ReactNode | (info: { selectedCount: number, totalCount: number }) => ReactNode)\\[]",
+          "type": "(ReactNode | (info: { selectedCount: number, totalCount: number }) => ReactNode)[]",
           "default": "-",
           "description": "A set of customized labels for select all checkboxes on the header",
           "descriptionZh": ""
         },
         {
           "name": "selectedKeys",
-          "type": "string\\[] | number\\[]",
-          "default": "\\[]",
+          "type": "string[] | number[]",
+          "default": "[]",
           "description": "A set of keys of selected items",
           "descriptionZh": ""
         },
@@ -19747,14 +19747,14 @@
         },
         {
           "name": "targetKeys",
-          "type": "string\\[] | number\\[]",
-          "default": "\\[]",
+          "type": "string[] | number[]",
+          "default": "[]",
           "description": "A set of keys of elements that are listed on the right column",
           "descriptionZh": ""
         },
         {
           "name": "titles",
-          "type": "ReactNode\\[]",
+          "type": "ReactNode[]",
           "default": "-",
           "description": "A set of titles that are sorted from left to right",
           "descriptionZh": ""
@@ -19886,14 +19886,14 @@
           },
           {
             "name": "filteredItems",
-            "type": "RecordType\\[]",
+            "type": "RecordType[]",
             "default": "-",
             "description": "Filtered items",
             "descriptionZh": "过滤后的数据"
           },
           {
             "name": "selectedKeys",
-            "type": "string\\[] | number\\[]",
+            "type": "string[] | number[]",
             "default": "-",
             "description": "Selected items",
             "descriptionZh": "选中的条目"
@@ -19907,7 +19907,7 @@
           },
           {
             "name": "onItemSelectAll",
-            "type": "(keys: string\\[] | number\\[], selected: boolean)",
+            "type": "(keys: string[] | number[], selected: boolean)",
             "default": "-",
             "description": "Select a group of items",
             "descriptionZh": "勾选一组条目"
@@ -19957,8 +19957,8 @@
         },
         {
           "name": "checkedKeys",
-          "type": "string\\[] | {checked: string\\[], halfChecked: string\\[]}",
-          "default": "\\[]",
+          "type": "string[] | {checked: string[], halfChecked: string[]}",
+          "default": "[]",
           "description": "(Controlled) Specifies the keys of the checked treeNodes (PS: When this specifies the key of a treeNode which is also a parent treeNode, all the children treeNodes of will be checked; and vice versa, when it specifies the key of a treeNode which is a child treeNode, its parent treeNode will also be checked. When `checkable` and `checkStrictly` is true, its object has `checked` and `halfChecked` property. Regardless of whether the child or parent treeNode is checked, they won't impact each other",
           "descriptionZh": "（受控）选中复选框的树节点（注意：父子节点有关联，如果传入父节点 key，则子节点自动选中；相应当子节点 key 都传入，父节点也自动选中。当设置 `checkable` 和 `checkStrictly`，它是一个有`checked`和`halfChecked`属性的对象，并且父子节点的选中与否不再关联"
         },
@@ -19978,8 +19978,8 @@
         },
         {
           "name": "defaultCheckedKeys",
-          "type": "string\\[]",
-          "default": "\\[]",
+          "type": "string[]",
+          "default": "[]",
           "description": "Specifies the keys of the default checked treeNodes",
           "descriptionZh": "默认选中复选框的树节点"
         },
@@ -19992,8 +19992,8 @@
         },
         {
           "name": "defaultExpandedKeys",
-          "type": "string\\[]",
-          "default": "\\[]",
+          "type": "string[]",
+          "default": "[]",
           "description": "Specify the keys of the default expanded treeNodes",
           "descriptionZh": "默认展开指定的树节点"
         },
@@ -20006,8 +20006,8 @@
         },
         {
           "name": "defaultSelectedKeys",
-          "type": "string\\[]",
-          "default": "\\[]",
+          "type": "string[]",
+          "default": "[]",
           "description": "Specifies the keys of the default selected treeNodes",
           "descriptionZh": "默认选中的树节点"
         },
@@ -20028,8 +20028,8 @@
         },
         {
           "name": "expandedKeys",
-          "type": "string\\[]",
-          "default": "\\[]",
+          "type": "string[]",
+          "default": "[]",
           "description": "(Controlled) Specifies the keys of the expanded treeNodes",
           "descriptionZh": "（受控）展开指定的树节点"
         },
@@ -20071,8 +20071,8 @@
         },
         {
           "name": "loadedKeys",
-          "type": "string\\[]",
-          "default": "\\[]",
+          "type": "string[]",
+          "default": "[]",
           "description": "(Controlled) Set loaded tree nodes. Need to work with `loadData`",
           "descriptionZh": "（受控）已经加载的节点，需要配合 `loadData` 使用"
         },
@@ -20107,7 +20107,7 @@
         },
         {
           "name": "selectedKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "(Controlled) Specifies the keys of the selected treeNodes, multiple selection needs to set `multiple` to true",
           "descriptionZh": "（受控）设置选中的树节点，多选需设置 `multiple` 为 true"
@@ -20159,7 +20159,7 @@
         },
         {
           "name": "treeData",
-          "type": "array&lt;{ key, title, children, \\[disabled, selectable] }>",
+          "type": "array&lt;{ key, title, children, [disabled, selectable] }>",
           "default": "-",
           "description": "The treeNodes data Array, if set it then you need not to construct children TreeNode. (key should be unique across the whole array)",
           "descriptionZh": "treeNodes 数据，如果设置则不需要手动构造 TreeNode 节点（key 在整个树范围内唯一）"
@@ -20468,7 +20468,7 @@
         },
         {
           "name": "defaultValue",
-          "type": "string | string\\[]",
+          "type": "string | string[]",
           "default": "-",
           "description": "To set the initial selected treeNode(s)",
           "descriptionZh": "指定默认选中的条目"
@@ -20718,8 +20718,8 @@
         },
         {
           "name": "treeData",
-          "type": "array&lt;{ value, title, children, \\[disabled, disableCheckbox, selectable, checkable] }>",
-          "default": "\\[]",
+          "type": "array&lt;{ value, title, children, [disabled, disableCheckbox, selectable, checkable] }>",
+          "default": "[]",
           "description": "Data of the treeNodes, manual construction work is no longer needed if this property has been set(ensure the Uniqueness of each value)",
           "descriptionZh": "treeNodes 数据，如果设置则不需要手动构造 TreeNode 节点（value 在整个树范围内唯一）"
         },
@@ -20727,8 +20727,8 @@
           "name": "treeDataSimpleMode",
           "type": "boolean | object&lt;{ id: string, pId: string, rootPId: string }>",
           "default": "false",
-          "description": "Enable simple mode of treeData. Changes the `treeData` schema to: \\[{id:1, pId:0, value:'1', title:\"test1\",...},...] where pId is parent node's id). It is possible to replace the default `id` and `pId` keys by providing object to `treeDataSimpleMode`",
-          "descriptionZh": "使用简单格式的 treeData，具体设置参考可设置的类型 (此时 treeData 应变为这样的数据结构: \\[{id:1, pId:0, value:'1', title:\"test1\",...},...]， `pId` 是父节点的 id)"
+          "description": "Enable simple mode of treeData. Changes the `treeData` schema to: [{id:1, pId:0, value:'1', title:\"test1\",...},...] where pId is parent node's id). It is possible to replace the default `id` and `pId` keys by providing object to `treeDataSimpleMode`",
+          "descriptionZh": "使用简单格式的 treeData，具体设置参考可设置的类型 (此时 treeData 应变为这样的数据结构: [{id:1, pId:0, value:'1', title:\"test1\",...},...]， `pId` 是父节点的 id)"
         },
         {
           "name": "treeTitleRender",
@@ -20747,7 +20747,7 @@
         },
         {
           "name": "treeDefaultExpandedKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Default expanded treeNodes",
           "descriptionZh": "默认展开的树节点"
@@ -20762,7 +20762,7 @@
         },
         {
           "name": "treeExpandedKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Set expanded keys",
           "descriptionZh": "设置展开的树节点"
@@ -20805,7 +20805,7 @@
         },
         {
           "name": "value",
-          "type": "string | string\\[]",
+          "type": "string | string[]",
           "default": "-",
           "description": "To set the current selected treeNode(s)",
           "descriptionZh": "指定当前选中的条目"
@@ -21443,11 +21443,11 @@
           },
           {
             "name": "icon",
-            "type": "\\[ReactNode, ReactNode]",
+            "type": "[ReactNode, ReactNode]",
             "default": "-",
-            "description": "Custom copy icon: \\[copyIcon, copiedIcon]",
+            "description": "Custom copy icon: [copyIcon, copiedIcon]",
             "since": "4.6.0",
-            "descriptionZh": "自定义拷贝图标：\\[默认图标, 拷贝后的图标]"
+            "descriptionZh": "自定义拷贝图标：[默认图标, 拷贝后的图标]"
           },
           {
             "name": "text",
@@ -21458,8 +21458,8 @@
           },
           {
             "name": "tooltips",
-            "type": "\\[ReactNode, ReactNode]",
-            "default": "\\[`Copy`, `Copied`]",
+            "type": "[ReactNode, ReactNode]",
+            "default": "[`Copy`, `Copied`]",
             "description": "Custom tooltip text, hide when it is false",
             "since": "4.4.0",
             "descriptionZh": "自定义提示文案，为 false 时隐藏文案"
@@ -21560,7 +21560,7 @@
           {
             "name": "triggerType",
             "type": "Array&lt;`icon`|`text`>",
-            "default": "\\[`icon`]",
+            "default": "[`icon`]",
             "description": "Edit mode trigger - icon, text or both (not specifying icon as trigger hides it)",
             "descriptionZh": "编辑模式触发器类型，图标、文本或者两者都设置（不设置图标作为触发器时它会隐藏）"
           },
@@ -21704,7 +21704,7 @@
         },
         {
           "name": "defaultFileList",
-          "type": "object\\[]",
+          "type": "object[]",
           "default": "-",
           "description": "Default list of files that have been uploaded",
           "descriptionZh": "默认已经上传的文件列表"
@@ -21726,7 +21726,7 @@
         },
         {
           "name": "fileList",
-          "type": "[UploadFile](#uploadfile)\\[]",
+          "type": "[UploadFile](#uploadfile)[]",
           "default": "-",
           "description": "List of files that have been uploaded (controlled). Here is a common issue [#2423](https://github.com/ant-design/ant-design/issues/2423) when using it",
           "descriptionZh": "已经上传的文件列表（受控），使用此参数时，如果遇到 `onChange` 只调用一次的问题，请参考 [#2423](https://github.com/ant-design/ant-design/issues/2423)"
@@ -21754,7 +21754,7 @@
         },
         {
           "name": "itemRender",
-          "type": "(originNode: ReactElement, file: UploadFile, fileList: object\\[], actions: { download: function, preview: function, remove: function }) => React.ReactNode",
+          "type": "(originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: function, preview: function, remove: function }) => React.ReactNode",
           "default": "-",
           "description": "Custom item of uploadList",
           "since": "4.16.0",
@@ -22303,15 +22303,15 @@
         },
         {
           "name": "gap",
-          "type": "\\[number, number\\]",
-          "default": "\\[100, 100\\]",
+          "type": "[number, number]",
+          "default": "[100, 100]",
           "description": "The spacing between watermarks",
           "descriptionZh": "水印之间的间距"
         },
         {
           "name": "offset",
-          "type": "\\[number, number\\]",
-          "default": "\\[gap\\[0\\]/2, gap\\[1\\]/2\\]",
+          "type": "[number, number]",
+          "default": "[gap[0]/2, gap[1]/2]",
           "description": "The offset of the watermark from the upper left corner of the container. The default is `gap/2`",
           "descriptionZh": "水印距离容器左上角的偏移量，默认为 `gap/2`"
         }

@@ -11,7 +11,16 @@ export function parseTableRow(row: string): string[] {
     .replace(/^\|/, '')
     .replace(/\|$/, '')
     .split('|')
-    .map((cell) => cell.trim().replace(new RegExp(PIPE, 'g'), '|'));
+    .map((cell) =>
+      cell
+        .trim()
+        .replace(new RegExp(PIPE, 'g'), '|')
+        // Clean up markdown escape remnants that are not meaningful in TypeScript type syntax
+        .replace(/\\\[/g, '[')             // \[ → [
+        .replace(/\\\]/g, ']')             // \] → ]
+        .replace(/\\</g, '<')              // \< → <
+        .replace(/\\>/g, '>')              // \> → >
+    );
 }
 
 /** Detect if a prop name indicates deprecation (~~name~~) */
