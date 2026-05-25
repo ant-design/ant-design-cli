@@ -12195,7 +12195,6 @@
           "type": "`'L' | 'M' | 'Q'",
           "default": "-",
           "description": "Error Code Level",
-          "since": "",
           "descriptionZh": "二维码纠错等级"
         },
         {
@@ -12203,7 +12202,6 @@
           "type": "`active | expired | loading `",
           "default": "-",
           "description": "QRCode status",
-          "since": "",
           "descriptionZh": "二维码状态"
         },
         {

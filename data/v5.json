@@ -7918,7 +7918,7 @@
           {
             "name": "remove",
             "type": "(index: number | number[]) => void",
-            "default": "number[]",
+            "default": "-",
             "description": "remove form item",
             "since": "4.5.0",
             "descriptionZh": "删除表单项"

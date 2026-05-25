@@ -3735,7 +3735,7 @@
           {
             "name": "remove",
             "type": "(index: number | number[]) => void",
-            "default": "number[]",
+            "default": "-",
             "description": "remove form item",
             "since": "4.5.0",
             "descriptionZh": "删除表单项"
@@ -9641,7 +9641,6 @@
           "type": "`top` | `right` | `bottom` | `left`",
           "default": "`top`",
           "description": "Position of tabs",
-          "since": "",
           "descriptionZh": "页签位置，可选值有 `top` `right` `bottom` `left`"
         },
         {

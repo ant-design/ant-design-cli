@@ -22,6 +22,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { parseApiSections, mergeProps } from './extractors/props.js';
 import type { ComponentData, PropData, MetadataStore } from '../src/types.js';
 
@@ -221,8 +222,8 @@ function cleanSinceField(prop: PropData): boolean {
   }
 
   // Pattern: "×" (multiplication sign used as separator or placeholder)
-  if (prop.since === '×' || prop.since === '✖') {
-    prop.since = '';
+  if (prop.since === '×' || prop.since === '✖' || prop.since === '') {
+    delete (prop as Record<string, unknown>).since;
   }
 
   return prop.since !== original;
@@ -258,7 +259,9 @@ function fixComponent(component: ComponentData): {
             ...prop,
             type: correct.type,
             default: correct.default,
-            since: correct.since || prop.since,
+            since: correct.since !== undefined
+                ? correct.since || undefined
+                : (VERSION_RE.test(prop.since?.trim() ?? '') ? prop.since : undefined),
           };
           docReparsed++;
         } else {
@@ -370,8 +373,11 @@ function main() {
     }
 
     const pipeFixed = filePipeSplitBefore - filePipeSplitAfter;
+    const hasFixes = fileEscapeFixes > 0 || pipeFixed > 0 || fileMisalignedFixes > 0 || fileSinceFixes > 0;
 
-    if (fileEscapeFixes > 0 || pipeFixed > 0 || fileMisalignedFixes > 0 || fileSinceFixes > 0) {
+    totalPipeSplitRemaining += filePipeSplitAfter;
+
+    if (hasFixes) {
       const newJson = JSON.stringify(store, null, 2) + '\n';
 
       if (shouldWrite) {
@@ -382,11 +388,12 @@ function main() {
       }
 
       totalEscapeFixes += fileEscapeFixes;
-      totalPipeSplitRemaining += filePipeSplitAfter;
       totalDocReparsed += fileDocReparsed;
       totalHeuristicRepairs += fileHeuristicRepairs;
       totalMisalignedFixes += fileMisalignedFixes;
       totalSinceFixes += fileSinceFixes;
+    } else if (filePipeSplitAfter > 0) {
+      console.log(`${file}: ${filePipeSplitAfter} pipe-split remaining`);
     } else {
       console.log(`${file}: clean`);
     }
@@ -398,4 +405,8 @@ function main() {
   }
 }
 
-main();
+const isEntrypoint = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isEntrypoint) {
+  main();
+}

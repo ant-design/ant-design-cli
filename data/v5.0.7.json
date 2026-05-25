@@ -16330,7 +16330,6 @@
           "type": "`top` | `right` | `bottom` | `left`",
           "default": "`top`",
           "description": "Position of tabs",
-          "since": "",
           "descriptionZh": "页签位置，可选值有 `top` `right` `bottom` `left`"
         },
         {

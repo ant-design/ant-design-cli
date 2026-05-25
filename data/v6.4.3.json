@@ -139,7 +139,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom close icon",
-          "since": "",
           "descriptionZh": "自定义关闭图标，请使用 `closable.closeIcon` 替代"
         },
         {
@@ -154,7 +153,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom error icon in Alert icon",
-          "since": "",
           "descriptionZh": "（仅支持全局配置）自定义错误图标"
         },
         {
@@ -169,7 +167,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom info icon in Alert icon",
-          "since": "",
           "descriptionZh": "（仅支持全局配置）自定义信息图标"
         },
         {
@@ -225,7 +222,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom success icon in Alert icon",
-          "since": "",
           "descriptionZh": "（仅支持全局配置）自定义成功图标"
         },
         {
@@ -247,7 +243,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom warning icon in Alert icon",
-          "since": "",
           "descriptionZh": "（仅支持全局配置）自定义警告图标"
         }
       ],
@@ -5964,7 +5959,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom clear icon",
-          "since": "",
           "descriptionZh": ""
         },
         {
@@ -9454,7 +9448,7 @@
           {
             "name": "remove",
             "type": "(index: number | number[]) => void",
-            "default": "number[]",
+            "default": "-",
             "description": "remove form item",
             "since": "4.5.0",
             "descriptionZh": "删除表单项"

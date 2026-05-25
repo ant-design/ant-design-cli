@@ -12244,7 +12244,6 @@
           "type": "`canvas | svg ` | `canvas`",
           "default": "-",
           "description": "render type",
-          "since": "",
           "descriptionZh": "渲染类型"
         },
         {
@@ -12295,7 +12294,6 @@
           "type": "`'L' | 'M' | 'Q'",
           "default": "-",
           "description": "Error Code Level",
-          "since": "",
           "descriptionZh": "二维码纠错等级"
         },
         {
@@ -12303,7 +12301,6 @@
           "type": "`active | expired | loading `",
           "default": "-",
           "description": "QRCode status",
-          "since": "",
           "descriptionZh": "二维码状态"
         },
         {
