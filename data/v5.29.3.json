@@ -9191,7 +9191,7 @@
           {
             "name": "validateTrigger",
             "type": "string | string[]",
-            "default": "-",
+            "default": "`onChange`",
             "description": "When to validate the value of children node",
             "since": "`onChange`",
             "descriptionZh": "设置字段校验的时机"
@@ -25528,7 +25528,7 @@
           },
           {
             "name": "ellipsis",
-            "type": "boolean | [ellipsis](#ellipsis)",
+            "type": "boolean | [Omit<ellipsis, 'expandable' | 'rows' | 'onExpand'>](#ellipsis)",
             "default": "false",
             "description": "Display ellipsis when text overflows, can't configure expandable, rows and onExpand by using object. Diff with Typography.Paragraph, Text do not have 100% width style which means it will fix width on the first ellipsis. If you want to have responsive ellipsis, please set width manually",
             "since": "'rows' \\",

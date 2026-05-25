@@ -19,18 +19,16 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { parseTableRow, parseTable, parseApiSections, mergeProps } from './extractors/props.js';
+import { parseApiSections, mergeProps } from './extractors/props.js';
 import type { ComponentData, PropData, MetadataStore } from '../src/types.js';
 
 const DATA_DIR = path.join(import.meta.dirname, '..', 'data');
 
+const VERSION_RE = /^\d+\.\d+(\.\d+)?$/;
+
 /** Fix markdown escape remnants in a string value. */
 export function cleanEscapes(value: string): string {
-  return value
-    .replace(/\\\[/g, '[')   // \[ → [
-    .replace(/\\\]/g, ']')   // \] → ]
-    .replace(/\\</g, '<')    // \< → <
-    .replace(/\\>/g, '>');   // \> → >
+  return value.replace(/\\([\[\]<>])/g, '$1');
 }
 
 /** Check if a prop has pipe-split corruption (type or default ends with trailing backslash). */
@@ -40,7 +38,7 @@ export function isPipeSplit(prop: PropData): boolean {
 
 /**
  * Re-extract props from embedded doc markdown using the corrected parseTableRow.
- * Falls back to heuristic repair if doc is not available.
+ * Returns a Map keyed by both bare prop name and qualified name (e.g. "Tabs.TabPane.tab").
  */
 function reparseFromDoc(component: ComponentData): Map<string, PropData> | null {
   if (!component.doc) return null;
@@ -58,6 +56,10 @@ function reparseFromDoc(component: ComponentData): Map<string, PropData> | null 
     const merged = mergeProps(enProps, zhProps);
     for (const prop of merged) {
       reparsed.set(prop.name, prop);
+      // Also store under qualified name for sub-component lookup
+      if (label !== '__api_root__' && label !== '__main__') {
+        reparsed.set(`${component.name}.${label}.${prop.name}`, prop);
+      }
     }
   }
 
@@ -79,37 +81,36 @@ function heuristicPipeSplitRepair(prop: PropData): PropData {
     fragments.push(prop.type.replace(/\\$/, '').trim());
   }
 
+  const since = prop.since?.trim() || '';
+  const isSinceVersion = VERSION_RE.test(since);
+
   if (prop.default && prop.default.endsWith('\\')) {
     // Multiple fragments: type, default, and possibly since are all type parts
     fragments.push(prop.default.replace(/\\$/, '').trim());
-    if (prop.since && !/^\d+\.\d+(\.\d+)?$/.test(prop.since.trim())) {
-      // since is a type fragment too
-      fragments.push(prop.since.replace(/\\$/, '').trim());
+    if (since && !isSinceVersion) {
+      fragments.push(since.replace(/\\$/, '').trim());
       repaired.since = '';
     }
     repaired.default = '-';
-  } else if (prop.default && (prop.default || '').trim() !== '-') {
+  } else if (prop.default && prop.default.trim() !== '-') {
     // Default is not "-" and type ends with \ — default is likely a type fragment
-    fragments.push((prop.default || '').trim());
-    if (prop.since && /^\d+\.\d+(\.\d+)?$/.test(prop.since.trim())) {
-      // since is a version — default is lost
+    fragments.push(prop.default.trim());
+    if (!since) {
       repaired.default = '-';
-    } else if (prop.since && /^-?$|^true|false$/i.test(prop.since.trim()) || /^\d+\.?\d*$/.test(prop.since.trim())) {
-      // since looks like a default value
+    } else if (isSinceVersion) {
+      repaired.default = '-';
+    } else if (/^-?$/.test(since) || /^(true|false)$/i.test(since) || /^\d+\.?\d*$/.test(since)) {
       repaired.default = prop.since;
       repaired.since = '';
     } else {
-      // since is more type fragments
-      if (prop.since) {
-        fragments.push(prop.since.replace(/\\$/, '').trim());
-      }
+      fragments.push(since.replace(/\\$/, '').trim());
       repaired.default = '-';
       repaired.since = '';
     }
   } else {
     // Default is "-" — check if since is a type fragment
-    if (prop.since && !/^\d+\.\d+(\.\d+)?$/.test(prop.since.trim())) {
-      fragments.push(prop.since.replace(/\\$/, '').trim());
+    if (since && !isSinceVersion) {
+      fragments.push(since.replace(/\\$/, '').trim());
       repaired.since = '';
     }
   }
@@ -123,30 +124,39 @@ function heuristicPipeSplitRepair(prop: PropData): PropData {
   return repaired;
 }
 
+/** Count pipe-split props across both main and sub-component props. */
+function countPipeSplit(component: ComponentData): number {
+  let count = (component.props || []).filter(p => isPipeSplit(p)).length;
+  if (component.subComponentProps) {
+    for (const subProps of Object.values(component.subComponentProps)) {
+      count += (subProps as PropData[]).filter(p => isPipeSplit(p)).length;
+    }
+  }
+  return count;
+}
+
 /** Fix all props in a component, returning counts of changes. */
 function fixComponent(component: ComponentData): {
   escapeFixes: number;
-  pipeFixes: number;
   docReparsed: number;
   heuristicRepairs: number;
 } {
   let escapeFixes = 0;
-  let pipeFixes = 0;
   let docReparsed = 0;
   let heuristicRepairs = 0;
 
-  // Try to re-parse from doc for pipe-split corruption
   const reparsed = reparseFromDoc(component);
 
-  function fixProps(props: PropData[]): void {
+  function fixProps(props: PropData[], qualifiedPrefix?: string): void {
     for (let i = 0; i < props.length; i++) {
       const prop = props[i];
       let changed = false;
 
-      // Fix pipe-split corruption using doc re-parse when available
       if (isPipeSplit(prop)) {
-        if (reparsed && reparsed.has(prop.name)) {
-          const correct = reparsed.get(prop.name)!;
+        // Try qualified name first for sub-component props, then bare name
+        const lookupKey = qualifiedPrefix ? `${qualifiedPrefix}.${prop.name}` : prop.name;
+        const correct = reparsed?.get(lookupKey) || reparsed?.get(prop.name);
+        if (correct) {
           props[i] = {
             ...prop,
             type: correct.type,
@@ -154,17 +164,14 @@ function fixComponent(component: ComponentData): {
             since: correct.since || prop.since,
           };
           docReparsed++;
-          changed = true;
         } else {
-          // No doc re-parse available — fall back to heuristic repair
-          // which may lose default/since info but at least produces valid type syntax
           props[i] = heuristicPipeSplitRepair(prop);
           heuristicRepairs++;
-          changed = true;
         }
+        changed = true;
       }
 
-      // Fix escape remnants in all string fields (always safe to apply)
+      // Fix escape remnants in all string fields
       for (const field of ['type', 'default', 'description', 'descriptionZh'] as const) {
         const val = props[i][field];
         if (typeof val === 'string' && val.includes('\\')) {
@@ -177,7 +184,6 @@ function fixComponent(component: ComponentData): {
         }
       }
 
-      // Also fix since field
       if (typeof props[i].since === 'string' && props[i].since!.includes('\\')) {
         props[i].since = cleanEscapes(props[i].since!);
         if (!changed) escapeFixes++;
@@ -190,34 +196,12 @@ function fixComponent(component: ComponentData): {
   }
 
   if (component.subComponentProps) {
-    for (const key of Object.keys(component.subComponentProps)) {
-      fixProps(component.subComponentProps[key]);
+    for (const [key, subProps] of Object.entries(component.subComponentProps)) {
+      fixProps(subProps, `${component.name}.${key}`);
     }
   }
 
-  // Also fix escape remnants in sub-component props that have separate doc sections
-  // by re-parsing their sections from the doc
-  if (reparsed && component.subComponentProps) {
-    for (const [subKey, subProps] of Object.entries(component.subComponentProps)) {
-      // Sub-component props may use qualified names like "Button.Group"
-      for (let i = 0; i < subProps.length; i++) {
-        if (isPipeSplit(subProps[i])) {
-          if (reparsed.has(subProps[i].name)) {
-            const correct = reparsed.get(subProps[i].name)!;
-            subProps[i] = {
-              ...subProps[i],
-              type: correct.type,
-              default: correct.default,
-              since: correct.since || subProps[i].since,
-            };
-            docReparsed++;
-          }
-        }
-      }
-    }
-  }
-
-  return { escapeFixes, pipeFixes, docReparsed, heuristicRepairs };
+  return { escapeFixes, docReparsed, heuristicRepairs };
 }
 
 function main() {
@@ -230,6 +214,7 @@ function main() {
   let totalEscapeFixes = 0;
   let totalPipeSplitRemaining = 0;
   let totalDocReparsed = 0;
+  let totalHeuristicRepairs = 0;
 
   for (const file of files) {
     const filePath = path.join(DATA_DIR, file);
@@ -237,52 +222,46 @@ function main() {
     const store: MetadataStore = JSON.parse(raw);
 
     let fileEscapeFixes = 0;
-    let filePipeSplitRemaining = 0;
+    let filePipeSplitBefore = 0;
+    let filePipeSplitAfter = 0;
     let fileDocReparsed = 0;
-
-    // Count pipe-split props before fixing
-    let pipeSplitBefore = 0;
-    for (const component of store.components || []) {
-      pipeSplitBefore += (component.props || []).filter(p => isPipeSplit(p)).length;
-    }
+    let fileHeuristicRepairs = 0;
 
     for (const component of store.components || []) {
+      filePipeSplitBefore += countPipeSplit(component);
       const counts = fixComponent(component);
       fileEscapeFixes += counts.escapeFixes;
       fileDocReparsed += counts.docReparsed;
+      fileHeuristicRepairs += counts.heuristicRepairs;
     }
 
     // Count remaining pipe-split props after fixing
     for (const component of store.components || []) {
-      filePipeSplitRemaining += (component.props || []).filter(p => isPipeSplit(p)).length;
-      if (component.subComponentProps) {
-        for (const subProps of Object.values(component.subComponentProps)) {
-          filePipeSplitRemaining += (subProps as PropData[]).filter(p => isPipeSplit(p)).length;
-        }
-      }
+      filePipeSplitAfter += countPipeSplit(component);
     }
 
-    const pipeFixed = pipeSplitBefore - filePipeSplitRemaining;
+    const pipeFixed = filePipeSplitBefore - filePipeSplitAfter;
 
     if (fileEscapeFixes > 0 || pipeFixed > 0) {
       const newJson = JSON.stringify(store, null, 2) + '\n';
 
       if (shouldWrite) {
         fs.writeFileSync(filePath, newJson);
-        console.log(`${file}: ${pipeFixed} pipe-split fixed (doc reparse), ${fileEscapeFixes} escape fixes, ${filePipeSplitRemaining} pipe-split remaining`);
+        console.log(`${file}: ${pipeFixed} pipe-split fixed (${fileDocReparsed} doc, ${fileHeuristicRepairs} heuristic), ${fileEscapeFixes} escape fixes, ${filePipeSplitAfter} remaining`);
       } else {
-        console.log(`${file}: would fix ${pipeFixed} pipe-split (doc reparse), ${fileEscapeFixes} escape fixes, ${filePipeSplitRemaining} pipe-split remaining`);
+        console.log(`${file}: would fix ${pipeFixed} pipe-split (${fileDocReparsed} doc, ${fileHeuristicRepairs} heuristic), ${fileEscapeFixes} escape fixes, ${filePipeSplitAfter} remaining`);
       }
 
       totalEscapeFixes += fileEscapeFixes;
-      totalPipeSplitRemaining += filePipeSplitRemaining;
+      totalPipeSplitRemaining += filePipeSplitAfter;
       totalDocReparsed += fileDocReparsed;
+      totalHeuristicRepairs += fileHeuristicRepairs;
     } else {
       console.log(`${file}: clean`);
     }
   }
 
-  console.log(`\nTotal: ${totalDocReparsed} pipe-split fixed via doc reparse, ${totalEscapeFixes} escape fixes, ${totalPipeSplitRemaining} pipe-split remaining (need re-extraction from antd source)`);
+  console.log(`\nTotal: ${totalDocReparsed} doc-reparse + ${totalHeuristicRepairs} heuristic = ${totalDocReparsed + totalHeuristicRepairs} pipe-split fixes, ${totalEscapeFixes} escape fixes, ${totalPipeSplitRemaining} remaining`);
   if (!shouldWrite) {
     console.log('Run with --write to apply changes');
   }
