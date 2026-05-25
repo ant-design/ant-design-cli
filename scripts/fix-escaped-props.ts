@@ -24,7 +24,7 @@ import type { ComponentData, PropData, MetadataStore } from '../src/types.js';
 
 const DATA_DIR = path.join(import.meta.dirname, '..', 'data');
 
-const VERSION_RE = /^\d+\.\d+(\.\d+)?$/;
+const VERSION_RE = /^v?\d+\.\d+(\.\d+)?(-[\w.]+)?$/;
 
 /** Fix markdown escape remnants in a string value. */
 export function cleanEscapes(value: string): string {
@@ -99,7 +99,7 @@ function heuristicPipeSplitRepair(prop: PropData): PropData {
       repaired.default = '-';
     } else if (isSinceVersion) {
       repaired.default = '-';
-    } else if (/^-?$/.test(since) || /^(true|false)$/i.test(since) || /^\d+\.?\d*$/.test(since)) {
+    } else if (/^-?$/.test(since) || /^(true|false)$/i.test(since) || /^-?\d*\.?\d+$/.test(since)) {
       repaired.default = prop.since;
       repaired.since = '';
     } else {
