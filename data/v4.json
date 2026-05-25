@@ -9638,10 +9638,10 @@
         },
         {
           "name": "tabPosition",
-          "type": "`top` | `right` | `bottom` | `left`",
-          "default": "`top`",
+          "type": "`top` | `right` | `bottom` \\",
+          "default": "`left`",
           "description": "Position of tabs",
-          "since": "",
+          "since": "`top`",
           "descriptionZh": "页签位置，可选值有 `top` `right` `bottom` `left`"
         },
         {

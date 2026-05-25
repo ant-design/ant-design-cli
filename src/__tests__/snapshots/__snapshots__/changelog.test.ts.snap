@@ -19,7 +19,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
         },
         {
           "name": "variant",
-          "type": "\`outlined\` | \`dashed\` | \`solid\`"
+          "type": "\`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`"
         }
       ],
       "removed": [],
@@ -50,11 +50,11 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
       "changed": [
         {
           "name": "cellRender",
-          "change": "function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute'"
+          "change": "function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode"
         },
         {
           "name": "fullCellRender",
-          "change": "function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute'"
+          "change": "function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode"
         }
       ]
     },
@@ -129,7 +129,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
       "changed": [
         {
           "name": "mode",
-          "change": "\`('single' | 'gradient')[]\` → \`'single' | 'gradient' | ('single'"
+          "change": "\`('single' | 'gradient')[]\` → \`'single' | 'gradient' | ('single' | 'gradient')[]\`"
         }
       ]
     },
@@ -180,7 +180,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
         },
         {
           "name": "placement",
-          "type": "\`top\` | \`left\` | \`right\`"
+          "type": "\`top\` | \`left\` | \`right\` | \`bottom\`"
         }
       ],
       "removed": [],
@@ -193,7 +193,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
       "changed": [
         {
           "name": "scrollToFirstError",
-          "change": "boolean |  → boolean |  | { focus: boolean }"
+          "change": "boolean | → boolean | | { focus: boolean }"
         }
       ]
     },
@@ -213,24 +213,13 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
       "changed": []
     },
     {
-      "component": "Modal",
-      "added": [],
-      "removed": [],
-      "changed": [
-        {
-          "name": "closable",
-          "change": "boolean | { closeIcon?: React.ReactNode } → boolean | { closeIcon?: React.ReactNode; disabled?: boolean; }"
-        }
-      ]
-    },
-    {
       "component": "Pagination",
       "added": [],
       "removed": [],
       "changed": [
         {
           "name": "pageSizeOptions",
-          "change": "string[] | number[] | [\`10\`, \`20\`, \`50\`, \`100\`] → number[]"
+          "change": "string[] | number[] → number[]"
         },
         {
           "name": "showSizeChanger",
@@ -316,17 +305,6 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
       "changed": []
     },
     {
-      "component": "Timeline",
-      "added": [],
-      "removed": [],
-      "changed": [
-        {
-          "name": "mode",
-          "change": "\`left\` | \`alternate\` → \`left\` | \`alternate\` | \`right\`"
-        }
-      ]
-    },
-    {
       "component": "TimePicker",
       "added": [
         {
@@ -399,7 +377,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
         },
         {
           "name": "trigger",
-          "type": "\`hover\` | \`focus\` | \`click\`"
+          "type": "\`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array&lt;string>"
         },
         {
           "name": "open",
@@ -434,7 +412,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
       "changed": [
         {
           "name": "showUploadList",
-          "change": "boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean, showDownloadIcon?: boolean, showRemoveIcon?: boolean, previewIcon?: ReactNode → boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean"
+          "change": "boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean, showDownloadIcon?: boolean, showRemoveIcon?: boolean, previewIcon?: ReactNode | (file: UploadFile) => ReactNode, removeIcon?: ReactNode | (file: UploadFile) => ReactNode, downloadIcon?: ReactNode | (file: UploadFile) => ReactNode } → boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean | (file: UploadFile) => boolean, showDownloadIcon?: boolean | (file: UploadFile) => boolean, showRemoveIcon?: boolean | (file: UploadFile) => boolean, previewIcon?: ReactNode | (file: UploadFile) => ReactNode, removeIcon?: ReactNode | (file: UploadFile) => ReactNode, downloadIcon?: ReactNode | (file: UploadFile) => ReactNode }"
         }
       ]
     },
@@ -470,15 +448,15 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format markdown 1`] = `
 
   Button:
     + color: \`default\` | \`primary\` | \`danger\`
-    + variant: \`outlined\` | \`dashed\` | \`solid\`
+    + variant: \`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`
     ~ htmlType: string → \`submit\` | \`reset\` | \`button\`
 
   Calendar:
     - dateCellRender: function(date: Dayjs): ReactNode
     - monthCellRender: function(date: Dayjs): ReactNode
     - monthFullCellRender: function(date: Dayjs): ReactNode
-    ~ cellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute'
-    ~ fullCellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute'
+    ~ cellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode
+    ~ fullCellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode
 
   Cascader:
     + prefix: ReactNode
@@ -497,7 +475,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format markdown 1`] = `
 
   ColorPicker:
     + disabledFormat: boolean
-    ~ mode: \`('single' | 'gradient')[]\` → \`'single' | 'gradient' | ('single'
+    ~ mode: \`('single' | 'gradient')[]\` → \`'single' | 'gradient' | ('single' | 'gradient')[]\`
 
   ConfigProvider:
     + splitter: { className?: string, style?: React.CSSProperties }
@@ -511,20 +489,17 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format markdown 1`] = `
 
   FloatButton:
     + htmlType: \`submit\` | \`reset\` | \`button\`
-    + placement: \`top\` | \`left\` | \`right\`
+    + placement: \`top\` | \`left\` | \`right\` | \`bottom\`
 
   Form:
-    ~ scrollToFirstError: boolean |  → boolean |  | { focus: boolean }
+    ~ scrollToFirstError: boolean | → boolean | | { focus: boolean }
 
   Input:
     + bordered: boolean
     + onInput: (value: string[]) => void
 
-  Modal:
-    ~ closable: boolean | { closeIcon?: React.ReactNode } → boolean | { closeIcon?: React.ReactNode; disabled?: boolean; }
-
   Pagination:
-    ~ pageSizeOptions: string[] | number[] | [\`10\`, \`20\`, \`50\`, \`100\`] → number[]
+    ~ pageSizeOptions: string[] | number[] → number[]
     ~ showSizeChanger: boolean → boolean | [SelectProps](/components/select#api)
 
   Radio:
@@ -547,9 +522,6 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format markdown 1`] = `
   Tabs:
     + [DropdownProps](/components/dropdown#api): 
 
-  Timeline:
-    ~ mode: \`left\` | \`alternate\` → \`left\` | \`alternate\` | \`right\`
-
   TimePicker:
     + prefix: ReactNode
 
@@ -568,7 +540,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format markdown 1`] = `
     - overlayStyle: object
     - overlayInnerStyle: object
     - placement: string
-    - trigger: \`hover\` | \`focus\` | \`click\`
+    - trigger: \`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array&lt;string>
     - open: boolean
     - zIndex: number
     - onOpenChange: (open: boolean) => void
@@ -577,7 +549,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format markdown 1`] = `
     + prefix: ReactNode
 
   Upload:
-    ~ showUploadList: boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean, showDownloadIcon?: boolean, showRemoveIcon?: boolean, previewIcon?: ReactNode → boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean
+    ~ showUploadList: boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean, showDownloadIcon?: boolean, showRemoveIcon?: boolean, previewIcon?: ReactNode | (file: UploadFile) => ReactNode, removeIcon?: ReactNode | (file: UploadFile) => ReactNode, downloadIcon?: ReactNode | (file: UploadFile) => ReactNode } → boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean | (file: UploadFile) => boolean, showDownloadIcon?: boolean | (file: UploadFile) => boolean, showRemoveIcon?: boolean | (file: UploadFile) => boolean, previewIcon?: ReactNode | (file: UploadFile) => ReactNode, removeIcon?: ReactNode | (file: UploadFile) => ReactNode, downloadIcon?: ReactNode | (file: UploadFile) => ReactNode }
 
   Splitter:
     + layout: \`horizontal\` | \`vertical\`
@@ -591,15 +563,15 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format text 1`] = `
 
   Button:
     + color: \`default\` | \`primary\` | \`danger\`
-    + variant: \`outlined\` | \`dashed\` | \`solid\`
+    + variant: \`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`
     ~ htmlType: string → \`submit\` | \`reset\` | \`button\`
 
   Calendar:
     - dateCellRender: function(date: Dayjs): ReactNode
     - monthCellRender: function(date: Dayjs): ReactNode
     - monthFullCellRender: function(date: Dayjs): ReactNode
-    ~ cellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute'
-    ~ fullCellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute'
+    ~ cellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode
+    ~ fullCellRender: function(current: dayjs, today: dayjs, info: { originNode: React.ReactElement,today: DateType, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode → function(current: dayjs, info: { prefixCls: string, originNode: React.ReactElement, today: dayjs, range?: 'start' | 'end', type: PanelMode, locale?: Locale, subType?: 'hour' | 'minute' | 'second' | 'meridiem' }) => React.ReactNode
 
   Cascader:
     + prefix: ReactNode
@@ -618,7 +590,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format text 1`] = `
 
   ColorPicker:
     + disabledFormat: boolean
-    ~ mode: \`('single' | 'gradient')[]\` → \`'single' | 'gradient' | ('single'
+    ~ mode: \`('single' | 'gradient')[]\` → \`'single' | 'gradient' | ('single' | 'gradient')[]\`
 
   ConfigProvider:
     + splitter: { className?: string, style?: React.CSSProperties }
@@ -632,20 +604,17 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format text 1`] = `
 
   FloatButton:
     + htmlType: \`submit\` | \`reset\` | \`button\`
-    + placement: \`top\` | \`left\` | \`right\`
+    + placement: \`top\` | \`left\` | \`right\` | \`bottom\`
 
   Form:
-    ~ scrollToFirstError: boolean |  → boolean |  | { focus: boolean }
+    ~ scrollToFirstError: boolean | → boolean | | { focus: boolean }
 
   Input:
     + bordered: boolean
     + onInput: (value: string[]) => void
 
-  Modal:
-    ~ closable: boolean | { closeIcon?: React.ReactNode } → boolean | { closeIcon?: React.ReactNode; disabled?: boolean; }
-
   Pagination:
-    ~ pageSizeOptions: string[] | number[] | [\`10\`, \`20\`, \`50\`, \`100\`] → number[]
+    ~ pageSizeOptions: string[] | number[] → number[]
     ~ showSizeChanger: boolean → boolean | [SelectProps](/components/select#api)
 
   Radio:
@@ -668,9 +637,6 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format text 1`] = `
   Tabs:
     + [DropdownProps](/components/dropdown#api): 
 
-  Timeline:
-    ~ mode: \`left\` | \`alternate\` → \`left\` | \`alternate\` | \`right\`
-
   TimePicker:
     + prefix: ReactNode
 
@@ -689,7 +655,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format text 1`] = `
     - overlayStyle: object
     - overlayInnerStyle: object
     - placement: string
-    - trigger: \`hover\` | \`focus\` | \`click\`
+    - trigger: \`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array&lt;string>
     - open: boolean
     - zIndex: number
     - onOpenChange: (open: boolean) => void
@@ -698,7 +664,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format text 1`] = `
     + prefix: ReactNode
 
   Upload:
-    ~ showUploadList: boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean, showDownloadIcon?: boolean, showRemoveIcon?: boolean, previewIcon?: ReactNode → boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean
+    ~ showUploadList: boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean, showDownloadIcon?: boolean, showRemoveIcon?: boolean, previewIcon?: ReactNode | (file: UploadFile) => ReactNode, removeIcon?: ReactNode | (file: UploadFile) => ReactNode, downloadIcon?: ReactNode | (file: UploadFile) => ReactNode } → boolean | { extra?: ReactNode | (file: UploadFile) => ReactNode, showPreviewIcon?: boolean | (file: UploadFile) => boolean, showDownloadIcon?: boolean | (file: UploadFile) => boolean, showRemoveIcon?: boolean | (file: UploadFile) => boolean, previewIcon?: ReactNode | (file: UploadFile) => ReactNode, removeIcon?: ReactNode | (file: UploadFile) => ReactNode, downloadIcon?: ReactNode | (file: UploadFile) => ReactNode }
 
   Splitter:
     + layout: \`horizontal\` | \`vertical\`
