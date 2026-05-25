@@ -139,7 +139,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom close icon",
-          "since": "×",
           "descriptionZh": "自定义关闭图标，请使用 `closable.closeIcon` 替代"
         },
         {
@@ -154,7 +153,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom error icon in Alert icon",
-          "since": "×",
           "descriptionZh": "（仅支持全局配置）自定义错误图标"
         },
         {
@@ -169,7 +167,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom info icon in Alert icon",
-          "since": "×",
           "descriptionZh": "（仅支持全局配置）自定义信息图标"
         },
         {
@@ -225,7 +222,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom success icon in Alert icon",
-          "since": "×",
           "descriptionZh": "（仅支持全局配置）自定义成功图标"
         },
         {
@@ -247,7 +243,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom warning icon in Alert icon",
-          "since": "×",
           "descriptionZh": "（仅支持全局配置）自定义警告图标"
         }
       ],
@@ -459,7 +454,7 @@
           "type": "boolean | Omit<AffixProps, 'offsetTop' | 'target' | 'children'>",
           "default": "true",
           "description": "Fixed mode of Anchor",
-          "since": "object: 5.19.0",
+          "since": "5.19.0",
           "descriptionZh": "固定模式"
         },
         {
@@ -534,7 +529,7 @@
         },
         {
           "name": "items",
-          "type": "{ key, href, title, target, children }\\[] [see](#anchoritem)",
+          "type": "{ key, href, title, target, children }[] [see](#anchoritem)",
           "default": "-",
           "description": "Data configuration option content, support nesting through children",
           "since": "5.1.0",
@@ -691,7 +686,7 @@
           },
           {
             "name": "children",
-            "type": "[AnchorItem](#anchoritem)\\[]",
+            "type": "[AnchorItem](#anchoritem)[]",
             "default": "-",
             "description": "Nested Anchor Link, `Attention: This attribute does not support horizontal orientation`",
             "descriptionZh": "嵌套的 Anchor Link，`注意：水平方向该属性不支持`"
@@ -837,8 +832,8 @@
         },
         {
           "name": "children",
-          "type": "HTMLInputElement | HTMLTextAreaElement | React.ReactElement&lt;InputProps>",
-          "default": "&lt;Input />",
+          "type": "HTMLInputElement | HTMLTextAreaElement | React.ReactElement<InputProps>",
+          "default": "<Input />",
           "description": "Customize input element",
           "descriptionZh": "自定义输入框"
         },
@@ -975,7 +970,7 @@
         },
         {
           "name": "options",
-          "type": "{ label, value }\\[]",
+          "type": "{ label, value }[]",
           "default": "-",
           "description": "Select options. Will get better perf than jsx definition",
           "descriptionZh": "数据化配置选项内容，相比 jsx 定义会获得更好的渲染性能"
@@ -1292,7 +1287,7 @@
           "type": "string | ReactNode",
           "default": "-",
           "description": "The address of the image for an image avatar or image element",
-          "since": "ReactNode: 4.8.0",
+          "since": "4.8.0",
           "descriptionZh": "图片类头像的资源地址或者图片元素"
         },
         {
@@ -1481,7 +1476,7 @@
         },
         {
           "name": "offset",
-          "type": "\\[number, number]",
+          "type": "[number, number]",
           "default": "-",
           "description": "Set offset of the badge dot",
           "descriptionZh": "设置状态点的位置偏移"
@@ -1795,7 +1790,7 @@
         },
         {
           "name": "items",
-          "type": "[ItemType\\[\\]](#itemtype)",
+          "type": "[ItemType[]](#itemtype)",
           "default": "-",
           "description": "The routing stack information of router (>=5.3.0 recommended, use `Breadcrumb.Item` children for older versions)",
           "since": "5.3.0",
@@ -2093,7 +2088,7 @@
           "type": "boolean | { delay: number, icon: ReactNode }",
           "default": "false",
           "description": "Set the loading status of button",
-          "since": "icon: 5.23.0",
+          "since": "5.23.0",
           "descriptionZh": "设置按钮载入状态"
         },
         {
@@ -2405,7 +2400,7 @@
         },
         {
           "name": "validRange",
-          "type": "\\[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
+          "type": "[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
           "default": "-",
           "description": "To set valid range",
           "descriptionZh": "设置可以显示的日期"
@@ -2571,7 +2566,7 @@
       "props": [
         {
           "name": "actions",
-          "type": "Array&lt;ReactNode>",
+          "type": "Array<ReactNode>",
           "default": "-",
           "description": "The action list, shows at the bottom of the Card",
           "descriptionZh": "卡片操作组，位置在卡片底部"
@@ -2936,7 +2931,7 @@
           "type": "boolean | { dotDuration?: boolean }",
           "default": "false",
           "description": "Whether to scroll automatically, you can specify `autoplay={{ dotDuration: true }}` to display the progress bar",
-          "since": "dotDuration: 5.24.0",
+          "since": "5.24.0",
           "descriptionZh": "是否自动切换，如果为 object 可以指定 `dotDuration` 来展示指示点进度条"
         },
         {
@@ -3189,8 +3184,8 @@
         },
         {
           "name": "defaultValue",
-          "type": "string\\[] | number\\[]",
-          "default": "\\[]",
+          "type": "string[] | number[]",
+          "default": "[]",
           "description": "Initial selected value",
           "descriptionZh": "默认的选中项"
         },
@@ -3342,7 +3337,7 @@
         },
         {
           "name": "options",
-          "type": "[Option](#option)\\[]",
+          "type": "[Option](#option)[]",
           "default": "-",
           "description": "The data options of cascade",
           "descriptionZh": "可选项数据源"
@@ -3417,7 +3412,7 @@
         },
         {
           "name": "value",
-          "type": "string\\[] | number\\[]",
+          "type": "string[] | number[]",
           "default": "-",
           "description": "The selected value",
           "descriptionZh": "指定选中项"
@@ -3855,8 +3850,8 @@
         },
         {
           "name": "defaultValue",
-          "type": "(string | number)\\[]",
-          "default": "\\[]",
+          "type": "(string | number)[]",
+          "default": "[]",
           "description": "Default selected value",
           "descriptionZh": "默认选中的选项"
         },
@@ -3876,15 +3871,15 @@
         },
         {
           "name": "options",
-          "type": "string\\[] | number\\[] | Option\\[]",
-          "default": "\\[]",
+          "type": "string[] | number[] | Option[]",
+          "default": "[]",
           "description": "Specifies options",
           "descriptionZh": "指定可选项"
         },
         {
           "name": "value",
-          "type": "(string | number | boolean)\\[]",
-          "default": "\\[]",
+          "type": "(string | number | boolean)[]",
+          "default": "[]",
           "description": "Used for setting the currently selected value",
           "descriptionZh": "指定选中的选项"
         },
@@ -4047,7 +4042,7 @@
         },
         {
           "name": "activeKey",
-          "type": "string\\[] | string <br/> number\\[] | number",
+          "type": "string[] | string <br/> number[] | number",
           "default": "No default value. In [accordion mode](#collapse-demo-accordion), it's the key of the first panel",
           "description": "Key of the active panel",
           "descriptionZh": "当前激活 tab 面板的 key"
@@ -4076,7 +4071,7 @@
         },
         {
           "name": "defaultActiveKey",
-          "type": "string\\[] | string <br/> number\\[] | number",
+          "type": "string[] | string <br/> number[] | number",
           "default": "-",
           "description": "Key of the initial active panel",
           "descriptionZh": "初始化选中面板的 key"
@@ -5077,7 +5072,7 @@
           },
           {
             "name": "anchor",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [AnchorStyleConfig\\[\"classNames\"\\]](/components/anchor#semantic-dom), styles?: [AnchorStyleConfig\\[\"styles\"\\]](/components/anchor#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [AnchorStyleConfig[\"classNames\"]](/components/anchor#semantic-dom), styles?: [AnchorStyleConfig[\"styles\"]](/components/anchor#semantic-dom) }",
             "default": "-",
             "description": "Set Anchor common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5093,7 +5088,7 @@
           },
           {
             "name": "badge",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [BadgeProps\\[\"classNames\"\\]](/components/badge#semantic-dom), styles?: [BadgeProps\\[\"styles\"\\]](/components/badge#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [BadgeProps[\"classNames\"]](/components/badge#semantic-dom), styles?: [BadgeProps[\"styles\"]](/components/badge#semantic-dom) }",
             "default": "-",
             "description": "Set Badge common props",
             "since": "5.7.0",
@@ -5125,7 +5120,7 @@
           },
           {
             "name": "card",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CardProps\\[\"classNames\"\\]](/components/card#semantic-dom), styles?: [CardProps\\[\"styles\"\\]](/components/card#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CardProps[\"classNames\"]](/components/card#semantic-dom), styles?: [CardProps[\"styles\"]](/components/card#semantic-dom) }",
             "default": "-",
             "description": "Set Card common props",
             "since": "5.7.0, `classNames` and `styles`: 5.14.0",
@@ -5133,7 +5128,7 @@
           },
           {
             "name": "cardMeta",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CardMetaProps\\[\"classNames\"\\]](/components/card#semantic-dom), styles?: [CardMetaProps\\[\"styles\"\\]](/components/card#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CardMetaProps[\"classNames\"]](/components/card#semantic-dom), styles?: [CardMetaProps[\"styles\"]](/components/card#semantic-dom) }",
             "default": "-",
             "description": "Set Card.Meta common props",
             "since": "6.0.0",
@@ -5141,7 +5136,7 @@
           },
           {
             "name": "calendar",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CalendarConfig\\[\"classNames\"\\]](/components/calendar#semantic-dom), styles?: [CalendarConfig\\[\"styles\"\\]](/components/calendar#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CalendarConfig[\"classNames\"]](/components/calendar#semantic-dom), styles?: [CalendarConfig[\"styles\"]](/components/calendar#semantic-dom) }",
             "default": "-",
             "description": "Set Calendar common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5157,7 +5152,7 @@
           },
           {
             "name": "cascader",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CascaderConfig\\[\"classNames\"\\]](/components/cascader#semantic-dom), styles?: [CascaderConfig\\[\"styles\"\\]](/components/cascader#semantic-dom), expandIcon?: React.ReactNode, loadingIcon?: React.ReactNode, searchIcon?: React.ReactNode, clearIcon?: React.ReactNode, removeIcon?: React.ReactNode, suffixIcon?: React.ReactNode }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CascaderConfig[\"classNames\"]](/components/cascader#semantic-dom), styles?: [CascaderConfig[\"styles\"]](/components/cascader#semantic-dom), expandIcon?: React.ReactNode, loadingIcon?: React.ReactNode, searchIcon?: React.ReactNode, clearIcon?: React.ReactNode, removeIcon?: React.ReactNode, suffixIcon?: React.ReactNode }",
             "default": "-",
             "description": "Set Cascader common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0, `expandIcon`, `loadingIcon`, `searchIcon`, `clearIcon`, `removeIcon`, `suffixIcon`: 6.4.0",
@@ -5165,7 +5160,7 @@
           },
           {
             "name": "checkbox",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CheckboxConfig\\[\"classNames\"\\]](/components/checkbox#semantic-dom), styles?: [CheckboxConfig\\[\"styles\"\\]](/components/checkbox#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [CheckboxConfig[\"classNames\"]](/components/checkbox#semantic-dom), styles?: [CheckboxConfig[\"styles\"]](/components/checkbox#semantic-dom) }",
             "default": "-",
             "description": "Set Checkbox common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5173,7 +5168,7 @@
           },
           {
             "name": "collapse",
-            "type": "{ className?: string, style?: React.CSSProperties, expandIcon?: (props) => ReactNode, classNames?: [CollapseProps\\[\"classNames\"\\]](/components/collapse#semantic-dom), styles?: [CollapseProps\\[\"styles\"\\]](/components/collapse#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, expandIcon?: (props) => ReactNode, classNames?: [CollapseProps[\"classNames\"]](/components/collapse#semantic-dom), styles?: [CollapseProps[\"styles\"]](/components/collapse#semantic-dom) }",
             "default": "-",
             "description": "Set Collapse common props",
             "since": "5.7.0, `expandIcon`: 5.15.0, `classNames` and `styles`: 6.0.0",
@@ -5181,7 +5176,7 @@
           },
           {
             "name": "colorPicker",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [ColorPickerConfig\\[\"classNames\"\\]](/components/color-picker#semantic-dom), styles?: [ColorPickerConfig\\[\"styles\"\\]](/components/color-picker#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [ColorPickerConfig[\"classNames\"]](/components/color-picker#semantic-dom), styles?: [ColorPickerConfig[\"styles\"]](/components/color-picker#semantic-dom) }",
             "default": "-",
             "description": "Set ColorPicker common props",
             "since": "5.7.0",
@@ -5205,7 +5200,7 @@
           },
           {
             "name": "descriptions",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DescriptionsProps\\[\"classNames\"\\]](/components/descriptions#semantic-dom), styles?: [DescriptionsProps\\[\"styles\"\\]](/components/descriptions#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DescriptionsProps[\"classNames\"]](/components/descriptions#semantic-dom), styles?: [DescriptionsProps[\"styles\"]](/components/descriptions#semantic-dom) }",
             "default": "-",
             "description": "Set Descriptions common props",
             "since": "5.7.0, `classNames` and `styles`: 5.23.0",
@@ -5213,14 +5208,14 @@
           },
           {
             "name": "divider",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DividerProps\\[\"classNames\"\\]](/components/divider#semantic-dom), styles?: [DividerProps\\[\"styles\"\\]](/components/divider#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DividerProps[\"classNames\"]](/components/divider#semantic-dom), styles?: [DividerProps[\"styles\"]](/components/divider#semantic-dom) }",
             "default": "-",
             "description": "Set Divider common props",
             "descriptionZh": ""
           },
           {
             "name": "drawer",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DrawerProps\\[\"classNames\"\\]](/components/drawer#semantic-dom), styles?: [DrawerProps\\[\"styles\"\\]](/components/drawer#semantic-dom), closeIcon?: ReactNode, closable?: [DrawerProps\\[\"closable\"\\]](/components/drawer-cn#api), focusable?: [DrawerProps\\[\"focusable\"\\]](/components/drawer#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DrawerProps[\"classNames\"]](/components/drawer#semantic-dom), styles?: [DrawerProps[\"styles\"]](/components/drawer#semantic-dom), closeIcon?: ReactNode, closable?: [DrawerProps[\"closable\"]](/components/drawer-cn#api), focusable?: [DrawerProps[\"focusable\"]](/components/drawer#api) }",
             "default": "-",
             "description": "Set Drawer common props",
             "since": "5.7.0, `classNames` and `styles`: 5.10.0, `closeIcon`: 5.14.0, `focusable`: 6.4.0",
@@ -5228,14 +5223,14 @@
           },
           {
             "name": "dropdown",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DropdownConfig\\[\"classNames\"\\]](/components/dropdown#semantic-dom), styles?: [DropdownConfig\\[\"styles\"\\]](/components/dropdown#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [DropdownConfig[\"classNames\"]](/components/dropdown#semantic-dom), styles?: [DropdownConfig[\"styles\"]](/components/dropdown#semantic-dom) }",
             "default": "-",
             "description": "Set Dropdown common props",
             "descriptionZh": ""
           },
           {
             "name": "empty",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [EmptyProps\\[\"classNames\"\\]](/components/empty#api), styles?: [EmptyProps\\[\"styles\"\\]](/components/empty#api), image?: ReactNode }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [EmptyProps[\"classNames\"]](/components/empty#api), styles?: [EmptyProps[\"styles\"]](/components/empty#api), image?: ReactNode }",
             "default": "-",
             "description": "Set Empty common props",
             "since": "5.7.0, `classNames` and `styles`: 5.23.0, `image`: 5.27.0",
@@ -5251,21 +5246,21 @@
           },
           {
             "name": "floatButton",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [FloatButtonProps\\[\"classNames\"\\]](/components/float-button#semantic-dom), styles?: [FloatButtonProps\\[\"styles\"\\]](/components/float-button#semantic-dom), backTopIcon?: React.ReactNode }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [FloatButtonProps[\"classNames\"]](/components/float-button#semantic-dom), styles?: [FloatButtonProps[\"styles\"]](/components/float-button#semantic-dom), backTopIcon?: React.ReactNode }",
             "default": "-",
             "description": "Set FloatButton common props",
             "descriptionZh": ""
           },
           {
             "name": "floatButtonGroup",
-            "type": "{ closeIcon?: React.ReactNode, className?: string, style?: React.CSSProperties, classNames?: [FloatButtonProps\\[\"classNames\"\\]](/components/float-button#semantic-dom), styles?: [FloatButtonProps\\[\"styles\"\\]](/components/float-button#semantic-dom) }",
+            "type": "{ closeIcon?: React.ReactNode, className?: string, style?: React.CSSProperties, classNames?: [FloatButtonProps[\"classNames\"]](/components/float-button#semantic-dom), styles?: [FloatButtonProps[\"styles\"]](/components/float-button#semantic-dom) }",
             "default": "-",
             "description": "Set FloatButton.Group common props",
             "descriptionZh": ""
           },
           {
             "name": "form",
-            "type": "{ className?: string, style?: React.CSSProperties, validateMessages?: [ValidateMessages](/components/form/#validatemessages), requiredMark?: boolean | `optional`, scrollToFirstError?: boolean | [Options](https://github.com/stipsan/scroll-into-view-if-needed/tree/ece40bd9143f48caf4b99503425ecb16b0ad8249#options), classNames?:[FormConfig\\[\"classNames\"\\]](/components/form#semantic-dom), styles?: [FormConfig\\[\"styles\"\\]](/components/form#semantic-dom), tooltip?: [TooltipProps](/components/tooltip#api) & { icon?: ReactNode }, labelAlign?: `left` | `right` }",
+            "type": "{ className?: string, style?: React.CSSProperties, validateMessages?: [ValidateMessages](/components/form/#validatemessages), requiredMark?: boolean | `optional`, scrollToFirstError?: boolean | [Options](https://github.com/stipsan/scroll-into-view-if-needed/tree/ece40bd9143f48caf4b99503425ecb16b0ad8249#options), classNames?:[FormConfig[\"classNames\"]](/components/form#semantic-dom), styles?: [FormConfig[\"styles\"]](/components/form#semantic-dom), tooltip?: [TooltipProps](/components/tooltip#api) & { icon?: ReactNode }, labelAlign?: `left` | `right` }",
             "default": "-",
             "description": "Set Form common props",
             "since": "`requiredMark`: 4.8.0; `colon`: 4.18.0; `scrollToFirstError`: 5.2.0; `className` and `style`: 5.7.0; `tooltip`: 6.3.0; `labelAlign`: 6.4.0",
@@ -5273,7 +5268,7 @@
           },
           {
             "name": "image",
-            "type": "{ className?: string, style?: React.CSSProperties, preview?: { closeIcon?: React.ReactNode, mask?: boolean | { enabled?: boolean, blur?: boolean, closable?: boolean }, classNames?:[ImageConfig\\[\"classNames\"\\]](/components/image#semantic-dom), styles?: [ImageConfig\\[\"styles\"\\]](/components/image#semantic-dom) }, fallback?: string }",
+            "type": "{ className?: string, style?: React.CSSProperties, preview?: { closeIcon?: React.ReactNode, mask?: boolean | { enabled?: boolean, blur?: boolean, closable?: boolean }, classNames?:[ImageConfig[\"classNames\"]](/components/image#semantic-dom), styles?: [ImageConfig[\"styles\"]](/components/image#semantic-dom) }, fallback?: string }",
             "default": "-",
             "description": "Set Image common props",
             "since": "5.7.0, `closeIcon`: 5.14.0, `preview.mask.closable`: 6.4.0, `classNames` and `styles`: 6.0.0",
@@ -5289,21 +5284,21 @@
           },
           {
             "name": "inputNumber",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [InputNumberConfig\\[\"classNames\"\\]](/components/input-number#semantic-dom), styles?: [InputNumberConfig\\[\"styles\"\\]](/components/input-number#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [InputNumberConfig[\"classNames\"]](/components/input-number#semantic-dom), styles?: [InputNumberConfig[\"styles\"]](/components/input-number#semantic-dom) }",
             "default": "-",
             "description": "Set InputNumber common props",
             "descriptionZh": ""
           },
           {
             "name": "otp",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [OTPConfig\\[\"classNames\"\\]](/components/input#semantic-otp), styles?: [OTPConfig\\[\"styles\"\\]](/components/input#semantic-otp) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [OTPConfig[\"classNames\"]](/components/input#semantic-otp), styles?: [OTPConfig[\"styles\"]](/components/input#semantic-otp) }",
             "default": "-",
             "description": "Set OTP common props",
             "descriptionZh": ""
           },
           {
             "name": "inputPassword",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [InputPasswordConfig\\[\"classNames\"\\]](/components/input#semantic-password), styles?: [InputPasswordConfig\\[\"styles\"\\]](/components/input#semantic-password), iconRender?: [InputPasswordProps\\[\"iconRender\"\\]](/components/input/#inputpassword) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [InputPasswordConfig[\"classNames\"]](/components/input#semantic-password), styles?: [InputPasswordConfig[\"styles\"]](/components/input#semantic-password), iconRender?: [InputPasswordProps[\"iconRender\"]](/components/input/#inputpassword) }",
             "default": "-",
             "description": "Set Password common props",
             "since": "6.4.0",
@@ -5311,15 +5306,15 @@
           },
           {
             "name": "inputSearch",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [InputSearchConfig\\[\"classNames\"\\]](/components/input#semantic-search), styles?: [InputSearchConfig\\[\"styles\"\\]](/components/input#semantic-search), searchIcon?: React.ReactNode }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [InputSearchConfig[\"classNames\"]](/components/input#semantic-search), styles?: [InputSearchConfig[\"styles\"]](/components/input#semantic-search), searchIcon?: React.ReactNode }",
             "default": "-",
             "description": "Set Search common props",
-            "since": "searchIcon: 6.4.0",
+            "since": "6.4.0",
             "descriptionZh": ""
           },
           {
             "name": "textArea",
-            "type": "{ autoComplete?: string, className?: string, style?: React.CSSProperties,classNames?:[TextAreaConfig\\[\"classNames\"\\]](/components/input#semantic-textarea), styles?: [TextAreaConfig\\[\"styles\"\\]](/components/input#semantic-textarea), allowClear?: boolean | { clearIcon?: ReactNode } }",
+            "type": "{ autoComplete?: string, className?: string, style?: React.CSSProperties,classNames?:[TextAreaConfig[\"classNames\"]](/components/input#semantic-textarea), styles?: [TextAreaConfig[\"styles\"]](/components/input#semantic-textarea), allowClear?: boolean | { clearIcon?: ReactNode } }",
             "default": "-",
             "description": "Set TextArea common props",
             "since": "5.15.0",
@@ -5335,7 +5330,7 @@
           },
           {
             "name": "list",
-            "type": "{ className?: string, style?: React.CSSProperties, item?:{ classNames: [ListItemProps\\[\"classNames\"\\]](/components/list#listitem), styles: [ListItemProps\\[\"styles\"\\]](/components/list#listitem) } }",
+            "type": "{ className?: string, style?: React.CSSProperties, item?:{ classNames: [ListItemProps[\"classNames\"]](/components/list#listitem), styles: [ListItemProps[\"styles\"]](/components/list#listitem) } }",
             "default": "-",
             "description": "Set List common props",
             "since": "5.7.0",
@@ -5343,7 +5338,7 @@
           },
           {
             "name": "masonry",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [MasonryProps\\[\"classNames\"\\]](/components/masonry#semantic-dom), styles?: [MasonryProps\\[\"styles\"\\]](/components/masonry#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [MasonryProps[\"classNames\"]](/components/masonry#semantic-dom), styles?: [MasonryProps[\"styles\"]](/components/masonry#semantic-dom) }",
             "default": "-",
             "description": "Set Masonry common props",
             "descriptionZh": ""
@@ -5358,7 +5353,7 @@
           },
           {
             "name": "mentions",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[MentionsConfig\\[\"classNames\"\\]](/components/mentions#semantic-dom), styles?: [MentionsConfig\\[\"styles\"\\]](/components/mentions#semantic-dom), allowClear?: boolean | { clearIcon?: ReactNode, disabled?: boolean } }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[MentionsConfig[\"classNames\"]](/components/mentions#semantic-dom), styles?: [MentionsConfig[\"styles\"]](/components/mentions#semantic-dom), allowClear?: boolean | { clearIcon?: ReactNode, disabled?: boolean } }",
             "default": "-",
             "description": "Set Mentions common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0, `allowClear`: 6.4.0",
@@ -5374,7 +5369,7 @@
           },
           {
             "name": "modal",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [ModalProps\\[\"classNames\"\\]](/components/modal#semantic-dom), styles?: [ModalProps\\[\"styles\"\\]](/components/modal#semantic-dom), closeIcon?: React.ReactNode, focusable?: [ModalProps\\[\"focusable\"\\]](/components/modal#api), infoIcon?: React.ReactNode, successIcon?: React.ReactNode, errorIcon?: React.ReactNode, warningIcon?: React.ReactNode }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [ModalProps[\"classNames\"]](/components/modal#semantic-dom), styles?: [ModalProps[\"styles\"]](/components/modal#semantic-dom), closeIcon?: React.ReactNode, focusable?: [ModalProps[\"focusable\"]](/components/modal#api), infoIcon?: React.ReactNode, successIcon?: React.ReactNode, errorIcon?: React.ReactNode, warningIcon?: React.ReactNode }",
             "default": "-",
             "description": "Set Modal common props",
             "since": "5.7.0, `classNames` and `styles`: 5.10.0, `closeIcon`: 5.14.0, `focusable`: 6.4.0, `infoIcon`, `successIcon`, `errorIcon` and `warningIcon`: 6.4.0",
@@ -5382,7 +5377,7 @@
           },
           {
             "name": "notification",
-            "type": "{ className?: string, style?: React.CSSProperties, closeIcon?: React.ReactNode, classNames?: [NotificationConfig\\[\"classNames\"\\]](/components/notification#semantic-dom), styles?: [NotificationConfig\\[\"styles\"\\]](/components/notification#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, closeIcon?: React.ReactNode, classNames?: [NotificationConfig[\"classNames\"]](/components/notification#semantic-dom), styles?: [NotificationConfig[\"styles\"]](/components/notification#semantic-dom) }",
             "default": "-",
             "description": "Set Notification common props",
             "since": "5.7.0, `closeIcon`: 5.14.0, `classNames` and `styles`: 6.0.0",
@@ -5390,7 +5385,7 @@
           },
           {
             "name": "pagination",
-            "type": "{ showSizeChanger?: boolean, totalBoundaryShowSizeChanger?: number, className?: string, style?: React.CSSProperties,classNames?:[PaginationConfig\\[\"classNames\"\\]](/components/pagination#semantic-dom), styles?: [PaginationConfig\\[\"styles\"\\]](/components/pagination#semantic-dom) }",
+            "type": "{ showSizeChanger?: boolean, totalBoundaryShowSizeChanger?: number, className?: string, style?: React.CSSProperties,classNames?:[PaginationConfig[\"classNames\"]](/components/pagination#semantic-dom), styles?: [PaginationConfig[\"styles\"]](/components/pagination#semantic-dom) }",
             "default": "-",
             "description": "Set Pagination common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5398,14 +5393,14 @@
           },
           {
             "name": "progress",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [ProgressConfig\\[\"classNames\"\\]](/components/progress#semantic-dom), styles?: [ProgressConfig\\[\"styles\"\\]](/components/progress#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [ProgressConfig[\"classNames\"]](/components/progress#semantic-dom), styles?: [ProgressConfig[\"styles\"]](/components/progress#semantic-dom) }",
             "default": "-",
             "description": "Set Progress common props",
             "descriptionZh": ""
           },
           {
             "name": "radio",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [RadioConfig\\[\"classNames\"\\]](/components/radio#semantic-dom), styles?: [RadioConfig\\[\"styles\"\\]](/components/radio#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [RadioConfig[\"classNames\"]](/components/radio#semantic-dom), styles?: [RadioConfig[\"styles\"]](/components/radio#semantic-dom) }",
             "default": "-",
             "description": "Set Radio common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5421,7 +5416,7 @@
           },
           {
             "name": "result",
-            "type": "{ className?: string, style?: React.CSSProperties , classNames?: [ResultProps\\[\"classNames\"\\]](/components/result#semantic-dom), styles?: [ResultProps\\[\"styles\"\\]](/components/result#semantic-dom)}",
+            "type": "{ className?: string, style?: React.CSSProperties , classNames?: [ResultProps[\"classNames\"]](/components/result#semantic-dom), styles?: [ResultProps[\"styles\"]](/components/result#semantic-dom)}",
             "default": "-",
             "description": "Set Result common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5429,7 +5424,7 @@
           },
           {
             "name": "ribbon",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [RibbonProps\\[\"classNames\"\\]](/components/badge#semantic-dom), styles?: [RibbonProps\\[\"styles\"\\]](/components/badge#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [RibbonProps[\"classNames\"]](/components/badge#semantic-dom), styles?: [RibbonProps[\"styles\"]](/components/badge#semantic-dom) }",
             "default": "-",
             "description": "Set Ribbon common props",
             "since": "6.0.0",
@@ -5437,7 +5432,7 @@
           },
           {
             "name": "skeleton",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [SkeletonProps\\[\"classNames\"\\]](/components/skeleton#semantic-dom), styles?: [SkeletonProps\\[\"styles\"\\]](/components/skeleton#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [SkeletonProps[\"classNames\"]](/components/skeleton#semantic-dom), styles?: [SkeletonProps[\"styles\"]](/components/skeleton#semantic-dom) }",
             "default": "-",
             "description": "Set Skeleton common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5445,7 +5440,7 @@
           },
           {
             "name": "segmented",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [SegmentedProps\\[\"classNames\"\\]](/components/segmented#semantic-dom), styles?: [SegmentedProps\\[\"styles\"\\]](/components/segmented#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [SegmentedProps[\"classNames\"]](/components/segmented#semantic-dom), styles?: [SegmentedProps[\"styles\"]](/components/segmented#semantic-dom) }",
             "default": "-",
             "description": "Set Segmented common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5453,7 +5448,7 @@
           },
           {
             "name": "select",
-            "type": "{ className?: string, showSearch?: [SelectProps\\[\"showSearch\"\\]](/components/select#api), style?: React.CSSProperties, classNames?: [SelectConfig\\[\"classNames\"\\]](/components/select#semantic-dom), styles?: [SelectConfig\\[\"styles\"\\]](/components/select#semantic-dom), allowClear?: boolean | { clearIcon?: ReactNode }, clearIcon?: React.ReactNode, loadingIcon?: React.ReactNode, menuItemSelectedIcon?: React.ReactNode, removeIcon?: React.ReactNode, suffixIcon?: React.ReactNode }",
+            "type": "{ className?: string, showSearch?: [SelectProps[\"showSearch\"]](/components/select#api), style?: React.CSSProperties, classNames?: [SelectConfig[\"classNames\"]](/components/select#semantic-dom), styles?: [SelectConfig[\"styles\"]](/components/select#semantic-dom), allowClear?: boolean | { clearIcon?: ReactNode }, clearIcon?: React.ReactNode, loadingIcon?: React.ReactNode, menuItemSelectedIcon?: React.ReactNode, removeIcon?: React.ReactNode, suffixIcon?: React.ReactNode }",
             "default": "-",
             "description": "Set Select common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0, `allowClear`, `clearIcon`, `loadingIcon`, `menuItemSelectedIcon`, `removeIcon`, `suffixIcon`: 6.4.0",
@@ -5461,7 +5456,7 @@
           },
           {
             "name": "slider",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [SliderProps\\[\"classNames\"\\]](/components/slider#semantic-dom), styles?: [SliderProps\\[\"styles\"\\]](/components/slider#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [SliderProps[\"classNames\"]](/components/slider#semantic-dom), styles?: [SliderProps[\"styles\"]](/components/slider#semantic-dom) }",
             "default": "-",
             "description": "Set Slider common props",
             "since": "5.7.0, `classNames` and `styles`: 5.23.0",
@@ -5469,7 +5464,7 @@
           },
           {
             "name": "switch",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [SwitchStyleConfig\\[\"classNames\"\\]](/components/switch#semantic-dom), styles?: [SwitchStyleConfig\\[\"styles\"\\]](/components/switch#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [SwitchStyleConfig[\"classNames\"]](/components/switch#semantic-dom), styles?: [SwitchStyleConfig[\"styles\"]](/components/switch#semantic-dom) }",
             "default": "-",
             "description": "Set Switch common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5477,7 +5472,7 @@
           },
           {
             "name": "space",
-            "type": "{ size: `small` | `middle` | `large` | `number`, className?: string, style?: React.CSSProperties, classNames?: [SpaceProps\\[\"classNames\"\\]](/components/space#semantic-dom), styles?: [SpaceProps\\[\"styles\"\\]](/components/space#semantic-dom) }",
+            "type": "{ size: `small` | `middle` | `large` | `number`, className?: string, style?: React.CSSProperties, classNames?: [SpaceProps[\"classNames\"]](/components/space#semantic-dom), styles?: [SpaceProps[\"styles\"]](/components/space#semantic-dom) }",
             "default": "-",
             "description": "Set Space common props, ref [Space](/components/space)",
             "since": "5.6.0",
@@ -5485,7 +5480,7 @@
           },
           {
             "name": "splitter",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Splitter\\[\"classNames\"\\]](/components/splitter#semantic-dom), styles?: [Splitter\\[\"styles\"\\]](/components/splitter#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Splitter[\"classNames\"]](/components/splitter#semantic-dom), styles?: [Splitter[\"styles\"]](/components/splitter#semantic-dom) }",
             "default": "-",
             "description": "Set Splitter common props",
             "since": "5.21.0",
@@ -5493,7 +5488,7 @@
           },
           {
             "name": "spin",
-            "type": "{ className?: string, style?: React.CSSProperties, indicator?: React.ReactElement, classNames?:[SpinConfig\\[\"classNames\"\\]](/components/spin#semantic-dom), styles?: [SpinConfig\\[\"styles\"\\]](/components/spin#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, indicator?: React.ReactElement, classNames?:[SpinConfig[\"classNames\"]](/components/spin#semantic-dom), styles?: [SpinConfig[\"styles\"]](/components/spin#semantic-dom) }",
             "default": "-",
             "description": "Set Spin common props",
             "since": "5.7.0, `indicator`: 5.20.0, `classNames` and `styles`: 6.0.0",
@@ -5501,7 +5496,7 @@
           },
           {
             "name": "statistic",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [StatisticProps\\[\"classNames\"\\]](/components/statistic#semantic-dom), styles?: [StatisticProps\\[\"styles\"\\]](/components/statistic#semantic-dom)}",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [StatisticProps[\"classNames\"]](/components/statistic#semantic-dom), styles?: [StatisticProps[\"styles\"]](/components/statistic#semantic-dom)}",
             "default": "-",
             "description": "Set Statistic common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5509,14 +5504,14 @@
           },
           {
             "name": "steps",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[StepsConfig\\[\"classNames\"\\]](/components/steps#semantic-dom), styles?: [StepsConfig\\[\"styles\"\\]](/components/steps#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[StepsConfig[\"classNames\"]](/components/steps#semantic-dom), styles?: [StepsConfig[\"styles\"]](/components/steps#semantic-dom) }",
             "default": "-",
             "description": "Set Steps common props",
             "descriptionZh": ""
           },
           {
             "name": "table",
-            "type": "{ className?: string, style?: React.CSSProperties, expandable?: { expandIcon?: props => React.ReactNode }, rowKey?: [TableProps\\[\"rowKey\"\\]](/components/table#api), scroll?: [TableProps\\[\"scroll\"\\]](/components/table#api), classNames?: [TableProps\\[\"classNames\"\\]](/components/table#semantic-dom), styles?: [TableProps\\[\"styles\"\\]](/components/table#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, expandable?: { expandIcon?: props => React.ReactNode }, rowKey?: [TableProps[\"rowKey\"]](/components/table#api), scroll?: [TableProps[\"scroll\"]](/components/table#api), classNames?: [TableProps[\"classNames\"]](/components/table#semantic-dom), styles?: [TableProps[\"styles\"]](/components/table#semantic-dom) }",
             "default": "-",
             "description": "Set Table common props",
             "since": "`scroll`: 6.2.0",
@@ -5524,7 +5519,7 @@
           },
           {
             "name": "tabs",
-            "type": "{ className?: string, style?: React.CSSProperties, indicator?: { size?: GetIndicatorSize, align?: `start` | `center` | `end` }, moreIcon?: ReactNode, addIcon?: ReactNode, removeIcon?: ReactNode, classNames?: [TabsConfig\\[\"classNames\"\\]](/components/tabs#semantic-dom), styles?: [TabsConfig\\[\"styles\"\\]](/components/tabs#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, indicator?: { size?: GetIndicatorSize, align?: `start` | `center` | `end` }, moreIcon?: ReactNode, addIcon?: ReactNode, removeIcon?: ReactNode, classNames?: [TabsConfig[\"classNames\"]](/components/tabs#semantic-dom), styles?: [TabsConfig[\"styles\"]](/components/tabs#semantic-dom) }",
             "default": "-",
             "description": "Set Tabs common props",
             "since": "5.7.0, `moreIcon` and `addIcon`: 5.14.0, `removeIcon`: 5.15.0, `classNames` and `styles`: 6.0.0",
@@ -5532,7 +5527,7 @@
           },
           {
             "name": "tag",
-            "type": "{ className?: string, style?: React.CSSProperties, closeIcon?: React.ReactNode, classNames?: [TagProps\\[\"classNames\"\\]](/components/tag#semantic-dom), styles?: [TagProps\\[\"styles\"\\]](/components/tag#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, closeIcon?: React.ReactNode, classNames?: [TagProps[\"classNames\"]](/components/tag#semantic-dom), styles?: [TagProps[\"styles\"]](/components/tag#semantic-dom) }",
             "default": "-",
             "description": "Set Tag common props",
             "since": "5.7.0, `closeIcon`: 5.14.0, `classNames` and `styles`: 6.0.0",
@@ -5540,7 +5535,7 @@
           },
           {
             "name": "timeline",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TimelineConfig\\[\"classNames\"\\]](/components/timeline#semantic-dom), styles?: [TimelineConfig\\[\"styles\"\\]](/components/timeline#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TimelineConfig[\"classNames\"]](/components/timeline#semantic-dom), styles?: [TimelineConfig[\"styles\"]](/components/timeline#semantic-dom) }",
             "default": "-",
             "description": "Set Timeline common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5548,7 +5543,7 @@
           },
           {
             "name": "timePicker",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TimePickerConfig\\[\"classNames\"\\]](/components/time-picker#semantic-dom), styles?: [TimePickerConfig\\[\"styles\"\\]](/components/time-picker#semantic-dom), suffixIcon?: React.ReactNode, allowClear?: boolean | { clearIcon?: ReactNode }, clearIcon?: React.ReactNode }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TimePickerConfig[\"classNames\"]](/components/time-picker#semantic-dom), styles?: [TimePickerConfig[\"styles\"]](/components/time-picker#semantic-dom), suffixIcon?: React.ReactNode, allowClear?: boolean | { clearIcon?: ReactNode }, clearIcon?: React.ReactNode }",
             "default": "-",
             "description": "Set TimePicker common props",
             "since": "5.7.0, `suffixIcon`: 6.3.0, `allowClear`, `clearIcon`: 6.4.0",
@@ -5556,7 +5551,7 @@
           },
           {
             "name": "tour",
-            "type": "{ closeIcon?: React.ReactNode, className?: string, style?: React.CSSProperties, classNames?: [TourProps\\[\"classNames\"\\]](/components/tour#semantic-dom), styles?: [TourProps\\[\"styles\"\\]](/components/tour#semantic-dom) }",
+            "type": "{ closeIcon?: React.ReactNode, className?: string, style?: React.CSSProperties, classNames?: [TourProps[\"classNames\"]](/components/tour#semantic-dom), styles?: [TourProps[\"styles\"]](/components/tour#semantic-dom) }",
             "default": "-",
             "description": "Set Tour common props",
             "since": "5.14.0, `classNames`、`styles`、`className`、`style`: 6.0.0",
@@ -5564,14 +5559,14 @@
           },
           {
             "name": "tooltip",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Tooltip\\[\"classNames\"\\]](/components/tooltip#semantic-dom), styles?: [Tooltip\\[\"styles\"\\]](/components/tooltip#semantic-dom), arrow: boolean | { pointAtCenter: boolean }, unique?: boolean, trigger?: [Tooltip\\[\"trigger\"\\]](/components/tooltip#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Tooltip[\"classNames\"]](/components/tooltip#semantic-dom), styles?: [Tooltip[\"styles\"]](/components/tooltip#semantic-dom), arrow: boolean | { pointAtCenter: boolean }, unique?: boolean, trigger?: [Tooltip[\"trigger\"]](/components/tooltip#api) }",
             "default": "-",
             "description": "Set Tooltip common props",
             "descriptionZh": ""
           },
           {
             "name": "popover",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Popover\\[\"classNames\"\\]](/components/popover#semantic-dom), styles?: [Popover\\[\"styles\"\\]](/components/popover#semantic-dom), arrow: boolean | { pointAtCenter: boolean }, trigger?: [Popover\\[\"trigger\"\\]](/components/popover#api)}",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Popover[\"classNames\"]](/components/popover#semantic-dom), styles?: [Popover[\"styles\"]](/components/popover#semantic-dom), arrow: boolean | { pointAtCenter: boolean }, trigger?: [Popover[\"trigger\"]](/components/popover#api)}",
             "default": "-",
             "description": "Set Popover common props",
             "since": "5.23.0, `arrow`: 6.0.0, `trigger`: 6.1.0",
@@ -5579,7 +5574,7 @@
           },
           {
             "name": "popconfirm",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Popconfirm\\[\"classNames\"\\]](/components/popconfirm#semantic-dom), styles?: [Popconfirm\\[\"styles\"\\]](/components/popconfirm#semantic-dom), arrow: boolean | { pointAtCenter: boolean }, trigger?: [Popconfirm\\[\"trigger\"\\]](/components/popconfirm#api)}",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[Popconfirm[\"classNames\"]](/components/popconfirm#semantic-dom), styles?: [Popconfirm[\"styles\"]](/components/popconfirm#semantic-dom), arrow: boolean | { pointAtCenter: boolean }, trigger?: [Popconfirm[\"trigger\"]](/components/popconfirm#api)}",
             "default": "-",
             "description": "Set Popconfirm common props",
             "since": "5.23.0, `arrow`: 6.0.0, `trigger`: 6.1.0",
@@ -5587,21 +5582,21 @@
           },
           {
             "name": "qrcode",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[QRCode\\[\"classNames\"\\]](/components/qr-code#semantic-dom), styles?: [QRCode\\[\"styles\"\\]](/components/qr-code#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[QRCode[\"classNames\"]](/components/qr-code#semantic-dom), styles?: [QRCode[\"styles\"]](/components/qr-code#semantic-dom) }",
             "default": "-",
             "description": "Set QRCode common props",
             "descriptionZh": ""
           },
           {
             "name": "transfer",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TransferConfig\\[\"classNames\"\\]](/components/transfer#semantic-dom), styles?: [TransferConfig\\[\"styles\"\\]](/components/transfer#semantic-dom), selectionsIcon?: React.ReactNode }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TransferConfig[\"classNames\"]](/components/transfer#semantic-dom), styles?: [TransferConfig[\"styles\"]](/components/transfer#semantic-dom), selectionsIcon?: React.ReactNode }",
             "default": "-",
             "description": "Set Transfer common props",
             "descriptionZh": ""
           },
           {
             "name": "tree",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TreeConfig\\[\"classNames\"\\]](/components/tree#semantic-dom), styles?: [TreeConfig\\[\"styles\"\\]](/components/tree#semantic-dom) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TreeConfig[\"classNames\"]](/components/tree#semantic-dom), styles?: [TreeConfig[\"styles\"]](/components/tree#semantic-dom) }",
             "default": "-",
             "description": "Set Tree common props",
             "since": "5.7.0, `classNames` and `styles`: 6.0.0",
@@ -5609,7 +5604,7 @@
           },
           {
             "name": "treeSelect",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TreeSelectConfig\\[\"classNames\"\\]](/components/tree-select#semantic-dom), styles?: [TreeSelectConfig\\[\"styles\"\\]](/components/tree-select#semantic-dom), switcherIcon?: [TreeSelect\\[\"switcherIcon\"\\]](/components/tree-select#api)}",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?: [TreeSelectConfig[\"classNames\"]](/components/tree-select#semantic-dom), styles?: [TreeSelectConfig[\"styles\"]](/components/tree-select#semantic-dom), switcherIcon?: [TreeSelect[\"switcherIcon\"]](/components/tree-select#api)}",
             "default": "-",
             "description": "Set TreeSelect common props",
             "descriptionZh": ""
@@ -5624,7 +5619,7 @@
           },
           {
             "name": "upload",
-            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[UploadConfig\\[\"classNames\"\\]](/components/upload#semantic-dom), styles?: [UploadConfig\\[\"styles\"\\]](/components/upload#semantic-dom), customRequest?: [Upload\\[\"customRequest\"\\]](/components/upload#api), progress?: [ProgressProps](/components/progress#api), accept?: [Upload\\[\"accept\"\\]](/components/upload#api) }",
+            "type": "{ className?: string, style?: React.CSSProperties, classNames?:[UploadConfig[\"classNames\"]](/components/upload#semantic-dom), styles?: [UploadConfig[\"styles\"]](/components/upload#semantic-dom), customRequest?: [Upload[\"customRequest\"]](/components/upload#api), progress?: [ProgressProps](/components/progress#api), accept?: [Upload[\"accept\"]](/components/upload#api) }",
             "default": "-",
             "description": "Set Upload common props",
             "since": "5.7.0, `customRequest`: 5.27.0, `classNames` and `styles`: 6.0.0, `accept` and `progress`: 6.4.0",
@@ -5856,7 +5851,7 @@
         },
         {
           "name": "placeholder",
-          "type": "string | \\[string,string]",
+          "type": "string | [string,string]",
           "default": "-",
           "description": "The placeholder of date input",
           "descriptionZh": ""
@@ -5886,7 +5881,7 @@
         },
         {
           "name": "presets",
-          "type": "{ label: React.ReactNode, value: Dayjs | (() => Dayjs) }\\[]",
+          "type": "{ label: React.ReactNode, value: Dayjs | (() => Dayjs) }[]",
           "default": "-",
           "description": "The preset ranges for quick selection, Since `5.8.0`, preset value supports callback function.",
           "descriptionZh": ""
@@ -5964,7 +5959,6 @@
           "type": "ReactNode",
           "default": "-",
           "description": "(Only supports global configuration) Custom clear icon",
-          "since": "×",
           "descriptionZh": ""
         },
         {
@@ -6612,8 +6606,8 @@
         "DatePicker.RangePicker": [
           {
             "name": "allowEmpty",
-            "type": "\\[boolean, boolean]",
-            "default": "\\[false, false]",
+            "type": "[boolean, boolean]",
+            "default": "[false, false]",
             "description": "Allow start or end input leave empty",
             "descriptionZh": "允许起始项部分为空"
           },
@@ -6643,14 +6637,14 @@
           },
           {
             "name": "defaultValue",
-            "type": "\\[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
+            "type": "[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
             "default": "-",
             "description": "To set default date",
             "descriptionZh": "默认日期"
           },
           {
             "name": "disabled",
-            "type": "\\[boolean, boolean]",
+            "type": "[boolean, boolean]",
             "default": "-",
             "description": "If disable start or end",
             "descriptionZh": "禁用起始项"
@@ -6688,7 +6682,7 @@
           },
           {
             "name": "presets",
-            "type": "{ label: React.ReactNode, value: (Dayjs | (() => Dayjs))\\[] }\\[]",
+            "type": "{ label: React.ReactNode, value: (Dayjs | (() => Dayjs))[] }[]",
             "default": "-",
             "description": "The preset ranges for quick selection, Since `5.8.0`, preset value supports callback function.",
             "descriptionZh": "预设时间范围快捷选择，自 `5.8.0` 起 value 支持函数返回值"
@@ -6716,8 +6710,8 @@
           },
           {
             "name": "showTime.defaultValue",
-            "type": "[dayjs](https://day.js.org/)\\[]",
-            "default": "\\[dayjs(), dayjs()]",
+            "type": "[dayjs](https://day.js.org/)[]",
+            "default": "[dayjs(), dayjs()]",
             "description": "Use `showTime.defaultOpenValue` instead",
             "since": "5.27.3",
             "deprecated": true,
@@ -6725,28 +6719,28 @@
           },
           {
             "name": "showTime.defaultOpenValue",
-            "type": "[dayjs](https://day.js.org/)\\[]",
-            "default": "\\[dayjs(), dayjs()]",
+            "type": "[dayjs](https://day.js.org/)[]",
+            "default": "[dayjs(), dayjs()]",
             "description": "To set default time of selected date, [demo](#date-picker-demo-disabled-date)",
             "descriptionZh": "设置用户选择日期时默认的时分秒，[例子](#date-picker-demo-disabled-date)"
           },
           {
             "name": "value",
-            "type": "\\[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
+            "type": "[[dayjs](https://day.js.org/), [dayjs](https://day.js.org/)]",
             "default": "-",
             "description": "To set date",
             "descriptionZh": "日期"
           },
           {
             "name": "onCalendarChange",
-            "type": "function(dates: \\[dayjs, dayjs], dateStrings: \\[string, string], info: { range:`start`|`end` })",
+            "type": "function(dates: [dayjs, dayjs], dateStrings: [string, string], info: { range:`start`|`end` })",
             "default": "-",
             "description": "Callback function, can be executed when the start time or the end time of the range is changing. `info` argument is added in 4.4.0",
             "descriptionZh": "待选日期发生变化的回调。`info` 参数自 4.4.0 添加"
           },
           {
             "name": "onChange",
-            "type": "function(dates: \\[dayjs, dayjs] | null, dateStrings: \\[string, string] | null)",
+            "type": "function(dates: [dayjs, dayjs] | null, dateStrings: [string, string] | null)",
             "default": "-",
             "description": "Callback function, can be executed when the selected time is changing",
             "descriptionZh": "日期范围发生变化的回调"
@@ -7252,7 +7246,7 @@
           "type": "boolean | { closeIcon?: React.ReactNode; disabled?: boolean; placement?: 'start' | 'end' }",
           "default": "true",
           "description": "Whether to show a close button. The position can be configured with `placement`",
-          "since": "placement: 5.28.0",
+          "since": "5.28.0",
           "descriptionZh": "是否显示关闭按钮。可通过 `placement` 配置其位置"
         },
         {
@@ -7435,7 +7429,7 @@
           "type": "boolean | [ResizableConfig](#resizableconfig)",
           "default": "-",
           "description": "Enable resizable by dragging",
-          "since": "boolean: 6.1.0",
+          "since": "6.1.0",
           "descriptionZh": "是否启用拖拽改变尺寸"
         },
         {
@@ -7812,8 +7806,8 @@
         },
         {
           "name": "trigger",
-          "type": "Array&lt;`click`|`hover`|`contextMenu`>",
-          "default": "\\[`hover`]",
+          "type": "Array<`click`|`hover`|`contextMenu`>",
+          "default": "[`hover`]",
           "description": "The trigger mode which executes the dropdown action. Note that hover can't be used on touchscreens",
           "descriptionZh": "触发下拉的行为，移动端不支持 hover"
         },
@@ -8143,7 +8137,7 @@
           "type": "[flex-wrap](https://developer.mozilla.org/en-US/docs/Web/CSS/flex-wrap) | boolean",
           "default": "nowrap",
           "description": "Set whether the element is displayed in a single line or in multiple lines",
-          "since": "boolean: 5.17.0",
+          "since": "5.17.0",
           "descriptionZh": "设置元素单行显示还是多行显示"
         },
         {
@@ -8279,7 +8273,7 @@
           "type": "ReactNode | [TooltipProps](/components/tooltip#api)",
           "default": "-",
           "description": "The text shown in the tooltip",
-          "since": "TooltipProps: 5.25.0",
+          "since": "5.25.0",
           "descriptionZh": ""
         },
         {
@@ -8597,7 +8591,7 @@
         },
         {
           "name": "fields",
-          "type": "[FieldData](#fielddata)\\[]",
+          "type": "[FieldData](#fielddata)[]",
           "default": "-",
           "description": "Control of form fields through state management (such as redux). Not recommended for non-strong demand. View [example](#form-demo-global-state)",
           "descriptionZh": "通过状态管理（如 redux）控制表单字段，如非强需求不推荐使用。查看[示例](#form-demo-global-state)"
@@ -8681,7 +8675,7 @@
           "type": "boolean | [Options](https://github.com/stipsan/scroll-into-view-if-needed/tree/ece40bd9143f48caf4b99503425ecb16b0ad8249#options) | { focus: boolean }",
           "default": "false",
           "description": "Auto scroll to first failed field when submit",
-          "since": "focus: 5.24.0",
+          "since": "5.24.0",
           "descriptionZh": "提交失败自动滚动到第一个错误字段"
         },
         {
@@ -8715,7 +8709,7 @@
         },
         {
           "name": "validateTrigger",
-          "type": "string | string\\[]",
+          "type": "string | string[]",
           "default": "`onChange`",
           "description": "Config field validate trigger",
           "since": "4.3.0",
@@ -9190,7 +9184,7 @@
           },
           {
             "name": "dependencies",
-            "type": "[NamePath](#namepath)\\[]",
+            "type": "[NamePath](#namepath)[]",
             "default": "-",
             "description": "Set the dependency field. See [below](#dependencies)",
             "descriptionZh": "设置依赖字段，说明[见下](#dependencies)"
@@ -9204,7 +9198,7 @@
           },
           {
             "name": "getValueFromEvent",
-            "type": "(..args: any\\[]) => any",
+            "type": "(..args: any[]) => any",
             "default": "-",
             "description": "Specify how to get value from event or other onChange arguments",
             "descriptionZh": "设置如何将 event 的值转换成字段值"
@@ -9222,7 +9216,7 @@
             "type": "boolean | { icons: [FeedbackIcons](#feedbackicons) }",
             "default": "false",
             "description": "Used with `validateStatus`, this option specifies the validation status icon. Recommended to be used only with `Input`. Also, It can get feedback icons via icons prop.",
-            "since": "icons: 5.9.0",
+            "since": "5.9.0",
             "descriptionZh": "配合 `validateStatus` 属性使用，展示校验状态图标，建议只配合 Input 组件使用 此外，它还可以通过 Icons 属性获取反馈图标。"
           },
           {
@@ -9260,7 +9254,7 @@
             "type": "ReactNode",
             "default": "-",
             "description": "Label text. When there is no need for a label but it needs to be aligned with a colon, it can be set to null",
-            "since": "null: 5.22.0",
+            "since": "5.22.0",
             "descriptionZh": "`label` 标签的文本，当不需要 label 又需要与冒号对齐，可以设为 null"
           },
           {
@@ -9279,7 +9273,7 @@
           },
           {
             "name": "messageVariables",
-            "type": "Record&lt;string, string>",
+            "type": "Record<string, string>",
             "default": "-",
             "description": "The default validate field info, description [see below](#messagevariables)",
             "since": "4.7.0",
@@ -9323,7 +9317,7 @@
           },
           {
             "name": "rules",
-            "type": "[Rule](#rule)\\[]",
+            "type": "[Rule](#rule)[]",
             "default": "-",
             "description": "Rules for field validation. Click [here](#form-demo-basic) to see an example",
             "descriptionZh": "校验规则，设置字段的校验逻辑。点击[此处](#form-demo-basic)查看示例"
@@ -9375,7 +9369,7 @@
           },
           {
             "name": "validateTrigger",
-            "type": "string | string\\[]",
+            "type": "string | string[]",
             "default": "`onChange`",
             "description": "When to validate the value of children node",
             "descriptionZh": "设置字段校验的时机"
@@ -9406,14 +9400,14 @@
         "Form.List": [
           {
             "name": "children",
-            "type": "(fields: Field\\[], operation: { add, remove, move }, meta: { errors }) => React.ReactNode",
+            "type": "(fields: Field[], operation: { add, remove, move }, meta: { errors }) => React.ReactNode",
             "default": "-",
             "description": "Render function",
             "descriptionZh": "渲染函数"
           },
           {
             "name": "initialValue",
-            "type": "any\\[]",
+            "type": "any[]",
             "default": "-",
             "description": "Config sub default value. Form `initialValues` get higher priority when conflict",
             "since": "4.9.0",
@@ -9428,7 +9422,7 @@
           },
           {
             "name": "rules",
-            "type": "{ validator, message }\\[]",
+            "type": "{ validator, message }[]",
             "default": "-",
             "description": "Validate rules, only support customize validator. Should work with [ErrorList](#formerrorlist)",
             "since": "4.7.0",
@@ -9453,8 +9447,8 @@
           },
           {
             "name": "remove",
-            "type": "(index: number | number\\[]) => void",
-            "default": "number\\[]",
+            "type": "(index: number | number[]) => void",
+            "default": "-",
             "description": "remove form item",
             "since": "4.5.0",
             "descriptionZh": "删除表单项"
@@ -9463,7 +9457,7 @@
         "Form.ErrorList": [
           {
             "name": "errors",
-            "type": "ReactNode\\[]",
+            "type": "ReactNode[]",
             "default": "-",
             "description": "Error list",
             "descriptionZh": "错误列表"
@@ -9488,7 +9482,7 @@
         "Form.FormInstance": [
           {
             "name": "getFieldError",
-            "type": "(name: [NamePath](#namepath)) => string\\[]",
+            "type": "(name: [NamePath](#namepath)) => string[]",
             "default": "-",
             "description": "Get the error messages by the field name",
             "descriptionZh": ""
@@ -9503,7 +9497,7 @@
           },
           {
             "name": "getFieldsError",
-            "type": "(nameList?: [NamePath](#namepath)\\[]) => FieldError\\[]",
+            "type": "(nameList?: [NamePath](#namepath)[]) => FieldError[]",
             "default": "-",
             "description": "Get the error messages by the fields name. Return as an array",
             "descriptionZh": ""
@@ -9524,7 +9518,7 @@
           },
           {
             "name": "isFieldsTouched",
-            "type": "(nameList?: [NamePath](#namepath)\\[], allTouched?: boolean) => boolean",
+            "type": "(nameList?: [NamePath](#namepath)[], allTouched?: boolean) => boolean",
             "default": "-",
             "description": "Check if fields have been operated. Check if all fields is touched when `allTouched` is `true`",
             "descriptionZh": ""
@@ -9545,7 +9539,7 @@
           },
           {
             "name": "resetFields",
-            "type": "(fields?: [NamePath](#namepath)\\[]) => void",
+            "type": "(fields?: [NamePath](#namepath)[]) => void",
             "default": "-",
             "description": "Reset fields to `initialValues`",
             "descriptionZh": ""
@@ -9555,12 +9549,12 @@
             "type": "(name: [NamePath](#namepath), options: [ScrollOptions](https://github.com/stipsan/scroll-into-view-if-needed/tree/ece40bd9143f48caf4b99503425ecb16b0ad8249#options) | { focus: boolean }) => void",
             "default": "-",
             "description": "Scroll to field position",
-            "since": "focus: 5.24.0",
+            "since": "5.24.0",
             "descriptionZh": ""
           },
           {
             "name": "setFields",
-            "type": "(fields: [FieldData](#fielddata)\\[]) => void",
+            "type": "(fields: [FieldData](#fielddata)[]) => void",
             "default": "-",
             "description": "Set fields status",
             "descriptionZh": ""
@@ -9589,7 +9583,7 @@
           },
           {
             "name": "validateFields",
-            "type": "(nameList?: [NamePath](#namepath)\\[], config?: [ValidateConfig](#validatefields)) => Promise",
+            "type": "(nameList?: [NamePath](#namepath)[], config?: [ValidateConfig](#validatefields)) => Promise",
             "default": "-",
             "description": "Validate fields. Use `recursive` to validate all the field in the path",
             "descriptionZh": ""
@@ -9598,21 +9592,21 @@
         "Form.FieldData": [
           {
             "name": "errors",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Error messages",
             "descriptionZh": ""
           },
           {
             "name": "warnings",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Warning messages",
             "descriptionZh": ""
           },
           {
             "name": "name",
-            "type": "[NamePath](#namepath)\\[]",
+            "type": "[NamePath](#namepath)[]",
             "default": "-",
             "description": "Field name path",
             "descriptionZh": ""
@@ -9649,14 +9643,14 @@
           },
           {
             "name": "enum",
-            "type": "any\\[]",
+            "type": "any[]",
             "default": "-",
             "description": "Match enum value. You need to set `type` to `enum` to enable this",
             "descriptionZh": ""
           },
           {
             "name": "fields",
-            "type": "Record&lt;string, [rule](#rule)>",
+            "type": "Record<string, [rule](#rule)>",
             "default": "-",
             "description": "Validate rule for child elements, valid when `type` is `array` or `object`",
             "descriptionZh": ""
@@ -9719,7 +9713,7 @@
           },
           {
             "name": "validateTrigger",
-            "type": "string | string\\[]",
+            "type": "string | string[]",
             "default": "-",
             "description": "Set validate trigger event. Must be the sub set of `validateTrigger` in Form.Item",
             "descriptionZh": ""
@@ -9890,7 +9884,7 @@
             "type": "`top` | `middle` | `bottom` | `stretch` | `{[key in 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl']: 'top' | 'middle' | 'bottom' | 'stretch'}`",
             "default": "`top`",
             "description": "Vertical alignment",
-            "since": "object: 4.24.0",
+            "since": "4.24.0",
             "descriptionZh": "垂直对齐方式"
           },
           {
@@ -9898,7 +9892,7 @@
             "type": "number | string | object | array",
             "default": "0",
             "description": "Spacing between grids, could be a [string CSS units](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units) or a object like { xs: 8, sm: 16, md: 24}. Or you can use array to make horizontal and vertical spacing work at the same time `[horizontal, vertical]`",
-            "since": "string: 5.28.0",
+            "since": "5.28.0",
             "descriptionZh": "栅格间隔，可以写成[字符串CSS单位](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Values_and_Units)或支持响应式的对象写法来设置水平间隔 { xs: 8, sm: 16, md: 24}。或者使用数组形式同时设置 `[水平间距, 垂直间距]`"
           },
           {
@@ -9906,7 +9900,7 @@
             "type": "`start` | `end` | `center` | `space-around` | `space-between` | `space-evenly` | `{[key in 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl']: 'start' | 'end' | 'center' | 'space-around' | 'space-between' | 'space-evenly'}`",
             "default": "`start`",
             "description": "Horizontal arrangement",
-            "since": "object: 4.24.0",
+            "since": "4.24.0",
             "descriptionZh": "水平排列方式"
           },
           {
@@ -10104,7 +10098,7 @@
           },
           {
             "name": "twoToneColor",
-            "type": "string | \\[string, string]",
+            "type": "string | [string, string]",
             "default": "-",
             "description": "Only supports the two-tone icon. Specify the primary color, or primary and secondary colors",
             "descriptionZh": ""
@@ -10113,7 +10107,7 @@
         "Icon.Custom Icon": [
           {
             "name": "component",
-            "type": "ComponentType&lt;CustomIconComponentProps>",
+            "type": "ComponentType<CustomIconComponentProps>",
             "default": "-",
             "description": "The component used for the root node",
             "descriptionZh": ""
@@ -10143,14 +10137,14 @@
         "Icon.Custom Font Icon": [
           {
             "name": "extraCommonProps",
-            "type": "{ \\[key: string]: any }",
+            "type": "{ [key: string]: any }",
             "default": "{}",
             "description": "Define extra properties to the component",
             "descriptionZh": ""
           },
           {
             "name": "scriptUrl",
-            "type": "string | string\\[]",
+            "type": "string | string[]",
             "default": "-",
             "description": "The URL generated by [iconfont.cn](https://iconfont.cn/) project. Support `string[]` after `@ant-design/icons@4.1.0`",
             "descriptionZh": ""
@@ -10827,7 +10821,7 @@
           "type": "boolean | { clearIcon: ReactNode, disabled?: boolean }",
           "default": "-",
           "description": "If allow to remove input content with clear icon",
-          "since": "disabled: 6.4.0",
+          "since": "6.4.0",
           "descriptionZh": "可以点击清除图标删除内容"
         },
         {
@@ -11217,7 +11211,7 @@
           {
             "name": "iconRender",
             "type": "(visible) => ReactNode",
-            "default": "(visible) => (visible ? &lt;EyeOutlined /> : &lt;EyeInvisibleOutlined />)",
+            "default": "(visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)",
             "description": "Custom toggle button",
             "since": "4.3.0",
             "descriptionZh": "自定义切换按钮"
@@ -11943,7 +11937,7 @@
             "type": "`xs` | `sm` | `md` | `lg` | `xl` | `xxl` | `xxxl`",
             "default": "-",
             "description": "[Breakpoints](/components/grid/#col) of the responsive layout",
-            "since": "xxxl: 6.3.0",
+            "since": "6.3.0",
             "descriptionZh": "触发响应式布局的[断点](/components/grid-cn#col)"
           },
           {
@@ -12061,7 +12055,7 @@
         },
         {
           "name": "dataSource",
-          "type": "any\\[]",
+          "type": "any[]",
           "default": "-",
           "description": "DataSource array for list",
           "descriptionZh": "列表数据源"
@@ -12365,7 +12359,7 @@
         "List.Item": [
           {
             "name": "actions",
-            "type": "Array&lt;ReactNode>",
+            "type": "Array<ReactNode>",
             "default": "-",
             "description": "The actions content of list item. If `itemLayout` is `vertical`, shows the content on bottom, otherwise shows content on the far right",
             "descriptionZh": "列表操作组，根据 `itemLayout` 的不同，位置在卡片底部或者最右侧"
@@ -12453,7 +12447,7 @@
         },
         {
           "name": "gutter",
-          "type": "[Gap](#gap) | \\[[Gap](#gap), [Gap](#gap)\\]",
+          "type": "[Gap](#gap) | [[Gap](#gap), [Gap](#gap)]",
           "default": "`0`",
           "description": "Spacing, can be a fixed value, responsive configuration, or a configuration for horizontal and vertical spacing",
           "descriptionZh": "间距，可以是固定值、响应式配置或水平垂直间距配置"
@@ -12652,7 +12646,7 @@
         },
         {
           "name": "prefix",
-          "type": "string | string\\[]",
+          "type": "string | string[]",
           "default": "`@`",
           "description": "Set trigger prefix keyword",
           "descriptionZh": ""
@@ -12762,7 +12756,7 @@
         {
           "name": "options",
           "type": "[Options](#option)",
-          "default": "\\[]",
+          "default": "[]",
           "description": "Option Configuration",
           "since": "5.1.0",
           "descriptionZh": ""
@@ -12970,14 +12964,14 @@
         },
         {
           "name": "defaultOpenKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Array with the keys of default opened sub menus",
           "descriptionZh": "初始展开的 SubMenu 菜单项 key 数组"
         },
         {
           "name": "defaultSelectedKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Array with the keys of default selected menu items",
           "descriptionZh": "初始选中的菜单项 key 数组"
@@ -13013,7 +13007,7 @@
         },
         {
           "name": "items",
-          "type": "[ItemType\\[\\]](#itemtype)",
+          "type": "[ItemType[]](#itemtype)",
           "default": "-",
           "description": "Menu item content",
           "since": "4.20.0",
@@ -13035,7 +13029,7 @@
         },
         {
           "name": "openKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Array with the keys of currently opened sub-menus",
           "descriptionZh": "当前展开的 SubMenu 菜单项 key 数组"
@@ -13056,7 +13050,7 @@
         },
         {
           "name": "selectedKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Array with the keys of currently selected menu items",
           "descriptionZh": "当前选中的菜单项 key 数组"
@@ -13127,7 +13121,7 @@
         },
         {
           "name": "onOpenChange",
-          "type": "function(openKeys: string\\[])",
+          "type": "function(openKeys: string[])",
           "default": "-",
           "description": "Called when sub-menus are opened or closed",
           "descriptionZh": "SubMenu 展开/关闭的回调"
@@ -13338,7 +13332,7 @@
           },
           {
             "name": "children",
-            "type": "[ItemType\\[\\]](#itemtype)",
+            "type": "[ItemType[]](#itemtype)",
             "default": "-",
             "description": "Sub-menus or sub-menu items",
             "descriptionZh": "分组的菜单项"
@@ -13380,7 +13374,7 @@
           },
           {
             "name": "popupOffset",
-            "type": "\\[number, number]",
+            "type": "[number, number]",
             "default": "-",
             "description": "Sub-menu offset, not working when `mode=\"inline\"`",
             "descriptionZh": "子菜单偏移量，`mode=\"inline\"` 时无效"
@@ -13408,7 +13402,7 @@
           },
           {
             "name": "children",
-            "type": "[MenuItemType\\[\\]](#menuitemtype)",
+            "type": "[MenuItemType[]](#menuitemtype)",
             "default": "-",
             "description": "Sub-menu items",
             "descriptionZh": "分组的菜单项"
@@ -13782,7 +13776,7 @@
         {
           "name": "closeIcon",
           "type": "ReactNode",
-          "default": "&lt;CloseOutlined />",
+          "default": "<CloseOutlined />",
           "description": "Custom close icon. 5.7.0: close button will be hidden when setting to `null` or `false`",
           "descriptionZh": "自定义关闭图标。5.7.0：设置为 `null` 或 `false` 时隐藏关闭按钮"
         },
@@ -13823,7 +13817,7 @@
           "type": "ReactNode | (originNode: ReactNode, extra: { OkBtn: React.FC, CancelBtn: React.FC }) => ReactNode",
           "default": "(OK and Cancel buttons)",
           "description": "Footer content, set as `footer={null}` when you don't need default buttons",
-          "since": "renderFunction: 5.9.0",
+          "since": "5.9.0",
           "descriptionZh": "底部内容，当不需要默认底部按钮时，可以设为 `footer={null}`"
         },
         {
@@ -13941,7 +13935,7 @@
           "type": "string | number | [Breakpoint](/components/grid-cn#col)",
           "default": "520",
           "description": "Width of the modal dialog",
-          "since": "Breakpoint: 5.23.0",
+          "since": "5.23.0",
           "descriptionZh": "宽度"
         },
         {
@@ -14266,7 +14260,7 @@
             "type": "ReactNode | (originNode: ReactNode, extra: { OkBtn: React.FC, CancelBtn: React.FC }) => ReactNode",
             "default": "-",
             "description": "Footer content, set as `footer: null` when you don't need default buttons",
-            "since": "renderFunction: 5.9.0",
+            "since": "5.9.0",
             "descriptionZh": "底部内容，当不需要默认底部按钮时，可以设为 `footer: null`"
           },
           {
@@ -14279,7 +14273,7 @@
           {
             "name": "icon",
             "type": "ReactNode",
-            "default": "&lt;ExclamationCircleFilled />",
+            "default": "<ExclamationCircleFilled />",
             "description": "Custom icon",
             "descriptionZh": "自定义图标"
           },
@@ -15000,8 +14994,8 @@
         },
         {
           "name": "pageSizeOptions",
-          "type": "number\\[]",
-          "default": "\\[`10`, `20`, `50`, `100`]",
+          "type": "number[]",
+          "default": "[`10`, `20`, `50`, `100`]",
           "description": "Specify the sizeChanger options",
           "descriptionZh": "指定每页可以显示多少条"
         },
@@ -15031,7 +15025,7 @@
           "type": "boolean | [SelectProps](/components/select#api)",
           "default": "-",
           "description": "Determine whether to show `pageSize` select",
-          "since": "SelectProps: 5.21.0",
+          "since": "5.21.0",
           "descriptionZh": "是否展示 `pageSize` 切换器"
         },
         {
@@ -15245,7 +15239,7 @@
         {
           "name": "icon",
           "type": "ReactNode",
-          "default": "&lt;ExclamationCircleFilled />",
+          "default": "<ExclamationCircleFilled />",
           "description": "Customize icon of confirmation",
           "descriptionZh": "自定义弹出气泡 Icon 图标"
         },
@@ -15667,7 +15661,7 @@
         },
         {
           "name": "size",
-          "type": "number | \\[number | string, number] | { width: number, height: number } | \"small\" | \"medium\"",
+          "type": "number | [number | string, number] | { width: number, height: number } | \"small\" | \"medium\"",
           "default": "\"medium\"",
           "description": "Progress size",
           "since": "5.3.0, Object: 5.18.0",
@@ -16050,7 +16044,7 @@
           "type": "`active | expired | loading | scanned`",
           "default": "`active`",
           "description": "QRCode status",
-          "since": "scanned: 5.13.0",
+          "since": "5.13.0",
           "descriptionZh": "二维码状态"
         },
         {
@@ -16412,7 +16406,7 @@
           },
           {
             "name": "options",
-            "type": "string\\[] | number\\[] | Array&lt;[CheckboxOptionType](#checkboxoptiontype)>",
+            "type": "string[] | number[] | Array<[CheckboxOptionType](#checkboxoptiontype)>",
             "default": "-",
             "description": "Set children optional",
             "descriptionZh": "以配置形式设置子元素"
@@ -16574,9 +16568,9 @@
         {
           "name": "character",
           "type": "ReactNode | (RateProps) => ReactNode",
-          "default": "&lt;StarFilled />",
+          "default": "<StarFilled />",
           "description": "The custom character of rate",
-          "since": "function(): 4.4.0",
+          "since": "4.4.0",
           "descriptionZh": "自定义字符"
         },
         {
@@ -16631,7 +16625,7 @@
         },
         {
           "name": "tooltips",
-          "type": "[TooltipProps](/components/tooltip#api)[] | string\\[]",
+          "type": "[TooltipProps](/components/tooltip#api)[] | string[]",
           "default": "-",
           "description": "Customize tooltip by each character",
           "descriptionZh": "自定义每项的提示信息"
@@ -16982,7 +16976,7 @@
         },
         {
           "name": "options",
-          "type": "string\\[] | number\\[] | SegmentedItemType\\[]",
+          "type": "string[] | number[] | SegmentedItemType[]",
           "default": "[]",
           "description": "Set children optional",
           "descriptionZh": ""
@@ -17275,7 +17269,7 @@
         },
         {
           "name": "defaultValue",
-          "type": "string | string\\[] | <br />number | number\\[] | <br />LabeledValue | LabeledValue\\[]",
+          "type": "string | string[] | <br />number | number[] | <br />LabeledValue | LabeledValue[]",
           "default": "-",
           "description": "Initial selected option",
           "descriptionZh": "指定默认选中的条目"
@@ -17420,7 +17414,7 @@
           "type": "number | `responsive`",
           "default": "-",
           "description": "Max tag count to show. `responsive` will cost render performance",
-          "since": "responsive: 4.10",
+          "since": "4.10",
           "descriptionZh": "最多显示多少个 tag，响应式模式会对性能产生损耗"
         },
         {
@@ -17482,14 +17476,14 @@
         },
         {
           "name": "options",
-          "type": "{ label, value }\\[]",
+          "type": "{ label, value }[]",
           "default": "-",
           "description": "Select options. Will get better perf than jsx definition",
           "descriptionZh": "数据化配置选项内容，相比 jsx 定义会获得更好的渲染性能"
         },
         {
           "name": "optionRender",
-          "type": "(option: FlattenOptionData\\<BaseOptionType\\> , info: { index: number }) => React.ReactNode",
+          "type": "(option: FlattenOptionData<BaseOptionType> , info: { index: number }) => React.ReactNode",
           "default": "-",
           "description": "Customize the rendering dropdown options",
           "since": "5.11.0",
@@ -17594,14 +17588,14 @@
         },
         {
           "name": "tokenSeparators",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Separator used to tokenize, only applies when `mode=\"tags\"`",
           "descriptionZh": "自动分词的分隔符，仅在 `mode=\"tags\"` 时生效"
         },
         {
           "name": "value",
-          "type": "string | string\\[] | <br />number | number\\[] | <br />LabeledValue | LabeledValue\\[]",
+          "type": "string | string[] | <br />number | number[] | <br />LabeledValue | LabeledValue[]",
           "default": "-",
           "description": "Current selected option (considered as a immutable array)",
           "descriptionZh": "指定当前选中的条目，多选时为一个数组。（value 数组引用未变化时，Select 不会更新）"
@@ -17638,7 +17632,7 @@
         },
         {
           "name": "onChange",
-          "type": "function(value, option:Option | Array&lt;Option>)",
+          "type": "function(value, option:Option | Array<Option>)",
           "default": "-",
           "description": "Called when select an option or input value change",
           "descriptionZh": "选中 option，或 input 的 value 变化时，调用此函数"
@@ -18155,7 +18149,7 @@
         },
         {
           "name": "width",
-          "type": "number | string | Array&lt;number | string>",
+          "type": "number | string | Array<number | string>",
           "default": "-",
           "description": "Set the width of paragraph. When width is an Array, it can set the width of each row. Otherwise only set the last row width",
           "descriptionZh": "设置段落占位图的宽度，若为数组时则为对应的每行宽度，反之则是最后一行的宽度"
@@ -18351,10 +18345,10 @@
         },
         {
           "name": "defaultValue",
-          "type": "number | \\[number, number]",
-          "default": "0 | \\[0, 0]",
-          "description": "The default value of the slider. When `range` is false, use number, otherwise, use \\[number, number]",
-          "descriptionZh": "设置初始取值。当 `range` 为 false 时，使用 number，否则用 \\[number, number]"
+          "type": "number | [number, number]",
+          "default": "0 | [0, 0]",
+          "description": "The default value of the slider. When `range` is false, use number, otherwise, use [number, number]",
+          "descriptionZh": "设置初始取值。当 `range` 为 false 时，使用 number，否则用 [number, number]"
         },
         {
           "name": "disabled",
@@ -18389,8 +18383,8 @@
           "name": "marks",
           "type": "object",
           "default": "{ number: ReactNode } | { number: { style: CSSProperties, label: ReactNode } }",
-          "description": "Tick marks of Slider. The type of key must be `number`, and must be in closed interval \\[min, max]. Each mark can declare its own style",
-          "descriptionZh": "刻度标记，key 的类型必须为 `number` 且取值在闭区间 \\[min, max] 内，每个标签可以单独设置样式"
+          "description": "Tick marks of Slider. The type of key must be `number`, and must be in closed interval [min, max]. Each mark can declare its own style",
+          "descriptionZh": "刻度标记，key 的类型必须为 `number` 且取值在闭区间 [min, max] 内，每个标签可以单独设置样式"
         },
         {
           "name": "max",
@@ -18451,10 +18445,10 @@
         },
         {
           "name": "value",
-          "type": "number | \\[number, number]",
+          "type": "number | [number, number]",
           "default": "-",
-          "description": "The value of slider. When `range` is false, use number, otherwise, use \\[number, number]",
-          "descriptionZh": "设置当前取值。当 `range` 为 false 时，使用 number，否则用 \\[number, number]"
+          "description": "The value of slider. When `range` is false, use number, otherwise, use [number, number]",
+          "descriptionZh": "设置当前取值。当 `range` 为 false 时，使用 number，否则用 [number, number]"
         },
         {
           "name": "vertical",
@@ -18787,7 +18781,7 @@
         },
         {
           "name": "size",
-          "type": "[Size](#size) | [Size\\[\\]](#size)",
+          "type": "[Size](#size) | [Size[]](#size)",
           "default": "`small`",
           "description": "The space size",
           "since": "4.1.0 | Array: 4.9.0",
@@ -19433,7 +19427,7 @@
             "type": "`boolean | { start?: boolean; end?: boolean; showCollapsibleIcon?: boolean | 'auto' }`",
             "default": "`false`",
             "description": "Quick folding",
-            "since": "showCollapsibleIcon: 5.27.0",
+            "since": "5.27.0",
             "descriptionZh": "快速折叠"
           },
           {
@@ -20384,7 +20378,7 @@
         },
         {
           "name": "columns",
-          "type": "[ColumnsType](#column)\\[]",
+          "type": "[ColumnsType](#column)[]",
           "default": "-",
           "description": "Columns of table",
           "descriptionZh": "表格列的配置描述，具体项见下表"
@@ -20398,7 +20392,7 @@
         },
         {
           "name": "dataSource",
-          "type": "object\\[]",
+          "type": "object[]",
           "default": "-",
           "description": "Data record array to be displayed",
           "descriptionZh": "数据数组"
@@ -20506,7 +20500,7 @@
         {
           "name": "sortDirections",
           "type": "Array",
-          "default": "\\[`ascend`, `descend`]",
+          "default": "[`ascend`, `descend`]",
           "description": "Supported sort way, could be `ascend`, `descend`",
           "descriptionZh": "支持的排序方式，取值为 `ascend` `descend`"
         },
@@ -20556,7 +20550,7 @@
         },
         {
           "name": "onChange",
-          "type": "function(pagination, filters, sorter, extra: { currentDataSource: \\[], action: `paginate` | `sort` | `filter` })",
+          "type": "function(pagination, filters, sorter, extra: { currentDataSource: [], action: `paginate` | `sort` | `filter` })",
           "default": "-",
           "description": "Callback executed when pagination, filters or sorter is changed",
           "descriptionZh": "分页、排序、筛选变化时触发"
@@ -21012,14 +21006,14 @@
           },
           {
             "name": "dataIndex",
-            "type": "string | string\\[]",
+            "type": "string | string[]",
             "default": "-",
             "description": "Display field of the data record, support nest path by string array",
             "descriptionZh": "列数据在数据项中对应的路径，支持通过数组查询嵌套路径"
           },
           {
             "name": "defaultFilteredValue",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Default filtered values",
             "descriptionZh": "默认筛选值"
@@ -21043,7 +21037,7 @@
             "type": "boolean | {showTitle?: boolean }",
             "default": "false",
             "description": "The ellipsis cell content, not working with sorter and filters for now.<br />tableLayout would be `fixed` when `ellipsis` is `true` or `{ showTitle?: boolean }`",
-            "since": "showTitle: 4.3.0",
+            "since": "4.3.0",
             "descriptionZh": "超过宽度将自动省略，暂不支持和排序筛选一起使用。<br />设置为 `true` 或 `{ showTitle?: boolean }` 时，表格布局将变成 `tableLayout=\"fixed\"`。"
           },
           {
@@ -21062,7 +21056,7 @@
           },
           {
             "name": "filteredValue",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Controlled filtered value, filter icon will highlight",
             "descriptionZh": "筛选的受控属性，外界可用此控制列的筛选状态，值为已筛选的 value 数组"
@@ -21107,7 +21101,7 @@
           },
           {
             "name": "filters",
-            "type": "object\\[]",
+            "type": "object[]",
             "default": "-",
             "description": "Filter menu config",
             "descriptionZh": "表头的筛选菜单项"
@@ -21143,7 +21137,7 @@
           },
           {
             "name": "responsive",
-            "type": "[Breakpoint](https://github.com/ant-design/ant-design/blob/015109b42b85c63146371b4e32b883cf97b088e8/components/_util/responsiveObserve.ts#L1)\\[]",
+            "type": "[Breakpoint](https://github.com/ant-design/ant-design/blob/015109b42b85c63146371b4e32b883cf97b088e8/components/_util/responsiveObserve.ts#L1)[]",
             "default": "-",
             "description": "The list of breakpoints at which to display this column. Always visible if not set",
             "since": "4.2.0",
@@ -21176,7 +21170,7 @@
           {
             "name": "sortDirections",
             "type": "Array",
-            "default": "\\[`ascend`, `descend`]",
+            "default": "[`ascend`, `descend`]",
             "description": "Supported sort way, override `sortDirections` in `Table`, could be `ascend`, `descend`",
             "descriptionZh": "支持的排序方式，覆盖 `Table` 中 `sortDirections`， 取值为 `ascend` `descend`"
           },
@@ -21267,14 +21261,14 @@
           {
             "name": "placement",
             "type": "Array",
-            "default": "\\[`bottomEnd`]",
+            "default": "[`bottomEnd`]",
             "description": "Specify the placement of `Pagination`, could be`topStart` | `topCenter` | `topEnd` |`bottomStart` | `bottomCenter` | `bottomEnd` | `none`",
             "descriptionZh": "指定分页显示的位置， 取值为`topStart` | `topCenter` | `topEnd` |`bottomStart` | `bottomCenter` | `bottomEnd`| `none`"
           },
           {
             "name": "position",
             "type": "Array",
-            "default": "\\[`bottomRight`]",
+            "default": "[`bottomRight`]",
             "description": "Specify the position of `Pagination`, could be`topLeft` | `topCenter` | `topRight` |`bottomLeft` | `bottomCenter` | `bottomRight` | `none`, please use `placement` instead",
             "deprecated": true,
             "descriptionZh": "指定分页显示的位置， 取值为`topLeft` | `topCenter` | `topRight` |`bottomLeft` | `bottomCenter` | `bottomRight` | `none`，请使用 `placement` 替换"
@@ -21312,7 +21306,7 @@
           },
           {
             "name": "defaultExpandedRowKeys",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Initial expanded row keys",
             "descriptionZh": "默认展开的行"
@@ -21322,12 +21316,12 @@
             "type": "string | (record, index, indent) => string",
             "default": "-",
             "description": "Expanded row's className",
-            "since": "string: 5.22.0",
+            "since": "5.22.0",
             "descriptionZh": "展开行的 className"
           },
           {
             "name": "expandedRowKeys",
-            "type": "string\\[]",
+            "type": "string[]",
             "default": "-",
             "description": "Current expanded row keys",
             "descriptionZh": "展开的行，控制属性"
@@ -21485,14 +21479,14 @@
           },
           {
             "name": "selectedRowKeys",
-            "type": "string\\[] | number\\[]",
-            "default": "\\[]",
+            "type": "string[] | number[]",
+            "default": "[]",
             "description": "Controlled selected row keys",
             "descriptionZh": "指定选中项的 key 数组，需要和 onChange 进行配合"
           },
           {
             "name": "selections",
-            "type": "object\\[] | boolean",
+            "type": "object[] | boolean",
             "default": "-",
             "description": "Custom selection [config](#selection), only displays default selections when set to `true`",
             "descriptionZh": "自定义选择项 [配置项](#selection), 设为 `true` 时使用默认选择项"
@@ -21704,7 +21698,7 @@
           "type": "ReactNode | {left?: ReactNode, right?: ReactNode}",
           "default": "-",
           "description": "Extra content in tab bar",
-          "since": "object: 4.6.0",
+          "since": "4.6.0",
           "descriptionZh": "tab bar 上额外的元素"
         },
         {
@@ -22374,7 +22368,7 @@
         {
           "name": "pendingDot",
           "type": "ReactNode",
-          "default": "&lt;LoadingOutlined /&gt;",
+          "default": "<LoadingOutlined />",
           "description": "Set the dot of the last ghost node when pending is true. Use `item.icon` instead",
           "deprecated": true,
           "descriptionZh": "当最后一个幽灵节点存在時，指定其时间图点，请使用 `item.icon` 代替"
@@ -22764,7 +22758,7 @@
         },
         {
           "name": "placeholder",
-          "type": "string | \\[string, string]",
+          "type": "string | [string, string]",
           "default": "`Select a time`",
           "description": "Display when there's no value",
           "descriptionZh": "没有值的时候显示的内容"
@@ -22883,7 +22877,7 @@
         },
         {
           "name": "onCalendarChange",
-          "type": "function(dates: \\[dayjs, dayjs], dateStrings: \\[string, string], info: { range:`start`|`end` })",
+          "type": "function(dates: [dayjs, dayjs], dateStrings: [string, string], info: { range:`start`|`end` })",
           "default": "-",
           "description": "Callback function, can be executed when the start time or the end time of the range is changing. `info` argument is added in 4.4.0",
           "descriptionZh": "待选日期发生变化的回调。`info` 参数自 4.4.0 添加"
@@ -23609,8 +23603,8 @@
       "props": [
         {
           "name": "actions",
-          "type": "ReactNode\\[]",
-          "default": "\\[`>`, `<`]",
+          "type": "ReactNode[]",
+          "default": "[`>`, `<`]",
           "description": "A set of operations that are sorted from top to bottom. When an array of strings is provided, default buttons will be used; when an array of ReactNode is provided, custom elements will be used",
           "since": "6.0.0",
           "descriptionZh": ""
@@ -23624,8 +23618,8 @@
         },
         {
           "name": "dataSource",
-          "type": "[RecordType extends TransferItem = TransferItem](https://github.com/ant-design/ant-design/blob/1bf0bab2a7bc0a774119f501806e3e0e3a6ba283/components/transfer/index.tsx#L12)\\[]",
-          "default": "\\[]",
+          "type": "[RecordType extends TransferItem = TransferItem](https://github.com/ant-design/ant-design/blob/1bf0bab2a7bc0a774119f501806e3e0e3a6ba283/components/transfer/index.tsx#L12)[]",
+          "default": "[]",
           "description": "Used for setting the source data. The elements that are part of this array will be present the left column. Except the elements whose keys are included in `targetKeys` prop",
           "descriptionZh": ""
         },
@@ -23656,7 +23650,7 @@
           "type": "(props, { direction }) => ReactNode",
           "default": "-",
           "description": "A function used for rendering the footer",
-          "since": "direction: 4.17.0",
+          "since": "4.17.0",
           "descriptionZh": ""
         },
         {
@@ -23684,8 +23678,8 @@
         },
         {
           "name": "operations",
-          "type": "string\\[]",
-          "default": "\\[`>`, `<`]",
+          "type": "string[]",
+          "default": "[`>`, `<`]",
           "description": "A set of operations that are sorted from top to bottom. Use `actions` instead.",
           "deprecated": true,
           "descriptionZh": ""
@@ -23715,15 +23709,15 @@
         },
         {
           "name": "selectAllLabels",
-          "type": "(ReactNode | (info: { selectedCount: number, totalCount: number }) => ReactNode)\\[]",
+          "type": "(ReactNode | (info: { selectedCount: number, totalCount: number }) => ReactNode)[]",
           "default": "-",
           "description": "A set of customized labels for select all checkboxes on the header",
           "descriptionZh": ""
         },
         {
           "name": "selectedKeys",
-          "type": "string\\[] | number\\[]",
-          "default": "\\[]",
+          "type": "string[] | number[]",
+          "default": "[]",
           "description": "A set of keys of selected items",
           "descriptionZh": ""
         },
@@ -23758,14 +23752,14 @@
         },
         {
           "name": "targetKeys",
-          "type": "string\\[] | number\\[]",
-          "default": "\\[]",
+          "type": "string[] | number[]",
+          "default": "[]",
           "description": "A set of keys of elements that are listed on the right column",
           "descriptionZh": ""
         },
         {
           "name": "titles",
-          "type": "ReactNode\\[]",
+          "type": "ReactNode[]",
           "default": "-",
           "description": "A set of titles that are sorted from left to right",
           "descriptionZh": ""
@@ -23970,14 +23964,14 @@
           },
           {
             "name": "filteredItems",
-            "type": "RecordType\\[]",
+            "type": "RecordType[]",
             "default": "-",
             "description": "Filtered items",
             "descriptionZh": "过滤后的数据"
           },
           {
             "name": "selectedKeys",
-            "type": "string\\[] | number\\[]",
+            "type": "string[] | number[]",
             "default": "-",
             "description": "Selected items",
             "descriptionZh": "选中的条目"
@@ -23991,7 +23985,7 @@
           },
           {
             "name": "onItemSelectAll",
-            "type": "(keys: string\\[] | number\\[], selected: boolean)",
+            "type": "(keys: string[] | number[], selected: boolean)",
             "default": "-",
             "description": "Select a group of items",
             "descriptionZh": "勾选一组条目"
@@ -24041,8 +24035,8 @@
         },
         {
           "name": "checkedKeys",
-          "type": "string\\[] | {checked: string\\[], halfChecked: string\\[]}",
-          "default": "\\[]",
+          "type": "string[] | {checked: string[], halfChecked: string[]}",
+          "default": "[]",
           "description": "(Controlled) Specifies the keys of the checked treeNodes (PS: When this specifies the key of a treeNode which is also a parent treeNode, all the children treeNodes of will be checked; and vice versa, when it specifies the key of a treeNode which is a child treeNode, its parent treeNode will also be checked. When `checkable` and `checkStrictly` is true, its object has `checked` and `halfChecked` property. Regardless of whether the child or parent treeNode is checked, they won't impact each other",
           "descriptionZh": "（受控）选中复选框的树节点（注意：父子节点有关联，如果传入父节点 key，则子节点自动选中；相应当子节点 key 都传入，父节点也自动选中。当设置 `checkable` 和 `checkStrictly`，它是一个有`checked`和`halfChecked`属性的对象，并且父子节点的选中与否不再关联"
         },
@@ -24069,8 +24063,8 @@
         },
         {
           "name": "defaultCheckedKeys",
-          "type": "string\\[]",
-          "default": "\\[]",
+          "type": "string[]",
+          "default": "[]",
           "description": "Specifies the keys of the default checked treeNodes",
           "descriptionZh": "默认选中复选框的树节点"
         },
@@ -24083,8 +24077,8 @@
         },
         {
           "name": "defaultExpandedKeys",
-          "type": "string\\[]",
-          "default": "\\[]",
+          "type": "string[]",
+          "default": "[]",
           "description": "Specify the keys of the default expanded treeNodes",
           "descriptionZh": "默认展开指定的树节点"
         },
@@ -24097,8 +24091,8 @@
         },
         {
           "name": "defaultSelectedKeys",
-          "type": "string\\[]",
-          "default": "\\[]",
+          "type": "string[]",
+          "default": "[]",
           "description": "Specifies the keys of the default selected treeNodes",
           "descriptionZh": "默认选中的树节点"
         },
@@ -24119,8 +24113,8 @@
         },
         {
           "name": "expandedKeys",
-          "type": "string\\[]",
-          "default": "\\[]",
+          "type": "string[]",
+          "default": "[]",
           "description": "(Controlled) Specifies the keys of the expanded treeNodes",
           "descriptionZh": "（受控）展开指定的树节点"
         },
@@ -24162,8 +24156,8 @@
         },
         {
           "name": "loadedKeys",
-          "type": "string\\[]",
-          "default": "\\[]",
+          "type": "string[]",
+          "default": "[]",
           "description": "(Controlled) Set loaded tree nodes. Need to work with `loadData`",
           "descriptionZh": "（受控）已经加载的节点，需要配合 `loadData` 使用"
         },
@@ -24198,7 +24192,7 @@
         },
         {
           "name": "selectedKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "(Controlled) Specifies the keys of the selected treeNodes, multiple selection needs to set `multiple` to true",
           "descriptionZh": "（受控）设置选中的树节点，多选需设置 `multiple` 为 true"
@@ -24236,7 +24230,7 @@
           "type": "ReactNode | ((props: AntTreeNodeProps) => ReactNode)",
           "default": "-",
           "description": "Customize expand/collapse icons for tree nodes (Will not rotate automatically in `showLine` mode)",
-          "since": "renderProps: 4.20.0",
+          "since": "4.20.0",
           "descriptionZh": "自定义树节点的展开/折叠图标（`showLine` 下不会自动 rotate）"
         },
         {
@@ -24257,7 +24251,7 @@
         },
         {
           "name": "treeData",
-          "type": "array&lt;{ key, title, children, \\[disabled, selectable] }>",
+          "type": "array<{ key, title, children, [disabled, selectable] }>",
           "default": "-",
           "description": "The treeNodes data Array, if set it then you need not to construct children TreeNode. (key should be unique across the whole array)",
           "descriptionZh": "treeNodes 数据，如果设置则不需要手动构造 TreeNode 节点（key 在整个树范围内唯一）"
@@ -24617,7 +24611,7 @@
         },
         {
           "name": "defaultValue",
-          "type": "string | string\\[]",
+          "type": "string | string[]",
           "default": "-",
           "description": "To set the initial selected treeNode(s)",
           "descriptionZh": "指定默认选中的条目"
@@ -24744,7 +24738,7 @@
           "type": "number | `responsive`",
           "default": "-",
           "description": "Max tag count to show. `responsive` will cost render performance",
-          "since": "responsive: 4.10",
+          "since": "4.10",
           "descriptionZh": "最多显示多少个 tag，响应式模式会对性能产生损耗"
         },
         {
@@ -24869,7 +24863,7 @@
           "type": "ReactNode | ((props: AntTreeNodeProps) => ReactNode)",
           "default": "-",
           "description": "Customize collapse/expand icon of tree node",
-          "since": "renderProps: 4.20.0",
+          "since": "4.20.0",
           "descriptionZh": "自定义树节点的展开/折叠图标"
         },
         {
@@ -24895,17 +24889,17 @@
         },
         {
           "name": "treeData",
-          "type": "array&lt;{ value, title, children, \\[disabled, disableCheckbox, selectable, checkable] }>",
-          "default": "\\[]",
+          "type": "array<{ value, title, children, [disabled, disableCheckbox, selectable, checkable] }>",
+          "default": "[]",
           "description": "Data of the treeNodes, manual construction work is no longer needed if this property has been set(ensure the Uniqueness of each value)",
           "descriptionZh": "treeNodes 数据，如果设置则不需要手动构造 TreeNode 节点（value 在整个树范围内唯一）"
         },
         {
           "name": "treeDataSimpleMode",
-          "type": "boolean | object&lt;{ id: string, pId: string, rootPId: string }>",
+          "type": "boolean | object<{ id: string, pId: string, rootPId: string }>",
           "default": "false",
-          "description": "Enable simple mode of treeData. Changes the `treeData` schema to: \\[{id:1, pId:0, value:'1', title:\"test1\",...},...] where pId is parent node's id). It is possible to replace the default `id` and `pId` keys by providing object to `treeDataSimpleMode`",
-          "descriptionZh": "使用简单格式的 treeData，具体设置参考可设置的类型 (此时 treeData 应变为这样的数据结构: \\[{id:1, pId:0, value:'1', title:\"test1\",...},...]， `pId` 是父节点的 id)"
+          "description": "Enable simple mode of treeData. Changes the `treeData` schema to: [{id:1, pId:0, value:'1', title:\"test1\",...},...] where pId is parent node's id). It is possible to replace the default `id` and `pId` keys by providing object to `treeDataSimpleMode`",
+          "descriptionZh": "使用简单格式的 treeData，具体设置参考可设置的类型 (此时 treeData 应变为这样的数据结构: [{id:1, pId:0, value:'1', title:\"test1\",...},...]， `pId` 是父节点的 id)"
         },
         {
           "name": "treeDefaultExpandAll",
@@ -24916,7 +24910,7 @@
         },
         {
           "name": "treeDefaultExpandedKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Default expanded treeNodes",
           "descriptionZh": "默认展开的树节点"
@@ -24931,7 +24925,7 @@
         },
         {
           "name": "treeExpandedKeys",
-          "type": "string\\[]",
+          "type": "string[]",
           "default": "-",
           "description": "Set expanded keys",
           "descriptionZh": "设置展开的树节点"
@@ -24983,7 +24977,7 @@
         },
         {
           "name": "value",
-          "type": "string | string\\[]",
+          "type": "string | string[]",
           "default": "-",
           "description": "To set the current selected treeNode(s)",
           "descriptionZh": "指定当前选中的条目"
@@ -25509,7 +25503,7 @@
             "type": "`secondary` | `success` | `warning` | `danger`",
             "default": "-",
             "description": "Content type",
-            "since": "success: 4.6.0",
+            "since": "4.6.0",
             "descriptionZh": "文本类型"
           },
           {
@@ -25599,7 +25593,7 @@
             "type": "number: 1, 2, 3, 4, 5",
             "default": "1",
             "description": "Set content importance. Match with `h1`, `h2`, `h3`, `h4`, `h5`",
-            "since": "5: 4.6.0",
+            "since": "4.6.0",
             "descriptionZh": "重要程度，相当于 `h1`、`h2`、`h3`、`h4`、`h5`"
           },
           {
@@ -25622,7 +25616,7 @@
             "type": "`secondary` | `success` | `warning` | `danger`",
             "default": "-",
             "description": "Content type",
-            "since": "success: 4.6.0",
+            "since": "4.6.0",
             "descriptionZh": "文本类型"
           },
           {
@@ -25734,7 +25728,7 @@
             "type": "`secondary` | `success` | `warning` | `danger`",
             "default": "-",
             "description": "Content type",
-            "since": "success: 4.6.0",
+            "since": "4.6.0",
             "descriptionZh": "文本类型"
           },
           {
@@ -25773,11 +25767,11 @@
           },
           {
             "name": "icon",
-            "type": "\\[ReactNode, ReactNode]",
+            "type": "[ReactNode, ReactNode]",
             "default": "-",
-            "description": "Custom copy icon: \\[copyIcon, copiedIcon]",
+            "description": "Custom copy icon: [copyIcon, copiedIcon]",
             "since": "4.6.0",
-            "descriptionZh": "自定义拷贝图标：\\[默认图标, 拷贝后的图标]"
+            "descriptionZh": "自定义拷贝图标：[默认图标, 拷贝后的图标]"
           },
           {
             "name": "tabIndex",
@@ -25796,8 +25790,8 @@
           },
           {
             "name": "tooltips",
-            "type": "\\[ReactNode, ReactNode]",
-            "default": "\\[`Copy`, `Copied`]",
+            "type": "[ReactNode, ReactNode]",
+            "default": "[`Copy`, `Copied`]",
             "description": "Custom tooltip text, hide when it is false",
             "since": "4.4.0",
             "descriptionZh": "自定义提示文案，为 false 时隐藏文案"
@@ -25837,7 +25831,7 @@
           {
             "name": "icon",
             "type": "ReactNode",
-            "default": "&lt;EditOutlined />",
+            "default": "<EditOutlined />",
             "description": "Custom editable icon",
             "since": "4.6.0",
             "descriptionZh": "自定义编辑图标"
@@ -25876,8 +25870,8 @@
           },
           {
             "name": "triggerType",
-            "type": "Array&lt;`icon`|`text`>",
-            "default": "\\[`icon`]",
+            "type": "Array<`icon`|`text`>",
+            "default": "[`icon`]",
             "description": "Edit mode trigger - icon, text or both (not specifying icon as trigger hides it)",
             "descriptionZh": "编辑模式触发器类型，图标、文本或者两者都设置（不设置图标作为触发器时它会隐藏）"
           },
@@ -26005,14 +25999,14 @@
         },
         {
           "name": "action",
-          "type": "string | (file) => Promise&lt;string>",
+          "type": "string | (file) => Promise<string>",
           "default": "-",
           "description": "Uploading URL",
           "descriptionZh": "上传的地址"
         },
         {
           "name": "beforeUpload",
-          "type": "(file: [RcFile](#rcfile), fileList: [RcFile[]](#rcfile)) => boolean | Promise&lt;File> | `Upload.LIST_IGNORE`",
+          "type": "(file: [RcFile](#rcfile), fileList: [RcFile[]](#rcfile)) => boolean | Promise<File> | `Upload.LIST_IGNORE`",
           "default": "-",
           "description": "Hook function which will be executed before uploading. Uploading will be stopped with `false` or a rejected Promise returned. When returned value is `Upload.LIST_IGNORE`, the list of files that have been uploaded will ignore it. **Warning：this function is not supported in IE9**",
           "descriptionZh": "上传文件之前的钩子，参数为上传的文件，若返回 `false` 则停止上传。支持返回一个 Promise 对象，Promise 对象 reject 时则停止上传，resolve 时开始上传（ resolve 传入 `File` 或 `Blob` 对象则上传 resolve 传入对象）；也可以返回 `Upload.LIST_IGNORE`，此时列表中将不展示此文件。 **注意：IE9 不支持该方法**"
@@ -26022,7 +26016,7 @@
           "type": "( options: [RequestOptions](#request-options), info: { defaultRequest: (option: [RequestOptions](#request-options)) => void; } ) => void",
           "default": "-",
           "description": "Override for the default xhr behavior allowing for additional customization and the ability to implement your own XMLHttpRequest",
-          "since": "defaultRequest: 5.28.0",
+          "since": "5.28.0",
           "descriptionZh": "通过覆盖默认的上传行为，可以自定义自己的上传实现"
         },
         {
@@ -26034,14 +26028,14 @@
         },
         {
           "name": "data",
-          "type": "object | (file) => object | Promise&lt;object>",
+          "type": "object | (file) => object | Promise<object>",
           "default": "-",
           "description": "Uploading extra params or function which can return uploading extra params",
           "descriptionZh": "上传所需额外参数或返回上传额外参数的方法"
         },
         {
           "name": "defaultFileList",
-          "type": "object\\[]",
+          "type": "object[]",
           "default": "-",
           "description": "Default list of files that have been uploaded",
           "descriptionZh": "默认已经上传的文件列表"
@@ -26063,7 +26057,7 @@
         },
         {
           "name": "fileList",
-          "type": "[UploadFile](#uploadfile)\\[]",
+          "type": "[UploadFile](#uploadfile)[]",
           "default": "-",
           "description": "List of files that have been uploaded (controlled). Here is a common issue [#2423](https://github.com/ant-design/ant-design/issues/2423) when using it",
           "descriptionZh": "已经上传的文件列表（受控），使用此参数时，如果遇到 `onChange` 只调用一次的问题，请参考 [#2423](https://github.com/ant-design/ant-design/issues/2423)"
@@ -26086,12 +26080,12 @@
           "name": "isImageUrl",
           "type": "(file: UploadFile) => boolean",
           "default": "[(inside implementation)](https://github.com/ant-design/ant-design/blob/4ad5830eecfb87471cd8ac588c5d992862b70770/components/upload/utils.tsx#L47-L68)",
-          "description": "Customize if render &lt;img /> in thumbnail",
-          "descriptionZh": "自定义缩略图是否使用 &lt;img /> 标签进行显示"
+          "description": "Customize if render <img /> in thumbnail",
+          "descriptionZh": "自定义缩略图是否使用 <img /> 标签进行显示"
         },
         {
           "name": "itemRender",
-          "type": "(originNode: ReactElement, file: UploadFile, fileList: object\\[], actions: { download: function, preview: function, remove: function }) => React.ReactNode",
+          "type": "(originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: function, preview: function, remove: function }) => React.ReactNode",
           "default": "-",
           "description": "Custom item of uploadList",
           "since": "4.16.0",
@@ -26151,7 +26145,7 @@
         },
         {
           "name": "previewFile",
-          "type": "(file: File | Blob) => Promise&lt;dataURL: string>",
+          "type": "(file: File | Blob) => Promise<dataURL: string>",
           "default": "-",
           "description": "Customize preview file logic",
           "descriptionZh": "自定义文件预览逻辑"
@@ -26693,15 +26687,15 @@
         },
         {
           "name": "gap",
-          "type": "\\[number, number\\]",
-          "default": "\\[100, 100\\]",
+          "type": "[number, number]",
+          "default": "[100, 100]",
           "description": "The spacing between watermarks",
           "descriptionZh": "水印之间的间距"
         },
         {
           "name": "offset",
-          "type": "\\[number, number\\]",
-          "default": "\\[gap\\[0\\]/2, gap\\[1\\]/2\\]",
+          "type": "[number, number]",
+          "default": "[gap[0]/2, gap[1]/2]",
           "description": "The offset of the watermark from the upper left corner of the container. The default is `gap/2`",
           "descriptionZh": "水印距离容器左上角的偏移量，默认为 `gap/2`"
         },

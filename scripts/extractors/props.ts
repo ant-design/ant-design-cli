@@ -11,7 +11,20 @@ export function parseTableRow(row: string): string[] {
     .replace(/^\|/, '')
     .replace(/\|$/, '')
     .split('|')
-    .map((cell) => cell.trim().replace(new RegExp(PIPE, 'g'), '|'));
+    .map((cell) =>
+      cell
+        .trim()
+        .replace(new RegExp(PIPE, 'g'), '|')
+        // Clean up markdown escape remnants that are not meaningful in TypeScript type syntax
+        .replace(/\\\[/g, '[')             // \[ → [
+        .replace(/\\\]/g, ']')             // \] → ]
+        .replace(/\\</g, '<')              // \< → <
+        .replace(/\\>/g, '>')              // \> → >
+        // Decode HTML entities that appear in older antd markdown docs
+        .replace(/&lt;/g, '<')             // &lt; → <
+        .replace(/&gt;/g, '>')             // &gt; → >
+        .replace(/&amp;/g, '&')            // &amp; → &
+    );
 }
 
 /** Detect if a prop name indicates deprecation (~~name~~) */
@@ -160,7 +173,7 @@ function extractTablesFromBlock(block: string, lang: 'en' | 'zh'): PropData[] {
  *
  * Returns a Map<label, PropData[]>.
  */
-function parseApiSections(content: string, lang: 'en' | 'zh'): Map<string, PropData[]> {
+export function parseApiSections(content: string, lang: 'en' | 'zh'): Map<string, PropData[]> {
   const sections = new Map<string, PropData[]>();
 
   // Find the start of ## API
@@ -214,7 +227,7 @@ function parseApiSections(content: string, lang: 'en' | 'zh'): Map<string, PropD
 }
 
 /** Merge English and Chinese props into bilingual PropData[] */
-function mergeProps(enProps: PropData[], zhProps: PropData[]): PropData[] {
+export function mergeProps(enProps: PropData[], zhProps: PropData[]): PropData[] {
   const zhMap = new Map(zhProps.map((p) => [p.name, p]));
 
   return enProps.map((enProp) => {
