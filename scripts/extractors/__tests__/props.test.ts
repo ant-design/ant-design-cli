@@ -51,4 +51,24 @@ describe('parseTableRow', () => {
     expect(cells[2]).toBe('string[]');
     expect(cells[3]).toBe('[]');
   });
+
+  it('decodes HTML entities in type values', () => {
+    const cells = parseTableRow('| render | Render | React.ReactElement&lt;InputProps> | - |  |');
+    expect(cells[2]).toBe('React.ReactElement<InputProps>');
+  });
+
+  it('decodes HTML entities in default values', () => {
+    const cells = parseTableRow('| icon | Icon | ReactNode | &lt;Input /&gt; |  |');
+    expect(cells[3]).toBe('<Input />');
+  });
+
+  it('decodes &amp; entity', () => {
+    const cells = parseTableRow('| key | Key | string &amp; number | - |  |');
+    expect(cells[2]).toBe('string & number');
+  });
+
+  it('handles mixed HTML entities and escaped brackets', () => {
+    const cells = parseTableRow('| items | Items | Array&lt;{key: string}&gt;\\[] | - |  |');
+    expect(cells[2]).toBe('Array<{key: string}>[]');
+  });
 });

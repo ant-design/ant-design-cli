@@ -507,7 +507,7 @@
         },
         {
           "name": "value",
-          "type": "string|string[]|{ key: string, label: string|ReactNode }|Array&lt;{ key: string, label: string|ReactNode }>",
+          "type": "string|string[]|{ key: string, label: string|ReactNode }|Array<{ key: string, label: string|ReactNode }>",
           "default": "-",
           "description": "selected option",
           "descriptionZh": "指定当前选中的条目"
@@ -1412,7 +1412,7 @@
       "props": [
         {
           "name": "actions",
-          "type": "Array&lt;ReactNode>",
+          "type": "Array<ReactNode>",
           "default": "-",
           "description": "The action list, shows at the bottom of the Card.",
           "descriptionZh": "卡片操作组，位置在卡片底部"
@@ -1485,7 +1485,7 @@
         },
         {
           "name": "tabList",
-          "type": "Array&lt;{key: string, tab: ReactNode}>",
+          "type": "Array<{key: string, tab: ReactNode}>",
           "default": "-",
           "description": "List of TabPane's head.",
           "descriptionZh": "页签标题列表"
@@ -3546,7 +3546,7 @@
         },
         {
           "name": "trigger",
-          "type": "Array&lt;`click`|`hover`|`contextMenu`>",
+          "type": "Array<`click`|`hover`|`contextMenu`>",
           "default": "`['hover']`",
           "description": "The trigger mode which executes the dropdown action. Note that hover can't be used on touchscreens.",
           "descriptionZh": ""
@@ -3691,7 +3691,7 @@
           },
           {
             "name": "trigger",
-            "type": "Array&lt;`click`|`hover`|`contextMenu`>",
+            "type": "Array<`click`|`hover`|`contextMenu`>",
             "default": "`['hover']`",
             "description": "The trigger mode which executes the dropdown action",
             "descriptionZh": "触发下拉的行为"
@@ -5750,7 +5750,7 @@
         },
         {
           "name": "defaultSuggestions",
-          "type": "Array&lt;string|Mention.Nav>",
+          "type": "Array<string|Mention.Nav>",
           "default": "[]",
           "description": "default suggestion content",
           "since": "3.12.0",
@@ -5807,7 +5807,7 @@
         },
         {
           "name": "prefix",
-          "type": "string or Array&lt;string>",
+          "type": "string or Array<string>",
           "default": "'@'",
           "description": "character which will trigger Mention to show mention list",
           "descriptionZh": "触发弹出下拉框的字符"
@@ -5821,7 +5821,7 @@
         },
         {
           "name": "suggestions",
-          "type": "Array&lt;string|Mention.Nav>",
+          "type": "Array<string|Mention.Nav>",
           "default": "[]",
           "description": "suggestion content",
           "descriptionZh": "建议内容"
@@ -6379,7 +6379,7 @@
           },
           {
             "name": "children",
-            "type": "Array&lt;MenuItem|SubMenu>",
+            "type": "Array<MenuItem|SubMenu>",
             "default": "-",
             "description": "Sub-menus or sub-menu items",
             "descriptionZh": "子菜单的菜单项"
@@ -8157,7 +8157,7 @@
           },
           {
             "name": "options",
-            "type": "string[] | Array&lt;{ label: string value: string disabled?: boolean }>",
+            "type": "string[] | Array<{ label: string value: string disabled?: boolean }>",
             "default": "-",
             "description": "set children optional",
             "descriptionZh": "以配置形式设置子元素"
@@ -8760,7 +8760,7 @@
         },
         {
           "name": "onChange",
-          "type": "function(value, option:Option/Array&lt;Option>)",
+          "type": "function(value, option:Option/Array<Option>)",
           "default": "-",
           "description": "Called when select an option or input value change, or value of input is changed in combobox mode",
           "descriptionZh": "选中 option，或 input 的 value 变化（combobox 模式下）时，调用此函数"

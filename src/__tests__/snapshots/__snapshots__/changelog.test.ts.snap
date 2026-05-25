@@ -377,7 +377,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
         },
         {
           "name": "trigger",
-          "type": "\`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array&lt;string>"
+          "type": "\`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array<string>"
         },
         {
           "name": "open",
@@ -540,7 +540,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format markdown 1`] = `
     - overlayStyle: object
     - overlayInnerStyle: object
     - placement: string
-    - trigger: \`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array&lt;string>
+    - trigger: \`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array<string>
     - open: boolean
     - zIndex: number
     - onOpenChange: (open: boolean) => void
@@ -655,7 +655,7 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format text 1`] = `
     - overlayStyle: object
     - overlayInnerStyle: object
     - placement: string
-    - trigger: \`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array&lt;string>
+    - trigger: \`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array<string>
     - open: boolean
     - zIndex: number
     - onOpenChange: (open: boolean) => void

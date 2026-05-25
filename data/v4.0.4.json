@@ -384,7 +384,7 @@
         },
         {
           "name": "value",
-          "type": "string|string[]|{ key: string, label: string|ReactNode }|Array&lt;{ key: string, label: string|ReactNode }>",
+          "type": "string|string[]|{ key: string, label: string|ReactNode }|Array<{ key: string, label: string|ReactNode }>",
           "default": "-",
           "description": "selected option",
           "since": "{ key: string, label: string\\",
@@ -1456,7 +1456,7 @@
       "props": [
         {
           "name": "actions",
-          "type": "Array&lt;ReactNode>",
+          "type": "Array<ReactNode>",
           "default": "-",
           "description": "The action list, shows at the bottom of the Card.",
           "descriptionZh": "卡片操作组，位置在卡片底部"
@@ -1527,7 +1527,7 @@
         },
         {
           "name": "tabList",
-          "type": "Array&lt;{key: string, tab: ReactNode}>",
+          "type": "Array<{key: string, tab: ReactNode}>",
           "default": "-",
           "description": "List of TabPane's head.",
           "descriptionZh": "页签标题列表"
@@ -3644,7 +3644,7 @@
         },
         {
           "name": "trigger",
-          "type": "Array&lt;`click`|`hover`|`contextMenu`>",
+          "type": "Array<`click`|`hover`|`contextMenu`>",
           "default": "`['hover']`",
           "description": "The trigger mode which executes the dropdown action. Note that hover can't be used on touchscreens.",
           "since": "`contextMenu`>",
@@ -3701,7 +3701,7 @@
         },
         {
           "name": "trigger",
-          "type": "Array&lt;`click`|`hover`|`contextMenu`>",
+          "type": "Array<`click`|`hover`|`contextMenu`>",
           "default": "`['hover']`",
           "description": "The trigger mode which executes the dropdown action",
           "since": "`contextMenu`>",
@@ -7367,7 +7367,7 @@
         },
         {
           "name": "options",
-          "type": "string[] | Array&lt;{ label: string value: string disabled?: boolean }>",
+          "type": "string[] | Array<{ label: string value: string disabled?: boolean }>",
           "default": "-",
           "description": "set children optional",
           "descriptionZh": "以配置形式设置子元素"
@@ -8009,7 +8009,7 @@
         },
         {
           "name": "onChange",
-          "type": "function(value, option:Option/Array&lt;Option>)",
+          "type": "function(value, option:Option/Array<Option>)",
           "default": "-",
           "description": "Called when select an option or input value change, or value of input is changed in combobox mode",
           "descriptionZh": "选中 option，或 input 的 value 变化（combobox 模式下）时，调用此函数"

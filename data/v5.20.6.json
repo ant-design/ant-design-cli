@@ -313,7 +313,7 @@
           "type": "boolean | Omit<AffixProps, 'offsetTop' | 'target' | 'children'>",
           "default": "true",
           "description": "Fixed mode of Anchor",
-          "since": "object: 5.19.0",
+          "since": "5.19.0",
           "descriptionZh": "固定模式"
         },
         {
@@ -645,15 +645,15 @@
         },
         {
           "name": "children (for customize input element)",
-          "type": "HTMLInputElement | HTMLTextAreaElement | React.ReactElement&lt;InputProps>",
-          "default": "&lt;Input />",
+          "type": "HTMLInputElement | HTMLTextAreaElement | React.ReactElement<InputProps>",
+          "default": "<Input />",
           "description": "Customize input element",
-          "since": "React.ReactElement&lt;InputProps>",
+          "since": "React.ReactElement<InputProps>",
           "descriptionZh": ""
         },
         {
           "name": "children (for dataSource)",
-          "type": "React.ReactElement&lt;OptionProps> | Array&lt;React.ReactElement&lt;OptionProps>>",
+          "type": "React.ReactElement<OptionProps> | Array<React.ReactElement<OptionProps>>",
           "default": "-",
           "description": "Data source to auto complete",
           "since": "-",
@@ -967,7 +967,7 @@
           "type": "string | ReactNode",
           "default": "-",
           "description": "The address of the image for an image avatar or image element",
-          "since": "ReactNode: 4.8.0",
+          "since": "4.8.0",
           "descriptionZh": "图片类头像的资源地址或者图片元素"
         },
         {
@@ -2435,7 +2435,7 @@
       "props": [
         {
           "name": "actions",
-          "type": "Array&lt;ReactNode>",
+          "type": "Array<ReactNode>",
           "default": "-",
           "description": "The action list, shows at the bottom of the Card",
           "descriptionZh": "卡片操作组，位置在卡片底部"
@@ -6966,7 +6966,7 @@
         },
         {
           "name": "trigger",
-          "type": "Array&lt;`click`|`hover`|`contextMenu`>",
+          "type": "Array<`click`|`hover`|`contextMenu`>",
           "default": "[`hover`]",
           "description": "The trigger mode which executes the dropdown action. Note that hover can't be used on touchscreens",
           "since": "`contextMenu`>",
@@ -8246,7 +8246,7 @@
           "type": "`top` | `middle` | `bottom` | `stretch` | `{[key in 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl']: 'top' | 'middle' | 'bottom' | 'stretch'}`",
           "default": "`top`",
           "description": "Vertical alignment",
-          "since": "object: 4.24.0",
+          "since": "4.24.0",
           "descriptionZh": "垂直对齐方式"
         },
         {
@@ -8262,7 +8262,7 @@
           "type": "`start` | `end` | `center` | `space-around` | `space-between` | `space-evenly` | `{[key in 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl']: 'start' | 'end' | 'center' | 'space-around' | 'space-between' | 'space-evenly'}`",
           "default": "`start`",
           "description": "Horizontal arrangement",
-          "since": "object: 4.24.0",
+          "since": "4.24.0",
           "descriptionZh": "水平排列方式"
         },
         {
@@ -8520,7 +8520,7 @@
         },
         {
           "name": "component",
-          "type": "ComponentType&lt;CustomIconComponentProps>",
+          "type": "ComponentType<CustomIconComponentProps>",
           "default": "-",
           "description": "The component used for the root node",
           "descriptionZh": "控制如何渲染图标，通常是一个渲染根标签为 `<svg>` 的 React 组件"
@@ -9199,7 +9199,7 @@
         {
           "name": "iconRender",
           "type": "(visible) => ReactNode",
-          "default": "(visible) => (visible ? &lt;EyeOutlined /> : &lt;EyeInvisibleOutlined />)",
+          "default": "(visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)",
           "description": "Custom toggle button",
           "since": "4.3.0",
           "descriptionZh": "自定义切换按钮"
@@ -9697,7 +9697,7 @@
           "type": "function(value: number | string, info: { userTyping: boolean, input: string }): string",
           "default": "-",
           "description": "Specifies the format of the value presented",
-          "since": "info: 4.17.0",
+          "since": "4.17.0",
           "descriptionZh": "指定输入框展示值的格式"
         },
         {
@@ -10649,7 +10649,7 @@
         },
         {
           "name": "actions",
-          "type": "Array&lt;ReactNode>",
+          "type": "Array<ReactNode>",
           "default": "-",
           "description": "The actions content of list item. If `itemLayout` is `vertical`, shows the content on bottom, otherwise shows content on the far right",
           "descriptionZh": "列表操作组，根据 `itemLayout` 的不同，位置在卡片底部或者最右侧"
@@ -12099,7 +12099,7 @@
         {
           "name": "closeIcon",
           "type": "ReactNode",
-          "default": "&lt;CloseOutlined />",
+          "default": "<CloseOutlined />",
           "description": "Custom close icon. 5.7.0: close button will be hidden when setting to `null` or `false`",
           "descriptionZh": "自定义关闭图标"
         },
@@ -12130,7 +12130,7 @@
           "type": "React.ReactNode | ((params:[footerRenderParams](/components/modal#footerrenderparams))=> React.ReactNode)",
           "default": "-",
           "description": "Footer content, set as `footer={null}` when you don't need default buttons",
-          "since": "renderFunction: 5.9.0",
+          "since": "5.9.0",
           "descriptionZh": "底部内容，当不需要默认底部按钮时，可以设为 `footer: null`"
         },
         {
@@ -12343,7 +12343,7 @@
           "type": "React.ReactNode | ((params:[footerRenderParams](/components/modal#footerrenderparams))=> React.ReactNode)",
           "default": "-",
           "description": "Footer content, set as `footer: null` when you don't need default buttons",
-          "since": "renderFunction: 5.9.0",
+          "since": "5.9.0",
           "descriptionZh": "底部内容，当不需要默认底部按钮时，可以设为 `footer: null`"
         },
         {
@@ -12357,7 +12357,7 @@
         {
           "name": "icon",
           "type": "ReactNode",
-          "default": "&lt;ExclamationCircleFilled />",
+          "default": "<ExclamationCircleFilled />",
           "description": "Custom icon",
           "descriptionZh": "自定义图标"
         },
@@ -14088,7 +14088,7 @@
           "type": "`active | expired | loading | scanned`",
           "default": "`active`",
           "description": "QRCode status",
-          "since": "scanned: 5.13.0",
+          "since": "5.13.0",
           "descriptionZh": "二维码状态"
         },
         {
@@ -14277,10 +14277,10 @@
         },
         {
           "name": "options",
-          "type": "string[] | number[] | Array&lt;[CheckboxOptionType](#checkboxoptiontype)>",
+          "type": "string[] | number[] | Array<[CheckboxOptionType](#checkboxoptiontype)>",
           "default": "-",
           "description": "Set children optional",
-          "since": "Array&lt;[CheckboxOptionType](#checkboxoptiontype)>",
+          "since": "Array<[CheckboxOptionType](#checkboxoptiontype)>",
           "descriptionZh": "以配置形式设置子元素"
         },
         {
@@ -14592,7 +14592,7 @@
           "type": "",
           "default": "(RateProps) => ReactNode",
           "description": "The custom character of rate",
-          "since": "&lt;StarFilled />",
+          "since": "<StarFilled />",
           "descriptionZh": "自定义字符"
         },
         {
@@ -15330,7 +15330,7 @@
           "type": "number | `responsive`",
           "default": "-",
           "description": "Max tag count to show. `responsive` will cost render performance",
-          "since": "responsive: 4.10",
+          "since": "4.10",
           "descriptionZh": "最多显示多少个 tag，响应式模式会对性能产生损耗"
         },
         {
@@ -15519,7 +15519,7 @@
         },
         {
           "name": "onChange",
-          "type": "function(value, option:Option | Array&lt;Option>)",
+          "type": "function(value, option:Option | Array<Option>)",
           "default": "-",
           "description": "Called when select an option or input value change",
           "since": "-",
@@ -16121,7 +16121,7 @@
         },
         {
           "name": "width",
-          "type": "number | string | Array&lt;number | string>",
+          "type": "number | string | Array<number | string>",
           "default": "-",
           "description": "Set the width of title",
           "descriptionZh": "设置段落占位图的宽度，若为数组时则为对应的每行宽度，反之则是最后一行的宽度"
@@ -16135,7 +16135,7 @@
         },
         {
           "name": "width",
-          "type": "number | string | Array&lt;number | string>",
+          "type": "number | string | Array<number | string>",
           "default": "-",
           "description": "Set the width of paragraph. When width is an Array, it can set the width of each row. Otherwise only set the last row width",
           "descriptionZh": "设置段落占位图的宽度，若为数组时则为对应的每行宽度，反之则是最后一行的宽度"
@@ -17395,7 +17395,7 @@
           "type": "string",
           "default": "`default`",
           "description": "Type of steps, can be set to one of the following values: `default` `navigation` `inline`",
-          "since": "inline: 5.0",
+          "since": "5.0",
           "descriptionZh": "步骤条类型，可选 `default` `navigation` `inline`"
         },
         {
@@ -18235,7 +18235,7 @@
           "type": "boolean | {showTitle?: boolean }",
           "default": "false",
           "description": "The ellipsis cell content, not working with sorter and filters for now.<br />tableLayout would be `fixed` when `ellipsis` is `true` or `{ showTitle?: boolean }`",
-          "since": "showTitle: 4.3.0",
+          "since": "4.3.0",
           "descriptionZh": "超过宽度将自动省略，暂不支持和排序筛选一起使用。<br />设置为 `true` 或 `{ showTitle?: boolean }` 时，表格布局将变成 `tableLayout=\"fixed\"`。"
         },
         {
@@ -19440,7 +19440,7 @@
           "type": "ReactNode | {left?: ReactNode, right?: ReactNode}",
           "default": "-",
           "description": "Extra content in tab bar",
-          "since": "object: 4.6.0",
+          "since": "4.6.0",
           "descriptionZh": "tab bar 上额外的元素"
         },
         {
@@ -20070,7 +20070,7 @@
         {
           "name": "pendingDot",
           "type": "ReactNode",
-          "default": "&lt;LoadingOutlined /&gt;",
+          "default": "<LoadingOutlined />",
           "description": "Set the dot of the last ghost node when pending is true",
           "descriptionZh": "当最后一个幽灵节点存在時，指定其时间图点"
         },
@@ -20707,7 +20707,7 @@
         },
         {
           "name": "trigger",
-          "type": "`hover` | `focus` | `click` | `contextMenu` | Array&lt;string>",
+          "type": "`hover` | `focus` | `click` | `contextMenu` | Array<string>",
           "default": "`hover`",
           "description": "Tooltip trigger mode. Could be multiple by passing an array",
           "since": "`click` \\",
@@ -21173,7 +21173,7 @@
           "type": "(props, { direction }) => ReactNode",
           "default": "-",
           "description": "A function used for rendering the footer",
-          "since": "direction: 4.17.0",
+          "since": "4.17.0",
           "descriptionZh": "底部渲染函数"
         },
         {
@@ -21689,7 +21689,7 @@
           "type": "ReactNode | ((props: AntTreeNodeProps) => ReactNode)",
           "default": "-",
           "description": "Customize expand/collapse icons for tree nodes (With default rotate angular style)",
-          "since": "renderProps: 4.20.0",
+          "since": "4.20.0",
           "descriptionZh": "自定义树节点的展开/折叠图标（带有默认 rotate 角度样式）"
         },
         {
@@ -21710,7 +21710,7 @@
         },
         {
           "name": "treeData",
-          "type": "array&lt;{ key, title, children, [disabled, selectable] }>",
+          "type": "array<{ key, title, children, [disabled, selectable] }>",
           "default": "-",
           "description": "The treeNodes data Array, if set it then you need not to construct children TreeNode. (key should be unique across the whole array)",
           "descriptionZh": "treeNodes 数据，如果设置则不需要手动构造 TreeNode 节点（key 在整个树范围内唯一）"
@@ -22156,7 +22156,7 @@
           "type": "number | `responsive`",
           "default": "-",
           "description": "Max tag count to show. `responsive` will cost render performance",
-          "since": "responsive: 4.10",
+          "since": "4.10",
           "descriptionZh": "最多显示多少个 tag，响应式模式会对性能产生损耗"
         },
         {
@@ -22253,7 +22253,7 @@
           "type": "ReactNode | ((props: AntTreeNodeProps) => ReactNode)",
           "default": "-",
           "description": "Customize collapse/expand icon of tree node",
-          "since": "renderProps: 4.20.0",
+          "since": "4.20.0",
           "descriptionZh": "自定义树节点的展开/折叠图标"
         },
         {
@@ -22279,14 +22279,14 @@
         },
         {
           "name": "treeData",
-          "type": "array&lt;{ value, title, children, [disabled, disableCheckbox, selectable, checkable] }>",
+          "type": "array<{ value, title, children, [disabled, disableCheckbox, selectable, checkable] }>",
           "default": "[]",
           "description": "Data of the treeNodes, manual construction work is no longer needed if this property has been set(ensure the Uniqueness of each value)",
           "descriptionZh": "treeNodes 数据，如果设置则不需要手动构造 TreeNode 节点（value 在整个树范围内唯一）"
         },
         {
           "name": "treeDataSimpleMode",
-          "type": "boolean | object&lt;{ id: string, pId: string, rootPId: string }>",
+          "type": "boolean | object<{ id: string, pId: string, rootPId: string }>",
           "default": "false",
           "description": "Enable simple mode of treeData. Changes the `treeData` schema to: [{id:1, pId:0, value:'1', title:\"test1\",...},...] where pId is parent node's id). It is possible to replace the default `id` and `pId` keys by providing object to `treeDataSimpleMode`",
           "since": "false",
@@ -22739,7 +22739,7 @@
           "type": "`secondary` | `success` | `warning` | `danger`",
           "default": "-",
           "description": "Content type",
-          "since": "success: 4.6.0",
+          "since": "4.6.0",
           "descriptionZh": "文本类型"
         },
         {
@@ -22799,7 +22799,7 @@
           "type": "number: 1, 2, 3, 4, 5",
           "default": "1",
           "description": "Set content importance. Match with `h1`, `h2`, `h3`, `h4`, `h5`",
-          "since": "5: 4.6.0",
+          "since": "4.6.0",
           "descriptionZh": "重要程度，相当于 `h1`、`h2`、`h3`、`h4`、`h5`"
         },
         {
@@ -22829,7 +22829,7 @@
           "type": "`secondary` | `success` | `warning` | `danger`",
           "default": "-",
           "description": "Content type",
-          "since": "success: 4.6.0",
+          "since": "4.6.0",
           "descriptionZh": "文本类型"
         },
         {
@@ -22918,7 +22918,7 @@
           "type": "`secondary` | `success` | `warning` | `danger`",
           "default": "-",
           "description": "Content type",
-          "since": "success: 4.6.0",
+          "since": "4.6.0",
           "descriptionZh": "文本类型"
         },
         {
@@ -22992,7 +22992,7 @@
         {
           "name": "icon",
           "type": "ReactNode",
-          "default": "&lt;EditOutlined />",
+          "default": "<EditOutlined />",
           "description": "Custom editable icon",
           "since": "4.6.0",
           "descriptionZh": "自定义编辑图标"
@@ -23052,7 +23052,7 @@
         },
         {
           "name": "triggerType",
-          "type": "Array&lt;`icon`|`text`>",
+          "type": "Array<`icon`|`text`>",
           "default": "[`icon`]",
           "description": "Edit mode trigger - icon, text or both (not specifying icon as trigger hides it)",
           "since": "[`icon`]",
@@ -23269,7 +23269,7 @@
         },
         {
           "name": "action",
-          "type": "string | (file) => Promise&lt;string>",
+          "type": "string | (file) => Promise<string>",
           "default": "-",
           "description": "Uploading URL",
           "since": "-",
@@ -23277,7 +23277,7 @@
         },
         {
           "name": "beforeUpload",
-          "type": "(file, fileList) => boolean | Promise&lt;File> | `Upload.LIST_IGNORE`",
+          "type": "(file, fileList) => boolean | Promise<File> | `Upload.LIST_IGNORE`",
           "default": "-",
           "description": "Hook function which will be executed before uploading. Uploading will be stopped with `false` or a rejected Promise returned. When returned value is `Upload.LIST_IGNORE`, the list of files that have been uploaded will ignore it. **Warning：this function is not supported in IE9**",
           "since": "`Upload.LIST_IGNORE`",
@@ -23292,10 +23292,10 @@
         },
         {
           "name": "data",
-          "type": "object | (file) => object | Promise&lt;object>",
+          "type": "object | (file) => object | Promise<object>",
           "default": "-",
           "description": "Uploading extra params or function which can return uploading extra params",
-          "since": "Promise&lt;object>",
+          "since": "Promise<object>",
           "descriptionZh": "上传所需额外参数或返回上传额外参数的方法"
         },
         {
@@ -23345,8 +23345,8 @@
           "name": "isImageUrl",
           "type": "(file: UploadFile) => boolean",
           "default": "[(inside implementation)](https://github.com/ant-design/ant-design/blob/4ad5830eecfb87471cd8ac588c5d992862b70770/components/upload/utils.tsx#L47-L68)",
-          "description": "Customize if render &lt;img /> in thumbnail",
-          "descriptionZh": "自定义缩略图是否使用 &lt;img /> 标签进行显示"
+          "description": "Customize if render <img /> in thumbnail",
+          "descriptionZh": "自定义缩略图是否使用 <img /> 标签进行显示"
         },
         {
           "name": "itemRender",
@@ -23402,7 +23402,7 @@
         },
         {
           "name": "previewFile",
-          "type": "(file: File | Blob) => Promise&lt;dataURL: string>",
+          "type": "(file: File | Blob) => Promise<dataURL: string>",
           "default": "-",
           "description": "Customize preview file logic",
           "since": "-",

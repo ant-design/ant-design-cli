@@ -108,7 +108,7 @@ exports[`info > info Button --detail --format json 1`] = `
       "type": "boolean | { delay: number, icon: ReactNode }",
       "default": "false",
       "description": "Set the loading status of button",
-      "since": "icon: 5.23.0",
+      "since": "5.23.0",
       "descriptionZh": "设置按钮载入状态"
     },
     {
@@ -214,7 +214,7 @@ And 4 other properties additionally.
 | htmlType | \`submit\` \\| \`reset\` \\| \`button\` | \`button\` | \`button\` | Set the original html \`type\` of \`button\`, see: [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#type) |
 | icon | ReactNode | - | - | Set the icon component of button |
 | iconPosition | \`start\` \\| \`end\` | \`start\` | 5.17.0 | Set the icon position of button |
-| loading | boolean \\| { delay: number, icon: ReactNode } | false | icon: 5.23.0 | Set the loading status of button |
+| loading | boolean \\| { delay: number, icon: ReactNode } | false | 5.23.0 | Set the loading status of button |
 | shape | \`default\` \\| \`circle\` \\| \`round\` | \`default\` | \`round\` | Can be used to set button shape |
 | size | \`large\` \\| \`middle\` \\| \`small\` | \`middle\` | \`small\` | Set the size of button |
 | styles | [Record<SemanticDOM, CSSProperties>](#semantic-dom) | - | 5.4.0 | Semantic DOM style |
@@ -257,7 +257,7 @@ href             string                                                         
 htmlType         \`submit\` | \`reset\` | \`button\`                                     \`button\`   \`button\`                                                           Set the original html \`type\` of \`button\`, see: [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#type)
 icon             ReactNode                                                         -          -                                                                  Set the icon component of button                                                                                           
 iconPosition     \`start\` | \`end\`                                                   \`start\`    5.17.0                                                             Set the icon position of button                                                                                            
-loading          boolean | { delay: number, icon: ReactNode }                      false      icon: 5.23.0                                                       Set the loading status of button                                                                                           
+loading          boolean | { delay: number, icon: ReactNode }                      false      5.23.0                                                             Set the loading status of button                                                                                           
 shape            \`default\` | \`circle\` | \`round\`                                    \`default\`  \`round\`                                                            Can be used to set button shape                                                                                            
 size             \`large\` | \`middle\` | \`small\`                                      \`middle\`   \`small\`                                                            Set the size of button                                                                                                     
 styles           [Record<SemanticDOM, CSSProperties>](#semantic-dom)               -          5.4.0                                                              Semantic DOM style                                                                                                         
@@ -343,7 +343,7 @@ exports[`info > info Button --format json --lang en 1`] = `
       "name": "loading",
       "type": "boolean | { delay: number, icon: ReactNode }",
       "default": "false",
-      "since": "icon: 5.23.0"
+      "since": "5.23.0"
     },
     {
       "name": "shape",
@@ -467,7 +467,7 @@ exports[`info > info Button --format json --lang zh 1`] = `
       "name": "loading",
       "type": "boolean | { delay: number, icon: ReactNode }",
       "default": "false",
-      "since": "icon: 5.23.0"
+      "since": "5.23.0"
     },
     {
       "name": "shape",
@@ -531,7 +531,7 @@ exports[`info > info Button --format markdown --lang en 1`] = `
 | htmlType | \`submit\` \\| \`reset\` \\| \`button\` | \`button\` | \`button\` |
 | icon | ReactNode | - | - |
 | iconPosition | \`start\` \\| \`end\` | \`start\` | 5.17.0 |
-| loading | boolean \\| { delay: number, icon: ReactNode } | false | icon: 5.23.0 |
+| loading | boolean \\| { delay: number, icon: ReactNode } | false | 5.23.0 |
 | shape | \`default\` \\| \`circle\` \\| \`round\` | \`default\` | \`round\` |
 | size | \`large\` \\| \`middle\` \\| \`small\` | \`middle\` | \`small\` |
 | styles | [Record<SemanticDOM, CSSProperties>](#semantic-dom) | - | 5.4.0 |
@@ -557,7 +557,7 @@ exports[`info > info Button --format markdown --lang zh 1`] = `
 | htmlType | \`submit\` \\| \`reset\` \\| \`button\` | \`button\` | \`button\` |
 | icon | ReactNode | - | - |
 | iconPosition | \`start\` \\| \`end\` | \`start\` | 5.17.0 |
-| loading | boolean \\| { delay: number, icon: ReactNode } | false | icon: 5.23.0 |
+| loading | boolean \\| { delay: number, icon: ReactNode } | false | 5.23.0 |
 | shape | \`default\` \\| \`circle\` \\| \`round\` | \`default\` | \`round\` |
 | size | \`large\` \\| \`middle\` \\| \`small\` | \`middle\` | \`small\` |
 | styles | [Record<SemanticDOM, CSSProperties>](#semantic-dom) | - | 5.4.0 |
@@ -583,7 +583,7 @@ href             string                                                         
 htmlType         \`submit\` | \`reset\` | \`button\`                                     \`button\`   \`button\`                                                         
 icon             ReactNode                                                         -          -                                                                
 iconPosition     \`start\` | \`end\`                                                   \`start\`    5.17.0                                                           
-loading          boolean | { delay: number, icon: ReactNode }                      false      icon: 5.23.0                                                     
+loading          boolean | { delay: number, icon: ReactNode }                      false      5.23.0                                                           
 shape            \`default\` | \`circle\` | \`round\`                                    \`default\`  \`round\`                                                          
 size             \`large\` | \`middle\` | \`small\`                                      \`middle\`   \`small\`                                                          
 styles           [Record<SemanticDOM, CSSProperties>](#semantic-dom)               -          5.4.0                                                            
@@ -609,7 +609,7 @@ href             string                                                         
 htmlType         \`submit\` | \`reset\` | \`button\`                                     \`button\`   \`button\`                                                         
 icon             ReactNode                                                         -          -                                                                
 iconPosition     \`start\` | \`end\`                                                   \`start\`    5.17.0                                                           
-loading          boolean | { delay: number, icon: ReactNode }                      false      icon: 5.23.0                                                     
+loading          boolean | { delay: number, icon: ReactNode }                      false      5.23.0                                                           
 shape            \`default\` | \`circle\` | \`round\`                                    \`default\`  \`round\`                                                          
 size             \`large\` | \`middle\` | \`small\`                                      \`middle\`   \`small\`                                                          
 styles           [Record<SemanticDOM, CSSProperties>](#semantic-dom)               -          5.4.0                                                            
@@ -645,7 +645,7 @@ href             string                                                         
 htmlType         \`submit\` | \`reset\` | \`button\`                                     \`button\`   \`button\`                                                         
 icon             ReactNode                                                         -          -                                                                
 iconPosition     \`start\` | \`end\`                                                   \`start\`    5.17.0                                                           
-loading          boolean | { delay: number, icon: ReactNode }                      false      icon: 5.23.0                                                     
+loading          boolean | { delay: number, icon: ReactNode }                      false      5.23.0                                                           
 shape            \`default\` | \`circle\` | \`round\`                                    \`default\`  \`round\`                                                          
 size             \`large\` | \`middle\` | \`small\`                                      \`middle\`   \`small\`                                                          
 styles           [Record<SemanticDOM, CSSProperties>](#semantic-dom)               -          5.4.0                                                            

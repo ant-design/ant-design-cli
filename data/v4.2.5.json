@@ -1472,7 +1472,7 @@
       "props": [
         {
           "name": "actions",
-          "type": "Array&lt;ReactNode>",
+          "type": "Array<ReactNode>",
           "default": "-",
           "description": "The action list, shows at the bottom of the Card.",
           "descriptionZh": "卡片操作组，位置在卡片底部"
@@ -1543,7 +1543,7 @@
         },
         {
           "name": "tabList",
-          "type": "Array&lt;{key: string, tab: ReactNode}>",
+          "type": "Array<{key: string, tab: ReactNode}>",
           "default": "-",
           "description": "List of TabPane's head.",
           "descriptionZh": "页签标题列表"
@@ -3744,7 +3744,7 @@
         },
         {
           "name": "trigger",
-          "type": "Array&lt;`click`|`hover`|`contextMenu`>",
+          "type": "Array<`click`|`hover`|`contextMenu`>",
           "default": "`['hover']`",
           "description": "The trigger mode which executes the dropdown action. Note that hover can't be used on touchscreens.",
           "since": "`contextMenu`>",
@@ -3801,7 +3801,7 @@
         },
         {
           "name": "trigger",
-          "type": "Array&lt;`click`|`hover`|`contextMenu`>",
+          "type": "Array<`click`|`hover`|`contextMenu`>",
           "default": "`['hover']`",
           "description": "The trigger mode which executes the dropdown action",
           "since": "`contextMenu`>",
@@ -7504,7 +7504,7 @@
         },
         {
           "name": "options",
-          "type": "string[] | Array&lt;{ label: string value: string disabled?: boolean }>",
+          "type": "string[] | Array<{ label: string value: string disabled?: boolean }>",
           "default": "-",
           "description": "set children optional",
           "descriptionZh": "以配置形式设置子元素"
@@ -8154,7 +8154,7 @@
         },
         {
           "name": "onChange",
-          "type": "function(value, option:Option/Array&lt;Option>)",
+          "type": "function(value, option:Option/Array<Option>)",
           "default": "-",
           "description": "Called when select an option or input value change, or value of input is changed in combobox mode",
           "descriptionZh": "选中 option，或 input 的 value 变化（combobox 模式下）时，调用此函数"
@@ -12597,7 +12597,7 @@
           "type": "boolean | { rows: number, expandable: boolean suffix: string, onExpand: Function(event), onEllipsis: Function(ellipsis) }",
           "default": "false",
           "description": "Display ellipsis when text overflows. Can configure rows and expandable by using object",
-          "since": "onEllipsis: 4.2.0",
+          "since": "4.2.0",
           "descriptionZh": "自动溢出省略，为对象时可设置省略行数、是否可展开、添加后缀等"
         },
         {
@@ -12678,7 +12678,7 @@
           "type": "boolean | { rows: number, expandable: boolean suffix: string, onExpand: Function(event), onEllipsis: Function(ellipsis) }",
           "default": "false",
           "description": "Display ellipsis when text overflows. Can configure rows expandable and suffix by using object",
-          "since": "onEllipsis: 4.2.0",
+          "since": "4.2.0",
           "descriptionZh": "自动溢出省略，为对象时可设置省略行数、是否可展开、添加后缀等"
         },
         {

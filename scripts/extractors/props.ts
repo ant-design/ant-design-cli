@@ -20,6 +20,10 @@ export function parseTableRow(row: string): string[] {
         .replace(/\\\]/g, ']')             // \] → ]
         .replace(/\\</g, '<')              // \< → <
         .replace(/\\>/g, '>')              // \> → >
+        // Decode HTML entities that appear in older antd markdown docs
+        .replace(/&lt;/g, '<')             // &lt; → <
+        .replace(/&gt;/g, '>')             // &gt; → >
+        .replace(/&amp;/g, '&')            // &amp; → &
     );
 }
 
