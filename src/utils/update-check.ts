@@ -12,7 +12,7 @@ const NPM_SOURCES = [
   'https://unpkg.com/@ant-design/cli@latest/package.json', // Unpkg CDN
 ];
 
-async function fetchLatestVersion(): Promise<string | null> {
+export async function fetchLatestVersion(): Promise<string | null> {
   const json = await fetchFirstJson<{ version?: string }>(NPM_SOURCES, 3000);
   return json?.version ?? null;
 }

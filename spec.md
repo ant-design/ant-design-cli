@@ -597,6 +597,90 @@ antd bug-cli --title "..." --description "Detailed description..."
 antd bug-cli --title "..." --submit
 ```
 
+### CLI Management
+
+#### `antd upgrade`
+
+Upgrade the CLI itself to the latest version published on npm.
+
+```bash
+antd upgrade                        # upgrade to latest version
+antd upgrade --format json          # structured JSON output
+antd upgrade --lang zh              # Chinese output
+```
+
+The command automatically detects which package manager was used to install the CLI by resolving the binary path (`which antd` on Unix, `where antd` on Windows) and matching path keywords:
+
+| Path Keyword | Package Manager |
+|---|---|
+| `.utoo` or `utoo/global` | `utoo` |
+| `.cnpm` or `cnpm/global` | `cnpm` |
+| `yarn/global` | `yarn` |
+| `.pnpm-global` or `pnpm/global` | `pnpm` |
+| `.bun` or `bun/install/global` | `bun` |
+| Other | `npm` (fallback) |
+
+Each package manager uses its own global upgrade command:
+
+| Package Manager | Upgrade Command |
+|---|---|
+| `npm` | `npm install -g @ant-design/cli@latest` |
+| `yarn` | `yarn global add @ant-design/cli@latest` |
+| `pnpm` | `pnpm add -g @ant-design/cli@latest` |
+| `bun` | `bun add -g @ant-design/cli@latest` |
+| `cnpm` | `cnpm install -g @ant-design/cli@latest` |
+| `utoo` | `ut install -g @ant-design/cli@latest` |
+
+**Flow:**
+
+1. Fetch the latest version from npm (reuses the existing `fetchLatestVersion()` with 3-mirror race: npmjs, npmmirror, unpkg)
+2. Compare with current CLI version (`__CLI_VERSION__`)
+3. If already up to date, output and exit 0
+4. Detect the package manager from the binary path; if detection fails, print error with manual command suggestion and exit 1
+5. Execute the corresponding upgrade command via `child_process.execFile` (120s timeout, `stdio: 'inherit'` for passthrough)
+6. Verify the upgraded version by running `antd --cli-version`; if version unchanged, warn and exit 2
+
+**Exit codes:**
+- `0` — success (upgraded or already up to date)
+- `1` — user error (network error, package manager not detected)
+- `2` — system error (upgrade command failed, version unchanged after upgrade)
+
+**Error codes:** `NETWORK_ERROR`, `PM_NOT_FOUND`, `UPGRADE_FAILED`, `VERSION_UNCHANGED`
+
+**Output (already up to date, text):**
+```
+Already up to date: v6.4.3
+```
+
+**Output (already up to date, json):**
+```json
+{"currentVersion":"6.4.3","message":"Already up to date"}
+```
+
+**Output (upgrade succeeded, text):**
+```
+Upgrading @ant-design/cli: v6.4.3 → v6.4.4
+Running: npm install -g @ant-design/cli@latest
+... (passthrough package manager output) ...
+Successfully upgraded to v6.4.4
+```
+
+**Output (upgrade succeeded, json):**
+```json
+{"previousVersion":"6.4.3","newVersion":"6.4.4","packageManager":"npm"}
+```
+
+**Output (upgrade succeeded, markdown):**
+```markdown
+## Upgrade
+
+| Field | Value |
+|---|---|
+| Previous Version | 6.4.3 |
+| New Version | 6.4.4 |
+| Package Manager | npm |
+```
+
 ## Global Flags
 
 | Flag | Description | Default |
@@ -637,7 +721,7 @@ Exit codes:
 - `1` — user error (invalid args, component not found)
 - `2` — system error (file read failure, data corruption)
 
-Common error codes: `COMPONENT_NOT_FOUND`, `VERSION_NOT_FOUND`, `NO_PROJECT_DETECTED`, `UNSUPPORTED_VERSION_FEATURE` (e.g. tokens for v3/v4).
+Common error codes: `COMPONENT_NOT_FOUND`, `VERSION_NOT_FOUND`, `NO_PROJECT_DETECTED`, `UNSUPPORTED_VERSION_FEATURE` (e.g. tokens for v3/v4), `NETWORK_ERROR`, `PM_NOT_FOUND`, `UPGRADE_FAILED`, `VERSION_UNCHANGED`.
 
 ## Technical Architecture
 
@@ -708,6 +792,18 @@ After each command completes, the CLI silently checks whether a newer version is
 - Uses `registry.npmjs.org` with a 3 s timeout; failures are silent
 - Output goes to **stderr**, so `--format json` stdout is never polluted
 - No new production dependencies — uses only built-in Node modules (`node:https`, `node:fs`, `node:os`, `node:path`)
+
+### Self-Upgrade
+
+The `antd upgrade` command upgrades the CLI to the latest version. It detects the package manager from the binary path and executes the matching global install command. Key modules:
+
+| Module | Purpose |
+|---|---|
+| `src/commands/upgrade.ts` | Command registration + main flow |
+| `src/utils/detect-pm.ts` | Package manager detection from binary path |
+| `src/utils/update-check.ts` | `fetchLatestVersion()` reused for version check |
+
+The command reuses the existing `fetchLatestVersion()` (3-mirror race + 24h cache) for checking the latest version, and `compare()` from `src/data/version.ts` for semver comparison.
 
 ### Automated Data Sync
 

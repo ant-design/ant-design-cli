@@ -39,6 +39,7 @@ Commands:
                                    for bug reporting
   mcp                              Start MCP (Model Context Protocol) server for
                                    AI assistant integration
+  upgrade                          Upgrade the CLI to the latest version
   bug [options]                    Report a bug to the antd repository
   bug-cli [options]                Report a bug to the ant-design-cli repository
   help [command]                   display help for command"
