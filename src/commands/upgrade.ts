@@ -148,6 +148,9 @@ export function registerUpgradeCommand(program: Command): void {
 
       const { cmd, args } = UPGRADE_COMMANDS[pm];
 
+      // Skip the postAction update check since we just checked/upgraded
+      process.env.NO_UPDATE_CHECK = '1';
+
       // Step 4: Print upgrade info (except json, which outputs at the end)
       if (opts.format !== 'json') {
         console.log(localize(`Upgrading @ant-design/cli: v${currentVersion} → v${latestVersion}`, `正在升级 @ant-design/cli: v${currentVersion} → v${latestVersion}`, opts.lang));
