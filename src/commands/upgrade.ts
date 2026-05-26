@@ -40,14 +40,14 @@ function formatUpgradeMarkdown(data: UpgradeResult, lang: string): string {
   return lines.join('\n');
 }
 
-const isWin = process.platform === 'win32';
+const IS_WIN = process.platform === 'win32';
 
 function runUpgrade(cmd: string, args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, args, {
       stdio: 'inherit',
       timeout: 120_000,
-      ...(isWin ? { shell: true } : {}),
+      ...(IS_WIN ? { shell: true } : {}),
     });
     child.on('error', reject);
     child.on('close', (code, signal) => {
@@ -183,7 +183,7 @@ export function registerUpgradeCommand(program: Command): void {
       let newVersion: string | null = null;
       try {
         newVersion = await new Promise<string>((resolve, reject) => {
-          execFile('antd', ['--cli-version'], { timeout: 10_000, ...(isWin ? { shell: true } : {}) }, (error, stdout) => {
+          execFile('antd', ['--cli-version'], { timeout: 10_000, ...(IS_WIN ? { shell: true } : {}) }, (error, stdout) => {
             if (error) reject(error);
             else resolve(stdout.trim());
           });

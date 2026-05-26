@@ -216,4 +216,28 @@ describe('upgrade command', () => {
     const err = JSON.parse(result.stderr);
     expect(err.code).toBe('NETWORK_ERROR');
   });
+
+  it('shows Chinese output with --lang zh', async () => {
+    mockFetchLatestVersion.mockResolvedValue('6.4.3');
+
+    const result = await runCLI('upgrade', '--lang', 'zh');
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('已是最新版本');
+  });
+
+  it('shows Chinese upgrade success with --lang zh', async () => {
+    mockFetchLatestVersion.mockResolvedValue('99.0.0');
+    mockDetectPackageManager.mockReturnValue('pnpm');
+
+    mockSpawn.mockReturnValue(createMockChildProcess(0));
+    mockExecFile.mockImplementation((_cmd: unknown, _args: unknown, _opts: unknown, cb: unknown) => {
+      (cb as (err: null, stdout: string) => void)(null, '99.0.0');
+      return {} as never;
+    });
+
+    const result = await runCLI('upgrade', '--lang', 'zh');
+    expect(result.stdout).toContain('正在升级');
+    expect(result.stdout).toContain('成功升级到');
+    expect(result.exitCode).toBe(0);
+  });
 });
