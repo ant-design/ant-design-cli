@@ -1,5 +1,6 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
+import { localize } from '../types.js';
 import { execFile, spawn } from 'node:child_process';
 import { compare, valid } from '../data/version.js';
 import { output } from '../output/formatter.js';
@@ -22,30 +23,37 @@ interface UpgradeSuccessResult {
 
 type UpgradeResult = AlreadyUpToDateResult | UpgradeSuccessResult;
 
-function formatUpgradeMarkdown(data: UpgradeResult): string {
-  const lines = ['## Upgrade', ''];
-  lines.push('| Field | Value |');
+function formatUpgradeMarkdown(data: UpgradeResult, lang: string): string {
+  const lines = [`## ${localize('Upgrade', '升级', lang)}`, ''];
+  lines.push(`| ${localize('Field', '字段', lang)} | ${localize('Value', '值', lang)} |`);
   lines.push('|---|---|');
 
   if ('newVersion' in data) {
-    lines.push(`| Previous Version | ${data.previousVersion} |`);
-    lines.push(`| New Version | ${data.newVersion} |`);
-    lines.push(`| Package Manager | ${data.packageManager} |`);
+    lines.push(`| ${localize('Previous Version', '升级前版本', lang)} | ${data.previousVersion} |`);
+    lines.push(`| ${localize('New Version', '升级后版本', lang)} | ${data.newVersion} |`);
+    lines.push(`| ${localize('Package Manager', '包管理器', lang)} | ${data.packageManager} |`);
   } else {
-    lines.push(`| Current Version | ${data.currentVersion} |`);
-    lines.push(`| Status | Already up to date |`);
+    lines.push(`| ${localize('Current Version', '当前版本', lang)} | ${data.currentVersion} |`);
+    lines.push(`| ${localize('Status', '状态', lang)} | ${localize('Already up to date', '已是最新版本', lang)} |`);
   }
 
   return lines.join('\n');
 }
 
+const isWin = process.platform === 'win32';
+
 function runUpgrade(cmd: string, args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
-    const child = spawn(cmd, args, { stdio: 'inherit', timeout: 120_000 });
+    const child = spawn(cmd, args, {
+      stdio: 'inherit',
+      timeout: 120_000,
+      ...(isWin ? { shell: true } : {}),
+    });
     child.on('error', reject);
-    child.on('close', (code) => {
+    child.on('close', (code, signal) => {
       if (code === 0) resolve();
-      else reject(new Error(`Process exited with code ${code}`));
+      else if (code !== null) reject(new Error(`Process exited with code ${code}`));
+      else reject(new Error(`Process killed by signal ${signal ?? 'unknown'}`));
     });
   });
 }
@@ -66,8 +74,16 @@ export function registerUpgradeCommand(program: Command): void {
       } catch {
         const err = createError(
           ErrorCodes.NETWORK_ERROR,
-          'Failed to fetch latest version from npm registry',
-          'Check your network connection and try again.',
+          localize(
+            'Failed to fetch latest version from npm registry',
+            '无法从 npm 获取最新版本',
+            opts.lang,
+          ),
+          localize(
+            'Check your network connection and try again.',
+            '请检查网络连接后重试。',
+            opts.lang,
+          ),
         );
         printError(err, opts.format);
         process.exitCode = 1;
@@ -77,8 +93,16 @@ export function registerUpgradeCommand(program: Command): void {
       if (!latestVersion || !valid(latestVersion)) {
         const err = createError(
           ErrorCodes.NETWORK_ERROR,
-          'Failed to determine latest version',
-          'Check your network connection and try again.',
+          localize(
+            'Failed to determine latest version',
+            '无法确定最新版本',
+            opts.lang,
+          ),
+          localize(
+            'Check your network connection and try again.',
+            '请检查网络连接后重试。',
+            opts.lang,
+          ),
         );
         printError(err, opts.format);
         process.exitCode = 1;
@@ -89,14 +113,14 @@ export function registerUpgradeCommand(program: Command): void {
       if ((compare(currentVersion, latestVersion) ?? 0) >= 0) {
         const result: AlreadyUpToDateResult = {
           currentVersion,
-          message: 'Already up to date',
+          message: localize('Already up to date', '已是最新版本', opts.lang),
         };
         if (opts.format === 'json') {
           output(result, 'json');
         } else if (opts.format === 'markdown') {
-          console.log(formatUpgradeMarkdown(result));
+          console.log(formatUpgradeMarkdown(result, opts.lang));
         } else {
-          console.log(`Already up to date: v${currentVersion}`);
+          console.log(localize(`Already up to date: v${currentVersion}`, `已是最新版本: v${currentVersion}`, opts.lang));
         }
         return;
       }
@@ -106,8 +130,16 @@ export function registerUpgradeCommand(program: Command): void {
       if (!pm) {
         const err = createError(
           ErrorCodes.PM_NOT_FOUND,
-          'Could not detect which package manager installed the CLI',
-          'Run manually: npm install -g @ant-design/cli@latest',
+          localize(
+            'Could not detect which package manager installed the CLI',
+            '无法检测安装 CLI 的包管理器',
+            opts.lang,
+          ),
+          localize(
+            'Run manually: npm install -g @ant-design/cli@latest',
+            '手动执行: npm install -g @ant-design/cli@latest',
+            opts.lang,
+          ),
         );
         printError(err, opts.format);
         process.exitCode = 1;
@@ -118,8 +150,8 @@ export function registerUpgradeCommand(program: Command): void {
 
       // Step 4: Print upgrade info (except json, which outputs at the end)
       if (opts.format !== 'json') {
-        console.log(`Upgrading @ant-design/cli: v${currentVersion} → v${latestVersion}`);
-        console.log(`Running: ${cmd} ${args.join(' ')}`);
+        console.log(localize(`Upgrading @ant-design/cli: v${currentVersion} → v${latestVersion}`, `正在升级 @ant-design/cli: v${currentVersion} → v${latestVersion}`, opts.lang));
+        console.log(localize(`Running: ${cmd} ${args.join(' ')}`, `执行: ${cmd} ${args.join(' ')}`, opts.lang));
       }
 
       // Step 5: Execute upgrade
@@ -128,8 +160,16 @@ export function registerUpgradeCommand(program: Command): void {
       } catch {
         const err = createError(
           ErrorCodes.UPGRADE_FAILED,
-          `Upgrade command failed: ${cmd} ${args.join(' ')}`,
-          `Run manually: ${cmd} ${args.join(' ')}`,
+          localize(
+            `Upgrade command failed: ${cmd} ${args.join(' ')}`,
+            `升级命令失败: ${cmd} ${args.join(' ')}`,
+            opts.lang,
+          ),
+          localize(
+            `Run manually: ${cmd} ${args.join(' ')}`,
+            `手动执行: ${cmd} ${args.join(' ')}`,
+            opts.lang,
+          ),
         );
         printError(err, opts.format);
         process.exitCode = 2;
@@ -140,7 +180,7 @@ export function registerUpgradeCommand(program: Command): void {
       let newVersion: string | null = null;
       try {
         newVersion = await new Promise<string>((resolve, reject) => {
-          execFile('antd', ['--cli-version'], { timeout: 10_000 }, (error, stdout) => {
+          execFile('antd', ['--cli-version'], { timeout: 10_000, ...(isWin ? { shell: true } : {}) }, (error, stdout) => {
             if (error) reject(error);
             else resolve(stdout.trim());
           });
@@ -158,15 +198,23 @@ export function registerUpgradeCommand(program: Command): void {
         if (opts.format === 'json') {
           output(result, 'json');
         } else if (opts.format === 'markdown') {
-          console.log(formatUpgradeMarkdown(result));
+          console.log(formatUpgradeMarkdown(result, opts.lang));
         } else {
-          console.log(`Successfully upgraded to v${newVersion}`);
+          console.log(localize(`Successfully upgraded to v${newVersion}`, `成功升级到 v${newVersion}`, opts.lang));
         }
       } else if (newVersion && newVersion === currentVersion) {
         const err = createError(
           ErrorCodes.VERSION_UNCHANGED,
-          `Upgrade command succeeded but version is still v${currentVersion}`,
-          'Check if you have the required permissions or try running the command manually.',
+          localize(
+            `Upgrade command succeeded but version is still v${currentVersion}`,
+            `升级命令执行成功但版本仍为 v${currentVersion}`,
+            opts.lang,
+          ),
+          localize(
+            'Check if you have the required permissions or try running the command manually.',
+            '请检查是否有足够权限，或尝试手动执行升级命令。',
+            opts.lang,
+          ),
         );
         printError(err, opts.format);
         process.exitCode = 2;
@@ -180,9 +228,9 @@ export function registerUpgradeCommand(program: Command): void {
         if (opts.format === 'json') {
           output(result, 'json');
         } else if (opts.format === 'markdown') {
-          console.log(formatUpgradeMarkdown(result));
+          console.log(formatUpgradeMarkdown(result, opts.lang));
         } else {
-          console.log(`Successfully upgraded to v${latestVersion}`);
+          console.log(localize(`Successfully upgraded to v${latestVersion}`, `成功升级到 v${latestVersion}`, opts.lang));
         }
       }
     });

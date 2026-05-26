@@ -637,7 +637,7 @@ Each package manager uses its own global upgrade command:
 2. Compare with current CLI version (`__CLI_VERSION__`)
 3. If already up to date, output and exit 0
 4. Detect the package manager from the binary path; if detection fails, print error with manual command suggestion and exit 1
-5. Execute the corresponding upgrade command via `child_process.execFile` (120s timeout, `stdio: 'inherit'` for passthrough)
+5. Execute the corresponding upgrade command via `child_process.spawn` (120s timeout, `stdio: 'inherit'` for passthrough, `shell: true` on Windows for `.cmd` compatibility)
 6. Verify the upgraded version by running `antd --cli-version`; if version unchanged, warn and exit 2
 
 **Exit codes:**

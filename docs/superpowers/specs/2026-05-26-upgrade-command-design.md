@@ -79,8 +79,8 @@ type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun' | 'cnpm' | 'utoo';
 
 **Key details:**
 - Step 1 reuses `fetchLatestVersion()` with existing 3-mirror race (npmjs, npmmirror, unpkg) + 3s timeout + 24h cache
-- Step 5 uses `child_process.execFile()` with 120s timeout (global installs can be slow)
-- Step 5 passes through stdout/stderr to terminal (`stdio: 'inherit'`) so users see install progress
+- Step 5 uses `child_process.spawn()` with 120s timeout (global installs can be slow), `stdio: 'inherit'` for passthrough, and `shell: true` on Windows for `.cmd` compatibility
+- Step 5 passes through stdout/stderr to terminal so users see install progress
 - Step 6 verifies by executing `antd --cli-version` via `execFile` (the in-process `__CLI_VERSION__` is baked in at build time and won't reflect the upgrade)
 
 ## Error Handling
