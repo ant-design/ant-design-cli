@@ -17,7 +17,7 @@ vi.mock('../../utils/update-check.js', () => ({
 
 // Mock detect-pm module
 vi.mock('../../utils/detect-pm.js', () => ({
-  detectPackageManager: vi.fn().mockReturnValue('npm'),
+  detectPackageManager: vi.fn(() => null),
   UPGRADE_COMMANDS: {
     npm: { cmd: 'npm', args: ['install', '-g', '@ant-design/cli@latest'] },
     yarn: { cmd: 'yarn', args: ['global', 'add', '@ant-design/cli@latest'] },

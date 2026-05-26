@@ -618,7 +618,9 @@ The command automatically detects which package manager was used to install the 
 | `yarn/global` | `yarn` |
 | `.pnpm-global` or `pnpm/global` | `pnpm` |
 | `.bun` or `bun/install/global` | `bun` |
-| Other | `npm` (fallback) |
+| Other (path recognized) | `npm` (fallback) |
+
+> If `which`/`where` fails entirely (binary not in PATH), detection returns `null` and the command exits with `PM_NOT_FOUND`.
 
 Each package manager uses its own global upgrade command:
 
@@ -648,7 +650,7 @@ Each package manager uses its own global upgrade command:
 **Error codes:** `NETWORK_ERROR`, `PM_NOT_FOUND`, `UPGRADE_FAILED`, `VERSION_UNCHANGED`
 
 **Output (already up to date, text):**
-```
+```text
 Already up to date: v6.4.3
 ```
 
@@ -658,7 +660,7 @@ Already up to date: v6.4.3
 ```
 
 **Output (upgrade succeeded, text):**
-```
+```text
 Upgrading @ant-design/cli: v6.4.3 → v6.4.4
 Running: npm install -g @ant-design/cli@latest
 ... (passthrough package manager output) ...

@@ -6,7 +6,7 @@ Add an `antd upgrade` command that upgrades the CLI itself to the latest version
 
 ## Command Interface
 
-```
+```bash
 antd upgrade [options]
 ```
 
@@ -60,7 +60,7 @@ type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun' | 'cnpm' | 'utoo';
 
 `src/commands/upgrade.ts` — `registerUpgradeCommand(program)`
 
-```
+```text
 1. fetchLatestVersion()     → get latest version (reuse from update-check.ts)
 2. compare(latest, current) → version comparison
    ├─ no upgrade needed → output "Already up to date" → exit 0
@@ -97,7 +97,7 @@ type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun' | 'cnpm' | 'utoo';
 ### Already up to date
 
 **text:**
-```
+```text
 Already up to date: v6.4.3
 ```
 
@@ -119,7 +119,7 @@ Already up to date: v6.4.3
 ### Upgrade succeeded
 
 **text:**
-```
+```text
 Upgrading @ant-design/cli: v6.4.3 → v6.4.4
 Running: npm install -g @ant-design/cli@latest
 ... (passthrough package manager output) ...
