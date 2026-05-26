@@ -1,6 +1,13 @@
-import { describe, it, expect } from 'vitest';
-import { inferPackageManagerFromPath, UPGRADE_COMMANDS } from '../../utils/detect-pm.js';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { inferPackageManagerFromPath, detectPackageManager, UPGRADE_COMMANDS } from '../../utils/detect-pm.js';
 import type { PackageManager } from '../../utils/detect-pm.js';
+import * as childProcess from 'node:child_process';
+
+vi.mock('node:child_process', () => ({
+  execFileSync: vi.fn(),
+}));
+
+const mockExecFileSync = vi.mocked(childProcess.execFileSync);
 
 describe('inferPackageManagerFromPath', () => {
   it('detects utoo from .utoo path', () => {
@@ -110,5 +117,87 @@ describe('UPGRADE_COMMANDS', () => {
   it('utoo uses ut install -g', () => {
     expect(UPGRADE_COMMANDS.utoo.cmd).toBe('ut');
     expect(UPGRADE_COMMANDS.utoo.args).toEqual(['install', '-g', '@ant-design/cli@latest']);
+  });
+});
+
+describe('detectPackageManager', () => {
+  const originalPlatform = process.platform;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    // Restore platform descriptor
+    Object.defineProperty(process, 'platform', { value: originalPlatform });
+    vi.restoreAllMocks();
+  });
+
+  function mockPlatform(platform: string) {
+    Object.defineProperty(process, 'platform', { value: platform });
+  }
+
+  it('returns npm when which returns an npm-style path (Unix)', () => {
+    mockPlatform('darwin');
+    mockExecFileSync.mockReturnValue('/usr/local/bin/antd\n');
+    expect(detectPackageManager()).toBe('npm');
+    expect(mockExecFileSync).toHaveBeenCalledWith('which', ['antd'], expect.any(Object));
+  });
+
+  it('returns yarn when which returns a yarn/global path', () => {
+    mockPlatform('linux');
+    mockExecFileSync.mockReturnValue('/home/user/.yarn/global/bin/antd\n');
+    expect(detectPackageManager()).toBe('yarn');
+  });
+
+  it('returns pnpm when which returns a .pnpm-global path', () => {
+    mockPlatform('darwin');
+    mockExecFileSync.mockReturnValue('/home/user/.pnpm-global/bin/antd\n');
+    expect(detectPackageManager()).toBe('pnpm');
+  });
+
+  it('returns bun when which returns a .bun path', () => {
+    mockPlatform('linux');
+    mockExecFileSync.mockReturnValue('/home/user/.bun/install/global/bin/antd\n');
+    expect(detectPackageManager()).toBe('bun');
+  });
+
+  it('returns cnpm when which returns a .cnpm path', () => {
+    mockPlatform('darwin');
+    mockExecFileSync.mockReturnValue('/home/user/.cnpm/global/bin/antd\n');
+    expect(detectPackageManager()).toBe('cnpm');
+  });
+
+  it('returns utoo when which returns a .utoo path', () => {
+    mockPlatform('linux');
+    mockExecFileSync.mockReturnValue('/home/user/.utoo/global/bin/antd\n');
+    expect(detectPackageManager()).toBe('utoo');
+  });
+
+  it('uses "where" on Windows', () => {
+    mockPlatform('win32');
+    mockExecFileSync.mockReturnValue('C:\\Users\\user\\.yarn\\global\\bin\\antd.cmd\r\n');
+    expect(detectPackageManager()).toBe('yarn');
+    expect(mockExecFileSync).toHaveBeenCalledWith('where', ['antd'], expect.any(Object));
+  });
+
+  it('returns null when which/where fails (binary not in PATH)', () => {
+    mockPlatform('darwin');
+    mockExecFileSync.mockImplementation(() => {
+      throw new Error('not found');
+    });
+    expect(detectPackageManager()).toBe(null);
+  });
+
+  it('returns null when which/where returns empty string', () => {
+    mockPlatform('darwin');
+    mockExecFileSync.mockReturnValue('   \n');
+    expect(detectPackageManager()).toBe(null);
+  });
+
+  it('takes the first line when which returns multiple matches', () => {
+    mockPlatform('darwin');
+    mockExecFileSync.mockReturnValue('/home/user/.pnpm-global/bin/antd\n/usr/local/bin/antd\n');
+    expect(detectPackageManager()).toBe('pnpm');
   });
 });
