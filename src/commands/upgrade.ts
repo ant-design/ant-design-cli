@@ -47,6 +47,7 @@ function runUpgrade(cmd: string, args: string[]): Promise<void> {
     const child = spawn(cmd, args, {
       stdio: 'inherit',
       timeout: 120_000,
+      /* v8 ignore next -- Windows-only branch */
       ...(IS_WIN ? { shell: true } : {}),
     });
     child.on('error', reject);
@@ -183,7 +184,7 @@ export function registerUpgradeCommand(program: Command): void {
       let newVersion: string | null = null;
       try {
         newVersion = await new Promise<string>((resolve, reject) => {
-          execFile('antd', ['--cli-version'], { timeout: 10_000, ...(IS_WIN ? { shell: true } : {}) }, (error, stdout) => {
+          execFile('antd', ['--cli-version'], { timeout: 10_000, /* v8 ignore next -- Windows-only branch */ ...(IS_WIN ? { shell: true } : {}) }, (error, stdout) => {
             if (error) reject(error);
             else resolve(stdout.trim());
           });
