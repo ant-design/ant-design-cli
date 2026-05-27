@@ -15,7 +15,6 @@
 
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -96,6 +95,58 @@ function extract(antdDir: string, output: string) {
   });
 }
 
+/**
+ * Fetch token-meta.json from the published npm package for the given antd version.
+ * This file is a build artifact that doesn't exist in raw git source,
+ * so we extract it from `npm pack` and place it where extractors expect it.
+ */
+function fetchTokenMeta(antdDir: string, tag: string) {
+  const targetDir = path.join(antdDir, 'components', 'version');
+  const targetFile = path.join(targetDir, 'token-meta.json');
+  if (fs.existsSync(targetFile)) return;
+
+  const tmpDir = path.join(antdDir, '.tmp-npm-pack');
+  try {
+    fs.mkdirSync(tmpDir, { recursive: true });
+    console.log(`  Fetching token-meta.json from antd@${tag}...`);
+    execSync(`npm pack antd@${tag} --quiet 2>/dev/null`, { cwd: tmpDir, stdio: 'pipe' });
+    const tarball = fs.readdirSync(tmpDir).find((f) => f.endsWith('.tgz'));
+    if (!tarball) throw new Error('tarball not found');
+    // Try package/es/version/ (v5+) first, then package/lib/version/ (v4)
+    const paths = [
+      'package/es/version/token-meta.json',
+      'package/lib/version/token-meta.json',
+    ];
+    let extracted = false;
+    for (const p of paths) {
+      try {
+        execSync(`tar -xzf ${tarball} ${p}`, { cwd: tmpDir, stdio: 'pipe' });
+        const extractedPath = path.join(tmpDir, p);
+        if (fs.existsSync(extractedPath)) {
+          fs.mkdirSync(targetDir, { recursive: true });
+          fs.copyFileSync(extractedPath, targetFile);
+          extracted = true;
+          break;
+        }
+      } catch {
+        // This path may not exist in this version's package
+      }
+    }
+    if (!extracted) {
+      console.log(`  token-meta.json not found in antd@${tag}, tokens will be empty`);
+    }
+  } catch (err) {
+    console.warn(`  Warning: Failed to fetch token-meta.json for antd@${tag}: ${err instanceof Error ? err.message : err}`);
+  } finally {
+    // Clean up temp dir
+    try {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    } catch {
+      // ignore cleanup errors
+    }
+  }
+}
+
 function updateVersionsJson(major: number, minorMap: Map<string, string>) {
   const file = path.join(DATA_DIR, 'versions.json');
   let index: Record<string, Record<string, string>> = {};
@@ -104,17 +155,24 @@ function updateVersionsJson(major: number, minorMap: Map<string, string>) {
       index = JSON.parse(fs.readFileSync(file, 'utf8'));
     }
   } catch (err) {
-    console.error(`  Warning: Failed to parse versions.json, starting fresh: ${err instanceof Error ? err.message : err}`);
+    // If versions.json is corrupted, DON'T overwrite it — that would lose data for
+    // majors not in our loop (e.g. v3). Just update this major's key in an empty object.
+    console.error(`  Warning: Failed to parse versions.json, data for other majors may be lost: ${err instanceof Error ? err.message : err}`);
   }
   const majorKey = `v${major}`;
   if (!index[majorKey]) index[majorKey] = {};
   for (const [minorKey, tag] of minorMap) {
     index[majorKey][minorKey] = tag;
   }
-  // Atomic write: write to temp file then rename
-  const tmpFile = path.join(os.tmpdir(), `versions-${Date.now()}.json`);
-  fs.writeFileSync(tmpFile, JSON.stringify(index, null, 2) + '\n');
-  fs.renameSync(tmpFile, file);
+  // Atomic write: write to temp file in same directory then rename (avoids EXDEV across filesystems)
+  const tmpFile = path.join(DATA_DIR, `.versions-${Date.now()}.tmp`);
+  try {
+    fs.writeFileSync(tmpFile, JSON.stringify(index, null, 2) + '\n');
+    fs.renameSync(tmpFile, file);
+  } catch (err) {
+    try { fs.unlinkSync(tmpFile); } catch { /* ignore */ }
+    throw err;
+  }
 }
 
 /** Remove snapshot files no longer referenced by versions.json. */
@@ -186,6 +244,7 @@ function main() {
     } else {
       console.log(`  v${major}: ${currentVersion} → ${latestTag}`);
       if (!checkout(antdDir, latestTag)) continue;
+      fetchTokenMeta(antdDir, latestTag);
       extract(antdDir, primaryFile);
     }
 
@@ -208,6 +267,7 @@ function main() {
         console.warn(`  Skipping ${minorKey} due to checkout failure`);
         continue;
       }
+      fetchTokenMeta(antdDir, tag);
       extract(antdDir, snapshot);
     }
 
