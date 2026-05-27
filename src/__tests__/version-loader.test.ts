@@ -37,6 +37,44 @@ describe('data/version', () => {
     expect(v.majorVersion).toBe('v5');
   });
 
+  it('preserves prerelease tag in --version flag', () => {
+    const v = detectVersion('5.0.0-beta.1');
+    expect(v.source).toBe('flag');
+    expect(v.version).toBe('5.0.0-beta.1');
+    expect(v.majorVersion).toBe('v5');
+  });
+
+  it('preserves prerelease from non-strict-semver flag via coerce (e.g. "5-beta.1")', () => {
+    const v = detectVersion('5-beta.1');
+    expect(v.source).toBe('flag');
+    expect(v.version).toBe('5.0.0-beta.1');
+    expect(v.majorVersion).toBe('v5');
+  });
+
+  it('coerces partial version in --version flag (e.g. "5" → "5.0.0")', () => {
+    const v = detectVersion('5');
+    expect(v.source).toBe('flag');
+    expect(v.version).toBe('5.0.0');
+    expect(v.majorVersion).toBe('v5');
+  });
+
+  it('falls back when --version is non-semver (e.g. "*")', () => {
+    const v = detectVersion('*');
+    expect(v.source).toBe('fallback');
+  });
+
+  it('falls back when --version is non-semver (e.g. "workspace:*")', () => {
+    const v = detectVersion('workspace:*');
+    expect(v.source).toBe('fallback');
+  });
+
+  it('emits warning on stderr when --version is non-semver', () => {
+    const spy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
+    detectVersion('not-a-version');
+    expect(spy).toHaveBeenCalledWith(expect.stringContaining('Warning'));
+    spy.mockRestore();
+  });
+
   it('returns fallback when no antd info found', () => {
     const v = detectVersion();
     expect(v.source).toBe('fallback');
@@ -71,6 +109,48 @@ describe('data/version', () => {
     const v = detectVersion();
     expect(v.source).toBe('package.json');
     expect(v.version).toBe('5.16.0');
+  });
+
+  it('falls back when package.json has "*" as dependency', () => {
+    writeFileSync(join(workdir, 'package.json'), JSON.stringify({ dependencies: { antd: '*' } }));
+    const v = detectVersion();
+    expect(v.source).toBe('fallback');
+  });
+
+  it('falls back when package.json has "workspace:*" as dependency', () => {
+    writeFileSync(join(workdir, 'package.json'), JSON.stringify({ dependencies: { antd: 'workspace:*' } }));
+    const v = detectVersion();
+    expect(v.source).toBe('fallback');
+  });
+
+  it('parses "npm:antd@5.0.0" alias specifier from package.json', () => {
+    writeFileSync(join(workdir, 'package.json'), JSON.stringify({ dependencies: { antd: 'npm:antd@5.0.0' } }));
+    const v = detectVersion();
+    expect(v.source).toBe('package.json');
+    expect(v.version).toBe('5.0.0');
+    expect(v.majorVersion).toBe('v5');
+  });
+
+  it('coerces version with "||" range from package.json', () => {
+    writeFileSync(join(workdir, 'package.json'), JSON.stringify({ dependencies: { antd: '>=5.0.0 || >=6.0.0' } }));
+    const v = detectVersion();
+    expect(v.source).toBe('package.json');
+    expect(v.version).toBe('5.0.0');
+  });
+
+  it('coerces bare major version "5" from package.json', () => {
+    writeFileSync(join(workdir, 'package.json'), JSON.stringify({ dependencies: { antd: '5' } }));
+    const v = detectVersion();
+    expect(v.source).toBe('package.json');
+    expect(v.version).toBe('5.0.0');
+  });
+
+  it('preserves prerelease from range-prefixed package.json dependency (e.g. "^5.18.0-beta.1")', () => {
+    writeFileSync(join(workdir, 'package.json'), JSON.stringify({ dependencies: { antd: '^5.18.0-beta.1' } }));
+    const v = detectVersion();
+    expect(v.source).toBe('package.json');
+    expect(v.version).toBe('5.18.0-beta.1');
+    expect(v.majorVersion).toBe('v5');
   });
 
   it('falls back if node_modules/antd has invalid package.json', () => {

@@ -81,11 +81,11 @@ Usage:
 
 exports[`semantic > semantic Drawer --format markdown --lang zh 1`] = `
 "Drawer Semantic Structure:
-├── mask         # Mask element
-├── content         # Drawer container element
-├── header         # Header element
-├── body         # Body element
-└── footer         # Footer element
+├── mask         # 遮罩层元素
+├── content         # Drawer 容器元素
+├── header         # 头部元素
+├── body         # 内容元素
+└── footer         # 底部元素
 
 Usage:
   <Drawer classNames={{ mask: 'my-mask' }} />
@@ -107,11 +107,11 @@ Usage:
 
 exports[`semantic > semantic Drawer --format text --lang zh 1`] = `
 "Drawer Semantic Structure:
-├── mask         # Mask element
-├── content         # Drawer container element
-├── header         # Header element
-├── body         # Body element
-└── footer         # Footer element
+├── mask         # 遮罩层元素
+├── content         # Drawer 容器元素
+├── header         # 头部元素
+├── body         # 内容元素
+└── footer         # 底部元素
 
 Usage:
   <Drawer classNames={{ mask: 'my-mask' }} />

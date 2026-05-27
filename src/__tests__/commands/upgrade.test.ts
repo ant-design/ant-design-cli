@@ -29,15 +29,28 @@ vi.mock('../../utils/detect-pm.js', () => ({
   inferPackageManagerFromPath: vi.fn(),
 }));
 
+// Mock version module so we can control compare() return value
+vi.mock('../../data/version.js', async (importOriginal) => {
+  const original = await importOriginal<typeof import('../../data/version.js')>();
+  return {
+    ...original,
+    compare: vi.fn(original.compare),
+    valid: vi.fn(original.valid),
+  };
+});
+
 // Import mocked modules after vi.mock
 import { spawn, execFile } from 'node:child_process';
 import { fetchLatestVersion } from '../../utils/update-check.js';
 import { detectPackageManager } from '../../utils/detect-pm.js';
+import { compare, valid } from '../../data/version.js';
 
 const mockSpawn = vi.mocked(spawn);
 const mockExecFile = vi.mocked(execFile);
 const mockFetchLatestVersion = vi.mocked(fetchLatestVersion);
 const mockDetectPackageManager = vi.mocked(detectPackageManager);
+const mockCompare = vi.mocked(compare);
+const mockValid = vi.mocked(valid);
 
 function createMockChildProcess(exitCode: number): ChildProcess {
   const cp = new EventEmitter() as ChildProcess;
@@ -371,5 +384,40 @@ describe('upgrade command', () => {
     const result = await runCLI('upgrade', '--format', 'markdown');
     expect(result.stdout).toContain('99.0.0');
     expect(result.exitCode).toBe(0);
+  });
+
+  it('proceeds with upgrade when compare returns null (unparseable currentVersion)', async () => {
+    // Simulate dev build where currentVersion is not valid semver
+    mockCompare.mockReturnValue(null);
+    mockFetchLatestVersion.mockResolvedValue('99.0.0');
+    mockDetectPackageManager.mockReturnValue('npm');
+
+    mockSpawn.mockReturnValue(createMockChildProcess(0));
+    mockExecFile.mockImplementation((_cmd: unknown, _args: unknown, _opts: unknown, cb: unknown) => {
+      (cb as (err: null, stdout: string) => void)(null, '99.0.0');
+      return {} as never;
+    });
+
+    const result = await runCLI('upgrade');
+    // Should NOT show "Already up to date" — should proceed with upgrade
+    expect(result.stdout).toContain('Upgrading @ant-design/cli');
+    expect(result.exitCode).toBe(0);
+  });
+
+  it('proceeds with upgrade when compare returns null (JSON format)', async () => {
+    mockCompare.mockReturnValue(null);
+    mockFetchLatestVersion.mockResolvedValue('99.0.0');
+    mockDetectPackageManager.mockReturnValue('npm');
+
+    mockSpawn.mockReturnValue(createMockChildProcess(0));
+    mockExecFile.mockImplementation((_cmd: unknown, _args: unknown, _opts: unknown, cb: unknown) => {
+      (cb as (err: null, stdout: string) => void)(null, '99.0.0');
+      return {} as never;
+    });
+
+    const result = await runCLI('upgrade', '--format', 'json');
+    expect(result.exitCode).toBe(0);
+    const data = JSON.parse(result.stdout);
+    expect(data.newVersion).toBe('99.0.0');
   });
 });

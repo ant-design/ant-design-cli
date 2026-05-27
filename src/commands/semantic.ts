@@ -1,5 +1,6 @@
 import type { Command } from 'commander';
 import type { GlobalOptions, CLIError, SemanticKey } from '../types.js';
+import { localize } from '../types.js';
 import { resolveComponent } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { createError, printError, ErrorCodes } from '../output/error.js';
@@ -67,7 +68,7 @@ export function registerSemanticCommand(program: Command): void {
       const structure = result.semanticStructure;
       for (let i = 0; i < structure.length; i++) {
         const prefix = i === structure.length - 1 ? '└──' : '├──';
-        console.log(`${prefix} ${structure[i].key}         # ${structure[i].description}`);
+        console.log(`${prefix} ${structure[i].key}         # ${localize(structure[i].description, structure[i].descriptionZh, opts.lang)}`);
       }
       console.log('');
       console.log('Usage:');
