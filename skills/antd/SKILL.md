@@ -9,6 +9,7 @@ allowed-tools:
   - Bash(antd *)
   - Bash(antd bug*)
   - Bash(antd bug-cli*)
+  - Bash(antd upgrade*)
   - Bash(npm install -g @ant-design/cli*)
   - Bash(which antd)
 ---
@@ -25,7 +26,7 @@ Before first use, check if the CLI is installed. If not, install it automaticall
 which antd || npm install -g @ant-design/cli
 ```
 
-After running any command, if the output contains an "Update available" notice, run `npm install -g @ant-design/cli` to update before continuing.
+After running any command, if the output contains an "Update available" notice, run `antd upgrade` to update before continuing.
 
 
 **Always use `--format json` for structured output you can parse programmatically.**
@@ -221,7 +222,21 @@ antd bug-cli --title "antd info Button returns wrong props for v5.12.0" \
 
 **Opt-out:** If the environment variable `ANTD_NO_AUTO_REPORT=1` is set, skip all bug-reporting suggestions entirely — do not suggest `antd bug` or `antd bug-cli` unless the user directly asks.
 
-### 11. Using as MCP server
+### 11. Upgrading the CLI
+
+When the user wants to update `@ant-design/cli` to the latest version, or when an "Update available" notice appears:
+
+```bash
+# Upgrade to the latest version (auto-detects package manager)
+antd upgrade
+
+# Structured output
+antd upgrade --format json
+```
+
+The command detects which package manager installed the CLI (npm, yarn, pnpm, bun, cnpm, utoo) and runs the appropriate upgrade command. If detection fails, it suggests the manual command.
+
+### 12. Using as MCP server
 
 If working in an IDE that supports MCP (Claude Desktop, Cursor, etc.), the CLI can also run as an MCP server, exposing all knowledge-query tools directly:
 
