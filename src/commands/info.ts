@@ -11,7 +11,7 @@ export interface ComponentInfoConcise {
   nameZh: string;
   description: string;
   props: { name: string; type: string; default: string; since: string }[];
-  subComponentProps?: Record<string, { name: string; type: string; default: string }[]>;
+  subComponentProps?: Record<string, { name: string; type: string; default: string; since: string }[]>;
 }
 
 export interface ComponentInfoDetail {
@@ -21,8 +21,6 @@ export interface ComponentInfoDetail {
   whenToUse: string;
   props: (PropData & { description: string })[];
   subComponentProps?: Record<string, (PropData & { description: string })[]>;
-  methods: { name: string; description: string; type: string }[];
-  related: string[];
   faq: { question: string; answer: string }[];
 }
 
@@ -59,8 +57,6 @@ export function getComponentInfo(
             ]),
           )
         : undefined,
-      methods: comp.methods || [],
-      related: comp.related || [],
       faq: comp.faq || [],
     };
   }
@@ -79,7 +75,7 @@ export function getComponentInfo(
       ? Object.fromEntries(
           Object.entries(comp.subComponentProps).map(([name, props]) => [
             name,
-            props.map((p) => ({ name: p.name, type: p.type, default: p.default })),
+            props.map((p) => ({ name: p.name, type: p.type, default: p.default, since: p.since ?? '' })),
           ]),
         )
       : undefined,
@@ -136,7 +132,7 @@ export function registerInfoCommand(program: Command): void {
         for (const [subName, subProps] of Object.entries(result.subComponentProps)) {
           console.log(`\n${subName}`);
           console.log('');
-          const subRows: string[][] = subProps.map((p): string[] => {
+          const subRows: string[][] = subProps.map((p: { name: string; type: string; default: string; since?: string; description?: string }): string[] => {
             const prop = p as { name: string; type: string; default: string; since?: string; description?: string };
             return opts.detail
               ? [prop.name, prop.type, prop.default, prop.since || '-', prop.description || '-']
@@ -144,10 +140,6 @@ export function registerInfoCommand(program: Command): void {
           });
           console.log(formatTable(headers, subRows, fmt));
         }
-      }
-
-      if (opts.detail && 'related' in result && result.related.length > 0) {
-        console.log(`\nRelated: ${result.related.join(', ')}`);
       }
     });
 }

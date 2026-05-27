@@ -45,7 +45,7 @@ export const TOOL_DEFINITIONS = [
       type: 'object' as const,
       properties: {
         component: { type: 'string', description: 'Component name (e.g. Button, Table)' },
-        detail: { type: 'boolean', description: 'Include full detail (whenToUse, methods, related, faq)' },
+        detail: { type: 'boolean', description: 'Include full detail (whenToUse, faq)' },
       },
       required: ['component'],
     },
@@ -123,11 +123,12 @@ export function createToolHandler(ctx: McpContext) {
       case 'antd_list': {
         const components = listComponents({ version: ctx.version });
         // Trim to MCP-friendly fields only
-        const trimmed = components.map(({ name, nameZh, category, description }) => ({
+        const trimmed = components.map(({ name, nameZh, category, description, since }) => ({
           name,
           nameZh,
           category,
           description,
+          since,
         }));
         return toMcpResult(trimmed);
       }

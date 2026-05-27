@@ -166,8 +166,6 @@ exports[`info > info Button --detail --format json 1`] = `
       "descriptionZh": "设置按钮的变体"
     }
   ],
-  "methods": [],
-  "related": [],
   "faq": [
     {
       "question": "How to choose type and color & variant?",

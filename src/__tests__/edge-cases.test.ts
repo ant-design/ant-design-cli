@@ -59,12 +59,4 @@ describe('edge cases via mocked loader', () => {
     const err = JSON.parse(stderr);
     expect(err.code).toBe('DOC_NOT_AVAILABLE');
   });
-
-  it('info --detail prints Related list when component has related entries', async () => {
-    mocks.store = makeStore([{ name: 'WithRelated', related: ['Button', 'Input'] }]);
-    const out = await run('info', 'WithRelated', '--detail');
-    expect(out).toContain('Related:');
-    expect(out).toContain('Button');
-    expect(out).toContain('Input');
-  });
 });
