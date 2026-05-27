@@ -60,8 +60,16 @@ function main() {
 
     // Update changelog
     run(`npx tsx scripts/update-changelog.ts --old "${oldVersion}" --new "${cliVersion}" --versions "${versionsStr}"`);
+  } else {
+    console.log(`package.json already has version ${cliVersion}, proceeding with publish`);
+  }
 
-    // Commit, tag and push
+  // Build and test BEFORE any git operations
+  run('npm run build', { stdio: 'inherit' });
+  run('npm test', { stdio: 'inherit' });
+
+  // Commit, tag and push only after successful build + test
+  if (cliVersion !== oldVersion) {
     run('git config user.name "github-actions[bot]"');
     run('git config user.email "github-actions[bot]@users.noreply.github.com"');
     run('git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md');
@@ -73,13 +81,7 @@ function main() {
     const releaseNotes = run(`npx tsx scripts/extract-changelog.ts "${cliVersion}"`);
     writeFileSync('/tmp/release-notes.md', releaseNotes);
     run(`gh release create "v${cliVersion}" --title "v${cliVersion}" --notes-file /tmp/release-notes.md`, { stdio: 'inherit' });
-  } else {
-    console.log(`package.json already has version ${cliVersion}, proceeding with publish`);
   }
-
-  // Build and test
-  run('npm run build', { stdio: 'inherit' });
-  run('npm test', { stdio: 'inherit' });
 
   // Publish to npm (clear NODE_AUTH_TOKEN for OIDC Trusted Publishing)
   run('NODE_AUTH_TOKEN="" npm publish --provenance --access public', { stdio: 'inherit' });

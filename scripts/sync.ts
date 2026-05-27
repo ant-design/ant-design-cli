@@ -15,12 +15,16 @@
 
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const MAJORS = [4, 5, 6];
 const ANTD_REMOTE = 'https://github.com/ant-design/ant-design.git';
-const EXTRACT_SCRIPT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'extract.ts');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PROJECT_ROOT = path.resolve(__dirname, '..');
+const EXTRACT_SCRIPT = path.join(__dirname, 'extract.ts');
+const DATA_DIR = path.join(PROJECT_ROOT, 'data');
 
 function parseArgs(args: string[]): { antdDir: string } {
   let antdDir = '';
@@ -33,19 +37,29 @@ function parseArgs(args: string[]): { antdDir: string } {
     console.error('Usage: tsx scripts/sync.ts --antd-dir <path>');
     process.exit(1);
   }
+  // Verify we're running from the project root
+  if (!fs.existsSync(path.join(PROJECT_ROOT, 'package.json'))) {
+    console.error(`Error: Cannot find package.json in ${PROJECT_ROOT}. Run this script from the project root.`);
+    process.exit(1);
+  }
   return { antdDir };
 }
 
 /** Returns all release tags for a major version, sorted ascending by semver. */
 function fetchTags(major: number): string[] {
-  const out = execSync(
-    `git ls-remote --tags --sort=v:refname ${ANTD_REMOTE} "refs/tags/${major}.*"`,
-    { encoding: 'utf8' },
-  );
-  return out
-    .split('\n')
-    .filter((line) => line && !line.includes('^{}'))
-    .map((line) => line.replace(/.*refs\/tags\//, ''));
+  try {
+    const out = execSync(
+      `git ls-remote --tags --sort=v:refname ${ANTD_REMOTE} "refs/tags/${major}.*"`,
+      { encoding: 'utf8' },
+    );
+    return out
+      .split('\n')
+      .filter((line) => line && !line.includes('^{}'))
+      .map((line) => line.replace(/.*refs\/tags\//, ''));
+  } catch (err) {
+    console.error(`Error fetching tags for v${major}: ${err instanceof Error ? err.message : err}`);
+    return [];
+  }
 }
 
 /** For each minor series (X.Y), picks the highest patch tag. Excludes pre-releases (e.g. 5.0.0-rc.1). */
@@ -65,9 +79,15 @@ function buildMinorMap(tags: string[]): Map<string, string> {
   return map;
 }
 
-function checkout(antdDir: string, tag: string) {
+function checkout(antdDir: string, tag: string): boolean {
   console.log(`  git checkout ${tag}`);
-  execSync(`git checkout ${tag}`, { cwd: antdDir, stdio: 'pipe' });
+  try {
+    execSync(`git checkout ${tag}`, { cwd: antdDir, stdio: 'pipe' });
+    return true;
+  } catch (err) {
+    console.error(`  Error checking out ${tag}: ${err instanceof Error ? err.message : err}`);
+    return false;
+  }
 }
 
 function extract(antdDir: string, output: string) {
@@ -77,23 +97,36 @@ function extract(antdDir: string, output: string) {
 }
 
 function updateVersionsJson(major: number, minorMap: Map<string, string>) {
-  const file = 'data/versions.json';
-  const index: Record<string, Record<string, string>> = fs.existsSync(file)
-    ? JSON.parse(fs.readFileSync(file, 'utf8'))
-    : {};
+  const file = path.join(DATA_DIR, 'versions.json');
+  let index: Record<string, Record<string, string>> = {};
+  try {
+    if (fs.existsSync(file)) {
+      index = JSON.parse(fs.readFileSync(file, 'utf8'));
+    }
+  } catch (err) {
+    console.error(`  Warning: Failed to parse versions.json, starting fresh: ${err instanceof Error ? err.message : err}`);
+  }
   const majorKey = `v${major}`;
   if (!index[majorKey]) index[majorKey] = {};
   for (const [minorKey, tag] of minorMap) {
     index[majorKey][minorKey] = tag;
   }
-  fs.writeFileSync(file, JSON.stringify(index, null, 2) + '\n');
+  // Atomic write: write to temp file then rename
+  const tmpFile = path.join(os.tmpdir(), `versions-${Date.now()}.json`);
+  fs.writeFileSync(tmpFile, JSON.stringify(index, null, 2) + '\n');
+  fs.renameSync(tmpFile, file);
 }
 
 /** Remove snapshot files no longer referenced by versions.json. */
 function cleanStaleSnapshots() {
-  const index: Record<string, Record<string, string>> = JSON.parse(
-    fs.readFileSync('data/versions.json', 'utf8'),
-  );
+  const versionsFile = path.join(DATA_DIR, 'versions.json');
+  let index: Record<string, Record<string, string>>;
+  try {
+    index = JSON.parse(fs.readFileSync(versionsFile, 'utf8'));
+  } catch (err) {
+    console.error(`  Warning: Failed to parse versions.json, skipping stale snapshot cleanup: ${err instanceof Error ? err.message : err}`);
+    return;
+  }
 
   if (Object.keys(index).length === 0) {
     console.warn('  versions.json is empty, skipping stale snapshot cleanup');
@@ -110,11 +143,11 @@ function cleanStaleSnapshots() {
   }
 
   // Scan data/ for stale .json files matching the v{X}.{Y}.{Z}.json pattern
-  const files = fs.readdirSync('data').filter((f) => /^v\d+\.\d+\.\d+\.json$/.test(f));
+  const files = fs.readdirSync(DATA_DIR).filter((f) => /^v\d+\.\d+\.\d+\.json$/.test(f));
   let removed = 0;
   for (const file of files) {
     if (!referenced.has(file)) {
-      fs.unlinkSync(path.join('data', file));
+      fs.unlinkSync(path.join(DATA_DIR, file));
       console.log(`  Removed stale snapshot: data/${file}`);
       removed++;
     }
@@ -131,6 +164,10 @@ function main() {
     console.log(`\n=== Syncing v${major} ===`);
 
     const tags = fetchTags(major);
+    if (tags.length === 0) {
+      console.warn(`No tags fetched for v${major}, skipping`);
+      continue;
+    }
     const minorMap = buildMinorMap(tags); // pre-releases already excluded
     const latestTag = [...minorMap.values()].at(-1);
     if (!latestTag) {
@@ -140,7 +177,7 @@ function main() {
     console.log(`Latest v${major}: ${latestTag}`);
 
     // Extract primary (latest) snapshot → data/v{major}.json (skip if already up-to-date)
-    const primaryFile = `data/v${major}.json`;
+    const primaryFile = path.join(DATA_DIR, `v${major}.json`);
     const currentVersion = fs.existsSync(primaryFile)
       ? JSON.parse(fs.readFileSync(primaryFile, 'utf8')).version
       : null;
@@ -148,26 +185,29 @@ function main() {
       console.log(`  v${major} already at ${latestTag}, skipping primary extract`);
     } else {
       console.log(`  v${major}: ${currentVersion} → ${latestTag}`);
-      checkout(antdDir, latestTag);
+      if (!checkout(antdDir, latestTag)) continue;
       extract(antdDir, primaryFile);
     }
 
     // Extract per-minor snapshots, replacing stale ones whose patch version changed
     for (const [minorKey, tag] of minorMap) {
-      const snapshot = `data/v${tag}.json`;
+      const snapshot = path.join(DATA_DIR, `v${tag}.json`);
       if (fs.existsSync(snapshot)) {
-        console.log(`  Snapshot ${snapshot} already exists, skipping`);
+        console.log(`  Snapshot v${tag}.json already exists, skipping`);
         continue;
       }
       // Remove stale snapshot for this minor (e.g. v6.4.2.json when tag is now 6.4.3)
       const stalePattern = new RegExp(`^v${minorKey.replaceAll('.', '\\.')}\\.\\d+\\.json$`);
-      const staleFiles = fs.readdirSync('data').filter((f) => stalePattern.test(f));
+      const staleFiles = fs.readdirSync(DATA_DIR).filter((f) => stalePattern.test(f));
       for (const stale of staleFiles) {
-        fs.unlinkSync(path.join('data', stale));
+        fs.unlinkSync(path.join(DATA_DIR, stale));
         console.log(`  Removed stale snapshot: data/${stale}`);
       }
       console.log(`  Extracting ${minorKey} → ${tag}`);
-      checkout(antdDir, tag);
+      if (!checkout(antdDir, tag)) {
+        console.warn(`  Skipping ${minorKey} due to checkout failure`);
+        continue;
+      }
       extract(antdDir, snapshot);
     }
 

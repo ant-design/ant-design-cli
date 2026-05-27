@@ -5,6 +5,10 @@ on:
     - cron: '37 * * * *' # Hourly at :37
   workflow_dispatch: # Manual trigger
 
+concurrency:
+  group: sync-antd-data
+  cancel-in-progress: false
+
 permissions:
   contents: write
   id-token: write  # npm OIDC Trusted Publishing + provenance
