@@ -6,7 +6,8 @@
 
 import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import os from 'node:os';
+import { resolve, join } from 'node:path';
 
 const GH_TOKEN = process.env.GH_TOKEN;
 
@@ -79,8 +80,9 @@ function main() {
 
     // Create GitHub Release
     const releaseNotes = run(`npx tsx scripts/extract-changelog.ts "${cliVersion}"`);
-    writeFileSync('/tmp/release-notes.md', releaseNotes);
-    run(`gh release create "v${cliVersion}" --title "v${cliVersion}" --notes-file /tmp/release-notes.md`, { stdio: 'inherit' });
+    const releaseNotesPath = join(os.tmpdir(), `release-notes-${Date.now()}.md`);
+    writeFileSync(releaseNotesPath, releaseNotes);
+    run(`gh release create "v${cliVersion}" --title "v${cliVersion}" --notes-file "${releaseNotesPath}"`, { stdio: 'inherit' });
   }
 
   // Publish to npm (clear NODE_AUTH_TOKEN for OIDC Trusted Publishing)
