@@ -41,7 +41,7 @@ npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
 - 🤖 **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
 - 🌍 **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
 - 🔮 **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
-- 🧩 **15 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
+- 🧩 **16 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
 - 🔌 **MCP 服务** — `antd mcp` 启动 stdio 服务，原生集成 Claude Desktop、Cursor 等 IDE。
 
 <br>
@@ -117,6 +117,8 @@ antd usage ./src                    # 分析项目中的 antd 导入
 antd lint ./src                     # 检查废弃 API 和最佳实践
 antd migrate 3 4                    # v3 → v4 迁移指南
 antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
+antd mcp                            # 启动 MCP 服务，供 IDE 集成
+antd upgrade                        # 升级 CLI 到最新版本
 ```
 
 <br>
@@ -151,6 +153,13 @@ antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 |---|---|
 | [`antd bug`](#antd-bug) | 向 ant-design/ant-design 报告 Bug，自动收集环境信息 |
 | [`antd bug-cli`](#antd-bug-cli) | 向 ant-design/ant-design-cli 报告 Bug |
+
+### 🔧 CLI 管理
+
+| 命令 | 说明 |
+|---|---|
+| [`antd mcp`](#antd-mcp) | 启动 MCP stdio 服务，供 IDE Agent 集成 |
+| [`antd upgrade`](#antd-upgrade) | 升级 CLI 到最新版本 |
 
 <br>
 
@@ -388,6 +397,52 @@ antd bug --title "..." --submit     # 通过 gh CLI 提交
 antd bug-cli --title "info 命令在 v4 组件上崩溃"
 antd bug-cli --title "..." --submit
 ```
+
+### `antd mcp`
+
+启动 MCP（Model Context Protocol）stdio 服务，供 IDE Agent 集成。提供 7 个工具和 2 个提示词，支持 Claude Desktop、Cursor 等 IDE 原生集成。
+
+```bash
+antd mcp                                # 使用自动检测的版本启动
+antd mcp --version 5.20.0 --lang zh     # 指定版本和语言
+```
+
+IDE 配置（`claude_desktop_config.json`）：
+
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "antd",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+**MCP 工具（7 个）：** `antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_semantic`、`antd_changelog`
+
+**MCP 提示词（2 个）：** `antd-expert`、`antd-page-generator`
+
+### `antd upgrade`
+
+升级 CLI 自身到 npm 上发布的最新版本。自动检测安装 CLI 的包管理器（npm、yarn、pnpm、bun、cnpm、utoo）并执行对应的升级命令。
+
+```bash
+antd upgrade                        # 升级到最新版本
+```
+
+<details>
+<summary>示例输出</summary>
+
+```text
+正在升级 @ant-design/cli: v6.4.3 → v6.4.4
+执行: npm install -g @ant-design/cli@latest
+... (包管理器输出透传) ...
+成功升级到 v6.4.4
+```
+
+</details>
 
 <br>
 

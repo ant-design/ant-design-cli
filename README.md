@@ -41,7 +41,7 @@ npx skills add ant-design/ant-design-cli    # install as an agent skill
 - 🤖 **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
 - 🌍 **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
 - 🔮 **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
-- 🧩 **15 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
+- 🧩 **16 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
 - 🔌 **MCP server** — `antd mcp` starts a stdio server for native IDE integration (Claude Desktop, Cursor).
 
 <br>
@@ -117,6 +117,8 @@ antd usage ./src                    # Analyze antd imports in project
 antd lint ./src                     # Check deprecated APIs & best practices
 antd migrate 3 4                    # v3 → v4 migration guide
 antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
+antd mcp                            # Start MCP server for IDE integration
+antd upgrade                        # Upgrade CLI to latest version
 ```
 
 <br>
@@ -151,6 +153,13 @@ antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 |---|---|
 | [`antd bug`](#antd-bug) | File a bug to ant-design/ant-design with auto-collected environment info |
 | [`antd bug-cli`](#antd-bug-cli) | File a bug to ant-design/ant-design-cli |
+
+### 🔧 CLI Management
+
+| Command | Description |
+|---|---|
+| [`antd mcp`](#antd-mcp) | Start MCP stdio server for IDE agent integration |
+| [`antd upgrade`](#antd-upgrade) | Upgrade the CLI to the latest version |
 
 <br>
 
@@ -388,6 +397,52 @@ antd bug --title "..." --submit     # submit via gh CLI
 antd bug-cli --title "info command crashes on v4"
 antd bug-cli --title "..." --submit
 ```
+
+### `antd mcp`
+
+Start an MCP (Model Context Protocol) stdio server for IDE agent integration. Exposes 7 tools and 2 prompts for native IDE integration (Claude Desktop, Cursor, etc.).
+
+```bash
+antd mcp                                # start with auto-detected version
+antd mcp --version 5.20.0 --lang zh     # pin version and language
+```
+
+IDE configuration (`claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "antd",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+**MCP Tools (7):** `antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_semantic`, `antd_changelog`
+
+**MCP Prompts (2):** `antd-expert`, `antd-page-generator`
+
+### `antd upgrade`
+
+Upgrade the CLI itself to the latest version published on npm. Automatically detects which package manager installed the CLI (npm, yarn, pnpm, bun, cnpm, utoo) and runs the corresponding upgrade command.
+
+```bash
+antd upgrade                        # upgrade to latest version
+```
+
+<details>
+<summary>Example output</summary>
+
+```text
+Upgrading @ant-design/cli: v6.4.3 → v6.4.4
+Running: npm install -g @ant-design/cli@latest
+... (passthrough package manager output) ...
+Successfully upgraded to v6.4.4
+```
+
+</details>
 
 <br>
 
