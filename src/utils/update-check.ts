@@ -19,13 +19,15 @@ export async function fetchLatestVersion(): Promise<string | null> {
 
 function printUpdateNotice(currentVersion: string, latestVersion: string): void {
   const line = `  Update available: ${currentVersion} → ${latestVersion}  `;
-  const install = '  Run: npm i -g @ant-design/cli  ';
-  const width = Math.max(line.length, install.length);
+  const cmd = '  Run: antd upgrade  ';
+  const install = '  Or: npm i -g @ant-design/cli  ';
+  const width = Math.max(line.length, cmd.length, install.length);
   const pad = (s: string) => s + ' '.repeat(width - s.length);
   const bar = '─'.repeat(width);
 
   process.stderr.write(`\n╭${bar}╮\n`);
   process.stderr.write(`│${pad(line)}│\n`);
+  process.stderr.write(`│${pad(cmd)}│\n`);
   process.stderr.write(`│${pad(install)}│\n`);
   process.stderr.write(`╰${bar}╯\n`);
 }

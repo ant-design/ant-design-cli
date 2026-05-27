@@ -783,7 +783,8 @@ After each command completes, the CLI silently checks whether a newer version is
 ```
 ╭────────────────────────────────────────╮
 │  Update available: 0.1.1 → 0.2.0       │
-│  Run: npm i -g @ant-design/cli          │
+│  Run: antd upgrade                      │
+│  Or:  npm i -g @ant-design/cli          │
 ╰────────────────────────────────────────╯
 ```
 
