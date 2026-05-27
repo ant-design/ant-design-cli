@@ -167,7 +167,7 @@ function findDuplicateVersions(cwd: string, pkgPath: string): string[] {
   const topPkg = readJson<DoctorPkgJson>(join(cwd, 'node_modules', pkgPath, 'package.json'));
   if (topPkg?.version) versions.push(topPkg.version);
 
-  // 2. One level of nesting: node_modules/*/node_modules/<pkgPath>
+  // 2. Nested installs: node_modules/*/node_modules/<pkgPath>
   const nmDir = join(cwd, 'node_modules');
   try {
     const entries = readdirSync(nmDir);
@@ -180,7 +180,19 @@ function findDuplicateVersions(cwd: string, pkgPath: string): string[] {
     // ignore read errors (e.g. node_modules doesn't exist)
   }
 
-  // Deduplicate
+  // 3. Scoped packages: node_modules/@scope/name/node_modules/<pkgPath>
+  //    (the loop above misses these because it only goes one level deep)
+  if (pkgPath.startsWith('@')) {
+    const scopeDir = join(cwd, 'node_modules', pkgPath.split('/')[0]);
+    try {
+      for (const entry of readdirSync(scopeDir)) {
+        if (entry.startsWith('.')) continue;
+        const nestedPkg = readJson<DoctorPkgJson>(join(scopeDir, entry, 'node_modules', pkgPath, 'package.json'));
+        if (nestedPkg?.version) versions.push(nestedPkg.version);
+      }
+    } catch { /* scope dir doesn't exist */ }
+  }
+
   return [...new Set(versions)];
 }
 

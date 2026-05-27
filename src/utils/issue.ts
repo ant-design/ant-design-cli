@@ -184,6 +184,15 @@ export function submitViaGh(repo: string, title: string, body: string): SubmitRe
 
 export function buildIssueUrl(repo: string, title: string, body: string): string {
   const baseUrl = `https://github.com/${repo}/issues/new`;
+
+  // Truncate title if it alone would make the URL too long
+  // Reserve space for the base URL, "title=" param, and minimal body param
+  const minBodyLen = 50; // account for "body=" and truncation note
+  const maxTitleLen = MAX_URL_LENGTH - baseUrl.length - 1 - minBodyLen; // -1 for "?"
+  if (title.length > maxTitleLen) {
+    title = title.slice(0, maxTitleLen) + '…';
+  }
+
   const params = new URLSearchParams({ title, body });
   let url = `${baseUrl}?${params.toString()}`;
 

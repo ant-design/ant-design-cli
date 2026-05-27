@@ -4,7 +4,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { MetadataStore, ComponentData, CLIError } from '../types.js';
 import { createError, fuzzyMatch, ErrorCodes } from '../output/error.js';
-import { readJson } from '../utils/json.js';
+import { readJson, readJsonWithStatus } from '../utils/json.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -97,10 +97,14 @@ function loadMetadataForVersionUncached(version: string): MetadataStore {
 
   // Load versions index
   const versionsPath = join(getDataPath(), 'versions.json');
-  const versionsIndex = readJson<Record<string, Record<string, string>>>(versionsPath);
-  if (!versionsIndex) {
+  const versionsResult = readJsonWithStatus<Record<string, Record<string, string>>>(versionsPath);
+  if (!versionsResult.data) {
+    if (!versionsResult.missing) {
+      process.stderr.write(`[antd-cli] Warning: versions index file may be corrupted: ${versionsPath}\n`);
+    }
     return loadMetadata(majorVersion);
   }
+  const versionsIndex = versionsResult.data;
 
   const majorIndex = versionsIndex[majorVersion] ?? {};
 

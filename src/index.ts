@@ -66,7 +66,7 @@ export function createProgram(): Command {
   registerBugCliCommand(program);
 
   program.hook('postAction', async () => {
-    await checkForUpdate();
+    await checkForUpdate().catch(() => {});
   });
 
   return program;

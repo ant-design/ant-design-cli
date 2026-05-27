@@ -34,7 +34,8 @@ export function registerBugCommand(program: Command): void {
           createError(ErrorCodes.TITLE_REQUIRED, '--title is required', 'Provide --title <title>'),
           opts.format,
         );
-        process.exit(1);
+        process.exitCode = 1;
+        return;
       }
 
       const env = collectAntdEnv(process.cwd(), opts.version);
@@ -54,7 +55,8 @@ export function registerBugCommand(program: Command): void {
             createError(ErrorCodes.GH_NOT_FOUND, 'gh CLI is not installed or not in PATH', 'Install GitHub CLI: https://cli.github.com/ — or remove --submit to get a pre-filled URL instead'),
             opts.format,
           );
-          process.exit(1);
+          process.exitCode = 1;
+          return;
         }
         try {
           const result = submitViaGh(ANTD_REPO, title, body);
@@ -69,7 +71,8 @@ export function registerBugCommand(program: Command): void {
             createError(ErrorCodes.GH_SUBMIT_FAILED, `Failed to create issue: ${message}`, 'Check your gh authentication with `gh auth status`'),
             opts.format,
           );
-          process.exit(2);
+          process.exitCode = 2;
+          return;
         }
         return;
       }
@@ -113,7 +116,8 @@ export function registerBugCliCommand(program: Command): void {
           createError(ErrorCodes.TITLE_REQUIRED, '--title is required', 'Provide --title <title>'),
           opts.format,
         );
-        process.exit(1);
+        process.exitCode = 1;
+        return;
       }
 
       const env = collectCliEnv();
@@ -133,7 +137,8 @@ export function registerBugCliCommand(program: Command): void {
             createError(ErrorCodes.GH_NOT_FOUND, 'gh CLI is not installed or not in PATH', 'Install GitHub CLI: https://cli.github.com/ — or remove --submit to get a pre-filled URL instead'),
             opts.format,
           );
-          process.exit(1);
+          process.exitCode = 1;
+          return;
         }
         try {
           const result = submitViaGh(CLI_REPO, title, body);
@@ -148,7 +153,8 @@ export function registerBugCliCommand(program: Command): void {
             createError(ErrorCodes.GH_SUBMIT_FAILED, `Failed to create issue: ${message}`, 'Check your gh authentication with `gh auth status`'),
             opts.format,
           );
-          process.exit(2);
+          process.exitCode = 2;
+          return;
         }
         return;
       }

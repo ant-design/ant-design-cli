@@ -15,11 +15,15 @@ const FALLBACK_MAJOR = 'v5';
 export function detectVersion(flagVersion?: string): VersionInfo {
   // 1. --version flag
   if (flagVersion) {
-    return {
-      version: flagVersion,
-      majorVersion: toMajor(flagVersion),
-      source: 'flag',
-    };
+    const coerced = semver.coerce(flagVersion);
+    if (coerced) {
+      return {
+        version: coerced.version,
+        majorVersion: `v${coerced.major}`,
+        source: 'flag',
+      };
+    }
+    // Non-semver flag value — fall through to other detection methods
   }
 
   // 2. node_modules/antd/package.json
@@ -47,11 +51,16 @@ export function detectVersion(flagVersion?: string): VersionInfo {
       pkg?.dependencies?.antd || pkg?.devDependencies?.antd || pkg?.peerDependencies?.antd;
     if (depVersion) {
       const cleaned = depVersion.replace(/[\^~>=<\s]/g, '');
-      return {
-        version: cleaned,
-        majorVersion: toMajor(cleaned),
-        source: 'package.json',
-      };
+      const coerced = semver.coerce(cleaned);
+      if (coerced) {
+        return {
+          version: coerced.version,
+          majorVersion: `v${coerced.major}`,
+          source: 'package.json',
+        };
+      }
+      // Non-semver specifier (e.g. '*', 'workspace:*', 'npm:antd@5.0.0')
+      // Fall through to fallback
     }
   }
 

@@ -111,7 +111,9 @@ export function registerUpgradeCommand(program: Command): void {
       }
 
       // Step 2: Compare versions
-      if ((compare(currentVersion, latestVersion) ?? 0) >= 0) {
+      const cmp = compare(currentVersion, latestVersion);
+      // If currentVersion is unparseable (e.g. dev build), proceed with upgrade
+      if (cmp !== null && cmp >= 0) {
         const result: AlreadyUpToDateResult = {
           currentVersion,
           message: localize('Already up to date', '已是最新版本', opts.lang),
@@ -191,9 +193,16 @@ export function registerUpgradeCommand(program: Command): void {
         });
       } catch {
         // Verification failed but upgrade may have succeeded
+        if (opts.format !== 'json') {
+          process.stderr.write(localize(
+            'Warning: could not verify the upgraded version (the new version may not yet be on PATH).\n',
+            '警告：无法验证升级后的版本（新版本可能尚未在 PATH 中）。\n',
+            opts.lang,
+          ));
+        }
       }
 
-      if (newVersion && valid(newVersion) && (compare(currentVersion, newVersion) ?? 0) < 0) {
+      if (newVersion && valid(newVersion) && (compare(currentVersion, newVersion) ?? -1) < 0) {
         const result: UpgradeSuccessResult = {
           previousVersion: currentVersion,
           newVersion,
