@@ -215,6 +215,44 @@ function cleanStaleSnapshots() {
   }
 }
 
+/** Validate that primary data files are well-formed after sync. */
+function validateData() {
+  let errors = 0;
+  for (const major of MAJORS) {
+    const file = path.join(DATA_DIR, `v${major}.json`);
+    if (!fs.existsSync(file)) {
+      console.error(`  FAIL: ${file} does not exist`);
+      errors++;
+      continue;
+    }
+    let data: any;
+    try {
+      data = JSON.parse(fs.readFileSync(file, 'utf8'));
+    } catch (err) {
+      console.error(`  FAIL: ${file} is not valid JSON: ${err instanceof Error ? err.message : err}`);
+      errors++;
+      continue;
+    }
+    if (!data.version || typeof data.version !== 'string') {
+      console.error(`  FAIL: ${file} missing or invalid "version" field`);
+      errors++;
+    }
+    if (!data.majorVersion || typeof data.majorVersion !== 'string') {
+      console.error(`  FAIL: ${file} missing or invalid "majorVersion" field`);
+      errors++;
+    }
+    if (!Array.isArray(data.components) || data.components.length === 0) {
+      console.error(`  FAIL: ${file} missing or empty "components" array`);
+      errors++;
+    }
+  }
+  if (errors > 0) {
+    console.error(`\nValidation failed with ${errors} error(s)`);
+    process.exit(1);
+  }
+  console.log('  All data files valid');
+}
+
 function main() {
   const { antdDir } = parseArgs(process.argv.slice(2));
 
@@ -278,6 +316,10 @@ function main() {
   // Final sweep: remove any snapshot files not referenced by versions.json
   console.log('\n=== Cleaning stale snapshots ===');
   cleanStaleSnapshots();
+
+  // Validate extracted data
+  console.log('\n=== Validating extracted data ===');
+  validateData();
 
   console.log('\nSync complete.');
 }
