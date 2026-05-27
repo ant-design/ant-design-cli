@@ -229,9 +229,6 @@ When the user wants to update `@ant-design/cli` to the latest version, or when a
 ```bash
 # Upgrade to the latest version (auto-detects package manager)
 antd upgrade
-
-# Structured output
-antd upgrade --format json
 ```
 
 The command detects which package manager installed the CLI (npm, yarn, pnpm, bun, cnpm, utoo) and runs the appropriate upgrade command. If detection fails, it suggests the manual command.

@@ -430,8 +430,6 @@ IDE 配置（`claude_desktop_config.json`）：
 
 ```bash
 antd upgrade                        # 升级到最新版本
-antd upgrade --format json          # 结构化 JSON 输出
-antd upgrade --lang zh              # 中文输出
 ```
 
 <details>

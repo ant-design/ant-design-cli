@@ -430,8 +430,6 @@ Upgrade the CLI itself to the latest version published on npm. Automatically det
 
 ```bash
 antd upgrade                        # upgrade to latest version
-antd upgrade --format json          # structured JSON output
-antd upgrade --lang zh              # Chinese output
 ```
 
 <details>
