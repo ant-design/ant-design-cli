@@ -111,7 +111,9 @@ export function registerUpgradeCommand(program: Command): void {
       }
 
       // Step 2: Compare versions
-      if ((compare(currentVersion, latestVersion) ?? 0) >= 0) {
+      const cmp = compare(currentVersion, latestVersion);
+      // If currentVersion is unparseable (e.g. dev build), proceed with upgrade
+      if (cmp !== null && cmp >= 0) {
         const result: AlreadyUpToDateResult = {
           currentVersion,
           message: localize('Already up to date', '已是最新版本', opts.lang),
@@ -193,7 +195,7 @@ export function registerUpgradeCommand(program: Command): void {
         // Verification failed but upgrade may have succeeded
       }
 
-      if (newVersion && valid(newVersion) && (compare(currentVersion, newVersion) ?? 0) < 0) {
+      if (newVersion && valid(newVersion) && (compare(currentVersion, newVersion) ?? -1) < 0) {
         const result: UpgradeSuccessResult = {
           previousVersion: currentVersion,
           newVersion,
