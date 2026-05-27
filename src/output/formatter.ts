@@ -71,8 +71,8 @@ export function outputTokens(
 
   const rows = result.tokens.map((t) =>
     isComponent
-      ? [t.name, t.type, t.default]
-      : [t.name, t.type, t.default, localize(t.description, t.descriptionZh, lang) || '-'],
+      ? [t.name, t.type, t.default || '-']
+      : [t.name, t.type, t.default || '-', localize(t.description, t.descriptionZh, lang) || '-'],
   );
 
   console.log(formatTable(headers, rows, format === 'markdown' ? 'markdown' : 'text'));

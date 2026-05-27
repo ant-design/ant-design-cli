@@ -6,7 +6,6 @@ export interface PropData {
   descriptionZh?: string;
   since?: string;
   deprecated?: boolean | string;
-  required?: boolean;
 }
 
 export interface DemoData {
@@ -21,7 +20,7 @@ export interface DemoData {
 export interface TokenData {
   name: string;
   type: string;
-  default: string;
+  default?: string;
   description?: string;
   descriptionZh?: string;
 }
@@ -43,11 +42,9 @@ export interface ComponentData {
   whenToUse?: string;
   whenToUseZh?: string;
   props: PropData[];
-  methods?: { name: string; description: string; type: string }[];
   demos?: DemoData[];
   tokens?: TokenData[];
   semanticStructure?: SemanticKey[];
-  related?: string[];
   faq?: { question: string; answer: string }[];
   subComponents?: string[];
   subComponentProps?: Record<string, PropData[]>;
