@@ -14,6 +14,10 @@ export const ErrorCodes = {
   GH_SUBMIT_FAILED: 'GH_SUBMIT_FAILED',
   DOC_NOT_AVAILABLE: 'DOC_NOT_AVAILABLE',
   UNKNOWN_TOOL: 'UNKNOWN_TOOL',
+  NETWORK_ERROR: 'NETWORK_ERROR',
+  PM_NOT_FOUND: 'PM_NOT_FOUND',
+  UPGRADE_FAILED: 'UPGRADE_FAILED',
+  VERSION_UNCHANGED: 'VERSION_UNCHANGED',
 } as const;
 
 export function createError(code: string, message: string, suggestion?: string): CLIError {
