@@ -132,7 +132,7 @@ export function registerInfoCommand(program: Command): void {
         for (const [subName, subProps] of Object.entries(result.subComponentProps)) {
           console.log(`\n${subName}`);
           console.log('');
-          const subRows: string[][] = subProps.map((p): string[] => {
+          const subRows: string[][] = subProps.map((p: { name: string; type: string; default: string; since?: string; description?: string }): string[] => {
             const prop = p as { name: string; type: string; default: string; since?: string; description?: string };
             return opts.detail
               ? [prop.name, prop.type, prop.default, prop.since || '-', prop.description || '-']
