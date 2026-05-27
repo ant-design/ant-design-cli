@@ -44,6 +44,13 @@ describe('data/version', () => {
     expect(v.majorVersion).toBe('v5');
   });
 
+  it('preserves prerelease from non-strict-semver flag via coerce (e.g. "5-beta.1")', () => {
+    const v = detectVersion('5-beta.1');
+    expect(v.source).toBe('flag');
+    expect(v.version).toBe('5.0.0-beta.1');
+    expect(v.majorVersion).toBe('v5');
+  });
+
   it('coerces partial version in --version flag (e.g. "5" → "5.0.0")', () => {
     const v = detectVersion('5');
     expect(v.source).toBe('flag');
@@ -136,6 +143,14 @@ describe('data/version', () => {
     const v = detectVersion();
     expect(v.source).toBe('package.json');
     expect(v.version).toBe('5.0.0');
+  });
+
+  it('preserves prerelease from range-prefixed package.json dependency (e.g. "^5.18.0-beta.1")', () => {
+    writeFileSync(join(workdir, 'package.json'), JSON.stringify({ dependencies: { antd: '^5.18.0-beta.1' } }));
+    const v = detectVersion();
+    expect(v.source).toBe('package.json');
+    expect(v.version).toBe('5.18.0-beta.1');
+    expect(v.majorVersion).toBe('v5');
   });
 
   it('falls back if node_modules/antd has invalid package.json', () => {

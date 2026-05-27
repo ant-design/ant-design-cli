@@ -17,7 +17,7 @@ export function detectVersion(flagVersion?: string): VersionInfo {
   if (flagVersion) {
     // Try parse first to preserve prerelease tags (e.g. "5.0.0-beta.1"),
     // then fall back to coerce for partial versions (e.g. "5" → "5.0.0")
-    const parsed = semver.parse(flagVersion) ?? semver.coerce(flagVersion);
+    const parsed = semver.parse(flagVersion) ?? semver.coerce(flagVersion, { includePrerelease: true });
     if (parsed) {
       return {
         version: parsed.version,
@@ -54,7 +54,7 @@ export function detectVersion(flagVersion?: string): VersionInfo {
       pkg?.dependencies?.antd || pkg?.devDependencies?.antd || pkg?.peerDependencies?.antd;
     if (depVersion) {
       // Try parse first to preserve prerelease, then coerce for partial versions
-      const parsed = semver.parse(depVersion) ?? semver.coerce(depVersion);
+      const parsed = semver.parse(depVersion) ?? semver.coerce(depVersion, { includePrerelease: true });
       if (parsed) {
         return {
           version: parsed.version,
@@ -62,7 +62,8 @@ export function detectVersion(flagVersion?: string): VersionInfo {
           source: 'package.json',
         };
       }
-      // Non-semver specifier (e.g. '*', 'workspace:*', 'npm:antd@5.0.0')
+      // Non-semver specifier (e.g. '*', 'workspace:*')
+      // Note: 'npm:antd@5.0.0' is handled by coerce above, not here
       // Fall through to fallback
     }
   }
