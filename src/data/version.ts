@@ -15,15 +15,18 @@ const FALLBACK_MAJOR = 'v5';
 export function detectVersion(flagVersion?: string): VersionInfo {
   // 1. --version flag
   if (flagVersion) {
-    const coerced = semver.coerce(flagVersion);
-    if (coerced) {
+    // Try parse first to preserve prerelease tags (e.g. "5.0.0-beta.1"),
+    // then fall back to coerce for partial versions (e.g. "5" → "5.0.0")
+    const parsed = semver.parse(flagVersion) ?? semver.coerce(flagVersion);
+    if (parsed) {
       return {
-        version: coerced.version,
-        majorVersion: `v${coerced.major}`,
+        version: parsed.version,
+        majorVersion: `v${parsed.major}`,
         source: 'flag',
       };
     }
-    // Non-semver flag value — fall through to other detection methods
+    // Non-semver flag value — fall through with a warning
+    process.stderr.write(`[antd-cli] Warning: --version "${flagVersion}" is not a valid semver version; falling back to auto-detection.\n`);
   }
 
   // 2. node_modules/antd/package.json
@@ -51,11 +54,12 @@ export function detectVersion(flagVersion?: string): VersionInfo {
       pkg?.dependencies?.antd || pkg?.devDependencies?.antd || pkg?.peerDependencies?.antd;
     if (depVersion) {
       const cleaned = depVersion.replace(/[\^~>=<\s]/g, '');
-      const coerced = semver.coerce(cleaned);
-      if (coerced) {
+      // Try parse first to preserve prerelease, then coerce for partial versions
+      const parsed = semver.parse(cleaned) ?? semver.coerce(cleaned);
+      if (parsed) {
         return {
-          version: coerced.version,
-          majorVersion: `v${coerced.major}`,
+          version: parsed.version,
+          majorVersion: `v${parsed.major}`,
           source: 'package.json',
         };
       }
