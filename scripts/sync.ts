@@ -13,7 +13,7 @@
  *   npx tsx scripts/sync.ts --antd-dir antd-source
  */
 
-import { execSync } from 'node:child_process';
+import { execFileSync, execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -90,7 +90,7 @@ function checkout(antdDir: string, tag: string): boolean {
 }
 
 function extract(antdDir: string, output: string) {
-  execSync(`npx tsx ${EXTRACT_SCRIPT} --antd-dir ${antdDir} --output ${output}`, {
+  execFileSync('npx', ['tsx', EXTRACT_SCRIPT, '--antd-dir', antdDir, '--output', output], {
     stdio: 'inherit',
   });
 }
@@ -120,7 +120,7 @@ function fetchTokenMeta(antdDir: string, tag: string) {
     let extracted = false;
     for (const p of paths) {
       try {
-        execSync(`tar -xzf ${tarball} ${p}`, { cwd: tmpDir, stdio: 'pipe' });
+        execFileSync('tar', ['-xzf', tarball, p], { cwd: tmpDir, stdio: 'pipe' });
         const extractedPath = path.join(tmpDir, p);
         if (fs.existsSync(extractedPath)) {
           fs.mkdirSync(targetDir, { recursive: true });
