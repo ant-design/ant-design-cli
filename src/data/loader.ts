@@ -313,8 +313,8 @@ function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; subCompone
         : cleanLabel(h3Match[1].trim());
 
       let m: RegExpExecArray | null;
-      const localRegex = new RegExp(tableRegex.source, 'g');
-      while ((m = localRegex.exec(part)) !== null) {
+      tableRegex.lastIndex = 0;
+      while ((m = tableRegex.exec(part)) !== null) {
         const parsed = parseTableProps(m[0], 'en');
         if (parsed.length > 0) {
           const existing = enSections.get(sectionLabel) || [];
@@ -347,8 +347,8 @@ function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; subCompone
             : cleanLabel(h3Match[1].trim());
 
           let m: RegExpExecArray | null;
-          const localRegex = new RegExp(tableRegex.source, 'g');
-          while ((m = localRegex.exec(part)) !== null) {
+          tableRegex.lastIndex = 0;
+          while ((m = tableRegex.exec(part)) !== null) {
             const parsed = parseTableProps(m[0], 'zh');
             if (parsed.length > 0) {
               const existing = zhSections.get(sectionLabel) || [];
@@ -386,41 +386,30 @@ function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; subCompone
 }
 
 /**
- * Backfill a component's empty fields from its own doc markdown and from the
- * major-version data. Version snapshots sometimes have missing props when the
- * extraction script failed to parse a component's API table.
+ * Backfill a component's empty fields from the major-version data.
+ * Called only when doc-based backfill was insufficient.
  */
-function backfillComponent(comp: ComponentData, majorStore: MetadataStore | null): void {
-  // 1. If props is empty but doc contains an API section, parse props from doc
-  if (comp.props.length === 0 && comp.doc) {
-    const parsed = parsePropsFromDoc(comp);
-    if (parsed && parsed.props.length > 0) {
-      comp.props = parsed.props;
-      if (Object.keys(parsed.subComponentProps).length > 0 && !comp.subComponentProps) {
-        comp.subComponentProps = parsed.subComponentProps;
+function backfillFromMajor(comp: ComponentData, majorStore: MetadataStore): void {
+  const majorComp = findComponent(majorStore, comp.name);
+  if (!majorComp) return;
+
+  // 1. If still empty after doc parsing, fall back to major version props
+  if (comp.props.length === 0 && majorComp.props.length > 0) {
+    comp.props = [...majorComp.props];
+    if (!comp.subComponentProps && majorComp.subComponentProps) {
+      comp.subComponentProps = { ...majorComp.subComponentProps };
+      for (const key of Object.keys(comp.subComponentProps)) {
+        comp.subComponentProps[key] = [...majorComp.subComponentProps[key]];
       }
     }
   }
 
-  // 2. If still empty and major version data is available, fall back to major
-  if (comp.props.length === 0 && majorStore) {
-    const majorComp = findComponent(majorStore, comp.name);
-    if (majorComp && majorComp.props.length > 0) {
-      comp.props = [...majorComp.props];
-      if (!comp.subComponentProps && majorComp.subComponentProps) {
-        comp.subComponentProps = { ...majorComp.subComponentProps };
-        for (const key of Object.keys(comp.subComponentProps)) {
-          comp.subComponentProps[key] = [...majorComp.subComponentProps[key]];
-        }
-      }
-    }
+  // 2. Backfill descriptions independently (en may exist without zh)
+  if (!comp.description && majorComp.description) {
+    comp.description = majorComp.description;
   }
-
-  // 3. Backfill description from major if empty
-  if (!comp.description && majorStore) {
-    const majorComp = findComponent(majorStore, comp.name);
-    if (majorComp?.description) comp.description = majorComp.description;
-    if (!comp.descriptionZh && majorComp?.descriptionZh) comp.descriptionZh = majorComp.descriptionZh;
+  if (!comp.descriptionZh && majorComp.descriptionZh) {
+    comp.descriptionZh = majorComp.descriptionZh;
   }
 }
 
@@ -451,9 +440,23 @@ export function resolveComponent(
   const majorVersion = `v${version.split('.')[0]}`;
   const parts = version.split('.');
   const requestedSnapshot = parts.length > 1;
-  if (requestedSnapshot || comp.props.length === 0 || !comp.description) {
-    const majorStore = requestedSnapshot ? loadMetadata(majorVersion) : null;
-    backfillComponent(comp, majorStore);
+
+  // 1. Try to backfill props from the component's own doc (no disk I/O)
+  if (comp.props.length === 0 && comp.doc) {
+    const parsed = parsePropsFromDoc(comp);
+    if (parsed && parsed.props.length > 0) {
+      comp.props = parsed.props;
+      if (Object.keys(parsed.subComponentProps).length > 0 && !comp.subComponentProps) {
+        comp.subComponentProps = parsed.subComponentProps;
+      }
+    }
+  }
+
+  // 2. Only load major store if props or localized descriptions are still missing
+  const needsMajorBackfill = comp.props.length === 0 || !comp.description || !comp.descriptionZh;
+  if ((requestedSnapshot || needsMajorBackfill) && needsMajorBackfill) {
+    const majorStore = loadMetadata(majorVersion);
+    backfillFromMajor(comp, majorStore);
   }
 
   return { store, comp };
