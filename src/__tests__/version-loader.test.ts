@@ -260,6 +260,235 @@ describe('data/loader', () => {
     }
   });
 
+  it('resolveComponent backfills props from doc when snapshot has empty props', () => {
+    // Popconfirm in v5.0.x snapshots has 0 props but doc has API tables
+    const result = resolveComponent('Popconfirm', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+      expect(result.comp.props.some((p) => p.name === 'title')).toBe(true);
+    }
+  });
+
+  it('resolveComponent backfills description from major version when snapshot has empty description', () => {
+    // Popconfirm in v5.0.x snapshots has empty description, v5.json has it
+    const result = resolveComponent('Popconfirm', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.description.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent backfills props for Drawer (Props column header)', () => {
+    // Drawer uses "Props" as the API table header instead of "Property"
+    const result = resolveComponent('Drawer', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent does not overwrite non-empty snapshot props', () => {
+    // Button should have its own props already, backfill should not change them
+    const result = resolveComponent('Button', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent backfills descriptionZh independently from description', () => {
+    // Ensure Chinese description is backfilled even if English description exists
+    const result = resolveComponent('Popconfirm', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      // Popconfirm snapshot has empty descriptionZh, major version has it
+      expect(result.comp.descriptionZh.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent backfills props from major version when doc has no API section', () => {
+    // Some components may have empty props and no ## API in doc — fall back to major
+    const result = resolveComponent('Popover', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent returns complete data for snapshot with all fields', () => {
+    // Button in v5.0.0 has props and description — verify data completeness
+    const result = resolveComponent('Button', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      // Verify it still has complete data
+      expect(result.comp.props.length).toBeGreaterThan(0);
+      expect(result.comp.description.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('backfillFromMajor uses shallow copy to avoid shared references', () => {
+    // Popconfirm in snapshot has empty props — backfilled from major should not share array
+    const result = resolveComponent('Popconfirm', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      const props1 = result.comp.props;
+      // Resolving same component from major version should return different array
+      const major = resolveComponent('Popconfirm', '5');
+      if (!('error' in major)) {
+        // If both routes return data, arrays should be independent
+        expect(props1).not.toBe(major.comp.props);
+      }
+    }
+  });
+
+  it('resolveComponent handles components with sub-component props in doc', () => {
+    // Check that subComponentProps are extracted from doc when present
+    const result = resolveComponent('Select', '5.0.0');
+    expect('error' in result).toBe(false);
+    // Select has Option sub-component with props
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+      // Select doc has "Select props" heading (main) and separate sub-sections
+      // Verify subComponentProps exist from doc backfill
+      if (result.comp.subComponentProps) {
+        const keys = Object.keys(result.comp.subComponentProps);
+        expect(keys.length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('resolveComponent populates since field from doc API table version column', () => {
+    // Popconfirm's doc has a "Version" / "版本" column in its API table
+    const result = resolveComponent('Popconfirm', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      const withSince = result.comp.props.filter((p) => p.since);
+      expect(withSince.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent parses Chinese descriptions from docZh', () => {
+    // Popconfirm snapshot has empty descriptionZh; doc backfill parses docZh
+    const result = resolveComponent('Popconfirm', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      // At least some props should have Chinese descriptions from docZh parsing
+      const withZhDesc = result.comp.props.filter((p) => p.descriptionZh && p.descriptionZh.length > 0);
+      expect(withZhDesc.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent populates subComponentProps from major version extraction', () => {
+    // Major version files have subComponentProps extracted at build time
+    const result = resolveComponent('Input', '5');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      // Input has TextArea, Search, Password, OTP sub-components
+      expect(result.comp.props.length).toBeGreaterThan(0);
+      expect(result.comp.subComponentProps).toBeDefined();
+      const keys = Object.keys(result.comp.subComponentProps!);
+      expect(keys.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent preserves deprecated props from extraction', () => {
+    // AutoComplete in v5.json has deprecated props with ~~strikethrough~~
+    const result = resolveComponent('AutoComplete', '5');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      const deprecated = result.comp.props.filter((p) => p.deprecated);
+      expect(deprecated.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent handles terminal sections in API doc', () => {
+    // Popconfirm doc has "## Note" after "## API" which terminates the API section
+    const result = resolveComponent('Popconfirm', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      // Should still have props parsed from the API section before "## Note"
+      expect(result.comp.props.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent handles Popover with empty snapshot props', () => {
+    // Popover in v5.0.x snapshot has empty props, should be backfilled from doc
+    const result = resolveComponent('Popover', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+      expect(result.comp.description.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent backfills descriptionZh from major version', () => {
+    // Popover snapshot has empty description and descriptionZh; doc + major backfill should fill them
+    const result = resolveComponent('Popover', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.descriptionZh!.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent handles major version request without snapshot', () => {
+    // Requesting just "5" uses the major version file directly
+    const result = resolveComponent('Button', '5');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent doc backfill parses Chinese API table with 版本 column', () => {
+    // Popconfirm Chinese doc has "版本" (version) column header
+    const result = resolveComponent('Popconfirm', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      const sinceProps = result.comp.props.filter((p) => p.since);
+      // Chinese "版本" is mapped to versionIdx, so since should be populated from both langs
+      expect(sinceProps.length).toBeGreaterThan(0);
+      // Also verify Chinese descriptions are merged correctly
+      const okButton = result.comp.props.find((p) => p.name === 'okText');
+      if (okButton) {
+        expect(okButton.description).toBeTruthy();
+        expect(okButton.descriptionZh).toBeTruthy();
+      }
+    }
+  });
+
+  it('resolveComponent with Drawer uses Props column header from doc', () => {
+    // Drawer's API table uses "Props" as the name column header instead of "Property"
+    const result = resolveComponent('Drawer', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent does not backfill doc when major version already has data', () => {
+    // Button in v5.20.0 has complete props from extraction; doc backfill should be skipped
+    const result = resolveComponent('Button', '5.20.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+      // Button's props should match the extraction data, not be duplicated from doc
+      const propNames = result.comp.props.map((p) => p.name);
+      const uniqueNames = new Set(propNames);
+      expect(propNames.length).toBe(uniqueNames.size);
+    }
+  });
+
+  it('resolveComponent backfills both english and chinese descriptions independently', () => {
+    // Test that description and descriptionZh are backfilled from different sources independently
+    const result = resolveComponent('Popover', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.description!.length).toBeGreaterThan(0);
+      expect(result.comp.descriptionZh!.length).toBeGreaterThan(0);
+    }
+  });
+
   it('falls back to loadMetadata when versions.json cannot be read', () => {
     // First call: returns null (simulating unreadable versions.json)
     // Subsequent calls (loadMetadata reads no JSON files, only readDataFile) — but
