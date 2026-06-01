@@ -283,8 +283,10 @@ function isMainSection(label: string, componentName: string): boolean {
 /**
  * Parse props from the `doc`/`docZh` markdown fields of a component.
  * Returns { props, subComponentProps } or null if no API section found.
+ *
+ * Exported for testing. Not part of the public CLI API.
  */
-function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; subComponentProps: Record<string, PropData[]> } | null {
+export function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; subComponentProps: Record<string, PropData[]> } | null {
   if (!comp.doc) return null;
 
   const apiMatch = comp.doc.match(/^## API\b/m);
@@ -388,8 +390,14 @@ function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; subCompone
 /**
  * Backfill a component's empty fields from the major-version data.
  * Called only when doc-based backfill was insufficient.
+ *
+ * ⚠️ Mutates `comp` in place — the component object comes from metadataCache,
+ * so this intentionally updates cached data. The mutation is idempotent
+ * (only fills empty props/description/subComponentProps).
+ *
+ * Exported for testing. Not part of the public CLI API.
  */
-function backfillFromMajor(comp: ComponentData, majorStore: MetadataStore): void {
+export function backfillFromMajor(comp: ComponentData, majorStore: MetadataStore): void {
   const majorComp = findComponent(majorStore, comp.name);
   if (!majorComp) return;
 
@@ -434,12 +442,7 @@ export function resolveComponent(
   }
 
   // Backfill empty fields from doc and/or major version data
-  // A "snapshot" is a version-specific file (e.g. v5.0.7.json), as opposed to
-  // the major-version aggregation file (v5.json). We detect this by checking
-  // whether the requested version includes a minor version number.
   const majorVersion = `v${version.split('.')[0]}`;
-  const parts = version.split('.');
-  const requestedSnapshot = parts.length > 1;
 
   // 1. Try to backfill props from the component's own doc (no disk I/O)
   if (comp.props.length === 0 && comp.doc) {
@@ -454,7 +457,7 @@ export function resolveComponent(
 
   // 2. Only load major store if props or localized descriptions are still missing
   const needsMajorBackfill = comp.props.length === 0 || !comp.description || !comp.descriptionZh;
-  if ((requestedSnapshot || needsMajorBackfill) && needsMajorBackfill) {
+  if (needsMajorBackfill) {
     const majorStore = loadMetadata(majorVersion);
     backfillFromMajor(comp, majorStore);
   }

@@ -316,8 +316,8 @@ describe('data/loader', () => {
     }
   });
 
-  it('resolveComponent does not load major store when snapshot has all data', () => {
-    // Button in v5.0.0 has props and description — no need for major store
+  it('resolveComponent returns complete data for snapshot with all fields', () => {
+    // Button in v5.0.0 has props and description — verify data completeness
     const result = resolveComponent('Button', '5.0.0');
     expect('error' in result).toBe(false);
     if (!('error' in result)) {
@@ -349,6 +349,12 @@ describe('data/loader', () => {
     // Select has Option sub-component with props
     if (!('error' in result)) {
       expect(result.comp.props.length).toBeGreaterThan(0);
+      // Select doc has "Select props" heading (main) and separate sub-sections
+      // Verify subComponentProps exist from doc backfill
+      if (result.comp.subComponentProps) {
+        const keys = Object.keys(result.comp.subComponentProps);
+        expect(keys.length).toBeGreaterThan(0);
+      }
     }
   });
 
