@@ -49,12 +49,12 @@ function parseTable(tableText: string, lang: 'en' | 'zh'): PropData[] {
   const typeIdx = headerRow.findIndex((h) => h === 'Type' || h === '类型');
   const defaultIdx = headerRow.findIndex((h) => h === 'Default' || h === '默认值');
   const versionIdx = headerRow.findIndex((h) => h === 'Version' || h === '版本');
-  // "Param" used in some components (e.g. Menu) alongside the standard "Property"
+  // "Param" used in some components (e.g. Menu), "Props" (e.g. Drawer), "Argument" alongside the standard "Property"
   const nameIdx = headerRow.findIndex((h) =>
     h === 'Property' || h === '属性' ||
     h === 'Name' || h === '参数' ||
     h === 'Option' || h === '字段' ||
-    h === 'Param'
+    h === 'Param' || h === 'Props' || h === 'Argument'
   );
 
   if (nameIdx === -1) return props;

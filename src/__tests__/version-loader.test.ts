@@ -260,6 +260,43 @@ describe('data/loader', () => {
     }
   });
 
+  it('resolveComponent backfills props from doc when snapshot has empty props', () => {
+    // Popconfirm in v5.0.x snapshots has 0 props but doc has API tables
+    const result = resolveComponent('Popconfirm', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+      expect(result.comp.props.some((p) => p.name === 'title')).toBe(true);
+    }
+  });
+
+  it('resolveComponent backfills description from major version when snapshot has empty description', () => {
+    // Popconfirm in v5.0.x snapshots has empty description, v5.json has it
+    const result = resolveComponent('Popconfirm', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.description.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent backfills props for Drawer (Props column header)', () => {
+    // Drawer uses "Props" as the API table header instead of "Property"
+    const result = resolveComponent('Drawer', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resolveComponent does not overwrite non-empty snapshot props', () => {
+    // Button should have its own props already, backfill should not change them
+    const result = resolveComponent('Button', '5.0.0');
+    expect('error' in result).toBe(false);
+    if (!('error' in result)) {
+      expect(result.comp.props.length).toBeGreaterThan(0);
+    }
+  });
+
   it('falls back to loadMetadata when versions.json cannot be read', () => {
     // First call: returns null (simulating unreadable versions.json)
     // Subsequent calls (loadMetadata reads no JSON files, only readDataFile) — but
