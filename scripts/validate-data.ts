@@ -57,6 +57,45 @@ function checkProps(props: PropData[], file: string, component: string, issues: 
   }
 }
 
+/** Check for components with API docs but no extracted props (extraction gap) */
+interface SnapshotIssue {
+  file: string;
+  component: string;
+  rule: string;
+}
+
+function checkEmptyPropsWithApi(files: string[]): SnapshotIssue[] {
+  const issues: SnapshotIssue[] = [];
+  const majorStores = new Map<string, MetadataStore>();
+
+  for (const file of files) {
+    const filePath = path.join(DATA_DIR, file);
+    const store: MetadataStore = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const majorKey = store.majorVersion;
+
+    // Load corresponding major version data for comparison
+    if (!majorStores.has(majorKey) && !file.replace(/\.json$/, '').includes('.')) {
+      majorStores.set(majorKey, store);
+    }
+    const majorStore = majorStores.get(majorKey);
+
+    for (const comp of store.components || []) {
+      if (comp.props.length === 0 && comp.doc?.includes('## API')) {
+        // Check if the major version has props for this component
+        const majorComp = majorStore?.components.find(c => c.name === comp.name);
+        const majorHasProps = majorComp && majorComp.props.length > 0;
+        issues.push({
+          file,
+          component: comp.name,
+          rule: majorHasProps ? 'empty-props-vs-major' : 'empty-props-with-api',
+        });
+      }
+    }
+  }
+
+  return issues;
+}
+
 function main() {
   const files = fs.readdirSync(DATA_DIR)
     .filter(f => /^v\d+.*\.json$/.test(f))
@@ -86,14 +125,26 @@ function main() {
   }
 
   const errorRules = ['trailing-backslash', 'html-entity', 'escape-remnant'];
-  const errorCount = issues.filter(i => errorRules.includes(i.rule)).length;
-  const warnCount = issues.length - errorCount;
+  let errorCount = issues.filter(i => errorRules.includes(i.rule)).length;
+  let warnCount = issues.length - errorCount;
 
   if (!quiet) {
     for (const issue of issues) {
       const level = errorRules.includes(issue.rule) ? 'ERROR' : 'WARN';
       console.log(`[${level}] [${issue.rule}] ${issue.file}:${issue.component}.${issue.prop} ${issue.field}=${JSON.stringify(issue.value)}`);
     }
+  }
+
+  // Check for empty props with API docs (extraction gap detection)
+  const snapshotIssues = checkEmptyPropsWithApi(files);
+  for (const si of snapshotIssues) {
+    const level = si.rule === 'empty-props-vs-major' ? 'ERROR' : 'WARN';
+    if (!quiet) {
+      console.log(`[${level}] [${si.rule}] ${si.file}:${si.component} has 0 props but API docs exist${si.rule === 'empty-props-vs-major' ? ' (major version has props)' : ''}`);
+    }
+    ruleCounts.set(si.rule, (ruleCounts.get(si.rule) || 0) + 1);
+    if (si.rule === 'empty-props-vs-major') errorCount++;
+    else warnCount++;
   }
 
   console.log(`\nSummary:`);

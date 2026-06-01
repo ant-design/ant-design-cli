@@ -38,9 +38,8 @@ function parseDeprecation(name: string): { cleanName: string; deprecated: boolea
 
 /** Parse all props from a single markdown table block */
 function parseTable(tableText: string, lang: 'en' | 'zh'): PropData[] {
-  const props: PropData[] = [];
   const lines = tableText.trim().split('\n');
-  if (lines.length < 3) return props;
+  if (lines.length < 3) return [];
 
   const headerRow = parseTableRow(lines[0]);
   const descIdx = lang === 'zh'
@@ -50,14 +49,33 @@ function parseTable(tableText: string, lang: 'en' | 'zh'): PropData[] {
   const defaultIdx = headerRow.findIndex((h) => h === 'Default' || h === '默认值');
   const versionIdx = headerRow.findIndex((h) => h === 'Version' || h === '版本');
   // "Param" used in some components (e.g. Menu), "Props" (e.g. Drawer), "Argument" alongside the standard "Property"
-  const nameIdx = headerRow.findIndex((h) =>
+  let nameIdx = headerRow.findIndex((h) =>
     h === 'Property' || h === '属性' ||
     h === 'Name' || h === '参数' ||
     h === 'Option' || h === '字段' ||
     h === 'Param' || h === 'Props' || h === 'Argument'
   );
 
-  if (nameIdx === -1) return props;
+  if (nameIdx === -1) {
+    // Fallback: assume first column is the prop name so future antd headers don't silently produce empty props
+    console.warn(`[extract] Unknown API table header: [${headerRow.join(', ')}], using first column as name`);
+    nameIdx = 0;
+  }
+
+  return parseTableRows(lines, lang, nameIdx, descIdx, typeIdx, defaultIdx, versionIdx);
+}
+
+/** Parse table rows given resolved column indices */
+function parseTableRows(
+  lines: string[],
+  lang: 'en' | 'zh',
+  nameIdx: number,
+  descIdx: number,
+  typeIdx: number,
+  defaultIdx: number,
+  versionIdx: number,
+): PropData[] {
+  const props: PropData[] = [];
 
   for (let i = 2; i < lines.length; i++) {
     const row = lines[i];
