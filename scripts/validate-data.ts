@@ -68,15 +68,21 @@ function checkEmptyPropsWithApi(files: string[]): SnapshotIssue[] {
   const issues: SnapshotIssue[] = [];
   const majorStores = new Map<string, MetadataStore>();
 
+  // Pass 1: load all major version stores first (e.g. v4.json, v5.json, v6.json)
+  // so they're available when checking snapshots
+  for (const file of files) {
+    if (!file.replace(/\.json$/, '').includes('.')) {
+      const filePath = path.join(DATA_DIR, file);
+      const store: MetadataStore = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      majorStores.set(store.majorVersion, store);
+    }
+  }
+
+  // Pass 2: check all files
   for (const file of files) {
     const filePath = path.join(DATA_DIR, file);
     const store: MetadataStore = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     const majorKey = store.majorVersion;
-
-    // Load corresponding major version data for comparison
-    if (!majorStores.has(majorKey) && !file.replace(/\.json$/, '').includes('.')) {
-      majorStores.set(majorKey, store);
-    }
     const majorStore = majorStores.get(majorKey);
 
     for (const comp of store.components || []) {

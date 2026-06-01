@@ -201,8 +201,24 @@ function parseTableProps(tableText: string, lang: 'en' | 'zh'): PropData[] {
     h === 'Property' || h === '属性' || h === 'Name' || h === '参数' || h === 'Option' || h === '字段' || h === 'Param' || h === 'Props' || h === 'Argument',
   );
 
-  if (nameIdx === -1) return [];
+  if (nameIdx === -1) {
+    // Fallback: assume first column is the prop name (matches extraction script behavior)
+    return parseTablePropsRows(lines, lang, 0, descIdx, typeIdx, defaultIdx, versionIdx);
+  }
 
+  return parseTablePropsRows(lines, lang, nameIdx, descIdx, typeIdx, defaultIdx, versionIdx);
+}
+
+/** Parse table rows given resolved column indices. */
+function parseTablePropsRows(
+  lines: string[],
+  lang: 'en' | 'zh',
+  nameIdx: number,
+  descIdx: number,
+  typeIdx: number,
+  defaultIdx: number,
+  versionIdx: number,
+): PropData[] {
   const props: PropData[] = [];
   for (let i = 2; i < lines.length; i++) {
     if (!lines[i].trim()) continue;
@@ -388,18 +404,21 @@ function backfillComponent(comp: ComponentData, majorStore: MetadataStore | null
 
   // 2. If still empty and major version data is available, fall back to major
   if (comp.props.length === 0 && majorStore) {
-    const majorComp = majorStore.components.find((c) => c.name === comp.name);
+    const majorComp = findComponent(majorStore, comp.name);
     if (majorComp && majorComp.props.length > 0) {
-      comp.props = majorComp.props;
+      comp.props = [...majorComp.props];
       if (!comp.subComponentProps && majorComp.subComponentProps) {
-        comp.subComponentProps = majorComp.subComponentProps;
+        comp.subComponentProps = { ...majorComp.subComponentProps };
+        for (const key of Object.keys(comp.subComponentProps)) {
+          comp.subComponentProps[key] = [...majorComp.subComponentProps[key]];
+        }
       }
     }
   }
 
   // 3. Backfill description from major if empty
   if (!comp.description && majorStore) {
-    const majorComp = majorStore.components.find((c) => c.name === comp.name);
+    const majorComp = findComponent(majorStore, comp.name);
     if (majorComp?.description) comp.description = majorComp.description;
     if (!comp.descriptionZh && majorComp?.descriptionZh) comp.descriptionZh = majorComp.descriptionZh;
   }
@@ -426,10 +445,14 @@ export function resolveComponent(
   }
 
   // Backfill empty fields from doc and/or major version data
+  // A "snapshot" is a version-specific file (e.g. v5.0.7.json), as opposed to
+  // the major-version aggregation file (v5.json). We detect this by checking
+  // whether the requested version includes a minor version number.
   const majorVersion = `v${version.split('.')[0]}`;
-  const isSnapshot = store.version !== majorVersion.slice(1);
-  if (isSnapshot || comp.props.length === 0 || !comp.description) {
-    const majorStore = isSnapshot ? loadMetadata(majorVersion) : null;
+  const parts = version.split('.');
+  const requestedSnapshot = parts.length > 1;
+  if (requestedSnapshot || comp.props.length === 0 || !comp.description) {
+    const majorStore = requestedSnapshot ? loadMetadata(majorVersion) : null;
     backfillComponent(comp, majorStore);
   }
 
