@@ -134,8 +134,8 @@ export function formatTable(
   }
 
   if (format === 'markdown') {
-    // Escape pipe characters in cell content to avoid breaking markdown tables
-    const escPipe = (s: string) => s.replace(/\|/g, '\\|');
+    // Escape backslashes first, then pipe characters to avoid breaking markdown tables
+    const escPipe = (s: string) => (s || '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
     const headerLine = '| ' + headers.map(escPipe).join(' | ') + ' |';
     const separator = '| ' + headers.map(() => '---').join(' | ') + ' |';
     const bodyLines = rows.map((row) => '| ' + row.map(escPipe).join(' | ') + ' |');

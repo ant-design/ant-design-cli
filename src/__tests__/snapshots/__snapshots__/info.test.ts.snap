@@ -217,7 +217,7 @@ And 4 other properties additionally.
 | size | \`large\` \\| \`middle\` \\| \`small\` | \`middle\` | \`small\` | Set the size of button |
 | styles | [Record<SemanticDOM, CSSProperties>](#semantic-dom) | - | 5.4.0 | Semantic DOM style |
 | target | string | - | - | Same as target attribute of a, works when href is specified |
-| type | \`primary\` \\| \`dashed\` \\| \`link\` \\| \`text\` \\| \`default\` | \`default\` | \`link\` \\ | Syntactic sugar. Set button type. Will follow \`variant\` & \`color\` if provided |
+| type | \`primary\` \\| \`dashed\` \\| \`link\` \\| \`text\` \\| \`default\` | \`default\` | \`link\` \\\\ | Syntactic sugar. Set button type. Will follow \`variant\` & \`color\` if provided |
 | onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - | Set the handler to handle \`click\` event |
 | variant | \`outlined\` \\| \`dashed\` \\| \`solid\` \\| \`filled\` \\| \`text\` \\| \`link\` | - | 5.21.0 | Set button variant |"
 `;
@@ -534,7 +534,7 @@ exports[`info > info Button --format markdown --lang en 1`] = `
 | size | \`large\` \\| \`middle\` \\| \`small\` | \`middle\` | \`small\` |
 | styles | [Record<SemanticDOM, CSSProperties>](#semantic-dom) | - | 5.4.0 |
 | target | string | - | - |
-| type | \`primary\` \\| \`dashed\` \\| \`link\` \\| \`text\` \\| \`default\` | \`default\` | \`link\` \\ |
+| type | \`primary\` \\| \`dashed\` \\| \`link\` \\| \`text\` \\| \`default\` | \`default\` | \`link\` \\\\ |
 | onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - |
 | variant | \`outlined\` \\| \`dashed\` \\| \`solid\` \\| \`filled\` \\| \`text\` \\| \`link\` | - | 5.21.0 |"
 `;
@@ -560,7 +560,7 @@ exports[`info > info Button --format markdown --lang zh 1`] = `
 | size | \`large\` \\| \`middle\` \\| \`small\` | \`middle\` | \`small\` |
 | styles | [Record<SemanticDOM, CSSProperties>](#semantic-dom) | - | 5.4.0 |
 | target | string | - | - |
-| type | \`primary\` \\| \`dashed\` \\| \`link\` \\| \`text\` \\| \`default\` | \`default\` | \`link\` \\ |
+| type | \`primary\` \\| \`dashed\` \\| \`link\` \\| \`text\` \\| \`default\` | \`default\` | \`link\` \\\\ |
 | onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - |
 | variant | \`outlined\` \\| \`dashed\` \\| \`solid\` \\| \`filled\` \\| \`text\` \\| \`link\` | - | 5.21.0 |"
 `;
