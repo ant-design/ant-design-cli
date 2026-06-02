@@ -90,7 +90,8 @@ function checkout(antdDir: string, tag: string): boolean {
 }
 
 function extract(antdDir: string, output: string) {
-  execFileSync('npx', ['tsx', EXTRACT_SCRIPT, '--antd-dir', antdDir, '--output', output], {
+  const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+  execFileSync(npxCmd, ['tsx', EXTRACT_SCRIPT, '--antd-dir', antdDir, '--output', output], {
     stdio: 'inherit',
   });
 }
