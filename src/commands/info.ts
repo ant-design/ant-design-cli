@@ -141,5 +141,14 @@ export function registerInfoCommand(program: Command): void {
           console.log(formatTable(headers, subRows, fmt));
         }
       }
+
+      // Common props note — most antd components inherit className/style/rootClassName via Common Props.
+      // ConfigProvider does NOT support common props (no DOM element rendered).
+      if (result.name !== 'ConfigProvider') {
+        const commonPropsNote = opts.lang === 'zh'
+          ? '💡 该组件还支持 className、style、rootClassName 等通用属性，详见 Common Props。'
+          : '💡 This component also supports common props: className, style, rootClassName. See Common Props for details.';
+        console.log(`\n${commonPropsNote}`);
+      }
     });
 }

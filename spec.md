@@ -127,6 +127,8 @@ JSON output (concise):
 
 For components without sub-components (e.g. Button), `subComponentProps` is omitted.
 
+Text and markdown output includes a note after the props table reminding users that the component also supports antd common props (`className`, `style`, `rootClassName`) which are not individually listed in the API table. JSON output omits this note for machine-parseability.
+
 JSON output (--detail):
 ```json
 {
