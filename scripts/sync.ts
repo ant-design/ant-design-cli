@@ -100,11 +100,18 @@ function extract(antdDir: string, output: string) {
  * Fetch token-meta.json from the published npm package for the given antd version.
  * This file is a build artifact that doesn't exist in raw git source,
  * so we extract it from `npm pack` and place it where extractors expect it.
+ *
+ * For v5+, token-meta.json is required — missing it would produce data files
+ * with empty tokens, silently breaking the `antd token` command. We throw
+ * instead of continuing with empty data.
  */
 function fetchTokenMeta(antdDir: string, tag: string) {
   const targetDir = path.join(antdDir, 'components', 'version');
   const targetFile = path.join(targetDir, 'token-meta.json');
   if (fs.existsSync(targetFile)) return;
+
+  const majorVersion = parseInt(tag.split('.')[0], 10);
+  const requiresTokens = majorVersion >= 5;
 
   const tmpDir = path.join(antdDir, '.tmp-npm-pack');
   try {
@@ -134,9 +141,16 @@ function fetchTokenMeta(antdDir: string, tag: string) {
       }
     }
     if (!extracted) {
-      console.log(`  token-meta.json not found in antd@${tag}, tokens will be empty`);
+      const msg = `token-meta.json not found in antd@${tag}`;
+      if (requiresTokens) {
+        throw new Error(`${msg} — token data is required for v5+ and cannot be empty`);
+      }
+      console.log(`  ${msg}, tokens will be empty (v4/v3)`);
     }
   } catch (err) {
+    if (requiresTokens) {
+      throw err; // Re-throw for v5+ — don't silently produce empty token data
+    }
     console.warn(`  Warning: Failed to fetch token-meta.json for antd@${tag}: ${err instanceof Error ? err.message : err}`);
   } finally {
     // Clean up temp dir
@@ -283,7 +297,13 @@ function main() {
     } else {
       console.log(`  v${major}: ${currentVersion} → ${latestTag}`);
       if (!checkout(antdDir, latestTag)) continue;
-      fetchTokenMeta(antdDir, latestTag);
+      try {
+        fetchTokenMeta(antdDir, latestTag);
+      } catch (err) {
+        console.error(`  ERROR: ${err instanceof Error ? err.message : err}`);
+        console.error(`  Skipping v${major} primary extract — cannot proceed without token data`);
+        continue;
+      }
       extract(antdDir, primaryFile);
     }
 
@@ -306,7 +326,13 @@ function main() {
         console.warn(`  Skipping ${minorKey} due to checkout failure`);
         continue;
       }
-      fetchTokenMeta(antdDir, tag);
+      try {
+        fetchTokenMeta(antdDir, tag);
+      } catch (err) {
+        console.error(`  ERROR: ${err instanceof Error ? err.message : err}`);
+        console.error(`  Skipping ${minorKey} snapshot — cannot proceed without token data`);
+        continue;
+      }
       extract(antdDir, snapshot);
     }
 
