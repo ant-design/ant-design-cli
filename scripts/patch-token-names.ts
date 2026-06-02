@@ -11,7 +11,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync, execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import os from 'node:os';
 
 const dataDir = path.resolve('data');
@@ -39,7 +39,7 @@ function fetchTokenMeta(version: string): Record<string, { descEn?: string; type
 
   console.log(`  Downloading antd@${version}...`);
   try {
-    execSync(`npm pack antd@${version} --quiet 2>/dev/null`, { cwd: tmpDir, stdio: 'pipe' });
+    execFileSync('npm', ['pack', `antd@${version}`, '--quiet'], { cwd: tmpDir, stdio: 'pipe' });
     const tarball = fs.readdirSync(tmpDir).find((f) => f.endsWith('.tgz'));
     if (!tarball) throw new Error('tarball not found');
     execFileSync('tar', ['-xzf', tarball, 'package/es/version/token-meta.json'], {
