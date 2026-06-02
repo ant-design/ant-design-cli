@@ -18,7 +18,7 @@ function escapeRegExp(s: string): string {
 
 const content = fs.readFileSync('CHANGELOG.md', 'utf8');
 const regex = new RegExp(
-  `^## .*?${escapeRegExp(version)}.*?\n(.*?)(?=^## |\\Z)`,
+  `^## .*?${escapeRegExp(version)}.*?\n(.*?)(?=^## |(?!\\.))`,
   'ms',
 );
 const match = regex.exec(content);
