@@ -11,9 +11,14 @@ if (!version) {
   process.exit(1);
 }
 
+/** Escape all regex special characters in a string so it can be safely embedded in a RegExp. */
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 const content = fs.readFileSync('CHANGELOG.md', 'utf8');
 const regex = new RegExp(
-  `^## .*?${version.replace(/\./g, '\\.')}.*?\n(.*?)(?=^## |\\Z)`,
+  `^## .*?${escapeRegExp(version)}.*?\n(.*?)(?=^## |(?!.))`,
   'ms',
 );
 const match = regex.exec(content);
