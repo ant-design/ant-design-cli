@@ -6,12 +6,23 @@ import { detectVersion } from '../data/version.js';
 import { printError } from '../output/error.js';
 import { formatTable, output } from '../output/formatter.js';
 
+/** Common props inherited by most antd components via Common Props. */
+const COMMON_PROPS: PropData[] = [
+  { name: 'className', type: 'string', default: '-', description: 'Additional CSS class', descriptionZh: '额外的 CSS 类名' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Additional style', descriptionZh: '额外的样式' },
+  { name: 'rootClassName', type: 'string', default: '-', description: 'ClassName on the root element', descriptionZh: '根元素的类名' },
+];
+
+/** Components that do NOT support common props (no DOM element rendered). */
+const COMMON_PROPS_EXCLUDED = new Set(['ConfigProvider']);
+
 export interface ComponentInfoConcise {
   name: string;
   nameZh: string;
   description: string;
   props: { name: string; type: string; default: string; since: string }[];
   subComponentProps?: Record<string, { name: string; type: string; default: string; since: string }[]>;
+  commonProps?: PropData[];
 }
 
 export interface ComponentInfoDetail {
@@ -21,6 +32,7 @@ export interface ComponentInfoDetail {
   whenToUse: string;
   props: (PropData & { description: string })[];
   subComponentProps?: Record<string, (PropData & { description: string })[]>;
+  commonProps?: PropData[];
   faq: { question: string; answer: string }[];
 }
 
@@ -38,6 +50,7 @@ export function getComponentInfo(
 
   const desc = localize(comp.description, comp.descriptionZh, opts.lang);
   const whenToUse = localize(comp.whenToUse, comp.whenToUseZh, opts.lang);
+  const commonProps = COMMON_PROPS_EXCLUDED.has(comp.name) ? undefined : COMMON_PROPS;
 
   if (opts.detail) {
     return {
@@ -57,6 +70,7 @@ export function getComponentInfo(
             ]),
           )
         : undefined,
+      commonProps,
       faq: comp.faq || [],
     };
   }
@@ -79,6 +93,7 @@ export function getComponentInfo(
           ]),
         )
       : undefined,
+    commonProps,
   };
 }
 
@@ -142,13 +157,24 @@ export function registerInfoCommand(program: Command): void {
         }
       }
 
-      // Common props note — most antd components inherit className/style/rootClassName via Common Props.
+      // Common props — most antd components inherit className/style/rootClassName via Common Props.
       // ConfigProvider does NOT support common props (no DOM element rendered).
-      if (result.name !== 'ConfigProvider') {
-        const commonPropsNote = opts.lang === 'zh'
-          ? '💡 该组件还支持 className、style、rootClassName 等通用属性，详见 Common Props。'
-          : '💡 This component also supports common props: className, style, rootClassName. See Common Props for details.';
-        console.log(`\n${commonPropsNote}`);
+      if (result.commonProps) {
+        const noteLabel = opts.lang === 'zh'
+          ? '通用属性（所有组件均支持，无需单独列出）'
+          : 'Common Props (inherited by all components, not listed individually)';
+        console.log(`\n${noteLabel}`);
+        console.log('');
+        const cpHeaders = opts.detail
+          ? ['Property', 'Type', 'Default', 'Description']
+          : ['Property', 'Type', 'Default'];
+        const cpRows: string[][] = result.commonProps.map((p: PropData) => {
+          const desc = opts.detail ? localize(p.description, p.descriptionZh, opts.lang) || '-' : undefined;
+          return opts.detail
+            ? [p.name, p.type, p.default, desc!]
+            : [p.name, p.type, p.default];
+        });
+        console.log(formatTable(cpHeaders, cpRows, fmt));
       }
     });
 }

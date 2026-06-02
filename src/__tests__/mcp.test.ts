@@ -32,9 +32,18 @@ describe('mcp tools', () => {
 
   it('antd_info returns component info', async () => {
     const result = await handle('antd_info', { component: 'Button' });
-    const data = parseResult(result) as { name: string; props: unknown[] };
+    const data = parseResult(result) as { name: string; props: unknown[]; commonProps: { name: string }[] };
     expect(data.name).toBe('Button');
     expect(data.props.length).toBeGreaterThan(0);
+    expect(data.commonProps).toBeDefined();
+    expect(data.commonProps.map((p) => p.name)).toEqual(['className', 'style', 'rootClassName']);
+  });
+
+  it('antd_info omits commonProps for ConfigProvider', async () => {
+    const result = await handle('antd_info', { component: 'ConfigProvider' });
+    const data = parseResult(result) as { name: string; commonProps?: unknown[] };
+    expect(data.name).toBe('ConfigProvider');
+    expect(data.commonProps).toBeUndefined();
   });
 
   it('antd_info honours detail flag', async () => {

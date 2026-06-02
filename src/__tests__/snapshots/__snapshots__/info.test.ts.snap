@@ -166,6 +166,29 @@ exports[`info > info Button --detail --format json 1`] = `
       "descriptionZh": "设置按钮的变体"
     }
   ],
+  "commonProps": [
+    {
+      "name": "className",
+      "type": "string",
+      "default": "-",
+      "description": "Additional CSS class",
+      "descriptionZh": "额外的 CSS 类名"
+    },
+    {
+      "name": "style",
+      "type": "CSSProperties",
+      "default": "-",
+      "description": "Additional style",
+      "descriptionZh": "额外的样式"
+    },
+    {
+      "name": "rootClassName",
+      "type": "string",
+      "default": "-",
+      "description": "ClassName on the root element",
+      "descriptionZh": "根元素的类名"
+    }
+  ],
   "faq": [
     {
       "question": "How to choose type and color & variant?",
@@ -221,7 +244,13 @@ And 4 other properties additionally.
 | onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - | Set the handler to handle \`click\` event |
 | variant | \`outlined\` \\| \`dashed\` \\| \`solid\` \\| \`filled\` \\| \`text\` \\| \`link\` | - | 5.21.0 | Set button variant |
 
-💡 This component also supports common props: className, style, rootClassName. See Common Props for details."
+Common Props (inherited by all components, not listed individually)
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| className | string | - | Additional CSS class |
+| style | CSSProperties | - | Additional style |
+| rootClassName | string | - | ClassName on the root element |"
 `;
 
 exports[`info > info Button --detail --format text 1`] = `
@@ -266,7 +295,13 @@ type             \`primary\` | \`dashed\` | \`link\` | \`text\` | \`default\`   
 onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void        -          -                                                                  Set the handler to handle \`click\` event                                                                                    
 variant          \`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`      -          5.21.0                                                             Set button variant                                                                                                         
 
-💡 This component also supports common props: className, style, rootClassName. See Common Props for details."
+Common Props (inherited by all components, not listed individually)
+
+Property       Type           Default  Description                  
+-------------  -------------  -------  -----------------------------
+className      string         -        Additional CSS class         
+style          CSSProperties  -        Additional style             
+rootClassName  string         -        ClassName on the root element"
 `;
 
 exports[`info > info Button --format json --lang en 1`] = `
@@ -388,6 +423,29 @@ exports[`info > info Button --format json --lang en 1`] = `
       "type": "\`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`",
       "default": "-",
       "since": "5.21.0"
+    }
+  ],
+  "commonProps": [
+    {
+      "name": "className",
+      "type": "string",
+      "default": "-",
+      "description": "Additional CSS class",
+      "descriptionZh": "额外的 CSS 类名"
+    },
+    {
+      "name": "style",
+      "type": "CSSProperties",
+      "default": "-",
+      "description": "Additional style",
+      "descriptionZh": "额外的样式"
+    },
+    {
+      "name": "rootClassName",
+      "type": "string",
+      "default": "-",
+      "description": "ClassName on the root element",
+      "descriptionZh": "根元素的类名"
     }
   ]
 }"
@@ -513,6 +571,29 @@ exports[`info > info Button --format json --lang zh 1`] = `
       "default": "-",
       "since": "5.21.0"
     }
+  ],
+  "commonProps": [
+    {
+      "name": "className",
+      "type": "string",
+      "default": "-",
+      "description": "Additional CSS class",
+      "descriptionZh": "额外的 CSS 类名"
+    },
+    {
+      "name": "style",
+      "type": "CSSProperties",
+      "default": "-",
+      "description": "Additional style",
+      "descriptionZh": "额外的样式"
+    },
+    {
+      "name": "rootClassName",
+      "type": "string",
+      "default": "-",
+      "description": "ClassName on the root element",
+      "descriptionZh": "根元素的类名"
+    }
   ]
 }"
 `;
@@ -542,7 +623,13 @@ exports[`info > info Button --format markdown --lang en 1`] = `
 | onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - |
 | variant | \`outlined\` \\| \`dashed\` \\| \`solid\` \\| \`filled\` \\| \`text\` \\| \`link\` | - | 5.21.0 |
 
-💡 This component also supports common props: className, style, rootClassName. See Common Props for details."
+Common Props (inherited by all components, not listed individually)
+
+| Property | Type | Default |
+| --- | --- | --- |
+| className | string | - |
+| style | CSSProperties | - |
+| rootClassName | string | - |"
 `;
 
 exports[`info > info Button --format markdown --lang zh 1`] = `
@@ -570,7 +657,13 @@ exports[`info > info Button --format markdown --lang zh 1`] = `
 | onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - |
 | variant | \`outlined\` \\| \`dashed\` \\| \`solid\` \\| \`filled\` \\| \`text\` \\| \`link\` | - | 5.21.0 |
 
-💡 该组件还支持 className、style、rootClassName 等通用属性，详见 Common Props。"
+通用属性（所有组件均支持，无需单独列出）
+
+| Property | Type | Default |
+| --- | --- | --- |
+| className | string | - |
+| style | CSSProperties | - |
+| rootClassName | string | - |"
 `;
 
 exports[`info > info Button --format text --lang en 1`] = `
@@ -598,7 +691,13 @@ type             \`primary\` | \`dashed\` | \`link\` | \`text\` | \`default\`   
 onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void        -          -                                                                
 variant          \`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`      -          5.21.0                                                           
 
-💡 This component also supports common props: className, style, rootClassName. See Common Props for details."
+Common Props (inherited by all components, not listed individually)
+
+Property       Type           Default
+-------------  -------------  -------
+className      string         -      
+style          CSSProperties  -      
+rootClassName  string         -"
 `;
 
 exports[`info > info Button --format text --lang zh 1`] = `
@@ -626,7 +725,13 @@ type             \`primary\` | \`dashed\` | \`link\` | \`text\` | \`default\`   
 onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void        -          -                                                                
 variant          \`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`      -          5.21.0                                                           
 
-💡 该组件还支持 className、style、rootClassName 等通用属性，详见 Common Props。"
+通用属性（所有组件均支持，无需单独列出）
+
+Property       Type           Default
+-------------  -------------  -------
+className      string         -      
+style          CSSProperties  -      
+rootClassName  string         -"
 `;
 
 exports[`info > info NonExistent --format json 1`] = `
@@ -664,5 +769,11 @@ type             \`primary\` | \`dashed\` | \`link\` | \`text\` | \`default\`   
 onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void        -          -                                                                
 variant          \`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`      -          5.21.0                                                           
 
-💡 This component also supports common props: className, style, rootClassName. See Common Props for details."
+Common Props (inherited by all components, not listed individually)
+
+Property       Type           Default
+-------------  -------------  -------
+className      string         -      
+style          CSSProperties  -      
+rootClassName  string         -"
 `;
