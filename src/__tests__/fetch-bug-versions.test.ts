@@ -20,7 +20,9 @@ describe('utils/fetch', () => {
   let fetchSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    fetchSpy = vi.spyOn(globalThis, 'fetch');
+    // Safe default: reject all real network calls to prevent accidental
+    // HTTP requests during tests (per CLAUDE.md Testing Safety rules).
+    fetchSpy = vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('network calls not allowed in tests'));
   });
 
   afterEach(() => {
