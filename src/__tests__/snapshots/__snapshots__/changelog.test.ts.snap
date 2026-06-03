@@ -1787,8 +1787,8 @@ exports[`changelog > changelog 5.20.0..5.22.0 --format markdown 1`] = `
 "### 5.22.0 (2024-11-12)
 
 - [**feature**] **Form** - 🆕 Form.Item supports hiding labels. 
-- [*fix*] **Form** - 🐞 Form removes the div used to expand the error height, wraps errorDom and extraDom with a div, and sets a minimum height for the div. 
-- [*fix*] **Form** - 🐞 Fix the problem that \`onValuesChange\` is still triggered when the Form field triggers change but the value does not change. 
+- [**fix**] **Form** - 🐞 Form removes the div used to expand the error height, wraps errorDom and extraDom with a div, and sets a minimum height for the div. 
+- [**fix**] **Form** - 🐞 Fix the problem that \`onValuesChange\` is still triggered when the Form field triggers change but the value does not change. 
 - [**feature**] **Form** - 🆕 Form supports the focus property in scrollToFirstError when form validation fails. 
 - [**feature**] **Table** - 🆕 Table column filter drop-down box supports \`filterDropdownProps\`. 
 - [**feature**] **Table** - 🆕 Table \`expandedRowClassName\` supports string. [-jia-nan](https://github.com/li-jia-nan)
@@ -1798,18 +1798,18 @@ exports[`changelog > changelog 5.20.0..5.22.0 --format markdown 1`] = `
 - [**feature**] **DatePicker** - 🆕 DatePicker supports prefix attribute. 
 - [style] **DatePicker** - 💄 Fixed the issue of DatePicker.RangePicker flashing when the mouse moves between cells. 
 - [**feature**] **DatePicker** - 🆕 In the \`Input.OTP\` component, add \`onInput\` event to get the value of each user input. At the same time, the relevant documentation has been updated. 
-- [*fix*] **DatePicker** - 🐞 Fixed the problem that Input.OTP cannot specify \`inputMode\`. [-rudzinski](https://github.com/alan-rudzinski)
+- [**fix**] **DatePicker** - 🐞 Fixed the problem that Input.OTP cannot specify \`inputMode\`. [-rudzinski](https://github.com/alan-rudzinski)
 - [**feature**] **DatePicker** 🆕 ColorPicker supports \`disabledFormat\`. [-muzhi](https://github.com/su-muzhi)
 - [**feature**] **DatePicker** 🆕 Add \`cursor\` configuration item to the \`focus\` method of InputNumber component to control the cursor position. 
 - [**feature**] **DatePicker** 🆕 Cascader adds \`disabled\` attribute to disable all first-level directory items of the component. 
 - [**feature**] **DatePicker** 🆕 Descriptions supports single-line spreading. 
 - [**feature**] **DatePicker** 🆕 Select/TreeSelect/Cascader components add \`prefix\` property to support custom prefix. 
-- [*fix*] **DatePicker** 🐞 Fix the problem that the preview image class name is lost when setting \`ImageProps.preview.rootClassName\` in Image. 
-- [*fix*] **DatePicker** 🐞 Fixed the issue that the last item in the TimePicker panel column cannot be scrolled to the top. 
-- [*fix*] **DatePicker** 🐞 Fix TreeSelect dropdown height not enough. 
-- [*fix*] **DatePicker** 🐞 Fixed the issue that Typography is not updated immediately when the ConfigProvider language is switched. 
-- [*fix*] **DatePicker** 🐞 Fixed the issue that Upload \`itemRender\` calling \`action.preview\` will cause a crash. 
-- [*fix*] **DatePicker** 🐞 Fixed Splitter pseudo-element symbol issue. 
+- [**fix**] **DatePicker** 🐞 Fix the problem that the preview image class name is lost when setting \`ImageProps.preview.rootClassName\` in Image. 
+- [**fix**] **DatePicker** 🐞 Fixed the issue that the last item in the TimePicker panel column cannot be scrolled to the top. 
+- [**fix**] **DatePicker** 🐞 Fix TreeSelect dropdown height not enough. 
+- [**fix**] **DatePicker** 🐞 Fixed the issue that Typography is not updated immediately when the ConfigProvider language is switched. 
+- [**fix**] **DatePicker** 🐞 Fixed the issue that Upload \`itemRender\` calling \`action.preview\` will cause a crash. 
+- [**fix**] **DatePicker** 🐞 Fixed Splitter pseudo-element symbol issue. 
 - [style] **DatePicker** 💄 Optimize Collapse accessibility attribute and mouse hover style. 
 - [style] **DatePicker** 💄 Fix styling issue of Menu title content. [-ice](https://github.com/coding-ice)
 - [other] **TypeScript** - 🤖 Upload exports type DraggerProps. 
@@ -1819,9 +1819,9 @@ exports[`changelog > changelog 5.20.0..5.22.0 --format markdown 1`] = `
 
 ### 5.21.6 (2024-10-28)
 
-- [*fix*] **Tree.DirectoryTree** 🐞 Fix Tree.DirectoryTree interactive area not being a whole row.
-- [*fix*] **the** 🐞 Fix the Button icon was not vertically centered.
-- [*fix*] **the** 🐞 Fix the pointer style not set to \`not-allowed\` in the \`disabled\` state when \`variant\` of the Input was set to \`borderless\`. 
+- [**fix**] **Tree.DirectoryTree** 🐞 Fix Tree.DirectoryTree interactive area not being a whole row.
+- [**fix**] **the** 🐞 Fix the Button icon was not vertically centered.
+- [**fix**] **the** 🐞 Fix the pointer style not set to \`not-allowed\` in the \`disabled\` state when \`variant\` of the Input was set to \`borderless\`. 
 - [style] **Splitter** - 💄 Improve the pre-rendered style of Splitter under SSR.
 - [style] **Splitter** - 💄 Increased the click area of ​​the Splitter collapse button to improve usability. 
 - [style] **Splitter** 💄 Improve Checkbox \`indeterminate\` to enhance accessibility experience. 
@@ -1829,11 +1829,11 @@ exports[`changelog > changelog 5.20.0..5.22.0 --format markdown 1`] = `
 
 ### 5.21.5 (2024-10-21)
 
-- [*fix*] **Cascader** 🐞 Fix Cascader filter limitation not working when \`limit\` set to \`false\`. 
-- [*fix*] **DatePicker** 🐞 Fix DatePicker disabled items cannot response mouse events bug. [-mparticle](https://github.com/ajenkins-mparticle)
-- [*fix*] **FloatButton** 🐞 Fix FloatButton menu problem what is difficult to click. 
-- [*fix*] **QRCode** 🐞 Fix QRCode \`onRefresh\` property not working properly. [-tang](https://github.com/kiner-tang)
-- [*fix*] **Typography** 🐞 Fix Typography links cannot be selected by user. 
+- [**fix**] **Cascader** 🐞 Fix Cascader filter limitation not working when \`limit\` set to \`false\`. 
+- [**fix**] **DatePicker** 🐞 Fix DatePicker disabled items cannot response mouse events bug. [-mparticle](https://github.com/ajenkins-mparticle)
+- [**fix**] **FloatButton** 🐞 Fix FloatButton menu problem what is difficult to click. 
+- [**fix**] **QRCode** 🐞 Fix QRCode \`onRefresh\` property not working properly. [-tang](https://github.com/kiner-tang)
+- [**fix**] **Typography** 🐞 Fix Typography links cannot be selected by user. 
 - [style] **Badge** 💄 Fix Badge incorrect token of texts. 
 - [style] **Layout** 💄 Fix Layout lost styles of collapse button. 
 - [**feature**] **Button** 🛠 Improve Button event handler declaration. 
@@ -1841,40 +1841,40 @@ exports[`changelog > changelog 5.20.0..5.22.0 --format markdown 1`] = `
 
 ### 5.21.4 (2024-10-14)
 
-- [*fix*] **General** 🐞 Fixed Input.Search not applying the \`hoverBorderColor/activeBorderColor\` token for hover/active states. 
-- [*fix*] **Tree** 🐞 Fix Tree icon align issue. 
-- [*fix*] **Splitter** 🐞 Fix Splitter occasionally shows unnecessary scrollbars in nested combinations. 
+- [**fix**] **General** 🐞 Fixed Input.Search not applying the \`hoverBorderColor/activeBorderColor\` token for hover/active states. 
+- [**fix**] **Tree** 🐞 Fix Tree icon align issue. 
+- [**fix**] **Splitter** 🐞 Fix Splitter occasionally shows unnecessary scrollbars in nested combinations. 
 - [style] **General** 💄 Modify Button \`textHoverBg\` hover background to \`colorFillTertiary\`. [-ice](https://github.com/coding-ice)
 - [other] **TypeScript** - 🤖 Improve type of Switch \`eventHandler\`. 
 
 ### 5.21.3 (2024-10-09)
 
 - [style] **General** 💄 Added a scroll bar to Dropdown when having many items. [-Asdf](https://github.com/Cameron-Asdf)
-- [*fix*] **Slider** - 🐞 Fix Slider issue where the \`id\` prop is not supported.
-- [*fix*] **Slider** - 🐞 Fix Slider to address the issue causing \`useLayoutEffect does nothing on the server\` warning when \`extractStyle\` is invoked.
-- [*fix*] **ColorPicker** 🐞 Fix ColorPicker with gradient mode, sometimes handle color will be force sync back to first handle color issue. 
-- [*fix*] **Table** 🐞 Fix Table \`onChange\` function receiving incorrect sorter value. 
-- [*fix*] **Splitter** - 🐞 Fix the issue about throw a warning when Splitter nested in a hidden tab panel. [-tang](https://github.com/kiner-tang)
-- [*fix*] **Splitter** - 🐞 Fix the issue about Splitter had unexpected gaps in Flex. [-tang](https://github.com/kiner-tang)
-- [*fix*] **Splitter** 🐞 MISC: Restore \`react\` and \`react-dom\` peerDependencies. 
+- [**fix**] **Slider** - 🐞 Fix Slider issue where the \`id\` prop is not supported.
+- [**fix**] **Slider** - 🐞 Fix Slider to address the issue causing \`useLayoutEffect does nothing on the server\` warning when \`extractStyle\` is invoked.
+- [**fix**] **ColorPicker** 🐞 Fix ColorPicker with gradient mode, sometimes handle color will be force sync back to first handle color issue. 
+- [**fix**] **Table** 🐞 Fix Table \`onChange\` function receiving incorrect sorter value. 
+- [**fix**] **Splitter** - 🐞 Fix the issue about throw a warning when Splitter nested in a hidden tab panel. [-tang](https://github.com/kiner-tang)
+- [**fix**] **Splitter** - 🐞 Fix the issue about Splitter had unexpected gaps in Flex. [-tang](https://github.com/kiner-tang)
+- [**fix**] **Splitter** 🐞 MISC: Restore \`react\` and \`react-dom\` peerDependencies. 
 - [other] **TypeScript** - 🤖 Improve type of Slider \`eventName\`. 
 
 ### 5.21.2 (2024-10-01)
 
-- [*fix*] **Typography** 🐞 Revert to fix Typography \`copyable\` icon align issue. 
-- [*fix*] **Tabs** 🐞 Fix Tabs flicker when browser zoom is enabled. 
-- [*fix*] **Select** 🐞 Fix Select incorrect \`activeBorderColor\` token when variant is filled. [-ice](https://github.com/coding-ice)
-- [*fix*] **General** 🐞 Fixed Input.Search alignment issue between the input field and search button at different zoom levels. 
+- [**fix**] **Typography** 🐞 Revert to fix Typography \`copyable\` icon align issue. 
+- [**fix**] **Tabs** 🐞 Fix Tabs flicker when browser zoom is enabled. 
+- [**fix**] **Select** 🐞 Fix Select incorrect \`activeBorderColor\` token when variant is filled. [-ice](https://github.com/coding-ice)
+- [**fix**] **General** 🐞 Fixed Input.Search alignment issue between the input field and search button at different zoom levels. 
 - [style] **General** 💄 MISC: Tweak outline width of focus style from \`4px\` to \`3px\`. 
-- [*fix*] **Splitter** - 🐞 Fixed the issue with Splitter dragging abnormally on touch screen devices. 
+- [**fix**] **Splitter** - 🐞 Fixed the issue with Splitter dragging abnormally on touch screen devices. 
 - [style] **Splitter** - 💄 Fixed Splitter.Panel style is invalid error. 
 - [deprecation] **Splitter** ⚡️ Remove TransButton in Table/Transfer/Typography. 
 
 ### 5.21.1 (2024-09-25)
 
-- [*fix*] **Button** 🐞 Fix Button issue where \`type="link"\` incorrectly used \`colorPrimary\`. [-ice](https://github.com/coding-ice)
-- [*fix*] **Button** 🐞 Fix Button style class name weight issue that caused custom gradient styles to be overridden. [-ice](https://github.com/coding-ice)
-- [*fix*] **Transfer** 🐞 Fix Transfer width issue when customized as TableTransfer. 
+- [**fix**] **Button** 🐞 Fix Button issue where \`type="link"\` incorrectly used \`colorPrimary\`. [-ice](https://github.com/coding-ice)
+- [**fix**] **Button** 🐞 Fix Button style class name weight issue that caused custom gradient styles to be overridden. [-ice](https://github.com/coding-ice)
+- [**fix**] **Transfer** 🐞 Fix Transfer width issue when customized as TableTransfer. 
 
 ### 5.21.0 (2024-09-22)
 
@@ -1884,27 +1884,27 @@ exports[`changelog > changelog 5.20.0..5.22.0 --format markdown 1`] = `
 - [style] **FloatButton** - 💄 Unify FloatButton and FloatButton.Group button round style. 
 - [style] **FloatButton** - 💄 Manage FloatButton's \`z-index\` with \`useZIndex\` to improve compatibility with other popup components. [-jia-nan](https://github.com/li-jia-nan)
 - [**feature**] **Menu** - 🆕 Menu.Item and Dropdown's \`menu\` supports \`extra\` prop now. [-ice](https://github.com/coding-ice)
-- [*fix*] **Menu** - 🐞 Fix Menu \`popupStyle\` not working on SubMenu. 
+- [**fix**] **Menu** - 🐞 Fix Menu \`popupStyle\` not working on SubMenu. 
 - [**feature**] **Table** - 🆕 Table supports \`minWidth\` for columns. 
-- [*fix*] **Table** - 🐞 Fix Table empty and shadow issues in virtual mode. 
-- [*fix*] **Table** - 🐞 Fix Table column selection issue where deselection was not possible under certain circumstances. 
+- [**fix**] **Table** - 🐞 Fix Table empty and shadow issues in virtual mode. 
+- [**fix**] **Table** - 🐞 Fix Table column selection issue where deselection was not possible under certain circumstances. 
 - [**feature**] **Input** - 🆕 Input.OTP support \`type\` to help handle some case need number only. 
-- [*fix*] **Input** - 🐞 Fix Select inside Input addon text color when Select is focused. 
+- [**fix**] **Input** - 🐞 Fix Select inside Input addon text color when Select is focused. 
 - [other] **Modal** - ⌨️ Fix Modal throws warning \`avoid using aria-hidden on a focused element or its ancestor\`. 
 - [**feature**] **Modal** - 🆕 Modal supports \`closable.disabled\` prop now. 
-- [*fix*] **Descriptions** - 🐞 Fix Descriptions column is missing in some cases. 
-- [*fix*] **Descriptions** - 🐞 Revert to fix the issue where the popup layer component inside Descriptions is being cut off. 
+- [**fix**] **Descriptions** - 🐞 Fix Descriptions column is missing in some cases. 
+- [**fix**] **Descriptions** - 🐞 Revert to fix the issue where the popup layer component inside Descriptions is being cut off. 
 - [**feature**] **Upload** - 🆕 Upload will pass \`name\` prop to \`<input type="file" />\`. 
 - [**feature**] **Upload** - 🆕 Upload \`showUploadList.showXxxIcon\` accept a function value now. 
-- [*fix*] **ColorPicker** - 🐞 Fix ColorPicker when type hex input may not get correct color with precision issue. 
-- [*fix*] **ColorPicker** - 🐞 Adjust ColorPicker popup panel not lock by \`value\` to allow control mode with \`onChangeComplete\` scenarios. 
-- [*fix*] **App** - 🐞 Fixed App warn about \`zIndex\` too large when using the \`modal\` with having popup component method via \`useApp\`. 
-- [*fix*] **App** - 🐞 Fix App rtl style does not respect ConfigProvider direction prop. [-jia-nan](https://github.com/li-jia-nan)
+- [**fix**] **ColorPicker** - 🐞 Fix ColorPicker when type hex input may not get correct color with precision issue. 
+- [**fix**] **ColorPicker** - 🐞 Adjust ColorPicker popup panel not lock by \`value\` to allow control mode with \`onChangeComplete\` scenarios. 
+- [**fix**] **App** - 🐞 Fixed App warn about \`zIndex\` too large when using the \`modal\` with having popup component method via \`useApp\`. 
+- [**fix**] **App** - 🐞 Fix App rtl style does not respect ConfigProvider direction prop. [-jia-nan](https://github.com/li-jia-nan)
 - [**feature**] **Pagination** - 🆕 Pagination \`showSizeChanger\` accepts Select props now. 
 - [style] **Pagination** - 💄 Remove Pagination default font family. 
 - [style] **Select** - 💄 Add more tokens for Select to customize hover/focus style. [-tang](https://github.com/kiner-tang)
-- [*fix*] **Select** - 🐞 Fix Select search text overlap with arrow icon. 
-- [*fix*] **Select** - 🐞 Fix Select extra background of clear icon when enable \`allowClear\` and \`variant="filled"\`. 
+- [**fix**] **Select** - 🐞 Fix Select search text overlap with arrow icon. 
+- [**fix**] **Select** - 🐞 Fix Select extra background of clear icon when enable \`allowClear\` and \`variant="filled"\`. 
 - [**feature**] **Select** 🆕 Segmented adds \`vertical\` property and improves accessibility. 
 - [**feature**] **Select** 🆕 Radio.Group supports \`block\` prop now. 
 - [**feature**] **Select** 🆕 ConfigProvider supports configuring the \`className\` and \`style\` properties of the Splitter component. [-jia-nan](https://github.com/li-jia-nan)
@@ -1912,67 +1912,67 @@ exports[`changelog > changelog 5.20.0..5.22.0 --format markdown 1`] = `
 - [**feature**] **Select** 🆕 Add ref on List component. 
 - [**feature**] **Select** 🆕 Collapse support \`classNames\` and \`styles\` for semantic style customization. 
 - [style] **Select** 💄 Make Skeleton.Node custom node by remove it's default icon children. 
-- [*fix*] **Select** 🐞 Fix Layout.Sider can not modify theme when used alone. 
-- [*fix*] **Select** 🐞 Fix Typography \`copyable\` with array \`children\` has additional \`,\` string issue. 
-- [*fix*] **Select** 🐞 Fix Tour where long title will overlap with close button. [-tang](https://github.com/kiner-tang)
+- [**fix**] **Select** 🐞 Fix Layout.Sider can not modify theme when used alone. 
+- [**fix**] **Select** 🐞 Fix Typography \`copyable\` with array \`children\` has additional \`,\` string issue. 
+- [**fix**] **Select** 🐞 Fix Tour where long title will overlap with close button. [-tang](https://github.com/kiner-tang)
 - [other] **Select** 🌐 Localization
 - [other] **TypeScript** - 🤖 Checkbox adds onFocus\` and \`onBlur\` in type definition. 
 - [other] **TypeScript** - 🤖 Fix Badge property type definition to support passing mouse events. 
 
 ### 5.20.6 (2024-09-09)
 
-- [*fix*] **Menu** 🐞 Improve Menu collapse animation smoothness. 
-- [*fix*] **Table** 🐞 Fix Table cell overflow bug if edit with virtual scroll. 
-- [*fix*] **Input.Search** 🐞 Fix Input.Search button radius not changing with \`size\`. 
-- [*fix*] **Form** 🐞 Fix Form password still can be toggle show/hide even if disabled. 
-- [*fix*] **wrap** 🐞 Revert to fix wrap behavior for Dropdown, and re-fix wrap when out of screen edge. 
+- [**fix**] **Menu** 🐞 Improve Menu collapse animation smoothness. 
+- [**fix**] **Table** 🐞 Fix Table cell overflow bug if edit with virtual scroll. 
+- [**fix**] **Input.Search** 🐞 Fix Input.Search button radius not changing with \`size\`. 
+- [**fix**] **Form** 🐞 Fix Form password still can be toggle show/hide even if disabled. 
+- [**fix**] **wrap** 🐞 Revert to fix wrap behavior for Dropdown, and re-fix wrap when out of screen edge. 
 - [style] **Badge** 💄 Fix Badge background transition when mouse out. [-ice](https://github.com/coding-ice)
 - [other] **TypeScript** - 🤖 Fix Collapse types for \`onChange\` arguments. 
 
 ### 5.20.5 (2024-09-03)
 
 - [**feature**] **internal** 🛠 Adjust Tree & TreeSelect \`defaultExpandAll\` logic to only add internal \`expandedKeys\` which \`treeNode\` has children instead to avoid perf issue when with large data or \`loadData\` case. 
-- [*fix*] **Cascader** 🐞 Fix Cascader not show parent option in search when using \`multiple\`.
-- [*fix*] **Typography** 🐞 Fix Typography \`ellipsis.tooltip.title\` with ReactNode will cause dead loop. 
+- [**fix**] **Cascader** 🐞 Fix Cascader not show parent option in search when using \`multiple\`.
+- [**fix**] **Typography** 🐞 Fix Typography \`ellipsis.tooltip.title\` with ReactNode will cause dead loop. 
 
 ### 5.20.4 (2024-09-02)
 
-- [*fix*] **Menu** - 🐞 Fix Menu token \`itemPaddingInline inoperative\` not working. [-ice](https://github.com/coding-ice)
-- [*fix*] **Menu** - 🐞 Fix Menu missing \`hover\` transition style. 
+- [**fix**] **Menu** - 🐞 Fix Menu token \`itemPaddingInline inoperative\` not working. [-ice](https://github.com/coding-ice)
+- [**fix**] **Menu** - 🐞 Fix Menu missing \`hover\` transition style. 
 - [style] **Menu** 💄 Badge add transition effect to count node. 
 - [style] **Menu** 💄 Fix Table column header move with unexpected transition. 
 - [**feature**] **Menu** 🛠 Refactor Typography code to optimize internal logic. 
-- [*fix*] **Menu** 🐞 Disable the Rate component within Form.Item when the form is disabled. 
+- [**fix**] **Menu** 🐞 Disable the Rate component within Form.Item when the form is disabled. 
 - [other] **Menu** 🌐 Patch tr_TR \`Transfer.deselectAll\` locale. [-ice](https://github.com/coding-ice)
 
 ### 5.20.3 (2024-08-26)
 
-- [*fix*] **Typography** 🐞 Refactor Typography native css ellipsis measure logic to handle precision edge case. 
-- [*fix*] **ColorPicker** 🐞 Fix ColorPicker \`onChangeComplete\` not correct when click directly without move on the picker panel. 
-- [*fix*] **FloatButton.Group** 🐞 Fix FloatButton.Group with controlled mode warning for nest updating issue. 
+- [**fix**] **Typography** 🐞 Refactor Typography native css ellipsis measure logic to handle precision edge case. 
+- [**fix**] **ColorPicker** 🐞 Fix ColorPicker \`onChangeComplete\` not correct when click directly without move on the picker panel. 
+- [**fix**] **FloatButton.Group** 🐞 Fix FloatButton.Group with controlled mode warning for nest updating issue. 
 
 ### 5.20.2 (2024-08-19)
 
 - [style] **the** 💄 Fix the suffix style problem of InputNumber without control. [-ice](https://github.com/coding-ice)
 - [**feature**] **General** 🆕 Form \`rule.message\` supports skipping variable substitution through \`\\\\\${}\`. 
-- [*fix*] **General** 🐞 Fixed the issue where the rounded corners of the trigger element are missing when the FloatButton component has shape="square" and in menu mode when the menu pops up. [-jia-nan](https://github.com/li-jia-nan)
-- [*fix*] **General** 🐞 Fixed the problem that Upload.Dragger does not work when dragging and dropping upload folders. 
-- [*fix*] **General** 🐞 Fixed the issue where the arrow icon disappears after hovering when Select specifies \`getPopcontainer={node=node.parentNode}\`. 
-- [*fix*] **General** 🐞 Fixed the arrow misalignment error when Popover sets the \`arrow.pointAtCenter\` property. 
+- [**fix**] **General** 🐞 Fixed the issue where the rounded corners of the trigger element are missing when the FloatButton component has shape="square" and in menu mode when the menu pops up. [-jia-nan](https://github.com/li-jia-nan)
+- [**fix**] **General** 🐞 Fixed the problem that Upload.Dragger does not work when dragging and dropping upload folders. 
+- [**fix**] **General** 🐞 Fixed the issue where the arrow icon disappears after hovering when Select specifies \`getPopcontainer={node=node.parentNode}\`. 
+- [**fix**] **General** 🐞 Fixed the arrow misalignment error when Popover sets the \`arrow.pointAtCenter\` property. 
 - [other] **TypeScript** - 🤖 Roll back the Table partial generic constraint object to any to reduce break changes caused by. 
 
 ### 5.20.1 (2024-08-11)
 
-- [*fix*] **ColorPicker** - 🐞 Fix ColorPicker compile error of \`-design/fast-color\`. 
+- [**fix**] **ColorPicker** - 🐞 Fix ColorPicker compile error of \`-design/fast-color\`. 
 - [style] **ColorPicker** - 💄 Fix ColorPicker not adjust border style when under Space.Compact. 
 - [style] **ColorPicker** 💄 Fix Table \`zIndexTableFixed\` token not support CSS var. [-jia-nan](https://github.com/li-jia-nan)
-- [*fix*] **ColorPicker** 🐞 Fix FloatButton don't support \`zIndexPopupBase\` token. [-io](https://github.com/Yuzu-io)
-- [*fix*] **ColorPicker** 🐞 Fix Typography \`tooltip\` not show with precision issue of \`ellipsis\`. 
-- [*fix*] **ColorPicker** 🐞 Fix Form \`preserve={false}\` should not trigger \`shouldUpdate\` rerender. 
-- [*fix*] **ColorPicker** 🐞 Fix Tour default \`z-index\` not follow \`zIndexPopup\` token issue. 
-- [*fix*] **ColorPicker** 🐞 Fix Calendar \`locale\` should override \`locale\` from ConfigProvider. 
-- [*fix*] **ColorPicker** 🐞 Fix Spin align issue when setting \`percent\`. 
-- [*fix*] **ColorPicker** 🐞 Fix Tree switcher position not ping at top when title break the line. 
+- [**fix**] **ColorPicker** 🐞 Fix FloatButton don't support \`zIndexPopupBase\` token. [-io](https://github.com/Yuzu-io)
+- [**fix**] **ColorPicker** 🐞 Fix Typography \`tooltip\` not show with precision issue of \`ellipsis\`. 
+- [**fix**] **ColorPicker** 🐞 Fix Form \`preserve={false}\` should not trigger \`shouldUpdate\` rerender. 
+- [**fix**] **ColorPicker** 🐞 Fix Tour default \`z-index\` not follow \`zIndexPopup\` token issue. 
+- [**fix**] **ColorPicker** 🐞 Fix Calendar \`locale\` should override \`locale\` from ConfigProvider. 
+- [**fix**] **ColorPicker** 🐞 Fix Spin align issue when setting \`percent\`. 
+- [**fix**] **ColorPicker** 🐞 Fix Tree switcher position not ping at top when title break the line. 
 - [other] **ColorPicker** 🌐 Locales
 - [other] **TypeScript** - 🤖 Refine Table all Record types from any to Object. [-jia-nan](https://github.com/li-jia-nan)
 
@@ -1980,8 +1980,8 @@ exports[`changelog > changelog 5.20.0..5.22.0 --format markdown 1`] = `
 
 - [**feature**] **ColorPicker** - 🛠 Replace ColorPicker internal \`/tinycolor\` with \`-design/fast-color\`.
 - [**feature**] **ColorPicker** - 🆕 ColorPicker support gradient color type and fix controlled mode not working.
-- [*fix*] **ColorPicker** - 🐞 Fix the issue where line-height is not effective in cssinjs mode for ColorPicker. 
-- [*fix*] **ColorPicker** - 🐞 Fix cursor disabled state for ColorPicker. [-ice](https://github.com/coding-ice)
+- [**fix**] **ColorPicker** - 🐞 Fix the issue where line-height is not effective in cssinjs mode for ColorPicker. 
+- [**fix**] **ColorPicker** - 🐞 Fix cursor disabled state for ColorPicker. [-ice](https://github.com/coding-ice)
 - [style] **ColorPicker** - 💄 Optimize ColorPicker when selecting a color from the \`transparent\` state, it defaults to using a bright color instead of black color to enhance the user interaction experience.
 - [**feature**] **ColorPicker** 🆕 ConfigProvider support indicator property for Spin. [-ice](https://github.com/coding-ice)
 - [**feature**] **ColorPicker** 🆕 Upload \`showUploadList\` support \`extra\` for additional content. 
@@ -1994,8 +1994,8 @@ exports[`changelog > changelog 5.20.0..5.22.0 --format markdown 1`] = `
 - [**feature**] **Slider** 🆕 InputNumber supports \`suffix\` prop. [-ice](https://github.com/coding-ice)
 - [**feature**] **Slider** 🆕 Input/TextArea/Mentions support \`onClear\` prop. [-jia-nan](https://github.com/li-jia-nan)
 - [other] **Slider** ⌨️ Optimize Input be changed repeatedly when hold the enter key in multi-mode. [rc-input#72](https://github.com/react-component/input/pull/72/files) 
-- [*fix*] **Slider** 🐞 Fix grouping columns does not apply sorting for Table. 
-- [*fix*] **Slider** 🐞 Fix Popover/PopConfirm/Tooltip with \`topLeft\`, \`topRight\`, \`bottomLeft\`, \`bottomRight\` zoom in transform origin not correct when target element width is too large.
+- [**fix**] **Slider** 🐞 Fix grouping columns does not apply sorting for Table. 
+- [**fix**] **Slider** 🐞 Fix Popover/PopConfirm/Tooltip with \`topLeft\`, \`topRight\`, \`bottomLeft\`, \`bottomRight\` zoom in transform origin not correct when target element width is too large.
 - [style] **Slider** 💄 Fix Tree filter node style lost. 
 - [other] **TypeScript** - 🤖 Component Token support string and number. 
 - [other] **TypeScript** - 🤖 Improve Radio export types. 
@@ -2441,27 +2441,27 @@ exports[`changelog > changelog 5.21.0 --format markdown 1`] = `
 - [style] **FloatButton** - 💄 Unify FloatButton and FloatButton.Group button round style. 
 - [style] **FloatButton** - 💄 Manage FloatButton's \`z-index\` with \`useZIndex\` to improve compatibility with other popup components. [-jia-nan](https://github.com/li-jia-nan)
 - [**feature**] **Menu** - 🆕 Menu.Item and Dropdown's \`menu\` supports \`extra\` prop now. [-ice](https://github.com/coding-ice)
-- [*fix*] **Menu** - 🐞 Fix Menu \`popupStyle\` not working on SubMenu. 
+- [**fix**] **Menu** - 🐞 Fix Menu \`popupStyle\` not working on SubMenu. 
 - [**feature**] **Table** - 🆕 Table supports \`minWidth\` for columns. 
-- [*fix*] **Table** - 🐞 Fix Table empty and shadow issues in virtual mode. 
-- [*fix*] **Table** - 🐞 Fix Table column selection issue where deselection was not possible under certain circumstances. 
+- [**fix**] **Table** - 🐞 Fix Table empty and shadow issues in virtual mode. 
+- [**fix**] **Table** - 🐞 Fix Table column selection issue where deselection was not possible under certain circumstances. 
 - [**feature**] **Input** - 🆕 Input.OTP support \`type\` to help handle some case need number only. 
-- [*fix*] **Input** - 🐞 Fix Select inside Input addon text color when Select is focused. 
+- [**fix**] **Input** - 🐞 Fix Select inside Input addon text color when Select is focused. 
 - [other] **Modal** - ⌨️ Fix Modal throws warning \`avoid using aria-hidden on a focused element or its ancestor\`. 
 - [**feature**] **Modal** - 🆕 Modal supports \`closable.disabled\` prop now. 
-- [*fix*] **Descriptions** - 🐞 Fix Descriptions column is missing in some cases. 
-- [*fix*] **Descriptions** - 🐞 Revert to fix the issue where the popup layer component inside Descriptions is being cut off. 
+- [**fix**] **Descriptions** - 🐞 Fix Descriptions column is missing in some cases. 
+- [**fix**] **Descriptions** - 🐞 Revert to fix the issue where the popup layer component inside Descriptions is being cut off. 
 - [**feature**] **Upload** - 🆕 Upload will pass \`name\` prop to \`<input type="file" />\`. 
 - [**feature**] **Upload** - 🆕 Upload \`showUploadList.showXxxIcon\` accept a function value now. 
-- [*fix*] **ColorPicker** - 🐞 Fix ColorPicker when type hex input may not get correct color with precision issue. 
-- [*fix*] **ColorPicker** - 🐞 Adjust ColorPicker popup panel not lock by \`value\` to allow control mode with \`onChangeComplete\` scenarios. 
-- [*fix*] **App** - 🐞 Fixed App warn about \`zIndex\` too large when using the \`modal\` with having popup component method via \`useApp\`. 
-- [*fix*] **App** - 🐞 Fix App rtl style does not respect ConfigProvider direction prop. [-jia-nan](https://github.com/li-jia-nan)
+- [**fix**] **ColorPicker** - 🐞 Fix ColorPicker when type hex input may not get correct color with precision issue. 
+- [**fix**] **ColorPicker** - 🐞 Adjust ColorPicker popup panel not lock by \`value\` to allow control mode with \`onChangeComplete\` scenarios. 
+- [**fix**] **App** - 🐞 Fixed App warn about \`zIndex\` too large when using the \`modal\` with having popup component method via \`useApp\`. 
+- [**fix**] **App** - 🐞 Fix App rtl style does not respect ConfigProvider direction prop. [-jia-nan](https://github.com/li-jia-nan)
 - [**feature**] **Pagination** - 🆕 Pagination \`showSizeChanger\` accepts Select props now. 
 - [style] **Pagination** - 💄 Remove Pagination default font family. 
 - [style] **Select** - 💄 Add more tokens for Select to customize hover/focus style. [-tang](https://github.com/kiner-tang)
-- [*fix*] **Select** - 🐞 Fix Select search text overlap with arrow icon. 
-- [*fix*] **Select** - 🐞 Fix Select extra background of clear icon when enable \`allowClear\` and \`variant="filled"\`. 
+- [**fix**] **Select** - 🐞 Fix Select search text overlap with arrow icon. 
+- [**fix**] **Select** - 🐞 Fix Select extra background of clear icon when enable \`allowClear\` and \`variant="filled"\`. 
 - [**feature**] **Select** 🆕 Segmented adds \`vertical\` property and improves accessibility. 
 - [**feature**] **Select** 🆕 Radio.Group supports \`block\` prop now. 
 - [**feature**] **Select** 🆕 ConfigProvider supports configuring the \`className\` and \`style\` properties of the Splitter component. [-jia-nan](https://github.com/li-jia-nan)
@@ -2469,9 +2469,9 @@ exports[`changelog > changelog 5.21.0 --format markdown 1`] = `
 - [**feature**] **Select** 🆕 Add ref on List component. 
 - [**feature**] **Select** 🆕 Collapse support \`classNames\` and \`styles\` for semantic style customization. 
 - [style] **Select** 💄 Make Skeleton.Node custom node by remove it's default icon children. 
-- [*fix*] **Select** 🐞 Fix Layout.Sider can not modify theme when used alone. 
-- [*fix*] **Select** 🐞 Fix Typography \`copyable\` with array \`children\` has additional \`,\` string issue. 
-- [*fix*] **Select** 🐞 Fix Tour where long title will overlap with close button. [-tang](https://github.com/kiner-tang)
+- [**fix**] **Select** 🐞 Fix Layout.Sider can not modify theme when used alone. 
+- [**fix**] **Select** 🐞 Fix Typography \`copyable\` with array \`children\` has additional \`,\` string issue. 
+- [**fix**] **Select** 🐞 Fix Tour where long title will overlap with close button. [-tang](https://github.com/kiner-tang)
 - [other] **Select** 🌐 Localization
 - [other] **TypeScript** - 🤖 Checkbox adds onFocus\` and \`onBlur\` in type definition. 
 - [other] **TypeScript** - 🤖 Fix Badge property type definition to support passing mouse events."

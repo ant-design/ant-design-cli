@@ -197,7 +197,7 @@ export function diffChangelog(opts: {
 
 // ── Printing helpers (CLI only) ──
 
-function printChangelogEntries(entries: ChangelogEntry[], format: string, versionArg?: string): void {
+function printChangelogEntries(entries: ChangelogEntry[], format: string, versionArg?: string, lang?: string): void {
   if (format === 'json') {
     output(versionArg ? entries : { latest: entries }, 'json');
     return;
@@ -208,9 +208,9 @@ function printChangelogEntries(entries: ChangelogEntry[], format: string, versio
       console.log(`### ${entry.version} (${entry.date})`);
       console.log('');
       for (const change of entry.changes) {
-        const label = change.type === 'feature' ? '**feature**'
-          : change.type === 'fix' ? '*fix*'
-          : change.type === 'breaking' ? '**BREAKING**'
+        const label = change.type === 'feature' ? `**${localize('feature', '新增', lang ?? 'en')}**`
+          : change.type === 'fix' ? `**${localize('fix', '修复', lang ?? 'en')}**`
+          : change.type === 'breaking' ? `**${localize('BREAKING', '破坏性变更', lang ?? 'en')}**`
           : change.type;
         console.log(`- [${label}] **${change.component}** ${change.description}`);
       }
@@ -256,19 +256,19 @@ function printApiDiff(result: DiffResult, format: string, lang?: string): void {
       if (diff.added.length > 0) {
         console.log(`**${localize('Added', '新增', lang ?? 'en')}:**`);
         console.log('');
-        console.log(formatTable(['Prop', 'Type'], diff.added.map(p => [p.name || '', p.type || '-']), 'markdown'));
+        console.log(formatTable([localize('Prop', '属性', lang ?? 'en'), localize('Type', '类型', lang ?? 'en')], diff.added.map(p => [p.name || '', p.type || '-']), 'markdown'));
         console.log('');
       }
       if (diff.removed.length > 0) {
         console.log(`**${localize('Removed', '移除', lang ?? 'en')}:**`);
         console.log('');
-        console.log(formatTable(['Prop', 'Type'], diff.removed.map(p => [p.name || '', p.type || '-']), 'markdown'));
+        console.log(formatTable([localize('Prop', '属性', lang ?? 'en'), localize('Type', '类型', lang ?? 'en')], diff.removed.map(p => [p.name || '', p.type || '-']), 'markdown'));
         console.log('');
       }
       if (diff.changed.length > 0) {
         console.log(`**${localize('Changed', '变更', lang ?? 'en')}:**`);
         console.log('');
-        console.log(formatTable(['Prop', 'Change'], diff.changed.map(p => [p.name || '', p.change || '-']), 'markdown'));
+        console.log(formatTable([localize('Prop', '属性', lang ?? 'en'), localize('Change', '变更', lang ?? 'en')], diff.changed.map(p => [p.name || '', p.change || '-']), 'markdown'));
         console.log('');
       }
     }
@@ -329,7 +329,7 @@ export function registerChangelogCommand(program: Command): void {
           return;
         }
 
-        printChangelogEntries(result.entries, opts.format, result.versionArg);
+        printChangelogEntries(result.entries, opts.format, result.versionArg, opts.lang);
       } else {
         const result = diffChangelog({ v1: v1!, v2: v2!, component });
 

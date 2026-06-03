@@ -115,7 +115,7 @@ export function registerDemoCommand(program: Command): void {
             console.log(localize('No demos available.', '暂无示例。', opts.lang));
           } else {
             console.log(formatTable(
-              ['Name', 'Title', 'Description'],
+              [localize('Name', '名称', opts.lang), localize('Title', '标题', opts.lang), localize('Description', '描述', opts.lang)],
               result.demos.map(d => [d.name, d.title, d.description]),
               'markdown',
             ));

@@ -158,7 +158,7 @@ exports[`demo > demo Button --format markdown --lang en 1`] = `
 exports[`demo > demo Button --format markdown --lang zh 1`] = `
 "## Button 示例
 
-| Name | Title | Description |
+| 名称 | 标题 | 描述 |
 | --- | --- | --- |
 | basic | Syntactic sugar | Through the \`type\` syntactic sugar, use the preset button styles: \`primary\` buttons, \`default\` buttons, \`dashed\` buttons, \`text\` buttons, and \`link\` buttons. |
 | block | Block Button | The \`block\` property will make a button fit to its parent width. |
