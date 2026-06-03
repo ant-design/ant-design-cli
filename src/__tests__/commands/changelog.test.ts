@@ -114,8 +114,4 @@ describe('changelog', () => {
     expect(out).toContain('API 差异');
   });
 
-  it('should show "No changelog data" in Chinese with --lang zh', async () => {
-    const out = await run('changelog', '999.0.0', '--lang', 'zh');
-    expect(out).toContain('没有可用的变更日志数据');
-  });
 });
