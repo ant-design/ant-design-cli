@@ -4,7 +4,7 @@
 
 <img src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="Ant Design" width="72">
 
-<h1>@ant-design/cli</h1>
+<h1>Ant Design CLI</h1>
 
 **命令行上的 Ant Design。**<br>
 查询组件知识、分析项目用量、指导版本迁移 — 完全离线。
