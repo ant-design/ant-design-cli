@@ -45,10 +45,19 @@ describe('changelog', () => {
     expect(out).toContain('API Diff:');
   });
 
-  it('should print "No changelog data" message for unknown major version', async () => {
-    // Version 999.x has no snapshot data
-    const out = await run('changelog', '999.0.0');
-    expect(out).toContain('No changelog data');
+  it('should error for unknown major version with no changelog data', async () => {
+    // Version 999.x has no snapshot data — should use structured error path
+    const result = await runCLI('changelog', '999.0.0');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('No changelog data available');
+  });
+
+  it('should error for unknown major version with JSON format', async () => {
+    const result = await runCLI('changelog', '999.0.0', '--format', 'json');
+    expect(result.exitCode).toBe(1);
+    const err = JSON.parse(result.stderr);
+    expect(err.code).toBe('VERSION_NOT_FOUND');
+    expect(err.error).toBe(true);
   });
 
   it('should error in diff mode when v1 version has no data (older major)', async () => {

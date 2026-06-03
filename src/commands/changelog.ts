@@ -262,11 +262,6 @@ export function registerChangelogCommand(program: Command): void {
         });
 
         if ('error' in result) {
-          // Special case: "No changelog data available" should just print a message, not a structured error
-          if (result.code === ErrorCodes.VERSION_NOT_FOUND && !result.suggestion) {
-            console.log('No changelog data available.');
-            return;
-          }
           printError(result, opts.format);
           process.exitCode = 1;
           return;
