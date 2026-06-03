@@ -144,4 +144,19 @@ describe('usage', () => {
       rmSync(tmpDir, { recursive: true, force: true });
     }
   });
+
+  it('should display markdown table in Chinese with --lang zh', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_md_zh__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Button } from 'antd';\nconst App = () => <Button>Test</Button>;`);
+      const out = await run('usage', tmpDir, '--format', 'markdown', '--lang', 'zh');
+      expect(out).toContain('### 组件');
+      expect(out).toContain('| 组件 | 导入次数 | 文件数 |');
+      expect(out).toContain('**合计：**');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
 });

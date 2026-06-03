@@ -49,6 +49,13 @@ describe('semantic', () => {
     expect(out).toContain('classNames');
   });
 
+  it('should show semantic as markdown table in Chinese', async () => {
+    const out = await run('semantic', 'Drawer', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('## Drawer 语义结构');
+    expect(out).toContain('| 键名 | 描述 |');
+    expect(out).toContain('**用法:**');
+  });
+
   it('should show semantic structure in Chinese with --lang zh', async () => {
     const out = await run('semantic', 'Drawer', '--lang', 'zh');
     expect(out).toContain('语义结构');

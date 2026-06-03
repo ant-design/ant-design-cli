@@ -29,6 +29,11 @@ describe('list', () => {
     expect(out).toContain('Button');
   });
 
+  it('should show list as markdown in Chinese', async () => {
+    const out = await run('list', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('| 组件 | 中文名 | 描述 | 版本 |');
+  });
+
   it('should show empty message when no components for an unknown major', async () => {
     const out = await run('list', '--version', '999.0.0');
     expect(out).toContain('No component data available');

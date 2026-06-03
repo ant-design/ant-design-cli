@@ -117,7 +117,13 @@ describe('changelog', () => {
   it('should show changelog entries as markdown', async () => {
     const out = await run('changelog', '5.21.0', '--format', 'markdown');
     expect(out).toContain('### 5.21.0');
-    expect(out).toMatch(/\[\*\*feature\*\*\]|\[\*fix\*\]/);
+    expect(out).toMatch(/\[\*\*feature\*\*\]|\[\*\*fix\*\*\]/);
+  });
+
+  it('should show changelog entries as markdown in Chinese', async () => {
+    const out = await run('changelog', '5.21.0', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('### 5.21.0');
+    expect(out).toMatch(/\[\*\*新增\*\*\]|\[\*\*修复\*\*\]/);
   });
 
   it('should show API diff with removed props as markdown', async () => {
@@ -128,9 +134,21 @@ describe('changelog', () => {
     expect(out).toContain('| Prop |');
   });
 
+  it('should show API diff as markdown in Chinese', async () => {
+    const out = await run('changelog', '4.24.0', '5.24.0', 'BackTop', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('API 差异');
+    expect(out).toContain('| 属性 |');
+    expect(out).toContain('**移除:**');
+  });
+
   it('should show "No API differences" as markdown when versions match', async () => {
     const out = await run('changelog', '5.20.0', '5.20.0', '--format', 'markdown');
     expect(out).toContain('No API differences found');
+  });
+
+  it('should show "No API differences" as markdown in Chinese', async () => {
+    const out = await run('changelog', '5.20.0', '5.20.0', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('没有 API 差异');
   });
 
 });

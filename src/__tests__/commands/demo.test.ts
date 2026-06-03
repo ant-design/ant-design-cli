@@ -40,6 +40,11 @@ describe('demo', () => {
     expect(out).toContain('basic');
   });
 
+  it('should list demos as a markdown table in Chinese', async () => {
+    const out = await run('demo', 'Button', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('| 名称 | 标题 | 描述 |');
+  });
+
   it('should show a single demo as markdown code block', async () => {
     const out = await run('demo', 'Button', 'basic', '--format', 'markdown');
     expect(out).toContain('## Button / ');

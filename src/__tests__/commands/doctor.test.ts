@@ -49,6 +49,14 @@ describe('doctor', () => {
     expect(out).toContain('**Summary:**');
   });
 
+  it('should run doctor as markdown in Chinese', async () => {
+    const out = await run('doctor', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('## antd 诊断');
+    expect(out).toContain('| 状态 | 检查项 | 信息 |');
+    expect(out).toContain('通过');
+    expect(out).toContain('**摘要：**');
+  });
+
   it('should show doctor as JSON', async () => {
     const out = await run('doctor', '--format', 'json');
     const data = JSON.parse(out);

@@ -436,4 +436,15 @@ const App = () => (
     expect(out).toContain('a11y');
     expect(out).toContain('**Summary:**');
   });
+
+  it('should output markdown table in Chinese with --lang zh', async () => {
+    const out = await lintFixture(
+      'markdown-zh',
+      `import { Image } from 'antd';\nconst App = () => <Image src="x.png" />;`,
+      ['--format', 'markdown', '--lang', 'zh'],
+    );
+    expect(out).toContain('## Lint 结果');
+    expect(out).toContain('| 规则 | 级别 | 信息 | 文件 |');
+    expect(out).toContain('**摘要：**');
+  });
 });
