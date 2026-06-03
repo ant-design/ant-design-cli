@@ -45,10 +45,21 @@ describe('changelog', () => {
     expect(out).toContain('API Diff:');
   });
 
-  it('should print "No changelog data" message for unknown major version', async () => {
-    // Version 999.x has no snapshot data
-    const out = await run('changelog', '999.0.0');
-    expect(out).toContain('No changelog data');
+  it('should error for unknown major version with no changelog data', async () => {
+    // Version 999.x has no snapshot data — should use structured error path
+    const result = await runCLI('changelog', '999.0.0');
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toContain('No changelog data available');
+  });
+
+  it('should error for unknown major version with JSON format', async () => {
+    const result = await runCLI('changelog', '999.0.0', '--format', 'json');
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe('');
+    const err = JSON.parse(result.stderr);
+    expect(err.code).toBe('VERSION_NOT_FOUND');
+    expect(err.error).toBe(true);
   });
 
   it('should error in diff mode when v1 version has no data (older major)', async () => {
@@ -91,5 +102,20 @@ describe('changelog', () => {
     const data = JSON.parse(out);
     expect(data.component).toBe('FloatButton');
     expect(data.added.length).toBeGreaterThan(0);
+  });
+
+  it('should show "No API differences" in Chinese with --lang zh', async () => {
+    const out = await run('changelog', '5.20.0', '5.20.0', '--lang', 'zh');
+    expect(out).toContain('没有 API 差异');
+  });
+
+  it('should show API Diff label in Chinese with --lang zh', async () => {
+    const out = await run('changelog', '5.0.0', '5.24.0', '--lang', 'zh');
+    expect(out).toContain('API 差异');
+  });
+
+  it('should show "No changelog data" in Chinese with --lang zh', async () => {
+    const out = await run('changelog', '999.0.0', '--lang', 'zh');
+    expect(out).toContain('没有可用的变更日志数据');
   });
 });

@@ -67,29 +67,39 @@ exports[`semantic > semantic Drawer --format json --lang zh 1`] = `
 `;
 
 exports[`semantic > semantic Drawer --format markdown --lang en 1`] = `
-"Drawer Semantic Structure:
-├── mask         # Mask element
-├── content         # Drawer container element
-├── header         # Header element
-├── body         # Body element
-└── footer         # Footer element
+"## Drawer Semantic Structure
 
-Usage:
-  <Drawer classNames={{ mask: 'my-mask' }} />
-  <Drawer styles={{ mask: { background: '#fff' } }} />"
+| Key | Description |
+| --- | --- |
+| mask | Mask element |
+| content | Drawer container element |
+| header | Header element |
+| body | Body element |
+| footer | Footer element |
+
+**Usage:**
+\`\`\`tsx
+<Drawer classNames={{ mask: 'my-mask' }} />
+<Drawer styles={{ mask: { background: '#fff' } }} />
+\`\`\`"
 `;
 
 exports[`semantic > semantic Drawer --format markdown --lang zh 1`] = `
-"Drawer Semantic Structure:
-├── mask         # 遮罩层元素
-├── content         # Drawer 容器元素
-├── header         # 头部元素
-├── body         # 内容元素
-└── footer         # 底部元素
+"## Drawer 语义结构
 
-Usage:
-  <Drawer classNames={{ mask: 'my-mask' }} />
-  <Drawer styles={{ mask: { background: '#fff' } }} />"
+| Key | Description |
+| --- | --- |
+| mask | 遮罩层元素 |
+| content | Drawer 容器元素 |
+| header | 头部元素 |
+| body | 内容元素 |
+| footer | 底部元素 |
+
+**用法:**
+\`\`\`tsx
+<Drawer classNames={{ mask: 'my-mask' }} />
+<Drawer styles={{ mask: { background: '#fff' } }} />
+\`\`\`"
 `;
 
 exports[`semantic > semantic Drawer --format text --lang en 1`] = `
@@ -106,14 +116,14 @@ Usage:
 `;
 
 exports[`semantic > semantic Drawer --format text --lang zh 1`] = `
-"Drawer Semantic Structure:
+"Drawer 语义结构：
 ├── mask         # 遮罩层元素
 ├── content         # Drawer 容器元素
 ├── header         # 头部元素
 ├── body         # 内容元素
 └── footer         # 底部元素
 
-Usage:
+用法：
   <Drawer classNames={{ mask: 'my-mask' }} />
   <Drawer styles={{ mask: { background: '#fff' } }} />"
 `;

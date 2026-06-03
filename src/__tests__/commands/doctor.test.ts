@@ -35,9 +35,18 @@ describe('doctor', () => {
     expect(out).toContain('Summary');
   });
 
+  it('should run doctor in Chinese with --lang zh', async () => {
+    const out = await run('doctor', '--lang', 'zh');
+    expect(out).toContain('antd 诊断');
+    expect(out).toContain('摘要');
+  });
+
   it('should run doctor as markdown', async () => {
     const out = await run('doctor', '--format', 'markdown');
-    expect(out).toContain('antd Doctor');
+    expect(out).toContain('## antd Doctor');
+    expect(out).toContain('| Status | Check | Message |');
+    expect(out).toContain('PASS');
+    expect(out).toContain('**Summary:**');
   });
 
   it('should show doctor as JSON', async () => {

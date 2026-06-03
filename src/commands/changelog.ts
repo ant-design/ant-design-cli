@@ -1,8 +1,9 @@
 import type { Command } from 'commander';
 import type { GlobalOptions, ComponentData, PropData, ChangelogEntry, CLIError } from '../types.js';
+import { localize } from '../types.js';
 import { loadMetadataForVersion, findComponent, getAllComponentNames } from '../data/loader.js';
 import { detectVersion, compare } from '../data/version.js';
-import { output } from '../output/formatter.js';
+import { output, formatTable } from '../output/formatter.js';
 import { createError, printError, fuzzyMatch, ErrorCodes } from '../output/error.js';
 
 // ── Changelog logic ──
@@ -196,11 +197,28 @@ export function diffChangelog(opts: {
 
 // ── Printing helpers (CLI only) ──
 
-function printChangelogEntries(entries: ChangelogEntry[], format: string, versionArg?: string): void {
+function printChangelogEntries(entries: ChangelogEntry[], format: string, versionArg?: string, lang?: string): void {
   if (format === 'json') {
     output(versionArg ? entries : { latest: entries }, 'json');
     return;
   }
+
+  if (format === 'markdown') {
+    for (const entry of entries) {
+      console.log(`### ${entry.version} (${entry.date})`);
+      console.log('');
+      for (const change of entry.changes) {
+        const label = change.type === 'feature' ? '**feature**'
+          : change.type === 'fix' ? '*fix*'
+          : change.type === 'breaking' ? '**BREAKING**'
+          : change.type;
+        console.log(`- [${label}] **${change.component}** ${change.description}`);
+      }
+      console.log('');
+    }
+    return;
+  }
+
   for (const entry of entries) {
     console.log(`## ${entry.version} (${entry.date})`);
     console.log('');
@@ -212,7 +230,7 @@ function printChangelogEntries(entries: ChangelogEntry[], format: string, versio
   }
 }
 
-function printApiDiff(result: DiffResult, format: string): void {
+function printApiDiff(result: DiffResult, format: string, lang?: string): void {
   if (format === 'json') {
     const jsonResult = result.component && result.diffs.length > 0
       ? { from: result.from, to: result.to, ...result.diffs[0] }
@@ -221,12 +239,56 @@ function printApiDiff(result: DiffResult, format: string): void {
     return;
   }
 
-  if (result.diffs.length === 0) {
-    console.log(`No API differences found between ${result.from} and ${result.to}.`);
+  if (format === 'markdown') {
+    if (result.diffs.length === 0) {
+      console.log(localize(
+        `No API differences found between ${result.from} and ${result.to}.`,
+        `${result.from} 和 ${result.to} 之间没有 API 差异。`,
+        lang ?? 'en',
+      ));
+      return;
+    }
+    console.log(`## ${localize('API Diff', 'API 差异', lang ?? 'en')}: ${result.from} → ${result.to}`);
+    console.log('');
+    for (const diff of result.diffs) {
+      console.log(`### ${diff.component}`);
+      console.log('');
+      if (diff.added.length > 0) {
+        console.log(`**${localize('Added', '新增', lang ?? 'en')}:**`);
+        console.log('');
+        console.log(formatTable(['Prop', 'Type'], diff.added.map(p => [p.name || '', p.type || '-']), 'markdown'));
+        console.log('');
+      }
+      if (diff.removed.length > 0) {
+        console.log(`**${localize('Removed', '移除', lang ?? 'en')}:**`);
+        console.log('');
+        console.log(formatTable(['Prop', 'Type'], diff.removed.map(p => [p.name || '', p.type || '-']), 'markdown'));
+        console.log('');
+      }
+      if (diff.changed.length > 0) {
+        console.log(`**${localize('Changed', '变更', lang ?? 'en')}:**`);
+        console.log('');
+        console.log(formatTable(['Prop', 'Change'], diff.changed.map(p => [p.name || '', p.change || '-']), 'markdown'));
+        console.log('');
+      }
+    }
     return;
   }
 
-  console.log(`API Diff: ${result.from} → ${result.to}`);
+  if (result.diffs.length === 0) {
+    console.log(localize(
+      `No API differences found between ${result.from} and ${result.to}.`,
+      `${result.from} 和 ${result.to} 之间没有 API 差异。`,
+      lang ?? 'en',
+    ));
+    return;
+  }
+
+  console.log(localize(
+    `API Diff: ${result.from} → ${result.to}`,
+    `API 差异：${result.from} → ${result.to}`,
+    lang ?? 'en',
+  ));
   console.log('');
   for (const diff of result.diffs) {
     console.log(`  ${diff.component}:`);
@@ -262,11 +324,6 @@ export function registerChangelogCommand(program: Command): void {
         });
 
         if ('error' in result) {
-          // Special case: "No changelog data available" should just print a message, not a structured error
-          if (result.code === ErrorCodes.VERSION_NOT_FOUND && !result.suggestion) {
-            console.log('No changelog data available.');
-            return;
-          }
           printError(result, opts.format);
           process.exitCode = 1;
           return;
@@ -282,7 +339,7 @@ export function registerChangelogCommand(program: Command): void {
           return;
         }
 
-        printApiDiff(result, opts.format);
+        printApiDiff(result, opts.format, opts.lang);
       }
     });
 }

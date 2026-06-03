@@ -27,4 +27,9 @@ describe('demo', () => {
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain('not found');
   });
+
+  it('should show demo list in Chinese with --lang zh', async () => {
+    const out = await run('demo', 'Button', '--lang', 'zh');
+    expect(out).toContain('示例：');
+  });
 });

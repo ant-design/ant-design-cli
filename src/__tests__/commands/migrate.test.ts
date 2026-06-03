@@ -9,6 +9,12 @@ describe('migrate', () => {
     expect(out).toContain('popupClassName');
   });
 
+  it('should show migration guide in Chinese with --lang zh', async () => {
+    const out = await run('migrate', '4', '5', '--lang', 'zh');
+    expect(out).toContain('迁移指南');
+    expect(out).toContain('合计');
+  });
+
   it('should show migration guide as JSON', async () => {
     const out = await run('migrate', '4', '5', '--format', 'json');
     const data = JSON.parse(out);

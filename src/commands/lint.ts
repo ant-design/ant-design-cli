@@ -1,10 +1,11 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
+import { localize } from '../types.js';
 import { readFileSync } from 'node:fs';
 import { parseSync, Visitor } from 'oxc-parser';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
-import { output } from '../output/formatter.js';
+import { formatTable, output } from '../output/formatter.js';
 import { collectFiles, getJSXElementName } from '../utils/scan.js';
 
 export interface LintIssue {
@@ -420,11 +421,32 @@ export function registerLintCommand(program: Command): void {
       }
 
       if (allIssues.length === 0) {
-        console.log(`Scanned ${files.length} files. No issues found.`);
+        console.log(localize(
+          `Scanned ${files.length} files. No issues found.`,
+          `扫描了 ${files.length} 个文件，未发现问题。`,
+          opts.lang,
+        ));
         return;
       }
 
-      console.log(`Scanned ${files.length} files. Found ${allIssues.length} issues:\n`);
+      if (opts.format === 'markdown') {
+        console.log(`## Lint Results`);
+        console.log('');
+        console.log(`Scanned ${files.length} files. Found ${allIssues.length} issues.`);
+        console.log('');
+        const headers = ['Rule', 'Severity', 'Message', 'File'];
+        const rows = allIssues.map((i) => [i.rule, i.severity, i.message, `${i.file}:${i.line}`]);
+        console.log(formatTable(headers, rows, 'markdown'));
+        console.log('');
+        console.log(`**Summary:** ${summary.deprecated} deprecated, ${summary.a11y} a11y, ${summary.usage} usage, ${summary.performance} performance`);
+        return;
+      }
+
+      console.log(localize(
+        `Scanned ${files.length} files. Found ${allIssues.length} issues:`,
+        `扫描了 ${files.length} 个文件，发现 ${allIssues.length} 个问题：`,
+        opts.lang,
+      ) + '\n');
 
       for (const issue of allIssues) {
         const icon = issue.severity === 'error' ? '✗' : '⚠';
@@ -432,6 +454,6 @@ export function registerLintCommand(program: Command): void {
         console.log(`    ${issue.message}`);
       }
 
-      console.log(`\nSummary: ${summary.deprecated} deprecated, ${summary.a11y} a11y, ${summary.usage} usage, ${summary.performance} performance`);
+      console.log(`\n${localize('Summary:', '摘要：', opts.lang)} ${localize(`${summary.deprecated} deprecated`, `${summary.deprecated} 已废弃`, opts.lang)}, ${localize(`${summary.a11y} a11y`, `${summary.a11y} 无障碍`, opts.lang)}, ${localize(`${summary.usage} usage`, `${summary.usage} 用法`, opts.lang)}, ${localize(`${summary.performance} performance`, `${summary.performance} 性能`, opts.lang)}`);
     });
 }

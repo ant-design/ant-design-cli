@@ -1,5 +1,6 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
+import { localize } from '../types.js';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { formatTable, output } from '../output/formatter.js';
@@ -42,7 +43,7 @@ export function registerListCommand(program: Command): void {
         if (opts.format === 'json') {
           output([], 'json');
         } else {
-          console.log('No component data available.');
+          console.log(localize('No component data available.', '没有可用的组件数据。', opts.lang));
         }
         return;
       }
@@ -68,11 +69,13 @@ export function registerListCommand(program: Command): void {
       }
 
       // Text format
-      const headers = ['Component', '组件名', 'Description', 'Since'];
+      const headers = opts.lang === 'zh'
+        ? ['组件', '组件名', '描述', '版本']
+        : ['Component', '组件名', 'Description', 'Since'];
       const rows = components.map((c) => [
         c.name,
         c.nameZh,
-        c.description,
+        localize(c.description, c.descriptionZh, opts.lang),
         c.since,
       ]);
       console.log(formatTable(headers, rows, 'text'));

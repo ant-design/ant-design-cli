@@ -33,6 +33,16 @@ describe('info', () => {
     expect(out).toContain('按钮用于开始一个即时操作');
   });
 
+  it('should show "使用场景" label with --lang zh --detail', async () => {
+    const out = await run('info', 'Button', '--detail', '--lang', 'zh');
+    expect(out).toContain('使用场景');
+  });
+
+  it('should show "通用属性" label with --lang zh', async () => {
+    const out = await run('info', 'Button', '--lang', 'zh');
+    expect(out).toContain('通用属性');
+  });
+
   it('should suggest correct name for typos', async () => {
     const result = await runCLI('info', 'Btn');
     expect(result.exitCode).toBe(1);

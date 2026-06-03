@@ -99,4 +99,22 @@ describe('usage', () => {
       rmSync(tmpDir, { recursive: true, force: true });
     }
   });
+
+  it('should display markdown table when components are found', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_md__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Button, Form } from 'antd';\nconst App = () => <Form><Form.Item><Button>Test</Button></Form.Item></Form>;`);
+      const out = await run('usage', tmpDir, '--format', 'markdown');
+      expect(out).toContain('## antd Usage');
+      expect(out).toContain('### Components');
+      expect(out).toContain('| Component | Imports | Files |');
+      expect(out).toContain('Button');
+      expect(out).toContain('Form');
+      expect(out).toContain('**Total:**');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
 });

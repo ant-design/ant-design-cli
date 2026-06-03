@@ -424,4 +424,16 @@ const App = () => (
     // Parser error → file is skipped, 0 issues
     expect(data.issues).toEqual([]);
   });
+
+  it('should output markdown table format', async () => {
+    const out = await lintFixture(
+      'markdown-output',
+      `import { Image } from 'antd';\nconst App = () => <Image src="x.png" />;`,
+      ['--format', 'markdown'],
+    );
+    expect(out).toContain('## Lint Results');
+    expect(out).toContain('| Rule | Severity | Message | File |');
+    expect(out).toContain('a11y');
+    expect(out).toContain('**Summary:**');
+  });
 });

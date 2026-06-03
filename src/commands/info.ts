@@ -155,7 +155,7 @@ export function registerInfoCommand(program: Command): void {
       const nameLabel = result.nameZh ? `${result.name} (${result.nameZh})` : result.name;
       console.log(`${nameLabel} — ${result.description}`);
       if (opts.detail && 'whenToUse' in result && result.whenToUse) {
-        console.log(`\nWhen to use: ${result.whenToUse}`);
+        console.log(`\n${localize('When to use:', '使用场景：', opts.lang)} ${result.whenToUse}`);
       }
       console.log('');
 
@@ -188,9 +188,11 @@ export function registerInfoCommand(program: Command): void {
       // Common props — most antd components inherit className/style/rootClassName via Common Props.
       // ConfigProvider does NOT support common props (no DOM element rendered).
       if (result.commonProps) {
-        const noteLabel = opts.lang === 'zh'
-          ? '通用属性（所有组件均支持，无需单独列出）'
-          : 'Common Props (inherited by all components, not listed individually)';
+        const noteLabel = localize(
+          'Common Props (inherited by all components, not listed individually)',
+          '通用属性（所有组件均支持，无需单独列出）',
+          opts.lang,
+        );
         console.log(`\n${noteLabel}`);
         console.log('');
         const cpHeaders = opts.detail
@@ -205,9 +207,11 @@ export function registerInfoCommand(program: Command): void {
         console.log(formatTable(cpHeaders, cpRows, fmt));
 
         if (result.htmlElement) {
-          const extendsNote = opts.lang === 'zh'
-            ? `\n扩展自 <${result.htmlElement}>，支持原生 HTML ${result.htmlElement} 属性。`
-            : `\nExtends <${result.htmlElement}> — supports native HTML ${result.htmlElement} attributes.`;
+          const extendsNote = localize(
+            `\nExtends <${result.htmlElement}> — supports native HTML ${result.htmlElement} attributes.`,
+            `\n扩展自 <${result.htmlElement}>，支持原生 HTML ${result.htmlElement} 属性。`,
+            opts.lang,
+          );
           console.log(extendsNote);
         }
       }

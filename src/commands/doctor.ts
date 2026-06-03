@@ -1,8 +1,9 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
+import { localize } from '../types.js';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { output } from '../output/formatter.js';
+import { formatTable, output } from '../output/formatter.js';
 import { readJson, type PackageJson } from '../utils/json.js';
 import { satisfies } from '../data/version.js';
 import { getBugVersions, findBugInfo } from '../utils/bug-versions.js';
@@ -483,8 +484,37 @@ export function registerDoctorCommand(program: Command): void {
         return;
       }
 
+      if (opts.format === 'markdown') {
+        console.log('## antd Doctor');
+        console.log('');
+        const headers = ['Status', 'Check', 'Message'];
+        const rows = checks.map((c) => {
+          const status = c.status === 'pass' ? 'PASS' : c.status === 'warn' ? 'WARN' : 'FAIL';
+          return [status, c.name, c.message];
+        });
+        console.log(formatTable(headers, rows, 'markdown'));
+        // Print suggestions as bullet list
+        const checksWithSuggestions = checks.filter((c) => c.suggestion);
+        if (checksWithSuggestions.length > 0) {
+          console.log('');
+          for (const c of checksWithSuggestions) {
+            const lines = c.suggestion!.split('\n');
+            for (const line of lines) {
+              console.log(`- **${c.name}**: ${line}`);
+            }
+          }
+        }
+        console.log('');
+        const parts = [];
+        if (summary.pass > 0) parts.push(`${summary.pass} passed`);
+        if (summary.fail > 0) parts.push(`${summary.fail} error${summary.fail > 1 ? 's' : ''}`);
+        if (summary.warn > 0) parts.push(`${summary.warn} warning${summary.warn > 1 ? 's' : ''}`);
+        console.log(`**Summary:** ${parts.join(', ')}`);
+        return;
+      }
+
       const ICONS = { pass: '✓', warn: '⚠', fail: '✗' };
-      console.log('antd Doctor\n');
+      console.log(localize('antd Doctor', 'antd 诊断', opts.lang) + '\n');
 
       const INDENT = '  ';
       for (const check of checks) {
@@ -502,9 +532,9 @@ export function registerDoctorCommand(program: Command): void {
 
       console.log('');
       const parts = [];
-      if (summary.pass > 0) parts.push(`${summary.pass} passed`);
-      if (summary.fail > 0) parts.push(`${summary.fail} error${summary.fail > 1 ? 's' : ''}`);
-      if (summary.warn > 0) parts.push(`${summary.warn} warning${summary.warn > 1 ? 's' : ''}`);
-      console.log(`Summary: ${parts.join(', ')}`);
+      if (summary.pass > 0) parts.push(localize(`${summary.pass} passed`, `${summary.pass} 通过`, opts.lang));
+      if (summary.fail > 0) parts.push(localize(`${summary.fail} error${summary.fail > 1 ? 's' : ''}`, `${summary.fail} 个错误`, opts.lang));
+      if (summary.warn > 0) parts.push(localize(`${summary.warn} warning${summary.warn > 1 ? 's' : ''}`, `${summary.warn} 个警告`, opts.lang));
+      console.log(`${localize('Summary:', '摘要：', opts.lang)} ${parts.join(', ')}`);
     });
 }
