@@ -429,6 +429,13 @@ export function registerLintCommand(program: Command): void {
         return;
       }
 
+      const summaryParts = [
+        localize(`${summary.deprecated} deprecated`, `${summary.deprecated} 已废弃`, opts.lang),
+        localize(`${summary.a11y} a11y`, `${summary.a11y} 无障碍`, opts.lang),
+        localize(`${summary.usage} usage`, `${summary.usage} 用法`, opts.lang),
+        localize(`${summary.performance} performance`, `${summary.performance} 性能`, opts.lang),
+      ].join(', ');
+
       if (opts.format === 'markdown') {
         console.log(`## ${localize('Lint Results', 'Lint 结果', opts.lang)}`);
         console.log('');
@@ -447,7 +454,7 @@ export function registerLintCommand(program: Command): void {
         const rows = allIssues.map((i) => [i.rule, i.severity, i.message, `${i.file}:${i.line}`]);
         console.log(formatTable(headers, rows, 'markdown'));
         console.log('');
-        console.log(`**${localize('Summary:', '摘要：', opts.lang)}** ${localize(`${summary.deprecated} deprecated`, `${summary.deprecated} 已废弃`, opts.lang)}, ${localize(`${summary.a11y} a11y`, `${summary.a11y} 无障碍`, opts.lang)}, ${localize(`${summary.usage} usage`, `${summary.usage} 用法`, opts.lang)}, ${localize(`${summary.performance} performance`, `${summary.performance} 性能`, opts.lang)}`);
+        console.log(`**${localize('Summary:', '摘要：', opts.lang)}** ${summaryParts}`);
         return;
       }
 
@@ -463,6 +470,6 @@ export function registerLintCommand(program: Command): void {
         console.log(`    ${issue.message}`);
       }
 
-      console.log(`\n${localize('Summary:', '摘要：', opts.lang)} ${localize(`${summary.deprecated} deprecated`, `${summary.deprecated} 已废弃`, opts.lang)}, ${localize(`${summary.a11y} a11y`, `${summary.a11y} 无障碍`, opts.lang)}, ${localize(`${summary.usage} usage`, `${summary.usage} 用法`, opts.lang)}, ${localize(`${summary.performance} performance`, `${summary.performance} 性能`, opts.lang)}`);
+      console.log(`\n${localize('Summary:', '摘要：', opts.lang)} ${summaryParts}`);
     });
 }

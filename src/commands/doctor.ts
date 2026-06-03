@@ -479,6 +479,11 @@ export function registerDoctorCommand(program: Command): void {
         fail: checks.filter((c) => c.status === 'fail').length,
       };
 
+      const parts: string[] = [];
+      if (summary.pass > 0) parts.push(localize(`${summary.pass} passed`, `${summary.pass} 通过`, opts.lang));
+      if (summary.fail > 0) parts.push(localize(`${summary.fail} error${summary.fail > 1 ? 's' : ''}`, `${summary.fail} 个错误`, opts.lang));
+      if (summary.warn > 0) parts.push(localize(`${summary.warn} warning${summary.warn > 1 ? 's' : ''}`, `${summary.warn} 个警告`, opts.lang));
+
       if (opts.format === 'json') {
         output({ checks, summary }, 'json');
         return;
@@ -513,14 +518,11 @@ export function registerDoctorCommand(program: Command): void {
           }
         }
         console.log('');
-        const parts = [];
-        if (summary.pass > 0) parts.push(localize(`${summary.pass} passed`, `${summary.pass} 通过`, opts.lang));
-        if (summary.fail > 0) parts.push(localize(`${summary.fail} error${summary.fail > 1 ? 's' : ''}`, `${summary.fail} 个错误`, opts.lang));
-        if (summary.warn > 0) parts.push(localize(`${summary.warn} warning${summary.warn > 1 ? 's' : ''}`, `${summary.warn} 个警告`, opts.lang));
         console.log(`**${localize('Summary:', '摘要：', opts.lang)}** ${parts.join(', ')}`);
         return;
       }
 
+      // Text format
       const ICONS = { pass: '✓', warn: '⚠', fail: '✗' };
       console.log(localize('antd Doctor', 'antd 诊断', opts.lang) + '\n');
 
@@ -539,10 +541,6 @@ export function registerDoctorCommand(program: Command): void {
       }
 
       console.log('');
-      const parts = [];
-      if (summary.pass > 0) parts.push(localize(`${summary.pass} passed`, `${summary.pass} 通过`, opts.lang));
-      if (summary.fail > 0) parts.push(localize(`${summary.fail} error${summary.fail > 1 ? 's' : ''}`, `${summary.fail} 个错误`, opts.lang));
-      if (summary.warn > 0) parts.push(localize(`${summary.warn} warning${summary.warn > 1 ? 's' : ''}`, `${summary.warn} 个警告`, opts.lang));
       console.log(`${localize('Summary:', '摘要：', opts.lang)} ${parts.join(', ')}`);
     });
 }

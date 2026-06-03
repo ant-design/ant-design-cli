@@ -53,9 +53,12 @@ export function registerListCommand(program: Command): void {
         return;
       }
 
-      const headers = opts.lang === 'zh'
-        ? ['组件', '中文名', '描述', '版本']
-        : ['Component', 'Name (zh)', 'Description', 'Since'];
+      const headers = [
+        localize('Component', '组件', opts.lang),
+        localize('Name (zh)', '中文名', opts.lang),
+        localize('Description', '描述', opts.lang),
+        localize('Since', '版本', opts.lang),
+      ];
       const rows = components.map((c) => [
         c.name,
         c.nameZh,

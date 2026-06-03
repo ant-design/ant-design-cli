@@ -239,15 +239,16 @@ function printApiDiff(result: DiffResult, format: string, lang: string = 'en'): 
     return;
   }
 
+  if (result.diffs.length === 0) {
+    console.log(localize(
+      `No API differences found between ${result.from} and ${result.to}.`,
+      `${result.from} 和 ${result.to} 之间没有 API 差异。`,
+      lang,
+    ));
+    return;
+  }
+
   if (format === 'markdown') {
-    if (result.diffs.length === 0) {
-      console.log(localize(
-        `No API differences found between ${result.from} and ${result.to}.`,
-        `${result.from} 和 ${result.to} 之间没有 API 差异。`,
-        lang,
-      ));
-      return;
-    }
     console.log(`## ${localize('API Diff', 'API 差异', lang)}: ${result.from} → ${result.to}`);
     console.log('');
     for (const diff of result.diffs) {
@@ -272,15 +273,6 @@ function printApiDiff(result: DiffResult, format: string, lang: string = 'en'): 
         console.log('');
       }
     }
-    return;
-  }
-
-  if (result.diffs.length === 0) {
-    console.log(localize(
-      `No API differences found between ${result.from} and ${result.to}.`,
-      `${result.from} 和 ${result.to} 之间没有 API 差异。`,
-      lang,
-    ));
     return;
   }
 

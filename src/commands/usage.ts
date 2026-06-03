@@ -156,11 +156,14 @@ export function registerUsageCommand(program: Command): void {
           opts.lang,
         ));
         console.log('');
+      }
 
-        if (components.length === 0 && nonComponents.length === 0) {
-          console.log(localize('No antd imports found.', '未找到 antd 导入。', opts.lang));
-          return;
-        }
+      if (components.length === 0 && nonComponents.length === 0) {
+        console.log(localize('No antd imports found.', '未找到 antd 导入。', opts.lang));
+        return;
+      }
+
+      if (opts.format === 'markdown') {
 
         if (components.length > 0) {
           console.log(`### ${localize('Components', '组件', opts.lang)}`);
@@ -206,11 +209,6 @@ export function registerUsageCommand(program: Command): void {
         `在 ${targetDir} 中扫描了 ${files.length} 个文件`,
         opts.lang,
       ) + '\n');
-
-      if (components.length === 0 && nonComponents.length === 0) {
-        console.log(localize('No antd imports found.', '未找到 antd 导入。', opts.lang));
-        return;
-      }
 
       if (components.length > 0) {
         for (const comp of components) {
