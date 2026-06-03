@@ -430,15 +430,24 @@ export function registerLintCommand(program: Command): void {
       }
 
       if (opts.format === 'markdown') {
-        console.log(`## Lint Results`);
+        console.log(`## ${localize('Lint Results', 'Lint 结果', opts.lang)}`);
         console.log('');
-        console.log(`Scanned ${files.length} files. Found ${allIssues.length} issues.`);
+        console.log(localize(
+          `Scanned ${files.length} files. Found ${allIssues.length} issues.`,
+          `扫描了 ${files.length} 个文件，发现 ${allIssues.length} 个问题。`,
+          opts.lang,
+        ));
         console.log('');
-        const headers = ['Rule', 'Severity', 'Message', 'File'];
+        const headers = [
+          localize('Rule', '规则', opts.lang),
+          localize('Severity', '级别', opts.lang),
+          localize('Message', '信息', opts.lang),
+          localize('File', '文件', opts.lang),
+        ];
         const rows = allIssues.map((i) => [i.rule, i.severity, i.message, `${i.file}:${i.line}`]);
         console.log(formatTable(headers, rows, 'markdown'));
         console.log('');
-        console.log(`**Summary:** ${summary.deprecated} deprecated, ${summary.a11y} a11y, ${summary.usage} usage, ${summary.performance} performance`);
+        console.log(`**${localize('Summary:', '摘要：', opts.lang)}** ${localize(`${summary.deprecated} deprecated`, `${summary.deprecated} 已废弃`, opts.lang)}, ${localize(`${summary.a11y} a11y`, `${summary.a11y} 无障碍`, opts.lang)}, ${localize(`${summary.usage} usage`, `${summary.usage} 用法`, opts.lang)}, ${localize(`${summary.performance} performance`, `${summary.performance} 性能`, opts.lang)}`);
         return;
       }
 

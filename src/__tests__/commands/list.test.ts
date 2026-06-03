@@ -25,7 +25,8 @@ describe('list', () => {
   it('should show list as markdown', async () => {
     const out = await run('list', '--format', 'markdown');
     expect(out).toContain('# antd Components');
-    expect(out).toContain('**Button**');
+    expect(out).toContain('| Component | Name (zh) | Description | Since |');
+    expect(out).toContain('Button');
   });
 
   it('should show empty message when no components for an unknown major', async () => {

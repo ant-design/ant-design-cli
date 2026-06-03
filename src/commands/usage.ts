@@ -148,20 +148,28 @@ export function registerUsageCommand(program: Command): void {
       }
 
       if (opts.format === 'markdown') {
-        console.log(`## antd Usage in ${targetDir}`);
+        console.log(`## ${localize(`antd Usage in ${targetDir}`, `${targetDir} 中的 antd 用法`, opts.lang)}`);
         console.log('');
-        console.log(`Scanned ${files.length} files.`);
+        console.log(localize(
+          `Scanned ${files.length} files.`,
+          `扫描了 ${files.length} 个文件。`,
+          opts.lang,
+        ));
         console.log('');
 
         if (components.length === 0 && nonComponents.length === 0) {
-          console.log('No antd imports found.');
+          console.log(localize('No antd imports found.', '未找到 antd 导入。', opts.lang));
           return;
         }
 
         if (components.length > 0) {
-          console.log('### Components');
+          console.log(`### ${localize('Components', '组件', opts.lang)}`);
           console.log('');
-          const headers = ['Component', 'Imports', 'Files'];
+          const headers = [
+            localize('Component', '组件', opts.lang),
+            localize('Imports', '导入次数', opts.lang),
+            localize('Files', '文件数', opts.lang),
+          ];
           const rows = components.map((c) => [c.name, String(c.imports), String(c.files.length)]);
           console.log(formatTable(headers, rows, 'markdown'));
           if (components.some((c) => c.subComponents)) {
@@ -169,20 +177,24 @@ export function registerUsageCommand(program: Command): void {
             for (const comp of components) {
               if (comp.subComponents) {
                 for (const [sub, count] of Object.entries(comp.subComponents)) {
-                  console.log(`- ${sub}: ${count} usages`);
+                  console.log(localize(`- ${sub}: ${count} usages`, `- ${sub}: ${count} 次使用`, opts.lang));
                 }
               }
             }
           }
           console.log('');
-          console.log(`**Total:** ${components.length} components, ${totalImports} imports`);
+          console.log(`**${localize('Total:', '合计：', opts.lang)}** ${localize(`${components.length} components`, `${components.length} 个组件`, opts.lang)}, ${localize(`${totalImports} imports`, `${totalImports} 次导入`, opts.lang)}`);
         }
 
         if (nonComponents.length > 0) {
           console.log('');
-          console.log('### Non-component exports');
+          console.log(`### ${localize('Non-component exports', '非组件导出', opts.lang)}`);
           console.log('');
-          const ncHeaders = ['Export', 'Imports', 'Files'];
+          const ncHeaders = [
+            localize('Export', '导出', opts.lang),
+            localize('Imports', '导入次数', opts.lang),
+            localize('Files', '文件数', opts.lang),
+          ];
           const ncRows = nonComponents.map((c) => [c.name, String(c.imports), String(c.files.length)]);
           console.log(formatTable(ncHeaders, ncRows, 'markdown'));
         }

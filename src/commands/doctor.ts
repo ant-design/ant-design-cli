@@ -485,11 +485,19 @@ export function registerDoctorCommand(program: Command): void {
       }
 
       if (opts.format === 'markdown') {
-        console.log('## antd Doctor');
+        console.log(`## ${localize('antd Doctor', 'antd 诊断', opts.lang)}`);
         console.log('');
-        const headers = ['Status', 'Check', 'Message'];
+        const headers = [
+          localize('Status', '状态', opts.lang),
+          localize('Check', '检查项', opts.lang),
+          localize('Message', '信息', opts.lang),
+        ];
         const rows = checks.map((c) => {
-          const status = c.status === 'pass' ? 'PASS' : c.status === 'warn' ? 'WARN' : 'FAIL';
+          const status = c.status === 'pass'
+            ? localize('PASS', '通过', opts.lang)
+            : c.status === 'warn'
+              ? localize('WARN', '警告', opts.lang)
+              : localize('FAIL', '失败', opts.lang);
           return [status, c.name, c.message];
         });
         console.log(formatTable(headers, rows, 'markdown'));
@@ -506,10 +514,10 @@ export function registerDoctorCommand(program: Command): void {
         }
         console.log('');
         const parts = [];
-        if (summary.pass > 0) parts.push(`${summary.pass} passed`);
-        if (summary.fail > 0) parts.push(`${summary.fail} error${summary.fail > 1 ? 's' : ''}`);
-        if (summary.warn > 0) parts.push(`${summary.warn} warning${summary.warn > 1 ? 's' : ''}`);
-        console.log(`**Summary:** ${parts.join(', ')}`);
+        if (summary.pass > 0) parts.push(localize(`${summary.pass} passed`, `${summary.pass} 通过`, opts.lang));
+        if (summary.fail > 0) parts.push(localize(`${summary.fail} error${summary.fail > 1 ? 's' : ''}`, `${summary.fail} 个错误`, opts.lang));
+        if (summary.warn > 0) parts.push(localize(`${summary.warn} warning${summary.warn > 1 ? 's' : ''}`, `${summary.warn} 个警告`, opts.lang));
+        console.log(`**${localize('Summary:', '摘要：', opts.lang)}** ${parts.join(', ')}`);
         return;
       }
 

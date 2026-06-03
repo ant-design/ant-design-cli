@@ -73,7 +73,7 @@ export function registerSemanticCommand(program: Command): void {
       if (opts.format === 'markdown') {
         console.log(`## ${localize(`${result.name} Semantic Structure`, `${result.name} 语义结构`, opts.lang)}`);
         console.log('');
-        const headers = ['Key', 'Description'];
+        const headers = [localize('Key', '键名', opts.lang), localize('Description', '描述', opts.lang)];
         const rows = structure.map((s) => [
           s.key,
           localize(s.description, s.descriptionZh, opts.lang),

@@ -197,7 +197,7 @@ export function diffChangelog(opts: {
 
 // ── Printing helpers (CLI only) ──
 
-function printChangelogEntries(entries: ChangelogEntry[], format: string, versionArg?: string, lang?: string): void {
+function printChangelogEntries(entries: ChangelogEntry[], format: string, versionArg?: string): void {
   if (format === 'json') {
     output(versionArg ? entries : { latest: entries }, 'json');
     return;

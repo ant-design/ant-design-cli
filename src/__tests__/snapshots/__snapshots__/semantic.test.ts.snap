@@ -87,7 +87,7 @@ exports[`semantic > semantic Drawer --format markdown --lang en 1`] = `
 exports[`semantic > semantic Drawer --format markdown --lang zh 1`] = `
 "## Drawer 语义结构
 
-| Key | Description |
+| 键名 | 描述 |
 | --- | --- |
 | mask | 遮罩层元素 |
 | content | Drawer 容器元素 |

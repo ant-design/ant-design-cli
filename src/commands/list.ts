@@ -53,31 +53,24 @@ export function registerListCommand(program: Command): void {
         return;
       }
 
-      if (opts.format === 'markdown') {
-        const lines: string[] = [
-          `# antd Components (${versionInfo.version})`,
-          '',
-          '| Component | 组件名 | Description | Since |',
-          '|-----------|--------|-------------|-------|',
-        ];
-        for (const c of components) {
-          const desc = c.description || c.descriptionZh || '';
-          lines.push(`| **${c.name}** | ${c.nameZh} | ${desc} | ${c.since} |`);
-        }
-        console.log(lines.join('\n'));
-        return;
-      }
-
-      // Text format
       const headers = opts.lang === 'zh'
-        ? ['组件', '组件名', '描述', '版本']
-        : ['Component', '组件名', 'Description', 'Since'];
+        ? ['组件', '中文名', '描述', '版本']
+        : ['Component', 'Name (zh)', 'Description', 'Since'];
       const rows = components.map((c) => [
         c.name,
         c.nameZh,
         localize(c.description, c.descriptionZh, opts.lang),
         c.since,
       ]);
+
+      if (opts.format === 'markdown') {
+        console.log(`# antd Components (${versionInfo.version})`);
+        console.log('');
+        console.log(formatTable(headers, rows, 'markdown'));
+        return;
+      }
+
+      // Text format
       console.log(formatTable(headers, rows, 'text'));
     });
 }
