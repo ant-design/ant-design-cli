@@ -4,7 +4,7 @@
 
 <img src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="Ant Design" width="72">
 
-<h1>@ant-design/cli</h1>
+<h1>Ant Design CLI</h1>
 
 **Ant Design on your command line.**<br>
 Query component knowledge, analyze project usage, and guide migrations — fully offline.
