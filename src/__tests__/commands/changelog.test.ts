@@ -49,12 +49,14 @@ describe('changelog', () => {
     // Version 999.x has no snapshot data — should use structured error path
     const result = await runCLI('changelog', '999.0.0');
     expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe('');
     expect(result.stderr).toContain('No changelog data available');
   });
 
   it('should error for unknown major version with JSON format', async () => {
     const result = await runCLI('changelog', '999.0.0', '--format', 'json');
     expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe('');
     const err = JSON.parse(result.stderr);
     expect(err.code).toBe('VERSION_NOT_FOUND');
     expect(err.error).toBe(true);
