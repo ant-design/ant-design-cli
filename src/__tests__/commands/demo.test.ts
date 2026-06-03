@@ -27,4 +27,28 @@ describe('demo', () => {
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain('not found');
   });
+
+  it('should show demo list in Chinese with --lang zh', async () => {
+    const out = await run('demo', 'Button', '--lang', 'zh');
+    expect(out).toContain('示例：');
+  });
+
+  it('should list demos as a markdown table', async () => {
+    const out = await run('demo', 'Button', '--format', 'markdown');
+    expect(out).toContain('## Button');
+    expect(out).toContain('| Name | Title | Description |');
+    expect(out).toContain('basic');
+  });
+
+  it('should list demos as a markdown table in Chinese', async () => {
+    const out = await run('demo', 'Button', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('| 名称 | 标题 | 描述 |');
+  });
+
+  it('should show a single demo as markdown code block', async () => {
+    const out = await run('demo', 'Button', 'basic', '--format', 'markdown');
+    expect(out).toContain('## Button / ');
+    expect(out).toContain('```tsx');
+    expect(out).toContain('import');
+  });
 });

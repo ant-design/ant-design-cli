@@ -1,9 +1,10 @@
 import type { Command } from 'commander';
 import type { GlobalOptions, CLIError } from '../types.js';
+import { localize } from '../types.js';
 import { resolveComponent } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { createError, printError, fuzzyMatch, ErrorCodes } from '../output/error.js';
-import { output } from '../output/formatter.js';
+import { output, formatTable } from '../output/formatter.js';
 
 export interface DemoListResult {
   component: string;
@@ -89,6 +90,14 @@ export function registerDemoCommand(program: Command): void {
         // Single demo result
         if (opts.format === 'json') {
           output(result, 'json');
+        } else if (opts.format === 'markdown') {
+          console.log(`## ${result.component} / ${result.title}`);
+          console.log('');
+          console.log(result.description);
+          console.log('');
+          console.log('```tsx');
+          console.log(result.code);
+          console.log('```');
         } else {
           console.log(`${result.component} / ${result.title}`);
           console.log(`${result.description}`);
@@ -99,15 +108,31 @@ export function registerDemoCommand(program: Command): void {
         // Demo list result
         if (opts.format === 'json') {
           output(result, 'json');
+        } else if (opts.format === 'markdown') {
+          console.log(`## ${result.component} ${localize('Demos', '示例', opts.lang)}`);
+          console.log('');
+          if (result.demos.length === 0) {
+            console.log(localize('No demos available.', '暂无示例。', opts.lang));
+          } else {
+            console.log(formatTable(
+              [localize('Name', '名称', opts.lang), localize('Title', '标题', opts.lang), localize('Description', '描述', opts.lang)],
+              result.demos.map(d => [d.name, d.title, d.description]),
+              'markdown',
+            ));
+          }
         } else {
-          console.log(`${result.component} Demos:`);
+          console.log(localize(
+            `${result.component} Demos:`,
+            `${result.component} 示例：`,
+            opts.lang,
+          ));
           console.log('');
           for (const demo of result.demos) {
             console.log(`  ${demo.name} — ${demo.title}`);
             console.log(`    ${demo.description}`);
           }
           if (result.demos.length === 0) {
-            console.log('  No demos available.');
+            console.log(localize('  No demos available.', '  暂无示例。', opts.lang));
           }
         }
       }

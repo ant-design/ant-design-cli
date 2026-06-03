@@ -28,6 +28,30 @@ async function runDoctorInTempDir(packages: Record<string, object>): Promise<any
   }
 }
 
+async function runDoctorTextInTempDir(packages: Record<string, object>, extraArgs: string[] = []): Promise<string> {
+  const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-test-md-'));
+  try {
+    mkdirSync(tempDir, { recursive: true });
+    writeFileSync(join(tempDir, 'package.json'), JSON.stringify({ name: 'test-project', version: '1.0.0' }));
+
+    for (const [pkgName, pkgJson] of Object.entries(packages)) {
+      const pkgDir = join(tempDir, 'node_modules', pkgName);
+      mkdirSync(pkgDir, { recursive: true });
+      writeFileSync(join(pkgDir, 'package.json'), JSON.stringify(pkgJson));
+    }
+
+    const cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(tempDir);
+    try {
+      const result = await runCLI('doctor', ...extraArgs);
+      return result.stdout;
+    } finally {
+      cwdSpy.mockRestore();
+    }
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
+}
+
 describe('doctor', () => {
   it('should run doctor', async () => {
     const out = await run('doctor');
@@ -35,9 +59,55 @@ describe('doctor', () => {
     expect(out).toContain('Summary');
   });
 
+  it('should run doctor in Chinese with --lang zh', async () => {
+    const out = await run('doctor', '--lang', 'zh');
+    expect(out).toContain('antd 诊断');
+    expect(out).toContain('摘要');
+  });
+
   it('should run doctor as markdown', async () => {
     const out = await run('doctor', '--format', 'markdown');
-    expect(out).toContain('antd Doctor');
+    expect(out).toContain('## antd Doctor');
+    expect(out).toContain('| Status | Check | Message |');
+    expect(out).toContain('PASS');
+    expect(out).toContain('**Summary:**');
+  });
+
+  it('should run doctor as markdown in Chinese', async () => {
+    const out = await run('doctor', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('## antd 诊断');
+    expect(out).toContain('| 状态 | 检查项 | 信息 |');
+    expect(out).toContain('通过');
+    expect(out).toContain('**摘要：**');
+  });
+
+  it('should show FAIL and WARN status in markdown', async () => {
+    // react-compat fails with React 17 + antd v5; cssinjs warns when missing
+    const out = await runDoctorTextInTempDir(
+      {
+        antd: { version: '5.20.0', peerDependencies: {} },
+        react: { version: '17.0.0' },
+      },
+      ['--format', 'markdown'],
+    );
+    expect(out).toContain('FAIL');
+    expect(out).toContain('WARN');
+    expect(out).toContain('error');
+    expect(out).toContain('warning');
+  });
+
+  it('should show Chinese FAIL and WARN status in markdown', async () => {
+    const out = await runDoctorTextInTempDir(
+      {
+        antd: { version: '5.20.0', peerDependencies: {} },
+        react: { version: '17.0.0' },
+      },
+      ['--format', 'markdown', '--lang', 'zh'],
+    );
+    expect(out).toContain('失败');
+    expect(out).toContain('警告');
+    expect(out).toContain('个错误');
+    expect(out).toContain('个警告');
   });
 
   it('should show doctor as JSON', async () => {

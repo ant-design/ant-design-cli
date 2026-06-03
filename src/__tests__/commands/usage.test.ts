@@ -99,4 +99,78 @@ describe('usage', () => {
       rmSync(tmpDir, { recursive: true, force: true });
     }
   });
+
+  it('should display markdown table when components are found', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_md__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Button, Form } from 'antd';\nconst App = () => <Form><Form.Item><Button>Test</Button></Form.Item></Form>;`);
+      const out = await run('usage', tmpDir, '--format', 'markdown');
+      expect(out).toContain('## antd Usage');
+      expect(out).toContain('### Components');
+      expect(out).toContain('| Component | Imports | Files |');
+      expect(out).toContain('Button');
+      expect(out).toContain('Form');
+      expect(out).toContain('**Total:**');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should show "No antd imports" as markdown when none found', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_md_empty__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `const App = () => <div>No antd here</div>;`);
+      const out = await run('usage', tmpDir, '--format', 'markdown');
+      expect(out).toContain('No antd imports found');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should display non-component exports section as markdown', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_md_noncomp__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Button, theme } from 'antd';\nconst { useToken } = theme;\nconst App = () => <Button>Test</Button>;`);
+      const out = await run('usage', tmpDir, '--format', 'markdown');
+      expect(out).toContain('### Non-component exports');
+      expect(out).toContain('theme');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should display markdown table in Chinese with --lang zh', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_md_zh__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Button } from 'antd';\nconst App = () => <Button>Test</Button>;`);
+      const out = await run('usage', tmpDir, '--format', 'markdown', '--lang', 'zh');
+      expect(out).toContain('### 组件');
+      expect(out).toContain('| 组件 | 导入次数 | 文件数 |');
+      expect(out).toContain('**合计：**');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should display non-component exports in Chinese markdown', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_md_zh_nc__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Button, theme } from 'antd';\nconst { useToken } = theme;\nconst App = () => <Button>Test</Button>;`);
+      const out = await run('usage', tmpDir, '--format', 'markdown', '--lang', 'zh');
+      expect(out).toContain('### 非组件导出');
+      expect(out).toContain('| 导出 | 导入次数 | 文件数 |');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
 });

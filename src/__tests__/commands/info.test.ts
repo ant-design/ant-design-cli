@@ -33,6 +33,16 @@ describe('info', () => {
     expect(out).toContain('按钮用于开始一个即时操作');
   });
 
+  it('should show "使用场景" label with --lang zh --detail', async () => {
+    const out = await run('info', 'Button', '--detail', '--lang', 'zh');
+    expect(out).toContain('使用场景');
+  });
+
+  it('should show "通用属性" label with --lang zh', async () => {
+    const out = await run('info', 'Button', '--lang', 'zh');
+    expect(out).toContain('通用属性');
+  });
+
   it('should suggest correct name for typos', async () => {
     const result = await runCLI('info', 'Btn');
     expect(result.exitCode).toBe(1);
@@ -77,6 +87,17 @@ describe('info', () => {
     const out = await run('info', 'Alert', '--version', '5.30.0', '--format', 'markdown');
     expect(out).toContain('Alert.ErrorBoundary');
     expect(out).toContain('|');
+  });
+
+  it('should show info as markdown in Chinese', async () => {
+    const out = await run('info', 'Button', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('按钮');
+    expect(out).toContain('|');
+  });
+
+  it('should show detailed info as markdown in Chinese', async () => {
+    const out = await run('info', 'Button', '--detail', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('使用场景');
   });
 
   it('should print sub-component sections in detail text output', async () => {

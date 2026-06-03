@@ -4,7 +4,7 @@ import { localize } from '../types.js';
 import { resolveComponent } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { createError, printError, ErrorCodes } from '../output/error.js';
-import { output } from '../output/formatter.js';
+import { formatTable, output } from '../output/formatter.js';
 
 export interface SemanticStructureResult {
   name: string;
@@ -55,7 +55,11 @@ export function registerSemanticCommand(program: Command): void {
       }
 
       if (result.semanticStructure.length === 0) {
-        console.log(`No semantic structure data available for ${result.name}.`);
+        console.log(localize(
+          `No semantic structure data available for ${result.name}.`,
+          `${result.name} 没有可用的语义结构数据。`,
+          opts.lang,
+        ));
         return;
       }
 
@@ -64,14 +68,37 @@ export function registerSemanticCommand(program: Command): void {
         return;
       }
 
-      console.log(`${result.name} Semantic Structure:`);
       const structure = result.semanticStructure;
+
+      if (opts.format === 'markdown') {
+        console.log(`## ${localize(`${result.name} Semantic Structure`, `${result.name} 语义结构`, opts.lang)}`);
+        console.log('');
+        const headers = [localize('Key', '键名', opts.lang), localize('Description', '描述', opts.lang)];
+        const rows = structure.map((s) => [
+          s.key,
+          localize(s.description, s.descriptionZh, opts.lang),
+        ]);
+        console.log(formatTable(headers, rows, 'markdown'));
+        console.log('');
+        console.log(`**${localize('Usage', '用法', opts.lang)}:**`);
+        console.log('```tsx');
+        console.log(`<${result.name} classNames={{ ${structure[0]?.key}: 'my-${structure[0]?.key}' }} />`);
+        console.log(`<${result.name} styles={{ ${structure[0]?.key}: { background: '#fff' } }} />`);
+        console.log('```');
+        return;
+      }
+
+      console.log(localize(
+        `${result.name} Semantic Structure:`,
+        `${result.name} 语义结构：`,
+        opts.lang,
+      ));
       for (let i = 0; i < structure.length; i++) {
         const prefix = i === structure.length - 1 ? '└──' : '├──';
         console.log(`${prefix} ${structure[i].key}         # ${localize(structure[i].description, structure[i].descriptionZh, opts.lang)}`);
       }
       console.log('');
-      console.log('Usage:');
+      console.log(localize('Usage:', '用法：', opts.lang));
       console.log(`  <${result.name} classNames={{ ${structure[0]?.key}: 'my-${structure[0]?.key}' }} />`);
       console.log(`  <${result.name} styles={{ ${structure[0]?.key}: { background: '#fff' } }} />`);
     });

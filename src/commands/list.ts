@@ -1,5 +1,6 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
+import { localize } from '../types.js';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { formatTable, output } from '../output/formatter.js';
@@ -42,7 +43,7 @@ export function registerListCommand(program: Command): void {
         if (opts.format === 'json') {
           output([], 'json');
         } else {
-          console.log('No component data available.');
+          console.log(localize('No component data available.', '没有可用的组件数据。', opts.lang));
         }
         return;
       }
@@ -52,29 +53,27 @@ export function registerListCommand(program: Command): void {
         return;
       }
 
+      const headers = [
+        localize('Component', '组件', opts.lang),
+        localize('Name (zh)', '中文名', opts.lang),
+        localize('Description', '描述', opts.lang),
+        localize('Since', '版本', opts.lang),
+      ];
+      const rows = components.map((c) => [
+        c.name,
+        c.nameZh,
+        localize(c.description, c.descriptionZh, opts.lang),
+        c.since,
+      ]);
+
       if (opts.format === 'markdown') {
-        const lines: string[] = [
-          `# antd Components (${versionInfo.version})`,
-          '',
-          '| Component | 组件名 | Description | Since |',
-          '|-----------|--------|-------------|-------|',
-        ];
-        for (const c of components) {
-          const desc = c.description || c.descriptionZh || '';
-          lines.push(`| **${c.name}** | ${c.nameZh} | ${desc} | ${c.since} |`);
-        }
-        console.log(lines.join('\n'));
+        console.log(`# antd Components (${versionInfo.version})`);
+        console.log('');
+        console.log(formatTable(headers, rows, 'markdown'));
         return;
       }
 
       // Text format
-      const headers = ['Component', '组件名', 'Description', 'Since'];
-      const rows = components.map((c) => [
-        c.name,
-        c.nameZh,
-        c.description,
-        c.since,
-      ]);
       console.log(formatTable(headers, rows, 'text'));
     });
 }

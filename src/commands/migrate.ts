@@ -1,5 +1,6 @@
 import type { Command } from 'commander';
 import type { GlobalOptions, OutputFormat } from '../types.js';
+import { localize } from '../types.js';
 import { output } from '../output/formatter.js';
 import { printError, createError, ErrorCodes } from '../output/error.js';
 import { V3_TO_V4_STEPS } from './migrate-v3-to-v4.js';
@@ -32,11 +33,15 @@ const MIGRATION_GUIDES: Record<string, MigrationStep[]> = {
 
 // ─── Output Formatters ──────────────────────────────────────────────────────
 
-function formatText(from: string, to: string, steps: MigrationStep[]): void {
+function formatText(from: string, to: string, steps: MigrationStep[], lang: string): void {
   const autoFixable = steps.filter((s) => s.autoFixable).length;
   const manual = steps.length - autoFixable;
 
-  console.log(`Migration Guide: v${from} → v${to}\n`);
+  console.log(localize(
+    `Migration Guide: v${from} → v${to}`,
+    `迁移指南：v${from} → v${to}`,
+    lang,
+  ) + '\n');
 
   // Group by component
   const grouped = groupByComponent(steps);
@@ -51,7 +56,7 @@ function formatText(from: string, to: string, steps: MigrationStep[]): void {
     console.log('');
   }
 
-  console.log(`Total: ${steps.length} steps (${autoFixable} auto-fixable, ${manual} manual)`);
+  console.log(`${localize('Total:', '合计：', lang)} ${localize(`${steps.length} steps`, `${steps.length} 个步骤`, lang)} (${localize(`${autoFixable} auto-fixable`, `${autoFixable} 个可自动修复`, lang)}, ${localize(`${manual} manual`, `${manual} 个需手动处理`, lang)})`);
 }
 
 function formatMarkdown(from: string, to: string, steps: MigrationStep[]): void {
@@ -292,7 +297,7 @@ export function registerMigrateCommand(program: Command): void {
           break;
         case 'text':
         default:
-          formatText(from, to, steps);
+          formatText(from, to, steps, opts.lang);
           break;
       }
     });

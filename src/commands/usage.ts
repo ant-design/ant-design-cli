@@ -1,8 +1,9 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
+import { localize } from '../types.js';
 import { readFileSync } from 'node:fs';
 import { parseSync, Visitor } from 'oxc-parser';
-import { output } from '../output/formatter.js';
+import { formatTable, output } from '../output/formatter.js';
 import { collectFiles, getJSXElementName } from '../utils/scan.js';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
@@ -146,29 +147,101 @@ export function registerUsageCommand(program: Command): void {
         return;
       }
 
-      console.log(`Scanned ${files.length} files in ${targetDir}\n`);
+      if (opts.format === 'markdown') {
+        console.log(`## ${localize(`antd Usage in ${targetDir}`, `${targetDir} 中的 antd 用法`, opts.lang)}`);
+        console.log('');
+        console.log(localize(
+          `Scanned ${files.length} files.`,
+          `扫描了 ${files.length} 个文件。`,
+          opts.lang,
+        ));
+        console.log('');
+      }
 
       if (components.length === 0 && nonComponents.length === 0) {
-        console.log('No antd imports found.');
+        console.log(localize('No antd imports found.', '未找到 antd 导入。', opts.lang));
         return;
       }
 
+      if (opts.format === 'markdown') {
+
+        if (components.length > 0) {
+          console.log(`### ${localize('Components', '组件', opts.lang)}`);
+          console.log('');
+          const headers = [
+            localize('Component', '组件', opts.lang),
+            localize('Imports', '导入次数', opts.lang),
+            localize('Files', '文件数', opts.lang),
+          ];
+          const rows = components.map((c) => [c.name, String(c.imports), String(c.files.length)]);
+          console.log(formatTable(headers, rows, 'markdown'));
+          if (components.some((c) => c.subComponents)) {
+            console.log('');
+            for (const comp of components) {
+              if (comp.subComponents) {
+                for (const [sub, count] of Object.entries(comp.subComponents)) {
+                  console.log(localize(`- ${sub}: ${count} usages`, `- ${sub}: ${count} 次使用`, opts.lang));
+                }
+              }
+            }
+          }
+          console.log('');
+          console.log(`**${localize('Total:', '合计：', opts.lang)}** ${localize(`${components.length} components`, `${components.length} 个组件`, opts.lang)}, ${localize(`${totalImports} imports`, `${totalImports} 次导入`, opts.lang)}`);
+        }
+
+        if (nonComponents.length > 0) {
+          console.log('');
+          console.log(`### ${localize('Non-component exports', '非组件导出', opts.lang)}`);
+          console.log('');
+          const ncHeaders = [
+            localize('Export', '导出', opts.lang),
+            localize('Imports', '导入次数', opts.lang),
+            localize('Files', '文件数', opts.lang),
+          ];
+          const ncRows = nonComponents.map((c) => [c.name, String(c.imports), String(c.files.length)]);
+          console.log(formatTable(ncHeaders, ncRows, 'markdown'));
+        }
+        return;
+      }
+
+      console.log(localize(
+        `Scanned ${files.length} files in ${targetDir}`,
+        `在 ${targetDir} 中扫描了 ${files.length} 个文件`,
+        opts.lang,
+      ) + '\n');
+
       if (components.length > 0) {
         for (const comp of components) {
-          console.log(`  ${comp.name} — ${comp.imports} imports across ${comp.files.length} files`);
+          console.log(localize(
+            `  ${comp.name} — ${comp.imports} imports across ${comp.files.length} files`,
+            `  ${comp.name} — ${comp.imports} 次导入，涉及 ${comp.files.length} 个文件`,
+            opts.lang,
+          ));
           if (comp.subComponents) {
             for (const [sub, count] of Object.entries(comp.subComponents)) {
-              console.log(`    ${sub}: ${count} usages`);
+              console.log(localize(
+                `    ${sub}: ${count} usages`,
+                `    ${sub}: ${count} 次使用`,
+                opts.lang,
+              ));
             }
           }
         }
-        console.log(`\nTotal: ${components.length} components, ${totalImports} imports`);
+        console.log(`\n${localize('Total:', '合计：', opts.lang)} ${localize(`${components.length} components`, `${components.length} 个组件`, opts.lang)}, ${localize(`${totalImports} imports`, `${totalImports} 次导入`, opts.lang)}`);
       }
 
       if (nonComponents.length > 0) {
-        console.log(`\nNon-component antd exports (${nonComponents.length}):`);
+        console.log(localize(
+          `\nNon-component antd exports (${nonComponents.length}):`,
+          `\n非组件 antd 导出（${nonComponents.length} 个）：`,
+          opts.lang,
+        ));
         for (const item of nonComponents) {
-          console.log(`  ${item.name} — ${item.imports} imports across ${item.files.length} files`);
+          console.log(localize(
+            `  ${item.name} — ${item.imports} imports across ${item.files.length} files`,
+            `  ${item.name} — ${item.imports} 次导入，涉及 ${item.files.length} 个文件`,
+            opts.lang,
+          ));
         }
       }
     });
