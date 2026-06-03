@@ -16,6 +16,27 @@ const COMMON_PROPS: PropData[] = [
 /** Components that do NOT support common props (no DOM element rendered). */
 const COMMON_PROPS_EXCLUDED = new Set(['ConfigProvider']);
 
+/**
+ * Maps component names to their underlying HTML element.
+ * Derived from antd source: forwardRef<HTMLXxxElement> / extends React.HTMLAttributes<HTMLXxxElement>.
+ * Components not listed here default to 'div'.
+ */
+const HTML_ELEMENT_MAP: Record<string, string> = {
+  Avatar: 'span',
+  Badge: 'span',
+  Button: 'button',
+  Checkbox: 'input',
+  FloatButton: 'button',
+  Input: 'input',
+  InputNumber: 'input',
+  Mentions: 'textarea',
+  Radio: 'input',
+  Switch: 'button',
+  Tag: 'span',
+  Typography: 'span',
+  Upload: 'span',
+};
+
 export interface ComponentInfoConcise {
   name: string;
   nameZh: string;
@@ -23,6 +44,7 @@ export interface ComponentInfoConcise {
   props: { name: string; type: string; default: string; since: string }[];
   subComponentProps?: Record<string, { name: string; type: string; default: string; since: string }[]>;
   commonProps?: PropData[];
+  htmlElement?: string;
 }
 
 export interface ComponentInfoDetail {
@@ -33,6 +55,7 @@ export interface ComponentInfoDetail {
   props: (PropData & { description: string })[];
   subComponentProps?: Record<string, (PropData & { description: string })[]>;
   commonProps?: PropData[];
+  htmlElement?: string;
   faq: { question: string; answer: string }[];
 }
 
@@ -51,6 +74,9 @@ export function getComponentInfo(
   const desc = localize(comp.description, comp.descriptionZh, opts.lang);
   const whenToUse = localize(comp.whenToUse, comp.whenToUseZh, opts.lang);
   const commonProps = COMMON_PROPS_EXCLUDED.has(comp.name) ? undefined : COMMON_PROPS;
+  const htmlElement = COMMON_PROPS_EXCLUDED.has(comp.name)
+    ? undefined
+    : HTML_ELEMENT_MAP[comp.name] ?? 'div';
 
   if (opts.detail) {
     return {
@@ -71,6 +97,7 @@ export function getComponentInfo(
           )
         : undefined,
       commonProps,
+      htmlElement,
       faq: comp.faq || [],
     };
   }
@@ -94,6 +121,7 @@ export function getComponentInfo(
         )
       : undefined,
     commonProps,
+    htmlElement,
   };
 }
 
@@ -175,6 +203,13 @@ export function registerInfoCommand(program: Command): void {
             : [p.name, p.type, p.default];
         });
         console.log(formatTable(cpHeaders, cpRows, fmt));
+
+        if (result.htmlElement) {
+          const extendsNote = opts.lang === 'zh'
+            ? `\n扩展自 <${result.htmlElement}>，支持原生 HTML ${result.htmlElement} 属性。`
+            : `\nExtends <${result.htmlElement}> — supports native HTML ${result.htmlElement} attributes.`;
+          console.log(extendsNote);
+        }
       }
     });
 }

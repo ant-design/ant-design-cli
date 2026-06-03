@@ -189,6 +189,7 @@ exports[`info > info Button --detail --format json 1`] = `
       "descriptionZh": "根元素的类名"
     }
   ],
+  "htmlElement": "button",
   "faq": [
     {
       "question": "How to choose type and color & variant?",
@@ -250,7 +251,9 @@ Common Props (inherited by all components, not listed individually)
 | --- | --- | --- | --- |
 | className | string | - | Additional CSS class |
 | style | CSSProperties | - | Additional style |
-| rootClassName | string | - | ClassName on the root element |"
+| rootClassName | string | - | ClassName on the root element |
+
+Extends <button> — supports native HTML button attributes."
 `;
 
 exports[`info > info Button --detail --format text 1`] = `
@@ -301,7 +304,9 @@ Property       Type           Default  Description
 -------------  -------------  -------  -----------------------------
 className      string         -        Additional CSS class         
 style          CSSProperties  -        Additional style             
-rootClassName  string         -        ClassName on the root element"
+rootClassName  string         -        ClassName on the root element
+
+Extends <button> — supports native HTML button attributes."
 `;
 
 exports[`info > info Button --format json --lang en 1`] = `
@@ -447,7 +452,8 @@ exports[`info > info Button --format json --lang en 1`] = `
       "description": "ClassName on the root element",
       "descriptionZh": "根元素的类名"
     }
-  ]
+  ],
+  "htmlElement": "button"
 }"
 `;
 
@@ -594,7 +600,8 @@ exports[`info > info Button --format json --lang zh 1`] = `
       "description": "ClassName on the root element",
       "descriptionZh": "根元素的类名"
     }
-  ]
+  ],
+  "htmlElement": "button"
 }"
 `;
 
@@ -629,7 +636,9 @@ Common Props (inherited by all components, not listed individually)
 | --- | --- | --- |
 | className | string | - |
 | style | CSSProperties | - |
-| rootClassName | string | - |"
+| rootClassName | string | - |
+
+Extends <button> — supports native HTML button attributes."
 `;
 
 exports[`info > info Button --format markdown --lang zh 1`] = `
@@ -663,7 +672,9 @@ exports[`info > info Button --format markdown --lang zh 1`] = `
 | --- | --- | --- |
 | className | string | - |
 | style | CSSProperties | - |
-| rootClassName | string | - |"
+| rootClassName | string | - |
+
+扩展自 <button>，支持原生 HTML button 属性。"
 `;
 
 exports[`info > info Button --format text --lang en 1`] = `
@@ -697,7 +708,9 @@ Property       Type           Default
 -------------  -------------  -------
 className      string         -      
 style          CSSProperties  -      
-rootClassName  string         -"
+rootClassName  string         -      
+
+Extends <button> — supports native HTML button attributes."
 `;
 
 exports[`info > info Button --format text --lang zh 1`] = `
@@ -731,7 +744,9 @@ Property       Type           Default
 -------------  -------------  -------
 className      string         -      
 style          CSSProperties  -      
-rootClassName  string         -"
+rootClassName  string         -      
+
+扩展自 <button>，支持原生 HTML button 属性。"
 `;
 
 exports[`info > info NonExistent --format json 1`] = `
@@ -775,5 +790,7 @@ Property       Type           Default
 -------------  -------------  -------
 className      string         -      
 style          CSSProperties  -      
-rootClassName  string         -"
+rootClassName  string         -      
+
+Extends <button> — supports native HTML button attributes."
 `;

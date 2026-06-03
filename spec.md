@@ -132,6 +132,8 @@ Most antd components inherit common props (`className`, `style`, `rootClassName`
 - **JSON format**: a `commonProps` array with `name`, `type`, `default`, `description`, `descriptionZh` fields. Omitted for `ConfigProvider` (which does not support common props).
 - **Text/markdown format**: a separate "Common Props" table after the component-specific props table. Omitted for `ConfigProvider`.
 
+Additionally, each component includes an `htmlElement` field indicating the underlying HTML element (e.g. Button → `"button"`, Input → `"input"`, Card → `"div"`). This tells consumers which native HTML attributes the component accepts. Omitted for `ConfigProvider`.
+
 JSON output (--detail):
 ```json
 {
