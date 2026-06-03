@@ -197,7 +197,7 @@ export function diffChangelog(opts: {
 
 // ── Printing helpers (CLI only) ──
 
-function printChangelogEntries(entries: ChangelogEntry[], format: string, versionArg?: string, lang?: string): void {
+function printChangelogEntries(entries: ChangelogEntry[], format: string, versionArg?: string, lang: string = 'en'): void {
   if (format === 'json') {
     output(versionArg ? entries : { latest: entries }, 'json');
     return;
@@ -208,9 +208,9 @@ function printChangelogEntries(entries: ChangelogEntry[], format: string, versio
       console.log(`### ${entry.version} (${entry.date})`);
       console.log('');
       for (const change of entry.changes) {
-        const label = change.type === 'feature' ? `**${localize('feature', '新增', lang ?? 'en')}**`
-          : change.type === 'fix' ? `**${localize('fix', '修复', lang ?? 'en')}**`
-          : change.type === 'breaking' ? `**${localize('BREAKING', '破坏性变更', lang ?? 'en')}**`
+        const label = change.type === 'feature' ? `**${localize('feature', '新增', lang)}**`
+          : change.type === 'fix' ? `**${localize('fix', '修复', lang)}**`
+          : change.type === 'breaking' ? `**${localize('BREAKING', '破坏性变更', lang)}**`
           : change.type;
         console.log(`- [${label}] **${change.component}** ${change.description}`);
       }
@@ -230,7 +230,7 @@ function printChangelogEntries(entries: ChangelogEntry[], format: string, versio
   }
 }
 
-function printApiDiff(result: DiffResult, format: string, lang?: string): void {
+function printApiDiff(result: DiffResult, format: string, lang: string = 'en'): void {
   if (format === 'json') {
     const jsonResult = result.component && result.diffs.length > 0
       ? { from: result.from, to: result.to, ...result.diffs[0] }
@@ -244,31 +244,31 @@ function printApiDiff(result: DiffResult, format: string, lang?: string): void {
       console.log(localize(
         `No API differences found between ${result.from} and ${result.to}.`,
         `${result.from} 和 ${result.to} 之间没有 API 差异。`,
-        lang ?? 'en',
+        lang,
       ));
       return;
     }
-    console.log(`## ${localize('API Diff', 'API 差异', lang ?? 'en')}: ${result.from} → ${result.to}`);
+    console.log(`## ${localize('API Diff', 'API 差异', lang)}: ${result.from} → ${result.to}`);
     console.log('');
     for (const diff of result.diffs) {
       console.log(`### ${diff.component}`);
       console.log('');
       if (diff.added.length > 0) {
-        console.log(`**${localize('Added', '新增', lang ?? 'en')}:**`);
+        console.log(`**${localize('Added', '新增', lang)}:**`);
         console.log('');
-        console.log(formatTable([localize('Prop', '属性', lang ?? 'en'), localize('Type', '类型', lang ?? 'en')], diff.added.map(p => [p.name || '', p.type || '-']), 'markdown'));
+        console.log(formatTable([localize('Prop', '属性', lang), localize('Type', '类型', lang)], diff.added.map(p => [p.name || '', p.type || '-']), 'markdown'));
         console.log('');
       }
       if (diff.removed.length > 0) {
-        console.log(`**${localize('Removed', '移除', lang ?? 'en')}:**`);
+        console.log(`**${localize('Removed', '移除', lang)}:**`);
         console.log('');
-        console.log(formatTable([localize('Prop', '属性', lang ?? 'en'), localize('Type', '类型', lang ?? 'en')], diff.removed.map(p => [p.name || '', p.type || '-']), 'markdown'));
+        console.log(formatTable([localize('Prop', '属性', lang), localize('Type', '类型', lang)], diff.removed.map(p => [p.name || '', p.type || '-']), 'markdown'));
         console.log('');
       }
       if (diff.changed.length > 0) {
-        console.log(`**${localize('Changed', '变更', lang ?? 'en')}:**`);
+        console.log(`**${localize('Changed', '变更', lang)}:**`);
         console.log('');
-        console.log(formatTable([localize('Prop', '属性', lang ?? 'en'), localize('Change', '变更', lang ?? 'en')], diff.changed.map(p => [p.name || '', p.change || '-']), 'markdown'));
+        console.log(formatTable([localize('Prop', '属性', lang), localize('Change', '变更', lang)], diff.changed.map(p => [p.name || '', p.change || '-']), 'markdown'));
         console.log('');
       }
     }
@@ -279,7 +279,7 @@ function printApiDiff(result: DiffResult, format: string, lang?: string): void {
     console.log(localize(
       `No API differences found between ${result.from} and ${result.to}.`,
       `${result.from} 和 ${result.to} 之间没有 API 差异。`,
-      lang ?? 'en',
+      lang,
     ));
     return;
   }
@@ -287,7 +287,7 @@ function printApiDiff(result: DiffResult, format: string, lang?: string): void {
   console.log(localize(
     `API Diff: ${result.from} → ${result.to}`,
     `API 差异：${result.from} → ${result.to}`,
-    lang ?? 'en',
+    lang,
   ));
   console.log('');
   for (const diff of result.diffs) {

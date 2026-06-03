@@ -159,4 +159,18 @@ describe('usage', () => {
       rmSync(tmpDir, { recursive: true, force: true });
     }
   });
+
+  it('should display non-component exports in Chinese markdown', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_md_zh_nc__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Button, theme } from 'antd';\nconst { useToken } = theme;\nconst App = () => <Button>Test</Button>;`);
+      const out = await run('usage', tmpDir, '--format', 'markdown', '--lang', 'zh');
+      expect(out).toContain('### 非组件导出');
+      expect(out).toContain('| 导出 | 导入次数 | 文件数 |');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
 });

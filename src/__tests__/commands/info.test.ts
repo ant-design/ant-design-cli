@@ -89,6 +89,17 @@ describe('info', () => {
     expect(out).toContain('|');
   });
 
+  it('should show info as markdown in Chinese', async () => {
+    const out = await run('info', 'Button', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('按钮');
+    expect(out).toContain('|');
+  });
+
+  it('should show detailed info as markdown in Chinese', async () => {
+    const out = await run('info', 'Button', '--detail', '--format', 'markdown', '--lang', 'zh');
+    expect(out).toContain('使用场景');
+  });
+
   it('should print sub-component sections in detail text output', async () => {
     const out = await run('info', 'Alert', '--version', '5.30.0', '--detail');
     expect(out).toContain('Alert.ErrorBoundary');
