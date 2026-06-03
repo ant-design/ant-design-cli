@@ -23,4 +23,25 @@ describe('CLI', () => {
     expect(data.code).toBe('COMPONENT_NOT_FOUND');
     expect(data.suggestion).toContain('Button');
   });
+
+  it('should reject invalid --format values', async () => {
+    const result = await runCLI('info', 'Button', '--format', 'csv');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Invalid format 'csv'");
+    expect(result.stderr).toContain('json, text, markdown');
+  });
+
+  it('should reject invalid --lang values', async () => {
+    const result = await runCLI('info', 'Button', '--lang', 'fr');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Invalid language 'fr'");
+    expect(result.stderr).toContain('en, zh');
+  });
+
+  it('should accept valid --format and --lang values', async () => {
+    const result = await runCLI('info', 'Button', '--format', 'json', '--lang', 'zh');
+    expect(result.exitCode).toBe(0);
+    const data = JSON.parse(result.stdout);
+    expect(data.name).toBe('Button');
+  });
 });

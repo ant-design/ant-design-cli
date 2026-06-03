@@ -15,6 +15,7 @@ import { registerEnvCommand } from './commands/env.js';
 import { registerUpgradeCommand } from './commands/upgrade.js';
 import { registerMcpCommand } from './commands/mcp.js';
 import { checkForUpdate } from './utils/update-check.js';
+import type { GlobalOptions } from './types.js';
 declare const __CLI_VERSION__: string;
 const CLI_VERSION = __CLI_VERSION__;
 
@@ -64,6 +65,23 @@ export function createProgram(): Command {
   // Issue Reporting commands
   registerBugCommand(program);
   registerBugCliCommand(program);
+
+  // Validate global options before any command runs
+  program.hook('preAction', () => {
+    const opts = program.opts<GlobalOptions>();
+    const validFormats = ['json', 'text', 'markdown'];
+    const validLangs = ['en', 'zh'];
+    if (opts.format && !validFormats.includes(opts.format)) {
+      console.error(`Error: Invalid format '${opts.format}'. Must be one of: ${validFormats.join(', ')}`);
+      process.exitCode = 1;
+      throw new Error('EXIT:1');
+    }
+    if (opts.lang && !validLangs.includes(opts.lang)) {
+      console.error(`Error: Invalid language '${opts.lang}'. Must be one of: ${validLangs.join(', ')}`);
+      process.exitCode = 1;
+      throw new Error('EXIT:1');
+    }
+  });
 
   program.hook('postAction', async () => {
     await checkForUpdate();
