@@ -117,4 +117,31 @@ describe('usage', () => {
       rmSync(tmpDir, { recursive: true, force: true });
     }
   });
+
+  it('should show "No antd imports" as markdown when none found', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_md_empty__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `const App = () => <div>No antd here</div>;`);
+      const out = await run('usage', tmpDir, '--format', 'markdown');
+      expect(out).toContain('No antd imports found');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should display non-component exports section as markdown', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_md_noncomp__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Button, theme } from 'antd';\nconst { useToken } = theme;\nconst App = () => <Button>Test</Button>;`);
+      const out = await run('usage', tmpDir, '--format', 'markdown');
+      expect(out).toContain('### Non-component exports');
+      expect(out).toContain('theme');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
 });

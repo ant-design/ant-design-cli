@@ -32,4 +32,18 @@ describe('demo', () => {
     const out = await run('demo', 'Button', '--lang', 'zh');
     expect(out).toContain('示例：');
   });
+
+  it('should list demos as a markdown table', async () => {
+    const out = await run('demo', 'Button', '--format', 'markdown');
+    expect(out).toContain('## Button');
+    expect(out).toContain('| Name | Title | Description |');
+    expect(out).toContain('basic');
+  });
+
+  it('should show a single demo as markdown code block', async () => {
+    const out = await run('demo', 'Button', 'basic', '--format', 'markdown');
+    expect(out).toContain('## Button / ');
+    expect(out).toContain('```tsx');
+    expect(out).toContain('import');
+  });
 });
