@@ -249,11 +249,12 @@ antd token Button                   # component-level tokens
 Output the antd **design-language document** (`design.md`) — a curated description of antd's default light theme, conformant with the [google-labs-code/design.md](https://github.com/google-labs-code/design.md) spec. Where `antd token` lists individual token names, `antd design` describes the design language as a whole (color/typography/spacing/radius values plus the principles behind them), so AI design tools (Figma Make, Stitch, etc.) and agents can consume antd's design language directly.
 
 ```bash
-antd design                         # full design.md to stdout
+antd design                         # design.md for the detected version
+antd design --version 6.4.0         # design.md for a specific version
 antd design --format json           # { doc }
 ```
 
-It mirrors the canonical `DESIGN.md` published at [`https://ant.design/design.md`](https://ant.design/design.md). The document is version-independent — `--version` and `--lang` do not affect its output.
+`design.md` is **major-grained** (antd rewrites it only across major releases), so it is resolved by major version. A `design.md` is currently published only for **antd v6** — requesting a major without one (v3/v4/v5) returns `UNSUPPORTED_VERSION_FEATURE`. It mirrors the canonical `DESIGN.md` published at [`https://ant.design/design.md`](https://ant.design/design.md).
 
 ### `antd semantic <Component>`
 

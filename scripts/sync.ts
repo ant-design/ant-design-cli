@@ -25,10 +25,10 @@ const PROJECT_ROOT = path.resolve(__dirname, '..');
 const EXTRACT_SCRIPT = path.join(__dirname, 'extract.ts');
 const DATA_DIR = path.join(PROJECT_ROOT, 'data');
 // antd ships a hand-curated DESIGN.md (the design-language doc) at its repo root.
-// It tracks the latest major's default light theme, so we sync it from the
-// newest v6 checkout. See syncDesignDoc().
+// It is major-grained (rewritten only across major releases), so we sync it per
+// major into data/design-v{major}.md. See syncDesignDocs().
 const DESIGN_SOURCE = 'DESIGN.md';
-const DESIGN_TARGET = path.join(DATA_DIR, 'design.md');
+const designTarget = (major: number) => path.join(DATA_DIR, `design-v${major}.md`);
 
 function parseArgs(args: string[]): { antdDir: string } {
   let antdDir = '';
@@ -274,34 +274,39 @@ function validateData() {
 }
 
 /**
- * Sync data/design.md from the antd source checkout.
+ * Sync per-major design.md files from the antd source checkout.
  *
  * antd keeps a hand-curated DESIGN.md at its repo root (the design-language
  * document described in ant-design/ant-design#58011). It is not version-specific
  * data we can extract — we just copy it verbatim, like other bundled assets.
  *
- * We check out the latest v6 tag first (the loop may have skipped checkout when
- * already up-to-date, and the CI clone uses --no-checkout). If the source file is
- * absent (e.g. not yet released in that tag), we keep the existing data/design.md
- * rather than deleting it — so an already bundled copy survives until upstream
- * publishes the file.
+ * The doc is major-grained (rewritten only across major releases), so for each
+ * major we check out its latest tag and copy DESIGN.md → data/design-v{major}.md.
+ * We check out explicitly because the loop may have skipped checkout when already
+ * up-to-date, and the CI clone uses --no-checkout. If the source file is absent
+ * (e.g. a major that predates DESIGN.md, or not yet released in that tag), we keep
+ * any existing data/design-v{major}.md rather than deleting it — so an already
+ * bundled copy survives until upstream publishes the file.
  */
-function syncDesignDoc(antdDir: string, tag: string | undefined) {
-  if (!tag) {
-    console.log('  No latest tag available, keeping existing data/design.md');
-    return;
+function syncDesignDocs(antdDir: string, latestTagByMajor: Map<number, string>) {
+  for (const major of MAJORS) {
+    const tag = latestTagByMajor.get(major);
+    if (!tag) {
+      console.log(`  v${major}: no latest tag, keeping existing data/design-v${major}.md`);
+      continue;
+    }
+    if (!checkout(antdDir, tag)) {
+      console.log(`  v${major}: could not check out ${tag}, keeping existing data/design-v${major}.md`);
+      continue;
+    }
+    const source = path.join(antdDir, DESIGN_SOURCE);
+    if (!fs.existsSync(source)) {
+      console.log(`  v${major}: ${DESIGN_SOURCE} not found in antd@${tag}, keeping existing data/design-v${major}.md`);
+      continue;
+    }
+    fs.copyFileSync(source, designTarget(major));
+    console.log(`  v${major}: synced ${DESIGN_SOURCE} from antd@${tag} → data/design-v${major}.md`);
   }
-  if (!checkout(antdDir, tag)) {
-    console.log(`  Could not check out ${tag}, keeping existing data/design.md`);
-    return;
-  }
-  const source = path.join(antdDir, DESIGN_SOURCE);
-  if (!fs.existsSync(source)) {
-    console.log(`  ${DESIGN_SOURCE} not found in antd@${tag}, keeping existing data/design.md`);
-    return;
-  }
-  fs.copyFileSync(source, DESIGN_TARGET);
-  console.log(`  Synced ${DESIGN_SOURCE} from antd@${tag} → data/design.md`);
 }
 
 function main() {
@@ -385,9 +390,9 @@ function main() {
   console.log('\n=== Cleaning stale snapshots ===');
   cleanStaleSnapshots();
 
-  // Sync the design-language document (DESIGN.md) from the latest v6 checkout.
+  // Sync per-major design.md files (DESIGN.md) from each major's latest checkout.
   console.log('\n=== Syncing design.md ===');
-  syncDesignDoc(antdDir, latestTagByMajor.get(6));
+  syncDesignDocs(antdDir, latestTagByMajor);
 
   // Validate extracted data
   console.log('\n=== Validating extracted data ===');

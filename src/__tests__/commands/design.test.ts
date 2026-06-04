@@ -4,8 +4,8 @@ import { getDesign } from '../../commands/design.js';
 import * as loader from '../../data/loader.js';
 
 describe('design', () => {
-  it('should output the design.md document', async () => {
-    const out = await run('design');
+  it('should output the v6 design.md document', async () => {
+    const out = await run('design', '--version', '6.4.0');
     // YAML front-matter conformant with the design.md spec
     expect(out).toContain('name: Ant Design');
     expect(out).toContain('colors:');
@@ -16,35 +16,40 @@ describe('design', () => {
   });
 
   it('should output design.md as JSON', async () => {
-    const out = await run('design', '--format', 'json');
+    const out = await run('design', '--version', '6.4.0', '--format', 'json');
     const data = JSON.parse(out);
     expect(typeof data.doc).toBe('string');
     expect(data.doc).toContain('name: Ant Design');
   });
 
-  it('should ignore version flag (design.md is version-independent)', async () => {
-    const result = await runCLI('design', '--version', '4.24.0');
-    expect(result.exitCode).toBe(0);
-    expect(result.stdout).toContain('name: Ant Design');
+  it('should error for a major without a design.md (v5)', async () => {
+    const result = await runCLI('design', '--version', '5.24.0');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('not available for antd v5');
   });
 
-  it('getDesign returns an error when design.md is missing', () => {
+  it('should error for a major without a design.md (v4)', async () => {
+    const result = await runCLI('design', '--version', '4.24.0');
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('not available for antd v4');
+  });
+
+  it('getDesign returns UNSUPPORTED_VERSION_FEATURE when the doc is missing', () => {
     const spy = vi.spyOn(loader, 'loadDesignDoc').mockReturnValue(null);
     try {
-      const result = getDesign();
+      const result = getDesign({ version: '6.0.0' });
       expect('error' in result && result.error).toBe(true);
-      expect((result as { code: string }).code).toBe('DOC_NOT_AVAILABLE');
+      expect((result as { code: string }).code).toBe('UNSUPPORTED_VERSION_FEATURE');
     } finally {
       spy.mockRestore();
     }
   });
 
-  it('command prints an error and exits 1 when design.md is missing', async () => {
-    const spy = vi.spyOn(loader, 'loadDesignDoc').mockReturnValue(null);
+  it('getDesign resolves the major from the version', () => {
+    const spy = vi.spyOn(loader, 'loadDesignDoc').mockReturnValue('# stub');
     try {
-      const result = await runCLI('design');
-      expect(result.exitCode).toBe(1);
-      expect(result.stderr).toContain('not available');
+      getDesign({ version: '6.4.3' });
+      expect(spy).toHaveBeenCalledWith('v6');
     } finally {
       spy.mockRestore();
     }

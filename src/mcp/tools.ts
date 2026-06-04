@@ -91,7 +91,7 @@ export const TOOL_DEFINITIONS = [
   },
   {
     name: 'antd_design',
-    description: "Get the antd design-language document (design.md): YAML front-matter with the full color, typography, radius, spacing, and component token values for the default light theme, plus prose on the design principles. Use to understand antd's overall design language or to feed AI design tools (Figma Make, Stitch, etc.).",
+    description: "Get the antd design-language document (design.md) for the target major version: YAML front-matter with the full color, typography, radius, spacing, and component token values for the default light theme, plus prose on the design principles. Use to understand antd's overall design language or to feed AI design tools (Figma Make, Stitch, etc.). A design.md is currently published only for antd v6.",
     inputSchema: {
       type: 'object' as const,
       properties: {},
@@ -178,7 +178,7 @@ export function createToolHandler(ctx: McpContext) {
       }
 
       case 'antd_design': {
-        const result = getDesign();
+        const result = getDesign({ version: ctx.version });
         return toMcpResult(result);
       }
 

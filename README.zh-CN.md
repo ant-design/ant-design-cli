@@ -249,11 +249,12 @@ antd token Button                   # 组件级 Token
 输出 antd **设计语言文档**（`design.md`）—— 对 antd 默认 Light 主题的精心编写的描述，遵循 [google-labs-code/design.md](https://github.com/google-labs-code/design.md) 规范。`antd token` 列举单个 Token 名称，而 `antd design` 整体描述设计语言（颜色 / 字体 / 间距 / 圆角的取值及其背后的设计原则），可被 AI 设计工具（Figma Make、Stitch 等）和 Agent 直接消费。
 
 ```bash
-antd design                         # 输出完整 design.md 到 stdout
+antd design                         # 输出当前检测版本的 design.md
+antd design --version 6.4.0         # 指定版本的 design.md
 antd design --format json           # { doc }
 ```
 
-它与发布在 [`https://ant.design/design.md`](https://ant.design/design.md) 的官方 `DESIGN.md` 保持一致。该文档与版本无关 —— `--version` 和 `--lang` 不影响其输出。
+`design.md` 按**大版本**区分（antd 只在大版本升级时重写它），因此按 major 解析。目前**仅 antd v6** 提供 `design.md` —— 查询没有该文档的大版本（v3/v4/v5）会返回 `UNSUPPORTED_VERSION_FEATURE`。它与发布在 [`https://ant.design/design.md`](https://ant.design/design.md) 的官方 `DESIGN.md` 保持一致。
 
 ### `antd semantic <Component>`
 

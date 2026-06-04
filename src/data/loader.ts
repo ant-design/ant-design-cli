@@ -49,21 +49,25 @@ function normalizeStore(store: MetadataStore): MetadataStore {
 }
 
 /**
- * Load the bundled `design.md` — a hand-curated design-language document
- * (YAML front-matter + prose) describing antd's default light theme,
- * conformant with the google-labs-code/design.md spec.
+ * Load the bundled design-language document for a major version — a
+ * hand-curated `design.md` (YAML front-matter + prose) describing antd's
+ * default light theme, conformant with the google-labs-code/design.md spec.
  *
- * Returns the raw markdown, or null if the file is missing.
+ * The document is major-grained (antd rewrites it only across major releases,
+ * e.g. v5 → v6), so files are named `design-v{major}.md` (e.g. design-v6.md).
+ *
+ * Returns the raw markdown, or null if no document exists for that major.
  */
-export function loadDesignDoc(): string | null {
-  const designPath = join(getDataPath(), 'design.md');
+export function loadDesignDoc(majorVersion: string): string | null {
+  const designPath = join(getDataPath(), `design-${majorVersion}.md`);
   try {
     if (!existsSync(designPath)) return null;
     return readFileSync(designPath, 'utf-8');
-    /* v8 ignore next 3 -- defensive: bundled design.md is always readable */
+    /* v8 ignore start -- defensive: bundled design-*.md is always readable */
   } catch {
     return null;
   }
+  /* v8 ignore stop */
 }
 
 export function loadMetadata(majorVersion: string): MetadataStore {

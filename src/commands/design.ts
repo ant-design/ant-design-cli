@@ -1,6 +1,7 @@
 import type { Command } from 'commander';
 import type { GlobalOptions, CLIError } from '../types.js';
 import { loadDesignDoc } from '../data/loader.js';
+import { detectVersion } from '../data/version.js';
 import { createError, printError, ErrorCodes } from '../output/error.js';
 import { output } from '../output/formatter.js';
 
@@ -9,21 +10,26 @@ export interface DesignDoc {
 }
 
 /**
- * Core function: get the antd design-language document (design.md).
+ * Core function: get the antd design-language document (design.md) for a version.
  * Returns { doc } or CLIError. Never writes to stdout.
  *
  * The document follows the google-labs-code/design.md spec — YAML front-matter
  * with colors/typography/rounded/spacing/components, plus prose sections — so AI
  * design tools (Figma Make, Stitch, etc.) can consume antd's design language.
+ *
+ * It is major-grained: antd rewrites it only across major releases, so we resolve
+ * the document by major version. A design.md is currently published only for v6;
+ * other majors return UNSUPPORTED_VERSION_FEATURE.
  */
-export function getDesign(): DesignDoc | CLIError {
-  const doc = loadDesignDoc();
+export function getDesign(opts: { version: string }): DesignDoc | CLIError {
+  const major = `v${opts.version.split('.')[0]}`;
+  const doc = loadDesignDoc(major);
 
   if (doc === null) {
     return createError(
-      ErrorCodes.DOC_NOT_AVAILABLE,
-      'design.md is not available in this CLI build',
-      'Try upgrading to a newer version of the CLI',
+      ErrorCodes.UNSUPPORTED_VERSION_FEATURE,
+      `design.md is not available for antd ${major}`,
+      'A design.md is currently published only for antd v6. Use --version 6.x or omit it.',
     );
   }
 
@@ -36,7 +42,8 @@ export function registerDesignCommand(program: Command): void {
     .description('Output the antd design-language document (design.md) for AI design tools')
     .action(() => {
       const opts = program.opts<GlobalOptions>();
-      const result = getDesign();
+      const versionInfo = detectVersion(opts.version);
+      const result = getDesign({ version: versionInfo.version });
 
       if ('error' in result) {
         printError(result, opts.format);
