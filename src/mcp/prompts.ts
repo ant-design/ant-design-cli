@@ -6,6 +6,7 @@ const SHARED_TOOL_WORKFLOW = `## Tool usage workflow
 
 ## Additional tools
 - Use **antd_token** for querying design tokens (global or component-level) for theming
+- Use **antd_design** for the overall design language (design.md): color/typography/spacing/radius values and design principles for the default light theme
 - Use **antd_semantic** for querying semantic classNames/styles customization structure
 - Use **antd_changelog** for querying version changes and cross-version API diffs
 

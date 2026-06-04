@@ -10,8 +10,8 @@ function parseResult(result: { content: { text: string }[]; isError?: boolean })
 }
 
 describe('mcp tools', () => {
-  it('exposes 7 tool definitions with consistent annotations', () => {
-    expect(TOOL_DEFINITIONS).toHaveLength(7);
+  it('exposes 8 tool definitions with consistent annotations', () => {
+    expect(TOOL_DEFINITIONS).toHaveLength(8);
     for (const def of TOOL_DEFINITIONS) {
       expect(def.name).toMatch(/^antd_/);
       expect(def.annotations.readOnlyHint).toBe(true);
@@ -101,6 +101,14 @@ describe('mcp tools', () => {
     const data = parseResult(result) as { component: string; tokens: unknown[] };
     expect(data.component).toBe('Button');
     expect(Array.isArray(data.tokens)).toBe(true);
+  });
+
+  it('antd_design returns the design.md document', async () => {
+    const result = await handle('antd_design', {});
+    const data = parseResult(result) as { doc: string };
+    expect(typeof data.doc).toBe('string');
+    expect(data.doc).toContain('name: Ant Design');
+    expect(data.doc).toContain('## Overview');
   });
 
   it('antd_semantic returns semantic structure', async () => {

@@ -27,6 +27,7 @@ Metadata for all major versions is bundled inside `@ant-design/cli`:
 @ant-design/cli
 └── data/
     ├── versions.json        # version index: minor series → snapshot tag (always plain JSON)
+    ├── design.md            # design-language document (always plain markdown, served by `antd design`)
     ├── v3.json.gz           # latest v3 (final version 3.26.20)
     ├── v3.26.20.json.gz     # snapshot for 3.26.x series
     ├── v4.json.gz           # latest v4 (gzip-compressed in published package)
@@ -214,6 +215,23 @@ antd token --version 3.26.0         # v3 uses Less variables, shows a hint
 **Note:** Design Tokens are only available in antd v5+. For v3 and v4, the command returns `UNSUPPORTED_VERSION_FEATURE` with a suggestion to use Less variables or upgrade to v5.
 
 
+#### `antd design`
+
+Output the antd **design-language document** (`design.md`) — a hand-curated description of antd's default light theme, conformant with the [google-labs-code/design.md](https://github.com/google-labs-code/design.md) spec. It is the prose-and-token counterpart to `antd token`: where `token` lists individual token names, `design` describes the design language as a whole (color/typography/spacing/radius values plus the principles behind them), so AI design tools (Figma Make, Stitch, etc.) and agents can consume antd's design language directly.
+
+```bash
+antd design                          # output the full design.md to stdout
+antd design --format json            # structured output: { "doc": "..." }
+```
+
+The document has two parts:
+
+- **YAML front-matter** — `colors`, `typography`, `rounded`, `spacing`, and `components` (12 core archetypes with their key states), with concrete values for the default light theme.
+- **Prose sections** — Overview, Customization, Colors, Typography, Layout, Elevation & Depth, Shapes, Components, and Do's and Don'ts.
+
+**Note:** `design.md` describes the current default light theme and is version-independent — `--version` and `--lang` do not affect its output. It mirrors the canonical `DESIGN.md` published at `https://ant.design/design.md`.
+
+
 #### `antd semantic <Component>`
 
 Query the semantic customization structure of a component — the available `classNames` and `styles` keys. Data extracted from `components/*/demo/_semantic.tsx` files.
@@ -294,7 +312,7 @@ IDE configuration (`claude_desktop_config.json`):
 }
 ```
 
-**MCP Tools (7):**
+**MCP Tools (8):**
 
 | Tool | Description |
 |---|---|
@@ -303,6 +321,7 @@ IDE configuration (`claude_desktop_config.json`):
 | `antd_doc` | Get full markdown documentation |
 | `antd_demo` | Get demo source code |
 | `antd_token` | Query Design Tokens |
+| `antd_design` | Get the design-language document (`design.md`) |
 | `antd_semantic` | Query semantic classNames/styles structure |
 | `antd_changelog` | Query changelog or diff API changes between versions |
 

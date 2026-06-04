@@ -48,6 +48,19 @@ function normalizeStore(store: MetadataStore): MetadataStore {
   return store;
 }
 
+/**
+ * Load the bundled `design.md` — a hand-curated design-language document
+ * (YAML front-matter + prose) describing antd's default light theme,
+ * conformant with the google-labs-code/design.md spec.
+ *
+ * Returns the raw markdown, or null if the file is missing.
+ */
+export function loadDesignDoc(): string | null {
+  const designPath = join(getDataPath(), 'design.md');
+  if (!existsSync(designPath)) return null;
+  return readFileSync(designPath, 'utf-8');
+}
+
 export function loadMetadata(majorVersion: string): MetadataStore {
   const dataPath = join(getDataPath(), `${majorVersion}.json`);
   try {

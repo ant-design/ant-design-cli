@@ -4,6 +4,7 @@ import { registerInfoCommand } from './commands/info.js';
 import { registerDocCommand } from './commands/doc.js';
 import { registerDemoCommand } from './commands/demo.js';
 import { registerTokenCommand } from './commands/token.js';
+import { registerDesignCommand } from './commands/design.js';
 import { registerSemanticCommand } from './commands/semantic.js';
 import { registerChangelogCommand } from './commands/changelog.js';
 import { registerDoctorCommand } from './commands/doctor.js';
@@ -46,6 +47,7 @@ export function createProgram(): Command {
   registerDocCommand(program);
   registerDemoCommand(program);
   registerTokenCommand(program);
+  registerDesignCommand(program);
   registerSemanticCommand(program);
   registerChangelogCommand(program);
 

@@ -41,7 +41,7 @@ npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
 - 🤖 **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
 - 🌍 **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
 - 🔮 **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
-- 🧩 **16 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
+- 🧩 **17 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
 - 🔌 **MCP 服务** — `antd mcp` 启动 stdio 服务，原生集成 Claude Desktop、Cursor 等 IDE。
 
 <br>
@@ -95,7 +95,7 @@ Agent 会自动完成 `npm install`、`npx skills add`，并开始使用 CLI。
 
 如需固定 antd 版本，在 `args` 数组中添加 `"--version", "5.20.0"`。
 
-提供 7 个工具（`antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_semantic`、`antd_changelog`）和 2 个提示词（`antd-expert`、`antd-page-generator`）。
+提供 8 个工具（`antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_design`、`antd_semantic`、`antd_changelog`）和 2 个提示词（`antd-expert`、`antd-page-generator`）。
 
 支持 [Claude Code](https://claude.ai/code)、[Cursor](https://cursor.sh)、[Codex](https://openai.com/codex)、[Gemini CLI](https://github.com/google-gemini/gemini-cli) 等所有兼容 [skills](https://github.com/nicepkg/agent-skills) 协议的 Agent。
 
@@ -109,6 +109,7 @@ antd info Button                    # 组件 Props、类型、默认值
 antd doc Button                     # 完整 Markdown 文档
 antd demo Select basic              # 可运行的 Demo 源码
 antd token DatePicker               # Design Token 值（v5+）
+antd design                         # 设计语言文档（design.md）
 antd semantic Table                 # classNames / styles 结构
 antd changelog 4.24.0 5.0.0 Select  # 跨版本 API 差异对比
 antd doctor                         # 诊断项目配置问题
@@ -134,6 +135,7 @@ antd upgrade                        # 升级 CLI 到最新版本
 | [`antd doc <Component>`](#antd-doc-component) | 组件完整 Markdown 文档 |
 | [`antd demo <Component> [name]`](#antd-demo-component-name) | 可运行的 Demo 源码（TSX） |
 | [`antd token [Component]`](#antd-token-component) | 全局或组件级 Design Token |
+| [`antd design`](#antd-design) | 设计语言文档（`design.md`），供 AI 设计工具消费 |
 | [`antd semantic <Component>`](#antd-semantic-component) | 语义化 `classNames` / `styles` 结构及用法示例 |
 | [`antd changelog`](#antd-changelog-v1-v2-component) | Changelog 条目、版本范围或跨版本 API 对比 |
 
@@ -241,6 +243,17 @@ antd demo Button basic              # 获取 Demo 源码
 antd token                          # 全局 Token（colorPrimary、borderRadius 等）
 antd token Button                   # 组件级 Token
 ```
+
+### `antd design`
+
+输出 antd **设计语言文档**（`design.md`）—— 对 antd 默认 Light 主题的精心编写的描述，遵循 [google-labs-code/design.md](https://github.com/google-labs-code/design.md) 规范。`antd token` 列举单个 Token 名称，而 `antd design` 整体描述设计语言（颜色 / 字体 / 间距 / 圆角的取值及其背后的设计原则），可被 AI 设计工具（Figma Make、Stitch 等）和 Agent 直接消费。
+
+```bash
+antd design                         # 输出完整 design.md 到 stdout
+antd design --format json           # { doc }
+```
+
+它与发布在 [`https://ant.design/design.md`](https://ant.design/design.md) 的官方 `DESIGN.md` 保持一致。该文档与版本无关 —— `--version` 和 `--lang` 不影响其输出。
 
 ### `antd semantic <Component>`
 
@@ -400,7 +413,7 @@ antd bug-cli --title "..." --submit
 
 ### `antd mcp`
 
-启动 MCP（Model Context Protocol）stdio 服务，供 IDE Agent 集成。提供 7 个工具和 2 个提示词，支持 Claude Desktop、Cursor 等 IDE 原生集成。
+启动 MCP（Model Context Protocol）stdio 服务，供 IDE Agent 集成。提供 8 个工具和 2 个提示词，支持 Claude Desktop、Cursor 等 IDE 原生集成。
 
 ```bash
 antd mcp                                # 使用自动检测的版本启动
@@ -420,7 +433,7 @@ IDE 配置（`claude_desktop_config.json`）：
 }
 ```
 
-**MCP 工具（7 个）：** `antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_semantic`、`antd_changelog`
+**MCP 工具（8 个）：** `antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_design`、`antd_semantic`、`antd_changelog`
 
 **MCP 提示词（2 个）：** `antd-expert`、`antd-page-generator`
 
