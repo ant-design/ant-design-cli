@@ -24,6 +24,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const EXTRACT_SCRIPT = path.join(__dirname, 'extract.ts');
 const DATA_DIR = path.join(PROJECT_ROOT, 'data');
+// antd ships a hand-curated DESIGN.md (the design-language doc) at its repo root.
+// It tracks the latest major's default light theme, so we sync it from the
+// newest v6 checkout. See syncDesignDoc().
+const DESIGN_SOURCE = 'DESIGN.md';
+const DESIGN_TARGET = path.join(DATA_DIR, 'design.md');
 
 function parseArgs(args: string[]): { antdDir: string } {
   let antdDir = '';
@@ -268,8 +273,43 @@ function validateData() {
   console.log('  All data files valid');
 }
 
+/**
+ * Sync data/design.md from the antd source checkout.
+ *
+ * antd keeps a hand-curated DESIGN.md at its repo root (the design-language
+ * document described in ant-design/ant-design#58011). It is not version-specific
+ * data we can extract — we just copy it verbatim, like other bundled assets.
+ *
+ * We check out the latest v6 tag first (the loop may have skipped checkout when
+ * already up-to-date, and the CI clone uses --no-checkout). If the source file is
+ * absent (e.g. not yet released in that tag), we keep the existing data/design.md
+ * rather than deleting it — so an already bundled copy survives until upstream
+ * publishes the file.
+ */
+function syncDesignDoc(antdDir: string, tag: string | undefined) {
+  if (!tag) {
+    console.log('  No latest tag available, keeping existing data/design.md');
+    return;
+  }
+  if (!checkout(antdDir, tag)) {
+    console.log(`  Could not check out ${tag}, keeping existing data/design.md`);
+    return;
+  }
+  const source = path.join(antdDir, DESIGN_SOURCE);
+  if (!fs.existsSync(source)) {
+    console.log(`  ${DESIGN_SOURCE} not found in antd@${tag}, keeping existing data/design.md`);
+    return;
+  }
+  fs.copyFileSync(source, DESIGN_TARGET);
+  console.log(`  Synced ${DESIGN_SOURCE} from antd@${tag} → data/design.md`);
+}
+
 function main() {
   const { antdDir } = parseArgs(process.argv.slice(2));
+
+  // Track the latest stable tag per major, so we can sync version-independent
+  // assets (DESIGN.md) from the newest major's checkout after the loop.
+  const latestTagByMajor = new Map<number, string>();
 
   for (const major of MAJORS) {
     console.log(`\n=== Syncing v${major} ===`);
@@ -285,6 +325,7 @@ function main() {
       console.warn(`No stable tags found for v${major}, skipping`);
       continue;
     }
+    latestTagByMajor.set(major, latestTag);
     console.log(`Latest v${major}: ${latestTag}`);
 
     // Extract primary (latest) snapshot → data/v{major}.json (skip if already up-to-date)
@@ -343,6 +384,10 @@ function main() {
   // Final sweep: remove any snapshot files not referenced by versions.json
   console.log('\n=== Cleaning stale snapshots ===');
   cleanStaleSnapshots();
+
+  // Sync the design-language document (DESIGN.md) from the latest v6 checkout.
+  console.log('\n=== Syncing design.md ===');
+  syncDesignDoc(antdDir, latestTagByMajor.get(6));
 
   // Validate extracted data
   console.log('\n=== Validating extracted data ===');

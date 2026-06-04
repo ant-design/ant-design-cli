@@ -27,7 +27,7 @@ Metadata for all major versions is bundled inside `@ant-design/cli`:
 @ant-design/cli
 └── data/
     ├── versions.json        # version index: minor series → snapshot tag (always plain JSON)
-    ├── design.md            # design-language document (always plain markdown, served by `antd design`)
+    ├── design.md            # design-language doc (plain markdown, synced from antd's DESIGN.md, served by `antd design`)
     ├── v3.json.gz           # latest v3 (final version 3.26.20)
     ├── v3.26.20.json.gz     # snapshot for 3.26.x series
     ├── v4.json.gz           # latest v4 (gzip-compressed in published package)
@@ -70,6 +70,7 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 - Each version file contains both `en` and `zh` descriptions, keyed by language
 - `semantic` data extracted from `components/*/demo/_semantic.tsx` files
 - Data is auto-extracted from antd source via `scripts/extract.ts`
+- `data/design.md` (the design-language document served by `antd design`) is **not** extracted but **copied verbatim** from antd's repo-root `DESIGN.md` during sync, since it is hand-curated prose, not derivable data. `scripts/sync.ts` checks out the latest v6 tag and copies the file; if the source `DESIGN.md` is absent (e.g. not yet released in that tag), the existing bundled copy is kept rather than deleted. The document tracks the latest major's default light theme and stays stable across minor/patch releases.
 - A GitHub Actions workflow (`sync.yml`) runs daily: for each major version it extracts the latest snapshot and any new minor-series snapshots, then updates `versions.json`
 - Stale snapshots (files not referenced by `versions.json`) are cleaned up automatically: when a new patch replaces an old one for the same minor series, the old file is removed inline; a final sweep after sync removes any orphaned snapshot files. `versions.json` is the source of truth — the cleanup scope derives from its contents, not from a hardcoded major-version list
 - Historical snapshots can be bootstrapped locally via `scripts/bootstrap-snapshots.ts`
