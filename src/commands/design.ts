@@ -19,7 +19,7 @@ export interface DesignDoc {
 export function getDesign(): DesignDoc | CLIError {
   const doc = loadDesignDoc();
 
-  if (!doc) {
+  if (doc === null) {
     return createError(
       ErrorCodes.DOC_NOT_AVAILABLE,
       'design.md is not available in this CLI build',

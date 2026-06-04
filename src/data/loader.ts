@@ -57,8 +57,13 @@ function normalizeStore(store: MetadataStore): MetadataStore {
  */
 export function loadDesignDoc(): string | null {
   const designPath = join(getDataPath(), 'design.md');
-  if (!existsSync(designPath)) return null;
-  return readFileSync(designPath, 'utf-8');
+  try {
+    if (!existsSync(designPath)) return null;
+    return readFileSync(designPath, 'utf-8');
+    /* v8 ignore next 3 -- defensive: bundled design.md is always readable */
+  } catch {
+    return null;
+  }
 }
 
 export function loadMetadata(majorVersion: string): MetadataStore {

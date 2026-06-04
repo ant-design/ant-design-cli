@@ -433,7 +433,7 @@ IDE configuration (`claude_desktop_config.json`):
 }
 ```
 
-**MCP Tools (7):** `antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_semantic`, `antd_changelog`
+**MCP Tools (8):** `antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design`, `antd_semantic`, `antd_changelog`
 
 **MCP Prompts (2):** `antd-expert`, `antd-page-generator`
 
