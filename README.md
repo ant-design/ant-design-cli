@@ -97,7 +97,7 @@ For IDEs that support [Model Context Protocol](https://modelcontextprotocol.io),
 
 To pin a specific antd version, add `"--version", "5.20.0"` to the `args` array.
 
-This exposes 8 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design`, `antd_semantic`, `antd_changelog`) and 2 prompts (`antd-expert`, `antd-page-generator`) for native IDE integration.
+This exposes 8 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design_md`, `antd_semantic`, `antd_changelog`) and 2 prompts (`antd-expert`, `antd-page-generator`) for native IDE integration.
 
 <br>
 
@@ -434,7 +434,7 @@ IDE configuration (`claude_desktop_config.json`):
 }
 ```
 
-**MCP Tools (8):** `antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design`, `antd_semantic`, `antd_changelog`
+**MCP Tools (8):** `antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design_md`, `antd_semantic`, `antd_changelog`
 
 **MCP Prompts (2):** `antd-expert`, `antd-page-generator`
 

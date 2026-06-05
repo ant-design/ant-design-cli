@@ -323,7 +323,7 @@ IDE configuration (`claude_desktop_config.json`):
 | `antd_doc` | Get full markdown documentation |
 | `antd_demo` | Get demo source code |
 | `antd_token` | Query Design Tokens |
-| `antd_design` | Get the design-language document (`design.md`) |
+| `antd_design_md` | Get the design-language document (`design.md`) |
 | `antd_semantic` | Query semantic classNames/styles structure |
 | `antd_changelog` | Query changelog or diff API changes between versions |
 

@@ -103,17 +103,17 @@ describe('mcp tools', () => {
     expect(Array.isArray(data.tokens)).toBe(true);
   });
 
-  it('antd_design returns the design.md document for v6', async () => {
+  it('antd_design_md returns the design.md document for v6', async () => {
     const handleV6 = createToolHandler({ version: '6.4.0', lang: 'en' });
-    const result = await handleV6('antd_design', {});
+    const result = await handleV6('antd_design_md', {});
     const data = parseResult(result) as { doc: string };
     expect(typeof data.doc).toBe('string');
     expect(data.doc).toContain('name: Ant Design');
     expect(data.doc).toContain('## Overview');
   });
 
-  it('antd_design returns an error for a major without a design.md (v5)', async () => {
-    const result = await handle('antd_design', {});
+  it('antd_design_md returns an error for a major without a design.md (v5)', async () => {
+    const result = await handle('antd_design_md', {});
     expect(result.isError).toBe(true);
     const data = parseResult(result) as { error: boolean; code: string };
     expect(data.error).toBe(true);
