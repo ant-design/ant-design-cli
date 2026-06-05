@@ -109,7 +109,7 @@ antd info Button                    # 组件 Props、类型、默认值
 antd doc Button                     # 完整 Markdown 文档
 antd demo Select basic              # 可运行的 Demo 源码
 antd token DatePicker               # Design Token 值（v5+）
-antd design                         # 设计语言文档（design.md）
+antd design.md                      # 设计语言文档（design.md）
 antd semantic Table                 # classNames / styles 结构
 antd changelog 4.24.0 5.0.0 Select  # 跨版本 API 差异对比
 antd doctor                         # 诊断项目配置问题
@@ -135,7 +135,7 @@ antd upgrade                        # 升级 CLI 到最新版本
 | [`antd doc <Component>`](#antd-doc-component) | 组件完整 Markdown 文档 |
 | [`antd demo <Component> [name]`](#antd-demo-component-name) | 可运行的 Demo 源码（TSX） |
 | [`antd token [Component]`](#antd-token-component) | 全局或组件级 Design Token |
-| [`antd design`](#antd-design) | 设计语言文档（`design.md`），供 AI 设计工具消费 |
+| [`antd design.md`](#antd-designmd) | 设计语言文档（`design.md`），供 AI 设计工具消费 |
 | [`antd semantic <Component>`](#antd-semantic-component) | 语义化 `classNames` / `styles` 结构及用法示例 |
 | [`antd changelog`](#antd-changelog-v1-v2-component) | Changelog 条目、版本范围或跨版本 API 对比 |
 
@@ -244,14 +244,14 @@ antd token                          # 全局 Token（colorPrimary、borderRadius
 antd token Button                   # 组件级 Token
 ```
 
-### `antd design`
+### `antd design.md`
 
-输出 antd **设计语言文档**（`design.md`）—— 对 antd 默认 Light 主题的精心编写的描述，遵循 [google-labs-code/design.md](https://github.com/google-labs-code/design.md) 规范。`antd token` 列举单个 Token 名称，而 `antd design` 整体描述设计语言（颜色 / 字体 / 间距 / 圆角的取值及其背后的设计原则），可被 AI 设计工具（Figma Make、Stitch 等）和 Agent 直接消费。
+输出 antd **设计语言文档**（`design.md`）—— 对 antd 默认 Light 主题的精心编写的描述，遵循 [google-labs-code/design.md](https://github.com/google-labs-code/design.md) 规范。`antd token` 列举单个 Token 名称，而 `antd design.md` 整体描述设计语言（颜色 / 字体 / 间距 / 圆角的取值及其背后的设计原则），可被 AI 设计工具（Figma Make、Stitch 等）和 Agent 直接消费。
 
 ```bash
-antd design                         # 输出当前检测版本的 design.md
-antd design --version 6.4.0         # 指定版本的 design.md
-antd design --format json           # { doc }
+antd design.md                      # 输出当前检测版本的 design.md
+antd design.md --version 6.4.0      # 指定版本的 design.md
+antd design.md --format json        # { doc }
 ```
 
 `design.md` 按**大版本**区分（antd 只在大版本升级时重写它），因此按 major 解析。目前**仅 antd v6** 提供 `design.md` —— 查询没有该文档的大版本（v3/v4/v5）会返回 `UNSUPPORTED_VERSION_FEATURE`。它与发布在 [`https://ant.design/design.md`](https://ant.design/design.md) 的官方 `DESIGN.md` 保持一致。

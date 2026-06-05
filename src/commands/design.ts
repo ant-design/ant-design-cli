@@ -38,7 +38,7 @@ export function getDesign(opts: { version: string }): DesignDoc | CLIError {
 
 export function registerDesignCommand(program: Command): void {
   program
-    .command('design')
+    .command('design.md')
     .description('Output the antd design-language document (design.md) for AI design tools')
     .action(() => {
       const opts = program.opts<GlobalOptions>();

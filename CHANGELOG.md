@@ -4,7 +4,7 @@
 
 ### Features
 
-- Add `antd design` command and `antd_design` MCP tool: output the antd design-language document (`design.md`) — color/typography/spacing/radius values and design principles for the default light theme, conformant with [google-labs-code/design.md](https://github.com/google-labs-code/design.md), consumable by AI design tools (Figma Make, Stitch, etc.). Resolved by major version (via `--version`); a `design.md` is currently published only for antd v6 ([#57701](https://github.com/ant-design/ant-design/issues/57701))
+- Add `antd design.md` command and `antd_design` MCP tool: output the antd design-language document (`design.md`) — color/typography/spacing/radius values and design principles for the default light theme, conformant with [google-labs-code/design.md](https://github.com/google-labs-code/design.md), consumable by AI design tools (Figma Make, Stitch, etc.). Resolved by major version (via `--version`); a `design.md` is currently published only for antd v6 ([#57701](https://github.com/ant-design/ant-design/issues/57701))
 
 
 ## [6.4.3](https://github.com/ant-design/ant-design-cli/compare/v6.4.2...v6.4.3) (2026-05-18)

@@ -51,7 +51,7 @@ antd semantic Button --format json
 antd token Button --format json
 
 # Get the overall design language (design.md): colors, typography, spacing, radius + principles
-antd design --format json
+antd design.md --format json
 ```
 
 **Workflow:** `antd info` → understand props → `antd demo` → grab a working example → write code.

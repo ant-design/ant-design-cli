@@ -4,7 +4,7 @@
 
 ### 新功能
 
-- 新增 `antd design` 命令和 `antd_design` MCP 工具：输出 antd 设计语言文档（`design.md`）—— 默认 Light 主题的颜色 / 字体 / 间距 / 圆角取值及设计原则，遵循 [google-labs-code/design.md](https://github.com/google-labs-code/design.md) 规范，可被 AI 设计工具（Figma Make、Stitch 等）直接消费。按大版本解析（通过 `--version`）；目前仅 antd v6 提供 `design.md` ([#57701](https://github.com/ant-design/ant-design/issues/57701))
+- 新增 `antd design.md` 命令和 `antd_design` MCP 工具：输出 antd 设计语言文档（`design.md`）—— 默认 Light 主题的颜色 / 字体 / 间距 / 圆角取值及设计原则，遵循 [google-labs-code/design.md](https://github.com/google-labs-code/design.md) 规范，可被 AI 设计工具（Figma Make、Stitch 等）直接消费。按大版本解析（通过 `--version`）；目前仅 antd v6 提供 `design.md` ([#57701](https://github.com/ant-design/ant-design/issues/57701))
 
 
 ## [6.4.3](https://github.com/ant-design/ant-design-cli/compare/v6.4.2...v6.4.3) (2026-05-18)
