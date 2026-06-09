@@ -729,7 +729,7 @@ Priority order:
 1. `--version` flag (highest)
 2. Installed version in `node_modules/antd/package.json`
 3. Declared version in project `package.json` dependencies
-4. Fallback version `5.24.0` (latest stable at time of build)
+4. Fallback version — the latest bundled major, resolved dynamically from the highest `data/v{N}.json` snapshot's `version` field (e.g. `6.4.3`), so it tracks "latest" as new majors are synced instead of going stale
 
 Resolution: The CLI maps the resolved version to a major version data directory (e.g. `5.20.0` → `v5/`), then filters props/tokens by `since` and `deprecated` fields against the exact version. If the resolved version does not exist as a published antd version (e.g. `5.999.0`), the CLI warns and uses the latest known version within that major.
 

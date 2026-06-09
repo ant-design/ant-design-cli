@@ -78,7 +78,17 @@ describe('data/version', () => {
   it('returns fallback when no antd info found', () => {
     const v = detectVersion();
     expect(v.source).toBe('fallback');
-    expect(v.majorVersion).toBe('v5');
+    expect(v.majorVersion).toBe('v6');
+  });
+
+  it('fallback version is resolved dynamically from the latest bundled major snapshot', () => {
+    // Not a hardcoded constant: it tracks the highest data/v{N}.json snapshot,
+    // matching that snapshot's exact version (and the CLI's own version).
+    const v = detectVersion();
+    const pkg = jsonModule.readJson<{ version: string }>(
+      join(origCwd, 'data', `${v.majorVersion}.json`),
+    );
+    expect(v.version).toBe(pkg?.version);
   });
 
   it('detects from node_modules/antd/package.json', () => {
