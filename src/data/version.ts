@@ -1,5 +1,7 @@
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { gunzipSync } from 'node:zlib';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import semver from 'semver';
 import { readJson, type PackageJson } from '../utils/json.js';
 
@@ -9,8 +11,65 @@ export interface VersionInfo {
   source: 'flag' | 'node_modules' | 'package.json' | 'fallback';
 }
 
-const FALLBACK_VERSION = '5.24.0';
-const FALLBACK_MAJOR = 'v5';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Last-resort fallback if the bundled data can't be probed (should never happen
+// in a real install). The dynamic resolver below normally supersedes this.
+const SAFE_FALLBACK_VERSION = '6.0.0';
+const SAFE_FALLBACK_MAJOR = 'v6';
+
+/** Read a major snapshot's `version`, supporting both .json (dev) and .json.gz (published). */
+function readSnapshotVersion(dir: string, major: string): string | undefined {
+  const base = join(dir, `${major}.json`);
+  try {
+    if (existsSync(base)) {
+      return (JSON.parse(readFileSync(base, 'utf-8')) as PackageJson).version;
+    }
+    if (existsSync(base + '.gz')) {
+      return (JSON.parse(gunzipSync(readFileSync(base + '.gz')).toString('utf-8')) as PackageJson).version;
+    }
+    /* v8 ignore next 3 -- defensive: bundled snapshots are always valid */
+  } catch {
+    return undefined;
+  }
+  return undefined;
+}
+
+/**
+ * Resolve the fallback version dynamically from the bundled data: the highest
+ * major snapshot present (e.g. data/v6.json[.gz]) and its `version` field. This
+ * keeps the fallback aligned with "latest" as new majors are synced, instead of
+ * a hardcoded constant that silently goes stale (it was stuck at 5.24.0 long
+ * after v6 shipped). Memoized — the bundled data never changes at runtime.
+ */
+let cachedFallback: { version: string; majorVersion: string } | undefined;
+
+function resolveFallback(): { version: string; majorVersion: string } {
+  if (cachedFallback) return cachedFallback;
+
+  // Mirror loader.ts: data/ sits next to dist/ (published) or one level up (src/data/)
+  const candidates = [join(__dirname, '..', 'data'), join(__dirname, '..', '..', 'data')];
+  for (const dir of candidates) {
+    if (!existsSync(dir)) continue;
+    let best = 0;
+    for (const file of readdirSync(dir)) {
+      const m = file.match(/^v(\d+)\.json(?:\.gz)?$/);
+      if (m) best = Math.max(best, parseInt(m[1], 10));
+    }
+    if (best === 0) continue;
+
+    const major = `v${best}`;
+    cachedFallback = {
+      version: readSnapshotVersion(dir, major) ?? `${best}.0.0`,
+      majorVersion: major,
+    };
+    return cachedFallback;
+  }
+
+  /* v8 ignore next 2 -- defensive: bundled data/ is always present */
+  cachedFallback = { version: SAFE_FALLBACK_VERSION, majorVersion: SAFE_FALLBACK_MAJOR };
+  return cachedFallback;
+}
 
 export function detectVersion(flagVersion?: string): VersionInfo {
   // 1. --version flag
@@ -68,10 +127,11 @@ export function detectVersion(flagVersion?: string): VersionInfo {
     }
   }
 
-  // 4. Fallback to latest
+  // 4. Fallback to the latest bundled major
+  const fb = resolveFallback();
   return {
-    version: FALLBACK_VERSION,
-    majorVersion: FALLBACK_MAJOR,
+    version: fb.version,
+    majorVersion: fb.majorVersion,
     source: 'fallback',
   };
 }
