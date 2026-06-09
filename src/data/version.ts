@@ -51,11 +51,16 @@ function resolveFallback(): { version: string; majorVersion: string } {
   // Mirror loader.ts: data/ sits next to dist/ (published) or one level up (src/data/)
   const candidates = [join(__dirname, '..', 'data'), join(__dirname, '..', '..', 'data')];
   for (const dir of candidates) {
-    if (!existsSync(dir)) continue;
     let best = 0;
-    for (const file of readdirSync(dir)) {
-      const m = file.match(/^v(\d+)\.json(?:\.gz)?$/);
-      if (m) best = Math.max(best, parseInt(m[1], 10));
+    try {
+      for (const file of readdirSync(dir)) {
+        const m = file.match(/^v(\d+)\.json(?:\.gz)?$/);
+        if (m) best = Math.max(best, parseInt(m[1], 10));
+      }
+    } catch {
+      // dir missing, not a directory, or unreadable — try the next candidate
+      /* v8 ignore next -- defensive: bundled data/ is always readable */
+      continue;
     }
     if (best === 0) continue;
 
