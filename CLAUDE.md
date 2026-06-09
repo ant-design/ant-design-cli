@@ -65,6 +65,25 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
+## Core Constraints for New Features
+
+**These are non-negotiable. Every new feature must satisfy both.**
+
+### Multi-Version Support
+
+Any new feature MUST support querying across multiple antd major versions (v4 / v5 / v6).
+
+- Resolve the target version through `detectVersion()` and honor the `--version` flag — never assume a single version.
+- Output and behavior must be correct for every supported major version, not just the latest.
+
+### No Hardcoded Data
+
+Feature data MUST NOT be hardcoded inside this CLI. It must be derived from the antd repo (or a related upstream repo) and bundled via the extraction pipeline.
+
+- Add or extend an extractor under `scripts/extractors/` that reads from an antd source checkout; regenerate `data/v{4,5,6}.json` via `scripts/extract.ts`.
+- The CLI loads bundled JSON at runtime (no remote fetch), but that JSON must be *generated from upstream*, not authored by hand.
+- If the data you need doesn't exist upstream, stop and discuss — don't inline a hardcoded copy.
+
 ## Spec
 
 See [spec.md](./spec.md) for the full design specification.

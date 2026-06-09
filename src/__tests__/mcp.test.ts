@@ -10,8 +10,8 @@ function parseResult(result: { content: { text: string }[]; isError?: boolean })
 }
 
 describe('mcp tools', () => {
-  it('exposes 7 tool definitions with consistent annotations', () => {
-    expect(TOOL_DEFINITIONS).toHaveLength(7);
+  it('exposes 8 tool definitions with consistent annotations', () => {
+    expect(TOOL_DEFINITIONS).toHaveLength(8);
     for (const def of TOOL_DEFINITIONS) {
       expect(def.name).toMatch(/^antd_/);
       expect(def.annotations.readOnlyHint).toBe(true);
@@ -101,6 +101,23 @@ describe('mcp tools', () => {
     const data = parseResult(result) as { component: string; tokens: unknown[] };
     expect(data.component).toBe('Button');
     expect(Array.isArray(data.tokens)).toBe(true);
+  });
+
+  it('antd_design_md returns the design.md document for v6', async () => {
+    const handleV6 = createToolHandler({ version: '6.4.0', lang: 'en' });
+    const result = await handleV6('antd_design_md', {});
+    const data = parseResult(result) as { doc: string };
+    expect(typeof data.doc).toBe('string');
+    expect(data.doc).toContain('name: Ant Design');
+    expect(data.doc).toContain('## Overview');
+  });
+
+  it('antd_design_md returns an error for a major without a design.md (v5)', async () => {
+    const result = await handle('antd_design_md', {});
+    expect(result.isError).toBe(true);
+    const data = parseResult(result) as { error: boolean; code: string };
+    expect(data.error).toBe(true);
+    expect(data.code).toBe('UNSUPPORTED_VERSION_FEATURE');
   });
 
   it('antd_semantic returns semantic structure', async () => {

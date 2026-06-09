@@ -24,6 +24,8 @@ Commands:
   demo <component> [name]          Get demo source code for a component
   token [component]                Query Design Tokens (global or
                                    component-level)
+  design.md                        Output the antd design-language document
+                                   (design.md) for AI design tools
   semantic <component>             Query the semantic customization structure of
                                    a component
   changelog [v1] [v2] [component]  Query changelog or compare API differences

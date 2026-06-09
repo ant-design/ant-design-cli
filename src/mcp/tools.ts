@@ -3,6 +3,7 @@ import { getComponentInfo } from '../commands/info.js';
 import { getComponentDoc } from '../commands/doc.js';
 import { getComponentDemo } from '../commands/demo.js';
 import { getTokens } from '../commands/token.js';
+import { getDesign } from '../commands/design.js';
 import { getSemanticStructure } from '../commands/semantic.js';
 import { queryChangelog, diffChangelog } from '../commands/changelog.js';
 import { createError, ErrorCodes } from '../output/error.js';
@@ -89,6 +90,16 @@ export const TOOL_DEFINITIONS = [
     annotations: { title: 'Query Design Tokens', ...TOOL_ANNOTATIONS },
   },
   {
+    name: 'antd_design_md',
+    description: "Get the antd design-language document (design.md) for the target major version: YAML front-matter with the full color, typography, radius, spacing, and component token values for the default light theme, plus prose on the design principles. Use to understand antd's overall design language or to feed AI design tools (Figma Make, Stitch, etc.). A design.md is currently published only for antd v6.",
+    inputSchema: {
+      type: 'object' as const,
+      properties: {},
+      required: [] as string[],
+    },
+    annotations: { title: 'Get Design Language', ...TOOL_ANNOTATIONS },
+  },
+  {
     name: 'antd_semantic',
     description: 'Query the semantic customization structure (classNames/styles) of a component.',
     inputSchema: {
@@ -163,6 +174,11 @@ export function createToolHandler(ctx: McpContext) {
           lang: ctx.lang,
           version: ctx.version,
         });
+        return toMcpResult(result);
+      }
+
+      case 'antd_design_md': {
+        const result = getDesign({ version: ctx.version });
         return toMcpResult(result);
       }
 

@@ -49,6 +49,9 @@ antd semantic Button --format json
 
 # Check component-level design tokens for theming
 antd token Button --format json
+
+# Get the overall design language (design.md): colors, typography, spacing, radius + principles
+antd design.md --format json
 ```
 
 **Workflow:** `antd info` → understand props → `antd demo` → grab a working example → write code.
@@ -248,7 +251,7 @@ If working in an IDE that supports MCP (Claude Desktop, Cursor, etc.), the CLI c
 }
 ```
 
-This provides 7 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_semantic`, `antd_changelog`) and 2 prompts (`antd-expert`, `antd-page-generator`) via MCP protocol.
+This provides 8 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design_md`, `antd_semantic`, `antd_changelog`) and 2 prompts (`antd-expert`, `antd-page-generator`) via MCP protocol.
 
 ## Global Flags
 

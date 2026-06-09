@@ -41,7 +41,7 @@ npx skills add ant-design/ant-design-cli    # install as an agent skill
 - 🤖 **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
 - 🌍 **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
 - 🔮 **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
-- 🧩 **16 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
+- 🧩 **17 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
 - 🔌 **MCP server** — `antd mcp` starts a stdio server for native IDE integration (Claude Desktop, Cursor).
 
 <br>
@@ -97,7 +97,7 @@ For IDEs that support [Model Context Protocol](https://modelcontextprotocol.io),
 
 To pin a specific antd version, add `"--version", "5.20.0"` to the `args` array.
 
-This exposes 7 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_semantic`, `antd_changelog`) and 2 prompts (`antd-expert`, `antd-page-generator`) for native IDE integration.
+This exposes 8 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design_md`, `antd_semantic`, `antd_changelog`) and 2 prompts (`antd-expert`, `antd-page-generator`) for native IDE integration.
 
 <br>
 
@@ -109,6 +109,7 @@ antd info Button                    # Component props, types, defaults
 antd doc Button                     # Full markdown documentation
 antd demo Select basic              # Runnable demo source code
 antd token DatePicker               # Design Token values (v5+)
+antd design.md                      # Design-language document (design.md)
 antd semantic Table                 # classNames / styles structure
 antd changelog 4.24.0 5.0.0 Select  # API diff across versions
 antd doctor                         # Diagnose project issues
@@ -134,6 +135,7 @@ antd upgrade                        # Upgrade CLI to latest version
 | [`antd doc <Component>`](#antd-doc-component) | Full markdown documentation for a component |
 | [`antd demo <Component> [name]`](#antd-demo-component-name) | Runnable demo source code (TSX) |
 | [`antd token [Component]`](#antd-token-component) | Global or component-level Design Tokens |
+| [`antd design.md`](#antd-designmd) | Design-language document (`design.md`) for AI design tools |
 | [`antd semantic <Component>`](#antd-semantic-component) | Semantic `classNames` / `styles` structure with usage examples |
 | [`antd changelog`](#antd-changelog-v1-v2-component) | Changelog entries, version ranges, or cross-version API diff |
 
@@ -241,6 +243,18 @@ antd demo Button basic              # get demo source code
 antd token                          # global tokens (colorPrimary, borderRadius, ...)
 antd token Button                   # component-level tokens
 ```
+
+### `antd design.md`
+
+Output the antd **design-language document** (`design.md`) — a curated description of antd's default light theme, conformant with the [google-labs-code/design.md](https://github.com/google-labs-code/design.md) spec. Where `antd token` lists individual token names, `antd design.md` describes the design language as a whole (color/typography/spacing/radius values plus the principles behind them), so AI design tools (Figma Make, Stitch, etc.) and agents can consume antd's design language directly.
+
+```bash
+antd design.md                      # design.md for the detected version
+antd design.md --version 6.4.0      # design.md for a specific version
+antd design.md --format json        # { doc }
+```
+
+`design.md` is **major-grained** (antd rewrites it only across major releases), so it is resolved by major version. A `design.md` is currently published only for **antd v6** — requesting a major without one (v3/v4/v5) returns `UNSUPPORTED_VERSION_FEATURE`. It mirrors the canonical `DESIGN.md` published at [`https://ant.design/design.md`](https://ant.design/design.md).
 
 ### `antd semantic <Component>`
 
@@ -400,7 +414,7 @@ antd bug-cli --title "..." --submit
 
 ### `antd mcp`
 
-Start an MCP (Model Context Protocol) stdio server for IDE agent integration. Exposes 7 tools and 2 prompts for native IDE integration (Claude Desktop, Cursor, etc.).
+Start an MCP (Model Context Protocol) stdio server for IDE agent integration. Exposes 8 tools and 2 prompts for native IDE integration (Claude Desktop, Cursor, etc.).
 
 ```bash
 antd mcp                                # start with auto-detected version
@@ -420,7 +434,7 @@ IDE configuration (`claude_desktop_config.json`):
 }
 ```
 
-**MCP Tools (7):** `antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_semantic`, `antd_changelog`
+**MCP Tools (8):** `antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design_md`, `antd_semantic`, `antd_changelog`
 
 **MCP Prompts (2):** `antd-expert`, `antd-page-generator`
 
