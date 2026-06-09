@@ -25,6 +25,7 @@ function readSnapshotVersion(dir: string, major: string): string | undefined {
     if (existsSync(base)) {
       return (JSON.parse(readFileSync(base, 'utf-8')) as PackageJson).version;
     }
+    /* v8 ignore next 3 -- gz files only present in production builds */
     if (existsSync(base + '.gz')) {
       return (JSON.parse(gunzipSync(readFileSync(base + '.gz')).toString('utf-8')) as PackageJson).version;
     }
