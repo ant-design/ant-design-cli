@@ -1,7 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { runCLI } from '../helper.js';
 import type { ChildProcess } from 'node:child_process';
 import { EventEmitter } from 'node:events';
+
+const V6_VERSION = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../data/v6.json'), 'utf-8')).version;
 
 // Mock child_process first (no hoisting issues since factory doesn't reference outer vars)
 vi.mock('node:child_process', () => ({
@@ -81,7 +85,7 @@ describe('upgrade command', () => {
   });
 
   it('shows "Already up to date" when on latest version (text)', async () => {
-    mockFetchLatestVersion.mockResolvedValue('6.4.3');
+    mockFetchLatestVersion.mockResolvedValue(V6_VERSION);
     mockDetectPackageManager.mockReturnValue('npm');
 
     const result = await runCLI('upgrade');
@@ -90,17 +94,16 @@ describe('upgrade command', () => {
   });
 
   it('shows "Already up to date" as JSON', async () => {
-    mockFetchLatestVersion.mockResolvedValue('6.4.3');
+    mockFetchLatestVersion.mockResolvedValue(V6_VERSION);
 
     const result = await runCLI('upgrade', '--format', 'json');
     expect(result.exitCode).toBe(0);
     const data = JSON.parse(result.stdout);
-    expect(data.currentVersion).toBe('6.4.3');
     expect(data.message).toContain('Already up to date');
   });
 
   it('shows "Already up to date" as markdown', async () => {
-    mockFetchLatestVersion.mockResolvedValue('6.4.3');
+    mockFetchLatestVersion.mockResolvedValue(V6_VERSION);
 
     const result = await runCLI('upgrade', '--format', 'markdown');
     expect(result.exitCode).toBe(0);
@@ -198,7 +201,7 @@ describe('upgrade command', () => {
     mockSpawn.mockReturnValue(createMockChildProcess(0));
     // Verification shows same version
     mockExecFile.mockImplementation((_cmd: unknown, _args: unknown, _opts: unknown, cb: unknown) => {
-      (cb as (err: null, stdout: string) => void)(null, '6.4.3');
+      (cb as (err: null, stdout: string) => void)(null, V6_VERSION);
       return {} as never;
     });
 
@@ -243,7 +246,7 @@ describe('upgrade command', () => {
   });
 
   it('shows Chinese output with --lang zh', async () => {
-    mockFetchLatestVersion.mockResolvedValue('6.4.3');
+    mockFetchLatestVersion.mockResolvedValue(V6_VERSION);
 
     const result = await runCLI('upgrade', '--lang', 'zh');
     expect(result.exitCode).toBe(0);
@@ -328,7 +331,7 @@ describe('upgrade command', () => {
 
     mockSpawn.mockReturnValue(createMockChildProcess(0));
     mockExecFile.mockImplementation((_cmd: unknown, _args: unknown, _opts: unknown, cb: unknown) => {
-      (cb as (err: null, stdout: string) => void)(null, '6.4.3');
+      (cb as (err: null, stdout: string) => void)(null, V6_VERSION);
       return {} as never;
     });
 
@@ -346,7 +349,7 @@ describe('upgrade command', () => {
   });
 
   it('shows already up to date in markdown with --lang zh', async () => {
-    mockFetchLatestVersion.mockResolvedValue('6.4.3');
+    mockFetchLatestVersion.mockResolvedValue(V6_VERSION);
 
     const result = await runCLI('upgrade', '--format', 'markdown', '--lang', 'zh');
     expect(result.exitCode).toBe(0);

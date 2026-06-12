@@ -30,6 +30,10 @@ jobs:
         id: check-version
         run: npx tsx scripts/check-sync-needed.ts
 
+      - name: Baseline test (before data sync)
+        if: steps.check-version.outputs.needs_publish == 'true'
+        run: npm run build && npm test
+
       - name: Clone antd repo (shallow, filter tree)
         if: steps.check-version.outputs.needs_sync == 'true'
         run: |
