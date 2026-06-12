@@ -132,7 +132,8 @@ function main() {
   };
 
   // 6. Validate: components with API docs but no props are likely extraction bugs
-  const suspicious = components.filter(c => c.props.length === 0 && c.doc?.includes('## API'));
+  // Exclude components that have subComponentProps (e.g. Grid→Row/Col, Typography→Text/Title/Paragraph)
+  const suspicious = components.filter(c => c.props.length === 0 && !c.subComponentProps && c.doc?.includes('## API'));
   if (suspicious.length > 0) {
     console.error(`\nError: ${suspicious.length} component(s) have API docs but no extracted props:`);
     suspicious.forEach(c => console.error(`  - ${c.name}`));
