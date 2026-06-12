@@ -1,5 +1,10 @@
 # 更新日志
 
+## [6.4.4](https://github.com/ant-design/ant-design-cli/compare/v6.4.3...v6.4.4) (2026-06-12)
+
+- 同步 antd 元数据 ([v6@6.4.4](https://github.com/ant-design/ant-design-cli/compare/v6.4.3...v6.4.4#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+
+
 ## 未发布
 
 ### 新功能

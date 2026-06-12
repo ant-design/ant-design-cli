@@ -41,6 +41,7 @@ exports[`info > info Button --detail --format json 1`] = `
       "type": "Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>",
       "default": "-",
       "description": "Customize class for each semantic structure inside the component. Supports object or function.",
+      "since": "6.0.0",
       "descriptionZh": "用于自定义组件内部各语义化结构的 class，支持对象或函数"
     },
     {
@@ -115,7 +116,7 @@ exports[`info > info Button --detail --format json 1`] = `
       "type": "boolean | { delay: number, icon: ReactNode }",
       "default": "false",
       "description": "Set the loading status of button",
-      "since": "5.23.0",
+      "since": "icon: 5.23.0",
       "descriptionZh": "设置按钮载入状态"
     },
     {
@@ -151,6 +152,7 @@ exports[`info > info Button --detail --format json 1`] = `
       "type": "Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>",
       "default": "-",
       "description": "Customize inline style for each semantic structure inside the component. Supports object or function.",
+      "since": "6.0.0",
       "descriptionZh": "用于自定义组件内部各语义化结构的行内 style，支持对象或函数"
     },
     {
@@ -237,7 +239,7 @@ And 4 other properties additionally.
 | --- | --- | --- | --- | --- |
 | autoInsertSpace | boolean | \`true\` | 5.17.0 | We add a space between two Chinese characters by default, which removed by setting \`autoInsertSpace\` to \`false\`. |
 | block | boolean | false | - | Option to fit button width to its parent width |
-| classNames | Record<[SemanticDOM](#semantic-dom), string> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), string> | - | - | Customize class for each semantic structure inside the component. Supports object or function. |
+| classNames | Record<[SemanticDOM](#semantic-dom), string> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), string> | - | 6.0.0 | Customize class for each semantic structure inside the component. Supports object or function. |
 | color | \`default\` \\| \`primary\` \\| \`danger\` \\| [PresetColors](#presetcolors) | \`primary\` when \`variant="solid"\` | \`default\`, \`primary\` and \`danger\`: 5.21.0, \`PresetColors\`: 5.23.0, \`solid\` default color: 6.4.0 | Set button color |
 | danger | boolean | false | - | Syntactic sugar. Set the danger status of button. will follow \`color\` if provided |
 | disabled | boolean | false | - | Disabled state of button |
@@ -247,12 +249,12 @@ And 4 other properties additionally.
 | icon | ReactNode | - | - | Set the icon component of button |
 | iconPlacement | \`start\` \\| \`end\` | \`start\` | - | Set the icon position of button |
 | iconPosition | \`start\` \\| \`end\` | \`start\` | 5.17.0 | Set the icon position of button, please use \`iconPlacement\` instead |
-| loading | boolean \\| { delay: number, icon: ReactNode } | false | 5.23.0 | Set the loading status of button |
+| loading | boolean \\| { delay: number, icon: ReactNode } | false | icon: 5.23.0 | Set the loading status of button |
 | loadingIcon | ReactNode | \`<LoadingOutlined />\` | - | (Only supports global configuration) Set the loading icon of button |
 | onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - | Set the handler to handle \`click\` event |
 | shape | \`default\` \\| \`circle\` \\| \`round\` | \`default\` | - | Can be used to set button shape |
 | size | \`large\` \\| \`medium\` \\| \`small\` | \`medium\` | - | Set the size of button |
-| styles | Record<[SemanticDOM](#semantic-dom), CSSProperties> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties> | - | - | Customize inline style for each semantic structure inside the component. Supports object or function. |
+| styles | Record<[SemanticDOM](#semantic-dom), CSSProperties> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties> | - | 6.0.0 | Customize inline style for each semantic structure inside the component. Supports object or function. |
 | target | string | - | - | Same as target attribute of a, works when href is specified |
 | type | \`primary\` \\| \`dashed\` \\| \`link\` \\| \`text\` \\| \`default\` | \`default\` | - | Syntactic sugar. Set button type. Will follow \`variant\` & \`color\` if provided |
 | variant | \`outlined\` \\| \`dashed\` \\| \`solid\` \\| \`filled\` \\| \`text\` \\| \`link\` | - | 5.21.0 | Set button variant |
@@ -292,7 +294,7 @@ Property         Type                                                           
 ---------------  -----------------------------------------------------------------------------------------------------------------------------  --------------------------------  -----------------------------------------------------------------------------------------------  ---------------------------------------------------------------------------------------------------------------------------
 autoInsertSpace  boolean                                                                                                                        \`true\`                            5.17.0                                                                                           We add a space between two Chinese characters by default, which removed by setting \`autoInsertSpace\` to \`false\`.           
 block            boolean                                                                                                                        false                             -                                                                                                Option to fit button width to its parent width                                                                             
-classNames       Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>                -                                 -                                                                                                Customize class for each semantic structure inside the component. Supports object or function.                             
+classNames       Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>                -                                 6.0.0                                                                                            Customize class for each semantic structure inside the component. Supports object or function.                             
 color            \`default\` | \`primary\` | \`danger\` | [PresetColors](#presetcolors)                                                               \`primary\` when \`variant="solid"\`  \`default\`, \`primary\` and \`danger\`: 5.21.0, \`PresetColors\`: 5.23.0, \`solid\` default color: 6.4.0  Set button color                                                                                                           
 danger           boolean                                                                                                                        false                             -                                                                                                Syntactic sugar. Set the danger status of button. will follow \`color\` if provided                                          
 disabled         boolean                                                                                                                        false                             -                                                                                                Disabled state of button                                                                                                   
@@ -302,12 +304,12 @@ htmlType         \`submit\` | \`reset\` | \`button\`                            
 icon             ReactNode                                                                                                                      -                                 -                                                                                                Set the icon component of button                                                                                           
 iconPlacement    \`start\` | \`end\`                                                                                                                \`start\`                           -                                                                                                Set the icon position of button                                                                                            
 iconPosition     \`start\` | \`end\`                                                                                                                \`start\`                           5.17.0                                                                                           Set the icon position of button, please use \`iconPlacement\` instead                                                        
-loading          boolean | { delay: number, icon: ReactNode }                                                                                   false                             5.23.0                                                                                           Set the loading status of button                                                                                           
+loading          boolean | { delay: number, icon: ReactNode }                                                                                   false                             icon: 5.23.0                                                                                     Set the loading status of button                                                                                           
 loadingIcon      ReactNode                                                                                                                      \`<LoadingOutlined />\`             -                                                                                                (Only supports global configuration) Set the loading icon of button                                                        
 onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void                                                                     -                                 -                                                                                                Set the handler to handle \`click\` event                                                                                    
 shape            \`default\` | \`circle\` | \`round\`                                                                                                 \`default\`                         -                                                                                                Can be used to set button shape                                                                                            
 size             \`large\` | \`medium\` | \`small\`                                                                                                   \`medium\`                          -                                                                                                Set the size of button                                                                                                     
-styles           Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>  -                                 -                                                                                                Customize inline style for each semantic structure inside the component. Supports object or function.                      
+styles           Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>  -                                 6.0.0                                                                                            Customize inline style for each semantic structure inside the component. Supports object or function.                      
 target           string                                                                                                                         -                                 -                                                                                                Same as target attribute of a, works when href is specified                                                                
 type             \`primary\` | \`dashed\` | \`link\` | \`text\` | \`default\`                                                                             \`default\`                         -                                                                                                Syntactic sugar. Set button type. Will follow \`variant\` & \`color\` if provided                                              
 variant          \`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`                                                                   -                                 5.21.0                                                                                           Set button variant                                                                                                         
@@ -345,7 +347,7 @@ exports[`info > info Button --format json --lang en 1`] = `
       "name": "classNames",
       "type": "Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>",
       "default": "-",
-      "since": ""
+      "since": "6.0.0"
     },
     {
       "name": "color",
@@ -405,7 +407,7 @@ exports[`info > info Button --format json --lang en 1`] = `
       "name": "loading",
       "type": "boolean | { delay: number, icon: ReactNode }",
       "default": "false",
-      "since": "5.23.0"
+      "since": "icon: 5.23.0"
     },
     {
       "name": "loadingIcon",
@@ -435,7 +437,7 @@ exports[`info > info Button --format json --lang en 1`] = `
       "name": "styles",
       "type": "Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>",
       "default": "-",
-      "since": ""
+      "since": "6.0.0"
     },
     {
       "name": "target",
@@ -505,7 +507,7 @@ exports[`info > info Button --format json --lang zh 1`] = `
       "name": "classNames",
       "type": "Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>",
       "default": "-",
-      "since": ""
+      "since": "6.0.0"
     },
     {
       "name": "color",
@@ -565,7 +567,7 @@ exports[`info > info Button --format json --lang zh 1`] = `
       "name": "loading",
       "type": "boolean | { delay: number, icon: ReactNode }",
       "default": "false",
-      "since": "5.23.0"
+      "since": "icon: 5.23.0"
     },
     {
       "name": "loadingIcon",
@@ -595,7 +597,7 @@ exports[`info > info Button --format json --lang zh 1`] = `
       "name": "styles",
       "type": "Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>",
       "default": "-",
-      "since": ""
+      "since": "6.0.0"
     },
     {
       "name": "target",
@@ -650,7 +652,7 @@ exports[`info > info Button --format markdown --lang en 1`] = `
 | --- | --- | --- | --- |
 | autoInsertSpace | boolean | \`true\` | 5.17.0 |
 | block | boolean | false | - |
-| classNames | Record<[SemanticDOM](#semantic-dom), string> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), string> | - | - |
+| classNames | Record<[SemanticDOM](#semantic-dom), string> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), string> | - | 6.0.0 |
 | color | \`default\` \\| \`primary\` \\| \`danger\` \\| [PresetColors](#presetcolors) | \`primary\` when \`variant="solid"\` | \`default\`, \`primary\` and \`danger\`: 5.21.0, \`PresetColors\`: 5.23.0, \`solid\` default color: 6.4.0 |
 | danger | boolean | false | - |
 | disabled | boolean | false | - |
@@ -660,12 +662,12 @@ exports[`info > info Button --format markdown --lang en 1`] = `
 | icon | ReactNode | - | - |
 | iconPlacement | \`start\` \\| \`end\` | \`start\` | - |
 | iconPosition | \`start\` \\| \`end\` | \`start\` | 5.17.0 |
-| loading | boolean \\| { delay: number, icon: ReactNode } | false | 5.23.0 |
+| loading | boolean \\| { delay: number, icon: ReactNode } | false | icon: 5.23.0 |
 | loadingIcon | ReactNode | \`<LoadingOutlined />\` | - |
 | onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - |
 | shape | \`default\` \\| \`circle\` \\| \`round\` | \`default\` | - |
 | size | \`large\` \\| \`medium\` \\| \`small\` | \`medium\` | - |
-| styles | Record<[SemanticDOM](#semantic-dom), CSSProperties> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties> | - | - |
+| styles | Record<[SemanticDOM](#semantic-dom), CSSProperties> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties> | - | 6.0.0 |
 | target | string | - | - |
 | type | \`primary\` \\| \`dashed\` \\| \`link\` \\| \`text\` \\| \`default\` | \`default\` | - |
 | variant | \`outlined\` \\| \`dashed\` \\| \`solid\` \\| \`filled\` \\| \`text\` \\| \`link\` | - | 5.21.0 |
@@ -688,7 +690,7 @@ exports[`info > info Button --format markdown --lang zh 1`] = `
 | --- | --- | --- | --- |
 | autoInsertSpace | boolean | \`true\` | 5.17.0 |
 | block | boolean | false | - |
-| classNames | Record<[SemanticDOM](#semantic-dom), string> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), string> | - | - |
+| classNames | Record<[SemanticDOM](#semantic-dom), string> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), string> | - | 6.0.0 |
 | color | \`default\` \\| \`primary\` \\| \`danger\` \\| [PresetColors](#presetcolors) | \`primary\` when \`variant="solid"\` | \`default\`, \`primary\` and \`danger\`: 5.21.0, \`PresetColors\`: 5.23.0, \`solid\` default color: 6.4.0 |
 | danger | boolean | false | - |
 | disabled | boolean | false | - |
@@ -698,12 +700,12 @@ exports[`info > info Button --format markdown --lang zh 1`] = `
 | icon | ReactNode | - | - |
 | iconPlacement | \`start\` \\| \`end\` | \`start\` | - |
 | iconPosition | \`start\` \\| \`end\` | \`start\` | 5.17.0 |
-| loading | boolean \\| { delay: number, icon: ReactNode } | false | 5.23.0 |
+| loading | boolean \\| { delay: number, icon: ReactNode } | false | icon: 5.23.0 |
 | loadingIcon | ReactNode | \`<LoadingOutlined />\` | - |
 | onClick | (event: React.MouseEvent<HTMLElement, MouseEvent>) => void | - | - |
 | shape | \`default\` \\| \`circle\` \\| \`round\` | \`default\` | - |
 | size | \`large\` \\| \`medium\` \\| \`small\` | \`medium\` | - |
-| styles | Record<[SemanticDOM](#semantic-dom), CSSProperties> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties> | - | - |
+| styles | Record<[SemanticDOM](#semantic-dom), CSSProperties> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties> | - | 6.0.0 |
 | target | string | - | - |
 | type | \`primary\` \\| \`dashed\` \\| \`link\` \\| \`text\` \\| \`default\` | \`default\` | - |
 | variant | \`outlined\` \\| \`dashed\` \\| \`solid\` \\| \`filled\` \\| \`text\` \\| \`link\` | - | 5.21.0 |
@@ -726,7 +728,7 @@ Property         Type                                                           
 ---------------  -----------------------------------------------------------------------------------------------------------------------------  --------------------------------  -----------------------------------------------------------------------------------------------
 autoInsertSpace  boolean                                                                                                                        \`true\`                            5.17.0                                                                                         
 block            boolean                                                                                                                        false                             -                                                                                              
-classNames       Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>                -                                 -                                                                                              
+classNames       Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>                -                                 6.0.0                                                                                          
 color            \`default\` | \`primary\` | \`danger\` | [PresetColors](#presetcolors)                                                               \`primary\` when \`variant="solid"\`  \`default\`, \`primary\` and \`danger\`: 5.21.0, \`PresetColors\`: 5.23.0, \`solid\` default color: 6.4.0
 danger           boolean                                                                                                                        false                             -                                                                                              
 disabled         boolean                                                                                                                        false                             -                                                                                              
@@ -736,12 +738,12 @@ htmlType         \`submit\` | \`reset\` | \`button\`                            
 icon             ReactNode                                                                                                                      -                                 -                                                                                              
 iconPlacement    \`start\` | \`end\`                                                                                                                \`start\`                           -                                                                                              
 iconPosition     \`start\` | \`end\`                                                                                                                \`start\`                           5.17.0                                                                                         
-loading          boolean | { delay: number, icon: ReactNode }                                                                                   false                             5.23.0                                                                                         
+loading          boolean | { delay: number, icon: ReactNode }                                                                                   false                             icon: 5.23.0                                                                                   
 loadingIcon      ReactNode                                                                                                                      \`<LoadingOutlined />\`             -                                                                                              
 onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void                                                                     -                                 -                                                                                              
 shape            \`default\` | \`circle\` | \`round\`                                                                                                 \`default\`                         -                                                                                              
 size             \`large\` | \`medium\` | \`small\`                                                                                                   \`medium\`                          -                                                                                              
-styles           Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>  -                                 -                                                                                              
+styles           Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>  -                                 6.0.0                                                                                          
 target           string                                                                                                                         -                                 -                                                                                              
 type             \`primary\` | \`dashed\` | \`link\` | \`text\` | \`default\`                                                                             \`default\`                         -                                                                                              
 variant          \`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`                                                                   -                                 5.21.0                                                                                         
@@ -764,7 +766,7 @@ Property         Type                                                           
 ---------------  -----------------------------------------------------------------------------------------------------------------------------  --------------------------------  -----------------------------------------------------------------------------------------------
 autoInsertSpace  boolean                                                                                                                        \`true\`                            5.17.0                                                                                         
 block            boolean                                                                                                                        false                             -                                                                                              
-classNames       Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>                -                                 -                                                                                              
+classNames       Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>                -                                 6.0.0                                                                                          
 color            \`default\` | \`primary\` | \`danger\` | [PresetColors](#presetcolors)                                                               \`primary\` when \`variant="solid"\`  \`default\`, \`primary\` and \`danger\`: 5.21.0, \`PresetColors\`: 5.23.0, \`solid\` default color: 6.4.0
 danger           boolean                                                                                                                        false                             -                                                                                              
 disabled         boolean                                                                                                                        false                             -                                                                                              
@@ -774,12 +776,12 @@ htmlType         \`submit\` | \`reset\` | \`button\`                            
 icon             ReactNode                                                                                                                      -                                 -                                                                                              
 iconPlacement    \`start\` | \`end\`                                                                                                                \`start\`                           -                                                                                              
 iconPosition     \`start\` | \`end\`                                                                                                                \`start\`                           5.17.0                                                                                         
-loading          boolean | { delay: number, icon: ReactNode }                                                                                   false                             5.23.0                                                                                         
+loading          boolean | { delay: number, icon: ReactNode }                                                                                   false                             icon: 5.23.0                                                                                   
 loadingIcon      ReactNode                                                                                                                      \`<LoadingOutlined />\`             -                                                                                              
 onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void                                                                     -                                 -                                                                                              
 shape            \`default\` | \`circle\` | \`round\`                                                                                                 \`default\`                         -                                                                                              
 size             \`large\` | \`medium\` | \`small\`                                                                                                   \`medium\`                          -                                                                                              
-styles           Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>  -                                 -                                                                                              
+styles           Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>  -                                 6.0.0                                                                                          
 target           string                                                                                                                         -                                 -                                                                                              
 type             \`primary\` | \`dashed\` | \`link\` | \`text\` | \`default\`                                                                             \`default\`                         -                                                                                              
 variant          \`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`                                                                   -                                 5.21.0                                                                                         
@@ -812,7 +814,7 @@ Property         Type                                                           
 ---------------  -----------------------------------------------------------------------------------------------------------------------------  --------------------------------  -----------------------------------------------------------------------------------------------
 autoInsertSpace  boolean                                                                                                                        \`true\`                            5.17.0                                                                                         
 block            boolean                                                                                                                        false                             -                                                                                              
-classNames       Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>                -                                 -                                                                                              
+classNames       Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>                -                                 6.0.0                                                                                          
 color            \`default\` | \`primary\` | \`danger\` | [PresetColors](#presetcolors)                                                               \`primary\` when \`variant="solid"\`  \`default\`, \`primary\` and \`danger\`: 5.21.0, \`PresetColors\`: 5.23.0, \`solid\` default color: 6.4.0
 danger           boolean                                                                                                                        false                             -                                                                                              
 disabled         boolean                                                                                                                        false                             -                                                                                              
@@ -822,12 +824,12 @@ htmlType         \`submit\` | \`reset\` | \`button\`                            
 icon             ReactNode                                                                                                                      -                                 -                                                                                              
 iconPlacement    \`start\` | \`end\`                                                                                                                \`start\`                           -                                                                                              
 iconPosition     \`start\` | \`end\`                                                                                                                \`start\`                           5.17.0                                                                                         
-loading          boolean | { delay: number, icon: ReactNode }                                                                                   false                             5.23.0                                                                                         
+loading          boolean | { delay: number, icon: ReactNode }                                                                                   false                             icon: 5.23.0                                                                                   
 loadingIcon      ReactNode                                                                                                                      \`<LoadingOutlined />\`             -                                                                                              
 onClick          (event: React.MouseEvent<HTMLElement, MouseEvent>) => void                                                                     -                                 -                                                                                              
 shape            \`default\` | \`circle\` | \`round\`                                                                                                 \`default\`                         -                                                                                              
 size             \`large\` | \`medium\` | \`small\`                                                                                                   \`medium\`                          -                                                                                              
-styles           Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>  -                                 -                                                                                              
+styles           Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>  -                                 6.0.0                                                                                          
 target           string                                                                                                                         -                                 -                                                                                              
 type             \`primary\` | \`dashed\` | \`link\` | \`text\` | \`default\`                                                                             \`default\`                         -                                                                                              
 variant          \`outlined\` | \`dashed\` | \`solid\` | \`filled\` | \`text\` | \`link\`                                                                   -                                 5.21.0                                                                                         
