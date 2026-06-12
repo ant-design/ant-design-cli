@@ -7,3 +7,4 @@ data/*.json.gz
 settings.local.json
 .worktrees/
 .claude/
+.codex/
