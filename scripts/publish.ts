@@ -67,13 +67,13 @@ function main() {
 
   // Build and test BEFORE any git operations
   run('npm run build', { stdio: 'inherit' });
-  run('npm test', { stdio: 'inherit' });
+  run('npx vitest run --update', { stdio: 'inherit' });
 
   // Commit, tag and push only after successful build + test
   if (cliVersion !== oldVersion) {
     run('git config user.name "github-actions[bot]"');
     run('git config user.email "github-actions[bot]@users.noreply.github.com"');
-    run('git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md');
+    run('git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md src/__tests__/snapshots/');
     run(`git commit -m "data: sync antd metadata (${versionsStr})"`);
     run(`git tag "v${cliVersion}"`);
     run('git push origin main --tags');
