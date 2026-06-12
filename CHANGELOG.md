@@ -2,18 +2,35 @@
 
 ## [6.4.4](https://github.com/ant-design/ant-design-cli/compare/v6.4.3...v6.4.4) (2026-06-12)
 
-- Update antd metadata ([v6@6.4.4](https://github.com/ant-design/ant-design-cli/compare/v6.4.3...v6.4.4#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
-
-
-## Unreleased
-
 ### Features
 
-- Add `antd design.md` command and `antd_design_md` MCP tool: output the antd design-language document (`design.md`) — color/typography/spacing/radius values and design principles for the default light theme, conformant with [google-labs-code/design.md](https://github.com/google-labs-code/design.md), consumable by AI design tools (Figma Make, Stitch, etc.). Resolved by major version (via `--version`); a `design.md` is currently published only for antd v6 ([#57701](https://github.com/ant-design/ant-design/issues/57701))
+- New `antd design.md` command — outputs antd's design language specification (colors, typography, spacing, radius, and design principles) in [design.md](https://github.com/google-labs-code/design.md) format, ready for AI design tools like Figma Make and Stitch. Also available as `antd_design_md` MCP tool ([#147](https://github.com/ant-design/ant-design-cli/pull/147), [ant-design#57701](https://github.com/ant-design/ant-design/issues/57701))
+- New `antd upgrade` command — update the CLI to the latest version without leaving your terminal ([#123](https://github.com/ant-design/ant-design-cli/pull/123))
+- All commands now support `--format markdown` output and `--lang zh` for Chinese labels ([#146](https://github.com/ant-design/ant-design-cli/pull/146))
+- `antd info` now shows a note about common props (`className` / `style` / `rootClassName`) shared by all components ([#139](https://github.com/ant-design/ant-design-cli/pull/139))
 
 ### Bug Fixes
 
-- Fix the auto-detection fallback version being stuck at `5.24.0`: it is now resolved dynamically from the latest bundled major snapshot (currently v6), so when antd is not installed and no `--version` is given, commands like `antd design.md` and `antd list` default to the latest major instead of the previous one
+- Fix version auto-detection defaulting to v5 instead of v6 when antd is not installed locally ([#150](https://github.com/ant-design/ant-design-cli/pull/150))
+- `antd mcp` now shows a helpful message when run directly in a terminal instead of silently hanging ([#154](https://github.com/ant-design/ant-design-cli/pull/154))
+- Fix some components (e.g. those with only sub-component props) failing to display in `antd info` ([#152](https://github.com/ant-design/ant-design-cli/pull/152))
+- Fix missing or malformed prop metadata and token data for some components across v5/v6 ([#138](https://github.com/ant-design/ant-design-cli/pull/138), [#132](https://github.com/ant-design/ant-design-cli/pull/132), [#122](https://github.com/ant-design/ant-design-cli/pull/122), [#125](https://github.com/ant-design/ant-design-cli/pull/125))
+- Fix markdown table output with special characters being incorrectly escaped ([#136](https://github.com/ant-design/ant-design-cli/pull/136))
+- Fix invalid `--format` or `--lang` values being silently ignored instead of showing an error ([#141](https://github.com/ant-design/ant-design-cli/pull/141))
+- Fix version parsing, `antd upgrade` comparison, and `antd semantic --lang zh` crash ([#127](https://github.com/ant-design/ant-design-cli/pull/127))
+
+### Security
+
+- Fix potential shell injection in build scripts ([#137](https://github.com/ant-design/ant-design-cli/pull/137), [#134](https://github.com/ant-design/ant-design-cli/pull/134))
+- Upgrade `qs` to 6.15.2 to resolve CVE-2026-8723 ([#121](https://github.com/ant-design/ant-design-cli/pull/121))
+
+### Other Changes
+
+- Reduce npm package size by excluding skills `node_modules` ([#144](https://github.com/ant-design/ant-design-cli/pull/144))
+- Add Codex and OpenAI Agents support ([#151](https://github.com/ant-design/ant-design-cli/pull/151))
+- Improve sync workflow reliability ([#155](https://github.com/ant-design/ant-design-cli/pull/155), [#156](https://github.com/ant-design/ant-design-cli/pull/156), [#135](https://github.com/ant-design/ant-design-cli/pull/135), [#133](https://github.com/ant-design/ant-design-cli/pull/133))
+- Bump dependencies ([#149](https://github.com/ant-design/ant-design-cli/pull/149), [#148](https://github.com/ant-design/ant-design-cli/pull/148), [#130](https://github.com/ant-design/ant-design-cli/pull/130), [#119](https://github.com/ant-design/ant-design-cli/pull/119), [#117](https://github.com/ant-design/ant-design-cli/pull/117))
+- Update antd metadata to v6.4.4 ([diff](https://github.com/ant-design/ant-design-cli/compare/v6.4.3...v6.4.4#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
 
 ## [6.4.3](https://github.com/ant-design/ant-design-cli/compare/v6.4.2...v6.4.3) (2026-05-18)

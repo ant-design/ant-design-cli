@@ -2,18 +2,35 @@
 
 ## [6.4.4](https://github.com/ant-design/ant-design-cli/compare/v6.4.3...v6.4.4) (2026-06-12)
 
-- 同步 antd 元数据 ([v6@6.4.4](https://github.com/ant-design/ant-design-cli/compare/v6.4.3...v6.4.4#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
-
-
-## 未发布
-
 ### 新功能
 
-- 新增 `antd design.md` 命令和 `antd_design_md` MCP 工具：输出 antd 设计语言文档（`design.md`）—— 默认 Light 主题的颜色 / 字体 / 间距 / 圆角取值及设计原则，遵循 [google-labs-code/design.md](https://github.com/google-labs-code/design.md) 规范，可被 AI 设计工具（Figma Make、Stitch 等）直接消费。按大版本解析（通过 `--version`）；目前仅 antd v6 提供 `design.md` ([#57701](https://github.com/ant-design/ant-design/issues/57701))
+- 新增 `antd design.md` 命令，输出 antd 设计语言规范（颜色、字体、间距、圆角及设计原则），兼容 [design.md](https://github.com/google-labs-code/design.md) 格式，可被 Figma Make、Stitch 等 AI 设计工具直接使用，同时提供 `antd_design_md` MCP tool ([#147](https://github.com/ant-design/ant-design-cli/pull/147), [ant-design#57701](https://github.com/ant-design/ant-design/issues/57701))
+- 新增 `antd upgrade` 命令，在终端内一键升级 CLI 到最新版本 ([#123](https://github.com/ant-design/ant-design-cli/pull/123))
+- 所有命令新增 `--format markdown` 输出格式和 `--lang zh` 中文显示支持 ([#146](https://github.com/ant-design/ant-design-cli/pull/146))
+- `antd info` 输出中新增所有组件通用属性（`className` / `style` / `rootClassName`）的说明 ([#139](https://github.com/ant-design/ant-design-cli/pull/139))
 
 ### Bug 修复
 
-- 修复自动探测的兜底版本一直停留在 `5.24.0` 的问题:现在改为从内置的最新大版本快照(当前为 v6)动态解析。在未安装 antd 且未指定 `--version` 时,`antd design.md`、`antd list` 等命令将默认使用最新大版本,而不再回退到上一个大版本
+- 修复未安装 antd 时版本自动检测错误回退到 v5 而非最新 v6 的问题 ([#150](https://github.com/ant-design/ant-design-cli/pull/150))
+- `antd mcp` 在终端中直接运行时现在会显示友好提示，不再静默挂起 ([#154](https://github.com/ant-design/ant-design-cli/pull/154))
+- 修复部分组件（仅有子组件属性的组件）在 `antd info` 中无法正常显示的问题 ([#152](https://github.com/ant-design/ant-design-cli/pull/152))
+- 修复 v5/v6 中部分组件的属性元数据和 Token 数据缺失或格式错误的问题 ([#138](https://github.com/ant-design/ant-design-cli/pull/138), [#132](https://github.com/ant-design/ant-design-cli/pull/132), [#122](https://github.com/ant-design/ant-design-cli/pull/122), [#125](https://github.com/ant-design/ant-design-cli/pull/125))
+- 修复 Markdown 表格输出中特殊字符转义不正确的问题 ([#136](https://github.com/ant-design/ant-design-cli/pull/136))
+- 修复传入无效的 `--format` 或 `--lang` 值时被静默忽略而未报错的问题 ([#141](https://github.com/ant-design/ant-design-cli/pull/141))
+- 修复版本解析、`antd upgrade` 版本比较和 `antd semantic --lang zh` 崩溃等问题 ([#127](https://github.com/ant-design/ant-design-cli/pull/127))
+
+### 安全
+
+- 修复构建脚本中潜在的命令注入风险 ([#137](https://github.com/ant-design/ant-design-cli/pull/137), [#134](https://github.com/ant-design/ant-design-cli/pull/134))
+- 升级 `qs` 至 6.15.2，修复 CVE-2026-8723 安全漏洞 ([#121](https://github.com/ant-design/ant-design-cli/pull/121))
+
+### 其他变更
+
+- 排除 skills 的 node_modules，减小包体积 ([#144](https://github.com/ant-design/ant-design-cli/pull/144))
+- 新增 Codex 及 OpenAI Agents 支持 ([#151](https://github.com/ant-design/ant-design-cli/pull/151))
+- 提升数据同步流程的稳定性 ([#155](https://github.com/ant-design/ant-design-cli/pull/155), [#156](https://github.com/ant-design/ant-design-cli/pull/156), [#135](https://github.com/ant-design/ant-design-cli/pull/135), [#133](https://github.com/ant-design/ant-design-cli/pull/133))
+- 升级依赖 ([#149](https://github.com/ant-design/ant-design-cli/pull/149), [#148](https://github.com/ant-design/ant-design-cli/pull/148), [#130](https://github.com/ant-design/ant-design-cli/pull/130), [#119](https://github.com/ant-design/ant-design-cli/pull/119), [#117](https://github.com/ant-design/ant-design-cli/pull/117))
+- 同步 antd 元数据至 v6.4.4 ([diff](https://github.com/ant-design/ant-design-cli/compare/v6.4.3...v6.4.4#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
 
 ## [6.4.3](https://github.com/ant-design/ant-design-cli/compare/v6.4.2...v6.4.3) (2026-05-18)
