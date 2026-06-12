@@ -42,7 +42,7 @@ npx skills add ant-design/ant-design-cli    # install as an agent skill
 - 🌍 **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
 - 🔮 **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
 - 🧩 **17 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
-- 🔌 **MCP server** — `antd mcp` starts a stdio server for native IDE integration (Claude Desktop, Cursor).
+- 🔌 **MCP server** — `antd mcp` starts a stdio server for native IDE integration (Claude Code, Cursor, VS Code, etc.).
 
 <br>
 
@@ -83,6 +83,19 @@ Works with [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [
 ### MCP Server
 
 For IDEs that support [Model Context Protocol](https://modelcontextprotocol.io), the CLI can run as an MCP server:
+
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "npx",
+      "args": ["-y", "@ant-design/cli", "mcp"]
+    }
+  }
+}
+```
+
+Or if you have the CLI installed globally (`npm i -g @ant-design/cli`):
 
 ```json
 {
@@ -414,21 +427,21 @@ antd bug-cli --title "..." --submit
 
 ### `antd mcp`
 
-Start an MCP (Model Context Protocol) stdio server for IDE agent integration. Exposes 8 tools and 2 prompts for native IDE integration (Claude Desktop, Cursor, etc.).
+Start an MCP (Model Context Protocol) stdio server for IDE agent integration. Exposes 8 tools and 2 prompts for native IDE integration (Claude Code, Cursor, VS Code, Codex, etc.).
 
 ```bash
 antd mcp                                # start with auto-detected version
 antd mcp --version 5.20.0 --lang zh     # pin version and language
 ```
 
-IDE configuration (`claude_desktop_config.json`):
+Configuration:
 
 ```json
 {
   "mcpServers": {
     "antd": {
-      "command": "antd",
-      "args": ["mcp"]
+      "command": "npx",
+      "args": ["-y", "@ant-design/cli", "mcp"]
     }
   }
 }

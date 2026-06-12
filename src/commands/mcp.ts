@@ -17,8 +17,35 @@ declare const __CLI_VERSION__: string;
 export function registerMcpCommand(program: Command): void {
   program
     .command('mcp')
-    .description('Start MCP (Model Context Protocol) server for AI assistant integration')
+    .description(
+      'Start MCP (Model Context Protocol) server for AI assistant integration.\n' +
+      'Not meant to be run directly. Configure your AI tool with:\n' +
+      '  { "mcpServers": { "antd": { "command": "npx", "args": ["-y", "@ant-design/cli", "mcp"] } } }',
+    )
     .action(/* v8 ignore start */ async () => {
+      if (process.stdin.isTTY) {
+        console.error('Ant Design MCP Server');
+        console.error('');
+        console.error('This command starts an MCP (Model Context Protocol) server that communicates via stdio.');
+        console.error('It is not meant to be run directly in a terminal.');
+        console.error('');
+        console.error('To use it, configure your AI tool with:');
+        console.error('');
+        console.error('  {');
+        console.error('    "mcpServers": {');
+        console.error('      "antd": {');
+        console.error('        "command": "npx",');
+        console.error('        "args": ["-y", "@ant-design/cli", "mcp"]');
+        console.error('      }');
+        console.error('    }');
+        console.error('  }');
+        console.error('');
+        console.error('Supported tools: Claude Code, Cursor, VS Code, Codex, etc.');
+        console.error('');
+        console.error('Starting MCP server on stdio...');
+        console.error('');
+      }
+
       const opts = program.opts<GlobalOptions>();
       const versionInfo = detectVersion(opts.version);
 
