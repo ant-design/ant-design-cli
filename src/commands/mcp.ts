@@ -40,7 +40,7 @@ export function registerMcpCommand(program: Command): void {
         console.error('    }');
         console.error('  }');
         console.error('');
-        console.error('Supported tools: Claude Code, Cursor, VS Code, Windsurf, Codex, etc.');
+        console.error('Supported tools: Claude Code, Cursor, VS Code, Codex, etc.');
         console.error('');
         console.error('Starting MCP server on stdio...');
         console.error('');

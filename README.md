@@ -427,7 +427,7 @@ antd bug-cli --title "..." --submit
 
 ### `antd mcp`
 
-Start an MCP (Model Context Protocol) stdio server for IDE agent integration. Exposes 8 tools and 2 prompts for native IDE integration (Claude Code, Cursor, VS Code, Windsurf, Codex, etc.).
+Start an MCP (Model Context Protocol) stdio server for IDE agent integration. Exposes 8 tools and 2 prompts for native IDE integration (Claude Code, Cursor, VS Code, Codex, etc.).
 
 ```bash
 antd mcp                                # start with auto-detected version
