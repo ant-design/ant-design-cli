@@ -478,19 +478,19 @@ antd migrate 4 5                    # v4 → v5 migration checklist
 antd migrate 5 6                    # v5 → v6 migration checklist
 antd migrate v4 v5                  # v prefix is accepted and normalized
 antd migrate 4 5 --component Select # Select-specific migration
-antd migrate 4 5 --apply ./src      # auto-fix what can be auto-fixed
+antd migrate 4 5 --apply ./src      # scan ./src and generate targeted migration prompts
 antd migrate --format json
 ```
 
 **Available migration paths:** v3→v4, v4→v5, v5→v6. Multi-version migrations (e.g., v3→v6) are not supported directly — migrate step by step.
 
-Safety model for `--apply`:
-- Always runs in **dry-run mode** first, printing changes before applying
-- Requires explicit `--apply --confirm` to actually write files
-- Creates a git stash backup before writing (`antd-migrate-backup-<timestamp>`)
-- Reports every file changed with before/after diff
-- Delegates to existing `@ant-design/codemod-v5` / `@ant-design/codemod-v6` packages for actual transforms
-- If no codemod package is available for the target version, falls back to guide-only mode
+Behavior of `--apply <dir>`:
+- Scans the target directory for antd component imports (reuses the `usage` scanning logic)
+- Filters migration steps to only those relevant to the project's actual component usage
+- For steps with `searchPattern`, matches against file contents to identify affected files
+- Outputs a targeted, agent-consumable migration prompt with `**Affected files:**` listed per step
+- `Global` steps (design token migration, etc.) are always included regardless of component usage
+- Components not imported in the project are excluded from the output
 
 JSON output (guide mode):
 ```json
