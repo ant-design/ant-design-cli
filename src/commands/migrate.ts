@@ -1,6 +1,5 @@
 import type { Command } from 'commander';
 import type { GlobalOptions, OutputFormat } from '../types.js';
-import { readFileSync } from 'node:fs';
 import { relative } from 'node:path';
 import { localize } from '../types.js';
 import { output } from '../output/formatter.js';
@@ -128,6 +127,8 @@ function formatJson(from: string, to: string, steps: MigrationStep[]): void {
   }, 'json');
 }
 
+const GLOBAL_COMPONENT = 'Global';
+
 interface MigrationScanResult {
   fileCount: number;
   componentFiles: Map<string, string[]>;
@@ -138,16 +139,6 @@ function scanForMigration(dir: string, steps: MigrationStep[]): MigrationScanRes
   const files = collectFiles(dir);
   const componentFiles = new Map<string, string[]>();
   const patternMatches = new Map<string, string[]>();
-  const antdFiles = new Set<string>();
-
-  for (const file of files) {
-    const fileUsage = scanFile(file);
-    if (fileUsage.size > 0) antdFiles.add(file);
-    for (const [name] of fileUsage) {
-      if (!componentFiles.has(name)) componentFiles.set(name, []);
-      componentFiles.get(name)!.push(file);
-    }
-  }
 
   const patternsToSearch = new Map<string, RegExp>();
   for (const step of steps) {
@@ -158,13 +149,14 @@ function scanForMigration(dir: string, steps: MigrationStep[]): MigrationScanRes
     }
   }
 
-  if (patternsToSearch.size > 0) {
-    for (const file of antdFiles) {
-      let content: string;
-      try {
-        content = readFileSync(file, 'utf-8');
-      } catch { continue; }
+  for (const file of files) {
+    const { usage, content } = scanFile(file, { returnContent: patternsToSearch.size > 0 });
+    for (const [name] of usage) {
+      if (!componentFiles.has(name)) componentFiles.set(name, []);
+      componentFiles.get(name)!.push(file);
+    }
 
+    if (content && usage.size > 0) {
       for (const [pattern, regex] of patternsToSearch) {
         if (regex.test(content)) {
           if (!patternMatches.has(pattern)) patternMatches.set(pattern, []);
@@ -177,12 +169,26 @@ function scanForMigration(dir: string, steps: MigrationStep[]): MigrationScanRes
   return { fileCount: files.length, componentFiles, patternMatches };
 }
 
+function getAffectedFiles(
+  step: MigrationStep,
+  scan: MigrationScanResult,
+  relativePath: (f: string) => string,
+): string[] {
+  const patternFiles = step.searchPattern && scan.patternMatches.get(step.searchPattern);
+  if (patternFiles && patternFiles.length > 0) return patternFiles.map(relativePath);
+  if (step.component !== GLOBAL_COMPONENT) {
+    const compFiles = scan.componentFiles.get(step.component);
+    if (compFiles && compFiles.length > 0) return compFiles.map(relativePath);
+  }
+  return [];
+}
+
 function formatApplyPrompt(from: string, to: string, steps: MigrationStep[], dir: string, format: OutputFormat): void {
   const scan = scanForMigration(dir, steps);
   const usedComponents = new Set(scan.componentFiles.keys());
 
   const relevantSteps = steps.filter((s) =>
-    s.component === 'Global' || usedComponents.has(s.component)
+    s.component === GLOBAL_COMPONENT || usedComponents.has(s.component)
   );
 
   const fixableSteps = relevantSteps.filter((s) => s.autoFixable && s.searchPattern);
@@ -210,7 +216,7 @@ function formatApplyPrompt(from: string, to: string, steps: MigrationStep[], dir
         before: s.before,
         after: s.after,
         migrationGuide: s.migrationGuide,
-        affectedFiles: ((s.searchPattern && scan.patternMatches.get(s.searchPattern)) || []).map(relativePath),
+        affectedFiles: getAffectedFiles(s, scan, relativePath),
       })),
       manualSteps: manualSteps.map((s) => ({
         component: s.component,
@@ -219,7 +225,7 @@ function formatApplyPrompt(from: string, to: string, steps: MigrationStep[], dir
         migrationGuide: s.migrationGuide,
         before: s.before,
         after: s.after,
-        affectedFiles: ((s.searchPattern && scan.patternMatches.get(s.searchPattern)) || []).map(relativePath),
+        affectedFiles: getAffectedFiles(s, scan, relativePath),
       })),
       summary: {
         totalAutoFix: fixableSteps.length,
@@ -234,7 +240,6 @@ function formatApplyPrompt(from: string, to: string, steps: MigrationStep[], dir
   lines.push(`# Target directory: ${dir}`);
   lines.push('');
 
-  // Scan results summary
   lines.push('## Scan Results');
   lines.push('');
   lines.push(`Scanned ${scan.fileCount} files in \`${dir}\``);
@@ -263,25 +268,7 @@ function formatApplyPrompt(from: string, to: string, steps: MigrationStep[], dir
       const step = fixableSteps[i];
       lines.push(`### ${i + 1}. ${step.component}: ${step.description}`);
       lines.push('');
-
-      const affected = step.searchPattern ? scan.patternMatches.get(step.searchPattern) : undefined;
-      if (affected && affected.length > 0) {
-        lines.push('**Affected files:**');
-        for (const file of affected) {
-          lines.push(`- ${relativePath(file)}`);
-        }
-        lines.push('');
-      } else if (step.component !== 'Global') {
-        const compFiles = scan.componentFiles.get(step.component);
-        if (compFiles && compFiles.length > 0) {
-          lines.push('**Files using this component:**');
-          for (const file of compFiles) {
-            lines.push(`- ${relativePath(file)}`);
-          }
-          lines.push('');
-        }
-      }
-
+      pushAffectedFileLines(lines, getAffectedFiles(step, scan, relativePath), step);
       if (step.searchPattern) {
         lines.push(`**Search regex:** \`${step.searchPattern}\``);
         lines.push('');
@@ -291,14 +278,8 @@ function formatApplyPrompt(from: string, to: string, steps: MigrationStep[], dir
         lines.push('');
       }
       if (step.before && step.after) {
-        lines.push('**Before:**');
-        lines.push('```tsx');
-        lines.push(step.before);
-        lines.push('```');
-        lines.push('**After:**');
-        lines.push('```tsx');
-        lines.push(step.after);
-        lines.push('```');
+        lines.push('**Before:**', '```tsx', step.before, '```');
+        lines.push('**After:**', '```tsx', step.after, '```');
         lines.push('');
       }
     }
@@ -311,38 +292,14 @@ function formatApplyPrompt(from: string, to: string, steps: MigrationStep[], dir
       const step = manualSteps[i];
       lines.push(`### ${i + 1}. ${step.component}: ${step.description}`);
       lines.push('');
-
-      const affected = step.searchPattern ? scan.patternMatches.get(step.searchPattern) : undefined;
-      if (affected && affected.length > 0) {
-        lines.push('**Affected files:**');
-        for (const file of affected) {
-          lines.push(`- ${relativePath(file)}`);
-        }
-        lines.push('');
-      } else if (step.component !== 'Global') {
-        const compFiles = scan.componentFiles.get(step.component);
-        if (compFiles && compFiles.length > 0) {
-          lines.push('**Files using this component:**');
-          for (const file of compFiles) {
-            lines.push(`- ${relativePath(file)}`);
-          }
-          lines.push('');
-        }
-      }
-
+      pushAffectedFileLines(lines, getAffectedFiles(step, scan, relativePath), step);
       if (step.migrationGuide) {
         lines.push(step.migrationGuide);
         lines.push('');
       }
       if (step.before && step.after) {
-        lines.push('**Before:**');
-        lines.push('```tsx');
-        lines.push(step.before);
-        lines.push('```');
-        lines.push('**After:**');
-        lines.push('```tsx');
-        lines.push(step.after);
-        lines.push('```');
+        lines.push('**Before:**', '```tsx', step.before, '```');
+        lines.push('**After:**', '```tsx', step.after, '```');
         lines.push('');
       }
       if (step.guide) {
@@ -353,6 +310,16 @@ function formatApplyPrompt(from: string, to: string, steps: MigrationStep[], dir
   }
 
   console.log(lines.join('\n'));
+}
+
+function pushAffectedFileLines(lines: string[], files: string[], step: MigrationStep): void {
+  if (files.length === 0) return;
+  const label = step.searchPattern ? '**Affected files:**' : '**Files using this component:**';
+  lines.push(label);
+  for (const file of files) {
+    lines.push(`- ${file}`);
+  }
+  lines.push('');
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

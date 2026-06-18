@@ -37,7 +37,7 @@ export function registerUsageCommand(program: Command): void {
       const aggregated = new Map<string, { imports: number; files: Set<string>; subComponents: Map<string, number> }>();
 
       for (const file of files) {
-        const fileUsage = scanFile(file);
+        const { usage: fileUsage } = scanFile(file);
         for (const [name, data] of fileUsage) {
           if (!aggregated.has(name)) {
             aggregated.set(name, { imports: 0, files: new Set(), subComponents: new Map() });

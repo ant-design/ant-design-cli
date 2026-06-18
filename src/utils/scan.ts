@@ -45,23 +45,28 @@ export function getJSXElementName(name: any): string {
   return '';
 }
 
+export interface ScanFileResult {
+  usage: Map<string, { count: number; subComponents: Map<string, number> }>;
+  content: string | undefined;
+}
+
 /** Scan a single file for antd component imports and sub-component JSX usage. */
-export function scanFile(filePath: string): Map<string, { count: number; subComponents: Map<string, number> }> {
-  const result = new Map<string, { count: number; subComponents: Map<string, number> }>();
+export function scanFile(filePath: string, opts?: { returnContent?: boolean }): ScanFileResult {
+  const usage = new Map<string, { count: number; subComponents: Map<string, number> }>();
 
   let content: string;
   try {
     content = readFileSync(filePath, 'utf-8');
   /* v8 ignore start -- fs read error */
   } catch {
-    return result;
+    return { usage, content: undefined };
   }
   /* v8 ignore stop */
 
-  if (!content.includes('antd')) return result;
+  if (!content.includes('antd')) return { usage, content: opts?.returnContent ? content : undefined };
 
   const parsed = parseSync(filePath, content);
-  if (parsed.errors.length > 0) return result;
+  if (parsed.errors.length > 0) return { usage, content: opts?.returnContent ? content : undefined };
 
   const importedNames = new Set<string>();
 
@@ -77,10 +82,10 @@ export function scanFile(filePath: string): Map<string, { count: number; subComp
           const name = spec.imported?.name || spec.local?.name;
           if (name) {
             importedNames.add(name);
-            if (!result.has(name)) {
-              result.set(name, { count: 0, subComponents: new Map() });
+            if (!usage.has(name)) {
+              usage.set(name, { count: 0, subComponents: new Map() });
             }
-            result.get(name)!.count++;
+            usage.get(name)!.count++;
           }
         }
       }
@@ -91,7 +96,7 @@ export function scanFile(filePath: string): Map<string, { count: number; subComp
       if (!fullName.includes('.')) return;
       const [parent] = fullName.split('.');
       if (importedNames.has(parent)) {
-        const entry = result.get(parent);
+        const entry = usage.get(parent);
         if (entry) {
           entry.subComponents.set(fullName, (entry.subComponents.get(fullName) || 0) + 1);
         }
@@ -100,6 +105,6 @@ export function scanFile(filePath: string): Map<string, { count: number; subComp
   });
   visitor.visit(parsed.program);
 
-  return result;
+  return { usage, content: opts?.returnContent ? content : undefined };
 }
 
