@@ -1,5 +1,4 @@
 import { statSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import fg from 'fast-glob';
 import { parseSync, Visitor } from 'oxc-parser';
 

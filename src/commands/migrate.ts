@@ -138,9 +138,11 @@ function scanForMigration(dir: string, steps: MigrationStep[]): MigrationScanRes
   const files = collectFiles(dir);
   const componentFiles = new Map<string, string[]>();
   const patternMatches = new Map<string, string[]>();
+  const antdFiles = new Set<string>();
 
   for (const file of files) {
     const fileUsage = scanFile(file);
+    if (fileUsage.size > 0) antdFiles.add(file);
     for (const [name] of fileUsage) {
       if (!componentFiles.has(name)) componentFiles.set(name, []);
       componentFiles.get(name)!.push(file);
@@ -157,7 +159,7 @@ function scanForMigration(dir: string, steps: MigrationStep[]): MigrationScanRes
   }
 
   if (patternsToSearch.size > 0) {
-    for (const file of files) {
+    for (const file of antdFiles) {
       let content: string;
       try {
         content = readFileSync(file, 'utf-8');
@@ -208,7 +210,7 @@ function formatApplyPrompt(from: string, to: string, steps: MigrationStep[], dir
         before: s.before,
         after: s.after,
         migrationGuide: s.migrationGuide,
-        affectedFiles: (s.searchPattern && scan.patternMatches.get(s.searchPattern) || []).map(relativePath),
+        affectedFiles: ((s.searchPattern && scan.patternMatches.get(s.searchPattern)) || []).map(relativePath),
       })),
       manualSteps: manualSteps.map((s) => ({
         component: s.component,
@@ -217,7 +219,7 @@ function formatApplyPrompt(from: string, to: string, steps: MigrationStep[], dir
         migrationGuide: s.migrationGuide,
         before: s.before,
         after: s.after,
-        affectedFiles: (s.searchPattern && scan.patternMatches.get(s.searchPattern) || []).map(relativePath),
+        affectedFiles: ((s.searchPattern && scan.patternMatches.get(s.searchPattern)) || []).map(relativePath),
       })),
       summary: {
         totalAutoFix: fixableSteps.length,
@@ -371,7 +373,7 @@ export function registerMigrateCommand(program: Command): void {
   program
     .command('migrate <from> <to>')
     .description('Version migration guide with optional auto-fix')
-    .option('--component <name>', 'Component-specific migration guide')
+    .option('--component <name>', 'Component-specific migration guide (combinable with --apply)')
     .option('--apply <dir>', 'Scan directory and generate targeted migration prompts with affected files')
     .option('--confirm', 'Confirm auto-fix (required with --apply)')
     .action((rawFrom: string, rawTo: string, cmdOpts: { component?: string; apply?: string; confirm?: boolean }) => {
