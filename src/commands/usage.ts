@@ -1,10 +1,8 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { localize } from '../types.js';
-import { readFileSync } from 'node:fs';
-import { parseSync, Visitor } from 'oxc-parser';
 import { formatTable, output } from '../output/formatter.js';
-import { collectFiles, getJSXElementName } from '../utils/scan.js';
+import { collectFiles, scanFile } from '../utils/scan.js';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 
@@ -13,64 +11,6 @@ interface ComponentUsage {
   imports: number;
   files: string[];
   subComponents?: Record<string, number>;
-}
-
-function scanFile(filePath: string): Map<string, { count: number; subComponents: Map<string, number> }> {
-  const result = new Map<string, { count: number; subComponents: Map<string, number> }>();
-
-  let content: string;
-  try {
-    content = readFileSync(filePath, 'utf-8');
-  /* v8 ignore start -- fs read error */
-  } catch {
-    return result;
-  }
-  /* v8 ignore stop */
-
-  if (!content.includes('antd')) return result;
-
-  const parsed = parseSync(filePath, content);
-  if (parsed.errors.length > 0) return result;
-
-  const importedNames = new Set<string>();
-
-  const visitor = new Visitor({
-    ImportDeclaration(node: any) {
-      const source = node.source.value;
-      if (source !== 'antd' && !source.startsWith('antd/')) return;
-      if (node.importKind === 'type') return;
-
-      for (const spec of node.specifiers) {
-        if (spec.type === 'ImportSpecifier') {
-          if (spec.importKind === 'type') continue;
-          const name = spec.imported?.name || spec.local?.name;
-          if (name) {
-            importedNames.add(name);
-            if (!result.has(name)) {
-              result.set(name, { count: 0, subComponents: new Map() });
-            }
-            result.get(name)!.count++;
-          }
-        }
-      }
-    },
-
-    // Detect sub-component JSX usage: <Form.Item>, <Table.Column>, etc.
-    JSXOpeningElement(node: any) {
-      const fullName = getJSXElementName(node.name);
-      if (!fullName.includes('.')) return;
-      const [parent] = fullName.split('.');
-      if (importedNames.has(parent)) {
-        const entry = result.get(parent);
-        if (entry) {
-          entry.subComponents.set(fullName, (entry.subComponents.get(fullName) || 0) + 1);
-        }
-      }
-    },
-  });
-  visitor.visit(parsed.program);
-
-  return result;
 }
 
 export function registerUsageCommand(program: Command): void {
@@ -97,7 +37,7 @@ export function registerUsageCommand(program: Command): void {
       const aggregated = new Map<string, { imports: number; files: Set<string>; subComponents: Map<string, number> }>();
 
       for (const file of files) {
-        const fileUsage = scanFile(file);
+        const { usage: fileUsage } = scanFile(file);
         for (const [name, data] of fileUsage) {
           if (!aggregated.has(name)) {
             aggregated.set(name, { imports: 0, files: new Set(), subComponents: new Map() });

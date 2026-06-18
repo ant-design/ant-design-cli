@@ -1,5 +1,30 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
 import { run, runCLI } from '../helper.js';
+
+const FIXTURE_DIR = join(import.meta.dirname, '..', '__fixtures_migrate_tmp__');
+
+beforeAll(() => {
+  mkdirSync(FIXTURE_DIR, { recursive: true });
+  writeFileSync(join(FIXTURE_DIR, 'App.tsx'), `
+import { Button, Select, Form } from 'antd';
+const App = () => (
+  <Form>
+    <Select dropdownClassName="old" />
+    <Button type="primary">OK</Button>
+  </Form>
+);
+`);
+  writeFileSync(join(FIXTURE_DIR, 'Other.tsx'), `
+import { Input } from 'antd';
+const Other = () => <Input />;
+`);
+});
+
+afterAll(() => {
+  rmSync(FIXTURE_DIR, { recursive: true, force: true });
+});
 
 describe('migrate', () => {
   it('should show migration guide', async () => {
@@ -87,5 +112,57 @@ describe('migrate', () => {
     expect(result.exitCode).toBe(1);
     const err = JSON.parse(result.stderr);
     expect(err.code).toBe('COMPONENT_NOT_FOUND');
+  });
+
+  describe('--apply with antd components', () => {
+    it('should filter steps to only used components', async () => {
+      const out = await run('migrate', '5', '6', '--apply', FIXTURE_DIR);
+      expect(out).toContain('Detected antd components:');
+      expect(out).toContain('Button');
+      expect(out).toContain('Select');
+      expect(out).toContain('Form');
+      // DatePicker is not imported, should not appear as a step
+      expect(out).not.toContain('DatePicker:');
+      expect(out).not.toContain('Drawer:');
+    });
+
+    it('should list affected files for pattern-matched steps', async () => {
+      const out = await run('migrate', '5', '6', '--apply', FIXTURE_DIR);
+      // Button type="primary" pattern should match App.tsx
+      expect(out).toContain('App.tsx');
+      expect(out).toContain('Affected files:');
+    });
+
+    it('should list component files as fallback when no pattern match', async () => {
+      const out = await run('migrate', '5', '6', '--apply', FIXTURE_DIR);
+      expect(out).toContain('Files using this component:');
+    });
+
+    it('should include scan results in JSON format', async () => {
+      const out = await run('migrate', '5', '6', '--apply', FIXTURE_DIR, '--format', 'json');
+      const data = JSON.parse(out);
+      expect(data.scan.fileCount).toBe(2);
+      expect(data.scan.components).toHaveProperty('Button');
+      expect(data.scan.components).toHaveProperty('Select');
+      expect(data.scan.components).not.toHaveProperty('DatePicker');
+    });
+
+    it('should include affectedFiles in JSON steps', async () => {
+      const out = await run('migrate', '5', '6', '--apply', FIXTURE_DIR, '--format', 'json');
+      const data = JSON.parse(out);
+      const buttonStep = data.autoFixSteps.find((s: any) => s.component === 'Button');
+      expect(buttonStep).toBeDefined();
+      expect(buttonStep.affectedFiles.length).toBeGreaterThan(0);
+      expect(buttonStep.affectedFiles.some((f: string) => f.includes('App.tsx'))).toBe(true);
+    });
+
+    it('should work with --component filter combined with --apply', async () => {
+      const out = await run('migrate', '5', '6', '--apply', FIXTURE_DIR, '--component', 'Button');
+      expect(out).toContain('Button');
+      expect(out).not.toContain('Select:');
+      expect(out).not.toContain('Form:');
+      // Global steps should still be excluded when --component is used
+      expect(out).not.toContain('Global:');
+    });
   });
 });
