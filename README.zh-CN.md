@@ -6,8 +6,8 @@
 
 <h1>Ant Design CLI</h1>
 
-**命令行上的 Ant Design。**<br>
-查询组件知识、分析项目用量、指导版本迁移 — 完全离线。
+**面向 Code Agent 的离线 Ant Design 知识库。**<br>
+在终端中查询版本化 API、分析项目用法，并生成迁移指导。
 
 <br>
 
@@ -24,9 +24,9 @@
 
 <br>
 
-## 🤔 为什么
+## 为什么
 
-Code Agent（Claude Code、Codex、Gemini CLI）在拥有即时 API 数据访问能力时，能写出更好的 antd 代码。这个 CLI 正是为此而生 — **antd v3 / v4 / v5 / v6 的每个 Prop、Token、Demo 和 Changelog 条目**，本地打包，毫秒级查询。
+Code Agent 在改动代码前能查到精确的 Ant Design API 时，生成结果会更稳。`@ant-design/cli` 将版本化组件元数据、Demo、Design Token、Changelog、项目分析能力和 MCP 工具打包成一个本地 CLI。
 
 ```bash
 npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
@@ -34,19 +34,20 @@ npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
 
 <br>
 
-## ✨ 亮点
+## 能力
 
-- 📦 **完全离线** — 所有元数据随包安装，无需网络请求，无延迟，无 API Key。
-- 🎯 **版本精确** — 跨 v3/v4/v5/v6 的 55+ 小版本快照。查询 `antd@5.3.0` 的精确 API，而非仅 "最新 v5"。
-- 🤖 **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
-- 🌍 **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
-- 🔮 **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
-- 🧩 **17 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
-- 🔌 **MCP 服务** — `antd mcp` 启动 stdio 服务，原生集成 Claude Desktop、Cursor 等 IDE。
+| 领域 | 能力 |
+|---|---|
+| 离线元数据 | Props、文档、Demo、Token、语义化 DOM、Changelog 和迁移说明随包安装 |
+| 版本快照 | 覆盖 antd v3/v4/v5/v6 的 55+ 小版本快照，可由 `--version` 或本地项目自动解析 |
+| Agent 输出 | 所有命令支持 JSON，错误结构化，带修复建议，并保持 stdout/stderr 分离 |
+| 项目分析 | 用量扫描、antd 专项 lint、环境信息收集和项目健康诊断 |
+| 原生集成 | stdio MCP 服务，提供 8 个只读工具和 2 个提示词，可接入 Claude Code、Cursor、VS Code、Codex 等 Agent |
+| 双语文档 | 组件名、描述和文档支持中英文，通过 `--lang en\|zh` 切换 |
 
 <br>
 
-## 📦 安装
+## 安装
 
 ```bash
 npm install -g @ant-design/cli
@@ -64,23 +65,28 @@ bun add -g @ant-design/cli
 
 <br>
 
-## 🤖 Agent 集成
+## Agent 集成
 
-CLI 内置 [Skill 文件](./skills/antd/SKILL.md)，指导 Code Agent 在正确的时机调用正确的命令：
+安装内置 [Skill 文件](./skills/antd/SKILL.md)，让兼容的 Agent 在修改代码前先查询 Ant Design 元数据：
 
 ```bash
 npx skills add ant-design/ant-design-cli
 ```
 
-或者直接告诉你的 Code Agent：
+支持 [Model Context Protocol](https://modelcontextprotocol.io) 的 IDE 可将 CLI 作为本地 MCP 服务使用：
 
-> 安装 `@ant-design/cli` 和 `ant-design/ant-design-cli` 的 antd skill
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "npx",
+      "args": ["-y", "@ant-design/cli", "mcp"]
+    }
+  }
+}
+```
 
-Agent 会自动完成 `npm install`、`npx skills add`，并开始使用 CLI。
-
-### MCP 服务
-
-支持 [Model Context Protocol](https://modelcontextprotocol.io) 的 IDE 可直接将 CLI 作为 MCP 服务使用：
+如果已经全局安装 CLI，也可以直接使用 `antd`：
 
 ```json
 {
@@ -95,15 +101,16 @@ Agent 会自动完成 `npm install`、`npx skills add`，并开始使用 CLI。
 
 如需固定 antd 版本，在 `args` 数组中添加 `"--version", "5.20.0"`。
 
-提供 8 个工具（`antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_design_md`、`antd_semantic`、`antd_changelog`）和 2 个提示词（`antd-expert`、`antd-page-generator`）。
+MCP 服务提供 8 个只读工具（`antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_design_md`、`antd_semantic`、`antd_changelog`）和 2 个提示词（`antd-expert`、`antd-page-generator`）。
 
-支持 [Claude Code](https://claude.ai/code)、[Cursor](https://cursor.sh)、[Codex](https://openai.com/codex)、[Gemini CLI](https://github.com/google-gemini/gemini-cli) 等所有兼容 [skills](https://github.com/nicepkg/agent-skills) 协议的 Agent。
+支持 [Claude Code](https://claude.ai/code)、[Cursor](https://cursor.sh)、[Codex](https://openai.com/codex)、[Gemini CLI](https://github.com/google-gemini/gemini-cli) 等兼容 [skills](https://github.com/nicepkg/agent-skills) 协议或 MCP 的 Agent。
 
 <br>
 
-## 🚀 快速开始
+## 快速开始
 
 ```bash
+# 知识查询
 antd list                           # 所有组件及版本信息
 antd info Button                    # 组件 Props、类型、默认值
 antd doc Button                     # 完整 Markdown 文档
@@ -112,21 +119,25 @@ antd token DatePicker               # Design Token 值（v5+）
 antd design.md                      # 设计语言文档（design.md）
 antd semantic Table                 # classNames / styles 结构
 antd changelog 4.24.0 5.0.0 Select  # 跨版本 API 差异对比
+
+# 项目分析
 antd doctor                         # 诊断项目配置问题
 antd env                            # 收集环境信息用于 Bug 报告
 antd usage ./src                    # 分析项目中的 antd 导入
 antd lint ./src                     # 检查废弃 API 和最佳实践
 antd migrate 3 4                    # v3 → v4 迁移指南
 antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
+
+# Agent 集成和 CLI 管理
 antd mcp                            # 启动 MCP 服务，供 IDE 集成
 antd upgrade                        # 升级 CLI 到最新版本
 ```
 
 <br>
 
-## 📖 命令
+## 命令
 
-### 📚 知识查询
+### 知识查询
 
 | 命令 | 说明 |
 |---|---|
@@ -139,7 +150,7 @@ antd upgrade                        # 升级 CLI 到最新版本
 | [`antd semantic <Component>`](#antd-semantic-component) | 语义化 `classNames` / `styles` 结构及用法示例 |
 | [`antd changelog`](#antd-changelog-v1-v2-component) | Changelog 条目、版本范围或跨版本 API 对比 |
 
-### 🔍 项目分析
+### 项目分析
 
 | 命令 | 说明 |
 |---|---|
@@ -149,14 +160,14 @@ antd upgrade                        # 升级 CLI 到最新版本
 | [`antd lint [target]`](#antd-lint-target) | 废弃 API、无障碍缺陷、性能问题、最佳实践 |
 | [`antd migrate <from> <to>`](#antd-migrate-from-to) | 迁移清单，区分自动修复/手动处理，`--apply` 生成 Agent 提示 |
 
-### 🐛 问题反馈
+### 问题反馈
 
 | 命令 | 说明 |
 |---|---|
 | [`antd bug`](#antd-bug) | 向 ant-design/ant-design 报告 Bug，自动收集环境信息 |
 | [`antd bug-cli`](#antd-bug-cli) | 向 ant-design/ant-design-cli 报告 Bug |
 
-### 🔧 CLI 管理
+### CLI 管理
 
 | 命令 | 说明 |
 |---|---|

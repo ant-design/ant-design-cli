@@ -6,8 +6,8 @@
 
 <h1>Ant Design CLI</h1>
 
-**Ant Design on your command line.**<br>
-Query component knowledge, analyze project usage, and guide migrations — fully offline.
+**Offline Ant Design knowledge for code agents.**<br>
+Query versioned APIs, inspect project usage, and generate migration guidance without leaving the terminal.
 
 <br>
 
@@ -24,9 +24,9 @@ Query component knowledge, analyze project usage, and guide migrations — fully
 
 <br>
 
-## 🤔 Why
+## Why
 
-Code agents (Claude Code, Codex, Gemini CLI) write better antd code when they have instant access to the right API data. This CLI gives them exactly that — **every prop, token, demo, and changelog entry for antd v3 / v4 / v5 / v6**, bundled locally, queryable in milliseconds.
+Code agents write better Ant Design code when they can query the exact API surface before generating changes. `@ant-design/cli` packages versioned component metadata, demos, design tokens, changelogs, project analysis, and MCP tools into a single local CLI.
 
 ```bash
 npx skills add ant-design/ant-design-cli    # install as an agent skill
@@ -34,19 +34,20 @@ npx skills add ant-design/ant-design-cli    # install as an agent skill
 
 <br>
 
-## ✨ Highlights
+## Capabilities
 
-- 📦 **Fully offline** — All metadata ships with the package. No network calls, no latency, no API keys.
-- 🎯 **Version-accurate** — 55+ per-minor snapshots across v3/v4/v5/v6. Query the exact API surface of `antd@5.3.0`, not just "latest v5".
-- 🤖 **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
-- 🌍 **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
-- 🔮 **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
-- 🧩 **17 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
-- 🔌 **MCP server** — `antd mcp` starts a stdio server for native IDE integration (Claude Code, Cursor, VS Code, etc.).
+| Area | What it provides |
+|---|---|
+| Offline metadata | Props, docs, demos, tokens, semantic DOM, changelogs, and migration notes bundled with the package |
+| Version snapshots | 55+ per-minor snapshots across antd v3/v4/v5/v6, resolved by `--version` or local project detection |
+| Agent output | JSON on every command, structured errors, suggestions, and clean stdout/stderr separation |
+| Project analysis | Usage scanning, antd-specific lint rules, environment collection, and project health diagnostics |
+| Native integration | A stdio MCP server with 8 read-only tools and 2 prompts for Claude Code, Cursor, VS Code, Codex, and other agents |
+| Bilingual docs | English and Chinese component names, descriptions, and documentation via `--lang en\|zh` |
 
 <br>
 
-## 📦 Install
+## Install
 
 ```bash
 npm install -g @ant-design/cli
@@ -64,25 +65,15 @@ bun add -g @ant-design/cli
 
 <br>
 
-## 🤖 Agent Integration
+## Agent Integration
 
-The CLI ships with a [skill file](./skills/antd/SKILL.md) that teaches code agents *when* and *how* to use each command:
+Install the bundled [skill file](./skills/antd/SKILL.md) so compatible agents know when to query Ant Design metadata before editing code:
 
 ```bash
 npx skills add ant-design/ant-design-cli
 ```
 
-Or simply tell your code agent:
-
-> Install `@ant-design/cli` and the antd skill from `ant-design/ant-design-cli`
-
-The agent will handle `npm install`, `npx skills add`, and start using the CLI automatically.
-
-Works with [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [Codex](https://openai.com/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli), and any agent supporting the [skills](https://github.com/nicepkg/agent-skills) protocol.
-
-### MCP Server
-
-For IDEs that support [Model Context Protocol](https://modelcontextprotocol.io), the CLI can run as an MCP server:
+For IDEs that support [Model Context Protocol](https://modelcontextprotocol.io), run the CLI as a local MCP server:
 
 ```json
 {
@@ -95,7 +86,7 @@ For IDEs that support [Model Context Protocol](https://modelcontextprotocol.io),
 }
 ```
 
-Or if you have the CLI installed globally (`npm i -g @ant-design/cli`):
+If the CLI is installed globally, you can also point the server at `antd` directly:
 
 ```json
 {
@@ -110,13 +101,16 @@ Or if you have the CLI installed globally (`npm i -g @ant-design/cli`):
 
 To pin a specific antd version, add `"--version", "5.20.0"` to the `args` array.
 
-This exposes 8 tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design_md`, `antd_semantic`, `antd_changelog`) and 2 prompts (`antd-expert`, `antd-page-generator`) for native IDE integration.
+The MCP server exposes 8 read-only tools (`antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design_md`, `antd_semantic`, `antd_changelog`) and 2 prompts (`antd-expert`, `antd-page-generator`).
+
+Works with [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [Codex](https://openai.com/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli), and agents that support the [skills](https://github.com/nicepkg/agent-skills) protocol or MCP.
 
 <br>
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
+# Knowledge queries
 antd list                           # All components with versions
 antd info Button                    # Component props, types, defaults
 antd doc Button                     # Full markdown documentation
@@ -125,21 +119,25 @@ antd token DatePicker               # Design Token values (v5+)
 antd design.md                      # Design-language document (design.md)
 antd semantic Table                 # classNames / styles structure
 antd changelog 4.24.0 5.0.0 Select  # API diff across versions
+
+# Project analysis
 antd doctor                         # Diagnose project issues
 antd env                            # Collect env info for bug reports
 antd usage ./src                    # Analyze antd imports in project
 antd lint ./src                     # Check deprecated APIs & best practices
 antd migrate 3 4                    # v3 → v4 migration guide
 antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
+
+# Agent integration and CLI management
 antd mcp                            # Start MCP server for IDE integration
 antd upgrade                        # Upgrade CLI to latest version
 ```
 
 <br>
 
-## 📖 Commands
+## Commands
 
-### 📚 Knowledge Query
+### Knowledge Query
 
 | Command | Description |
 |---|---|
@@ -152,7 +150,7 @@ antd upgrade                        # Upgrade CLI to latest version
 | [`antd semantic <Component>`](#antd-semantic-component) | Semantic `classNames` / `styles` structure with usage examples |
 | [`antd changelog`](#antd-changelog-v1-v2-component) | Changelog entries, version ranges, or cross-version API diff |
 
-### 🔍 Project Analysis
+### Project Analysis
 
 | Command | Description |
 |---|---|
@@ -162,14 +160,14 @@ antd upgrade                        # Upgrade CLI to latest version
 | [`antd lint [target]`](#antd-lint-target) | Deprecated APIs, accessibility gaps, performance issues, best practices |
 | [`antd migrate <from> <to>`](#antd-migrate-from-to) | Migration checklist with auto-fixable/manual split and `--apply` agent prompt |
 
-### 🐛 Issue Reporting
+### Issue Reporting
 
 | Command | Description |
 |---|---|
 | [`antd bug`](#antd-bug) | File a bug to ant-design/ant-design with auto-collected environment info |
 | [`antd bug-cli`](#antd-bug-cli) | File a bug to ant-design/ant-design-cli |
 
-### 🔧 CLI Management
+### CLI Management
 
 | Command | Description |
 |---|---|
