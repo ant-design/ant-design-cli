@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import matter from 'gray-matter';
+import { parseFrontMatter } from '../utils/frontMatter.js';
 
 export interface ComponentMeta {
   name: string;
@@ -86,7 +86,7 @@ export function extractComponents(antdDir: string): ComponentMeta[] {
     if (!fs.existsSync(enPath)) continue;
 
     const enRaw = fs.readFileSync(enPath, 'utf-8');
-    const enParsed = matter(enRaw);
+    const enParsed = parseFrontMatter(enRaw);
     const fm = enParsed.data;
 
     // Skip non-component entries: no category, overview pages, or utility dirs
@@ -102,7 +102,7 @@ export function extractComponents(antdDir: string): ComponentMeta[] {
     let whenToUseZh = '';
     if (fs.existsSync(zhPath)) {
       const zhRaw = fs.readFileSync(zhPath, 'utf-8');
-      const zhParsed = matter(zhRaw);
+      const zhParsed = parseFrontMatter(zhRaw);
       nameZh = (zhParsed.data.subtitle as string | undefined) || '';
       descriptionZh = (zhParsed.data.description as string | undefined) || '';
       categoryZh = resolveCategory(zhParsed.data);

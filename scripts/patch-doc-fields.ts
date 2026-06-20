@@ -12,7 +12,7 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import matter from 'gray-matter';
+import { parseFrontMatter } from './utils/frontMatter.js';
 import type { ComponentData } from '../src/types.js';
 
 function parseArgs(args: string[]): { antdDir: string } {
@@ -94,11 +94,11 @@ function main() {
       const zhRaw = gitShow(antdDir, tag, zhPath);
 
       if (enRaw) {
-        comp.doc = matter(enRaw).content || undefined;
+        comp.doc = parseFrontMatter(enRaw).content || undefined;
         anyPatched = true;
       }
       if (zhRaw) {
-        comp.docZh = matter(zhRaw).content || undefined;
+        comp.docZh = parseFrontMatter(zhRaw).content || undefined;
       }
     }
 

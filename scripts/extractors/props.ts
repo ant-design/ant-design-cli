@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import matter from 'gray-matter';
+import { parseFrontMatter } from '../utils/frontMatter.js';
 import type { PropData } from '../../src/types.js';
 
 /** Parse a markdown table row into cells, handling escaped pipes (`\|`) */
@@ -274,12 +274,12 @@ export function extractProps(antdDir: string, dirName: string, componentName: st
 
   if (!fs.existsSync(enPath)) return { props: [], subComponentProps: {} };
 
-  const enContent = matter(fs.readFileSync(enPath, 'utf-8')).content;
+  const enContent = parseFrontMatter(fs.readFileSync(enPath, 'utf-8')).content;
   const enSections = parseApiSections(enContent, 'en');
 
   let zhSections = new Map<string, PropData[]>();
   if (fs.existsSync(zhPath)) {
-    const zhContent = matter(fs.readFileSync(zhPath, 'utf-8')).content;
+    const zhContent = parseFrontMatter(fs.readFileSync(zhPath, 'utf-8')).content;
     zhSections = parseApiSections(zhContent, 'zh');
   }
 
