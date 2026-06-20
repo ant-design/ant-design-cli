@@ -152,6 +152,8 @@ describe('setup command', () => {
 
   it('supports skill mode without writing MCP config', async () => {
     await withTempProject(async (dir) => {
+      writeFileSync(join(dir, 'CLAUDE.md'), '# Claude Instructions\n');
+
       const result = await runCLI(
         'setup',
         '--client',
@@ -170,11 +172,16 @@ describe('setup command', () => {
       const data = JSON.parse(result.stdout);
       expect(data.mode).toBe('skill');
       expect(data.changed).toBe(false);
+      expect(data.skillChanged).toBe(true);
+      expect(data.skillDir).toBe(join(dir, 'skills', 'antd'));
       expect(data.instructionsChanged).toBe(true);
+      expect(data.instructionsFile).toBe(join(dir, 'CLAUDE.md'));
 
-      const instructions = readFileSync(join(dir, 'AGENTS.md'), 'utf-8');
-      expect(instructions).toContain('use the Ant Design CLI commands');
-      expect(instructions).toContain('`antd info <Component> --format json`');
+      expect(existsSync(join(dir, '.mcp.json'))).toBe(false);
+      expect(readFileSync(join(dir, 'skills', 'antd', 'SKILL.md'), 'utf-8')).toContain('name: antd');
+
+      const instructions = readFileSync(join(dir, 'CLAUDE.md'), 'utf-8');
+      expect(instructions).toContain('Use the local Ant Design skill at `skills/antd/SKILL.md`');
     });
   });
 
@@ -196,16 +203,18 @@ describe('setup command', () => {
       const data = JSON.parse(result.stdout);
       expect(data.mode).toBe('both');
       expect(data.changed).toBe(true);
+      expect(data.skillChanged).toBe(true);
       expect(data.instructionsChanged).toBe(true);
       expect(readJson(join(dir, '.mcp.json')).mcpServers.antd).toEqual({
         command: 'npx',
         args: ['-y', '@ant-design/cli', 'mcp'],
       });
-      expect(readFileSync(join(dir, 'AGENTS.md'), 'utf-8')).toContain('use the configured `antd` MCP server');
+      expect(readFileSync(join(dir, 'skills', 'antd', 'SKILL.md'), 'utf-8')).toContain('name: antd');
+      expect(readFileSync(join(dir, 'AGENTS.md'), 'utf-8')).toContain('Use the local Ant Design skill at `skills/antd/SKILL.md`');
     });
   });
 
-  it('checks skill mode instructions', async () => {
+  it('checks skill mode installation and instructions', async () => {
     await withTempProject(async (dir) => {
       const missing = await runCLI(
         'setup',
@@ -220,7 +229,9 @@ describe('setup command', () => {
         'json',
       );
       expect(missing.exitCode).toBe(1);
-      expect(JSON.parse(missing.stdout).problems).toContain('AGENTS.md instructions not found');
+      const missingData = JSON.parse(missing.stdout);
+      expect(missingData.problems).toContain('Ant Design skill not installed');
+      expect(missingData.problems).toContain('Skill instructions not found');
 
       await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill');
 

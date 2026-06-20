@@ -1,6 +1,7 @@
 import type { Command } from 'commander';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { GlobalOptions, OutputFormat } from '../types.js';
 import { localize } from '../types.js';
 import { output } from '../output/formatter.js';
@@ -31,6 +32,8 @@ interface SetupResult {
   changed: boolean;
   dryRun: boolean;
   config: Record<string, unknown>;
+  skillDir?: string;
+  skillChanged?: boolean;
   instructionsFile?: string;
   instructionsChanged?: boolean;
 }
@@ -127,14 +130,9 @@ function createSkillInstructionsBlock(): string {
     INSTRUCTIONS_START,
     '## Ant Design CLI Skill',
     '',
-    'When working with Ant Design in this repository, use the Ant Design CLI commands before writing component code:',
+    'Use the local Ant Design skill at `skills/antd/SKILL.md` before working on Ant Design code in this repository.',
     '',
-    '- Use `antd info <Component> --format json` for component props, defaults, common props, and native HTML element hints.',
-    '- Use `antd doc <Component>` when you need the full component API documentation.',
-    '- Use `antd demo <Component> [name] --format json` before generating non-trivial usage examples.',
-    '- Use `antd token [Component] --format json` and `antd design.md` for theme, token, and design-language work.',
-    '- Use `antd semantic <Component> --format json` when customizing `classNames` or `styles` slots.',
-    '- Use `antd changelog` for version migration or API-diff questions.',
+    'The skill teaches agents when and how to call `@ant-design/cli` commands such as `antd info`, `antd doc`, `antd demo`, `antd token`, `antd semantic`, and `antd changelog`.',
     '',
     INSTRUCTIONS_END,
   ].join('\n');
@@ -146,7 +144,7 @@ function createInstructionsBlock(mode: SetupMode): string {
     return createMcpInstructionsBlock().replace(
       INSTRUCTIONS_END,
       [
-        'If the MCP server is unavailable, fall back to the equivalent `antd` CLI commands with `--format json`.',
+        'Use the local Ant Design skill at `skills/antd/SKILL.md` for CLI fallback guidance and project-local agent instructions.',
         '',
         INSTRUCTIONS_END,
       ].join('\n'),
@@ -155,8 +153,18 @@ function createInstructionsBlock(mode: SetupMode): string {
   return createMcpInstructionsBlock();
 }
 
+function chooseInstructionsFile(projectDir: string): string {
+  const claudeFile = join(projectDir, 'CLAUDE.md');
+  if (existsSync(claudeFile)) return claudeFile;
+
+  const agentsFile = join(projectDir, 'AGENTS.md');
+  if (existsSync(agentsFile)) return agentsFile;
+
+  return agentsFile;
+}
+
 function writeInstructions(projectDir: string, dryRun: boolean, mode: SetupMode): { file: string; changed: boolean } {
-  const file = join(projectDir, 'AGENTS.md');
+  const file = chooseInstructionsFile(projectDir);
   const current = existsSync(file) ? readFileSync(file, 'utf-8') : '';
   const block = createInstructionsBlock(mode);
   const pattern = new RegExp(`${INSTRUCTIONS_START}[\\s\\S]*?${INSTRUCTIONS_END}`);
@@ -172,6 +180,40 @@ function writeInstructions(projectDir: string, dryRun: boolean, mode: SetupMode)
   return { file, changed };
 }
 
+function resolveBundledSkillDir(): string {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const candidates = [
+    resolve(here, '../../skills/antd'),
+    resolve(here, '../skills/antd'),
+    resolve(process.cwd(), 'skills/antd'),
+  ];
+
+  const found = candidates.find((dir) => existsSync(join(dir, 'SKILL.md')));
+  if (!found) {
+    throw new Error('Bundled Ant Design skill not found');
+  }
+  return found;
+}
+
+function installSkill(projectDir: string, dryRun: boolean): { dir: string; changed: boolean } {
+  const source = resolveBundledSkillDir();
+  const target = join(projectDir, 'skills', 'antd');
+  const sourceSkill = join(source, 'SKILL.md');
+  const targetSkill = join(target, 'SKILL.md');
+
+  if (resolve(source) === resolve(target)) {
+    return { dir: target, changed: false };
+  }
+
+  const changed = !existsSync(targetSkill) || readFileSync(sourceSkill, 'utf-8') !== readFileSync(targetSkill, 'utf-8');
+  if (changed && !dryRun) {
+    mkdirSync(dirname(target), { recursive: true });
+    cpSync(source, target, { recursive: true, force: true });
+  }
+
+  return { dir: target, changed };
+}
+
 function getServerEntry(config: Record<string, unknown>, serverKey: 'mcpServers' | 'servers'): unknown {
   const servers = config[serverKey];
   if (!servers || typeof servers !== 'object' || Array.isArray(servers)) return undefined;
@@ -179,11 +221,28 @@ function getServerEntry(config: Record<string, unknown>, serverKey: 'mcpServers'
 }
 
 function checkInstructions(projectDir: string, mode: SetupMode): string[] {
-  const file = join(projectDir, 'AGENTS.md');
-  if (!existsSync(file)) return ['AGENTS.md instructions not found'];
-  const current = readFileSync(file, 'utf-8');
   const expected = createInstructionsBlock(mode);
-  if (!current.includes(expected)) return ['AGENTS.md instructions do not match expected instructions'];
+  const files = [join(projectDir, 'CLAUDE.md'), join(projectDir, 'AGENTS.md')];
+  const existing = files.filter(existsSync);
+
+  if (existing.length === 0) {
+    return [mode === 'mcp' ? 'MCP instructions not found' : 'Skill instructions not found'];
+  }
+  if (!existing.some((file) => readFileSync(file, 'utf-8').includes(expected))) {
+    return [mode === 'mcp' ? 'MCP instructions do not match expected instructions' : 'Skill instructions do not match expected instructions'];
+  }
+  return [];
+}
+
+function checkSkill(projectDir: string): string[] {
+  const source = resolveBundledSkillDir();
+  const sourceSkill = join(source, 'SKILL.md');
+  const targetSkill = join(projectDir, 'skills', 'antd', 'SKILL.md');
+
+  if (!existsSync(targetSkill)) return ['Ant Design skill not installed'];
+  if (readFileSync(sourceSkill, 'utf-8') !== readFileSync(targetSkill, 'utf-8')) {
+    return ['Ant Design skill does not match bundled skill'];
+  }
   return [];
 }
 
@@ -210,6 +269,7 @@ function checkAgent(client: AgentClient, projectDir: string, globalOpts: GlobalO
   }
 
   if (mode === 'skill' || mode === 'both') {
+    problems.push(...checkSkill(projectDir));
     problems.push(...checkInstructions(projectDir, mode));
   }
 
@@ -302,10 +362,15 @@ export function setup(
   const config = shouldWriteMcp ? createMergedConfig(current, clientConfig.serverKey, globalOpts) : {};
   const changed = shouldWriteMcp && stableJson(current) !== stableJson(config);
   let instructions: { file: string; changed: boolean } | undefined;
+  let skill: { dir: string; changed: boolean } | undefined;
 
   if (!dryRun && changed) {
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, stableJson(config));
+  }
+
+  if (mode === 'skill' || mode === 'both') {
+    skill = installSkill(projectDir, dryRun);
   }
 
   if (mode === 'skill' || mode === 'both' || shouldWriteInstructions) {
@@ -319,6 +384,12 @@ export function setup(
     changed,
     dryRun,
     config,
+    ...(skill
+      ? {
+          skillDir: skill.dir,
+          skillChanged: skill.changed,
+        }
+      : {}),
     ...(instructions
       ? {
           instructionsFile: instructions.file,

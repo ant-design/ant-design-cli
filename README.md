@@ -465,8 +465,8 @@ antd setup --client claude --dry-run    # preview without writing files
 antd setup --client claude --project ./my-app
 antd setup --client claude --version 5.29.3 --lang zh
 antd setup --client claude --check      # verify existing config
-antd setup --client claude --mode skill # write CLI/skill instructions only
-antd setup --client claude --mode both  # write MCP config and instructions
+antd setup --client claude --mode skill # install skills/antd and write instructions
+antd setup --client claude --mode both  # write MCP config, install skill, and write instructions
 antd setup --client claude --write-instructions
 ```
 
@@ -475,8 +475,8 @@ Modes:
 | Mode | Behavior |
 |---|---|
 | `mcp` | Writes the client MCP config only. This is the default. |
-| `skill` | Writes an `AGENTS.md` block that teaches agents to call the `antd` CLI directly. |
-| `both` | Writes both MCP config and `AGENTS.md` instructions. |
+| `skill` | Installs the bundled `skills/antd` skill into `skills/antd/` and writes a managed instruction block to `CLAUDE.md` or `AGENTS.md`. |
+| `both` | Writes MCP config, installs `skills/antd`, and writes the managed instruction block. |
 
 Supported clients:
 
@@ -499,7 +499,9 @@ Generated server entry:
 }
 ```
 
-Use `--check` to validate an existing setup without writing files. It exits with code `0` when the selected mode is configured, and `1` when config or instructions are missing or different.
+Skill instructions are written to `CLAUDE.md` when it exists, otherwise to `AGENTS.md` when it exists. If neither file exists, `AGENTS.md` is created.
+
+Use `--check` to validate an existing setup without writing files. It exits with code `0` when the selected mode is configured, and `1` when config, skill files, or instructions are missing or different.
 
 Use `--write-instructions` with the default `mcp` mode to also add an idempotent managed block to `AGENTS.md`, telling agents to use the configured `antd` MCP server before generating Ant Design code.
 

@@ -350,8 +350,8 @@ antd setup --client claude --dry-run    # preview without writing files
 antd setup --client claude --project ./my-app
 antd setup --client claude --version 5.29.3 --lang zh
 antd setup --client claude --check      # verify existing config
-antd setup --client claude --mode skill # write CLI/skill instructions only
-antd setup --client claude --mode both  # write MCP config and instructions
+antd setup --client claude --mode skill # install skills/antd and write instructions
+antd setup --client claude --mode both  # write MCP config, install skill, and write instructions
 antd setup --client claude --write-instructions
 ```
 
@@ -360,8 +360,8 @@ Modes:
 | Mode | Behavior |
 |---|---|
 | `mcp` | Writes the client-specific MCP config only. This is the default. |
-| `skill` | Writes an idempotent managed block to `AGENTS.md` that teaches agents to call the `antd` CLI directly (`antd info`, `antd doc`, `antd demo`, `antd token`, `antd design.md`, `antd semantic`, `antd changelog`). It does not write MCP config. |
-| `both` | Writes both the MCP config and `AGENTS.md` instructions. The instructions prefer the configured `antd` MCP server and mention CLI fallback with `--format json`. |
+| `skill` | Copies the bundled `skills/antd` skill into the target project at `skills/antd/` and writes an idempotent managed block to `CLAUDE.md` or `AGENTS.md` telling agents to use the local skill. It does not write MCP config. |
+| `both` | Writes MCP config, installs `skills/antd`, and writes the managed instruction block. The instructions prefer the configured `antd` MCP server and point to the local skill for fallback guidance. |
 
 Supported clients:
 
@@ -386,7 +386,9 @@ The command preserves existing MCP servers in the target file and adds or replac
 
 When `--version` is provided, it is pinned into generated MCP server args. When `--lang zh` is provided, generated MCP args start in Chinese mode. English is the default and is omitted from generated args.
 
-`--check` validates the selected mode without writing files. In `mcp` mode it checks the `antd` MCP server entry. In `skill` mode it checks the managed `AGENTS.md` block. In `both` mode it checks both. It exits `0` when the selected mode is configured and exits `1` when config or instructions are missing or differ from the expected content.
+Skill instructions are written to `CLAUDE.md` if it already exists, otherwise to `AGENTS.md` if it already exists. If neither file exists, `AGENTS.md` is created.
+
+`--check` validates the selected mode without writing files. In `mcp` mode it checks the `antd` MCP server entry. In `skill` mode it checks the copied `skills/antd/SKILL.md` and managed instruction block. In `both` mode it checks all of them. It exits `0` when the selected mode is configured and exits `1` when config, skill files, or instructions are missing or differ from the expected content.
 
 `--write-instructions` is a compatibility convenience for the default `mcp` mode. It writes the MCP-oriented `AGENTS.md` block in addition to the MCP config. Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it.
 
@@ -399,6 +401,8 @@ JSON output:
   "file": "/path/to/project/.mcp.json",
   "changed": true,
   "dryRun": false,
+  "skillDir": "/path/to/project/skills/antd",
+  "skillChanged": true,
   "instructionsFile": "/path/to/project/AGENTS.md",
   "instructionsChanged": true,
   "config": {
