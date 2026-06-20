@@ -131,12 +131,26 @@ function createMcpInstructionsBlock(): string {
   ].join('\n');
 }
 
-function createSkillInstructionsBlock(): string {
+function getSkillDir(projectDir: string, client: AgentClient): string {
+  return client === 'claude'
+    ? join(projectDir, '.claude', 'skills', 'antd')
+    : join(projectDir, 'skills', 'antd');
+}
+
+function getSkillInstructionsPath(client: AgentClient): string {
+  return client === 'claude'
+    ? '.claude/skills/antd/SKILL.md'
+    : 'skills/antd/SKILL.md';
+}
+
+function createSkillInstructionsBlock(client: AgentClient): string {
+  const skillPath = getSkillInstructionsPath(client);
+  const label = client === 'claude' ? 'installed Ant Design skill' : 'local Ant Design skill reference';
   return [
     INSTRUCTIONS_START,
     '## Ant Design CLI Skill',
     '',
-    'Use the local Ant Design skill at `skills/antd/SKILL.md` before working on Ant Design code in this repository.',
+    `Use the ${label} at \`${skillPath}\` before working on Ant Design code in this repository.`,
     '',
     'The skill teaches agents when and how to call `@ant-design/cli` commands such as `antd info`, `antd doc`, `antd demo`, `antd token`, `antd semantic`, and `antd changelog`.',
     '',
@@ -144,13 +158,15 @@ function createSkillInstructionsBlock(): string {
   ].join('\n');
 }
 
-function createInstructionsBlock(mode: SetupMode): string {
-  if (mode === 'skill') return createSkillInstructionsBlock();
+function createInstructionsBlock(mode: SetupMode, client: AgentClient): string {
+  if (mode === 'skill') return createSkillInstructionsBlock(client);
   if (mode === 'both') {
+    const skillPath = getSkillInstructionsPath(client);
+    const label = client === 'claude' ? 'installed Ant Design skill' : 'local Ant Design skill reference';
     return createMcpInstructionsBlock().replace(
       INSTRUCTIONS_END,
       [
-        'Use the local Ant Design skill at `skills/antd/SKILL.md` for CLI fallback guidance and project-local agent instructions.',
+        `Use the ${label} at \`${skillPath}\` for CLI fallback guidance and project-local agent instructions.`,
         '',
         INSTRUCTIONS_END,
       ].join('\n'),
@@ -159,20 +175,14 @@ function createInstructionsBlock(mode: SetupMode): string {
   return createMcpInstructionsBlock();
 }
 
-function chooseInstructionsFile(projectDir: string): string {
-  const claudeFile = join(projectDir, 'CLAUDE.md');
-  if (existsSync(claudeFile)) return claudeFile;
-
-  const agentsFile = join(projectDir, 'AGENTS.md');
-  if (existsSync(agentsFile)) return agentsFile;
-
-  return agentsFile;
+function chooseInstructionsFile(projectDir: string, client: AgentClient): string {
+  return join(projectDir, client === 'claude' ? 'CLAUDE.md' : 'AGENTS.md');
 }
 
-function writeInstructions(projectDir: string, dryRun: boolean, mode: SetupMode): { file: string; changed: boolean } {
-  const file = chooseInstructionsFile(projectDir);
+function writeInstructions(projectDir: string, dryRun: boolean, mode: SetupMode, client: AgentClient): { file: string; changed: boolean } {
+  const file = chooseInstructionsFile(projectDir, client);
   const current = existsSync(file) ? readFileSync(file, 'utf-8') : '';
-  const block = createInstructionsBlock(mode);
+  const block = createInstructionsBlock(mode, client);
   const pattern = new RegExp(`${INSTRUCTIONS_START}[\\s\\S]*?${INSTRUCTIONS_END}`);
   const next = pattern.test(current)
     ? current.replace(pattern, block)
@@ -202,9 +212,9 @@ function resolveBundledSkillDir(): string {
   return found;
 }
 
-function installSkill(projectDir: string, dryRun: boolean): { dir: string; changed: boolean } {
+function installSkill(projectDir: string, dryRun: boolean, client: AgentClient): { dir: string; changed: boolean } {
   const source = resolveBundledSkillDir();
-  const target = join(projectDir, 'skills', 'antd');
+  const target = getSkillDir(projectDir, client);
   const sourceSkill = join(source, 'SKILL.md');
   const targetSkill = join(target, 'SKILL.md');
 
@@ -238,9 +248,9 @@ function isMatchingServerEntry(actual: unknown, expected: Record<string, unknown
     && entry.args.every((arg, index) => arg === expectedArgs[index]);
 }
 
-function checkInstructions(projectDir: string, mode: SetupMode): string[] {
-  const expected = createInstructionsBlock(mode);
-  const file = chooseInstructionsFile(projectDir);
+function checkInstructions(projectDir: string, mode: SetupMode, client: AgentClient): string[] {
+  const expected = createInstructionsBlock(mode, client);
+  const file = chooseInstructionsFile(projectDir, client);
 
   if (!existsSync(file)) {
     return [mode === 'mcp' ? 'MCP instructions not found' : 'Skill instructions not found'];
@@ -251,10 +261,10 @@ function checkInstructions(projectDir: string, mode: SetupMode): string[] {
   return [];
 }
 
-function checkSkill(projectDir: string): string[] {
+function checkSkill(projectDir: string, client: AgentClient): string[] {
   const source = resolveBundledSkillDir();
   const sourceSkill = join(source, 'SKILL.md');
-  const targetSkill = join(projectDir, 'skills', 'antd', 'SKILL.md');
+  const targetSkill = join(getSkillDir(projectDir, client), 'SKILL.md');
 
   if (!existsSync(targetSkill)) return ['Ant Design skill not installed'];
   if (readFileSync(sourceSkill, 'utf-8') !== readFileSync(targetSkill, 'utf-8')) {
@@ -292,11 +302,11 @@ function checkAgent(
   }
 
   if (mode === 'skill' || mode === 'both') {
-    problems.push(...checkSkill(projectDir));
+    problems.push(...checkSkill(projectDir, client));
   }
 
   if (mode === 'skill' || mode === 'both' || shouldCheckInstructions) {
-    problems.push(...checkInstructions(projectDir, mode));
+    problems.push(...checkInstructions(projectDir, mode, client));
   }
 
   return {
@@ -405,11 +415,11 @@ export function setup(
   }
 
   if (mode === 'skill' || mode === 'both') {
-    skill = installSkill(projectDir, dryRun);
+    skill = installSkill(projectDir, dryRun, client);
   }
 
   if (mode === 'skill' || mode === 'both' || shouldWriteInstructions) {
-    instructions = writeInstructions(projectDir, dryRun, mode === 'mcp' ? 'mcp' : mode);
+    instructions = writeInstructions(projectDir, dryRun, mode === 'mcp' ? 'mcp' : mode, client);
   }
 
   return {

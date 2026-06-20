@@ -442,7 +442,7 @@ IDE 配置（`claude_desktop_config.json`）：
 
 ### `antd setup`
 
-为本地 AI Agent 项目接入 Ant Design MCP 和/或内置的 `skills/antd` 技能。该命令可以写入对应客户端的 MCP 配置、安装本地技能，并为 Agent 写入托管指令。
+为本地 AI Agent 项目接入 Ant Design MCP 和/或内置的 `skills/antd` 指南。该命令可以写入对应客户端的 MCP 配置、安装适配客户端的技能或技能参考，并为 Agent 写入托管指令。
 
 ```bash
 antd setup --client claude              # 写入 .mcp.json
@@ -452,7 +452,7 @@ antd setup --client claude --dry-run    # 预览配置，不写入文件
 antd setup --client claude --project ./my-app
 antd setup --client claude --version 5.29.3 --lang zh
 antd setup --client claude --check      # 校验已有配置
-antd setup --client claude --mode skill # 安装 skills/antd 并写入指令
+antd setup --client claude --mode skill # 安装 Claude 技能并写入指令
 antd setup --client claude --mode both  # 写入 MCP 配置、安装技能并写入指令
 antd setup --client claude --write-instructions
 ```
@@ -462,16 +462,16 @@ antd setup --client claude --write-instructions
 | 模式 | 行为 |
 |---|---|
 | `mcp` | 只写入客户端 MCP 配置。这是默认模式。 |
-| `skill` | 将内置的 `skills/antd` 技能安装到 `skills/antd/`，并向 `CLAUDE.md` 或 `AGENTS.md` 写入托管指令。 |
-| `both` | 写入 MCP 配置、安装 `skills/antd`，并写入托管指令。 |
+| `skill` | 为所选客户端安装内置 Ant Design 指南，并写入托管指令。 |
+| `both` | 写入 MCP 配置、安装技能或技能参考，并写入托管指令。 |
 
 支持的客户端：
 
-| 客户端 | 配置文件 | 服务字段 |
-|---|---|---|
-| `claude` | `.mcp.json` | `mcpServers` |
-| `cursor` | `.cursor/mcp.json` | `mcpServers` |
-| `vscode` | `.vscode/mcp.json` | `servers` |
+| 客户端 | 配置文件 | 服务字段 | 技能位置 | 指令文件 |
+|---|---|---|---|---|
+| `claude` | `.mcp.json` | `mcpServers` | `.claude/skills/antd/` | `CLAUDE.md` |
+| `cursor` | `.cursor/mcp.json` | `mcpServers` | `skills/antd/` 技能参考 | `AGENTS.md` |
+| `vscode` | `.vscode/mcp.json` | `servers` | `skills/antd/` 技能参考 | `AGENTS.md` |
 
 生成的服务项：
 
@@ -486,7 +486,7 @@ antd setup --client claude --write-instructions
 }
 ```
 
-技能指令会优先写入已有的 `CLAUDE.md`，否则写入已有的 `AGENTS.md`。如果两者都不存在，则创建 `AGENTS.md`。
+技能指令会写入所选客户端对应的指令文件：Claude 使用 `CLAUDE.md`，Cursor 和 VS Code 使用 `AGENTS.md`。Claude 会获得 `.claude/skills/antd/` 下的项目级原生技能；其他客户端会获得同一份 `skills/antd/` 本地技能参考，并通过指令区块告诉 Agent 何时使用。
 
 使用 `--check` 可以只校验已有配置，不写入文件。当所选模式已正确配置时退出码为 `0`，配置、技能文件或指令缺失/不一致时退出码为 `1`。
 

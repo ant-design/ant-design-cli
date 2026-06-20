@@ -455,7 +455,7 @@ Configuration:
 
 ### `antd setup`
 
-Configure a local AI agent project with Ant Design MCP and/or the bundled `skills/antd` skill. The command can write the client-specific MCP config file, install the local skill, and add managed instructions for agents.
+Configure a local AI agent project with Ant Design MCP and/or the bundled `skills/antd` guidance. The command can write the client-specific MCP config file, install a client-appropriate skill or skill reference, and add managed instructions for agents.
 
 ```bash
 antd setup --client claude              # write .mcp.json
@@ -465,7 +465,7 @@ antd setup --client claude --dry-run    # preview without writing files
 antd setup --client claude --project ./my-app
 antd setup --client claude --version 5.29.3 --lang zh
 antd setup --client claude --check      # verify existing config
-antd setup --client claude --mode skill # install skills/antd and write instructions
+antd setup --client claude --mode skill # install Claude skill and write instructions
 antd setup --client claude --mode both  # write MCP config, install skill, and write instructions
 antd setup --client claude --write-instructions
 ```
@@ -475,16 +475,16 @@ Modes:
 | Mode | Behavior |
 |---|---|
 | `mcp` | Writes the client MCP config only. This is the default. |
-| `skill` | Installs the bundled `skills/antd` skill into `skills/antd/` and writes a managed instruction block to `CLAUDE.md` or `AGENTS.md`. |
-| `both` | Writes MCP config, installs `skills/antd`, and writes the managed instruction block. |
+| `skill` | Installs the bundled Ant Design guidance for the selected client and writes a managed instruction block. |
+| `both` | Writes MCP config, installs the skill or skill reference, and writes the managed instruction block. |
 
 Supported clients:
 
-| Client | Config file | Server key |
-|---|---|---|
-| `claude` | `.mcp.json` | `mcpServers` |
-| `cursor` | `.cursor/mcp.json` | `mcpServers` |
-| `vscode` | `.vscode/mcp.json` | `servers` |
+| Client | Config file | Server key | Skill target | Instructions file |
+|---|---|---|---|---|
+| `claude` | `.mcp.json` | `mcpServers` | `.claude/skills/antd/` | `CLAUDE.md` |
+| `cursor` | `.cursor/mcp.json` | `mcpServers` | `skills/antd/` skill reference | `AGENTS.md` |
+| `vscode` | `.vscode/mcp.json` | `servers` | `skills/antd/` skill reference | `AGENTS.md` |
 
 Generated server entry:
 
@@ -499,7 +499,7 @@ Generated server entry:
 }
 ```
 
-Skill instructions are written to `CLAUDE.md` when it exists, otherwise to `AGENTS.md` when it exists. If neither file exists, `AGENTS.md` is created.
+Skill instructions are written to the selected client's instruction file: Claude uses `CLAUDE.md`; Cursor and VS Code use `AGENTS.md`. Claude gets a native project skill under `.claude/skills/antd/`; other clients get the same bundled guidance as a local `skills/antd/` reference and an instruction block telling agents when to use it.
 
 Use `--check` to validate an existing setup without writing files. It exits with code `0` when the selected mode is configured, and `1` when config, skill files, or instructions are missing or different.
 

@@ -257,7 +257,7 @@ describe('setup command', () => {
       const result = await runCLI(
         'setup',
         '--client',
-        'claude',
+        'cursor',
         '--project',
         dir,
         '--write-instructions',
@@ -278,7 +278,7 @@ describe('setup command', () => {
       const secondRun = await runCLI(
         'setup',
         '--client',
-        'claude',
+        'cursor',
         '--project',
         dir,
         '--write-instructions',
@@ -295,8 +295,6 @@ describe('setup command', () => {
 
   it('supports skill mode without writing MCP config', async () => {
     await withTempProject(async (dir) => {
-      writeFileSync(join(dir, 'CLAUDE.md'), '# Claude Instructions\n');
-
       const result = await runCLI(
         'setup',
         '--client',
@@ -316,15 +314,32 @@ describe('setup command', () => {
       expect(data.mode).toBe('skill');
       expect(data.changed).toBe(false);
       expect(data.skillChanged).toBe(true);
-      expect(data.skillDir).toBe(join(dir, 'skills', 'antd'));
+      expect(data.skillDir).toBe(join(dir, '.claude', 'skills', 'antd'));
       expect(data.instructionsChanged).toBe(true);
       expect(data.instructionsFile).toBe(join(dir, 'CLAUDE.md'));
 
       expect(existsSync(join(dir, '.mcp.json'))).toBe(false);
-      expect(readFileSync(join(dir, 'skills', 'antd', 'SKILL.md'), 'utf-8')).toContain('name: antd');
+      expect(readFileSync(join(dir, '.claude', 'skills', 'antd', 'SKILL.md'), 'utf-8')).toContain('name: antd');
 
       const instructions = readFileSync(join(dir, 'CLAUDE.md'), 'utf-8');
-      expect(instructions).toContain('Use the local Ant Design skill at `skills/antd/SKILL.md`');
+      expect(instructions).toContain('Use the installed Ant Design skill at `.claude/skills/antd/SKILL.md`');
+    });
+  });
+
+  it('writes Cursor skill references and instructions to generic agent files', async () => {
+    await withTempProject(async (dir) => {
+      writeFileSync(join(dir, 'CLAUDE.md'), '# Claude Instructions\n');
+
+      const result = await runCLI('setup', '--client', 'cursor', '--project', dir, '--mode', 'skill', '--format', 'json');
+
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+      expect(data.skillDir).toBe(join(dir, 'skills', 'antd'));
+      expect(data.instructionsFile).toBe(join(dir, 'AGENTS.md'));
+      expect(existsSync(join(dir, '.claude', 'skills', 'antd', 'SKILL.md'))).toBe(false);
+      expect(readFileSync(join(dir, 'skills', 'antd', 'SKILL.md'), 'utf-8')).toContain('name: antd');
+      expect(readFileSync(join(dir, 'AGENTS.md'), 'utf-8')).toContain('Use the local Ant Design skill reference at `skills/antd/SKILL.md`');
+      expect(readFileSync(join(dir, 'CLAUDE.md'), 'utf-8')).toBe('# Claude Instructions\n');
     });
   });
 
@@ -343,7 +358,7 @@ describe('setup command', () => {
     });
   });
 
-  it('supports both mode by writing MCP config and AGENTS.md instructions', async () => {
+  it('supports both mode by writing MCP config and Claude skill instructions', async () => {
     await withTempProject(async (dir) => {
       const result = await runCLI(
         'setup',
@@ -367,8 +382,8 @@ describe('setup command', () => {
         command: 'npx',
         args: ['-y', '@ant-design/cli', 'mcp'],
       });
-      expect(readFileSync(join(dir, 'skills', 'antd', 'SKILL.md'), 'utf-8')).toContain('name: antd');
-      expect(readFileSync(join(dir, 'AGENTS.md'), 'utf-8')).toContain('Use the local Ant Design skill at `skills/antd/SKILL.md`');
+      expect(readFileSync(join(dir, '.claude', 'skills', 'antd', 'SKILL.md'), 'utf-8')).toContain('name: antd');
+      expect(readFileSync(join(dir, 'CLAUDE.md'), 'utf-8')).toContain('Use the installed Ant Design skill at `.claude/skills/antd/SKILL.md`');
     });
   });
 
@@ -378,20 +393,20 @@ describe('setup command', () => {
 
       expect(result.exitCode).toBe(0);
       expect(result.stdout).toContain(`Wrote: ${join(dir, '.mcp.json')}`);
-      expect(result.stdout).toContain(`Wrote: ${join(dir, 'skills', 'antd')}`);
-      expect(result.stdout).toContain(`Wrote: ${join(dir, 'AGENTS.md')}`);
+      expect(result.stdout).toContain(`Wrote: ${join(dir, '.claude', 'skills', 'antd')}`);
+      expect(result.stdout).toContain(`Wrote: ${join(dir, 'CLAUDE.md')}`);
     });
   });
 
   it('prints Wrote when only the skill directory changes', async () => {
     await withTempProject(async (dir) => {
       await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill');
-      rmSync(join(dir, 'skills'), { recursive: true, force: true });
+      rmSync(join(dir, '.claude'), { recursive: true, force: true });
 
       const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill');
 
       expect(result.exitCode).toBe(0);
-      expect(result.stdout).toContain(`Wrote: ${join(dir, 'skills', 'antd')}`);
+      expect(result.stdout).toContain(`Wrote: ${join(dir, '.claude', 'skills', 'antd')}`);
       expect(result.stdout).not.toContain('Already configured');
     });
   });
@@ -501,7 +516,7 @@ describe('setup command', () => {
   it('reports a mismatched installed skill', async () => {
     await withTempProject(async (dir) => {
       await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill');
-      writeFileSync(join(dir, 'skills', 'antd', 'SKILL.md'), 'name: stale\n');
+      writeFileSync(join(dir, '.claude', 'skills', 'antd', 'SKILL.md'), 'name: stale\n');
 
       const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill', '--check', '--format', 'json');
 
@@ -511,7 +526,7 @@ describe('setup command', () => {
   });
 
   it('does not try to copy the bundled skill onto itself during dry run', async () => {
-    const result = await runCLI('setup', '--client', 'claude', '--project', process.cwd(), '--mode', 'skill', '--dry-run', '--format', 'json');
+    const result = await runCLI('setup', '--client', 'cursor', '--project', process.cwd(), '--mode', 'skill', '--dry-run', '--format', 'json');
 
     expect(result.exitCode).toBe(0);
     const data = JSON.parse(result.stdout);
