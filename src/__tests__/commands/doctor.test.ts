@@ -3,6 +3,7 @@ import { writeFileSync, mkdirSync, rmSync, mkdtempSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { run, runCLI } from '../helper.js';
+import { cacheStore } from '../../utils/store.js';
 
 async function runDoctorInTempDir(packages: Record<string, object>): Promise<any> {
   const tempDir = mkdtempSync(join(tmpdir(), 'antd-cli-test-'));
@@ -120,6 +121,39 @@ describe('doctor', () => {
     expect(names).toContain('cssinjs-duplicate');
     expect(names).toContain('cssinjs-compat');
     expect(names).toContain('icons-compat');
+  });
+
+  it('should check bundled bug versions without network or cache writes', async () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('network calls not allowed'));
+    const cacheSetSpy = vi.spyOn(cacheStore, 'set').mockImplementation(() => undefined);
+
+    try {
+      const data = await runDoctorInTempDir({
+        antd: { version: '6.4.1', peerDependencies: {} },
+        react: { version: '18.2.0' },
+      });
+
+      const check = data.checks.find((c: { name: string }) => c.name === 'antd-installed');
+      expect(check?.status).toBe('fail');
+      expect(check?.message).toContain('known bugs');
+      expect(check?.suggestion).toContain('https://github.com/ant-design/ant-design/issues/57975');
+      expect(fetchSpy).not.toHaveBeenCalled();
+      expect(cacheSetSpy).not.toHaveBeenCalled();
+    } finally {
+      fetchSpy.mockRestore();
+      cacheSetSpy.mockRestore();
+    }
+  });
+
+  it('should not match bundled bug versions when installed antd version is missing', async () => {
+    const data = await runDoctorInTempDir({
+      antd: { peerDependencies: {} },
+      react: { version: '18.2.0' },
+    });
+
+    const check = data.checks.find((c: { name: string }) => c.name === 'antd-installed');
+    expect(check?.status).toBe('pass');
+    expect(check?.message).toContain('unknown');
   });
 });
 

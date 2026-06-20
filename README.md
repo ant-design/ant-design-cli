@@ -307,7 +307,7 @@ antd changelog 4.24.0 5.0.0 Select  # API diff for Select only
 
 ### `antd doctor`
 
-Runs 10 checks against your project: antd installed, React version compat, duplicate antd/dayjs/cssinjs installs, peer dependency satisfaction, theme config, babel-plugin-import usage, and CSS-in-JS setup.
+Runs 10 checks against your project: antd installed and bundled known-bug version data, React version compat, duplicate antd/dayjs/cssinjs installs, peer dependency satisfaction, theme config, babel-plugin-import usage, and CSS-in-JS setup. All checks use bundled/local data and do not make network calls.
 
 ```bash
 antd doctor

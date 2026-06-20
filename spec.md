@@ -350,7 +350,7 @@ antd doctor --format json
 ```
 
 Checks (in order):
-1. `antd-installed` — verifies antd is installed in the project; severity: error
+1. `antd-installed` — verifies antd is installed in the project and checks the installed version against bundled BUG_VERSIONS data; severity: error. This check is fully offline and does not fetch remote bug metadata or write runtime cache.
 2. `react-compat` — antd version compatibility with React version
 3. `duplicate-install` — detects multiple antd installations
 4. `dayjs-duplicate` — detects multiple dayjs installations in node_modules; severity: error

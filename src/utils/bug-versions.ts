@@ -1,8 +1,10 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { gunzipSync } from 'node:zlib';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { satisfies } from '../data/version.js';
-import { cacheStore } from './store.js';
-import { fetchFirstJson } from './fetch.js';
 
-const BUG_VERSIONS_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export type BugVersionsMap = Record<string, string[]>;
 
@@ -11,11 +13,41 @@ export interface BugMatchResult {
   urls: string[];
 }
 
-const BUG_VERSIONS_SOURCES = [
-  'https://registry.npmmirror.com/antd/latest/files/BUG_VERSIONS.json', // China mirror (fast in CN)
-  'https://unpkg.com/antd/BUG_VERSIONS.json',                           // Unpkg CDN
-  'https://cdn.jsdelivr.net/npm/antd/BUG_VERSIONS.json',                // jsDelivr CDN
-];
+let bundledBugVersions: BugVersionsMap | null | undefined;
+
+function readDataFile(filePath: string): string {
+  const gzPath = filePath + '.gz';
+  /* v8 ignore next 3 -- gz files only present in production builds */
+  if (existsSync(gzPath)) {
+    return gunzipSync(readFileSync(gzPath)).toString('utf-8');
+  }
+  return readFileSync(filePath, 'utf-8');
+}
+
+/** Load bundled BUG_VERSIONS data without network or runtime cache access. */
+export function loadBundledBugVersions(): BugVersionsMap | null {
+  if (bundledBugVersions !== undefined) return bundledBugVersions;
+
+  const candidates = [
+    join(__dirname, '..', 'data', 'bug-versions.json'),       // from dist/
+    join(__dirname, '..', '..', 'data', 'bug-versions.json'), // from src/utils/
+  ];
+
+  for (const filePath of candidates) {
+    try {
+      if (!existsSync(filePath) && !existsSync(filePath + '.gz')) continue;
+      bundledBugVersions = JSON.parse(readDataFile(filePath)) as BugVersionsMap;
+      return bundledBugVersions;
+    } catch {
+      // Try the next candidate.
+    }
+  }
+
+  /* v8 ignore start -- defensive: bundled data/ is always present */
+  bundledBugVersions = null;
+  return bundledBugVersions;
+  /* v8 ignore stop */
+}
 
 /** Find the first bug range that the given antd version matches. */
 export function findBugInfo(version: string, bugVersions: BugVersionsMap): BugMatchResult | null {
@@ -25,28 +57,4 @@ export function findBugInfo(version: string, bugVersions: BugVersionsMap): BugMa
     }
   }
   return null;
-}
-
-/**
- * Get BUG_VERSIONS data using a 6-hour cache.
- * Falls back to stale cache on network failure.
- * Returns null only if never cached and all fetches fail.
- */
-export async function getBugVersions(): Promise<BugVersionsMap | null> {
-  const now = Date.now();
-  const cached = cacheStore.get('bugVersionsCache');
-
-  if (cached && now - cached.lastChecked < BUG_VERSIONS_TTL_MS) {
-    return cached.data;
-  }
-
-  const fetched = await fetchFirstJson<BugVersionsMap>(BUG_VERSIONS_SOURCES, 5000);
-
-  if (fetched) {
-    cacheStore.set('bugVersionsCache', { lastChecked: now, data: fetched });
-    return fetched;
-  }
-
-  // Network failed — degrade gracefully to stale cache data
-  return cached?.data ?? null;
 }
