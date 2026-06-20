@@ -382,7 +382,7 @@ JSON output:
 
 #### `antd usage [dir]`
 
-Scan project for antd component/API usage statistics using AST-based analysis (powered by `oxc-parser`). Detects direct imports (`import { Button } from 'antd'`), sub-component JSX usage (`<Form.Item>`, `<Table.Column>`), and named imports from sub-paths.
+Scan project for antd component/API usage statistics using AST-based analysis (powered by `oxc-parser`). Detects direct imports (`import { Button } from 'antd'`), default component imports from sub-paths (`import Button from 'antd/es/button'` / `antd/lib/button`), sub-component JSX usage (`<Form.Item>`, `<Table.Column>`), and named imports from sub-paths.
 
 ```bash
 antd usage                          # scan current directory
