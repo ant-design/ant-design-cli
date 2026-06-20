@@ -338,21 +338,21 @@ All tools include MCP annotations: `readOnlyHint: true`, `destructiveHint: false
 
 Global `--version` and `--lang` are resolved once at server startup (not per tool call). All tool outputs are JSON. The server uses `@modelcontextprotocol/sdk` with stdio transport.
 
-#### `antd setup-agent`
+#### `antd setup`
 
 Configure a local AI agent project to use the Ant Design MCP server. This is an onboarding helper for `antd mcp`: it writes the correct MCP client configuration file, while `antd mcp` remains the stdio server that the agent starts.
 
 ```bash
-antd setup-agent --client claude              # write .mcp.json
-antd setup-agent --client cursor              # write .cursor/mcp.json
-antd setup-agent --client vscode              # write .vscode/mcp.json
-antd setup-agent --client claude --dry-run    # preview without writing files
-antd setup-agent --client claude --project ./my-app
-antd setup-agent --client claude --version 5.29.3 --lang zh
-antd setup-agent --client claude --check      # verify existing config
-antd setup-agent --client claude --mode skill # write CLI/skill instructions only
-antd setup-agent --client claude --mode both  # write MCP config and instructions
-antd setup-agent --client claude --write-instructions
+antd setup --client claude              # write .mcp.json
+antd setup --client cursor              # write .cursor/mcp.json
+antd setup --client vscode              # write .vscode/mcp.json
+antd setup --client claude --dry-run    # preview without writing files
+antd setup --client claude --project ./my-app
+antd setup --client claude --version 5.29.3 --lang zh
+antd setup --client claude --check      # verify existing config
+antd setup --client claude --mode skill # write CLI/skill instructions only
+antd setup --client claude --mode both  # write MCP config and instructions
+antd setup --client claude --write-instructions
 ```
 
 Modes:

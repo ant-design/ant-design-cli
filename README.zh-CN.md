@@ -119,7 +119,7 @@ antd lint ./src                     # 检查废弃 API 和最佳实践
 antd migrate 3 4                    # v3 → v4 迁移指南
 antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 antd mcp                            # 启动 MCP 服务，供 IDE 集成
-antd setup-agent --client claude    # 配置本地 Agent MCP 设置
+antd setup --client claude    # 配置本地 Agent MCP 设置
 antd upgrade                        # 升级 CLI 到最新版本
 ```
 
@@ -162,7 +162,7 @@ antd upgrade                        # 升级 CLI 到最新版本
 | 命令 | 说明 |
 |---|---|
 | [`antd mcp`](#antd-mcp) | 启动 MCP stdio 服务，供 IDE Agent 集成 |
-| [`antd setup-agent`](#antd-setup-agent) | 为 Claude Code、Cursor 或 VS Code 写入本地 MCP 配置 |
+| [`antd setup`](#antd-setup) | 为 Claude Code、Cursor 或 VS Code 写入本地 MCP 配置 |
 | [`antd upgrade`](#antd-upgrade) | 升级 CLI 到最新版本 |
 
 <br>
@@ -440,21 +440,21 @@ IDE 配置（`claude_desktop_config.json`）：
 
 **MCP 提示词（2 个）：** `antd-expert`、`antd-page-generator`
 
-### `antd setup-agent`
+### `antd setup`
 
 配置本地 AI Agent 项目使用 Ant Design MCP 服务。该命令会写入对应客户端的 MCP 配置文件，保留已有服务，并添加或替换 `antd` 服务项。
 
 ```bash
-antd setup-agent --client claude              # 写入 .mcp.json
-antd setup-agent --client cursor              # 写入 .cursor/mcp.json
-antd setup-agent --client vscode              # 写入 .vscode/mcp.json
-antd setup-agent --client claude --dry-run    # 预览配置，不写入文件
-antd setup-agent --client claude --project ./my-app
-antd setup-agent --client claude --version 5.29.3 --lang zh
-antd setup-agent --client claude --check      # 校验已有配置
-antd setup-agent --client claude --mode skill # 仅写入 CLI/Skill 指令
-antd setup-agent --client claude --mode both  # 同时写入 MCP 配置和指令
-antd setup-agent --client claude --write-instructions
+antd setup --client claude              # 写入 .mcp.json
+antd setup --client cursor              # 写入 .cursor/mcp.json
+antd setup --client vscode              # 写入 .vscode/mcp.json
+antd setup --client claude --dry-run    # 预览配置，不写入文件
+antd setup --client claude --project ./my-app
+antd setup --client claude --version 5.29.3 --lang zh
+antd setup --client claude --check      # 校验已有配置
+antd setup --client claude --mode skill # 仅写入 CLI/Skill 指令
+antd setup --client claude --mode both  # 同时写入 MCP 配置和指令
+antd setup --client claude --write-instructions
 ```
 
 模式：

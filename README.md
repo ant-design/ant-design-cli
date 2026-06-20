@@ -132,7 +132,7 @@ antd lint ./src                     # Check deprecated APIs & best practices
 antd migrate 3 4                    # v3 → v4 migration guide
 antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 antd mcp                            # Start MCP server for IDE integration
-antd setup-agent --client claude    # Configure local agent MCP settings
+antd setup --client claude    # Configure local agent MCP settings
 antd upgrade                        # Upgrade CLI to latest version
 ```
 
@@ -175,7 +175,7 @@ antd upgrade                        # Upgrade CLI to latest version
 | Command | Description |
 |---|---|
 | [`antd mcp`](#antd-mcp) | Start MCP stdio server for IDE agent integration |
-| [`antd setup-agent`](#antd-setup-agent) | Write local MCP config for Claude Code, Cursor, or VS Code |
+| [`antd setup`](#antd-setup) | Write local MCP config for Claude Code, Cursor, or VS Code |
 | [`antd upgrade`](#antd-upgrade) | Upgrade the CLI to the latest version |
 
 <br>
@@ -453,21 +453,21 @@ Configuration:
 
 **MCP Prompts (2):** `antd-expert`, `antd-page-generator`
 
-### `antd setup-agent`
+### `antd setup`
 
 Configure a local AI agent project to use the Ant Design MCP server. The command writes the client-specific MCP config file, preserving existing servers and adding or replacing the `antd` entry.
 
 ```bash
-antd setup-agent --client claude              # write .mcp.json
-antd setup-agent --client cursor              # write .cursor/mcp.json
-antd setup-agent --client vscode              # write .vscode/mcp.json
-antd setup-agent --client claude --dry-run    # preview without writing files
-antd setup-agent --client claude --project ./my-app
-antd setup-agent --client claude --version 5.29.3 --lang zh
-antd setup-agent --client claude --check      # verify existing config
-antd setup-agent --client claude --mode skill # write CLI/skill instructions only
-antd setup-agent --client claude --mode both  # write MCP config and instructions
-antd setup-agent --client claude --write-instructions
+antd setup --client claude              # write .mcp.json
+antd setup --client cursor              # write .cursor/mcp.json
+antd setup --client vscode              # write .vscode/mcp.json
+antd setup --client claude --dry-run    # preview without writing files
+antd setup --client claude --project ./my-app
+antd setup --client claude --version 5.29.3 --lang zh
+antd setup --client claude --check      # verify existing config
+antd setup --client claude --mode skill # write CLI/skill instructions only
+antd setup --client claude --mode both  # write MCP config and instructions
+antd setup --client claude --write-instructions
 ```
 
 Modes:

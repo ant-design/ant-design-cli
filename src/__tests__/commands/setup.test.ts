@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { runCLI } from '../helper.js';
 
 function withTempProject<T>(fn: (dir: string) => Promise<T>): Promise<T> {
-  const dir = mkdtempSync(join(tmpdir(), 'antd-cli-setup-agent-'));
+  const dir = mkdtempSync(join(tmpdir(), 'antd-cli-setup-'));
   return fn(dir).finally(() => {
     rmSync(dir, { recursive: true, force: true });
   });
@@ -15,11 +15,11 @@ function readJson(path: string): any {
   return JSON.parse(readFileSync(path, 'utf-8'));
 }
 
-describe('setup-agent command', () => {
+describe('setup command', () => {
   it('previews Claude Code MCP config without writing files in dry run mode', async () => {
     await withTempProject(async (dir) => {
       const result = await runCLI(
-        'setup-agent',
+        'setup',
         '--client',
         'claude',
         '--project',
@@ -58,7 +58,7 @@ describe('setup-agent command', () => {
         },
       }));
 
-      const result = await runCLI('setup-agent', '--client', 'cursor', '--project', dir, '--format', 'json');
+      const result = await runCLI('setup', '--client', 'cursor', '--project', dir, '--format', 'json');
 
       expect(result.exitCode).toBe(0);
       const data = JSON.parse(result.stdout);
@@ -75,7 +75,7 @@ describe('setup-agent command', () => {
 
   it('writes VS Code MCP config using the servers key', async () => {
     await withTempProject(async (dir) => {
-      const result = await runCLI('setup-agent', '--client', 'vscode', '--project', dir, '--format', 'json');
+      const result = await runCLI('setup', '--client', 'vscode', '--project', dir, '--format', 'json');
 
       expect(result.exitCode).toBe(0);
       const data = JSON.parse(result.stdout);
@@ -91,15 +91,15 @@ describe('setup-agent command', () => {
 
   it('checks whether the agent MCP config is already installed', async () => {
     await withTempProject(async (dir) => {
-      const missing = await runCLI('setup-agent', '--client', 'claude', '--project', dir, '--check', '--format', 'json');
+      const missing = await runCLI('setup', '--client', 'claude', '--project', dir, '--check', '--format', 'json');
       expect(missing.exitCode).toBe(1);
       const missingData = JSON.parse(missing.stdout);
       expect(missingData.configured).toBe(false);
       expect(missingData.problems).toContain('Config file not found');
 
-      await runCLI('setup-agent', '--client', 'claude', '--project', dir);
+      await runCLI('setup', '--client', 'claude', '--project', dir);
 
-      const configured = await runCLI('setup-agent', '--client', 'claude', '--project', dir, '--check', '--format', 'json');
+      const configured = await runCLI('setup', '--client', 'claude', '--project', dir, '--check', '--format', 'json');
       expect(configured.exitCode).toBe(0);
       const configuredData = JSON.parse(configured.stdout);
       expect(configuredData.configured).toBe(true);
@@ -112,7 +112,7 @@ describe('setup-agent command', () => {
       writeFileSync(join(dir, 'AGENTS.md'), '# Project Instructions\n\nKeep this line.\n');
 
       const result = await runCLI(
-        'setup-agent',
+        'setup',
         '--client',
         'claude',
         '--project',
@@ -128,12 +128,12 @@ describe('setup-agent command', () => {
 
       const first = readFileSync(join(dir, 'AGENTS.md'), 'utf-8');
       expect(first).toContain('Keep this line.');
-      expect(first).toContain('<!-- antd-cli setup-agent start -->');
+      expect(first).toContain('<!-- antd-cli setup start -->');
       expect(first).toContain('use the configured `antd` MCP server');
-      expect(first.match(/antd-cli setup-agent start/g)).toHaveLength(1);
+      expect(first.match(/antd-cli setup start/g)).toHaveLength(1);
 
       const secondRun = await runCLI(
-        'setup-agent',
+        'setup',
         '--client',
         'claude',
         '--project',
@@ -146,14 +146,14 @@ describe('setup-agent command', () => {
       const secondData = JSON.parse(secondRun.stdout);
       expect(secondData.instructionsChanged).toBe(false);
       const second = readFileSync(join(dir, 'AGENTS.md'), 'utf-8');
-      expect(second.match(/antd-cli setup-agent start/g)).toHaveLength(1);
+      expect(second.match(/antd-cli setup start/g)).toHaveLength(1);
     });
   });
 
   it('supports skill mode without writing MCP config', async () => {
     await withTempProject(async (dir) => {
       const result = await runCLI(
-        'setup-agent',
+        'setup',
         '--client',
         'claude',
         '--project',
@@ -181,7 +181,7 @@ describe('setup-agent command', () => {
   it('supports both mode by writing MCP config and AGENTS.md instructions', async () => {
     await withTempProject(async (dir) => {
       const result = await runCLI(
-        'setup-agent',
+        'setup',
         '--client',
         'claude',
         '--project',
@@ -208,7 +208,7 @@ describe('setup-agent command', () => {
   it('checks skill mode instructions', async () => {
     await withTempProject(async (dir) => {
       const missing = await runCLI(
-        'setup-agent',
+        'setup',
         '--client',
         'claude',
         '--project',
@@ -222,10 +222,10 @@ describe('setup-agent command', () => {
       expect(missing.exitCode).toBe(1);
       expect(JSON.parse(missing.stdout).problems).toContain('AGENTS.md instructions not found');
 
-      await runCLI('setup-agent', '--client', 'claude', '--project', dir, '--mode', 'skill');
+      await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill');
 
       const configured = await runCLI(
-        'setup-agent',
+        'setup',
         '--client',
         'claude',
         '--project',

@@ -9,7 +9,7 @@ import { createError, ErrorCodes, printError } from '../output/error.js';
 type AgentClient = 'claude' | 'cursor' | 'vscode';
 type SetupMode = 'mcp' | 'skill' | 'both';
 
-interface SetupAgentOptions {
+interface SetupOptions {
   client: AgentClient;
   project: string;
   mode?: SetupMode;
@@ -24,7 +24,7 @@ interface ClientConfig {
   serverKey: 'mcpServers' | 'servers';
 }
 
-interface SetupAgentResult {
+interface SetupResult {
   client: AgentClient;
   mode: SetupMode;
   file: string;
@@ -51,8 +51,8 @@ const CLIENTS: Record<AgentClient, Omit<ClientConfig, 'client' | 'file'> & { fil
   vscode: { file: '.vscode/mcp.json', serverKey: 'servers' },
 };
 
-const INSTRUCTIONS_START = '<!-- antd-cli setup-agent start -->';
-const INSTRUCTIONS_END = '<!-- antd-cli setup-agent end -->';
+const INSTRUCTIONS_START = '<!-- antd-cli setup start -->';
+const INSTRUCTIONS_END = '<!-- antd-cli setup end -->';
 
 function isAgentClient(value: string): value is AgentClient {
   return value in CLIENTS;
@@ -224,7 +224,7 @@ function checkAgent(client: AgentClient, projectDir: string, globalOpts: GlobalO
   };
 }
 
-function formatSetupAgentMarkdown(result: SetupAgentResult, lang: string): string {
+function formatSetupMarkdown(result: SetupResult, lang: string): string {
   return [
     `## ${localize('Setup Agent', '配置 Agent', lang)}`,
     '',
@@ -239,7 +239,7 @@ function formatSetupAgentMarkdown(result: SetupAgentResult, lang: string): strin
   ].join('\n');
 }
 
-function printSetupAgentResult(result: SetupAgentResult | CheckAgentResult, format: OutputFormat, lang: string): void {
+function printSetupResult(result: SetupResult | CheckAgentResult, format: OutputFormat, lang: string): void {
   if (format === 'json') {
     output(result, 'json');
     return;
@@ -248,7 +248,7 @@ function printSetupAgentResult(result: SetupAgentResult | CheckAgentResult, form
     if ('configured' in result) {
       console.log(formatCheckAgentMarkdown(result, lang));
     } else {
-      console.log(formatSetupAgentMarkdown(result, lang));
+      console.log(formatSetupMarkdown(result, lang));
     }
     return;
   }
@@ -287,14 +287,14 @@ function formatCheckAgentMarkdown(result: CheckAgentResult, lang: string): strin
   ].join('\n');
 }
 
-export function setupAgent(
+export function setup(
   client: AgentClient,
   projectDir: string,
   globalOpts: GlobalOptions,
   dryRun = false,
   mode: SetupMode = 'mcp',
   shouldWriteInstructions = false,
-): SetupAgentResult {
+): SetupResult {
   const clientConfig = CLIENTS[client];
   const file = resolve(projectDir, clientConfig.file);
   const shouldWriteMcp = mode === 'mcp' || mode === 'both';
@@ -328,9 +328,9 @@ export function setupAgent(
   };
 }
 
-export function registerSetupAgentCommand(program: Command): void {
+export function registerSetupCommand(program: Command): void {
   program
-    .command('setup-agent')
+    .command('setup')
     .description('Configure an AI agent to use the Ant Design MCP server')
     .requiredOption('--client <client>', 'Agent client: claude, cursor, or vscode')
     .option('--mode <mode>', 'Setup mode: mcp, skill, or both', 'mcp')
@@ -338,7 +338,7 @@ export function registerSetupAgentCommand(program: Command): void {
     .option('--dry-run', 'Preview the config without writing files')
     .option('--check', 'Check whether the agent is already configured')
     .option('--write-instructions', 'Write AGENTS.md instructions for using the antd MCP server')
-    .action((cmdOpts: SetupAgentOptions) => {
+    .action((cmdOpts: SetupOptions) => {
       const opts = program.opts<GlobalOptions>();
       if (!isAgentClient(cmdOpts.client)) {
         const err = createError(
@@ -382,7 +382,7 @@ export function registerSetupAgentCommand(program: Command): void {
       try {
         const result = cmdOpts.check
           ? checkAgent(cmdOpts.client, cmdOpts.project, opts, mode)
-          : setupAgent(
+          : setup(
               cmdOpts.client,
               cmdOpts.project,
               opts,
@@ -390,7 +390,7 @@ export function registerSetupAgentCommand(program: Command): void {
               mode,
               Boolean(cmdOpts.writeInstructions),
             );
-        printSetupAgentResult(result, opts.format, opts.lang);
+        printSetupResult(result, opts.format, opts.lang);
         if ('configured' in result && !result.configured) {
           process.exitCode = 1;
         }
