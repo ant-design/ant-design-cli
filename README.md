@@ -41,7 +41,7 @@ npx skills add ant-design/ant-design-cli    # install as an agent skill
 - 🤖 **Agent-optimized** — `--format json` on every command. Structured errors with codes and suggestions. Clean stdout/stderr separation.
 - 🌍 **Bilingual** — Every component name, description, and doc has both English and Chinese. Switch with `--lang zh`.
 - 🔮 **Smart matching** — Typo `Buttn`? The CLI suggests `Button` using Levenshtein distance, with first-letter preference.
-- 🧩 **17 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
+- 🧩 **18 commands** — From prop lookup to project-wide lint, from design token queries to cross-version API diffing.
 - 🔌 **MCP server** — `antd mcp` starts a stdio server for native IDE integration (Claude Code, Cursor, VS Code, etc.).
 
 <br>
@@ -132,6 +132,7 @@ antd lint ./src                     # Check deprecated APIs & best practices
 antd migrate 3 4                    # v3 → v4 migration guide
 antd migrate 4 5 --apply ./src      # Agent-ready migration prompt
 antd mcp                            # Start MCP server for IDE integration
+antd setup-agent --client claude    # Configure local agent MCP settings
 antd upgrade                        # Upgrade CLI to latest version
 ```
 
@@ -174,6 +175,7 @@ antd upgrade                        # Upgrade CLI to latest version
 | Command | Description |
 |---|---|
 | [`antd mcp`](#antd-mcp) | Start MCP stdio server for IDE agent integration |
+| [`antd setup-agent`](#antd-setup-agent) | Write local MCP config for Claude Code, Cursor, or VS Code |
 | [`antd upgrade`](#antd-upgrade) | Upgrade the CLI to the latest version |
 
 <br>
@@ -450,6 +452,46 @@ Configuration:
 **MCP Tools (8):** `antd_list`, `antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design_md`, `antd_semantic`, `antd_changelog`
 
 **MCP Prompts (2):** `antd-expert`, `antd-page-generator`
+
+### `antd setup-agent`
+
+Configure a local AI agent project to use the Ant Design MCP server. The command writes the client-specific MCP config file, preserving existing servers and adding or replacing the `antd` entry.
+
+```bash
+antd setup-agent --client claude              # write .mcp.json
+antd setup-agent --client cursor              # write .cursor/mcp.json
+antd setup-agent --client vscode              # write .vscode/mcp.json
+antd setup-agent --client claude --dry-run    # preview without writing files
+antd setup-agent --client claude --project ./my-app
+antd setup-agent --client claude --version 5.29.3 --lang zh
+antd setup-agent --client claude --check      # verify existing config
+antd setup-agent --client claude --write-instructions
+```
+
+Supported clients:
+
+| Client | Config file | Server key |
+|---|---|---|
+| `claude` | `.mcp.json` | `mcpServers` |
+| `cursor` | `.cursor/mcp.json` | `mcpServers` |
+| `vscode` | `.vscode/mcp.json` | `servers` |
+
+Generated server entry:
+
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "npx",
+      "args": ["-y", "@ant-design/cli", "mcp", "--version", "5.29.3", "--lang", "zh"]
+    }
+  }
+}
+```
+
+Use `--check` to validate an existing setup without writing files. It exits with code `0` when the `antd` MCP server entry matches the expected config, and `1` when the config is missing or different.
+
+Use `--write-instructions` to add an idempotent managed block to `AGENTS.md`, telling agents to use the configured `antd` MCP server before generating Ant Design code.
 
 ### `antd upgrade`
 

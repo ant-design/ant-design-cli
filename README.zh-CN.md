@@ -41,7 +41,7 @@ npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
 - 🤖 **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
 - 🌍 **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
 - 🔮 **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
-- 🧩 **17 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
+- 🧩 **18 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
 - 🔌 **MCP 服务** — `antd mcp` 启动 stdio 服务，原生集成 Claude Desktop、Cursor 等 IDE。
 
 <br>
@@ -119,6 +119,7 @@ antd lint ./src                     # 检查废弃 API 和最佳实践
 antd migrate 3 4                    # v3 → v4 迁移指南
 antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 antd mcp                            # 启动 MCP 服务，供 IDE 集成
+antd setup-agent --client claude    # 配置本地 Agent MCP 设置
 antd upgrade                        # 升级 CLI 到最新版本
 ```
 
@@ -161,6 +162,7 @@ antd upgrade                        # 升级 CLI 到最新版本
 | 命令 | 说明 |
 |---|---|
 | [`antd mcp`](#antd-mcp) | 启动 MCP stdio 服务，供 IDE Agent 集成 |
+| [`antd setup-agent`](#antd-setup-agent) | 为 Claude Code、Cursor 或 VS Code 写入本地 MCP 配置 |
 | [`antd upgrade`](#antd-upgrade) | 升级 CLI 到最新版本 |
 
 <br>
@@ -437,6 +439,46 @@ IDE 配置（`claude_desktop_config.json`）：
 **MCP 工具（8 个）：** `antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_design_md`、`antd_semantic`、`antd_changelog`
 
 **MCP 提示词（2 个）：** `antd-expert`、`antd-page-generator`
+
+### `antd setup-agent`
+
+配置本地 AI Agent 项目使用 Ant Design MCP 服务。该命令会写入对应客户端的 MCP 配置文件，保留已有服务，并添加或替换 `antd` 服务项。
+
+```bash
+antd setup-agent --client claude              # 写入 .mcp.json
+antd setup-agent --client cursor              # 写入 .cursor/mcp.json
+antd setup-agent --client vscode              # 写入 .vscode/mcp.json
+antd setup-agent --client claude --dry-run    # 预览配置，不写入文件
+antd setup-agent --client claude --project ./my-app
+antd setup-agent --client claude --version 5.29.3 --lang zh
+antd setup-agent --client claude --check      # 校验已有配置
+antd setup-agent --client claude --write-instructions
+```
+
+支持的客户端：
+
+| 客户端 | 配置文件 | 服务字段 |
+|---|---|---|
+| `claude` | `.mcp.json` | `mcpServers` |
+| `cursor` | `.cursor/mcp.json` | `mcpServers` |
+| `vscode` | `.vscode/mcp.json` | `servers` |
+
+生成的服务项：
+
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "npx",
+      "args": ["-y", "@ant-design/cli", "mcp", "--version", "5.29.3", "--lang", "zh"]
+    }
+  }
+}
+```
+
+使用 `--check` 可以只校验已有配置，不写入文件。当 `antd` MCP 服务项与预期配置一致时退出码为 `0`，配置缺失或不一致时退出码为 `1`。
+
+使用 `--write-instructions` 可以向 `AGENTS.md` 写入一个可重复更新的托管区块，提示 Agent 在生成 Ant Design 代码前优先使用已配置的 `antd` MCP 服务。
 
 ### `antd upgrade`
 

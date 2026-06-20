@@ -338,6 +338,88 @@ All tools include MCP annotations: `readOnlyHint: true`, `destructiveHint: false
 
 Global `--version` and `--lang` are resolved once at server startup (not per tool call). All tool outputs are JSON. The server uses `@modelcontextprotocol/sdk` with stdio transport.
 
+#### `antd setup-agent`
+
+Configure a local AI agent project to use the Ant Design MCP server. This is an onboarding helper for `antd mcp`: it writes the correct MCP client configuration file, while `antd mcp` remains the stdio server that the agent starts.
+
+```bash
+antd setup-agent --client claude              # write .mcp.json
+antd setup-agent --client cursor              # write .cursor/mcp.json
+antd setup-agent --client vscode              # write .vscode/mcp.json
+antd setup-agent --client claude --dry-run    # preview without writing files
+antd setup-agent --client claude --project ./my-app
+antd setup-agent --client claude --version 5.29.3 --lang zh
+antd setup-agent --client claude --check      # verify existing config
+antd setup-agent --client claude --write-instructions
+```
+
+Supported clients:
+
+| Client | Config file | Server key |
+|---|---|---|
+| `claude` | `.mcp.json` | `mcpServers` |
+| `cursor` | `.cursor/mcp.json` | `mcpServers` |
+| `vscode` | `.vscode/mcp.json` | `servers` |
+
+The command preserves existing MCP servers in the target file and adds or replaces the `antd` server entry:
+
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "npx",
+      "args": ["-y", "@ant-design/cli", "mcp", "--version", "5.29.3", "--lang", "zh"]
+    }
+  }
+}
+```
+
+When `--version` is provided, it is pinned into the generated MCP server args. When `--lang zh` is provided, the generated server starts in Chinese mode. English is the default and is omitted from generated args.
+
+`--check` validates the target config without writing files. It exits `0` when the `antd` MCP server entry exists and matches the expected command/args for the requested global flags, and exits `1` when the config file is missing, the `antd` server entry is missing, or the existing entry differs.
+
+`--write-instructions` writes an idempotent managed block to `AGENTS.md` in the target project. The block tells agents to use the configured `antd` MCP server before generating Ant Design code and lists the relevant MCP tools (`antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design_md`, `antd_semantic`, `antd_changelog`). Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it.
+
+JSON output:
+
+```json
+{
+  "client": "claude",
+  "file": "/path/to/project/.mcp.json",
+  "changed": true,
+  "dryRun": false,
+  "instructionsFile": "/path/to/project/AGENTS.md",
+  "instructionsChanged": true,
+  "config": {
+    "mcpServers": {
+      "antd": {
+        "command": "npx",
+        "args": ["-y", "@ant-design/cli", "mcp"]
+      }
+    }
+  }
+}
+```
+
+Check JSON output:
+
+```json
+{
+  "client": "claude",
+  "file": "/path/to/project/.mcp.json",
+  "configured": true,
+  "problems": [],
+  "expected": {
+    "command": "npx",
+    "args": ["-y", "@ant-design/cli", "mcp"]
+  },
+  "actual": {
+    "command": "npx",
+    "args": ["-y", "@ant-design/cli", "mcp"]
+  }
+}
+```
+
 ### Project Analysis
 
 #### `antd doctor`
