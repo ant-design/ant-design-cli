@@ -5,16 +5,16 @@ import * as fetchModule from '../utils/fetch.js';
 
 // Replace the Conf-backed store with an in-memory shim to avoid cross-test on-disk races.
 let memStore: Record<string, unknown> = {};
-beforeEach(() => {
-  memStore = {};
-});
-vi.spyOn(cacheStore, 'get').mockImplementation(((key: string) => memStore[key]) as never);
-vi.spyOn(cacheStore, 'set').mockImplementation(((key: string, value: unknown) => {
-  memStore[key] = value;
-}) as never);
-vi.spyOn(cacheStore, 'delete').mockImplementation(((key: string) => {
-  delete memStore[key];
-}) as never);
+
+function mockCacheStore() {
+  vi.spyOn(cacheStore, 'get').mockImplementation(((key: string) => memStore[key]) as never);
+  vi.spyOn(cacheStore, 'set').mockImplementation(((key: string, value: unknown) => {
+    memStore[key] = value;
+  }) as never);
+  vi.spyOn(cacheStore, 'delete').mockImplementation(((key: string) => {
+    delete memStore[key];
+  }) as never);
+}
 
 const ORIG_CI = process.env.CI;
 const ORIG_NO_UPDATE = process.env.NO_UPDATE_CHECK;
@@ -34,13 +34,15 @@ describe('update-check', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
+    memStore = {};
+    mockCacheStore();
     cacheStore.delete('updateCache');
     stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
     cacheStore.delete('updateCache');
+    vi.restoreAllMocks();
     restoreCI();
   });
 
