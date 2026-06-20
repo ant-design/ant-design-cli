@@ -29,6 +29,10 @@ export async function runCLI(...args: string[]): Promise<CLIRunResult> {
     stdout += String(data);
     return true;
   });
+  const errWriteSpy = vi.spyOn(process.stderr, 'write').mockImplementation((data: unknown) => {
+    stderr += String(data);
+    return true;
+  });
   const exitSpy = vi.spyOn(process, 'exit').mockImplementation((code?: string | number | null) => {
     forcedExitCode = typeof code === 'number' ? code : 0;
     // Throw to halt execution after process.exit, matching real behavior
@@ -50,6 +54,7 @@ export async function runCLI(...args: string[]): Promise<CLIRunResult> {
     logSpy.mockRestore();
     errSpy.mockRestore();
     writeSpy.mockRestore();
+    errWriteSpy.mockRestore();
     exitSpy.mockRestore();
     process.exitCode = origExitCode as number | undefined;
     forcedExitCode = capturedExitCode;

@@ -753,6 +753,8 @@ Exit codes:
 
 Common error codes: `COMPONENT_NOT_FOUND`, `VERSION_NOT_FOUND`, `NO_PROJECT_DETECTED`, `UNSUPPORTED_VERSION_FEATURE` (e.g. tokens for v3/v4), `NETWORK_ERROR`, `PM_NOT_FOUND`, `UPGRADE_FAILED`, `VERSION_UNCHANGED`.
 
+Invalid global options such as `--format` and `--lang` exit with code `1` and print only the validation message to stderr; internal sentinel errors or Node.js stack traces must not be shown to users.
+
 ## Technical Architecture
 
 ```
