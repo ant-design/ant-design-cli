@@ -6,11 +6,15 @@ export interface ParsedFrontMatter {
 }
 
 function isDelimiter(line: string): boolean {
-  const trimmed = line.trim();
+  const trimmed = line.trimEnd();
   return trimmed === '---' || trimmed === '...';
 }
 
 export function parseFrontMatter(input: string): ParsedFrontMatter {
+  if (input.startsWith('\uFEFF')) {
+    input = input.slice(1);
+  }
+
   const firstLineEnd = input.indexOf('\n');
   const firstLine = firstLineEnd === -1 ? input : input.slice(0, firstLineEnd);
 
