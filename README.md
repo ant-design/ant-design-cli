@@ -175,7 +175,7 @@ antd upgrade                        # Upgrade CLI to latest version
 | Command | Description |
 |---|---|
 | [`antd mcp`](#antd-mcp) | Start MCP stdio server for IDE agent integration |
-| [`antd setup`](#antd-setup) | Write local MCP config for Claude Code, Cursor, or VS Code |
+| [`antd setup`](#antd-setup) | Write local MCP config or install skills for Claude Code, Cursor, VS Code, or Codex |
 | [`antd upgrade`](#antd-upgrade) | Upgrade the CLI to the latest version |
 
 <br>
@@ -461,6 +461,7 @@ Configure a local AI agent project with Ant Design MCP and/or the bundled `skill
 antd setup --client claude              # write .mcp.json
 antd setup --client cursor              # write .cursor/mcp.json
 antd setup --client vscode              # write .vscode/mcp.json
+antd setup --client codex               # install Codex project skill
 antd setup --client claude --dry-run    # preview without writing files
 antd setup --client claude --project ./my-app
 antd setup --client claude --version 5.29.3 --lang zh
@@ -483,8 +484,9 @@ Supported clients:
 | Client | Config file | Server key | Skill target | Instructions file |
 |---|---|---|---|---|
 | `claude` | `.mcp.json` | `mcpServers` | `.claude/skills/antd/` | `CLAUDE.md` |
-| `cursor` | `.cursor/mcp.json` | `mcpServers` | `skills/antd/` skill reference | `AGENTS.md` |
-| `vscode` | `.vscode/mcp.json` | `servers` | `skills/antd/` skill reference | `AGENTS.md` |
+| `cursor` | `.cursor/mcp.json` | `mcpServers` | `.agents/skills/antd/` shared skill | `AGENTS.md` |
+| `vscode` | `.vscode/mcp.json` | `servers` | `.agents/skills/antd/` shared skill | `AGENTS.md` |
+| `codex` | - | - | `.agents/skills/antd/` shared skill | `AGENTS.md` |
 
 Generated server entry:
 
@@ -499,7 +501,9 @@ Generated server entry:
 }
 ```
 
-Skill instructions are written to the selected client's instruction file: Claude uses `CLAUDE.md`; Cursor and VS Code use `AGENTS.md`. Claude gets a native project skill under `.claude/skills/antd/`; other clients get the same bundled guidance as a local `skills/antd/` reference and an instruction block telling agents when to use it.
+Skill instructions are written to the selected client's instruction file: Claude uses `CLAUDE.md`; Cursor, VS Code, and Codex use `AGENTS.md`. Claude gets a native project skill under `.claude/skills/antd/`; Cursor, VS Code, and Codex get the same bundled guidance under `.agents/skills/antd/` and an instruction block telling agents when to use it.
+
+Codex setup currently supports skill installation only. Use `antd setup --client codex --mode skill`, or omit `--mode` because Codex defaults to `skill`.
 
 Use `--check` to validate an existing setup without writing files. It exits with code `0` when the selected mode is configured, and `1` when config, skill files, or instructions are missing or different.
 

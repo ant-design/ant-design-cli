@@ -346,6 +346,7 @@ Configure a local AI agent project with Ant Design MCP and/or the bundled `skill
 antd setup --client claude              # write .mcp.json
 antd setup --client cursor              # write .cursor/mcp.json
 antd setup --client vscode              # write .vscode/mcp.json
+antd setup --client codex               # install Codex project skill
 antd setup --client claude --dry-run    # preview without writing files
 antd setup --client claude --project ./my-app
 antd setup --client claude --version 5.29.3 --lang zh
@@ -368,8 +369,9 @@ Supported clients:
 | Client | Config file | Server key | Skill target | Instructions file |
 |---|---|---|---|---|
 | `claude` | `.mcp.json` | `mcpServers` | `.claude/skills/antd/` | `CLAUDE.md` |
-| `cursor` | `.cursor/mcp.json` | `mcpServers` | `skills/antd/` skill reference | `AGENTS.md` |
-| `vscode` | `.vscode/mcp.json` | `servers` | `skills/antd/` skill reference | `AGENTS.md` |
+| `cursor` | `.cursor/mcp.json` | `mcpServers` | `.agents/skills/antd/` shared skill | `AGENTS.md` |
+| `vscode` | `.vscode/mcp.json` | `servers` | `.agents/skills/antd/` shared skill | `AGENTS.md` |
+| `codex` | - | - | `.agents/skills/antd/` shared skill | `AGENTS.md` |
 
 The command preserves existing MCP servers in the target file and adds or replaces the `antd` server entry:
 
@@ -386,7 +388,9 @@ The command preserves existing MCP servers in the target file and adds or replac
 
 When `--version` is provided, it is pinned into generated MCP server args. When `--lang zh` is provided, generated MCP args start in Chinese mode. English is the default and is omitted from generated args.
 
-Skill instructions are written to the selected client's instruction file: Claude uses `CLAUDE.md`; Cursor and VS Code use `AGENTS.md`. Claude gets a native project skill under `.claude/skills/antd/`; other clients get the same bundled guidance as a local `skills/antd/` reference.
+Skill instructions are written to the selected client's instruction file: Claude uses `CLAUDE.md`; Cursor, VS Code, and Codex use `AGENTS.md`. Claude gets a native project skill under `.claude/skills/antd/`; Cursor, VS Code, and Codex get the same bundled guidance under `.agents/skills/antd/`.
+
+Codex setup currently supports skill installation only. `antd setup --client codex` defaults to `skill`; explicit `--mode mcp` or `--mode both` is rejected until a project-local Codex MCP config format is supported.
 
 `--check` validates the selected mode without writing files:
 
@@ -398,7 +402,7 @@ It exits `0` when the selected mode is configured and exits `1` when config, ski
 
 `--write-instructions` is a compatibility convenience for the default `mcp` mode. It writes the MCP-oriented block to the selected agent instructions file in addition to the MCP config. Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it. When combined with `--check`, it also checks that the MCP-oriented instruction block is present in the same selected file.
 
-Text output reports every file or directory that was actually changed, one per line. For example, `--mode both` can print the MCP config file, `.claude/skills/antd` or `skills/antd`, and the selected `CLAUDE.md` or `AGENTS.md` path.
+Text output reports every file or directory that was actually changed, one per line. For example, `--mode both` can print the MCP config file, `.claude/skills/antd` or `.agents/skills/antd`, and the selected `CLAUDE.md` or `AGENTS.md` path.
 In `--dry-run` mode, text output reports `Would write` only when the selected setup would change files; otherwise it reports `Already configured`.
 
 JSON output:

@@ -334,12 +334,42 @@ describe('setup command', () => {
 
       expect(result.exitCode).toBe(0);
       const data = JSON.parse(result.stdout);
-      expect(data.skillDir).toBe(join(dir, 'skills', 'antd'));
+      expect(data.skillDir).toBe(join(dir, '.agents', 'skills', 'antd'));
       expect(data.instructionsFile).toBe(join(dir, 'AGENTS.md'));
       expect(existsSync(join(dir, '.claude', 'skills', 'antd', 'SKILL.md'))).toBe(false);
-      expect(readFileSync(join(dir, 'skills', 'antd', 'SKILL.md'), 'utf-8')).toContain('name: antd');
-      expect(readFileSync(join(dir, 'AGENTS.md'), 'utf-8')).toContain('Use the local Ant Design skill reference at `skills/antd/SKILL.md`');
+      expect(readFileSync(join(dir, '.agents', 'skills', 'antd', 'SKILL.md'), 'utf-8')).toContain('name: antd');
+      expect(readFileSync(join(dir, 'AGENTS.md'), 'utf-8')).toContain('Use the shared Ant Design skill at `.agents/skills/antd/SKILL.md`');
       expect(readFileSync(join(dir, 'CLAUDE.md'), 'utf-8')).toBe('# Claude Instructions\n');
+    });
+  });
+
+  it('installs Codex shared skills and writes AGENTS.md instructions', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI('setup', '--client', 'codex', '--project', dir, '--format', 'json');
+
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+      expect(data.client).toBe('codex');
+      expect(data.mode).toBe('skill');
+      expect(data.changed).toBe(false);
+      expect(data.skillDir).toBe(join(dir, '.agents', 'skills', 'antd'));
+      expect(data.instructionsFile).toBe(join(dir, 'AGENTS.md'));
+      expect(existsSync(join(dir, '.agents', 'skills', 'antd', 'SKILL.md'))).toBe(true);
+      expect(readFileSync(join(dir, 'AGENTS.md'), 'utf-8')).toContain('Use the shared Ant Design skill at `.agents/skills/antd/SKILL.md`');
+
+      const check = await runCLI('setup', '--client', 'codex', '--project', dir, '--check', '--format', 'json');
+      expect(check.exitCode).toBe(0);
+      expect(JSON.parse(check.stdout).configured).toBe(true);
+    });
+  });
+
+  it('rejects Codex MCP setup modes because only skill install is supported', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI('setup', '--client', 'codex', '--project', dir, '--mode', 'mcp', '--format', 'json');
+
+      expect(result.exitCode).toBe(1);
+      const error = JSON.parse(result.stderr);
+      expect(error.message).toContain("Codex setup only supports '--mode skill'");
     });
   });
 
@@ -525,12 +555,12 @@ describe('setup command', () => {
     });
   });
 
-  it('does not try to copy the bundled skill onto itself during dry run', async () => {
+  it('previews shared skill installation during dry run', async () => {
     const result = await runCLI('setup', '--client', 'cursor', '--project', process.cwd(), '--mode', 'skill', '--dry-run', '--format', 'json');
 
     expect(result.exitCode).toBe(0);
     const data = JSON.parse(result.stdout);
-    expect(data.skillDir).toBe(join(process.cwd(), 'skills', 'antd'));
-    expect(data.skillChanged).toBe(false);
+    expect(data.skillDir).toBe(join(process.cwd(), '.agents', 'skills', 'antd'));
+    expect(data.skillChanged).toBe(true);
   });
 });

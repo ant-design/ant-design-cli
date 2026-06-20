@@ -162,7 +162,7 @@ antd upgrade                        # 升级 CLI 到最新版本
 | 命令 | 说明 |
 |---|---|
 | [`antd mcp`](#antd-mcp) | 启动 MCP stdio 服务，供 IDE Agent 集成 |
-| [`antd setup`](#antd-setup) | 为 Claude Code、Cursor 或 VS Code 接入 Ant Design MCP/Skill |
+| [`antd setup`](#antd-setup) | 为 Claude Code、Cursor、VS Code 或 Codex 接入 Ant Design MCP/Skill |
 | [`antd upgrade`](#antd-upgrade) | 升级 CLI 到最新版本 |
 
 <br>
@@ -448,6 +448,7 @@ IDE 配置（`claude_desktop_config.json`）：
 antd setup --client claude              # 写入 .mcp.json
 antd setup --client cursor              # 写入 .cursor/mcp.json
 antd setup --client vscode              # 写入 .vscode/mcp.json
+antd setup --client codex               # 安装 Codex 项目技能
 antd setup --client claude --dry-run    # 预览配置，不写入文件
 antd setup --client claude --project ./my-app
 antd setup --client claude --version 5.29.3 --lang zh
@@ -470,8 +471,9 @@ antd setup --client claude --write-instructions
 | 客户端 | 配置文件 | 服务字段 | 技能位置 | 指令文件 |
 |---|---|---|---|---|
 | `claude` | `.mcp.json` | `mcpServers` | `.claude/skills/antd/` | `CLAUDE.md` |
-| `cursor` | `.cursor/mcp.json` | `mcpServers` | `skills/antd/` 技能参考 | `AGENTS.md` |
-| `vscode` | `.vscode/mcp.json` | `servers` | `skills/antd/` 技能参考 | `AGENTS.md` |
+| `cursor` | `.cursor/mcp.json` | `mcpServers` | `.agents/skills/antd/` 共享技能 | `AGENTS.md` |
+| `vscode` | `.vscode/mcp.json` | `servers` | `.agents/skills/antd/` 共享技能 | `AGENTS.md` |
+| `codex` | - | - | `.agents/skills/antd/` 共享技能 | `AGENTS.md` |
 
 生成的服务项：
 
@@ -486,7 +488,9 @@ antd setup --client claude --write-instructions
 }
 ```
 
-技能指令会写入所选客户端对应的指令文件：Claude 使用 `CLAUDE.md`，Cursor 和 VS Code 使用 `AGENTS.md`。Claude 会获得 `.claude/skills/antd/` 下的项目级原生技能；其他客户端会获得同一份 `skills/antd/` 本地技能参考，并通过指令区块告诉 Agent 何时使用。
+技能指令会写入所选客户端对应的指令文件：Claude 使用 `CLAUDE.md`，Cursor、VS Code 和 Codex 使用 `AGENTS.md`。Claude 会获得 `.claude/skills/antd/` 下的项目级原生技能；Cursor、VS Code 和 Codex 会获得同一份 `.agents/skills/antd/` 共享技能，并通过指令区块告诉 Agent 何时使用。
+
+Codex setup 目前只支持技能安装。请使用 `antd setup --client codex --mode skill`，也可以省略 `--mode`，因为 Codex 默认使用 `skill` 模式。
 
 使用 `--check` 可以只校验已有配置，不写入文件。当所选模式已正确配置时退出码为 `0`，配置、技能文件或指令缺失/不一致时退出码为 `1`。
 

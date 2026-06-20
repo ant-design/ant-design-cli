@@ -7,7 +7,8 @@ import { localize } from '../types.js';
 import { output } from '../output/formatter.js';
 import { createError, ErrorCodes, printError } from '../output/error.js';
 
-type AgentClient = 'claude' | 'cursor' | 'vscode';
+type AgentClient = 'claude' | 'cursor' | 'vscode' | 'codex';
+type McpAgentClient = Exclude<AgentClient, 'codex'>;
 type SetupMode = 'mcp' | 'skill' | 'both';
 
 interface SetupOptions {
@@ -20,7 +21,7 @@ interface SetupOptions {
 }
 
 interface ClientConfig {
-  client: AgentClient;
+  client: McpAgentClient;
   file: string;
   serverKey: 'mcpServers' | 'servers';
 }
@@ -48,7 +49,7 @@ interface CheckAgentResult {
   actual?: unknown;
 }
 
-const CLIENTS: Record<AgentClient, Omit<ClientConfig, 'client' | 'file'> & { file: string }> = {
+const CLIENTS: Record<McpAgentClient, Omit<ClientConfig, 'client' | 'file'> & { file: string }> = {
   claude: { file: '.mcp.json', serverKey: 'mcpServers' },
   cursor: { file: '.cursor/mcp.json', serverKey: 'mcpServers' },
   vscode: { file: '.vscode/mcp.json', serverKey: 'servers' },
@@ -58,7 +59,11 @@ const INSTRUCTIONS_START = '<!-- antd-cli setup start -->';
 const INSTRUCTIONS_END = '<!-- antd-cli setup end -->';
 
 function isAgentClient(value: string): value is AgentClient {
-  return Object.prototype.hasOwnProperty.call(CLIENTS, value);
+  return value === 'codex' || Object.prototype.hasOwnProperty.call(CLIENTS, value);
+}
+
+function isMcpAgentClient(value: AgentClient): value is McpAgentClient {
+  return value !== 'codex';
 }
 
 function isSetupMode(value: string): value is SetupMode {
@@ -132,20 +137,18 @@ function createMcpInstructionsBlock(): string {
 }
 
 function getSkillDir(projectDir: string, client: AgentClient): string {
-  return client === 'claude'
-    ? join(projectDir, '.claude', 'skills', 'antd')
-    : join(projectDir, 'skills', 'antd');
+  if (client === 'claude') return join(projectDir, '.claude', 'skills', 'antd');
+  return join(projectDir, '.agents', 'skills', 'antd');
 }
 
 function getSkillInstructionsPath(client: AgentClient): string {
-  return client === 'claude'
-    ? '.claude/skills/antd/SKILL.md'
-    : 'skills/antd/SKILL.md';
+  if (client === 'claude') return '.claude/skills/antd/SKILL.md';
+  return '.agents/skills/antd/SKILL.md';
 }
 
 function createSkillInstructionsBlock(client: AgentClient): string {
   const skillPath = getSkillInstructionsPath(client);
-  const label = client === 'claude' ? 'installed Ant Design skill' : 'local Ant Design skill reference';
+  const label = client === 'claude' ? 'installed Ant Design skill' : 'shared Ant Design skill';
   return [
     INSTRUCTIONS_START,
     '## Ant Design CLI Skill',
@@ -162,7 +165,7 @@ function createInstructionsBlock(mode: SetupMode, client: AgentClient): string {
   if (mode === 'skill') return createSkillInstructionsBlock(client);
   if (mode === 'both') {
     const skillPath = getSkillInstructionsPath(client);
-    const label = client === 'claude' ? 'installed Ant Design skill' : 'local Ant Design skill reference';
+    const label = client === 'claude' ? 'installed Ant Design skill' : 'shared Ant Design skill';
     return createMcpInstructionsBlock().replace(
       INSTRUCTIONS_END,
       [
@@ -217,10 +220,6 @@ function installSkill(projectDir: string, dryRun: boolean, client: AgentClient):
   const target = getSkillDir(projectDir, client);
   const sourceSkill = join(source, 'SKILL.md');
   const targetSkill = join(target, 'SKILL.md');
-
-  if (resolve(source) === resolve(target)) {
-    return { dir: target, changed: false };
-  }
 
   const changed = !existsSync(targetSkill) || readFileSync(sourceSkill, 'utf-8') !== readFileSync(targetSkill, 'utf-8');
   if (changed && !dryRun) {
@@ -280,14 +279,14 @@ function checkAgent(
   mode: SetupMode,
   shouldCheckInstructions = false,
 ): CheckAgentResult {
-  const clientConfig = CLIENTS[client];
-  const file = resolve(projectDir, clientConfig.file);
-  const expectedConfig = createMergedConfig({}, clientConfig.serverKey, globalOpts);
-  const expected = getServerEntry(expectedConfig, clientConfig.serverKey) as Record<string, unknown>;
+  const clientConfig = isMcpAgentClient(client) ? CLIENTS[client] : undefined;
+  const file = clientConfig ? resolve(projectDir, clientConfig.file) : chooseInstructionsFile(projectDir, client);
+  const expectedConfig = clientConfig ? createMergedConfig({}, clientConfig.serverKey, globalOpts) : {};
+  const expected = clientConfig ? getServerEntry(expectedConfig, clientConfig.serverKey) as Record<string, unknown> : {};
   const problems: string[] = [];
   let actual: unknown;
 
-  if (mode === 'mcp' || mode === 'both') {
+  if ((mode === 'mcp' || mode === 'both') && clientConfig) {
     if (!existsSync(file)) {
       problems.push('Config file not found');
     } else {
@@ -400,11 +399,11 @@ export function setup(
   mode: SetupMode = 'mcp',
   shouldWriteInstructions = false,
 ): SetupResult {
-  const clientConfig = CLIENTS[client];
-  const file = resolve(projectDir, clientConfig.file);
+  const clientConfig = isMcpAgentClient(client) ? CLIENTS[client] : undefined;
+  const file = clientConfig ? resolve(projectDir, clientConfig.file) : chooseInstructionsFile(projectDir, client);
   const shouldWriteMcp = mode === 'mcp' || mode === 'both';
-  const current = shouldWriteMcp ? readConfig(file) : {};
-  const config = shouldWriteMcp ? createMergedConfig(current, clientConfig.serverKey, globalOpts) : {};
+  const current = shouldWriteMcp && clientConfig ? readConfig(file) : {};
+  const config = shouldWriteMcp && clientConfig ? createMergedConfig(current, clientConfig.serverKey, globalOpts) : {};
   const changed = shouldWriteMcp && stableJson(current) !== stableJson(config);
   let instructions: { file: string; changed: boolean } | undefined;
   let skill: { dir: string; changed: boolean } | undefined;
@@ -448,8 +447,8 @@ export function registerSetupCommand(program: Command): void {
   program
     .command('setup')
     .description('Set up Ant Design MCP/Skill for AI agents')
-    .requiredOption('--client <client>', 'Agent client: claude, cursor, or vscode')
-    .option('--mode <mode>', 'Setup mode: mcp, skill, or both', 'mcp')
+    .requiredOption('--client <client>', 'Agent client: claude, cursor, vscode, or codex')
+    .option('--mode <mode>', 'Setup mode: mcp, skill, or both')
     .option('--project <dir>', 'Project directory to write config into', process.cwd())
     .option('--dry-run', 'Preview the config without writing files')
     .option('--check', 'Check whether the agent is already configured')
@@ -465,8 +464,8 @@ export function registerSetupCommand(program: Command): void {
             opts.lang,
           ),
           localize(
-            'Use one of: claude, cursor, vscode.',
-            '请使用: claude, cursor, vscode。',
+            'Use one of: claude, cursor, vscode, codex.',
+            '请使用: claude, cursor, vscode, codex。',
             opts.lang,
           ),
         );
@@ -493,7 +492,25 @@ export function registerSetupCommand(program: Command): void {
         return;
       }
 
-      const mode = cmdOpts.mode ?? 'mcp';
+      const mode = cmdOpts.mode ?? (cmdOpts.client === 'codex' ? 'skill' : 'mcp');
+      if (cmdOpts.client === 'codex' && mode !== 'skill') {
+        const err = createError(
+          ErrorCodes.INVALID_ARGUMENT,
+          localize(
+            "Codex setup only supports '--mode skill'",
+            "Codex setup 目前只支持 '--mode skill'",
+            opts.lang,
+          ),
+          localize(
+            'Use `antd setup --client codex --mode skill` to install the project skill.',
+            '请使用 `antd setup --client codex --mode skill` 安装项目技能。',
+            opts.lang,
+          ),
+        );
+        printError(err, opts.format);
+        process.exitCode = 1;
+        return;
+      }
 
       try {
         const result = cmdOpts.check
