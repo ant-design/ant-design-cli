@@ -426,13 +426,13 @@ export function setup(
 export function registerSetupCommand(program: Command): void {
   program
     .command('setup')
-    .description('Configure an AI agent to use the Ant Design MCP server')
+    .description('Set up Ant Design MCP/Skill for AI agents')
     .requiredOption('--client <client>', 'Agent client: claude, cursor, or vscode')
     .option('--mode <mode>', 'Setup mode: mcp, skill, or both', 'mcp')
     .option('--project <dir>', 'Project directory to write config into', process.cwd())
     .option('--dry-run', 'Preview the config without writing files')
     .option('--check', 'Check whether the agent is already configured')
-    .option('--write-instructions', 'Write AGENTS.md instructions for using the antd MCP server')
+    .option('--write-instructions', 'Write agent instructions for using the antd MCP server')
     .action((cmdOpts: SetupOptions) => {
       const opts = program.opts<GlobalOptions>();
       if (!isAgentClient(cmdOpts.client)) {

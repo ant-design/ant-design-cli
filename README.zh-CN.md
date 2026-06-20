@@ -119,7 +119,7 @@ antd lint ./src                     # 检查废弃 API 和最佳实践
 antd migrate 3 4                    # v3 → v4 迁移指南
 antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 antd mcp                            # 启动 MCP 服务，供 IDE 集成
-antd setup --client claude    # 配置本地 Agent MCP 设置
+antd setup --client claude          # 为 AI Agent 接入 MCP/Skill
 antd upgrade                        # 升级 CLI 到最新版本
 ```
 
@@ -162,7 +162,7 @@ antd upgrade                        # 升级 CLI 到最新版本
 | 命令 | 说明 |
 |---|---|
 | [`antd mcp`](#antd-mcp) | 启动 MCP stdio 服务，供 IDE Agent 集成 |
-| [`antd setup`](#antd-setup) | 为 Claude Code、Cursor 或 VS Code 写入本地 MCP 配置 |
+| [`antd setup`](#antd-setup) | 为 Claude Code、Cursor 或 VS Code 接入 Ant Design MCP/Skill |
 | [`antd upgrade`](#antd-upgrade) | 升级 CLI 到最新版本 |
 
 <br>
@@ -442,7 +442,7 @@ IDE 配置（`claude_desktop_config.json`）：
 
 ### `antd setup`
 
-配置本地 AI Agent 项目使用 Ant Design MCP 服务。该命令会写入对应客户端的 MCP 配置文件，保留已有服务，并添加或替换 `antd` 服务项。
+为本地 AI Agent 项目接入 Ant Design MCP 和/或内置的 `skills/antd` 技能。该命令可以写入对应客户端的 MCP 配置、安装本地技能，并为 Agent 写入托管指令。
 
 ```bash
 antd setup --client claude              # 写入 .mcp.json
@@ -490,7 +490,7 @@ antd setup --client claude --write-instructions
 
 使用 `--check` 可以只校验已有配置，不写入文件。当所选模式已正确配置时退出码为 `0`，配置、技能文件或指令缺失/不一致时退出码为 `1`。
 
-在默认 `mcp` 模式下使用 `--write-instructions`，可以额外向 `AGENTS.md` 写入一个可重复更新的托管区块，提示 Agent 在生成 Ant Design 代码前优先使用已配置的 `antd` MCP 服务。
+在默认 `mcp` 模式下使用 `--write-instructions`，可以额外向选中的 Agent 指令文件写入一个可重复更新的托管区块，提示 Agent 在生成 Ant Design 代码前优先使用已配置的 `antd` MCP 服务。
 
 ### `antd upgrade`
 

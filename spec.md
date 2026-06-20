@@ -340,7 +340,7 @@ Global `--version` and `--lang` are resolved once at server startup (not per too
 
 #### `antd setup`
 
-Configure a local AI agent project to use the Ant Design MCP server. This is an onboarding helper for `antd mcp`: it writes the correct MCP client configuration file, while `antd mcp` remains the stdio server that the agent starts.
+Configure a local AI agent project with Ant Design MCP and/or the bundled `skills/antd` skill. This is an onboarding helper for agent integrations: in `mcp` mode it writes the correct MCP client configuration file while `antd mcp` remains the stdio server that the agent starts; in `skill` mode it installs the local skill and writes agent instructions.
 
 ```bash
 antd setup --client claude              # write .mcp.json
@@ -396,7 +396,7 @@ Skill instructions are written to `CLAUDE.md` if it already exists, otherwise to
 
 It exits `0` when the selected mode is configured and exits `1` when config, skill files, or instructions are missing or differ from the expected content.
 
-`--write-instructions` is a compatibility convenience for the default `mcp` mode. It writes the MCP-oriented `AGENTS.md` block in addition to the MCP config. Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it.
+`--write-instructions` is a compatibility convenience for the default `mcp` mode. It writes the MCP-oriented block to the selected agent instructions file in addition to the MCP config. Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it.
 
 Text output reports the file or directory that was actually changed. For example, when only instructions change, it prints the selected `CLAUDE.md` or `AGENTS.md` path rather than the MCP config path.
 
