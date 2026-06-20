@@ -263,7 +263,13 @@ function checkSkill(projectDir: string): string[] {
   return [];
 }
 
-function checkAgent(client: AgentClient, projectDir: string, globalOpts: GlobalOptions, mode: SetupMode): CheckAgentResult {
+function checkAgent(
+  client: AgentClient,
+  projectDir: string,
+  globalOpts: GlobalOptions,
+  mode: SetupMode,
+  shouldCheckInstructions = false,
+): CheckAgentResult {
   const clientConfig = CLIENTS[client];
   const file = resolve(projectDir, clientConfig.file);
   const expectedConfig = createMergedConfig({}, clientConfig.serverKey, globalOpts);
@@ -287,6 +293,9 @@ function checkAgent(client: AgentClient, projectDir: string, globalOpts: GlobalO
 
   if (mode === 'skill' || mode === 'both') {
     problems.push(...checkSkill(projectDir));
+  }
+
+  if (mode === 'skill' || mode === 'both' || shouldCheckInstructions) {
     problems.push(...checkInstructions(projectDir, mode));
   }
 
@@ -344,17 +353,18 @@ function printSetupResult(result: SetupResult | CheckAgentResult, format: Output
 
   const action = result.dryRun
     ? localize('Would write', '将写入', lang)
-    : result.changed || result.instructionsChanged
+    : result.changed || result.skillChanged || result.instructionsChanged
       ? localize('Wrote', '已写入', lang)
       : localize('Already configured', '已配置', lang);
-  const changedTarget = result.changed
-    ? result.file
-    : result.instructionsChanged
-      ? result.instructionsFile
-      : result.skillChanged
-        ? result.skillDir
-        : result.file;
-  console.log(`${action}: ${changedTarget}`);
+  const changedTargets = [
+    ...(result.changed ? [result.file] : []),
+    ...(result.skillChanged && result.skillDir ? [result.skillDir] : []),
+    ...(result.instructionsChanged && result.instructionsFile ? [result.instructionsFile] : []),
+  ];
+  const targets = changedTargets.length > 0 ? changedTargets : [result.file];
+  for (const target of targets) {
+    console.log(`${action}: ${target}`);
+  }
 }
 
 function formatCheckAgentMarkdown(result: CheckAgentResult, lang: string): string {
@@ -476,7 +486,7 @@ export function registerSetupCommand(program: Command): void {
 
       try {
         const result = cmdOpts.check
-          ? checkAgent(cmdOpts.client, cmdOpts.project, opts, mode)
+          ? checkAgent(cmdOpts.client, cmdOpts.project, opts, mode, Boolean(cmdOpts.writeInstructions))
           : setup(
               cmdOpts.client,
               cmdOpts.project,

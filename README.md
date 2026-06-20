@@ -503,7 +503,7 @@ Skill instructions are written to `CLAUDE.md` when it exists, otherwise to `AGEN
 
 Use `--check` to validate an existing setup without writing files. It exits with code `0` when the selected mode is configured, and `1` when config, skill files, or instructions are missing or different.
 
-Use `--write-instructions` with the default `mcp` mode to also add an idempotent managed block to the selected agent instructions file, telling agents to use the configured `antd` MCP server before generating Ant Design code.
+Use `--write-instructions` with the default `mcp` mode to also add an idempotent managed block to the selected agent instructions file, telling agents to use the configured `antd` MCP server before generating Ant Design code. With `--check`, it also verifies that instruction block.
 
 ### `antd upgrade`
 

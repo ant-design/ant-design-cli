@@ -396,9 +396,9 @@ Skill instructions are written to `CLAUDE.md` if it already exists, otherwise to
 
 It exits `0` when the selected mode is configured and exits `1` when config, skill files, or instructions are missing or differ from the expected content.
 
-`--write-instructions` is a compatibility convenience for the default `mcp` mode. It writes the MCP-oriented block to the selected agent instructions file in addition to the MCP config. Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it.
+`--write-instructions` is a compatibility convenience for the default `mcp` mode. It writes the MCP-oriented block to the selected agent instructions file in addition to the MCP config. Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it. When combined with `--check`, it also checks that the MCP-oriented instruction block is present.
 
-Text output reports the file or directory that was actually changed. For example, when only instructions change, it prints the selected `CLAUDE.md` or `AGENTS.md` path rather than the MCP config path.
+Text output reports every file or directory that was actually changed, one per line. For example, `--mode both` can print the MCP config file, `skills/antd`, and the selected `CLAUDE.md` or `AGENTS.md` path.
 
 JSON output:
 

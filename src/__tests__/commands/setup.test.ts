@@ -272,6 +272,67 @@ describe('setup command', () => {
     });
   });
 
+  it('prints every changed target in text mode when multiple files are written', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'both');
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toContain(`Wrote: ${join(dir, '.mcp.json')}`);
+      expect(result.stdout).toContain(`Wrote: ${join(dir, 'skills', 'antd')}`);
+      expect(result.stdout).toContain(`Wrote: ${join(dir, 'AGENTS.md')}`);
+    });
+  });
+
+  it('prints Wrote when only the skill directory changes', async () => {
+    await withTempProject(async (dir) => {
+      await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill');
+      rmSync(join(dir, 'skills'), { recursive: true, force: true });
+
+      const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill');
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toContain(`Wrote: ${join(dir, 'skills', 'antd')}`);
+      expect(result.stdout).not.toContain('Already configured');
+    });
+  });
+
+  it('checks MCP instructions when --check is combined with --write-instructions', async () => {
+    await withTempProject(async (dir) => {
+      await runCLI('setup', '--client', 'claude', '--project', dir);
+
+      const missingInstructions = await runCLI(
+        'setup',
+        '--client',
+        'claude',
+        '--project',
+        dir,
+        '--check',
+        '--write-instructions',
+        '--format',
+        'json',
+      );
+
+      expect(missingInstructions.exitCode).toBe(1);
+      expect(JSON.parse(missingInstructions.stdout).problems).toContain('MCP instructions not found');
+
+      await runCLI('setup', '--client', 'claude', '--project', dir, '--write-instructions');
+      const configured = await runCLI(
+        'setup',
+        '--client',
+        'claude',
+        '--project',
+        dir,
+        '--check',
+        '--write-instructions',
+        '--format',
+        'json',
+      );
+
+      expect(configured.exitCode).toBe(0);
+      expect(JSON.parse(configured.stdout).configured).toBe(true);
+    });
+  });
+
   it('checks skill mode installation and instructions', async () => {
     await withTempProject(async (dir) => {
       const missing = await runCLI(

@@ -490,7 +490,7 @@ antd setup --client claude --write-instructions
 
 使用 `--check` 可以只校验已有配置，不写入文件。当所选模式已正确配置时退出码为 `0`，配置、技能文件或指令缺失/不一致时退出码为 `1`。
 
-在默认 `mcp` 模式下使用 `--write-instructions`，可以额外向选中的 Agent 指令文件写入一个可重复更新的托管区块，提示 Agent 在生成 Ant Design 代码前优先使用已配置的 `antd` MCP 服务。
+在默认 `mcp` 模式下使用 `--write-instructions`，可以额外向选中的 Agent 指令文件写入一个可重复更新的托管区块，提示 Agent 在生成 Ant Design 代码前优先使用已配置的 `antd` MCP 服务。与 `--check` 一起使用时，也会校验该指令区块。
 
 ### `antd upgrade`
 
