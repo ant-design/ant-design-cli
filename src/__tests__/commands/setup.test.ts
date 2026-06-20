@@ -48,6 +48,18 @@ describe('setup command', () => {
     });
   });
 
+  it('does not report a dry run write when setup is already current', async () => {
+    await withTempProject(async (dir) => {
+      await runCLI('setup', '--client', 'claude', '--project', dir);
+
+      const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--dry-run');
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toContain(`Already configured: ${join(dir, '.mcp.json')}`);
+      expect(result.stdout).not.toContain('Would write');
+    });
+  });
+
   it('writes Cursor MCP config while preserving existing servers', async () => {
     await withTempProject(async (dir) => {
       const cursorDir = join(dir, '.cursor');

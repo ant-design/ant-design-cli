@@ -399,6 +399,7 @@ It exits `0` when the selected mode is configured and exits `1` when config, ski
 `--write-instructions` is a compatibility convenience for the default `mcp` mode. It writes the MCP-oriented block to the selected agent instructions file in addition to the MCP config. Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it. When combined with `--check`, it also checks that the MCP-oriented instruction block is present in the same selected file.
 
 Text output reports every file or directory that was actually changed, one per line. For example, `--mode both` can print the MCP config file, `skills/antd`, and the selected `CLAUDE.md` or `AGENTS.md` path.
+In `--dry-run` mode, text output reports `Would write` only when the selected setup would change files; otherwise it reports `Already configured`.
 
 JSON output:
 

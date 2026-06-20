@@ -350,16 +350,17 @@ function printSetupResult(result: SetupResult | CheckAgentResult, format: Output
     return;
   }
 
-  const action = result.dryRun
-    ? localize('Would write', '将写入', lang)
-    : result.changed || result.skillChanged || result.instructionsChanged
-      ? localize('Wrote', '已写入', lang)
-      : localize('Already configured', '已配置', lang);
   const changedTargets = [
     ...(result.changed ? [result.file] : []),
     ...(result.skillChanged && result.skillDir ? [result.skillDir] : []),
     ...(result.instructionsChanged && result.instructionsFile ? [result.instructionsFile] : []),
   ];
+  const hasChanges = changedTargets.length > 0;
+  const action = hasChanges
+    ? result.dryRun
+      ? localize('Would write', '将写入', lang)
+      : localize('Wrote', '已写入', lang)
+    : localize('Already configured', '已配置', lang);
   const targets = changedTargets.length > 0 ? changedTargets : [result.file];
   for (const target of targets) {
     console.log(`${action}: ${target}`);
