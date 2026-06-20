@@ -350,8 +350,18 @@ antd setup-agent --client claude --dry-run    # preview without writing files
 antd setup-agent --client claude --project ./my-app
 antd setup-agent --client claude --version 5.29.3 --lang zh
 antd setup-agent --client claude --check      # verify existing config
+antd setup-agent --client claude --mode skill # write CLI/skill instructions only
+antd setup-agent --client claude --mode both  # write MCP config and instructions
 antd setup-agent --client claude --write-instructions
 ```
+
+Modes:
+
+| Mode | Behavior |
+|---|---|
+| `mcp` | Writes the client-specific MCP config only. This is the default. |
+| `skill` | Writes an idempotent managed block to `AGENTS.md` that teaches agents to call the `antd` CLI directly (`antd info`, `antd doc`, `antd demo`, `antd token`, `antd design.md`, `antd semantic`, `antd changelog`). It does not write MCP config. |
+| `both` | Writes both the MCP config and `AGENTS.md` instructions. The instructions prefer the configured `antd` MCP server and mention CLI fallback with `--format json`. |
 
 Supported clients:
 
@@ -374,17 +384,18 @@ The command preserves existing MCP servers in the target file and adds or replac
 }
 ```
 
-When `--version` is provided, it is pinned into the generated MCP server args. When `--lang zh` is provided, the generated server starts in Chinese mode. English is the default and is omitted from generated args.
+When `--version` is provided, it is pinned into generated MCP server args. When `--lang zh` is provided, generated MCP args start in Chinese mode. English is the default and is omitted from generated args.
 
-`--check` validates the target config without writing files. It exits `0` when the `antd` MCP server entry exists and matches the expected command/args for the requested global flags, and exits `1` when the config file is missing, the `antd` server entry is missing, or the existing entry differs.
+`--check` validates the selected mode without writing files. In `mcp` mode it checks the `antd` MCP server entry. In `skill` mode it checks the managed `AGENTS.md` block. In `both` mode it checks both. It exits `0` when the selected mode is configured and exits `1` when config or instructions are missing or differ from the expected content.
 
-`--write-instructions` writes an idempotent managed block to `AGENTS.md` in the target project. The block tells agents to use the configured `antd` MCP server before generating Ant Design code and lists the relevant MCP tools (`antd_info`, `antd_doc`, `antd_demo`, `antd_token`, `antd_design_md`, `antd_semantic`, `antd_changelog`). Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it.
+`--write-instructions` is a compatibility convenience for the default `mcp` mode. It writes the MCP-oriented `AGENTS.md` block in addition to the MCP config. Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it.
 
 JSON output:
 
 ```json
 {
   "client": "claude",
+  "mode": "both",
   "file": "/path/to/project/.mcp.json",
   "changed": true,
   "dryRun": false,
@@ -406,6 +417,7 @@ Check JSON output:
 ```json
 {
   "client": "claude",
+  "mode": "mcp",
   "file": "/path/to/project/.mcp.json",
   "configured": true,
   "problems": [],

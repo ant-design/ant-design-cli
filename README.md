@@ -465,8 +465,18 @@ antd setup-agent --client claude --dry-run    # preview without writing files
 antd setup-agent --client claude --project ./my-app
 antd setup-agent --client claude --version 5.29.3 --lang zh
 antd setup-agent --client claude --check      # verify existing config
+antd setup-agent --client claude --mode skill # write CLI/skill instructions only
+antd setup-agent --client claude --mode both  # write MCP config and instructions
 antd setup-agent --client claude --write-instructions
 ```
+
+Modes:
+
+| Mode | Behavior |
+|---|---|
+| `mcp` | Writes the client MCP config only. This is the default. |
+| `skill` | Writes an `AGENTS.md` block that teaches agents to call the `antd` CLI directly. |
+| `both` | Writes both MCP config and `AGENTS.md` instructions. |
 
 Supported clients:
 
@@ -489,9 +499,9 @@ Generated server entry:
 }
 ```
 
-Use `--check` to validate an existing setup without writing files. It exits with code `0` when the `antd` MCP server entry matches the expected config, and `1` when the config is missing or different.
+Use `--check` to validate an existing setup without writing files. It exits with code `0` when the selected mode is configured, and `1` when config or instructions are missing or different.
 
-Use `--write-instructions` to add an idempotent managed block to `AGENTS.md`, telling agents to use the configured `antd` MCP server before generating Ant Design code.
+Use `--write-instructions` with the default `mcp` mode to also add an idempotent managed block to `AGENTS.md`, telling agents to use the configured `antd` MCP server before generating Ant Design code.
 
 ### `antd upgrade`
 

@@ -149,4 +149,95 @@ describe('setup-agent command', () => {
       expect(second.match(/antd-cli setup-agent start/g)).toHaveLength(1);
     });
   });
+
+  it('supports skill mode without writing MCP config', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI(
+        'setup-agent',
+        '--client',
+        'claude',
+        '--project',
+        dir,
+        '--mode',
+        'skill',
+        '--format',
+        'json',
+      );
+
+      expect(result.exitCode).toBe(0);
+      expect(existsSync(join(dir, '.mcp.json'))).toBe(false);
+
+      const data = JSON.parse(result.stdout);
+      expect(data.mode).toBe('skill');
+      expect(data.changed).toBe(false);
+      expect(data.instructionsChanged).toBe(true);
+
+      const instructions = readFileSync(join(dir, 'AGENTS.md'), 'utf-8');
+      expect(instructions).toContain('use the Ant Design CLI commands');
+      expect(instructions).toContain('`antd info <Component> --format json`');
+    });
+  });
+
+  it('supports both mode by writing MCP config and AGENTS.md instructions', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI(
+        'setup-agent',
+        '--client',
+        'claude',
+        '--project',
+        dir,
+        '--mode',
+        'both',
+        '--format',
+        'json',
+      );
+
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+      expect(data.mode).toBe('both');
+      expect(data.changed).toBe(true);
+      expect(data.instructionsChanged).toBe(true);
+      expect(readJson(join(dir, '.mcp.json')).mcpServers.antd).toEqual({
+        command: 'npx',
+        args: ['-y', '@ant-design/cli', 'mcp'],
+      });
+      expect(readFileSync(join(dir, 'AGENTS.md'), 'utf-8')).toContain('use the configured `antd` MCP server');
+    });
+  });
+
+  it('checks skill mode instructions', async () => {
+    await withTempProject(async (dir) => {
+      const missing = await runCLI(
+        'setup-agent',
+        '--client',
+        'claude',
+        '--project',
+        dir,
+        '--mode',
+        'skill',
+        '--check',
+        '--format',
+        'json',
+      );
+      expect(missing.exitCode).toBe(1);
+      expect(JSON.parse(missing.stdout).problems).toContain('AGENTS.md instructions not found');
+
+      await runCLI('setup-agent', '--client', 'claude', '--project', dir, '--mode', 'skill');
+
+      const configured = await runCLI(
+        'setup-agent',
+        '--client',
+        'claude',
+        '--project',
+        dir,
+        '--mode',
+        'skill',
+        '--check',
+        '--format',
+        'json',
+      );
+      expect(configured.exitCode).toBe(0);
+      expect(JSON.parse(configured.stdout).configured).toBe(true);
+    });
+  });
 });

@@ -452,8 +452,18 @@ antd setup-agent --client claude --dry-run    # 预览配置，不写入文件
 antd setup-agent --client claude --project ./my-app
 antd setup-agent --client claude --version 5.29.3 --lang zh
 antd setup-agent --client claude --check      # 校验已有配置
+antd setup-agent --client claude --mode skill # 仅写入 CLI/Skill 指令
+antd setup-agent --client claude --mode both  # 同时写入 MCP 配置和指令
 antd setup-agent --client claude --write-instructions
 ```
+
+模式：
+
+| 模式 | 行为 |
+|---|---|
+| `mcp` | 只写入客户端 MCP 配置。这是默认模式。 |
+| `skill` | 向 `AGENTS.md` 写入指令，教 Agent 直接调用 `antd` CLI。 |
+| `both` | 同时写入 MCP 配置和 `AGENTS.md` 指令。 |
 
 支持的客户端：
 
@@ -476,9 +486,9 @@ antd setup-agent --client claude --write-instructions
 }
 ```
 
-使用 `--check` 可以只校验已有配置，不写入文件。当 `antd` MCP 服务项与预期配置一致时退出码为 `0`，配置缺失或不一致时退出码为 `1`。
+使用 `--check` 可以只校验已有配置，不写入文件。当所选模式已正确配置时退出码为 `0`，配置或指令缺失/不一致时退出码为 `1`。
 
-使用 `--write-instructions` 可以向 `AGENTS.md` 写入一个可重复更新的托管区块，提示 Agent 在生成 Ant Design 代码前优先使用已配置的 `antd` MCP 服务。
+在默认 `mcp` 模式下使用 `--write-instructions`，可以额外向 `AGENTS.md` 写入一个可重复更新的托管区块，提示 Agent 在生成 Ant Design 代码前优先使用已配置的 `antd` MCP 服务。
 
 ### `antd upgrade`
 

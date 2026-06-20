@@ -7,10 +7,12 @@ import { output } from '../output/formatter.js';
 import { createError, ErrorCodes, printError } from '../output/error.js';
 
 type AgentClient = 'claude' | 'cursor' | 'vscode';
+type SetupMode = 'mcp' | 'skill' | 'both';
 
 interface SetupAgentOptions {
   client: AgentClient;
   project: string;
+  mode?: SetupMode;
   dryRun?: boolean;
   check?: boolean;
   writeInstructions?: boolean;
@@ -24,6 +26,7 @@ interface ClientConfig {
 
 interface SetupAgentResult {
   client: AgentClient;
+  mode: SetupMode;
   file: string;
   changed: boolean;
   dryRun: boolean;
@@ -34,6 +37,7 @@ interface SetupAgentResult {
 
 interface CheckAgentResult {
   client: AgentClient;
+  mode: SetupMode;
   file: string;
   configured: boolean;
   problems: string[];
@@ -52,6 +56,10 @@ const INSTRUCTIONS_END = '<!-- antd-cli setup-agent end -->';
 
 function isAgentClient(value: string): value is AgentClient {
   return value in CLIENTS;
+}
+
+function isSetupMode(value: string): value is SetupMode {
+  return value === 'mcp' || value === 'skill' || value === 'both';
 }
 
 function buildMcpArgs(opts: GlobalOptions): string[] {
@@ -96,7 +104,7 @@ function stableJson(value: unknown): string {
   return JSON.stringify(value, null, 2) + '\n';
 }
 
-function createInstructionsBlock(): string {
+function createMcpInstructionsBlock(): string {
   return [
     INSTRUCTIONS_START,
     '## Ant Design CLI MCP',
@@ -114,10 +122,43 @@ function createInstructionsBlock(): string {
   ].join('\n');
 }
 
-function writeInstructions(projectDir: string, dryRun: boolean): { file: string; changed: boolean } {
+function createSkillInstructionsBlock(): string {
+  return [
+    INSTRUCTIONS_START,
+    '## Ant Design CLI Skill',
+    '',
+    'When working with Ant Design in this repository, use the Ant Design CLI commands before writing component code:',
+    '',
+    '- Use `antd info <Component> --format json` for component props, defaults, common props, and native HTML element hints.',
+    '- Use `antd doc <Component>` when you need the full component API documentation.',
+    '- Use `antd demo <Component> [name] --format json` before generating non-trivial usage examples.',
+    '- Use `antd token [Component] --format json` and `antd design.md` for theme, token, and design-language work.',
+    '- Use `antd semantic <Component> --format json` when customizing `classNames` or `styles` slots.',
+    '- Use `antd changelog` for version migration or API-diff questions.',
+    '',
+    INSTRUCTIONS_END,
+  ].join('\n');
+}
+
+function createInstructionsBlock(mode: SetupMode): string {
+  if (mode === 'skill') return createSkillInstructionsBlock();
+  if (mode === 'both') {
+    return createMcpInstructionsBlock().replace(
+      INSTRUCTIONS_END,
+      [
+        'If the MCP server is unavailable, fall back to the equivalent `antd` CLI commands with `--format json`.',
+        '',
+        INSTRUCTIONS_END,
+      ].join('\n'),
+    );
+  }
+  return createMcpInstructionsBlock();
+}
+
+function writeInstructions(projectDir: string, dryRun: boolean, mode: SetupMode): { file: string; changed: boolean } {
   const file = join(projectDir, 'AGENTS.md');
   const current = existsSync(file) ? readFileSync(file, 'utf-8') : '';
-  const block = createInstructionsBlock();
+  const block = createInstructionsBlock(mode);
   const pattern = new RegExp(`${INSTRUCTIONS_START}[\\s\\S]*?${INSTRUCTIONS_END}`);
   const next = pattern.test(current)
     ? current.replace(pattern, block)
@@ -137,7 +178,16 @@ function getServerEntry(config: Record<string, unknown>, serverKey: 'mcpServers'
   return (servers as Record<string, unknown>).antd;
 }
 
-function checkAgent(client: AgentClient, projectDir: string, globalOpts: GlobalOptions): CheckAgentResult {
+function checkInstructions(projectDir: string, mode: SetupMode): string[] {
+  const file = join(projectDir, 'AGENTS.md');
+  if (!existsSync(file)) return ['AGENTS.md instructions not found'];
+  const current = readFileSync(file, 'utf-8');
+  const expected = createInstructionsBlock(mode);
+  if (!current.includes(expected)) return ['AGENTS.md instructions do not match expected instructions'];
+  return [];
+}
+
+function checkAgent(client: AgentClient, projectDir: string, globalOpts: GlobalOptions, mode: SetupMode): CheckAgentResult {
   const clientConfig = CLIENTS[client];
   const file = resolve(projectDir, clientConfig.file);
   const expectedConfig = createMergedConfig({}, clientConfig.serverKey, globalOpts);
@@ -145,20 +195,27 @@ function checkAgent(client: AgentClient, projectDir: string, globalOpts: GlobalO
   const problems: string[] = [];
   let actual: unknown;
 
-  if (!existsSync(file)) {
-    problems.push('Config file not found');
-  } else {
-    const current = readConfig(file);
-    actual = getServerEntry(current, clientConfig.serverKey);
-    if (!actual) {
-      problems.push('Ant Design MCP server not configured');
-    } else if (stableJson(actual) !== stableJson(expected)) {
-      problems.push('Ant Design MCP server config does not match expected config');
+  if (mode === 'mcp' || mode === 'both') {
+    if (!existsSync(file)) {
+      problems.push('Config file not found');
+    } else {
+      const current = readConfig(file);
+      actual = getServerEntry(current, clientConfig.serverKey);
+      if (!actual) {
+        problems.push('Ant Design MCP server not configured');
+      } else if (stableJson(actual) !== stableJson(expected)) {
+        problems.push('Ant Design MCP server config does not match expected config');
+      }
     }
+  }
+
+  if (mode === 'skill' || mode === 'both') {
+    problems.push(...checkInstructions(projectDir, mode));
   }
 
   return {
     client,
+    mode,
     file,
     configured: problems.length === 0,
     problems,
@@ -174,8 +231,10 @@ function formatSetupAgentMarkdown(result: SetupAgentResult, lang: string): strin
     `| ${localize('Field', '字段', lang)} | ${localize('Value', '值', lang)} |`,
     '|---|---|',
     `| ${localize('Client', '客户端', lang)} | ${result.client} |`,
+    `| ${localize('Mode', '模式', lang)} | ${result.mode} |`,
     `| ${localize('File', '文件', lang)} | ${result.file} |`,
     `| ${localize('Changed', '已变更', lang)} | ${String(result.changed)} |`,
+    `| ${localize('Instructions Changed', '指令已变更', lang)} | ${String(result.instructionsChanged ?? false)} |`,
     `| ${localize('Dry Run', '预览模式', lang)} | ${String(result.dryRun)} |`,
   ].join('\n');
 }
@@ -208,7 +267,7 @@ function printSetupAgentResult(result: SetupAgentResult | CheckAgentResult, form
 
   const action = result.dryRun
     ? localize('Would write', '将写入', lang)
-    : result.changed
+    : result.changed || result.instructionsChanged
       ? localize('Wrote', '已写入', lang)
       : localize('Already configured', '已配置', lang);
   console.log(`${action}: ${result.file}`);
@@ -221,6 +280,7 @@ function formatCheckAgentMarkdown(result: CheckAgentResult, lang: string): strin
     `| ${localize('Field', '字段', lang)} | ${localize('Value', '值', lang)} |`,
     '|---|---|',
     `| ${localize('Client', '客户端', lang)} | ${result.client} |`,
+    `| ${localize('Mode', '模式', lang)} | ${result.mode} |`,
     `| ${localize('File', '文件', lang)} | ${result.file} |`,
     `| ${localize('Configured', '已配置', lang)} | ${String(result.configured)} |`,
     `| ${localize('Problems', '问题', lang)} | ${result.problems.join('; ') || '-'} |`,
@@ -232,13 +292,15 @@ export function setupAgent(
   projectDir: string,
   globalOpts: GlobalOptions,
   dryRun = false,
+  mode: SetupMode = 'mcp',
   shouldWriteInstructions = false,
 ): SetupAgentResult {
   const clientConfig = CLIENTS[client];
   const file = resolve(projectDir, clientConfig.file);
-  const current = readConfig(file);
-  const config = createMergedConfig(current, clientConfig.serverKey, globalOpts);
-  const changed = stableJson(current) !== stableJson(config);
+  const shouldWriteMcp = mode === 'mcp' || mode === 'both';
+  const current = shouldWriteMcp ? readConfig(file) : {};
+  const config = shouldWriteMcp ? createMergedConfig(current, clientConfig.serverKey, globalOpts) : {};
+  const changed = shouldWriteMcp && stableJson(current) !== stableJson(config);
   let instructions: { file: string; changed: boolean } | undefined;
 
   if (!dryRun && changed) {
@@ -246,12 +308,13 @@ export function setupAgent(
     writeFileSync(file, stableJson(config));
   }
 
-  if (shouldWriteInstructions) {
-    instructions = writeInstructions(projectDir, dryRun);
+  if (mode === 'skill' || mode === 'both' || shouldWriteInstructions) {
+    instructions = writeInstructions(projectDir, dryRun, mode === 'mcp' ? 'mcp' : mode);
   }
 
   return {
     client,
+    mode,
     file,
     changed,
     dryRun,
@@ -270,6 +333,7 @@ export function registerSetupAgentCommand(program: Command): void {
     .command('setup-agent')
     .description('Configure an AI agent to use the Ant Design MCP server')
     .requiredOption('--client <client>', 'Agent client: claude, cursor, or vscode')
+    .option('--mode <mode>', 'Setup mode: mcp, skill, or both', 'mcp')
     .option('--project <dir>', 'Project directory to write config into', process.cwd())
     .option('--dry-run', 'Preview the config without writing files')
     .option('--check', 'Check whether the agent is already configured')
@@ -294,15 +358,36 @@ export function registerSetupAgentCommand(program: Command): void {
         process.exitCode = 1;
         return;
       }
+      if (!isSetupMode(cmdOpts.mode ?? 'mcp')) {
+        const err = createError(
+          ErrorCodes.INVALID_ARGUMENT,
+          localize(
+            `Unsupported setup mode '${cmdOpts.mode}'`,
+            `不支持的配置模式 '${cmdOpts.mode}'`,
+            opts.lang,
+          ),
+          localize(
+            'Use one of: mcp, skill, both.',
+            '请使用: mcp, skill, both。',
+            opts.lang,
+          ),
+        );
+        printError(err, opts.format);
+        process.exitCode = 1;
+        return;
+      }
+
+      const mode = cmdOpts.mode ?? 'mcp';
 
       try {
         const result = cmdOpts.check
-          ? checkAgent(cmdOpts.client, cmdOpts.project, opts)
+          ? checkAgent(cmdOpts.client, cmdOpts.project, opts, mode)
           : setupAgent(
               cmdOpts.client,
               cmdOpts.project,
               opts,
               Boolean(cmdOpts.dryRun),
+              mode,
               Boolean(cmdOpts.writeInstructions),
             );
         printSetupAgentResult(result, opts.format, opts.lang);
