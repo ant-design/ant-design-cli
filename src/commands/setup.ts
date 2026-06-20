@@ -239,13 +239,12 @@ function isMatchingServerEntry(actual: unknown, expected: Record<string, unknown
 
 function checkInstructions(projectDir: string, mode: SetupMode): string[] {
   const expected = createInstructionsBlock(mode);
-  const files = [join(projectDir, 'CLAUDE.md'), join(projectDir, 'AGENTS.md')];
-  const existing = files.filter(existsSync);
+  const file = chooseInstructionsFile(projectDir);
 
-  if (existing.length === 0) {
+  if (!existsSync(file)) {
     return [mode === 'mcp' ? 'MCP instructions not found' : 'Skill instructions not found'];
   }
-  if (!existing.some((file) => readFileSync(file, 'utf-8').includes(expected))) {
+  if (!readFileSync(file, 'utf-8').includes(expected)) {
     return [mode === 'mcp' ? 'MCP instructions do not match expected instructions' : 'Skill instructions do not match expected instructions'];
   }
   return [];

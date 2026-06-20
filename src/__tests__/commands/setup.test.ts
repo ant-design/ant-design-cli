@@ -333,6 +333,33 @@ describe('setup command', () => {
     });
   });
 
+  it('checks instructions in the same file setup would write', async () => {
+    await withTempProject(async (dir) => {
+      writeFileSync(join(dir, 'CLAUDE.md'), '# Claude Instructions\n');
+      writeFileSync(join(dir, 'AGENTS.md'), '# Project Instructions\n');
+      await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'both');
+      const agentsWithInstructions = readFileSync(join(dir, 'CLAUDE.md'), 'utf-8');
+      writeFileSync(join(dir, 'CLAUDE.md'), '# Claude Instructions\n');
+      writeFileSync(join(dir, 'AGENTS.md'), agentsWithInstructions);
+
+      const result = await runCLI(
+        'setup',
+        '--client',
+        'claude',
+        '--project',
+        dir,
+        '--mode',
+        'both',
+        '--check',
+        '--format',
+        'json',
+      );
+
+      expect(result.exitCode).toBe(1);
+      expect(JSON.parse(result.stdout).problems).toContain('Skill instructions do not match expected instructions');
+    });
+  });
+
   it('checks skill mode installation and instructions', async () => {
     await withTempProject(async (dir) => {
       const missing = await runCLI(
