@@ -44,7 +44,7 @@
   },
   "overrides": {
     "fast-uri": "^3.1.2",
-    "hono": "^4.12.23",
+    "hono": "^4.12.26",
     "ip-address": "^10.1.1"
   },
   "dependencies": {
