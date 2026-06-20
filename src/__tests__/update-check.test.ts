@@ -36,12 +36,10 @@ describe('update-check', () => {
     vi.restoreAllMocks();
     memStore = {};
     mockCacheStore();
-    cacheStore.delete('updateCache');
     stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
   });
 
   afterEach(() => {
-    cacheStore.delete('updateCache');
     vi.restoreAllMocks();
     restoreCI();
   });
