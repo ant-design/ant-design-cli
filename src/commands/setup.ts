@@ -195,6 +195,7 @@ function resolveBundledSkillDir(): string {
   ];
 
   const found = candidates.find((dir) => existsSync(join(dir, 'SKILL.md')));
+  /* v8 ignore next 3 -- package.json includes skills/antd; this only guards broken installs */
   if (!found) {
     throw new Error('Bundled Ant Design skill not found');
   }

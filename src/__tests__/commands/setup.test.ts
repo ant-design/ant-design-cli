@@ -126,6 +126,34 @@ describe('setup command', () => {
     });
   });
 
+  it('treats a non-object existing config file as an empty config', async () => {
+    await withTempProject(async (dir) => {
+      writeFileSync(join(dir, '.mcp.json'), '[]');
+
+      const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--format', 'json');
+
+      expect(result.exitCode).toBe(0);
+      expect(readJson(join(dir, '.mcp.json')).mcpServers.antd).toEqual({
+        command: 'npx',
+        args: ['-y', '@ant-design/cli', 'mcp'],
+      });
+    });
+  });
+
+  it('reports invalid JSON config files as setup errors', async () => {
+    await withTempProject(async (dir) => {
+      writeFileSync(join(dir, '.mcp.json'), '{');
+
+      const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--format', 'json');
+
+      expect(result.exitCode).toBe(1);
+      const error = JSON.parse(result.stderr);
+      expect(error.code).toBe('INVALID_ARGUMENT');
+      expect(error.message).toContain('Failed to configure agent');
+      expect(error.suggestion).toContain('valid JSON');
+    });
+  });
+
   it('checks whether the agent MCP config is already installed', async () => {
     await withTempProject(async (dir) => {
       const missing = await runCLI('setup', '--client', 'claude', '--project', dir, '--check', '--format', 'json');
@@ -144,6 +172,21 @@ describe('setup command', () => {
     });
   });
 
+  it('reports MCP check problems in text output', async () => {
+    await withTempProject(async (dir) => {
+      const missing = await runCLI('setup', '--client', 'claude', '--project', dir, '--check');
+      expect(missing.exitCode).toBe(1);
+      expect(missing.stdout).toContain(`Not configured: ${join(dir, '.mcp.json')}`);
+      expect(missing.stdout).toContain('- Config file not found');
+
+      await runCLI('setup', '--client', 'claude', '--project', dir);
+      const configured = await runCLI('setup', '--client', 'claude', '--project', dir, '--check');
+
+      expect(configured.exitCode).toBe(0);
+      expect(configured.stdout).toContain(`Configured: ${join(dir, '.mcp.json')}`);
+    });
+  });
+
   it('checks MCP config semantically regardless of key order', async () => {
     await withTempProject(async (dir) => {
       writeFileSync(join(dir, '.mcp.json'), JSON.stringify({
@@ -159,6 +202,51 @@ describe('setup command', () => {
 
       expect(configured.exitCode).toBe(0);
       expect(JSON.parse(configured.stdout).configured).toBe(true);
+    });
+  });
+
+  it('reports malformed MCP server containers and entries during check', async () => {
+    await withTempProject(async (dir) => {
+      writeFileSync(join(dir, '.mcp.json'), JSON.stringify({ mcpServers: [] }));
+
+      const missingEntry = await runCLI('setup', '--client', 'claude', '--project', dir, '--check', '--format', 'json');
+      expect(missingEntry.exitCode).toBe(1);
+      expect(JSON.parse(missingEntry.stdout).problems).toContain('Ant Design MCP server not configured');
+
+      writeFileSync(join(dir, '.mcp.json'), JSON.stringify({ mcpServers: { antd: [] } }));
+      const malformedEntry = await runCLI('setup', '--client', 'claude', '--project', dir, '--check', '--format', 'json');
+
+      expect(malformedEntry.exitCode).toBe(1);
+      expect(JSON.parse(malformedEntry.stdout).problems).toContain('Ant Design MCP server config does not match expected config');
+    });
+  });
+
+  it('renders setup and check markdown output', async () => {
+    await withTempProject(async (dir) => {
+      const setupResult = await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'both', '--format', 'markdown');
+
+      expect(setupResult.exitCode).toBe(0);
+      expect(setupResult.stdout).toContain('## Setup Agent');
+      expect(setupResult.stdout).toContain('| Client | claude |');
+      expect(setupResult.stdout).toContain('| Mode | both |');
+      expect(setupResult.stdout).toContain('| Instructions Changed | true |');
+
+      const checkResult = await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'both', '--check', '--format', 'markdown');
+      expect(checkResult.exitCode).toBe(0);
+      expect(checkResult.stdout).toContain('## Setup Agent Check');
+      expect(checkResult.stdout).toContain('| Configured | true |');
+      expect(checkResult.stdout).toContain('| Problems | - |');
+    });
+  });
+
+  it('rejects unsupported setup modes', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'invalid', '--format', 'json');
+
+      expect(result.exitCode).toBe(1);
+      const error = JSON.parse(result.stderr);
+      expect(error.code).toBe('INVALID_ARGUMENT');
+      expect(error.message).toContain("Unsupported setup mode 'invalid'");
     });
   });
 
@@ -408,5 +496,26 @@ describe('setup command', () => {
       expect(configured.exitCode).toBe(0);
       expect(JSON.parse(configured.stdout).configured).toBe(true);
     });
+  });
+
+  it('reports a mismatched installed skill', async () => {
+    await withTempProject(async (dir) => {
+      await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill');
+      writeFileSync(join(dir, 'skills', 'antd', 'SKILL.md'), 'name: stale\n');
+
+      const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill', '--check', '--format', 'json');
+
+      expect(result.exitCode).toBe(1);
+      expect(JSON.parse(result.stdout).problems).toContain('Ant Design skill does not match bundled skill');
+    });
+  });
+
+  it('does not try to copy the bundled skill onto itself during dry run', async () => {
+    const result = await runCLI('setup', '--client', 'claude', '--project', process.cwd(), '--mode', 'skill', '--dry-run', '--format', 'json');
+
+    expect(result.exitCode).toBe(0);
+    const data = JSON.parse(result.stdout);
+    expect(data.skillDir).toBe(join(process.cwd(), 'skills', 'antd'));
+    expect(data.skillChanged).toBe(false);
   });
 });
