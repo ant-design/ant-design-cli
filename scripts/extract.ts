@@ -9,7 +9,6 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import matter from 'gray-matter';
 import { extractComponents } from './extractors/components.js';
 import { extractProps } from './extractors/props.js';
 import { extractDemos } from './extractors/demos.js';
@@ -17,6 +16,7 @@ import { extractTokens, extractGlobalTokens, resetTokenCache } from './extractor
 import { extractSemantic } from './extractors/semantic.js';
 import { extractChangelog } from './extractors/changelog.js';
 import { extractFaq } from './extractors/faq.js';
+import { parseFrontMatter } from './utils/frontMatter.js';
 import type { MetadataStore, ComponentData } from '../src/types.js';
 
 function parseArgs(args: string[]): { antdDir: string; output: string } {
@@ -90,8 +90,8 @@ function main() {
     // Bundle raw markdown docs for `antd doc` command
     const enDocPath = path.join(antdDir, 'components', meta.dirName, 'index.en-US.md');
     const zhDocPath = path.join(antdDir, 'components', meta.dirName, 'index.zh-CN.md');
-    const doc = fs.existsSync(enDocPath) ? matter(fs.readFileSync(enDocPath, 'utf-8')).content : undefined;
-    const docZh = fs.existsSync(zhDocPath) ? matter(fs.readFileSync(zhDocPath, 'utf-8')).content : undefined;
+    const doc = fs.existsSync(enDocPath) ? parseFrontMatter(fs.readFileSync(enDocPath, 'utf-8')).content : undefined;
+    const docZh = fs.existsSync(zhDocPath) ? parseFrontMatter(fs.readFileSync(zhDocPath, 'utf-8')).content : undefined;
 
     const component: ComponentData = {
       name: meta.name,

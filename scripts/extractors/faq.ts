@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import matter from 'gray-matter';
+import { parseFrontMatter } from '../utils/frontMatter.js';
 
 export interface FaqItem {
   question: string;
@@ -50,6 +50,6 @@ export function extractFaq(antdDir: string, dirName: string): FaqItem[] {
   const enPath = path.join(antdDir, 'components', dirName, 'index.en-US.md');
   if (!fs.existsSync(enPath)) return [];
 
-  const enContent = matter(fs.readFileSync(enPath, 'utf-8')).content;
+  const enContent = parseFrontMatter(fs.readFileSync(enPath, 'utf-8')).content;
   return parseFaq(enContent);
 }

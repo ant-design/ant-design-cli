@@ -43,8 +43,7 @@
     "access": "public"
   },
   "overrides": {
-    "fast-uri": "^3.1.2",
-    "hono": "^4.12.26",
+    "esbuild": "0.28.1",
     "ip-address": "^10.1.1"
   },
   "dependencies": {
@@ -64,10 +63,10 @@
     "conf": "^15.1.0",
     "env-paths": "^4.0.0",
     "envinfo": "^7.21.0",
-    "gray-matter": "^4.0.3",
     "tsup": "^8.4.0",
     "tsx": "^4.19.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.2",
+    "yaml": "^2.9.0"
   }
 }

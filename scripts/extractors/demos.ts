@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import matter from 'gray-matter';
 import type { DemoData } from '../../src/types.js';
+import { parseFrontMatter } from '../utils/frontMatter.js';
 
 /** Parse a demo .md file which has `## zh-CN` and `## en-US` sections (v4+ format) */
 function parseDemoMd(content: string): { titleZh: string; titleEn: string; descZh: string; descEn: string } {
@@ -24,7 +24,7 @@ function parseV3DemoMd(content: string): {
   descZh: string;
   code: string;
 } {
-  const parsed = matter(content);
+  const parsed = parseFrontMatter(content);
   const titleObj = parsed.data.title || {};
   const titleEn = typeof titleObj === 'string' ? titleObj : titleObj['en-US'] || '';
   const titleZh = typeof titleObj === 'string' ? '' : titleObj['zh-CN'] || '';
