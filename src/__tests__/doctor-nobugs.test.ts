@@ -7,6 +7,7 @@ import { tmpdir } from 'node:os';
 vi.mock('../utils/bug-versions.js', () => ({
   findBugInfo: () => null,
   getBugVersions: async () => null,
+  loadBundledBugVersions: () => null,
 }));
 
 const { runCLI } = await import('./helper.js');

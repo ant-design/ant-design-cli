@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { formatTable, output } from '../output/formatter.js';
 import { readJson, type PackageJson } from '../utils/json.js';
 import { satisfies } from '../data/version.js';
-import { getBugVersions, findBugInfo } from '../utils/bug-versions.js';
+import { loadBundledBugVersions, findBugInfo } from '../utils/bug-versions.js';
 
 interface DoctorPkgJson extends PackageJson {
   peerDependencies?: Record<string, string>;
@@ -95,7 +95,7 @@ function buildContext(cwd: string): DoctorContext {
   return { cwd, antdPkg, antdMajor, projectPkg, reactPkg, cssinjsPkg, iconsPkg, ecosystemPackages };
 }
 
-async function checkAntdInstalled(ctx: DoctorContext): Promise<CheckResult> {
+function checkAntdInstalled(ctx: DoctorContext): CheckResult {
   if (!ctx.antdPkg) {
     return {
       name: 'antd-installed',
@@ -106,7 +106,7 @@ async function checkAntdInstalled(ctx: DoctorContext): Promise<CheckResult> {
     };
   }
 
-  const bugVersions = await getBugVersions();
+  const bugVersions = ctx.antdPkg.version ? loadBundledBugVersions() : null;
   const hit = bugVersions ? findBugInfo(ctx.antdPkg.version, bugVersions) : null;
 
   if (hit) {
@@ -460,7 +460,7 @@ export function registerDoctorCommand(program: Command): void {
       const ctx = buildContext(process.cwd());
 
       const checks: CheckResult[] = [
-        await checkAntdInstalled(ctx),
+        checkAntdInstalled(ctx),
         checkReactCompat(ctx),
         checkDuplicateInstall(ctx),
         checkDayjsDuplicate(ctx),

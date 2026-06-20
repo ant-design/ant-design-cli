@@ -28,7 +28,9 @@ const DATA_DIR = path.join(PROJECT_ROOT, 'data');
 // It is major-grained (rewritten only across major releases), so we sync it per
 // major into data/design-v{major}.md. See syncDesignDocs().
 const DESIGN_SOURCE = 'DESIGN.md';
+const BUG_VERSIONS_SOURCE = 'BUG_VERSIONS.json';
 const designTarget = (major: number) => path.join(DATA_DIR, `design-v${major}.md`);
+const bugVersionsTarget = () => path.join(DATA_DIR, 'bug-versions.json');
 
 function parseArgs(args: string[]): { antdDir: string } {
   let antdDir = '';
@@ -266,6 +268,25 @@ function validateData() {
       errors++;
     }
   }
+
+  const bugVersionsFile = bugVersionsTarget();
+  try {
+    const data = JSON.parse(fs.readFileSync(bugVersionsFile, 'utf8')) as Record<string, unknown>;
+    if (Object.keys(data).length === 0) {
+      console.error(`  FAIL: ${bugVersionsFile} is empty`);
+      errors++;
+    }
+    for (const [range, urls] of Object.entries(data)) {
+      if (!Array.isArray(urls) || urls.some((url) => typeof url !== 'string')) {
+        console.error(`  FAIL: ${bugVersionsFile} has invalid URLs for range "${range}"`);
+        errors++;
+      }
+    }
+  } catch (err) {
+    console.error(`  FAIL: ${bugVersionsFile} is not valid JSON: ${err instanceof Error ? err.message : err}`);
+    errors++;
+  }
+
   if (errors > 0) {
     console.error(`\nValidation failed with ${errors} error(s)`);
     process.exit(1);
@@ -307,6 +328,35 @@ function syncDesignDocs(antdDir: string, latestTagByMajor: Map<number, string>) 
     fs.copyFileSync(source, designTarget(major));
     console.log(`  v${major}: synced ${DESIGN_SOURCE} from antd@${tag} → data/design-v${major}.md`);
   }
+}
+
+/**
+ * Sync the root BUG_VERSIONS.json from the latest stable antd checkout.
+ *
+ * This file powers `antd doctor`'s known-bug version check. Keeping it in the
+ * normal sync pipeline preserves the CLI's offline runtime behavior without
+ * letting the bundled bug database drift from upstream.
+ */
+function syncBugVersions(antdDir: string, latestTagByMajor: Map<number, string>) {
+  const latestMajor = Math.max(...latestTagByMajor.keys());
+  const tag = latestTagByMajor.get(latestMajor);
+  if (!tag) {
+    console.log(`  no latest tag, keeping existing data/bug-versions.json`);
+    return;
+  }
+  if (!checkout(antdDir, tag)) {
+    console.log(`  could not check out ${tag}, keeping existing data/bug-versions.json`);
+    return;
+  }
+
+  const source = path.join(antdDir, BUG_VERSIONS_SOURCE);
+  if (!fs.existsSync(source)) {
+    console.log(`  ${BUG_VERSIONS_SOURCE} not found in antd@${tag}, keeping existing data/bug-versions.json`);
+    return;
+  }
+
+  fs.copyFileSync(source, bugVersionsTarget());
+  console.log(`  synced ${BUG_VERSIONS_SOURCE} from antd@${tag} → data/bug-versions.json`);
 }
 
 function main() {
@@ -393,6 +443,10 @@ function main() {
   // Sync per-major design.md files (DESIGN.md) from each major's latest checkout.
   console.log('\n=== Syncing design.md ===');
   syncDesignDocs(antdDir, latestTagByMajor);
+
+  // Sync known-bug version data from latest stable antd.
+  console.log('\n=== Syncing BUG_VERSIONS.json ===');
+  syncBugVersions(antdDir, latestTagByMajor);
 
   // Validate extracted data
   console.log('\n=== Validating extracted data ===');
