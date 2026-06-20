@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { spawnSync } from 'node:child_process';
 import { run, runCLI } from './helper.js';
 
 describe('CLI', () => {
@@ -29,6 +30,21 @@ describe('CLI', () => {
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain("Invalid format 'csv'");
     expect(result.stderr).toContain('json, text, markdown');
+  });
+
+  it('should not print an internal stack trace for invalid global options', () => {
+    const env = { ...process.env };
+    delete env.VITEST;
+    const result = spawnSync(process.execPath, ['dist/index.js', 'list', '--format', 'csv'], {
+      cwd: process.cwd(),
+      env: { ...env, NO_UPDATE_CHECK: '1' },
+      encoding: 'utf-8',
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Invalid format 'csv'");
+    expect(result.stderr).not.toContain('Error: EXIT:1');
+    expect(result.stderr).not.toContain('at Object.callback');
   });
 
   it('should reject invalid --lang values', async () => {

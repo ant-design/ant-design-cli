@@ -75,13 +75,11 @@ export function createProgram(): Command {
     const validLangs = ['en', 'zh'];
     if (opts.format && !validFormats.includes(opts.format)) {
       console.error(`Error: Invalid format '${opts.format}'. Must be one of: ${validFormats.join(', ')}`);
-      process.exitCode = 1;
-      throw new Error('EXIT:1');
+      process.exit(1);
     }
     if (opts.lang && !validLangs.includes(opts.lang)) {
       console.error(`Error: Invalid language '${opts.lang}'. Must be one of: ${validLangs.join(', ')}`);
-      process.exitCode = 1;
-      throw new Error('EXIT:1');
+      process.exit(1);
     }
   });
 
