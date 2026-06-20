@@ -50,8 +50,37 @@ export interface ScanFileResult {
   content: string | undefined;
 }
 
+export interface ScanFileOptions {
+  returnContent?: boolean;
+  componentBySubpath?: Map<string, string>;
+}
+
+export function normalizeComponentKey(name: string): string {
+  return name.replace(/[^a-z0-9]/gi, '').toLowerCase();
+}
+
+function getSubpathComponentName(source: string, componentBySubpath?: Map<string, string>): string | undefined {
+  if (!componentBySubpath) return undefined;
+
+  const parts = source.split('/');
+  if (parts[0] !== 'antd') return undefined;
+
+  const startIndex = parts[1] === 'es' || parts[1] === 'lib' ? 2 : 1;
+  if (parts.length <= startIndex) return undefined;
+
+  const subpathParts = parts.slice(startIndex);
+  if (subpathParts.includes('style') || subpathParts.includes('locale')) return undefined;
+
+  for (let i = parts.length - 1; i >= startIndex; i--) {
+    const componentName = componentBySubpath.get(normalizeComponentKey(parts[i]));
+    if (componentName) return componentName;
+  }
+
+  return undefined;
+}
+
 /** Scan a single file for antd component imports and sub-component JSX usage. */
-export function scanFile(filePath: string, opts?: { returnContent?: boolean }): ScanFileResult {
+export function scanFile(filePath: string, opts?: ScanFileOptions): ScanFileResult {
   const usage = new Map<string, { count: number; subComponents: Map<string, number> }>();
 
   let content: string;
@@ -88,6 +117,16 @@ export function scanFile(filePath: string, opts?: { returnContent?: boolean }): 
             usage.get(name)!.count++;
           }
         }
+        if (spec.type === 'ImportDefaultSpecifier') {
+          const name = getSubpathComponentName(source, opts?.componentBySubpath);
+          if (name) {
+            importedNames.add(name);
+            if (!usage.has(name)) {
+              usage.set(name, { count: 0, subComponents: new Map() });
+            }
+            usage.get(name)!.count++;
+          }
+        }
       }
     },
 
@@ -107,4 +146,3 @@ export function scanFile(filePath: string, opts?: { returnContent?: boolean }): 
 
   return { usage, content: opts?.returnContent ? content : undefined };
 }
-

@@ -2,7 +2,7 @@ import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { localize } from '../types.js';
 import { formatTable, output } from '../output/formatter.js';
-import { collectFiles, scanFile } from '../utils/scan.js';
+import { collectFiles, normalizeComponentKey, scanFile } from '../utils/scan.js';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 
@@ -26,10 +26,14 @@ export function registerUsageCommand(program: Command): void {
       const versionInfo = detectVersion(opts.version);
       const store = loadMetadataForVersion(versionInfo.version);
       const knownComponents = new Set(store.components.map((c) => c.name));
+      const componentBySubpath = new Map(store.components.map((c) => [normalizeComponentKey(c.name), c.name]));
       for (const comp of store.components) {
         for (const subKey of Object.keys(comp.subComponentProps ?? {})) {
           const leaf = subKey.split('.').pop();
-          if (leaf) knownComponents.add(leaf);
+          if (leaf) {
+            knownComponents.add(leaf);
+            componentBySubpath.set(normalizeComponentKey(leaf), leaf);
+          }
         }
       }
 
@@ -37,7 +41,7 @@ export function registerUsageCommand(program: Command): void {
       const aggregated = new Map<string, { imports: number; files: Set<string>; subComponents: Map<string, number> }>();
 
       for (const file of files) {
-        const { usage: fileUsage } = scanFile(file);
+        const { usage: fileUsage } = scanFile(file, { componentBySubpath });
         for (const [name, data] of fileUsage) {
           if (!aggregated.has(name)) {
             aggregated.set(name, { imports: 0, files: new Set(), subComponents: new Map() });

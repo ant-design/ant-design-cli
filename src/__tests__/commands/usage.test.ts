@@ -27,6 +27,27 @@ describe('usage', () => {
     }
   });
 
+  it('should count default imports from antd component subpaths', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_subpath__');
+    const fixture = join(tmpDir, 'test.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import Button from 'antd/es/button';\nimport DatePicker from 'antd/lib/date-picker';\nimport Row from 'antd/es/grid/row';\nimport Col from 'antd/es/grid/col';\nimport InternalThing from 'antd/es/_util/thing';\nconst App = () => <><Button>Test</Button><DatePicker /><Row><Col /></Row></>;`);
+      const out = await run('usage', tmpDir, '--format', 'json');
+      const data = JSON.parse(out);
+      const components = data.components.map((c: { name: string }) => c.name);
+      expect(components).toContain('Button');
+      expect(components).toContain('DatePicker');
+      expect(components).toContain('Row');
+      expect(components).toContain('Col');
+      expect(components).not.toContain('Grid');
+      expect(components).not.toContain('InternalThing');
+      expect(data.summary.totalImports).toBe(4);
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('should show message when no antd imports found', async () => {
     const tmpDir = join(__dirname, '__tmp_usage_empty__');
     const fixture = join(tmpDir, 'test.tsx');
