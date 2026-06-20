@@ -388,9 +388,17 @@ When `--version` is provided, it is pinned into generated MCP server args. When 
 
 Skill instructions are written to `CLAUDE.md` if it already exists, otherwise to `AGENTS.md` if it already exists. If neither file exists, `AGENTS.md` is created.
 
-`--check` validates the selected mode without writing files. In `mcp` mode it checks the `antd` MCP server entry. In `skill` mode it checks the copied `skills/antd/SKILL.md` and managed instruction block. In `both` mode it checks all of them. It exits `0` when the selected mode is configured and exits `1` when config, skill files, or instructions are missing or differ from the expected content.
+`--check` validates the selected mode without writing files:
+
+- `mcp` checks the `antd` MCP server entry.
+- `skill` checks the copied `skills/antd/SKILL.md` and managed instruction block.
+- `both` checks all of them.
+
+It exits `0` when the selected mode is configured and exits `1` when config, skill files, or instructions are missing or differ from the expected content.
 
 `--write-instructions` is a compatibility convenience for the default `mcp` mode. It writes the MCP-oriented `AGENTS.md` block in addition to the MCP config. Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it.
+
+Text output reports the file or directory that was actually changed. For example, when only instructions change, it prints the selected `CLAUDE.md` or `AGENTS.md` path rather than the MCP config path.
 
 JSON output:
 

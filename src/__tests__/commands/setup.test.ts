@@ -89,6 +89,31 @@ describe('setup command', () => {
     });
   });
 
+  it('rejects prototype property names as unsupported clients', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI('setup', '--client', 'toString', '--project', dir, '--format', 'json');
+
+      expect(result.exitCode).toBe(1);
+      const err = JSON.parse(result.stderr);
+      expect(err.code).toBe('INVALID_ARGUMENT');
+      expect(err.message).toContain("Unsupported agent client 'toString'");
+    });
+  });
+
+  it('treats an empty existing config file as an empty config', async () => {
+    await withTempProject(async (dir) => {
+      writeFileSync(join(dir, '.mcp.json'), '   \n');
+
+      const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--format', 'json');
+
+      expect(result.exitCode).toBe(0);
+      expect(readJson(join(dir, '.mcp.json')).mcpServers.antd).toEqual({
+        command: 'npx',
+        args: ['-y', '@ant-design/cli', 'mcp'],
+      });
+    });
+  });
+
   it('checks whether the agent MCP config is already installed', async () => {
     await withTempProject(async (dir) => {
       const missing = await runCLI('setup', '--client', 'claude', '--project', dir, '--check', '--format', 'json');
@@ -104,6 +129,24 @@ describe('setup command', () => {
       const configuredData = JSON.parse(configured.stdout);
       expect(configuredData.configured).toBe(true);
       expect(configuredData.problems).toEqual([]);
+    });
+  });
+
+  it('checks MCP config semantically regardless of key order', async () => {
+    await withTempProject(async (dir) => {
+      writeFileSync(join(dir, '.mcp.json'), JSON.stringify({
+        mcpServers: {
+          antd: {
+            args: ['-y', '@ant-design/cli', 'mcp'],
+            command: 'npx',
+          },
+        },
+      }));
+
+      const configured = await runCLI('setup', '--client', 'claude', '--project', dir, '--check', '--format', 'json');
+
+      expect(configured.exitCode).toBe(0);
+      expect(JSON.parse(configured.stdout).configured).toBe(true);
     });
   });
 
@@ -182,6 +225,21 @@ describe('setup command', () => {
 
       const instructions = readFileSync(join(dir, 'CLAUDE.md'), 'utf-8');
       expect(instructions).toContain('Use the local Ant Design skill at `skills/antd/SKILL.md`');
+    });
+  });
+
+  it('prints the instructions file when only skill instructions change in text mode', async () => {
+    await withTempProject(async (dir) => {
+      writeFileSync(join(dir, 'CLAUDE.md'), '# Claude Instructions\n');
+      await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill');
+
+      writeFileSync(join(dir, 'CLAUDE.md'), '# Claude Instructions\n');
+
+      const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'skill');
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toContain(join(dir, 'CLAUDE.md'));
+      expect(result.stdout).not.toContain(join(dir, '.mcp.json'));
     });
   });
 

@@ -58,7 +58,7 @@ const INSTRUCTIONS_START = '<!-- antd-cli setup start -->';
 const INSTRUCTIONS_END = '<!-- antd-cli setup end -->';
 
 function isAgentClient(value: string): value is AgentClient {
-  return value in CLIENTS;
+  return Object.prototype.hasOwnProperty.call(CLIENTS, value);
 }
 
 function isSetupMode(value: string): value is SetupMode {
@@ -78,7 +78,13 @@ function buildMcpArgs(opts: GlobalOptions): string[] {
 
 function readConfig(file: string): Record<string, unknown> {
   if (!existsSync(file)) return {};
-  return JSON.parse(readFileSync(file, 'utf-8')) as Record<string, unknown>;
+  const content = readFileSync(file, 'utf-8').trim();
+  if (!content) return {};
+  const parsed = JSON.parse(content) as unknown;
+  if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+    return parsed as Record<string, unknown>;
+  }
+  return {};
 }
 
 function createMergedConfig(
@@ -220,6 +226,17 @@ function getServerEntry(config: Record<string, unknown>, serverKey: 'mcpServers'
   return (servers as Record<string, unknown>).antd;
 }
 
+function isMatchingServerEntry(actual: unknown, expected: Record<string, unknown>): boolean {
+  if (!actual || typeof actual !== 'object' || Array.isArray(actual)) return false;
+  const entry = actual as Record<string, unknown>;
+  const expectedArgs = expected.args;
+  return entry.command === expected.command
+    && Array.isArray(entry.args)
+    && Array.isArray(expectedArgs)
+    && entry.args.length === expectedArgs.length
+    && entry.args.every((arg, index) => arg === expectedArgs[index]);
+}
+
 function checkInstructions(projectDir: string, mode: SetupMode): string[] {
   const expected = createInstructionsBlock(mode);
   const files = [join(projectDir, 'CLAUDE.md'), join(projectDir, 'AGENTS.md')];
@@ -262,7 +279,7 @@ function checkAgent(client: AgentClient, projectDir: string, globalOpts: GlobalO
       actual = getServerEntry(current, clientConfig.serverKey);
       if (!actual) {
         problems.push('Ant Design MCP server not configured');
-      } else if (stableJson(actual) !== stableJson(expected)) {
+      } else if (!isMatchingServerEntry(actual, expected)) {
         problems.push('Ant Design MCP server config does not match expected config');
       }
     }
@@ -330,7 +347,14 @@ function printSetupResult(result: SetupResult | CheckAgentResult, format: Output
     : result.changed || result.instructionsChanged
       ? localize('Wrote', '已写入', lang)
       : localize('Already configured', '已配置', lang);
-  console.log(`${action}: ${result.file}`);
+  const changedTarget = result.changed
+    ? result.file
+    : result.instructionsChanged
+      ? result.instructionsFile
+      : result.skillChanged
+        ? result.skillDir
+        : result.file;
+  console.log(`${action}: ${changedTarget}`);
 }
 
 function formatCheckAgentMarkdown(result: CheckAgentResult, lang: string): string {
