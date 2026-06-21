@@ -961,10 +961,11 @@ The command reuses the existing `fetchLatestVersion()` (3-mirror race + 24h cach
 GitHub Actions workflow `.github/workflows/sync.yml` runs daily:
 
 1. For each major version (v4, v5, v6), find the latest antd release tag via `git ls-remote`
-2. Checkout antd source at that tag
-3. Run `scripts/extract.ts` to generate new data
-4. If data changed, commit and push
-5. Align CLI version with the latest antd version and publish to npm
+2. Before syncing, compare each bundled primary snapshot with the latest stable npm version for that major line
+3. Checkout antd source at that tag
+4. Run `scripts/extract.ts` to generate new data
+5. If data changed, commit and push
+6. Align CLI version with the latest antd version and publish to npm
 
 The CLI version is kept in sync with antd — e.g., when antd publishes v6.3.2, the CLI is also published as v6.3.2.
 
