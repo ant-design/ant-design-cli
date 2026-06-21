@@ -44,6 +44,10 @@ jobs:
         if: steps.check-version.outputs.needs_sync == 'true'
         run: npx tsx scripts/sync.ts --antd-dir antd-source
 
+      - name: Validate synced data
+        if: steps.check-version.outputs.needs_sync == 'true'
+        run: npx tsx scripts/validate-data.ts --quiet
+
       - name: Build and publish
         if: steps.check-version.outputs.needs_publish == 'true'
         run: npx tsx scripts/publish.ts
