@@ -72,6 +72,7 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 - Data is auto-extracted from antd source via `scripts/extract.ts`
 - `data/design-v{major}.md` (the design-language document served by `antd design.md`) is **not** extracted but **copied verbatim** from antd's repo-root `DESIGN.md` during sync, since it is hand-curated prose, not derivable data. It is major-grained, so `scripts/sync.ts` checks out each major's latest tag and copies the file to `data/design-v{major}.md` (only `design-v6.md` exists today; antd has not published `DESIGN.md` for v3/v4/v5). If the source `DESIGN.md` is absent for a major, the existing bundled copy is kept rather than deleted.
 - A GitHub Actions workflow (`sync.yml`) runs daily: for each major version it extracts the latest snapshot and any new minor-series snapshots, then updates `versions.json`
+- Sync fails closed if release tags cannot be fetched for any configured major line, instead of publishing partially refreshed data.
 - Stale snapshots (files not referenced by `versions.json`) are cleaned up automatically: when a new patch replaces an old one for the same minor series, the old file is removed inline; a final sweep after sync removes any orphaned snapshot files. `versions.json` is the source of truth — the cleanup scope derives from its contents, not from a hardcoded major-version list
 - Historical snapshots can be bootstrapped locally via `scripts/bootstrap-snapshots.ts`
 - CLI version aligns with the latest antd version (e.g., antd 6.3.2 → CLI 6.3.2)
