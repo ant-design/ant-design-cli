@@ -154,6 +154,21 @@ describe('setup command', () => {
     });
   });
 
+  it('does not report non-JSON setup failures as JSON errors', async () => {
+    await withTempProject(async (dir) => {
+      writeFileSync(join(dir, '.agents'), 'not a directory');
+
+      const result = await runCLI('setup', '--client', 'cursor', '--project', dir, '--mode', 'skill', '--format', 'json');
+
+      expect(result.exitCode).toBe(1);
+      const error = JSON.parse(result.stderr);
+      expect(error.code).toBe('INVALID_ARGUMENT');
+      expect(error.message).toContain('Failed to configure agent');
+      expect(error.suggestion).toContain('read and written');
+      expect(error.suggestion).not.toContain('valid JSON');
+    });
+  });
+
   it('checks whether the agent MCP config is already installed', async () => {
     await withTempProject(async (dir) => {
       const missing = await runCLI('setup', '--client', 'claude', '--project', dir, '--check', '--format', 'json');
@@ -534,6 +549,10 @@ describe('setup command', () => {
       );
       expect(missing.exitCode).toBe(1);
       const missingData = JSON.parse(missing.stdout);
+      expect(missingData.targets).toEqual([
+        join(dir, '.claude', 'skills', 'antd'),
+        join(dir, 'CLAUDE.md'),
+      ]);
       expect(missingData.problems).toContain('Ant Design skill not installed');
       expect(missingData.problems).toContain('Skill instructions not found');
 
@@ -553,6 +572,19 @@ describe('setup command', () => {
       );
       expect(configured.exitCode).toBe(0);
       expect(JSON.parse(configured.stdout).configured).toBe(true);
+    });
+  });
+
+  it('reports skill check targets in text output', async () => {
+    await withTempProject(async (dir) => {
+      await runCLI('setup', '--client', 'cursor', '--project', dir, '--mode', 'skill');
+
+      const result = await runCLI('setup', '--client', 'cursor', '--project', dir, '--mode', 'skill', '--check');
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toContain(`Configured: ${join(dir, '.agents', 'skills', 'antd')}`);
+      expect(result.stdout).toContain(`Configured: ${join(dir, 'AGENTS.md')}`);
+      expect(result.stdout).not.toContain(join(dir, '.cursor', 'mcp.json'));
     });
   });
 

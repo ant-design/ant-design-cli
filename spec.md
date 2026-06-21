@@ -400,6 +400,8 @@ Codex setup currently supports skill installation only. `antd setup --client cod
 
 It exits `0` when the selected mode is configured and exits `1` when config, skill files, or instructions are missing or differ from the expected content.
 
+Check output reports the selected setup targets. In text mode, each checked file or directory is printed with `Configured` or `Not configured`; in JSON output, `targets` contains the same selected files and directories while `file` remains the primary MCP config path for compatibility.
+
 `--write-instructions` is a compatibility convenience for the default `mcp` mode. It writes the MCP-oriented block to the selected agent instructions file in addition to the MCP config. Existing content outside the managed block is preserved. Running the command again updates the managed block rather than duplicating it. When combined with `--check`, it also checks that the MCP-oriented instruction block is present in the same selected file.
 
 Text output reports every file or directory that was actually changed, one per line. For example, `--mode both` can print the MCP config file, `.claude/skills/antd` or `.agents/skills/antd`, and the selected `CLAUDE.md` or `AGENTS.md` path.

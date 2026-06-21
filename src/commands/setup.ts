@@ -43,6 +43,7 @@ interface CheckAgentResult {
   client: AgentClient;
   mode: SetupMode;
   file: string;
+  targets: string[];
   configured: boolean;
   problems: string[];
   expected: Record<string, unknown>;
@@ -281,6 +282,11 @@ function checkAgent(
 ): CheckAgentResult {
   const clientConfig = isMcpAgentClient(client) ? CLIENTS[client] : undefined;
   const file = clientConfig ? resolve(projectDir, clientConfig.file) : chooseInstructionsFile(projectDir, client);
+  const targets = [
+    ...((mode === 'mcp' || mode === 'both') && clientConfig ? [file] : []),
+    ...(mode === 'skill' || mode === 'both' ? [getSkillDir(projectDir, client)] : []),
+    ...(mode === 'skill' || mode === 'both' || shouldCheckInstructions ? [chooseInstructionsFile(projectDir, client)] : []),
+  ];
   const expectedConfig = clientConfig ? createMergedConfig({}, clientConfig.serverKey, globalOpts) : {};
   const expected = clientConfig ? getServerEntry(expectedConfig, clientConfig.serverKey) as Record<string, unknown> : {};
   const problems: string[] = [];
@@ -312,6 +318,7 @@ function checkAgent(
     client,
     mode,
     file,
+    targets,
     configured: problems.length === 0,
     problems,
     expected,
@@ -350,9 +357,13 @@ function printSetupResult(result: SetupResult | CheckAgentResult, format: Output
 
   if ('configured' in result) {
     if (result.configured) {
-      console.log(localize(`Configured: ${result.file}`, `已配置: ${result.file}`, lang));
+      for (const target of result.targets) {
+        console.log(localize(`Configured: ${target}`, `已配置: ${target}`, lang));
+      }
     } else {
-      console.log(localize(`Not configured: ${result.file}`, `未配置: ${result.file}`, lang));
+      for (const target of result.targets) {
+        console.log(localize(`Not configured: ${target}`, `未配置: ${target}`, lang));
+      }
       for (const problem of result.problems) {
         console.log(`- ${problem}`);
       }
@@ -391,9 +402,25 @@ function formatCheckAgentMarkdown(result: CheckAgentResult, lang: string): strin
     `| ${localize('Client', '客户端', lang)} | ${result.client} |`,
     `| ${localize('Mode', '模式', lang)} | ${result.mode} |`,
     `| ${localize('File', '文件', lang)} | ${result.file} |`,
+    `| ${localize('Targets', '目标', lang)} | ${result.targets.join('<br>')} |`,
     `| ${localize('Configured', '已配置', lang)} | ${String(result.configured)} |`,
     `| ${localize('Problems', '问题', lang)} | ${result.problems.join('; ') || '-'} |`,
   ].join('\n');
+}
+
+function getSetupErrorSuggestion(error: unknown, lang: string): string {
+  if (error instanceof SyntaxError) {
+    return localize(
+      'Check that the target config file contains valid JSON.',
+      '请检查目标配置文件是否为有效 JSON。',
+      lang,
+    );
+  }
+  return localize(
+    'Check that the target files can be read and written, then retry.',
+    '请检查目标文件是否可读写，然后重试。',
+    lang,
+  );
 }
 
 export function setup(
@@ -540,11 +567,7 @@ export function registerSetupCommand(program: Command): void {
             `配置 Agent 失败: ${error instanceof Error ? error.message : String(error)}`,
             opts.lang,
           ),
-          localize(
-            'Check that the target config file contains valid JSON.',
-            '请检查目标配置文件是否为有效 JSON。',
-            opts.lang,
-          ),
+          getSetupErrorSuggestion(error, opts.lang),
         );
         printError(err, opts.format);
         process.exitCode = 1;
