@@ -74,6 +74,7 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 - A GitHub Actions workflow (`sync.yml`) runs daily: for each major version it extracts the latest snapshot and any new minor-series snapshots, then updates `versions.json`
 - Sync fails closed if release tags cannot be fetched for any configured major line, instead of publishing partially refreshed data.
 - Stale snapshots (files not referenced by `versions.json`) are cleaned up automatically: when a new patch replaces an old one for the same minor series, the old file is removed inline; a final sweep after sync removes any orphaned snapshot files. `versions.json` is the source of truth — the cleanup scope derives from its contents, not from a hardcoded major-version list
+- If `versions.json` cannot be parsed, sync fails closed instead of overwriting it with a partial index, so stale snapshot cleanup never runs from corrupted version metadata.
 - Historical snapshots can be bootstrapped locally via `scripts/bootstrap-snapshots.ts`
 - CLI version aligns with the latest antd version (e.g., antd 6.3.2 → CLI 6.3.2)
 - The components schema is consistent across major versions to enable cross-version diffing

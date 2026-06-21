@@ -175,17 +175,19 @@ function fetchTokenMeta(antdDir: string, tag: string) {
   }
 }
 
-function updateVersionsJson(major: number, minorMap: Map<string, string>) {
-  const file = path.join(DATA_DIR, 'versions.json');
+export function updateVersionsJson(dataDir: string, major: number, minorMap: Map<string, string>) {
+  const file = path.join(dataDir, 'versions.json');
   let index: Record<string, Record<string, string>> = {};
   try {
     if (fs.existsSync(file)) {
-      index = JSON.parse(fs.readFileSync(file, 'utf8'));
+      const parsed = JSON.parse(fs.readFileSync(file, 'utf8'));
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        throw new Error('versions.json must contain an object index');
+      }
+      index = parsed;
     }
   } catch (err) {
-    // If versions.json is corrupted, DON'T overwrite it — that would lose data for
-    // majors not in our loop (e.g. v3). Just update this major's key in an empty object.
-    console.error(`  Warning: Failed to parse versions.json, data for other majors may be lost: ${err instanceof Error ? err.message : err}`);
+    throw new Error(`Failed to parse versions.json; refusing to overwrite existing version index: ${err instanceof Error ? err.message : err}`);
   }
   const majorKey = `v${major}`;
   if (!index[majorKey]) index[majorKey] = {};
@@ -193,7 +195,7 @@ function updateVersionsJson(major: number, minorMap: Map<string, string>) {
     index[majorKey][minorKey] = tag;
   }
   // Atomic write: write to temp file in same directory then rename (avoids EXDEV across filesystems)
-  const tmpFile = path.join(DATA_DIR, `.versions-${Date.now()}.tmp`);
+  const tmpFile = path.join(dataDir, `.versions-${Date.now()}.tmp`);
   try {
     fs.writeFileSync(tmpFile, JSON.stringify(index, null, 2) + '\n');
     fs.renameSync(tmpFile, file);
@@ -434,7 +436,7 @@ function main() {
       extract(antdDir, snapshot);
     }
 
-    updateVersionsJson(major, minorMap);
+    updateVersionsJson(DATA_DIR, major, minorMap);
     console.log(`  Updated versions.json for v${major}`);
   }
 
