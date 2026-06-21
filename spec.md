@@ -969,6 +969,7 @@ GitHub Actions workflow `.github/workflows/sync.yml` runs daily:
 7. Align CLI version with the latest antd version and publish to npm
 
 The CLI version is kept in sync with antd — e.g., when antd publishes v6.3.2, the CLI is also published as v6.3.2.
+If sync produces data-only changes while the current CLI version has already been published, the workflow commits and pushes those data changes without attempting to republish the same npm version.
 
 ## Output Examples
 
