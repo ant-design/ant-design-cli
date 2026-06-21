@@ -371,7 +371,12 @@ function printSetupResult(result: SetupResult | CheckAgentResult, format: Output
       ? localize('Would write', '将写入', lang)
       : localize('Wrote', '已写入', lang)
     : localize('Already configured', '已配置', lang);
-  const targets = changedTargets.length > 0 ? changedTargets : [result.file];
+  const fallbackTargets = [
+    ...(result.mode === 'skill' ? [] : [result.file]),
+    ...(result.skillDir ? [result.skillDir] : []),
+    ...(result.instructionsFile ? [result.instructionsFile] : []),
+  ];
+  const targets = changedTargets.length > 0 ? changedTargets : fallbackTargets;
   for (const target of targets) {
     console.log(`${action}: ${target}`);
   }

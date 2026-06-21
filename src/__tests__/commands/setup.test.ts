@@ -441,6 +441,19 @@ describe('setup command', () => {
     });
   });
 
+  it('prints skill targets when skill mode is already configured', async () => {
+    await withTempProject(async (dir) => {
+      await runCLI('setup', '--client', 'cursor', '--project', dir, '--mode', 'skill');
+
+      const result = await runCLI('setup', '--client', 'cursor', '--project', dir, '--mode', 'skill');
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toContain(`Already configured: ${join(dir, '.agents', 'skills', 'antd')}`);
+      expect(result.stdout).toContain(`Already configured: ${join(dir, 'AGENTS.md')}`);
+      expect(result.stdout).not.toContain(join(dir, '.cursor', 'mcp.json'));
+    });
+  });
+
   it('checks MCP instructions when --check is combined with --write-instructions', async () => {
     await withTempProject(async (dir) => {
       await runCLI('setup', '--client', 'claude', '--project', dir);
@@ -556,11 +569,14 @@ describe('setup command', () => {
   });
 
   it('previews shared skill installation during dry run', async () => {
-    const result = await runCLI('setup', '--client', 'cursor', '--project', process.cwd(), '--mode', 'skill', '--dry-run', '--format', 'json');
+    await withTempProject(async (dir) => {
+      const result = await runCLI('setup', '--client', 'cursor', '--project', dir, '--mode', 'skill', '--dry-run', '--format', 'json');
 
-    expect(result.exitCode).toBe(0);
-    const data = JSON.parse(result.stdout);
-    expect(data.skillDir).toBe(join(process.cwd(), '.agents', 'skills', 'antd'));
-    expect(data.skillChanged).toBe(true);
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+      expect(data.skillDir).toBe(join(dir, '.agents', 'skills', 'antd'));
+      expect(data.skillChanged).toBe(true);
+      expect(existsSync(join(dir, '.agents', 'skills', 'antd', 'SKILL.md'))).toBe(false);
+    });
   });
 });
