@@ -118,10 +118,12 @@ function extract(antdDir: string, output: string) {
  * with empty tokens, silently breaking the `antd token` command. We throw
  * instead of continuing with empty data.
  */
-function fetchTokenMeta(antdDir: string, tag: string) {
+export function fetchTokenMeta(antdDir: string, tag: string) {
   const targetDir = path.join(antdDir, 'components', 'version');
   const targetFile = path.join(targetDir, 'token-meta.json');
-  if (fs.existsSync(targetFile)) return;
+  if (fs.existsSync(targetFile)) {
+    fs.unlinkSync(targetFile);
+  }
 
   const majorVersion = parseInt(tag.split('.')[0], 10);
   const requiresTokens = majorVersion >= 5;
