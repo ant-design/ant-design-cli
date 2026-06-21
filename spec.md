@@ -964,8 +964,9 @@ GitHub Actions workflow `.github/workflows/sync.yml` runs daily:
 2. Before syncing, compare each bundled primary snapshot with the latest stable npm version for that major line
 3. Checkout antd source at that tag
 4. Run `scripts/extract.ts` to generate new data
-5. If data changed, commit and push
-6. Align CLI version with the latest antd version and publish to npm
+5. Run `scripts/validate-data.ts --quiet` to fail on critical data formatting issues while reporting known upstream snapshot gaps as warnings
+6. If data changed, commit and push
+7. Align CLI version with the latest antd version and publish to npm
 
 The CLI version is kept in sync with antd — e.g., when antd publishes v6.3.2, the CLI is also published as v6.3.2.
 

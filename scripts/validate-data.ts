@@ -144,13 +144,12 @@ function main() {
   // Check for empty props with API docs (extraction gap detection)
   const snapshotIssues = checkEmptyPropsWithApi(files);
   for (const si of snapshotIssues) {
-    const level = si.rule === 'empty-props-vs-major' ? 'ERROR' : 'WARN';
+    const level = 'WARN';
     if (!quiet) {
       console.log(`[${level}] [${si.rule}] ${si.file}:${si.component} has 0 props but API docs exist${si.rule === 'empty-props-vs-major' ? ' (major version has props)' : ''}`);
     }
     ruleCounts.set(si.rule, (ruleCounts.get(si.rule) || 0) + 1);
-    if (si.rule === 'empty-props-vs-major') errorCount++;
-    else warnCount++;
+    warnCount++;
   }
 
   console.log(`\nSummary:`);
