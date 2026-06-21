@@ -41,7 +41,7 @@ npx skills add ant-design/ant-design-cli    # 安装为 Agent Skill
 - 🤖 **Agent 优化** — 所有命令支持 `--format json`。结构化错误码与修复建议。stdout/stderr 严格分离。
 - 🌍 **双语输出** — 每个组件名、描述和文档均有中英文。通过 `--lang zh` 切换。
 - 🔮 **智能纠错** — 输入 `Buttn`？CLI 基于 Levenshtein 距离建议 `Button`，优先匹配首字母相同的候选。
-- 🧩 **17 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
+- 🧩 **18 条命令** — 从 Prop 查询到项目级 Lint，从 Design Token 到跨版本 API 对比。
 - 🔌 **MCP 服务** — `antd mcp` 启动 stdio 服务，原生集成 Claude Desktop、Cursor 等 IDE。
 
 <br>
@@ -119,6 +119,7 @@ antd lint ./src                     # 检查废弃 API 和最佳实践
 antd migrate 3 4                    # v3 → v4 迁移指南
 antd migrate 4 5 --apply ./src      # 生成 Agent 迁移提示
 antd mcp                            # 启动 MCP 服务，供 IDE 集成
+antd setup --client claude          # 为 AI Agent 接入 MCP/Skill
 antd upgrade                        # 升级 CLI 到最新版本
 ```
 
@@ -161,6 +162,7 @@ antd upgrade                        # 升级 CLI 到最新版本
 | 命令 | 说明 |
 |---|---|
 | [`antd mcp`](#antd-mcp) | 启动 MCP stdio 服务，供 IDE Agent 集成 |
+| [`antd setup`](#antd-setup) | 为 Claude Code、Cursor、VS Code 或 Codex 接入 Ant Design MCP/Skill |
 | [`antd upgrade`](#antd-upgrade) | 升级 CLI 到最新版本 |
 
 <br>
@@ -437,6 +439,62 @@ IDE 配置（`claude_desktop_config.json`）：
 **MCP 工具（8 个）：** `antd_list`、`antd_info`、`antd_doc`、`antd_demo`、`antd_token`、`antd_design_md`、`antd_semantic`、`antd_changelog`
 
 **MCP 提示词（2 个）：** `antd-expert`、`antd-page-generator`
+
+### `antd setup`
+
+为本地 AI Agent 项目接入 Ant Design MCP 和/或内置的 `skills/antd` 指南。该命令可以写入对应客户端的 MCP 配置、安装适配客户端的技能或技能参考，并为 Agent 写入托管指令。
+
+```bash
+antd setup --client claude              # 写入 .mcp.json
+antd setup --client cursor              # 写入 .cursor/mcp.json
+antd setup --client vscode              # 写入 .vscode/mcp.json
+antd setup --client codex               # 安装 Codex 项目技能
+antd setup --client claude --dry-run    # 预览配置，不写入文件
+antd setup --client claude --project ./my-app
+antd setup --client claude --version 5.29.3 --lang zh
+antd setup --client claude --check      # 校验已有配置
+antd setup --client claude --mode skill # 安装 Claude 技能并写入指令
+antd setup --client claude --mode both  # 写入 MCP 配置、安装技能并写入指令
+antd setup --client claude --write-instructions
+```
+
+模式：
+
+| 模式 | 行为 |
+|---|---|
+| `mcp` | 只写入客户端 MCP 配置。这是默认模式。 |
+| `skill` | 为所选客户端安装内置 Ant Design 指南，并写入托管指令。 |
+| `both` | 写入 MCP 配置、安装技能或技能参考，并写入托管指令。 |
+
+支持的客户端：
+
+| 客户端 | 配置文件 | 服务字段 | 技能位置 | 指令文件 |
+|---|---|---|---|---|
+| `claude` | `.mcp.json` | `mcpServers` | `.claude/skills/antd/` | `CLAUDE.md` |
+| `cursor` | `.cursor/mcp.json` | `mcpServers` | `.agents/skills/antd/` 共享技能 | `AGENTS.md` |
+| `vscode` | `.vscode/mcp.json` | `servers` | `.agents/skills/antd/` 共享技能 | `AGENTS.md` |
+| `codex` | - | - | `.agents/skills/antd/` 共享技能 | `AGENTS.md` |
+
+生成的服务项：
+
+```json
+{
+  "mcpServers": {
+    "antd": {
+      "command": "npx",
+      "args": ["-y", "@ant-design/cli", "mcp", "--version", "5.29.3", "--lang", "zh"]
+    }
+  }
+}
+```
+
+技能指令会写入所选客户端对应的指令文件：Claude 使用 `CLAUDE.md`，Cursor、VS Code 和 Codex 使用 `AGENTS.md`。Claude 会获得 `.claude/skills/antd/` 下的项目级原生技能；Cursor、VS Code 和 Codex 会获得同一份 `.agents/skills/antd/` 共享技能，并通过指令区块告诉 Agent 何时使用。
+
+Codex setup 目前只支持技能安装。请使用 `antd setup --client codex --mode skill`，也可以省略 `--mode`，因为 Codex 默认使用 `skill` 模式。
+
+使用 `--check` 可以只校验已有配置，不写入文件。当所选模式已正确配置时退出码为 `0`，配置、技能文件或指令缺失/不一致时退出码为 `1`。
+
+在默认 `mcp` 模式下使用 `--write-instructions`，可以额外向选中的 Agent 指令文件写入一个可重复更新的托管区块，提示 Agent 在生成 Ant Design 代码前优先使用已配置的 `antd` MCP 服务。与 `--check` 一起使用时，也会校验该指令区块。
 
 ### `antd upgrade`
 

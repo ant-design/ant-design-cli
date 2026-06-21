@@ -42,6 +42,7 @@ Commands:
   mcp                              Start MCP (Model Context Protocol) server for AI assistant integration.
   Not meant to be run directly. Configure your AI tool with:
     { "mcpServers": { "antd": { "command": "npx", "args": ["-y", "@ant-design/cli", "mcp"] } } }
+  setup [options]                  Set up Ant Design MCP/Skill for AI agents
   upgrade                          Upgrade the CLI to the latest version
   bug [options]                    Report a bug to the antd repository
   bug-cli [options]                Report a bug to the ant-design-cli repository
