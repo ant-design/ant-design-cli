@@ -52,19 +52,25 @@ function parseArgs(args: string[]): { antdDir: string } {
 }
 
 /** Returns all release tags for a major version, sorted ascending by semver. */
-function fetchTags(major: number): string[] {
+export function fetchTags(major: number): string[] {
   try {
     const out = execSync(
       `git ls-remote --tags --sort=v:refname ${ANTD_REMOTE} "refs/tags/${major}.*"`,
       { encoding: 'utf8' },
     );
-    return out
+    const tags = out
       .split('\n')
       .filter((line) => line && !line.includes('^{}'))
       .map((line) => line.replace(/.*refs\/tags\//, ''));
+    if (tags.length === 0) {
+      throw new Error(`No release tags found for v${major}`);
+    }
+    return tags;
   } catch (err) {
-    console.error(`Error fetching tags for v${major}: ${err instanceof Error ? err.message : err}`);
-    return [];
+    const stderr = err && typeof err === 'object' && 'stderr' in err && err.stderr
+      ? `\n${Buffer.isBuffer(err.stderr) ? err.stderr.toString('utf8') : String(err.stderr)}`
+      : '';
+    throw new Error(`Error fetching tags for v${major}: ${err instanceof Error ? err.message : err}${stderr}`);
   }
 }
 
@@ -370,10 +376,6 @@ function main() {
     console.log(`\n=== Syncing v${major} ===`);
 
     const tags = fetchTags(major);
-    if (tags.length === 0) {
-      console.warn(`No tags fetched for v${major}, skipping`);
-      continue;
-    }
     const minorMap = buildMinorMap(tags); // pre-releases already excluded
     const latestTag = [...minorMap.values()].at(-1);
     if (!latestTag) {
@@ -455,4 +457,6 @@ function main() {
   console.log('\nSync complete.');
 }
 
-main();
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+  main();
+}
