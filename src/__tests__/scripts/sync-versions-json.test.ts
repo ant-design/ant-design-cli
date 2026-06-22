@@ -42,11 +42,7 @@ describe('sync versions.json handling', () => {
     const previousSnapshot = join(dataDir, 'v6.4.2.json');
     writeFileSync(previousSnapshot, '{}');
 
-    expect(() => syncMinorSnapshot({
-      antdDir: workdir,
-      dataDir,
-      minorKey: '6.4',
-      tag: '6.4.4',
+    expect(() => syncMinorSnapshot(workdir, dataDir, '6.4', '6.4.4', {
       checkoutTag: () => true,
       fetchTokenMetaForTag: () => undefined,
       extractSnapshot: () => {

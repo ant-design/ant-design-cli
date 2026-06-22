@@ -109,26 +109,22 @@ function extract(antdDir: string, output: string) {
   });
 }
 
-interface SyncMinorSnapshotOptions {
-  antdDir: string;
-  dataDir: string;
-  minorKey: string;
-  tag: string;
+interface SyncMinorSnapshotDeps {
   checkoutTag?: (antdDir: string, tag: string) => boolean;
   fetchTokenMetaForTag?: (antdDir: string, tag: string) => void;
   extractSnapshot?: (antdDir: string, output: string) => void;
 }
 
-export function syncMinorSnapshot(options: SyncMinorSnapshotOptions) {
-  const {
-    antdDir,
-    dataDir,
-    minorKey,
-    tag,
-    checkoutTag = checkout,
-    fetchTokenMetaForTag = fetchTokenMeta,
-    extractSnapshot = extract,
-  } = options;
+export function syncMinorSnapshot(
+  antdDir: string,
+  dataDir: string,
+  minorKey: string,
+  tag: string,
+  deps: SyncMinorSnapshotDeps = {},
+) {
+  const checkoutTag = deps.checkoutTag ?? checkout;
+  const fetchTokenMetaForTag = deps.fetchTokenMetaForTag ?? fetchTokenMeta;
+  const extractSnapshot = deps.extractSnapshot ?? extract;
   const snapshot = path.join(dataDir, `v${tag}.json`);
   if (fs.existsSync(snapshot)) {
     console.log(`  Snapshot v${tag}.json already exists, skipping`);
@@ -459,7 +455,7 @@ function main() {
     // Extract per-minor snapshots, replacing stale ones whose patch version changed
     for (const [minorKey, tag] of minorMap) {
       try {
-        syncMinorSnapshot({ antdDir, dataDir: DATA_DIR, minorKey, tag });
+        syncMinorSnapshot(antdDir, DATA_DIR, minorKey, tag);
       } catch (err) {
         console.error(`  ERROR: ${err instanceof Error ? err.message : err}`);
         throw new Error(`Failed to sync ${minorKey} snapshot ${tag}; refusing to update versions.json`);
