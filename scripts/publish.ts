@@ -9,6 +9,9 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getErrorText, isNpmPackageNotFoundError } from './utils/npm-errors.js';
+
+export { isNpmPackageNotFoundError } from './utils/npm-errors.js';
 
 function run(cmd: string, options?: { cwd?: string; stdio?: 'pipe' | 'inherit' }): string {
   const result = execSync(cmd, {
@@ -22,8 +25,11 @@ function run(cmd: string, options?: { cwd?: string; stdio?: 'pipe' | 'inherit' }
 
 function getNpmVersion(pkgName: string, version: string): string | null {
   try {
-    return run(`npm view "${pkgName}@${version}" version 2>/dev/null || true`);
-  } catch {
+    return run(`npm view "${pkgName}@${version}" version`);
+  } catch (err) {
+    if (!isNpmPackageNotFoundError(err)) {
+      throw err;
+    }
     return null;
   }
 }
@@ -51,6 +57,18 @@ export function getPublishPlan(input: PublishPlanInput) {
   };
 }
 
+type PublishStep = 'commit' | 'tag' | 'push' | 'publish' | 'release';
+
+export function getPublishSteps(plan: ReturnType<typeof getPublishPlan>): PublishStep[] {
+  const steps: PublishStep[] = [];
+  if (plan.shouldCommit) steps.push('commit');
+  if (plan.shouldTag) steps.push('tag');
+  if (plan.shouldCommit || plan.shouldTag) steps.push('push');
+  if (plan.shouldPublish) steps.push('publish');
+  if (plan.shouldRelease) steps.push('release');
+  return steps;
+}
+
 function gitTagExists(version: string): boolean {
   try {
     return run(`git ls-remote --tags origin "refs/tags/v${version}"`).length > 0;
@@ -60,19 +78,10 @@ function gitTagExists(version: string): boolean {
 }
 
 export function isGithubReleaseNotFoundError(err: unknown): boolean {
-  const parts: string[] = [];
-
-  if (err instanceof Error) {
-    parts.push(err.message);
-  }
-
-  if (err && typeof err === 'object' && 'stderr' in err) {
-    const stderr = err.stderr;
-    parts.push(Buffer.isBuffer(stderr) ? stderr.toString('utf8') : String(stderr ?? ''));
-  }
-
-  const errorText = parts.join('\n').toLowerCase();
-  return errorText.includes('not found') || errorText.includes('could not resolve to a release');
+  const errorText = getErrorText(err);
+  return errorText.includes('release not found')
+    || errorText.includes('http 404')
+    || errorText.includes('could not resolve to a release');
 }
 
 function githubReleaseExists(version: string): boolean {
@@ -131,37 +140,32 @@ function main() {
   run('npm run build', { stdio: 'inherit' });
   run('npx vitest run --update', { stdio: 'inherit' });
 
-  // Commit, tag and push only after successful build + test
-  if (plan.shouldCommit) {
-    run('git config user.name "github-actions[bot]"');
-    run('git config user.email "github-actions[bot]@users.noreply.github.com"');
-    run('git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md src/__tests__/snapshots/');
-    run(`git commit -m "data: sync antd metadata (${versionsStr || cliVersion})"`);
-
-    if (plan.shouldTag) {
+  for (const step of getPublishSteps(plan)) {
+    if (step === 'commit') {
+      run('git config user.name "github-actions[bot]"');
+      run('git config user.email "github-actions[bot]@users.noreply.github.com"');
+      run('git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md src/__tests__/snapshots/');
+      run(`git commit -m "data: sync antd metadata (${versionsStr || cliVersion})"`);
+    } else if (step === 'tag') {
       run(`git tag "v${cliVersion}"`);
+    } else if (step === 'push') {
+      if (plan.shouldCommit) {
+        run(plan.shouldTag ? 'git push origin main --tags' : 'git push origin main');
+      } else {
+        run(`git push origin "v${cliVersion}"`);
+      }
+    } else if (step === 'publish') {
+      run('NODE_AUTH_TOKEN="" npm publish --provenance --access public', { stdio: 'inherit' });
+      console.log(`Successfully published @ant-design/cli@${cliVersion}`);
+    } else if (step === 'release') {
+      const releaseNotes = run(`npx tsx scripts/extract-changelog.ts "${cliVersion}"`);
+      const releaseNotesPath = join(os.tmpdir(), `release-notes-${Date.now()}.md`);
+      writeFileSync(releaseNotesPath, releaseNotes);
+      run(`gh release create "v${cliVersion}" --title "v${cliVersion}" --notes-file "${releaseNotesPath}"`, { stdio: 'inherit' });
     }
-
-    run(plan.shouldTag ? 'git push origin main --tags' : 'git push origin main');
-  } else if (plan.shouldTag) {
-    run(`git tag "v${cliVersion}"`);
-    run(`git push origin "v${cliVersion}"`);
   }
 
-  if (plan.shouldRelease) {
-    // Create GitHub Release
-    const releaseNotes = run(`npx tsx scripts/extract-changelog.ts "${cliVersion}"`);
-    const releaseNotesPath = join(os.tmpdir(), `release-notes-${Date.now()}.md`);
-    writeFileSync(releaseNotesPath, releaseNotes);
-    run(`gh release create "v${cliVersion}" --title "v${cliVersion}" --notes-file "${releaseNotesPath}"`, { stdio: 'inherit' });
-  }
-
-  // Publish to npm (clear NODE_AUTH_TOKEN for OIDC Trusted Publishing)
-  if (plan.shouldPublish) {
-    run('NODE_AUTH_TOKEN="" npm publish --provenance --access public', { stdio: 'inherit' });
-
-    console.log(`Successfully published @ant-design/cli@${cliVersion}`);
-  } else {
+  if (!plan.shouldPublish) {
     console.log(`Version ${cliVersion} already published to npm; committed synced data changes only`);
   }
 }

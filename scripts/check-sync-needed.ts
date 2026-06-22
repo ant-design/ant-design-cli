@@ -17,6 +17,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import semver from 'semver';
+import { isNpmPackageNotFoundError } from './utils/npm-errors.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.join(__dirname, '..', 'data');
@@ -51,7 +52,10 @@ function getLatestNpmVersion(major: number): string | null {
   try {
     const output = execSync(`npm view antd@${major} version --json`, { encoding: 'utf8' });
     return getLatestStableVersion(output);
-  } catch {
+  } catch (err) {
+    if (!isNpmPackageNotFoundError(err)) {
+      throw err;
+    }
     return null;
   }
 }
@@ -72,7 +76,10 @@ function isCliVersionPublished(version: string): boolean {
   try {
     execSync(`npm view "@ant-design/cli@${version}" version`, { stdio: 'pipe' });
     return true;
-  } catch {
+  } catch (err) {
+    if (!isNpmPackageNotFoundError(err)) {
+      throw err;
+    }
     return false;
   }
 }
