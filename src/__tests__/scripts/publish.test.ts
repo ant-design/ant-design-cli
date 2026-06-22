@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { getPublishPlan, isGithubReleaseNotFoundError } from '../../../scripts/publish.js';
+import {
+  getPublishPlan,
+  getPublishSteps,
+  isGithubReleaseNotFoundError,
+  isNpmPackageNotFoundError,
+} from '../../../scripts/publish.js';
 
 describe('publish workflow plan', () => {
   it('commits synced data changes even when the CLI version is already published', () => {
@@ -69,5 +74,37 @@ describe('publish workflow plan', () => {
     expect(isGithubReleaseNotFoundError(new Error('release not found'))).toBe(true);
     expect(isGithubReleaseNotFoundError({ stderr: Buffer.from('HTTP 404: Not Found') })).toBe(true);
     expect(isGithubReleaseNotFoundError(new Error('HTTP 401: Bad credentials'))).toBe(false);
+    expect(isGithubReleaseNotFoundError({ stderr: Buffer.from('sh: gh: command not found') })).toBe(false);
+  });
+
+  it('only classifies npm not-found errors as unpublished packages', () => {
+    expect(isNpmPackageNotFoundError({ stderr: Buffer.from('npm ERR! code E404\nnpm ERR! 404 Not Found') })).toBe(true);
+    expect(isNpmPackageNotFoundError(new Error('No match found for version 6.4.4'))).toBe(true);
+    expect(isNpmPackageNotFoundError(new Error('network timeout'))).toBe(false);
+    expect(isNpmPackageNotFoundError(new Error('npm ERR! code E401'))).toBe(false);
+  });
+
+  it('publishes to npm before creating a GitHub Release', () => {
+    const steps = getPublishSteps({
+      shouldCommit: true,
+      shouldPublish: true,
+      shouldTag: true,
+      shouldRelease: true,
+      shouldSkip: false,
+    });
+
+    expect(steps.indexOf('publish')).toBeLessThan(steps.indexOf('release'));
+  });
+
+  it('keeps publish before release during recovery without a commit', () => {
+    const steps = getPublishSteps({
+      shouldCommit: false,
+      shouldPublish: true,
+      shouldTag: false,
+      shouldRelease: true,
+      shouldSkip: false,
+    });
+
+    expect(steps).toEqual(['publish', 'release']);
   });
 });
