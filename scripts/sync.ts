@@ -109,6 +109,47 @@ function extract(antdDir: string, output: string) {
   });
 }
 
+interface SyncMinorSnapshotOptions {
+  antdDir: string;
+  dataDir: string;
+  minorKey: string;
+  tag: string;
+  checkoutTag?: (antdDir: string, tag: string) => boolean;
+  fetchTokenMetaForTag?: (antdDir: string, tag: string) => void;
+  extractSnapshot?: (antdDir: string, output: string) => void;
+}
+
+export function syncMinorSnapshot(options: SyncMinorSnapshotOptions) {
+  const {
+    antdDir,
+    dataDir,
+    minorKey,
+    tag,
+    checkoutTag = checkout,
+    fetchTokenMetaForTag = fetchTokenMeta,
+    extractSnapshot = extract,
+  } = options;
+  const snapshot = path.join(dataDir, `v${tag}.json`);
+  if (fs.existsSync(snapshot)) {
+    console.log(`  Snapshot v${tag}.json already exists, skipping`);
+    return;
+  }
+
+  console.log(`  Extracting ${minorKey} → ${tag}`);
+  if (!checkoutTag(antdDir, tag)) {
+    throw new Error(`Failed to checkout ${tag}`);
+  }
+  fetchTokenMetaForTag(antdDir, tag);
+  extractSnapshot(antdDir, snapshot);
+
+  const stalePattern = new RegExp(`^v${minorKey.replaceAll('.', '\\.')}\\.\\d+\\.json$`);
+  const staleFiles = fs.readdirSync(dataDir).filter((f) => f !== `v${tag}.json` && stalePattern.test(f));
+  for (const stale of staleFiles) {
+    fs.unlinkSync(path.join(dataDir, stale));
+    console.log(`  Removed stale snapshot: data/${stale}`);
+  }
+}
+
 /**
  * Fetch token-meta.json from the published npm package for the given antd version.
  * This file is a build artifact that doesn't exist in raw git source,
@@ -195,6 +236,12 @@ export function updateVersionsJson(dataDir: string, major: number, minorMap: Map
   if (!index[majorKey]) index[majorKey] = {};
   for (const [minorKey, tag] of minorMap) {
     index[majorKey][minorKey] = tag;
+  }
+  for (const tag of Object.values(index[majorKey])) {
+    const snapshot = path.join(dataDir, `v${tag}.json`);
+    if (!fs.existsSync(snapshot)) {
+      throw new Error(`versions.json would reference missing snapshot data/v${tag}.json`);
+    }
   }
   // Atomic write: write to temp file in same directory then rename (avoids EXDEV across filesystems)
   const tmpFile = path.join(dataDir, `.versions-${Date.now()}.tmp`);
@@ -411,31 +458,12 @@ function main() {
 
     // Extract per-minor snapshots, replacing stale ones whose patch version changed
     for (const [minorKey, tag] of minorMap) {
-      const snapshot = path.join(DATA_DIR, `v${tag}.json`);
-      if (fs.existsSync(snapshot)) {
-        console.log(`  Snapshot v${tag}.json already exists, skipping`);
-        continue;
-      }
-      // Remove stale snapshot for this minor (e.g. v6.4.2.json when tag is now 6.4.3)
-      const stalePattern = new RegExp(`^v${minorKey.replaceAll('.', '\\.')}\\.\\d+\\.json$`);
-      const staleFiles = fs.readdirSync(DATA_DIR).filter((f) => stalePattern.test(f));
-      for (const stale of staleFiles) {
-        fs.unlinkSync(path.join(DATA_DIR, stale));
-        console.log(`  Removed stale snapshot: data/${stale}`);
-      }
-      console.log(`  Extracting ${minorKey} → ${tag}`);
-      if (!checkout(antdDir, tag)) {
-        console.warn(`  Skipping ${minorKey} due to checkout failure`);
-        continue;
-      }
       try {
-        fetchTokenMeta(antdDir, tag);
+        syncMinorSnapshot({ antdDir, dataDir: DATA_DIR, minorKey, tag });
       } catch (err) {
         console.error(`  ERROR: ${err instanceof Error ? err.message : err}`);
-        console.error(`  Skipping ${minorKey} snapshot — cannot proceed without token data`);
-        continue;
+        throw new Error(`Failed to sync ${minorKey} snapshot ${tag}; refusing to update versions.json`);
       }
-      extract(antdDir, snapshot);
     }
 
     updateVersionsJson(DATA_DIR, major, minorMap);

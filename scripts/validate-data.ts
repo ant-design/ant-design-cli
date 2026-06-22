@@ -10,6 +10,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { PropData, MetadataStore } from '../src/types.js';
 
 const DATA_DIR = path.join(import.meta.dirname, '..', 'data');
@@ -102,6 +103,41 @@ function checkEmptyPropsWithApi(files: string[]): SnapshotIssue[] {
   return issues;
 }
 
+export function validateVersionsIndexReferences(dataDir: string): string[] {
+  const versionsPath = path.join(dataDir, 'versions.json');
+  const issues: string[] = [];
+  let index: Record<string, Record<string, string>>;
+
+  try {
+    const parsed = JSON.parse(fs.readFileSync(versionsPath, 'utf8'));
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return ['versions.json must contain an object index'];
+    }
+    index = parsed;
+  } catch (err) {
+    return [`versions.json is not valid JSON: ${err instanceof Error ? err.message : err}`];
+  }
+
+  for (const minorIndex of Object.values(index)) {
+    if (!minorIndex || typeof minorIndex !== 'object' || Array.isArray(minorIndex)) {
+      issues.push('versions.json major entries must contain object indexes');
+      continue;
+    }
+    for (const tag of Object.values(minorIndex)) {
+      if (typeof tag !== 'string') {
+        issues.push('versions.json snapshot tags must be strings');
+        continue;
+      }
+      const snapshot = `data/v${tag}.json`;
+      if (!fs.existsSync(path.join(dataDir, `v${tag}.json`))) {
+        issues.push(`versions.json references missing snapshot ${snapshot}`);
+      }
+    }
+  }
+
+  return issues;
+}
+
 function main() {
   const files = fs.readdirSync(DATA_DIR)
     .filter(f => /^v\d+.*\.json$/.test(f))
@@ -152,6 +188,15 @@ function main() {
     warnCount++;
   }
 
+  const versionsIndexIssues = validateVersionsIndexReferences(DATA_DIR);
+  for (const issue of versionsIndexIssues) {
+    if (!quiet) {
+      console.log(`[ERROR] [versions-index] ${issue}`);
+    }
+    ruleCounts.set('versions-index', (ruleCounts.get('versions-index') || 0) + 1);
+    errorCount++;
+  }
+
   console.log(`\nSummary:`);
   for (const [rule, count] of [...ruleCounts.entries()].sort()) {
     console.log(`  ${rule}: ${count}`);
@@ -168,4 +213,6 @@ function main() {
   }
 }
 
-main();
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+  main();
+}
