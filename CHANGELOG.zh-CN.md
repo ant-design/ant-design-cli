@@ -2,6 +2,28 @@
 
 ## [6.4.5](https://github.com/ant-design/ant-design-cli/compare/v6.4.4...v6.4.5) (2026-06-22)
 
+### 新功能
+
+- 新增 `antd setup` 命令，用于初始化 Ant Design 项目和相关配置 ([#165](https://github.com/ant-design/ant-design-cli/pull/165))
+- `antd migrate` 现在可以扫描目录，并基于实际使用情况生成更有针对性的迁移提示词 ([#159](https://github.com/ant-design/ant-design-cli/pull/159))
+
+### Bug 修复
+
+- 修复同步发布流程的鉴权与恢复路径，确保缺失或失败的发布产物能被可靠检测和修复 ([#180](https://github.com/ant-design/ant-design-cli/pull/180), [#179](https://github.com/ant-design/ant-design-cli/pull/179), [#178](https://github.com/ant-design/ant-design-cli/pull/178), [#177](https://github.com/ant-design/ant-design-cli/pull/177), [#176](https://github.com/ant-design/ant-design-cli/pull/176))
+- 增强同步流程，覆盖 release tag 缺失、版本索引损坏、Token 元数据过期和纯数据同步变更等场景 ([#174](https://github.com/ant-design/ant-design-cli/pull/174), [#173](https://github.com/ant-design/ant-design-cli/pull/173), [#172](https://github.com/ant-design/ant-design-cli/pull/172), [#171](https://github.com/ant-design/ant-design-cli/pull/171), [#170](https://github.com/ant-design/ant-design-cli/pull/170), [#169](https://github.com/ant-design/ant-design-cli/pull/169), [#168](https://github.com/ant-design/ant-design-cli/pull/168))
+- 保持 doctor bug 检查离线执行，避免测试和普通运行触发网络请求 ([#164](https://github.com/ant-design/ant-design-cli/pull/164))
+- `usage` 分析现在会统计 `antd` 子路径的默认导入 ([#163](https://github.com/ant-design/ant-design-cli/pull/163))
+- 传入无效全局选项时不再输出堆栈信息 ([#162](https://github.com/ant-design/ant-design-cli/pull/162))
+
+### 安全
+
+- 修复 Dependabot 安全告警 ([#167](https://github.com/ant-design/ant-design-cli/pull/167))
+
+### 其他变更
+
+- 升级依赖 ([#175](https://github.com/ant-design/ant-design-cli/pull/175), [#160](https://github.com/ant-design/ant-design-cli/pull/160), [#157](https://github.com/ant-design/ant-design-cli/pull/157))
+- 保持升级检查缓存相关测试使用安全 mock ([#161](https://github.com/ant-design/ant-design-cli/pull/161))
+- 为 v6.4.4 补充中文发布说明 ([#158](https://github.com/ant-design/ant-design-cli/pull/158))
 - 同步 antd 元数据 ([v6@6.4.5](https://github.com/ant-design/ant-design-cli/compare/v6.4.4...v6.4.5#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
 
