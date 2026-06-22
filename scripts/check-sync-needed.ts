@@ -17,7 +17,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import semver from 'semver';
-import { isNpmPackageNotFoundError } from './utils/npm-errors.js';
+import { getErrorText, isNpmPackageNotFoundError } from './utils/npm-errors.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.join(__dirname, '..', 'data');
@@ -29,6 +29,8 @@ interface SyncStatusOptions {
   getLatestNpmVersion: (major: number) => string | null;
   getLocalVersion: (major: number) => string | null;
   isCliVersionPublished: (version: string) => boolean;
+  gitTagExists: (version: string) => boolean;
+  githubReleaseExists: (version: string) => boolean;
 }
 
 export function getLatestStableVersion(output: string): string | null {
@@ -84,6 +86,29 @@ function isCliVersionPublished(version: string): boolean {
   }
 }
 
+function gitTagExists(version: string): boolean {
+  return execSync(`git ls-remote --tags origin "refs/tags/v${version}"`, { encoding: 'utf8' }).trim().length > 0;
+}
+
+function isGithubReleaseNotFoundError(err: unknown): boolean {
+  const errorText = getErrorText(err);
+  return errorText.includes('release not found')
+    || errorText.includes('http 404')
+    || errorText.includes('could not resolve to a release');
+}
+
+function githubReleaseExists(version: string): boolean {
+  try {
+    execSync(`gh release view "v${version}"`, { stdio: 'pipe' });
+    return true;
+  } catch (err) {
+    if (!isGithubReleaseNotFoundError(err)) {
+      throw err;
+    }
+    return false;
+  }
+}
+
 export function resolveSyncStatus(options: SyncStatusOptions) {
   let needsSync = false;
   const statusLines: string[] = [];
@@ -97,7 +122,10 @@ export function resolveSyncStatus(options: SyncStatusOptions) {
   }
 
   const v6Local = options.getLocalVersion(6);
-  const needsPublish = needsSync || !v6Local || !options.isCliVersionPublished(v6Local);
+  const cliPublished = v6Local ? options.isCliVersionPublished(v6Local) : false;
+  const tagExists = v6Local ? options.gitTagExists(v6Local) : false;
+  const releaseExists = v6Local ? options.githubReleaseExists(v6Local) : false;
+  const needsPublish = needsSync || !v6Local || !cliPublished || !tagExists || !releaseExists;
 
   return { needsSync, needsPublish, statusLines };
 }
@@ -108,6 +136,8 @@ function main() {
     getLatestNpmVersion,
     getLocalVersion,
     isCliVersionPublished,
+    gitTagExists,
+    githubReleaseExists,
   });
 
   console.log('Version check:');

@@ -46,8 +46,8 @@ interface PublishPlanInput {
 export function getPublishPlan(input: PublishPlanInput) {
   const hasLocalChanges = input.changedFiles.size > 0 || input.cliVersion !== input.oldVersion;
   const shouldPublish = !input.existingVersion;
-  const shouldTag = shouldPublish && input.existingGitTag !== true;
-  const shouldRelease = shouldPublish && input.existingGithubRelease !== true;
+  const shouldTag = input.existingGitTag !== true;
+  const shouldRelease = input.existingGithubRelease !== true;
   return {
     shouldCommit: hasLocalChanges,
     shouldPublish,
@@ -166,7 +166,7 @@ function main() {
   }
 
   if (!plan.shouldPublish) {
-    console.log(`Version ${cliVersion} already published to npm; committed synced data changes only`);
+    console.log(`Version ${cliVersion} already published to npm; recovered pending release artifacts and/or committed synced data changes`);
   }
 }
 
