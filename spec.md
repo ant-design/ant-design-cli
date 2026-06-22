@@ -971,6 +971,7 @@ GitHub Actions workflow `.github/workflows/sync.yml` runs hourly:
 
 The CLI version is kept in sync with antd — e.g., when antd publishes v6.3.2, the CLI is also published as v6.3.2.
 If sync produces data-only changes while the current CLI version has already been published, the workflow commits and pushes those data changes without attempting to republish the same npm version.
+If the package version was already committed but a previous publish attempt failed, `scripts/publish.ts` recovers the missing git tag, GitHub Release, and npm publish without requiring a new version bump.
 
 ## Output Examples
 

@@ -32,17 +32,59 @@ interface PublishPlanInput {
   cliVersion: string;
   oldVersion: string;
   existingVersion: string | null;
+  existingGitTag?: boolean;
+  existingGithubRelease?: boolean;
   changedFiles: Set<string>;
 }
 
 export function getPublishPlan(input: PublishPlanInput) {
   const hasLocalChanges = input.changedFiles.size > 0 || input.cliVersion !== input.oldVersion;
   const shouldPublish = !input.existingVersion;
+  const shouldTag = shouldPublish && input.existingGitTag !== true;
+  const shouldRelease = shouldPublish && input.existingGithubRelease !== true;
   return {
     shouldCommit: hasLocalChanges,
     shouldPublish,
-    shouldSkip: !hasLocalChanges && !shouldPublish,
+    shouldTag,
+    shouldRelease,
+    shouldSkip: !hasLocalChanges && !shouldPublish && !shouldTag && !shouldRelease,
   };
+}
+
+function gitTagExists(version: string): boolean {
+  try {
+    return run(`git ls-remote --tags origin "refs/tags/v${version}"`).length > 0;
+  } catch {
+    return false;
+  }
+}
+
+export function isGithubReleaseNotFoundError(err: unknown): boolean {
+  const parts: string[] = [];
+
+  if (err instanceof Error) {
+    parts.push(err.message);
+  }
+
+  if (err && typeof err === 'object' && 'stderr' in err) {
+    const stderr = err.stderr;
+    parts.push(Buffer.isBuffer(stderr) ? stderr.toString('utf8') : String(stderr ?? ''));
+  }
+
+  const errorText = parts.join('\n').toLowerCase();
+  return errorText.includes('not found') || errorText.includes('could not resolve to a release');
+}
+
+function githubReleaseExists(version: string): boolean {
+  try {
+    run(`gh release view "v${version}"`);
+    return true;
+  } catch (err) {
+    if (!isGithubReleaseNotFoundError(err)) {
+      throw err;
+    }
+    return false;
+  }
 }
 
 function main() {
@@ -52,6 +94,8 @@ function main() {
 
   // Check if already published
   const existingVersion = getNpmVersion('@ant-design/cli', cliVersion);
+  const existingGitTag = gitTagExists(cliVersion);
+  const existingGithubRelease = githubReleaseExists(cliVersion);
 
   // Collect version info for changelog — only include versions whose data file actually changed
   const changedFiles = new Set(run('git diff --name-only HEAD -- data/').split(/\r?\n/).filter(Boolean));
@@ -66,7 +110,7 @@ function main() {
   // Get current package.json version
   const pkg = JSON.parse(readFileSync('package.json', 'utf-8'));
   const oldVersion = pkg.version;
-  const plan = getPublishPlan({ cliVersion, oldVersion, existingVersion, changedFiles });
+  const plan = getPublishPlan({ cliVersion, oldVersion, existingVersion, existingGitTag, existingGithubRelease, changedFiles });
 
   if (plan.shouldSkip) {
     console.log(`Version ${cliVersion} already published to npm and no local changes were found, skipping release`);
@@ -94,14 +138,17 @@ function main() {
     run('git add data/ package.json package-lock.json CHANGELOG.md CHANGELOG.zh-CN.md src/__tests__/snapshots/');
     run(`git commit -m "data: sync antd metadata (${versionsStr || cliVersion})"`);
 
-    if (plan.shouldPublish && cliVersion !== oldVersion) {
+    if (plan.shouldTag) {
       run(`git tag "v${cliVersion}"`);
     }
 
-    run(plan.shouldPublish && cliVersion !== oldVersion ? 'git push origin main --tags' : 'git push origin main');
+    run(plan.shouldTag ? 'git push origin main --tags' : 'git push origin main');
+  } else if (plan.shouldTag) {
+    run(`git tag "v${cliVersion}"`);
+    run(`git push origin "v${cliVersion}"`);
   }
 
-  if (plan.shouldPublish && cliVersion !== oldVersion) {
+  if (plan.shouldRelease) {
     // Create GitHub Release
     const releaseNotes = run(`npx tsx scripts/extract-changelog.ts "${cliVersion}"`);
     const releaseNotesPath = join(os.tmpdir(), `release-notes-${Date.now()}.md`);
