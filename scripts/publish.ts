@@ -4,7 +4,7 @@
  * Handles version check, git operations, and npm publish.
  */
 
-import { execSync } from 'node:child_process';
+import { execFileSync, execSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import { join, resolve } from 'node:path';
@@ -25,7 +25,7 @@ function run(cmd: string, options?: { cwd?: string; stdio?: 'pipe' | 'inherit' }
 
 function getNpmVersion(pkgName: string, version: string): string | null {
   try {
-    return run(`npm view "${pkgName}@${version}" version`);
+    return execFileSync('npm', ['view', `${pkgName}@${version}`, 'version'], { encoding: 'utf8' }).trim();
   } catch (err) {
     if (!isNpmPackageNotFoundError(err)) {
       throw err;
@@ -71,7 +71,7 @@ export function getPublishSteps(plan: ReturnType<typeof getPublishPlan>): Publis
 
 function gitTagExists(version: string): boolean {
   try {
-    return run(`git ls-remote --tags origin "refs/tags/v${version}"`).length > 0;
+    return execFileSync('git', ['ls-remote', '--tags', 'origin', `refs/tags/v${version}`], { encoding: 'utf8' }).trim().length > 0;
   } catch {
     return false;
   }
@@ -86,7 +86,7 @@ export function isGithubReleaseNotFoundError(err: unknown): boolean {
 
 function githubReleaseExists(version: string): boolean {
   try {
-    run(`gh release view "v${version}"`);
+    execFileSync('gh', ['release', 'view', `v${version}`], { stdio: 'pipe' });
     return true;
   } catch (err) {
     if (!isGithubReleaseNotFoundError(err)) {

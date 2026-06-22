@@ -29,6 +29,8 @@ jobs:
       - name: Check if sync needed
         id: check-version
         run: npx tsx scripts/check-sync-needed.ts
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Baseline test (before data sync)
         if: steps.check-version.outputs.needs_publish == 'true'

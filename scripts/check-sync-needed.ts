@@ -12,7 +12,7 @@
  *   needs_publish — CLI for the synced version hasn't been published yet
  */
 
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -52,7 +52,7 @@ export function getLatestStableVersion(output: string): string | null {
 
 function getLatestNpmVersion(major: number): string | null {
   try {
-    const output = execSync(`npm view antd@${major} version --json`, { encoding: 'utf8' });
+    const output = execFileSync('npm', ['view', `antd@${major}`, 'version', '--json'], { encoding: 'utf8' });
     return getLatestStableVersion(output);
   } catch (err) {
     if (!isNpmPackageNotFoundError(err)) {
@@ -76,7 +76,7 @@ function getLocalVersion(major: number): string | null {
 
 function isCliVersionPublished(version: string): boolean {
   try {
-    execSync(`npm view "@ant-design/cli@${version}" version`, { stdio: 'pipe' });
+    execFileSync('npm', ['view', `@ant-design/cli@${version}`, 'version'], { stdio: 'pipe' });
     return true;
   } catch (err) {
     if (!isNpmPackageNotFoundError(err)) {
@@ -87,7 +87,7 @@ function isCliVersionPublished(version: string): boolean {
 }
 
 function gitTagExists(version: string): boolean {
-  return execSync(`git ls-remote --tags origin "refs/tags/v${version}"`, { encoding: 'utf8' }).trim().length > 0;
+  return execFileSync('git', ['ls-remote', '--tags', 'origin', `refs/tags/v${version}`], { encoding: 'utf8' }).trim().length > 0;
 }
 
 function isGithubReleaseNotFoundError(err: unknown): boolean {
@@ -99,7 +99,7 @@ function isGithubReleaseNotFoundError(err: unknown): boolean {
 
 function githubReleaseExists(version: string): boolean {
   try {
-    execSync(`gh release view "v${version}"`, { stdio: 'pipe' });
+    execFileSync('gh', ['release', 'view', `v${version}`], { stdio: 'pipe' });
     return true;
   } catch (err) {
     if (!isGithubReleaseNotFoundError(err)) {
@@ -122,10 +122,12 @@ export function resolveSyncStatus(options: SyncStatusOptions) {
   }
 
   const v6Local = options.getLocalVersion(6);
-  const cliPublished = v6Local ? options.isCliVersionPublished(v6Local) : false;
-  const tagExists = v6Local ? options.gitTagExists(v6Local) : false;
-  const releaseExists = v6Local ? options.githubReleaseExists(v6Local) : false;
-  const needsPublish = needsSync || !v6Local || !cliPublished || !tagExists || !releaseExists;
+  const needsPublish =
+    needsSync ||
+    !v6Local ||
+    !options.isCliVersionPublished(v6Local) ||
+    !options.gitTagExists(v6Local) ||
+    !options.githubReleaseExists(v6Local);
 
   return { needsSync, needsPublish, statusLines };
 }
