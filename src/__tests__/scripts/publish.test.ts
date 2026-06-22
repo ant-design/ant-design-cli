@@ -41,6 +41,23 @@ describe('publish workflow plan', () => {
     expect(plan.shouldSkip).toBe(true);
   });
 
+  it('recovers a missing git tag and GitHub Release even when npm is already published', () => {
+    const plan = getPublishPlan({
+      cliVersion: '6.4.4',
+      oldVersion: '6.4.4',
+      existingVersion: '6.4.4',
+      existingGitTag: false,
+      existingGithubRelease: false,
+      changedFiles: new Set(),
+    });
+
+    expect(plan.shouldCommit).toBe(false);
+    expect(plan.shouldPublish).toBe(false);
+    expect(plan.shouldTag).toBe(true);
+    expect(plan.shouldRelease).toBe(true);
+    expect(plan.shouldSkip).toBe(false);
+  });
+
   it('recovers tag, release, and npm publish when package version already changed but publish failed', () => {
     const plan = getPublishPlan({
       cliVersion: '6.4.4',
@@ -106,5 +123,17 @@ describe('publish workflow plan', () => {
     });
 
     expect(steps).toEqual(['publish', 'release']);
+  });
+
+  it('pushes a recovered tag before creating a missing release when npm is already published', () => {
+    const steps = getPublishSteps({
+      shouldCommit: false,
+      shouldPublish: false,
+      shouldTag: true,
+      shouldRelease: true,
+      shouldSkip: false,
+    });
+
+    expect(steps).toEqual(['tag', 'push', 'release']);
   });
 });

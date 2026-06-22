@@ -18,9 +18,25 @@ describe('check-sync-needed', () => {
       getLatestNpmVersion: () => '6.4.4',
       getLocalVersion: () => '6.4.4',
       isCliVersionPublished: () => true,
+      gitTagExists: () => true,
+      githubReleaseExists: () => true,
     });
 
     expect(status.needsSync).toBe(false);
     expect(status.needsPublish).toBe(false);
+  });
+
+  it('requests publish recovery when npm is published but tag or release is missing', () => {
+    const status = resolveSyncStatus({
+      majors: [6],
+      getLatestNpmVersion: () => '6.4.4',
+      getLocalVersion: () => '6.4.4',
+      isCliVersionPublished: () => true,
+      gitTagExists: () => false,
+      githubReleaseExists: () => false,
+    });
+
+    expect(status.needsSync).toBe(false);
+    expect(status.needsPublish).toBe(true);
   });
 });

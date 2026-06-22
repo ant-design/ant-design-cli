@@ -971,7 +971,7 @@ GitHub Actions workflow `.github/workflows/sync.yml` runs hourly:
 
 The CLI version is kept in sync with antd — e.g., when antd publishes v6.3.2, the CLI is also published as v6.3.2.
 If sync produces data-only changes while the current CLI version has already been published, the workflow commits and pushes those data changes without attempting to republish the same npm version.
-If the package version was already committed but a previous publish attempt failed, `scripts/publish.ts` recovers the missing git tag, npm publish, and GitHub Release without requiring a new version bump.
+If the package version was already committed but a previous publish attempt failed, `scripts/publish.ts` recovers missing release artifacts without requiring a new version bump. The sync gate treats a missing npm package, git tag, or GitHub Release for the synced v6 version as `needs_publish=true`.
 Npm registry lookups fail closed: only explicit package/version not-found errors are treated as unpublished; network, registry, or auth failures stop the workflow instead of triggering a false recovery.
 GitHub Releases are created only after npm publish succeeds, so public release notes do not appear before the package is installable.
 
