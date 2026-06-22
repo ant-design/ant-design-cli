@@ -39,4 +39,24 @@ describe('check-sync-needed', () => {
     expect(status.needsSync).toBe(false);
     expect(status.needsPublish).toBe(true);
   });
+
+  it('short-circuits release artifact checks when data sync is already needed', () => {
+    const status = resolveSyncStatus({
+      majors: [6],
+      getLatestNpmVersion: () => '6.4.5',
+      getLocalVersion: () => '6.4.4',
+      isCliVersionPublished: () => {
+        throw new Error('should not check npm package when sync is needed');
+      },
+      gitTagExists: () => {
+        throw new Error('should not check git tag when sync is needed');
+      },
+      githubReleaseExists: () => {
+        throw new Error('should not check GitHub Release when sync is needed');
+      },
+    });
+
+    expect(status.needsSync).toBe(true);
+    expect(status.needsPublish).toBe(true);
+  });
 });
