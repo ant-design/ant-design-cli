@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { updateVersionsJson } from '../../../scripts/sync.js';
+import { syncMinorSnapshot, updateVersionsJson } from '../../../scripts/sync.js';
 
 describe('sync versions.json handling', () => {
   let workdir: string;
@@ -29,5 +29,41 @@ describe('sync versions.json handling', () => {
 
     expect(() => updateVersionsJson(dataDir, 6, new Map([['6.4', '6.4.4']]))).toThrow(/versions\.json/);
     expect(readFileSync(join(dataDir, 'versions.json'), 'utf8')).toBe('null');
+  });
+
+  it('fails closed when versions.json would reference a missing snapshot', () => {
+    writeFileSync(join(dataDir, 'versions.json'), '{}');
+
+    expect(() => updateVersionsJson(dataDir, 6, new Map([['6.4', '6.4.4']]))).toThrow(/data\/v6\.4\.4\.json/);
+    expect(readFileSync(join(dataDir, 'versions.json'), 'utf8')).toBe('{}');
+  });
+
+  it('fails closed when any existing major references a missing snapshot', () => {
+    writeFileSync(join(dataDir, 'versions.json'), JSON.stringify({
+      v5: { '5.27': '5.27.6' },
+      v6: {},
+    }));
+    writeFileSync(join(dataDir, 'v6.4.4.json'), '{}');
+
+    expect(() => updateVersionsJson(dataDir, 6, new Map([['6.4', '6.4.4']]))).toThrow(/data\/v5\.27\.6\.json/);
+    expect(JSON.parse(readFileSync(join(dataDir, 'versions.json'), 'utf8'))).toEqual({
+      v5: { '5.27': '5.27.6' },
+      v6: {},
+    });
+  });
+
+  it('keeps the previous minor snapshot when the replacement extraction fails', () => {
+    const previousSnapshot = join(dataDir, 'v6.4.2.json');
+    writeFileSync(previousSnapshot, '{}');
+
+    expect(() => syncMinorSnapshot(workdir, dataDir, '6.4', '6.4.4', {
+      checkoutTag: () => true,
+      fetchTokenMetaForTag: () => undefined,
+      extractSnapshot: () => {
+        throw new Error('extract failed');
+      },
+    })).toThrow(/extract failed/);
+
+    expect(existsSync(previousSnapshot)).toBe(true);
   });
 });
