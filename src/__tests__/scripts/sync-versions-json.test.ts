@@ -38,6 +38,20 @@ describe('sync versions.json handling', () => {
     expect(readFileSync(join(dataDir, 'versions.json'), 'utf8')).toBe('{}');
   });
 
+  it('fails closed when any existing major references a missing snapshot', () => {
+    writeFileSync(join(dataDir, 'versions.json'), JSON.stringify({
+      v5: { '5.27': '5.27.6' },
+      v6: {},
+    }));
+    writeFileSync(join(dataDir, 'v6.4.4.json'), '{}');
+
+    expect(() => updateVersionsJson(dataDir, 6, new Map([['6.4', '6.4.4']]))).toThrow(/data\/v5\.27\.6\.json/);
+    expect(JSON.parse(readFileSync(join(dataDir, 'versions.json'), 'utf8'))).toEqual({
+      v5: { '5.27': '5.27.6' },
+      v6: {},
+    });
+  });
+
   it('keeps the previous minor snapshot when the replacement extraction fails', () => {
     const previousSnapshot = join(dataDir, 'v6.4.2.json');
     writeFileSync(previousSnapshot, '{}');

@@ -233,10 +233,15 @@ export function updateVersionsJson(dataDir: string, major: number, minorMap: Map
   for (const [minorKey, tag] of minorMap) {
     index[majorKey][minorKey] = tag;
   }
-  for (const tag of Object.values(index[majorKey])) {
-    const snapshot = path.join(dataDir, `v${tag}.json`);
-    if (!fs.existsSync(snapshot)) {
-      throw new Error(`versions.json would reference missing snapshot data/v${tag}.json`);
+  for (const minorIndex of Object.values(index)) {
+    if (!minorIndex || typeof minorIndex !== 'object' || Array.isArray(minorIndex)) {
+      throw new Error('versions.json major entries must contain object indexes');
+    }
+    for (const tag of Object.values(minorIndex)) {
+      const snapshot = path.join(dataDir, `v${tag}.json`);
+      if (!fs.existsSync(snapshot)) {
+        throw new Error(`versions.json would reference missing snapshot data/v${tag}.json`);
+      }
     }
   }
   // Atomic write: write to temp file in same directory then rename (avoids EXDEV across filesystems)
