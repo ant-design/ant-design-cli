@@ -95,4 +95,16 @@ describe('publish workflow plan', () => {
 
     expect(steps.indexOf('publish')).toBeLessThan(steps.indexOf('release'));
   });
+
+  it('keeps publish before release during recovery without a commit', () => {
+    const steps = getPublishSteps({
+      shouldCommit: false,
+      shouldPublish: true,
+      shouldTag: false,
+      shouldRelease: true,
+      shouldSkip: false,
+    });
+
+    expect(steps).toEqual(['publish', 'release']);
+  });
 });
