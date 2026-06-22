@@ -60,10 +60,19 @@ function gitTagExists(version: string): boolean {
 }
 
 export function isGithubReleaseNotFoundError(err: unknown): boolean {
-  const error = err as { message?: unknown; stderr?: unknown };
-  const stderr = Buffer.isBuffer(error?.stderr) ? error.stderr.toString('utf8') : String(error?.stderr ?? '');
-  const message = `${String(error?.message ?? '')}\n${stderr}`.toLowerCase();
-  return message.includes('not found') || message.includes('could not resolve to a release');
+  const parts: string[] = [];
+
+  if (err instanceof Error) {
+    parts.push(err.message);
+  }
+
+  if (err && typeof err === 'object' && 'stderr' in err) {
+    const stderr = err.stderr;
+    parts.push(Buffer.isBuffer(stderr) ? stderr.toString('utf8') : String(stderr ?? ''));
+  }
+
+  const errorText = parts.join('\n').toLowerCase();
+  return errorText.includes('not found') || errorText.includes('could not resolve to a release');
 }
 
 function githubReleaseExists(version: string): boolean {
