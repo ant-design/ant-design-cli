@@ -22,6 +22,16 @@ declare const __CLI_VERSION__: string;
 const CLI_VERSION = __CLI_VERSION__;
 type RootOptions = Omit<GlobalOptions, 'version'> & { version?: string | boolean };
 
+function getHelpBanner(version: string): string {
+  return [
+    '/\\          Ant Design CLI',
+    `/  \\        antd ${version}`,
+    '/ /\\ \\       Component intelligence for agents',
+    '/_/  \\_\\     Query, diagnose, and migrate antd projects',
+    '',
+  ].join('\n');
+}
+
 function getCommandArgs(argv: readonly string[] | undefined, options: Parameters<Command['parseAsync']>[1]): readonly string[] {
   if (options?.from === 'user') {
     return argv ?? [];
@@ -40,7 +50,7 @@ export function createProgram(): Command {
     .option('--lang <lang>', 'Output language: en or zh', 'en')
     .option('--detail', 'Full information output', false);
 
-  program.addHelpText('before', `antd ${CLI_VERSION}\n\n`);
+  program.addHelpText('before', `${getHelpBanner(CLI_VERSION)}\n`);
 
   // -V remains for compatibility; -v and bare --version print CLI version.
   program.addOption(new Option('-V, --cli-version', 'Output the CLI version number'));

@@ -1,7 +1,10 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`help > --help 1`] = `
-"antd 6.5.0
+"/\\          Ant Design CLI
+/  \\        antd 6.5.0
+/ /\\ \\       Component intelligence for agents
+/_/  \\_\\     Query, diagnose, and migrate antd projects
 
 
 Usage: antd [options] [command]

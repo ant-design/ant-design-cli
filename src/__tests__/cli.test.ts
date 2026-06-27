@@ -8,6 +8,7 @@ const { version: cliVersion } = JSON.parse(readFileSync('package.json', 'utf-8')
 describe('CLI', () => {
   it('should show help', async () => {
     const out = await run('--help');
+    expect(out).toContain('Ant Design CLI');
     expect(out).toContain(`antd ${cliVersion}`);
     expect(out).toContain('antd');
     expect(out).toContain('list');
