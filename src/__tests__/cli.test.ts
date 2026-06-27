@@ -1,19 +1,45 @@
 import { describe, it, expect } from 'vitest';
 import { spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { run, runCLI } from './helper.js';
+
+const { version: cliVersion } = JSON.parse(readFileSync('package.json', 'utf-8')) as { version: string };
 
 describe('CLI', () => {
   it('should show help', async () => {
     const out = await run('--help');
+    expect(out).toContain(`antd ${cliVersion}`);
     expect(out).toContain('antd');
     expect(out).toContain('list');
     expect(out).toContain('info');
     expect(out).toContain('demo');
   });
 
+  it('should show help with version when no command is provided', async () => {
+    const out = await run();
+    expect(out).toContain(`antd ${cliVersion}`);
+    expect(out).toContain('Usage: antd [options] [command]');
+  });
+
+  it('should show help with version with -h', async () => {
+    const out = await run('-h');
+    expect(out).toContain(`antd ${cliVersion}`);
+    expect(out).toContain('Usage: antd [options] [command]');
+  });
+
   it('should show CLI version with -V', async () => {
     const out = await run('-V');
     expect(out).toMatch(/^\d+\.\d+\.\d+[-\w.]*$/);
+  });
+
+  it('should show CLI version with -v', async () => {
+    const out = await run('-v');
+    expect(out).toBe(cliVersion);
+  });
+
+  it('should show CLI version with bare --version', async () => {
+    const out = await run('--version');
+    expect(out).toBe(cliVersion);
   });
 
   it('should output error as JSON to stderr', async () => {

@@ -20,6 +20,14 @@ import { checkForUpdate } from './utils/update-check.js';
 import type { GlobalOptions } from './types.js';
 declare const __CLI_VERSION__: string;
 const CLI_VERSION = __CLI_VERSION__;
+type RootOptions = Omit<GlobalOptions, 'version'> & { version?: string | boolean };
+
+function getCommandArgs(argv: readonly string[] | undefined, options: Parameters<Command['parseAsync']>[1]): readonly string[] {
+  if (options?.from === 'user') {
+    return argv ?? [];
+  }
+  return (argv ?? process.argv).slice(2);
+}
 
 export function createProgram(): Command {
   const program = new Command();
@@ -28,15 +36,23 @@ export function createProgram(): Command {
     .name('antd')
     .description('CLI tool for querying antd knowledge and analyzing antd usage')
     .option('--format <format>', 'Output format: json, text, or markdown', 'text')
-    .option('--version <version>', 'Target antd version (e.g. 5.20.0)')
+    .option('--version [version]', 'Target antd version (e.g. 5.20.0); omit value to output CLI version')
     .option('--lang <lang>', 'Output language: en or zh', 'en')
     .option('--detail', 'Full information output', false);
 
-  // -V for CLI version (--version is used for antd version targeting)
+  program.addHelpText('before', `antd ${CLI_VERSION}\n\n`);
+
+  // -V remains for compatibility; -v and bare --version print CLI version.
   program.addOption(new Option('-V, --cli-version', 'Output the CLI version number'));
+  program.addOption(new Option('-v', 'Output the CLI version number'));
 
   // Handle -V/--cli-version via Commander event (fires before subcommand dispatch)
   program.on('option:cli-version', () => {
+    // eslint-disable-next-line no-console
+    console.log(CLI_VERSION);
+    process.exit(0);
+  });
+  program.on('option:v', () => {
     // eslint-disable-next-line no-console
     console.log(CLI_VERSION);
     process.exit(0);
@@ -72,7 +88,12 @@ export function createProgram(): Command {
 
   // Validate global options before any command runs
   program.hook('preAction', () => {
-    const opts = program.opts<GlobalOptions>();
+    const opts = program.opts<RootOptions>();
+    if (opts.version === true) {
+      // eslint-disable-next-line no-console
+      console.log(CLI_VERSION);
+      process.exit(0);
+    }
     const validFormats = ['json', 'text', 'markdown'];
     const validLangs = ['en', 'zh'];
     if (opts.format && !validFormats.includes(opts.format)) {
@@ -86,6 +107,21 @@ export function createProgram(): Command {
   program.hook('postAction', async () => {
     await checkForUpdate();
   });
+
+  const parseAsync = program.parseAsync.bind(program);
+  program.parseAsync = async (argv, options) => {
+    const args = getCommandArgs(argv, options);
+    if (args.length === 0) {
+      program.outputHelp();
+      return program;
+    }
+    if (args.length === 1 && args[0] === '--version') {
+      // eslint-disable-next-line no-console
+      console.log(CLI_VERSION);
+      return program;
+    }
+    return parseAsync(argv, options);
+  };
 
   return program;
 }

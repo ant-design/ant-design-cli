@@ -83,6 +83,8 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 
 ## Commands
 
+Running `antd`, `antd -h`, or `antd --help` prints root help with the Ant Design CLI banner logo and includes the current CLI version. Running `antd -v`, `antd -V`, `antd --cli-version`, or bare `antd --version` prints only the CLI version.
+
 ### Knowledge Query
 
 #### `antd list`
@@ -835,9 +837,10 @@ Successfully upgraded to v6.4.4
 | Flag | Description | Default |
 |---|---|---|
 | `--format json\|text\|markdown` | Output format. `json` includes all data with no decoration. | `text` |
-| `--version <v>` | Target antd version (full semver, e.g. `5.20.0`) | auto-detect from project |
+| `--version [v]` | Target antd version when a value is provided (full semver, e.g. `5.20.0`); bare `--version` prints the CLI version. | auto-detect from project |
 | `--lang en\|zh` | Output language | `en` |
 | `--detail` | Full information output (more fields in response) | `false` |
+| `-v`, `-V`, `--cli-version` | Print the CLI version number. | — |
 
 Note: `--quiet` removed. `--format json` already provides clean structured output for agents. `--format text` is for human-readable output and always includes formatting.
 

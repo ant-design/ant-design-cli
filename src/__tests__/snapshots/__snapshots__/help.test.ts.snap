@@ -1,17 +1,22 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`help > --help 1`] = `
-"Usage: antd [options] [command]
+"antd 6.5.0
+
+
+Usage: antd [options] [command]
 
 CLI tool for querying antd knowledge and analyzing antd usage
 
 Options:
   --format <format>                Output format: json, text, or markdown
                                    (default: "text")
-  --version <version>              Target antd version (e.g. 5.20.0)
+  --version [version]              Target antd version (e.g. 5.20.0); omit value
+                                   to output CLI version
   --lang <lang>                    Output language: en or zh (default: "en")
   --detail                         Full information output (default: false)
   -V, --cli-version                Output the CLI version number
+  -v                               Output the CLI version number
   -h, --help                       display help for command
 
 Commands:
