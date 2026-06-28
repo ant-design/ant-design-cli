@@ -9,6 +9,7 @@ describe('CLI', () => {
   it('should show help', async () => {
     const out = await run('--help');
     expect(out).toContain('Ant Design CLI');
+    expect(out).toContain('/ ___ |');
     expect(out).toContain(`antd ${cliVersion}`);
     expect(out).toContain('antd');
     expect(out).toContain('list');

@@ -24,10 +24,14 @@ type RootOptions = Omit<GlobalOptions, 'version'> & { version?: string | boolean
 
 function getHelpBanner(version: string): string {
   return [
-    '/\\          Ant Design CLI',
-    `/  \\        antd ${version}`,
-    '/ /\\ \\       Component intelligence for agents',
-    '/_/  \\_\\     Query, diagnose, and migrate antd projects',
+    '    ___          _     ____',
+    '   /   |  ____  (_)___/ / /',
+    '  / /| | / __ \\/ / __  / /',
+    ' / ___ |/ / / / / /_/ /_/',
+    '/_/  |_/_/ /_/_/\\__,_(_)',
+    '',
+    `antd ${version}  |  Ant Design CLI`,
+    'Component intelligence for React agents',
     '',
   ].join('\n');
 }
