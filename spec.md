@@ -83,6 +83,14 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 
 ## Commands
 
+### Root Help
+
+`antd`, `antd -h`, and `antd --help` display the root help. The help output starts with one blank line, a CFonts-rendered `ANT DESIGN CLI` banner using the `tiny` font, the current CLI package version as `@ant-design/cli v{version}`, and a plain solid divider line with the same visible length as the version label, followed by the normal Commander usage, options, and command list.
+
+In an interactive TTY, the CFonts banner may render with color/gradient styling when terminal color is supported. The divider remains plain text. Non-TTY output, `NO_COLOR`, or `TERM=dumb` use plain text ANSI-free output for snapshots, pipes, and tests.
+
+The banner is only part of the root help surface. `-V` / `--cli-version` continue to print only the raw CLI version string, and `--version <v>` remains the target antd version flag.
+
 ### Knowledge Query
 
 #### `antd list`
@@ -838,6 +846,7 @@ Successfully upgraded to v6.4.4
 | `--version <v>` | Target antd version (full semver, e.g. `5.20.0`) | auto-detect from project |
 | `--lang en\|zh` | Output language | `en` |
 | `--detail` | Full information output (more fields in response) | `false` |
+| `-V`, `--cli-version` | Print the raw CLI package version and exit | - |
 
 Note: `--quiet` removed. `--format json` already provides clean structured output for agents. `--format text` is for human-readable output and always includes formatting.
 
@@ -890,6 +899,7 @@ Invalid global options such as `--format` and `--lang` exit with code `1` and pr
 
 - Language: TypeScript + Node.js
 - CLI framework: `commander`
+- Terminal help effects: `cfonts` for the root help banner
 - Minimum Node version: 20+
 - Package name: `@ant-design/cli`
 - Global command: `antd`
