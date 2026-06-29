@@ -18,12 +18,10 @@ CLI tool for querying antd knowledge and analyzing antd usage
 Options:
   --format <format>                Output format: json, text, or markdown
                                    (default: "text")
-  --version [version]              Target antd version (e.g. 5.20.0); omit value
-                                   to output CLI version
+  --version [version]              Target antd version (e.g. 5.20.0)
   --lang <lang>                    Output language: en or zh (default: "en")
   --detail                         Full information output (default: false)
   -V, --cli-version                Output the CLI version number
-  -v                               Output the CLI version number
   -h, --help                       display help for command
 
 Commands:

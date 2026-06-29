@@ -34,14 +34,16 @@ describe('CLI', () => {
     expect(out).toMatch(/^\d+\.\d+\.\d+[-\w.]*$/);
   });
 
-  it('should show CLI version with -v', async () => {
-    const out = await run('-v');
-    expect(out).toBe(cliVersion);
+  it('should reject -v because CLI version uses -V', async () => {
+    const result = await runCLI('-v');
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toContain("unknown option '-v'");
   });
 
-  it('should show CLI version with bare --version', async () => {
+  it('should not treat bare --version as a CLI version alias', async () => {
     const out = await run('--version');
-    expect(out).toBe(cliVersion);
+    expect(out).not.toBe(cliVersion);
   });
 
   it('should output error as JSON to stderr', async () => {
