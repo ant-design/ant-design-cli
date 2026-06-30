@@ -4,7 +4,7 @@
 
 ### Bug Fixes
 
-- `antd lint` no longer flags default/namespace imports of non-JS assets (e.g. `antd/dist/reset.css`, `antd/es/icon.svg`) under the performance rule, since such sources resolve to a bundler asset with only a default export ([#185](https://github.com/ant-design/ant-design-cli/issues/185))
+- `antd lint` no longer flags default/namespace imports of non-JS assets (e.g. `antd/dist/reset.css`, `antd/es/some-icon.svg`) under the performance rule, since such sources resolve to a bundler asset with only a default export ([#185](https://github.com/ant-design/ant-design-cli/issues/185))
 
 
 ## [6.5.0](https://github.com/ant-design/ant-design-cli/compare/v6.4.5...v6.5.0) (2026-06-27)

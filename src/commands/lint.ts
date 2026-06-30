@@ -132,7 +132,7 @@ function isLocalePath(source: string, antdAliases: string[]): boolean {
   );
 }
 
-const MODULE_EXTENSIONS = new Set(['js', 'jsx', 'ts', 'tsx', 'mjs', 'cjs']);
+const MODULE_EXTENSIONS = new Set(['js', 'jsx', 'ts', 'tsx', 'mjs', 'cjs', 'mts', 'cts']);
 
 // A source like `antd/dist/reset.css` resolves to a bundler asset with only a
 // default export, so the default/namespace-import performance rule can't apply.
@@ -219,10 +219,9 @@ function lintFile(
         }
 
         if (!only || only === 'performance') {
-          const skipPerformance = isLocalePath(source, antdAliases) || isNonModuleSource(source);
-          const isNamespace = spec.type === 'ImportNamespaceSpecifier' && !skipPerformance;
-          const isDefault = spec.type === 'ImportDefaultSpecifier' && !skipPerformance;
-          if (isNamespace || isDefault) {
+          const isNamespace = spec.type === 'ImportNamespaceSpecifier';
+          const isDefault = spec.type === 'ImportDefaultSpecifier';
+          if ((isNamespace || isDefault) && !isLocalePath(source, antdAliases) && !isNonModuleSource(source)) {
             const localName = spec.local?.name ?? '';
             pendingPerformanceIssues.push({
               line: lineOf(node), source, localName,
