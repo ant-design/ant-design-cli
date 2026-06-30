@@ -319,6 +319,28 @@ const App = () => (
     expect(data.issues.some((i: LintIssue) => i.rule === 'performance' && i.message.includes('default'))).toBe(true);
   });
 
+  it('should not flag default/namespace imports of non-JS assets (#185)', async () => {
+    const out = await lintFixture(
+      'asset-import',
+      `import resetStyles from 'antd/dist/reset.css';\nimport iconUrl from 'antd/es/some-icon.svg';\nimport fontUrl from 'antd/fonts/icon.woff2';\nimport * as styles from 'antd/dist/styles.png';\nconst App = () => <div className={resetStyles}>{iconUrl}{fontUrl}{styles}</div>;`,
+      ['--only', 'performance', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'performance')).toBe(false);
+  });
+
+  it('should still flag bare antd default import alongside asset imports (#185)', async () => {
+    const out = await lintFixture(
+      'asset-and-module-import',
+      `import resetStyles from 'antd/dist/reset.css';\nimport antd from 'antd';\nconst App = () => <antd.Button>{resetStyles}</antd.Button>;`,
+      ['--only', 'performance', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    const perfIssues = data.issues.filter((i: LintIssue) => i.rule === 'performance');
+    expect(perfIssues.some((i: LintIssue) => i.message.includes('antd/dist/reset.css'))).toBe(false);
+    expect(perfIssues.some((i: LintIssue) => i.message.includes('default') && i.message.includes("from antd."))).toBe(true);
+  });
+
   it('should warn on Checkbox value outside Checkbox.Group', async () => {
     const out = await lintFixture(
       'checkbox-value',
