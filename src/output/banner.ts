@@ -50,7 +50,7 @@ function renderCfonts(
     transitionGradient: true,
   }) as { string: string };
 
-  return rendered.string;
+  return rendered?.string || text;
 }
 
 function trimLineStart(line: string): string {
