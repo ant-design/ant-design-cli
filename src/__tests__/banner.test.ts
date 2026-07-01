@@ -55,8 +55,9 @@ describe('help banner', () => {
     expect(banner).toContain('\u001b[38;2;45;217;255m\u001b[48;2;45;200;255m▀');
     expect(banner).toContain('\u001b[38;2;255;63;83m\u001b[48;2;246;60;81m▀');
     expect(banner).toContain('\u001b[48;2;');
-    expect(banner).toContain('\u001b[38;2;19;194;194m');
-    expect(banner).toContain('\u001b[38;2;146;84;222m');
+    expect(banner).toContain('\u001b[38;2;45;217;255m');
+    expect(banner).toContain('\u001b[38;2;255;77;79m');
+    expect(banner).not.toContain('\u001b[38;2;146;84;222m');
     expect(banner).not.toContain('\u001b[38;2;22;119;255m─');
     expect(plainBanner).toContain('@ant-design/cli v6.5.0');
   });

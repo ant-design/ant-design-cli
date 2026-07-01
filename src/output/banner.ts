@@ -1,6 +1,6 @@
 import cfonts from 'cfonts';
 
-const HELP_BANNER_GRADIENT = ['#1677ff', '#13c2c2', '#9254de'];
+const HELP_BANNER_GRADIENT = ['#1677ff', '#2dd9ff', '#ff4d4f'];
 const HELP_LOGO_CELLS = [
   [['', ''], ['', ''], ['', ''], ['', ''], ['', '#3ab7ff'], ['#44c3ff', '#26c1ff'], ['#2dd9ff', '#2dc8ff'], ['#33e5ff', '#39affc'], ['', '#50a7f1'], ['', ''], ['', ''], ['', ''], ['', '']],
   [['', ''], ['', ''], ['', '#269aff'], ['#2daaff', '#1ca5ff'], ['#21b4ff', '#22a8fd'], ['#25b4fd', ''], ['#6493ea', ''], ['#42a2f5', ''], ['#3eb5fa', '#3fbafb'], ['#35c4ff', '#61a9dc'], ['', '#f67272'], ['', ''], ['', '']],
