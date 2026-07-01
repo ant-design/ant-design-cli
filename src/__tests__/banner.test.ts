@@ -25,11 +25,11 @@ describe('help banner', () => {
 
     expect(lines[0]).toBe('');
     expect(lines[1]).toBe('    ▄███▄');
-    expect(lines[2]).toBe('  ▄██▀▀▀██▄');
-    expect(lines[3]).toBe('▄██▀ ▄█▄ ▀██▄');
-    expect(lines[4]).toBe('▀██▄ ▀█▀ ▄██▀');
-    expect(lines[5]).toBe('  ▀██▄▄▄██▀');
-    expect(lines[6]).toBe('    ▀▀█▀▀');
+    expect(lines[2]).toBe('  ▄█▀   ▀█▄');
+    expect(lines[3]).toBe('▄█▀ ▄█▄  ▀██▄');
+    expect(lines[4]).toBe('▀█▄ ▀█▀  ▄██▀');
+    expect(lines[5]).toBe('  ▀█▄   ▄█▀');
+    expect(lines[6]).toBe('    ▀███▀');
     expect(lines[7]).toBe('');
     expect(lines[8]).toMatch(/^▄▀█/);
     expect(lines[9]).toMatch(/^█▀█/);
@@ -47,13 +47,14 @@ describe('help banner', () => {
     const plainBanner = banner.replace(/\u001b\[[0-9;]*m/g, '');
 
     expect(plainBanner).toMatch(/^\n    ▄▀▀▀▄/);
-    expect(plainBanner).toContain('\n▄▀▀▀ ▄▀▄ ▀▀▀▄\n');
-    expect(plainBanner).toContain('\n▀▀▀▄ ▀▀▀ ▄▀▀▀\n');
+    expect(plainBanner).toContain('\n▄▀▀ ▄▀▄  ▀▀▀▄\n');
+    expect(plainBanner).toContain('\n▀▀▄ ▀▀▀  ▄▀▀▀\n');
+    expect(plainBanner).toContain('\n  ▀▀▄   ▄▀▀\n');
     expect(plainBanner).toContain('\n▄▀█ █▄ █ ▀█▀');
     expect(plainBanner).toContain('\n█▀█ █ ▀█  █');
     expect(plainBanner).toContain('\n──────────────────────\n');
-    expect(banner).toContain('\u001b[38;2;45;217;255m\u001b[48;2;45;200;255m▀');
-    expect(banner).toContain('\u001b[38;2;255;63;83m\u001b[48;2;246;60;81m▀');
+    expect(banner).toContain('\u001b[38;2;45;217;255m\u001b[48;2;45;217;255m▀');
+    expect(banner).toContain('\u001b[38;2;255;120;117m\u001b[48;2;255;77;79m▀');
     expect(banner).toContain('\u001b[48;2;');
     expect(banner).toContain('\u001b[38;2;45;217;255m');
     expect(banner).toContain('\u001b[38;2;255;77;79m');
