@@ -5,6 +5,10 @@ const HELP_BANNER_GRADIENT = ['#1677ff', '#2dd9ff', '#ff4d4f'];
 const ANSI_ESCAPE_PATTERN = /^\u001b\[[0-9;]*m/;
 
 function shouldUseTerminalColor(): boolean {
+  if (process.env.FORCE_COLOR && process.env.FORCE_COLOR !== '0') {
+    return true;
+  }
+
   return Boolean(process.stdout.isTTY && !process.env.NO_COLOR && process.env.TERM !== 'dumb');
 }
 
@@ -41,7 +45,7 @@ function renderCfonts(
     gradient: color ? HELP_BANNER_GRADIENT : false,
     independentGradient: true,
     lineHeight: 0,
-    maxLength: '0',
+    maxLength: 0,
     spaceless: true,
     transitionGradient: true,
   }) as { string: string };

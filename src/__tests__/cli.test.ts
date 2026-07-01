@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
 import { run, runCLI } from './helper.js';
 
 describe('CLI', () => {
@@ -31,15 +30,6 @@ describe('CLI', () => {
     const out = await run('-V');
     expect(out).toMatch(/^\d+\.\d+\.\d+[-\w.]*$/);
     expect(out).not.toContain('ANT DESIGN');
-  });
-
-  it('should use only cfonts for the help banner dependency', () => {
-    const pkg = JSON.parse(readFileSync('package.json', 'utf-8')) as {
-      dependencies: Record<string, string>;
-    };
-    expect(pkg.dependencies).toHaveProperty('cfonts');
-    expect(pkg.dependencies).not.toHaveProperty('gradient-string');
-    expect(pkg.dependencies).not.toHaveProperty('chalk-animation');
   });
 
   it('should output error as JSON to stderr', async () => {

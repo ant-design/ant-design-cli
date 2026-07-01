@@ -35,7 +35,7 @@ export function createProgram(): Command {
     .option('--lang <lang>', 'Output language: en or zh', 'en')
     .option('--detail', 'Full information output', false);
 
-  program.addHelpText('before', createHelpBanner(CLI_VERSION));
+  program.addHelpText('before', () => createHelpBanner(CLI_VERSION));
 
   // -V for CLI version (--version is used for antd version targeting)
   program.addOption(new Option('-V, --cli-version', 'Output the CLI version number'));

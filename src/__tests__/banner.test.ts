@@ -65,4 +65,13 @@ describe('help banner', () => {
     expect(banner).not.toContain('\u001b[38;2;22;119;255m─');
     expect(plainBanner).toContain('@ant-design/cli v6.5.0');
   });
+
+  it('respects FORCE_COLOR when choosing the default banner color mode', () => {
+    process.env.FORCE_COLOR = '3';
+
+    const banner = createHelpBanner('6.5.0');
+
+    expect(banner).toContain('\u001b[38;2;');
+    expect(banner).toContain('\u001b[48;2;');
+  });
 });
