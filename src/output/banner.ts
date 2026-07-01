@@ -1,17 +1,15 @@
 import cfonts from 'cfonts';
 
 const HELP_BANNER_GRADIENT = ['#1677ff', '#13c2c2', '#9254de'];
-const HELP_LOGO_BLUE = '#1677ff';
-const HELP_LOGO_RED = '#ff4d4f';
-const HELP_LOGO_LINES = [
-  '   ╱╲',
-  ' ╱╱  ╲',
-  '╱╱ ●  ❯',
-  '╲╲    ╱',
-  ' ╲╲  ╱',
-  '   ╲╱',
-];
-const HELP_LOGO_WIDTH = Math.max(...HELP_LOGO_LINES.map((line) => line.length));
+const HELP_LOGO_CELLS = [
+  [['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', '#2fbcff'], ['#31caff', '#29d2ff'], ['#2fcfff', '#30cbff'], ['', '#3db2f7'], ['', ''], ['', ''], ['', ''], ['', ''], ['', '']],
+  [['', ''], ['', ''], ['', ''], ['', '#27a3fc'], ['#2ab2ff', '#20baff'], ['#26ccff', '#27aefd'], ['#28baff', ''], ['#469bf1', ''], ['#43bbff', '#41aff8'], ['#44b0f7', '#3dc1ff'], ['', ''], ['', ''], ['', ''], ['', '']],
+  [['', ''], ['', '#1d8dfc'], ['#2297ff', '#18a1ff'], ['#1babff', '#1f95ff'], ['#22a1ff', ''], ['', ''], ['', '#f8686f'], ['', '#fa6e71'], ['', ''], ['#41bdfa', ''], ['#ee6873', '#fa5763'], ['#f66b6b', '#ff6973'], ['', '#f6696c'], ['', '']],
+  [['#1c87fc', '#1883ff'], ['#1593ff', '#138bff'], ['#1c8eff', '#1483ff'], ['', ''], ['', ''], ['#f54f61', '#f44153'], ['#ff5868', '#ff3d50'], ['#ff616d', '#ff4357'], ['#f85e68', '#f64a5d'], ['', ''], ['', ''], ['#f85365', '#f84456'], ['#ff5b68', '#ff4b5e'], ['#f6626a', '#f65563']],
+  [['', ''], ['#157bff', ''], ['#138eff', '#157bff'], ['#1280fd', '#1187ff'], ['', '#1880ff'], ['', ''], ['#f43445', ''], ['#f63947', ''], ['', ''], ['', '#1c88ff'], ['#f83442', '#e73950'], ['#ff3e51', '#f63243'], ['#f63e4e', ''], ['', '']],
+  [['', ''], ['', ''], ['', ''], ['#1576fc', ''], ['#1184ff', '#1273ff'], ['#1b7fff', '#1080ff'], ['', '#1778ff'], ['', '#1678ff'], ['#1980fd', '#1284ff'], ['#1486ff', '#1d7bff'], ['', ''], ['', ''], ['', ''], ['', '']],
+  [['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['#126eff', ''], ['#0e75ff', '#166eff'], ['#1077ff', '#1972ff'], ['#1d76ff', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', '']],
+] as const;
 const ANSI_ESCAPE_PATTERN = /^\u001b\[[0-9;]*m/;
 
 function shouldUseTerminalColor(): boolean {
@@ -84,7 +82,7 @@ function trimLineStart(line: string): string {
 }
 
 function addLogo(wordmarkLines: string[], color: boolean): string {
-  const logoLines = HELP_LOGO_LINES.map((line) => renderLogoLine(line, color));
+  const logoLines = HELP_LOGO_CELLS.map((row) => renderLogoLine(row, color));
   const wordmarkStartLine = Math.floor((logoLines.length - wordmarkLines.length) / 2);
 
   return logoLines
@@ -94,33 +92,44 @@ function addLogo(wordmarkLines: string[], color: boolean): string {
         return line.trimEnd();
       }
 
-      const padding = ' '.repeat(HELP_LOGO_WIDTH - HELP_LOGO_LINES[index].length + 3);
-      return `${line}${padding}${wordmarkLine}`.trimEnd();
+      return `${line}   ${wordmarkLine}`.trimEnd();
     })
     .join('\n');
 }
 
-function renderLogoLine(line: string, color: boolean): string {
-  if (!color) {
-    return line;
-  }
-
-  return Array.from(line)
-    .map((char) => {
-      if (char === '●' || char === '❯') {
-        return colorText(char, HELP_LOGO_RED);
-      }
-      if (char.trim()) {
-        return colorText(char, HELP_LOGO_BLUE);
-      }
-      return char;
-    })
+function renderLogoLine(row: readonly (readonly [string, string])[], color: boolean): string {
+  return row
+    .map(([top, bottom]) => renderLogoCell(top, bottom, color))
     .join('');
 }
 
-function colorText(text: string, hexColor: string): string {
+function renderLogoCell(top: string, bottom: string, color: boolean): string {
+  if (!top && !bottom) {
+    return ' ';
+  }
+
+  if (!color) {
+    if (top && bottom) {
+      return '█';
+    }
+    return top ? '▀' : '▄';
+  }
+
+  if (top && bottom) {
+    return `${foreground(top)}${background(bottom)}▀\u001b[39m\u001b[49m`;
+  }
+
+  return top ? `${foreground(top)}▀\u001b[39m` : `${foreground(bottom)}▄\u001b[39m`;
+}
+
+function foreground(hexColor: string): string {
   const [red, green, blue] = hexToRgb(hexColor);
-  return `\u001b[38;2;${red};${green};${blue}m${text}\u001b[39m`;
+  return `\u001b[38;2;${red};${green};${blue}m`;
+}
+
+function background(hexColor: string): string {
+  const [red, green, blue] = hexToRgb(hexColor);
+  return `\u001b[48;2;${red};${green};${blue}m`;
 }
 
 function hexToRgb(hexColor: string): [number, number, number] {
