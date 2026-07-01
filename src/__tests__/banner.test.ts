@@ -21,11 +21,26 @@ afterEach(() => {
 describe('help banner', () => {
   it('renders the wordmark without extra top padding and aligns the label', () => {
     const banner = createHelpBanner('6.5.0', false);
-    const [topPadding, firstLine, secondLine, spacerLine, labelLine, dividerLine] = banner.split('\n');
+    const [
+      topPadding,
+      firstLine,
+      secondLine,
+      thirdLine,
+      fourthLine,
+      fifthLine,
+      sixthLine,
+      spacerLine,
+      labelLine,
+      dividerLine,
+    ] = banner.split('\n');
 
     expect(topPadding).toBe('');
-    expect(firstLine).toMatch(/^▄▀█/);
-    expect(secondLine).toMatch(/^█▀█/);
+    expect(firstLine).toBe('   ╱╲');
+    expect(secondLine).toBe(' ╱╱  ╲');
+    expect(thirdLine).toMatch(/^╱╱ ●  ❯ {3}▄▀█/);
+    expect(fourthLine).toMatch(/^╲╲    ╱ {3}█▀█/);
+    expect(fifthLine).toBe(' ╲╲  ╱');
+    expect(sixthLine).toBe('   ╲╱');
     expect(spacerLine).toBe('');
     expect(labelLine).toBe('@ant-design/cli v6.5.0');
     expect(dividerLine).toBe('──────────────────────');
@@ -39,9 +54,13 @@ describe('help banner', () => {
     const banner = createHelpBanner('6.5.0', true);
     const plainBanner = banner.replace(/\u001b\[[0-9;]*m/g, '');
 
-    expect(plainBanner).toMatch(/^\n▄▀█/);
-    expect(plainBanner).toContain('\n█▀█');
+    expect(plainBanner).toMatch(/^\n   ╱╲/);
+    expect(plainBanner).toContain('\n╱╱ ●  ❯   ▄▀█');
+    expect(plainBanner).toContain('\n╲╲    ╱   █▀█');
     expect(plainBanner).toContain('\n──────────────────────\n');
+    expect(banner).toContain('\u001b[38;2;22;119;255m╱\u001b[39m');
+    expect(banner).toContain('\u001b[38;2;255;77;79m●\u001b[39m');
+    expect(banner).toContain('\u001b[38;2;255;77;79m❯\u001b[39m');
     expect(banner).toContain('\u001b[38;2;19;194;194m');
     expect(banner).toContain('\u001b[38;2;146;84;222m');
     expect(banner).not.toContain('\u001b[38;2;22;119;255m─');

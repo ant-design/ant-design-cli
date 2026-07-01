@@ -85,9 +85,9 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 
 ### Root Help
 
-`antd`, `antd -h`, and `antd --help` display the root help. The help output starts with one blank line, a CFonts-rendered `ANT DESIGN CLI` banner using the `tiny` font, the current CLI package version as `@ant-design/cli v{version}`, and a plain solid divider line with the same visible length as the version label, followed by the normal Commander usage, options, and command list.
+`antd`, `antd -h`, and `antd --help` display the root help. The help output starts with one blank line, a small Ant Design-style line-art logo followed by a CFonts-rendered `ANT DESIGN CLI` banner using the `tiny` font, the current CLI package version as `@ant-design/cli v{version}`, and a plain solid divider line with the same visible length as the version label, followed by the normal Commander usage, options, and command list.
 
-In an interactive TTY, the CFonts banner may render with color/gradient styling when terminal color is supported. The divider remains plain text. Non-TTY output, `NO_COLOR`, or `TERM=dumb` use plain text ANSI-free output for snapshots, pipes, and tests.
+In an interactive TTY, the line-art logo renders with Ant Design blue/red colors and the CFonts banner may render with color/gradient styling when terminal color is supported. The divider remains plain text. Non-TTY output, `NO_COLOR`, or `TERM=dumb` use plain text ANSI-free output for snapshots, pipes, and tests.
 
 The banner is only part of the root help surface. `-V` / `--cli-version` continue to print only the raw CLI version string, and `--version <v>` remains the target antd version flag.
 
