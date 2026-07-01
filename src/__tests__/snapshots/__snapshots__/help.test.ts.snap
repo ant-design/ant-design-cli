@@ -1,7 +1,23 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`help > --help 1`] = `
-"Usage: antd [options] [command]
+"▄██▄
+     ▄██▀▀██▄
+   ▄██▀    ▀▀ ▄
+ ▄██▀  ▄▄▄▄  ▀██▄
+███    ████    ███
+ ▀██▄  ▀▀▀▀  ▄██▀
+   ▀██▄    ▄▄ ▀
+     ▀██▄▄██▀
+       ▀██▀
+
+▄▀█ █▄ █ ▀█▀   █▀▄ █▀▀ █▀▀ █ █▀▀ █▄ █   █▀▀ █   █
+█▀█ █ ▀█  █    █▄▀ ██▄ ▄▄█ █ █▄█ █ ▀█   █▄▄ █▄▄ █
+
+@ant-design/cli v6.5.0
+──────────────────────
+
+Usage: antd [options] [command]
 
 CLI tool for querying antd knowledge and analyzing antd usage
 
@@ -39,9 +55,7 @@ Commands:
                                    auto-fix
   env [dir]                        Collect antd-related environment information
                                    for bug reporting
-  mcp                              Start MCP (Model Context Protocol) server for AI assistant integration.
-  Not meant to be run directly. Configure your AI tool with:
-    { "mcpServers": { "antd": { "command": "npx", "args": ["-y", "@ant-design/cli", "mcp"] } } }
+  mcp                              Start MCP server for AI assistant integration
   setup [options]                  Set up Ant Design MCP/Skill for AI agents
   upgrade                          Upgrade the CLI to the latest version
   bug [options]                    Report a bug to the antd repository

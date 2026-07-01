@@ -17,11 +17,7 @@ declare const __CLI_VERSION__: string;
 export function registerMcpCommand(program: Command): void {
   program
     .command('mcp')
-    .description(
-      'Start MCP (Model Context Protocol) server for AI assistant integration.\n' +
-      'Not meant to be run directly. Configure your AI tool with:\n' +
-      '  { "mcpServers": { "antd": { "command": "npx", "args": ["-y", "@ant-design/cli", "mcp"] } } }',
-    )
+    .description('Start MCP server for AI assistant integration')
     .action(/* v8 ignore start */ async () => {
       if (process.stdin.isTTY) {
         console.error('Ant Design MCP Server');
