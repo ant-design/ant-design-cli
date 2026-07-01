@@ -132,6 +132,18 @@ function isLocalePath(source: string, antdAliases: string[]): boolean {
   );
 }
 
+const MODULE_EXTENSIONS = new Set(['js', 'jsx', 'ts', 'tsx', 'mjs', 'cjs', 'mts', 'cts']);
+
+// A source like `antd/dist/reset.css` resolves to a bundler asset with only a
+// default export, so the default/namespace-import performance rule can't apply.
+// Bare specifiers and extensionless subpaths (`antd`, `antd/es/button`) have no
+// extension and are treated as modules.
+function isNonModuleSource(source: string): boolean {
+  const match = /\.([^./]+)$/.exec(source);
+  if (!match) return false;
+  return !MODULE_EXTENSIONS.has(match[1].toLowerCase());
+}
+
 function mayContainAntdAlias(content: string, antdAliases: string[]): boolean {
   return antdAliases.some((antdAlias) => content.includes(antdAlias));
 }
@@ -207,13 +219,13 @@ function lintFile(
         }
 
         if (!only || only === 'performance') {
-          const isNonLocaleNamespace = spec.type === 'ImportNamespaceSpecifier' && !isLocalePath(source, antdAliases);
-          const isNonLocaleDefault = spec.type === 'ImportDefaultSpecifier' && !isLocalePath(source, antdAliases);
-          if (isNonLocaleNamespace || isNonLocaleDefault) {
+          const isNamespace = spec.type === 'ImportNamespaceSpecifier';
+          const isDefault = spec.type === 'ImportDefaultSpecifier';
+          if ((isNamespace || isDefault) && !isLocalePath(source, antdAliases) && !isNonModuleSource(source)) {
             const localName = spec.local?.name ?? '';
             pendingPerformanceIssues.push({
               line: lineOf(node), source, localName,
-              kind: isNonLocaleNamespace ? 'namespace' : 'default',
+              kind: isNamespace ? 'namespace' : 'default',
             });
             namespaceMemberUsage.set(localName, new Set());
           }
