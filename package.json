@@ -19,6 +19,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
+    "generate:logo": "tsx scripts/generate-logo.ts",
     "extract": "tsx scripts/extract.ts",
     "prepack": "npm run build && tsx scripts/compress-data.ts",
     "postpack": "tsx scripts/compress-data.ts --undo"

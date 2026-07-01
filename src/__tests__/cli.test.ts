@@ -6,8 +6,8 @@ import { run, runCLI } from './helper.js';
 describe('CLI', () => {
   it('should show root help with the CLI version banner when no command is provided', async () => {
     const out = await run();
-    expect(out).toMatch(/^▄███▄/);
-    expect(out).toContain('▄█▀ ▄█▄  ▀██▄');
+    expect(out).toMatch(/^▄██▄/);
+    expect(out).toContain('███    ████    ███');
     expect(out).toContain('\n▄▀█ █▄ █ ▀█▀   █▀▄ █▀▀ █▀▀ █ █▀▀ █▄ █   █▀▀ █   █');
     expect(out).toContain('\n█▀█ █ ▀█  █    █▄▀ ██▄ ▄▄█ █ █▄█ █ ▀█   █▄▄ █▄▄ █');
     expect(out).toMatch(/@ant-design\/cli v\d+\.\d+\.\d+[-\w.]*/);
@@ -16,8 +16,8 @@ describe('CLI', () => {
 
   it('should show help', async () => {
     const out = await run('--help');
-    expect(out).toMatch(/^▄███▄/);
-    expect(out).toContain('▄█▀ ▄█▄  ▀██▄');
+    expect(out).toMatch(/^▄██▄/);
+    expect(out).toContain('███    ████    ███');
     expect(out).toContain('\n▄▀█ █▄ █ ▀█▀   █▀▄ █▀▀ █▀▀ █ █▀▀ █▄ █   █▀▀ █   █');
     expect(out).toContain('\n█▀█ █ ▀█  █    █▄▀ ██▄ ▄▄█ █ █▄█ █ ▀█   █▄▄ █▄▄ █');
     expect(out).toMatch(/@ant-design\/cli v\d+\.\d+\.\d+[-\w.]*/);

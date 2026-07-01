@@ -85,9 +85,11 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 
 ### Root Help
 
-`antd`, `antd -h`, and `antd --help` display the root help. The help output starts with one blank line, a small pre-rendered Ant Design logo derived from the official SVG followed by a CFonts-rendered `ANT DESIGN CLI` banner using the `tiny` font, the current CLI package version as `@ant-design/cli v{version}`, and a plain solid divider line with the same visible length as the version label, followed by the normal Commander usage, options, and command list.
+`antd`, `antd -h`, and `antd --help` display the root help. The help output starts with one blank line, a small terminal-optimized Ant Design logo generated from the official SVG followed by a CFonts-rendered `ANT DESIGN CLI` banner using the `tiny` font, the current CLI package version as `@ant-design/cli v{version}`, and a plain solid divider line with the same visible length as the version label, followed by the normal Commander usage, options, and command list.
 
-In an interactive TTY, the SVG-derived logo renders as ANSI truecolor half-block cells and the CFonts banner may render with color/gradient styling when terminal color is supported. The divider remains plain text. Non-TTY output, `NO_COLOR`, or `TERM=dumb` use a plain ANSI-free block fallback for snapshots, pipes, and tests.
+In an interactive TTY, the logo renders as a pre-generated ANSI truecolor half-block logo and the CFonts banner may render with color/gradient styling when terminal color is supported. The divider remains plain text. Non-TTY output, `NO_COLOR`, or `TERM=dumb` use a pre-generated ANSI-free Unicode fallback for snapshots, pipes, and tests.
+
+The logo is pre-rendered by `npm run generate:logo`, which reads the committed `scripts/assets/antd-logo.svg` and writes fixed constants to `src/output/logo.ts`. Runtime help rendering must not read files, access the network, rasterize SVGs, or depend on image-processing packages such as `sharp`.
 
 The banner is only part of the root help surface. `-V` / `--cli-version` continue to print only the raw CLI version string, and `--version <v>` remains the target antd version flag.
 

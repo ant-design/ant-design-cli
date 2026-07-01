@@ -24,19 +24,22 @@ describe('help banner', () => {
     const lines = banner.split('\n');
 
     expect(lines[0]).toBe('');
-    expect(lines[1]).toBe('    ▄███▄');
-    expect(lines[2]).toBe('  ▄█▀   ▀█▄');
-    expect(lines[3]).toBe('▄█▀ ▄█▄  ▀██▄');
-    expect(lines[4]).toBe('▀█▄ ▀█▀  ▄██▀');
-    expect(lines[5]).toBe('  ▀█▄   ▄█▀');
-    expect(lines[6]).toBe('    ▀███▀');
-    expect(lines[7]).toBe('');
-    expect(lines[8]).toMatch(/^▄▀█/);
-    expect(lines[9]).toMatch(/^█▀█/);
+    expect(lines[1]).toBe('       ▄██▄');
+    expect(lines[2]).toBe('     ▄██▀▀██▄');
+    expect(lines[3]).toBe('   ▄██▀    ▀▀ ▄');
+    expect(lines[4]).toBe(' ▄██▀  ▄▄▄▄  ▀██▄');
+    expect(lines[5]).toBe('███    ████    ███');
+    expect(lines[6]).toBe(' ▀██▄  ▀▀▀▀  ▄██▀');
+    expect(lines[7]).toBe('   ▀██▄    ▄▄ ▀');
+    expect(lines[8]).toBe('     ▀██▄▄██▀');
+    expect(lines[9]).toBe('       ▀██▀');
     expect(lines[10]).toBe('');
-    expect(lines[11]).toBe('@ant-design/cli v6.5.0');
-    expect(lines[12]).toBe('──────────────────────');
-    expect(lines[12]).toHaveLength(lines[11].length);
+    expect(lines[11]).toMatch(/^▄▀█/);
+    expect(lines[12]).toMatch(/^█▀█/);
+    expect(lines[13]).toBe('');
+    expect(lines[14]).toBe('@ant-design/cli v6.5.0');
+    expect(lines[15]).toBe('──────────────────────');
+    expect(lines[15]).toHaveLength(lines[14].length);
   });
 
   it('renders the color banner with a truecolor gradient', () => {
@@ -46,18 +49,18 @@ describe('help banner', () => {
     const banner = createHelpBanner('6.5.0', true);
     const plainBanner = banner.replace(/\u001b\[[0-9;]*m/g, '');
 
-    expect(plainBanner).toMatch(/^\n    ▄▀▀▀▄/);
-    expect(plainBanner).toContain('\n▄▀▀ ▄▀▄  ▀▀▀▄\n');
-    expect(plainBanner).toContain('\n▀▀▄ ▀▀▀  ▄▀▀▀\n');
-    expect(plainBanner).toContain('\n  ▀▀▄   ▄▀▀\n');
+    expect(plainBanner).toMatch(/^\n       ▄▀▀▄/);
+    expect(plainBanner).toContain('\n   ▄▀▀▀    ▀▀ ▄\n');
+    expect(plainBanner).toContain('\n▀▀▀    ▀▀▀▀    ▀▀▀\n');
+    expect(plainBanner).toContain('\n     ▀▀▀▄▄▀▀▀\n');
     expect(plainBanner).toContain('\n▄▀█ █▄ █ ▀█▀');
     expect(plainBanner).toContain('\n█▀█ █ ▀█  █');
     expect(plainBanner).toContain('\n──────────────────────\n');
-    expect(banner).toContain('\u001b[38;2;45;217;255m\u001b[48;2;45;217;255m▀');
-    expect(banner).toContain('\u001b[38;2;255;120;117m\u001b[48;2;255;77;79m▀');
+    expect(banner).toContain('\u001b[38;2;');
     expect(banner).toContain('\u001b[48;2;');
-    expect(banner).toContain('\u001b[38;2;45;217;255m');
-    expect(banner).toContain('\u001b[38;2;255;77;79m');
+    expect(banner).toContain('\u001b[38;2;36;191;255m');
+    expect(banner).toContain('\u001b[38;2;249;106;103m');
+    expect(banner).not.toContain('\\u001b');
     expect(banner).not.toContain('\u001b[38;2;146;84;222m');
     expect(banner).not.toContain('\u001b[38;2;22;119;255m─');
     expect(plainBanner).toContain('@ant-design/cli v6.5.0');

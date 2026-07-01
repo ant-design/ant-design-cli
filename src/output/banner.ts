@@ -1,14 +1,7 @@
 import cfonts from 'cfonts';
+import { HELP_LOGO_ANSI, HELP_LOGO_TEXT } from './logo.js';
 
 const HELP_BANNER_GRADIENT = ['#1677ff', '#2dd9ff', '#ff4d4f'];
-const HELP_LOGO_CELLS = [
-  [['', ''], ['', ''], ['', ''], ['', ''], ['', '#2dd9ff'], ['#2dd9ff', '#2dd9ff'], ['#2dd9ff', '#2dd9ff'], ['#2dd9ff', '#2dd9ff'], ['', '#2dd9ff'], ['', ''], ['', ''], ['', ''], ['', '']],
-  [['', ''], ['', ''], ['', '#1890ff'], ['#2dd9ff', '#1890ff'], ['#2dd9ff', ''], ['', ''], ['', ''], ['', ''], ['#2dd9ff', ''], ['#2dd9ff', '#ff7875'], ['', '#ff7875'], ['', ''], ['', '']],
-  [['', '#1890ff'], ['#1890ff', '#1890ff'], ['#1890ff', ''], ['', ''], ['', '#ff4d4f'], ['#ff7875', '#ff4d4f'], ['', '#ff4d4f'], ['', ''], ['', ''], ['#ff7875', ''], ['#ff7875', '#ff4d4f'], ['#ff7875', '#ff4d4f'], ['', '#ff4d4f']],
-  [['#1890ff', ''], ['#1890ff', '#1890ff'], ['', '#1890ff'], ['', ''], ['#ff4d4f', ''], ['#ff4d4f', '#ff7875'], ['#ff4d4f', ''], ['', ''], ['', ''], ['', '#ff7875'], ['#ff4d4f', '#ff7875'], ['#ff4d4f', '#ff7875'], ['#ff4d4f', '']],
-  [['', ''], ['', ''], ['#1890ff', ''], ['#1890ff', '#1677ff'], ['', '#1677ff'], ['', ''], ['', ''], ['', ''], ['', '#1677ff'], ['#ff7875', '#1677ff'], ['#ff7875', ''], ['', ''], ['', '']],
-  [['', ''], ['', ''], ['', ''], ['', ''], ['#1677ff', ''], ['#1677ff', '#1677ff'], ['#1677ff', '#1677ff'], ['#1677ff', '#1677ff'], ['#1677ff', ''], ['', ''], ['', ''], ['', ''], ['', '']],
-] as const;
 const ANSI_ESCAPE_PATTERN = /^\u001b\[[0-9;]*m/;
 
 function shouldUseTerminalColor(): boolean {
@@ -81,51 +74,7 @@ function trimLineStart(line: string): string {
 }
 
 function addLogo(wordmarkLines: string[], color: boolean): string {
-  const logoLines = HELP_LOGO_CELLS.map((row) => renderLogoLine(row, color));
+  const logo = color ? HELP_LOGO_ANSI : HELP_LOGO_TEXT;
 
-  return `${logoLines.map((line) => line.trimEnd()).join('\n')}\n\n${wordmarkLines.join('\n')}`;
-}
-
-function renderLogoLine(row: readonly (readonly [string, string])[], color: boolean): string {
-  return row
-    .map(([top, bottom]) => renderLogoCell(top, bottom, color))
-    .join('');
-}
-
-function renderLogoCell(top: string, bottom: string, color: boolean): string {
-  if (!top && !bottom) {
-    return ' ';
-  }
-
-  if (!color) {
-    if (top && bottom) {
-      return '█';
-    }
-    return top ? '▀' : '▄';
-  }
-
-  if (top && bottom) {
-    return `${foreground(top)}${background(bottom)}▀\u001b[39m\u001b[49m`;
-  }
-
-  return top ? `${foreground(top)}▀\u001b[39m` : `${foreground(bottom)}▄\u001b[39m`;
-}
-
-function foreground(hexColor: string): string {
-  const [red, green, blue] = hexToRgb(hexColor);
-  return `\u001b[38;2;${red};${green};${blue}m`;
-}
-
-function background(hexColor: string): string {
-  const [red, green, blue] = hexToRgb(hexColor);
-  return `\u001b[48;2;${red};${green};${blue}m`;
-}
-
-function hexToRgb(hexColor: string): [number, number, number] {
-  const color = hexColor.replace('#', '');
-  return [
-    Number.parseInt(color.slice(0, 2), 16),
-    Number.parseInt(color.slice(2, 4), 16),
-    Number.parseInt(color.slice(4, 6), 16),
-  ];
+  return `${logo}\n\n${wordmarkLines.join('\n')}`;
 }
