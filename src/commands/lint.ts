@@ -172,18 +172,23 @@ function getGitRoot(targetPath: string): string {
   if (!existsSync(absoluteTarget)) {
     throw new Error(`Lint target not found: ${targetPath}`);
   }
-  const gitCwd = existsSync(absoluteTarget) && statSync(absoluteTarget).isFile()
-    ? dirname(absoluteTarget)
-    : absoluteTarget;
+  let gitCwd = absoluteTarget;
+  try {
+    if (statSync(absoluteTarget).isFile()) {
+      gitCwd = dirname(absoluteTarget);
+    }
+  } catch {
+    gitCwd = absoluteTarget;
+  }
   return execGit(gitCwd, ['rev-parse', '--show-toplevel']).trim();
 }
 
 function getPathspec(repoRoot: string, targetPath: string): string {
   const rel = relative(repoRoot, resolve(targetPath));
-  return rel === '' ? '.' : rel;
+  return rel === '' ? '.' : rel.replace(/\\/g, '/');
 }
 
-function isLintableSource(filePath: string): boolean {
+function isLintableSource(filePath: string, gitPath = filePath): boolean {
   if (!existsSync(filePath)) return false;
   try {
     if (!statSync(filePath).isFile()) return false;
@@ -191,7 +196,7 @@ function isLintableSource(filePath: string): boolean {
     return false;
   }
   if (!SCAN_EXTENSIONS.has(extname(filePath))) return false;
-  return !filePath.split(/[\\/]/).some((segment) => SKIP_DIRS.has(segment) || segment.startsWith('.umi'));
+  return !gitPath.split(/[\\/]/).some((segment) => SKIP_DIRS.has(segment) || segment.startsWith('.umi'));
 }
 
 function resolveDiffBase(repoRoot: string, diff: boolean | string | undefined): string {
@@ -222,8 +227,8 @@ function collectGitFiles(targetPath: string, mode: 'diff' | 'staged', diff?: boo
     .split('\n')
     .map((file) => file.trim())
     .filter(Boolean)
-    .map((file) => join(repoRoot, file))
-    .filter(isLintableSource);
+    .filter((file) => isLintableSource(join(repoRoot, file), file))
+    .map((file) => join(repoRoot, file));
 }
 
 function lintFile(

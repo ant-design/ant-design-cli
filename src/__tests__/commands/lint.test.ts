@@ -34,6 +34,7 @@ describe('lint', () => {
       execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
       execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: dir });
       execFileSync('git', ['config', 'user.name', 'Test User'], { cwd: dir });
+      execFileSync('git', ['config', 'commit.gpgsign', 'false'], { cwd: dir });
       writeFileSync(join(dir, 'package.json'), JSON.stringify({ dependencies: { antd: '6.3.1' } }));
       return dir;
     } catch (error) {
@@ -214,6 +215,32 @@ const App = () => (
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain('Lint target not found');
     expect(result.stderr).not.toContain('at ');
+  });
+
+  it('should not skip changed files when the repo parent path includes a skipped directory name', async () => {
+    const parent = join(__dirname, '__tmp_lint_git_parent__', 'build');
+    const dir = join(parent, 'repo');
+    rmSync(join(__dirname, '__tmp_lint_git_parent__'), { recursive: true, force: true });
+    try {
+      mkdirSync(dir, { recursive: true });
+      execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
+      execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: dir });
+      execFileSync('git', ['config', 'user.name', 'Test User'], { cwd: dir });
+      execFileSync('git', ['config', 'commit.gpgsign', 'false'], { cwd: dir });
+      writeFileSync(join(dir, 'package.json'), JSON.stringify({ dependencies: { antd: '6.3.1' } }));
+      writeFileSync(join(dir, 'changed.tsx'), `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;\n`);
+      execFileSync('git', ['add', '.'], { cwd: dir });
+      execFileSync('git', ['commit', '-m', 'initial'], { cwd: dir, stdio: 'ignore' });
+
+      writeFileSync(join(dir, 'changed.tsx'), `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+
+      const result = await runCLI('lint', dir, '--diff', 'HEAD', '--format', 'json');
+      const data = JSON.parse(result.stdout);
+      expect(data.summary.total).toBe(1);
+      expect(data.issues[0].file).toBe(join(dir, 'changed.tsx'));
+    } finally {
+      rmSync(join(__dirname, '__tmp_lint_git_parent__'), { recursive: true, force: true });
+    }
   });
 
   it('should detect namespace import performance issues', async () => {
