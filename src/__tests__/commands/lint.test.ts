@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { chmodSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import type { LintIssue } from '../../commands/lint.js';
 import { run, runCLI } from '../helper.js';
@@ -461,6 +461,49 @@ const App = () => (
     expect(out).toContain('Skipped 1 file');
     expect(out).toContain('[parse-error]');
     expect(out).toContain('unparseable-text.tsx');
+  });
+
+  it('should show skipped files alongside text issues', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_issue_and_skip__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(join(tmpDir, 'issue.tsx'), `import { Image } from 'antd';\nconst App = () => <Image src="x.png" />;\n`);
+      writeFileSync(join(tmpDir, 'broken.tsx'), `import { Button } from 'antd';\nconst App = () => { broken( <Button };\n`);
+
+      const result = await runCLI('lint', tmpDir);
+
+      expect(result.stdout).toContain('Found 1 issues');
+      expect(result.stdout).toContain('Skipped files:');
+      expect(result.stdout).toContain('broken.tsx');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should report files that cannot be read as skipped', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_unreadable__');
+    const fixture = join(tmpDir, 'unreadable.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(fixture, `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;\n`);
+      chmodSync(fixture, 0o000);
+
+      const result = await runCLI('lint', fixture, '--format', 'json');
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.skipped).toBe(1);
+      expect(data.skippedFiles[0]).toEqual(expect.objectContaining({
+        file: fixture,
+        reason: 'read-error',
+      }));
+    } finally {
+      try {
+        chmodSync(fixture, 0o600);
+      } catch {
+        // File may not exist if setup failed before writeFileSync.
+      }
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
   });
 
   it('should show skipped files in markdown output', async () => {
