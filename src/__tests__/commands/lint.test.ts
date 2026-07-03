@@ -443,8 +443,36 @@ const App = () => (
       ['--format', 'json'],
     );
     const data = JSON.parse(out);
-    // Parser error → file is skipped, 0 issues
     expect(data.issues).toEqual([]);
+    expect(data.summary.skipped).toBe(1);
+    expect(data.skippedFiles).toEqual([
+      expect.objectContaining({
+        reason: 'parse-error',
+        file: expect.stringContaining('unparseable.tsx'),
+      }),
+    ]);
+  });
+
+  it('should show skipped files in text output', async () => {
+    const out = await lintFixture(
+      'unparseable-text',
+      `import { Button } from 'antd';\nconst App = () => { broken( <Button };`,
+    );
+    expect(out).toContain('Skipped 1 file');
+    expect(out).toContain('[parse-error]');
+    expect(out).toContain('unparseable-text.tsx');
+  });
+
+  it('should show skipped files in markdown output', async () => {
+    const out = await lintFixture(
+      'unparseable-markdown',
+      `import { Button } from 'antd';\nconst App = () => { broken( <Button };`,
+      ['--format', 'markdown'],
+    );
+    expect(out).toContain('## Lint Results');
+    expect(out).toContain('### Skipped Files');
+    expect(out).toContain('parse-error');
+    expect(out).toContain('unparseable-markdown.tsx');
   });
 
   it('should output markdown table format', async () => {

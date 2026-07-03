@@ -573,9 +573,19 @@ JSON output:
       "message": "Button `ghost` is deprecated (since 5.12.0). Please use `variant` instead"
     }
   ],
-  "summary": {"total": 1, "deprecated": 1, "a11y": 0, "usage": 0, "performance": 0}
+  "skippedFiles": [
+    {
+      "file": "src/pages/broken.tsx",
+      "reason": "parse-error",
+      "message": "Unexpected token"
+    }
+  ],
+  "partial": true,
+  "summary": {"total": 1, "deprecated": 1, "a11y": 0, "usage": 0, "performance": 0, "skipped": 1}
 }
 ```
+
+When a file cannot be read or parsed, `antd lint` reports it in `skippedFiles` instead of silently dropping it. `partial` is `true` whenever at least one file was skipped. Text and markdown output include a skipped-files section with the reason and parser/read error message.
 
 Note: This is complementary to ESLint. `antd lint` focuses on antd-specific knowledge (deprecated APIs per version, prop combination mistakes, antd accessibility) that generic ESLint rules cannot cover.
 

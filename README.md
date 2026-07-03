@@ -386,6 +386,8 @@ antd lint ./src --only deprecated --format json --antd-alias @shared-components
 
 Use `--antd-alias <source>` to treat additional package names as aliases of `antd`. Repeat the flag for multiple wrapper packages; `antd` remains enabled by default.
 
+Files that cannot be read or parsed are reported as skipped instead of being silently ignored. JSON output includes `skippedFiles`, `partial`, and `summary.skipped`; text and markdown output include a skipped-files section.
+
 ### `antd migrate <from> <to>`
 
 v3→v4 covers 15+ migration steps; v4→v5 covers 25+ migration steps; v5→v6 covers 30+. Each step includes component name, breaking flag, search pattern, and before/after code.
