@@ -2,7 +2,7 @@ import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { localize } from '../types.js';
 import { existsSync, readFileSync, statSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, type ExecFileSyncOptionsWithStringEncoding } from 'node:child_process';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 import { parseSync, Visitor } from 'oxc-parser';
 import { loadMetadataForVersion } from '../data/loader.js';
@@ -156,11 +156,22 @@ function collectAntdAlias(source: string, previous: string[]): string[] {
 }
 
 function execGit(cwd: string, args: string[]): string {
-  return execFileSync('git', args, { cwd, encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'] });
+  const options: ExecFileSyncOptionsWithStringEncoding = { cwd, encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'] };
+  try {
+    return execFileSync('git', args, options);
+  } catch (error) {
+    const stderr = typeof (error as { stderr?: unknown }).stderr === 'string'
+      ? (error as { stderr: string }).stderr.trim()
+      : '';
+    throw new Error(stderr || (error instanceof Error ? error.message : 'git command failed'));
+  }
 }
 
 function getGitRoot(targetPath: string): string {
   const absoluteTarget = resolve(targetPath);
+  if (!existsSync(absoluteTarget)) {
+    throw new Error(`Lint target not found: ${targetPath}`);
+  }
   const gitCwd = existsSync(absoluteTarget) && statSync(absoluteTarget).isFile()
     ? dirname(absoluteTarget)
     : absoluteTarget;
@@ -473,7 +484,7 @@ export function registerLintCommand(program: Command): void {
       const opts = program.opts<GlobalOptions>();
       const targetPath = target || '.';
       if (cmdOpts.diff && cmdOpts.staged) {
-        program.error('Error: --diff and --staged cannot be used together');
+        program.error('--diff and --staged cannot be used together');
       }
       const versionInfo = detectVersion(opts.version);
       const store = loadMetadataForVersion(versionInfo.version);
@@ -488,7 +499,7 @@ export function registerLintCommand(program: Command): void {
             ? collectGitFiles(targetPath, 'diff', cmdOpts.diff)
             : collectFiles(targetPath);
       } catch (error) {
-        program.error(`Error: ${error instanceof Error ? error.message : String(error)}`);
+        program.error(error instanceof Error ? error.message : String(error));
       }
       const allIssues: LintIssue[] = [];
 

@@ -29,12 +29,17 @@ describe('lint', () => {
   function gitFixture(name: string): string {
     const dir = join(__dirname, `__tmp_lint_git_${name}__`);
     rmSync(dir, { recursive: true, force: true });
-    mkdirSync(dir, { recursive: true });
-    execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
-    execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: dir });
-    execFileSync('git', ['config', 'user.name', 'Test User'], { cwd: dir });
-    writeFileSync(join(dir, 'package.json'), JSON.stringify({ dependencies: { antd: '6.3.1' } }));
-    return dir;
+    try {
+      mkdirSync(dir, { recursive: true });
+      execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
+      execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: dir });
+      execFileSync('git', ['config', 'user.name', 'Test User'], { cwd: dir });
+      writeFileSync(join(dir, 'package.json'), JSON.stringify({ dependencies: { antd: '6.3.1' } }));
+      return dir;
+    } catch (error) {
+      rmSync(dir, { recursive: true, force: true });
+      throw error;
+    }
   }
 
   it('lint deprecated message includes replacement hint from description', async () => {
@@ -190,6 +195,25 @@ const App = () => (
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
+  });
+
+  it('should reject --diff and --staged without duplicating the error prefix', async () => {
+    const result = await runCLI('lint', '--diff', 'HEAD', '--staged');
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('--diff and --staged cannot be used together');
+    expect(result.stderr).not.toContain('Error: Error:');
+  });
+
+  it('should report missing git lint targets without an internal stack trace', async () => {
+    const missing = join(__dirname, '__tmp_lint_git_missing__');
+    rmSync(missing, { recursive: true, force: true });
+
+    const result = await runCLI('lint', missing, '--diff', 'HEAD');
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('Lint target not found');
+    expect(result.stderr).not.toContain('at ');
   });
 
   it('should detect namespace import performance issues', async () => {
