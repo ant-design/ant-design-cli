@@ -553,6 +553,9 @@ antd lint --only deprecated         # only check deprecated APIs
 antd lint --only a11y               # only check accessibility
 antd lint --only usage              # only check usage mistakes
 antd lint --only performance        # only check performance
+antd lint --diff                    # only check files changed from origin/main (fallback: HEAD)
+antd lint --diff main               # only check files changed from a specific git base
+antd lint --staged                  # only check staged git files
 antd lint --format json
 antd lint --only deprecated --format json --antd-alias @shared-components
 ```
@@ -560,6 +563,8 @@ antd lint --only deprecated --format json --antd-alias @shared-components
 Options:
 - `--only <category>` — limit checks to `deprecated`, `a11y`, `usage`, or `performance`
 - `--antd-alias <source>` — treat additional package names as aliases of `antd`; repeat the flag for multiple wrapper packages. `antd` remains enabled by default.
+- `--diff [base]` — limit checks to changed git files. Without `base`, compares against the merge-base of `origin/main` and `HEAD`; if `origin/main` is unavailable, falls back to `HEAD`. When `base` is provided, compares against the merge-base of that ref and `HEAD`, falling back to the provided ref if no merge-base can be computed. Includes staged and unstaged working tree changes relative to the base.
+- `--staged` — limit checks to staged git files. Cannot be combined with `--diff`.
 
 JSON output:
 ```json
