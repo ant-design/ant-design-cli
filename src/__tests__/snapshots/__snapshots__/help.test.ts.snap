@@ -56,7 +56,8 @@ Commands:
   env [dir]                        Collect antd-related environment information
                                    for bug reporting
   mcp                              Start MCP server for AI assistant integration
-  setup [options]                  Set up Ant Design MCP/Skill for AI agents
+  setup [options]                  Set up Ant Design MCP/Skill for AI agents or
+                                   GitHub Actions
   upgrade                          Upgrade the CLI to the latest version
   bug [options]                    Report a bug to the antd repository
   bug-cli [options]                Report a bug to the ant-design-cli repository

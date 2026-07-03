@@ -611,4 +611,58 @@ describe('setup command', () => {
       expect(existsSync(join(dir, '.agents', 'skills', 'antd', 'SKILL.md'))).toBe(false);
     });
   });
+
+  it('writes GitHub Actions workflow for Ant Design checks', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI('setup', '--client', 'github-actions', '--project', dir, '--format', 'json');
+
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+      expect(data.client).toBe('github-actions');
+      expect(data.mode).toBe('ci');
+      expect(data.changed).toBe(true);
+      expect(data.file).toBe(join(dir, '.github', 'workflows', 'antd-cli.yml'));
+
+      const workflow = readFileSync(join(dir, '.github', 'workflows', 'antd-cli.yml'), 'utf-8');
+      expect(workflow).toContain('name: Ant Design CLI');
+      expect(workflow).toContain('npx -y @ant-design/cli doctor --format json');
+      expect(workflow).toContain('npx -y @ant-design/cli lint ./src --format json');
+
+      const check = await runCLI('setup', '--client', 'github-actions', '--project', dir, '--check', '--format', 'json');
+      expect(check.exitCode).toBe(0);
+      expect(JSON.parse(check.stdout).configured).toBe(true);
+    });
+  });
+
+  it('previews GitHub Actions workflow during dry run', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI('setup', '--client', 'github-actions', '--project', dir, '--dry-run', '--format', 'json');
+
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+      expect(data.changed).toBe(true);
+      expect(data.config.workflow).toContain('npx -y @ant-design/cli doctor --format json');
+      expect(existsSync(join(dir, '.github', 'workflows', 'antd-cli.yml'))).toBe(false);
+    });
+  });
+
+  it('rejects MCP setup mode for GitHub Actions', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI('setup', '--client', 'github-actions', '--project', dir, '--mode', 'mcp', '--format', 'json');
+
+      expect(result.exitCode).toBe(1);
+      const error = JSON.parse(result.stderr);
+      expect(error.message).toContain("GitHub Actions setup only supports '--mode ci'");
+    });
+  });
+
+  it('rejects ci setup mode for agent clients', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI('setup', '--client', 'claude', '--project', dir, '--mode', 'ci', '--format', 'json');
+
+      expect(result.exitCode).toBe(1);
+      const error = JSON.parse(result.stderr);
+      expect(error.message).toContain("'--mode ci' is only supported with --client github-actions");
+    });
+  });
 });
