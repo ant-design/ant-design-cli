@@ -276,6 +276,22 @@ const App = () => (
     }
   });
 
+  it('should fall back to git process error messages when stderr is unavailable', async () => {
+    const dir = gitFixture('diff-git-missing');
+    const originalPath = process.env.PATH;
+    try {
+      process.env.PATH = '';
+      const result = await runCLI('lint', dir, '--diff', 'HEAD');
+
+      expect(result.exitCode).toBe(1);
+      expect(result.stderr).toContain('git');
+      expect(result.stderr).not.toContain('git command failed');
+    } finally {
+      process.env.PATH = originalPath;
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it('should lint only staged files with --staged', async () => {
     const dir = gitFixture('staged');
     try {
