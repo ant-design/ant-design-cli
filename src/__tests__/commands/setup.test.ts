@@ -625,6 +625,8 @@ describe('setup command', () => {
 
       const workflow = readFileSync(join(dir, '.github', 'workflows', 'antd-cli.yml'), 'utf-8');
       expect(workflow).toContain('name: Ant Design CLI');
+      expect(workflow).toContain('uses: actions/checkout@v7');
+      expect(workflow).toContain('uses: actions/setup-node@v6');
       expect(workflow).toContain('npx -y @ant-design/cli doctor --format json');
       expect(workflow).toContain('npx -y @ant-design/cli lint ./src --format json');
 
