@@ -26,8 +26,8 @@ describe('lint', () => {
     }
   }
 
-  function gitFixture(name: string): string {
-    const dir = join(__dirname, `__tmp_lint_git_${name}__`);
+  function gitFixture(name: string, fixtureDir?: string): string {
+    const dir = fixtureDir ?? join(__dirname, `__tmp_lint_git_${name}__`);
     rmSync(dir, { recursive: true, force: true });
     try {
       mkdirSync(dir, { recursive: true });
@@ -338,12 +338,7 @@ const App = () => (
     const dir = join(parent, 'repo');
     rmSync(join(__dirname, '__tmp_lint_git_parent__'), { recursive: true, force: true });
     try {
-      mkdirSync(dir, { recursive: true });
-      execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
-      execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: dir });
-      execFileSync('git', ['config', 'user.name', 'Test User'], { cwd: dir });
-      execFileSync('git', ['config', 'commit.gpgsign', 'false'], { cwd: dir });
-      writeFileSync(join(dir, 'package.json'), JSON.stringify({ dependencies: { antd: '6.3.1' } }));
+      gitFixture('parent-skip', dir);
       writeFileSync(join(dir, 'changed.tsx'), `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;\n`);
       execFileSync('git', ['add', '.'], { cwd: dir });
       execFileSync('git', ['commit', '-m', 'initial'], { cwd: dir, stdio: 'ignore' });
