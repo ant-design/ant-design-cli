@@ -177,9 +177,11 @@ function getGitRoot(targetPath: string): string {
     if (statSync(absoluteTarget).isFile()) {
       gitCwd = dirname(absoluteTarget);
     }
+  /* v8 ignore start -- defensive: the path may change between existsSync and statSync */
   } catch {
     gitCwd = absoluteTarget;
   }
+  /* v8 ignore stop */
   return execGit(gitCwd, ['rev-parse', '--show-toplevel']).trim();
 }
 
@@ -192,9 +194,11 @@ function isLintableSource(filePath: string, gitPath = filePath): boolean {
   if (!existsSync(filePath)) return false;
   try {
     if (!statSync(filePath).isFile()) return false;
+  /* v8 ignore start -- defensive: the file may change between existsSync and statSync */
   } catch {
     return false;
   }
+  /* v8 ignore stop */
   if (!SCAN_EXTENSIONS.has(extname(filePath))) return false;
   return !gitPath.split(/[\\/]/).some((segment) => SKIP_DIRS.has(segment) || segment.startsWith('.umi'));
 }

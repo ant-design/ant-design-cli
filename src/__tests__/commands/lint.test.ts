@@ -176,6 +176,81 @@ const App = () => (
     }
   });
 
+  it('should default --diff to HEAD when origin/main is unavailable', async () => {
+    const dir = gitFixture('diff-default');
+    try {
+      writeFileSync(join(dir, 'changed.tsx'), `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;\n`);
+      execFileSync('git', ['add', '.'], { cwd: dir });
+      execFileSync('git', ['commit', '-m', 'initial'], { cwd: dir, stdio: 'ignore' });
+
+      writeFileSync(join(dir, 'changed.tsx'), `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+
+      const result = await runCLI('lint', dir, '--diff', '--format', 'json');
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(1);
+      expect(data.issues[0].file).toBe(join(dir, 'changed.tsx'));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('should support --diff when the lint target is a file', async () => {
+    const dir = gitFixture('diff-file-target');
+    try {
+      const changedFile = join(dir, 'changed.tsx');
+      writeFileSync(changedFile, `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;\n`);
+      execFileSync('git', ['add', '.'], { cwd: dir });
+      execFileSync('git', ['commit', '-m', 'initial'], { cwd: dir, stdio: 'ignore' });
+
+      writeFileSync(changedFile, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+
+      const result = await runCLI('lint', changedFile, '--diff', 'HEAD', '--format', 'json');
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(1);
+      expect(data.issues[0].file).toBe(changedFile);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('should ignore non-source files selected by --diff', async () => {
+    const dir = gitFixture('diff-non-source');
+    try {
+      writeFileSync(join(dir, 'notes.md'), '# notes\n');
+      execFileSync('git', ['add', '.'], { cwd: dir });
+      execFileSync('git', ['commit', '-m', 'initial'], { cwd: dir, stdio: 'ignore' });
+
+      writeFileSync(join(dir, 'notes.md'), '# changed notes\n');
+
+      const result = await runCLI('lint', dir, '--diff', 'HEAD', '--format', 'json');
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(0);
+      expect(data.issues).toEqual([]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('should include git stderr when --diff uses an invalid ref', async () => {
+    const dir = gitFixture('diff-invalid-ref');
+    try {
+      writeFileSync(join(dir, 'changed.tsx'), `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+      execFileSync('git', ['add', '.'], { cwd: dir });
+      execFileSync('git', ['commit', '-m', 'initial'], { cwd: dir, stdio: 'ignore' });
+
+      const result = await runCLI('lint', dir, '--diff', 'not-a-real-ref');
+
+      expect(result.exitCode).toBe(1);
+      expect(result.stderr).toContain('not-a-real-ref');
+      expect(result.stderr).not.toContain('Command failed');
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it('should lint only staged files with --staged', async () => {
     const dir = gitFixture('staged');
     try {
