@@ -159,6 +159,10 @@ function createGitHubActionsWorkflow(globalOpts: GlobalOptions): string {
   ].join('\n');
 }
 
+function normalizeTextFile(content: string): string {
+  return content.replace(/\r\n/g, '\n');
+}
+
 function stableJson(value: unknown): string {
   return JSON.stringify(value, null, 2) + '\n';
 }
@@ -346,7 +350,7 @@ function checkAgent(
     if (!existsSync(file)) {
       problems.push('GitHub Actions workflow not found');
     } else {
-      actual = readFileSync(file, 'utf-8');
+      actual = normalizeTextFile(readFileSync(file, 'utf-8'));
       if (actual !== expectedWorkflow) {
         problems.push('GitHub Actions workflow does not match expected config');
       }
@@ -509,7 +513,7 @@ export function setup(
     : clientConfig ? resolve(projectDir, clientConfig.file) : chooseInstructionsFile(projectDir, client);
   if (isGitHubActions) {
     const workflow = createGitHubActionsWorkflow(globalOpts);
-    const current = existsSync(file) ? readFileSync(file, 'utf-8') : '';
+    const current = existsSync(file) ? normalizeTextFile(readFileSync(file, 'utf-8')) : '';
     const changed = current !== workflow;
     if (!dryRun && changed) {
       mkdirSync(dirname(file), { recursive: true });

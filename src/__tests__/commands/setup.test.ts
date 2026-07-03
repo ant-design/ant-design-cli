@@ -634,6 +634,73 @@ describe('setup command', () => {
     });
   });
 
+  it('passes global version and language options to the GitHub Actions workflow', async () => {
+    await withTempProject(async (dir) => {
+      const result = await runCLI(
+        'setup',
+        '--client',
+        'github-actions',
+        '--project',
+        dir,
+        '--format',
+        'json',
+        '--version',
+        '5.29.3',
+        '--lang',
+        'zh',
+      );
+
+      expect(result.exitCode).toBe(0);
+      const workflow = readFileSync(join(dir, '.github', 'workflows', 'antd-cli.yml'), 'utf-8');
+      expect(workflow).toContain('npx -y @ant-design/cli doctor --format json --version 5.29.3 --lang zh');
+      expect(workflow).toContain('npx -y @ant-design/cli lint ./src --format json --version 5.29.3 --lang zh');
+    });
+  });
+
+  it('reports missing and mismatched GitHub Actions workflows during check', async () => {
+    await withTempProject(async (dir) => {
+      const missing = await runCLI('setup', '--client', 'github-actions', '--project', dir, '--check', '--format', 'json');
+      expect(missing.exitCode).toBe(1);
+      expect(JSON.parse(missing.stdout).problems).toContain('GitHub Actions workflow not found');
+
+      const workflowDir = join(dir, '.github', 'workflows');
+      mkdirSync(workflowDir, { recursive: true });
+      writeFileSync(join(workflowDir, 'antd-cli.yml'), 'name: stale\n');
+
+      const mismatched = await runCLI('setup', '--client', 'github-actions', '--project', dir, '--check', '--format', 'json');
+      expect(mismatched.exitCode).toBe(1);
+      expect(JSON.parse(mismatched.stdout).problems).toContain('GitHub Actions workflow does not match expected config');
+    });
+  });
+
+  it('checks GitHub Actions workflow with CRLF line endings', async () => {
+    await withTempProject(async (dir) => {
+      await runCLI('setup', '--client', 'github-actions', '--project', dir);
+      const workflowPath = join(dir, '.github', 'workflows', 'antd-cli.yml');
+      writeFileSync(workflowPath, readFileSync(workflowPath, 'utf-8').replace(/\n/g, '\r\n'));
+
+      const check = await runCLI('setup', '--client', 'github-actions', '--project', dir, '--check', '--format', 'json');
+
+      expect(check.exitCode).toBe(0);
+      expect(JSON.parse(check.stdout).configured).toBe(true);
+    });
+  });
+
+  it('does not rewrite a GitHub Actions workflow that only differs by CRLF line endings', async () => {
+    await withTempProject(async (dir) => {
+      await runCLI('setup', '--client', 'github-actions', '--project', dir);
+      const workflowPath = join(dir, '.github', 'workflows', 'antd-cli.yml');
+      const workflow = readFileSync(workflowPath, 'utf-8').replace(/\n/g, '\r\n');
+      writeFileSync(workflowPath, workflow);
+
+      const result = await runCLI('setup', '--client', 'github-actions', '--project', dir, '--format', 'json');
+
+      expect(result.exitCode).toBe(0);
+      expect(JSON.parse(result.stdout).changed).toBe(false);
+      expect(readFileSync(workflowPath, 'utf-8')).toBe(workflow);
+    });
+  });
+
   it('previews GitHub Actions workflow during dry run', async () => {
     await withTempProject(async (dir) => {
       const result = await runCLI('setup', '--client', 'github-actions', '--project', dir, '--dry-run', '--format', 'json');
