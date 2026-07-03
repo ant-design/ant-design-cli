@@ -524,6 +524,16 @@ const App = () => (
     expect(data.issues.some((i: LintIssue) => i.rule === 'performance' && i.message.includes('default'))).toBe(true);
   });
 
+  it('should use generic named import suggestion when default import members are unknown', async () => {
+    const out = await lintFixture(
+      'default-import-unused',
+      `import antd from 'antd';\nconst App = () => <div>{String(Boolean(antd))}</div>;`,
+      ['--only', 'performance', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'performance' && i.message.includes('Use named imports instead'))).toBe(true);
+  });
+
   it('should not flag default/namespace imports of non-JS assets (#185)', async () => {
     const out = await lintFixture(
       'asset-import',
