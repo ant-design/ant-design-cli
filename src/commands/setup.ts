@@ -7,9 +7,9 @@ import { localize } from '../types.js';
 import { output } from '../output/formatter.js';
 import { createError, ErrorCodes, printError } from '../output/error.js';
 
-type AgentClient = 'claude' | 'cursor' | 'vscode' | 'codex';
-type McpAgentClient = Exclude<AgentClient, 'codex'>;
-type SetupMode = 'mcp' | 'skill' | 'both';
+type AgentClient = 'claude' | 'cursor' | 'vscode' | 'codex' | 'github-actions';
+type McpAgentClient = Exclude<AgentClient, 'codex' | 'github-actions'>;
+type SetupMode = 'mcp' | 'skill' | 'both' | 'ci';
 
 interface SetupOptions {
   client: AgentClient;
@@ -60,15 +60,15 @@ const INSTRUCTIONS_START = '<!-- antd-cli setup start -->';
 const INSTRUCTIONS_END = '<!-- antd-cli setup end -->';
 
 function isAgentClient(value: string): value is AgentClient {
-  return value === 'codex' || Object.prototype.hasOwnProperty.call(CLIENTS, value);
+  return value === 'codex' || value === 'github-actions' || Object.prototype.hasOwnProperty.call(CLIENTS, value);
 }
 
 function isMcpAgentClient(value: AgentClient): value is McpAgentClient {
-  return value !== 'codex';
+  return value !== 'codex' && value !== 'github-actions';
 }
 
 function isSetupMode(value: string): value is SetupMode {
-  return value === 'mcp' || value === 'skill' || value === 'both';
+  return value === 'mcp' || value === 'skill' || value === 'both' || value === 'ci';
 }
 
 function buildMcpArgs(opts: GlobalOptions): string[] {
@@ -113,6 +113,54 @@ function createMergedConfig(
       },
     },
   };
+}
+
+function shellArg(value: string): string {
+  return /^[A-Za-z0-9@._/:=-]+$/.test(value) ? value : `'${value.replace(/'/g, "'\\''")}'`;
+}
+
+function buildCliCommand(command: string, args: string[], opts: GlobalOptions): string {
+  const parts = ['npx', '-y', '@ant-design/cli', command, ...args];
+  if (opts.version) {
+    parts.push('--version', opts.version);
+  }
+  if (opts.lang && opts.lang !== 'en') {
+    parts.push('--lang', opts.lang);
+  }
+  return parts.map(shellArg).join(' ');
+}
+
+function createGitHubActionsWorkflow(globalOpts: GlobalOptions): string {
+  return [
+    'name: Ant Design CLI',
+    '',
+    'on:',
+    '  pull_request:',
+    '',
+    'permissions:',
+    '  contents: read',
+    '',
+    'jobs:',
+    '  antd:',
+    '    runs-on: ubuntu-latest',
+    '    steps:',
+    '      - uses: actions/checkout@v7',
+    '      - uses: actions/setup-node@v6',
+    '        with:',
+    '          node-version: 20',
+    '          cache: npm',
+    '      - run: npm ci',
+    '      - run: npm run build',
+    '      - name: Run antd doctor',
+    `        run: ${buildCliCommand('doctor', ['--format', 'json'], globalOpts)}`,
+    '      - name: Run antd lint',
+    `        run: ${buildCliCommand('lint', ['./src', '--format', 'json'], globalOpts)}`,
+    '',
+  ].join('\n');
+}
+
+function normalizeTextFile(content: string): string {
+  return content.replace(/\r\n/g, '\n');
 }
 
 function stableJson(value: unknown): string {
@@ -180,6 +228,7 @@ function createInstructionsBlock(mode: SetupMode, client: AgentClient): string {
 }
 
 function chooseInstructionsFile(projectDir: string, client: AgentClient): string {
+  if (client === 'github-actions') return join(projectDir, '.github', 'workflows', 'antd-cli.yml');
   return join(projectDir, client === 'claude' ? 'CLAUDE.md' : 'AGENTS.md');
 }
 
@@ -280,9 +329,13 @@ function checkAgent(
   mode: SetupMode,
   shouldCheckInstructions = false,
 ): CheckAgentResult {
+  const isGitHubActions = client === 'github-actions';
   const clientConfig = isMcpAgentClient(client) ? CLIENTS[client] : undefined;
-  const file = clientConfig ? resolve(projectDir, clientConfig.file) : chooseInstructionsFile(projectDir, client);
+  const file = isGitHubActions
+    ? resolve(projectDir, '.github', 'workflows', 'antd-cli.yml')
+    : clientConfig ? resolve(projectDir, clientConfig.file) : chooseInstructionsFile(projectDir, client);
   const targets = [
+    ...(isGitHubActions ? [file] : []),
     ...((mode === 'mcp' || mode === 'both') && clientConfig ? [file] : []),
     ...(mode === 'skill' || mode === 'both' ? [getSkillDir(projectDir, client)] : []),
     ...(mode === 'skill' || mode === 'both' || shouldCheckInstructions ? [chooseInstructionsFile(projectDir, client)] : []),
@@ -291,6 +344,28 @@ function checkAgent(
   const expected = clientConfig ? getServerEntry(expectedConfig, clientConfig.serverKey) as Record<string, unknown> : {};
   const problems: string[] = [];
   let actual: unknown;
+
+  if (isGitHubActions) {
+    const expectedWorkflow = createGitHubActionsWorkflow(globalOpts);
+    if (!existsSync(file)) {
+      problems.push('GitHub Actions workflow not found');
+    } else {
+      actual = normalizeTextFile(readFileSync(file, 'utf-8'));
+      if (actual !== expectedWorkflow) {
+        problems.push('GitHub Actions workflow does not match expected config');
+      }
+    }
+    return {
+      client,
+      mode,
+      file,
+      targets,
+      configured: problems.length === 0,
+      problems,
+      expected: { workflow: expectedWorkflow },
+      actual,
+    };
+  }
 
   if ((mode === 'mcp' || mode === 'both') && clientConfig) {
     if (!existsSync(file)) {
@@ -431,8 +506,29 @@ export function setup(
   mode: SetupMode = 'mcp',
   shouldWriteInstructions = false,
 ): SetupResult {
+  const isGitHubActions = client === 'github-actions';
   const clientConfig = isMcpAgentClient(client) ? CLIENTS[client] : undefined;
-  const file = clientConfig ? resolve(projectDir, clientConfig.file) : chooseInstructionsFile(projectDir, client);
+  const file = isGitHubActions
+    ? resolve(projectDir, '.github', 'workflows', 'antd-cli.yml')
+    : clientConfig ? resolve(projectDir, clientConfig.file) : chooseInstructionsFile(projectDir, client);
+  if (isGitHubActions) {
+    const workflow = createGitHubActionsWorkflow(globalOpts);
+    const current = existsSync(file) ? normalizeTextFile(readFileSync(file, 'utf-8')) : '';
+    const changed = current !== workflow;
+    if (!dryRun && changed) {
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, workflow);
+    }
+    return {
+      client,
+      mode,
+      file,
+      changed,
+      dryRun,
+      config: { workflow },
+    };
+  }
+
   const shouldWriteMcp = mode === 'mcp' || mode === 'both';
   const current = shouldWriteMcp && clientConfig ? readConfig(file) : {};
   const config = shouldWriteMcp && clientConfig ? createMergedConfig(current, clientConfig.serverKey, globalOpts) : {};
@@ -478,9 +574,9 @@ export function setup(
 export function registerSetupCommand(program: Command): void {
   program
     .command('setup')
-    .description('Set up Ant Design MCP/Skill for AI agents')
-    .requiredOption('--client <client>', 'Agent client: claude, cursor, vscode, or codex')
-    .option('--mode <mode>', 'Setup mode: mcp, skill, or both')
+    .description('Set up Ant Design MCP/Skill for AI agents or GitHub Actions')
+    .requiredOption('--client <client>', 'Agent client: claude, cursor, vscode, codex, or github-actions')
+    .option('--mode <mode>', 'Setup mode: mcp, skill, both, or ci')
     .option('--project <dir>', 'Project directory to write config into', process.cwd())
     .option('--dry-run', 'Preview the config without writing files')
     .option('--check', 'Check whether the agent is already configured')
@@ -496,8 +592,8 @@ export function registerSetupCommand(program: Command): void {
             opts.lang,
           ),
           localize(
-            'Use one of: claude, cursor, vscode, codex.',
-            '请使用: claude, cursor, vscode, codex。',
+            'Use one of: claude, cursor, vscode, codex, github-actions.',
+            '请使用: claude, cursor, vscode, codex, github-actions。',
             opts.lang,
           ),
         );
@@ -514,8 +610,8 @@ export function registerSetupCommand(program: Command): void {
             opts.lang,
           ),
           localize(
-            'Use one of: mcp, skill, both.',
-            '请使用: mcp, skill, both。',
+            'Use one of: mcp, skill, both, ci.',
+            '请使用: mcp, skill, both, ci。',
             opts.lang,
           ),
         );
@@ -524,7 +620,7 @@ export function registerSetupCommand(program: Command): void {
         return;
       }
 
-      const mode = cmdOpts.mode ?? (cmdOpts.client === 'codex' ? 'skill' : 'mcp');
+      const mode = cmdOpts.mode ?? (cmdOpts.client === 'codex' ? 'skill' : cmdOpts.client === 'github-actions' ? 'ci' : 'mcp');
       if (cmdOpts.client === 'codex' && mode !== 'skill') {
         const err = createError(
           ErrorCodes.INVALID_ARGUMENT,
@@ -536,6 +632,42 @@ export function registerSetupCommand(program: Command): void {
           localize(
             'Use `antd setup --client codex --mode skill` to install the project skill.',
             '请使用 `antd setup --client codex --mode skill` 安装项目技能。',
+            opts.lang,
+          ),
+        );
+        printError(err, opts.format);
+        process.exitCode = 1;
+        return;
+      }
+      if (cmdOpts.client === 'github-actions' && mode !== 'ci') {
+        const err = createError(
+          ErrorCodes.INVALID_ARGUMENT,
+          localize(
+            "GitHub Actions setup only supports '--mode ci'",
+            "GitHub Actions setup 目前只支持 '--mode ci'",
+            opts.lang,
+          ),
+          localize(
+            'Use `antd setup --client github-actions --mode ci` to write the workflow.',
+            '请使用 `antd setup --client github-actions --mode ci` 写入 workflow。',
+            opts.lang,
+          ),
+        );
+        printError(err, opts.format);
+        process.exitCode = 1;
+        return;
+      }
+      if (cmdOpts.client !== 'github-actions' && mode === 'ci') {
+        const err = createError(
+          ErrorCodes.INVALID_ARGUMENT,
+          localize(
+            "'--mode ci' is only supported with --client github-actions",
+            "'--mode ci' 仅支持与 --client github-actions 一起使用",
+            opts.lang,
+          ),
+          localize(
+            'Use `--mode mcp`, `--mode skill`, or `--mode both` for agent clients.',
+            'Agent 客户端请使用 `--mode mcp`、`--mode skill` 或 `--mode both`。',
             opts.lang,
           ),
         );

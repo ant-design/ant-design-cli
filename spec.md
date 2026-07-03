@@ -361,6 +361,7 @@ antd setup --client claude              # write .mcp.json
 antd setup --client cursor              # write .cursor/mcp.json
 antd setup --client vscode              # write .vscode/mcp.json
 antd setup --client codex               # install Codex project skill
+antd setup --client github-actions      # write .github/workflows/antd-cli.yml
 antd setup --client claude --dry-run    # preview without writing files
 antd setup --client claude --project ./my-app
 antd setup --client claude --version 5.29.3 --lang zh
@@ -377,6 +378,7 @@ Modes:
 | `mcp` | Writes the client-specific MCP config only. This is the default. |
 | `skill` | Installs the bundled Ant Design guidance for the selected client and writes an idempotent managed instruction block. It does not write MCP config. |
 | `both` | Writes MCP config, installs the skill or skill reference, and writes the managed instruction block. The instructions prefer the configured `antd` MCP server and point to the local guidance for fallback. |
+| `ci` | Writes a GitHub Actions workflow. This mode is only supported by `--client github-actions`; `github-actions` defaults to `ci`. |
 
 Supported clients:
 
@@ -386,6 +388,7 @@ Supported clients:
 | `cursor` | `.cursor/mcp.json` | `mcpServers` | `.agents/skills/antd/` shared skill | `AGENTS.md` |
 | `vscode` | `.vscode/mcp.json` | `servers` | `.agents/skills/antd/` shared skill | `AGENTS.md` |
 | `codex` | - | - | `.agents/skills/antd/` shared skill | `AGENTS.md` |
+| `github-actions` | `.github/workflows/antd-cli.yml` | - | - | - |
 
 The command preserves existing MCP servers in the target file and adds or replaces the `antd` server entry:
 
@@ -406,11 +409,42 @@ Skill instructions are written to the selected client's instruction file: Claude
 
 Codex setup currently supports skill installation only. `antd setup --client codex` defaults to `skill`; explicit `--mode mcp` or `--mode both` is rejected until a project-local Codex MCP config format is supported.
 
+GitHub Actions setup writes `.github/workflows/antd-cli.yml` with an advisory pull-request workflow:
+
+```yaml
+name: Ant Design CLI
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  antd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Run antd doctor
+        run: npx -y @ant-design/cli doctor --format json
+      - name: Run antd lint
+        run: npx -y @ant-design/cli lint ./src --format json
+```
+
+When `--version` or `--lang zh` is provided, those options are appended to the generated `antd doctor` and `antd lint` commands. Explicit `--mode mcp`, `--mode skill`, or `--mode both` is rejected for `github-actions`; explicit `--mode ci` is rejected for agent clients.
+
 `--check` validates the selected mode without writing files:
 
 - `mcp` checks the `antd` MCP server entry.
 - `skill` checks the copied skill or skill reference and the managed instruction block in the same agent instructions file that setup would write.
 - `both` checks all of them.
+- `ci` checks the generated GitHub Actions workflow content.
 
 It exits `0` when the selected mode is configured and exits `1` when config, skill files, or instructions are missing or differ from the expected content.
 

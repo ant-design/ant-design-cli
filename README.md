@@ -468,6 +468,7 @@ antd setup --client claude              # write .mcp.json
 antd setup --client cursor              # write .cursor/mcp.json
 antd setup --client vscode              # write .vscode/mcp.json
 antd setup --client codex               # install Codex project skill
+antd setup --client github-actions      # write .github/workflows/antd-cli.yml
 antd setup --client claude --dry-run    # preview without writing files
 antd setup --client claude --project ./my-app
 antd setup --client claude --version 5.29.3 --lang zh
@@ -484,6 +485,7 @@ Modes:
 | `mcp` | Writes the client MCP config only. This is the default. |
 | `skill` | Installs the bundled Ant Design guidance for the selected client and writes a managed instruction block. |
 | `both` | Writes MCP config, installs the skill or skill reference, and writes the managed instruction block. |
+| `ci` | Writes a GitHub Actions workflow. This mode is only supported by `--client github-actions`. |
 
 Supported clients:
 
@@ -493,6 +495,7 @@ Supported clients:
 | `cursor` | `.cursor/mcp.json` | `mcpServers` | `.agents/skills/antd/` shared skill | `AGENTS.md` |
 | `vscode` | `.vscode/mcp.json` | `servers` | `.agents/skills/antd/` shared skill | `AGENTS.md` |
 | `codex` | - | - | `.agents/skills/antd/` shared skill | `AGENTS.md` |
+| `github-actions` | `.github/workflows/antd-cli.yml` | - | - | - |
 
 Generated server entry:
 
@@ -510,6 +513,8 @@ Generated server entry:
 Skill instructions are written to the selected client's instruction file: Claude uses `CLAUDE.md`; Cursor, VS Code, and Codex use `AGENTS.md`. Claude gets a native project skill under `.claude/skills/antd/`; Cursor, VS Code, and Codex get the same bundled guidance under `.agents/skills/antd/` and an instruction block telling agents when to use it.
 
 Codex setup currently supports skill installation only. Use `antd setup --client codex --mode skill`, or omit `--mode` because Codex defaults to `skill`.
+
+GitHub Actions setup writes an advisory pull-request workflow that runs `npm ci`, `npm run build`, `npx -y @ant-design/cli doctor --format json`, and `npx -y @ant-design/cli lint ./src --format json`. Use `--check` to verify that the workflow matches the generated content.
 
 Use `--check` to validate an existing setup without writing files. It exits with code `0` when the selected mode is configured, and `1` when config, skill files, or instructions are missing or different.
 
