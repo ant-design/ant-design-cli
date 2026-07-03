@@ -390,6 +390,8 @@ Use `--antd-alias <source>` to treat additional package names as aliases of `ant
 
 Use `--diff [base]` to lint changed git files only. By default it compares with `origin/main`'s merge-base, falling back to `HEAD`; pass a base ref such as `main` to override it. Use `--staged` to lint only staged files.
 
+Files that cannot be read or parsed are reported as skipped instead of being silently ignored. JSON output includes `skippedFiles`, `partial`, and `summary.skipped`; text and markdown output include a skipped-files section.
+
 ### `antd migrate <from> <to>`
 
 v3→v4 covers 15+ migration steps; v4→v5 covers 25+ migration steps; v5→v6 covers 30+. Each step includes component name, breaking flag, search pattern, and before/after code.

@@ -18,6 +18,12 @@ export interface LintIssue {
   message: string;
 }
 
+interface SkippedFile {
+  file: string;
+  reason: 'read-error' | 'parse-error';
+  message: string;
+}
+
 type DeprecatedInfo = { prop: string; since: string; message: string };
 type LintCommandOptions = { only?: string; antdAlias?: string[]; diff?: boolean | string; staged?: boolean };
 
@@ -240,21 +246,37 @@ function lintFile(
   deprecatedMap: Map<string, DeprecatedInfo[]>,
   antdAliases: string[],
   only?: string,
-): LintIssue[] {
+): { issues: LintIssue[]; skipped?: SkippedFile } {
   let content: string;
   try {
     content = readFileSync(filePath, 'utf-8');
     /* v8 ignore start -- fs read error */
-  } catch {
-    return [];
+  } catch (error) {
+    return {
+      issues: [],
+      skipped: {
+        file: filePath,
+        reason: 'read-error',
+        message: error instanceof Error ? error.message : 'Failed to read file',
+      },
+    };
   }
   /* v8 ignore stop */
 
   // Fast pre-check: skip files that don't reference configured antd aliases
-  if (!mayContainAntdAlias(content, antdAliases)) return [];
+  if (!mayContainAntdAlias(content, antdAliases)) return { issues: [] };
 
   const result = parseSync(filePath, content);
-  if (result.errors.length > 0) return [];
+  if (result.errors.length > 0) {
+    return {
+      issues: [],
+      skipped: {
+        file: filePath,
+        reason: 'parse-error',
+        message: result.errors[0]?.message ?? 'Failed to parse file',
+      },
+    };
+  }
 
   const issues: LintIssue[] = [];
   const importedComponents = new Set<string>();
@@ -478,7 +500,13 @@ function lintFile(
     report('performance', 'error', pending.line, `Avoid ${importKind} import from ${pending.source}. ${suggestion}`);
   }
 
-  return issues;
+  return { issues };
+}
+
+function printSkippedFiles(skippedFiles: SkippedFile[]): void {
+  for (const skipped of skippedFiles) {
+    console.log(`  - ${skipped.file} [${skipped.reason}] ${skipped.message}`);
+  }
 }
 
 export function registerLintCommand(program: Command): void {
@@ -511,9 +539,12 @@ export function registerLintCommand(program: Command): void {
         program.error(error instanceof Error ? error.message : String(error));
       }
       const allIssues: LintIssue[] = [];
+      const skippedFiles: SkippedFile[] = [];
 
       for (const file of files) {
-        allIssues.push(...lintFile(file, deprecatedMap, antdAliases, cmdOpts.only));
+        const result = lintFile(file, deprecatedMap, antdAliases, cmdOpts.only);
+        allIssues.push(...result.issues);
+        if (result.skipped) skippedFiles.push(result.skipped);
       }
 
       const summary = {
@@ -522,10 +553,57 @@ export function registerLintCommand(program: Command): void {
         a11y: allIssues.filter((i) => i.rule === 'a11y').length,
         usage: allIssues.filter((i) => i.rule === 'usage').length,
         performance: allIssues.filter((i) => i.rule === 'performance').length,
+        skipped: skippedFiles.length,
       };
 
       if (opts.format === 'json') {
-        output({ issues: allIssues, summary }, 'json');
+        output({ issues: allIssues, skippedFiles, partial: skippedFiles.length > 0, summary }, 'json');
+        return;
+      }
+
+      const summaryParts = [
+        localize(`${summary.deprecated} deprecated`, `${summary.deprecated} 已废弃`, opts.lang),
+        localize(`${summary.a11y} a11y`, `${summary.a11y} 无障碍`, opts.lang),
+        localize(`${summary.usage} usage`, `${summary.usage} 用法`, opts.lang),
+        localize(`${summary.performance} performance`, `${summary.performance} 性能`, opts.lang),
+        localize(`${summary.skipped} skipped`, `${summary.skipped} 已跳过`, opts.lang),
+      ].join(', ');
+
+      if (opts.format === 'markdown' && (allIssues.length > 0 || skippedFiles.length > 0)) {
+        console.log(`## ${localize('Lint Results', 'Lint 结果', opts.lang)}`);
+        console.log('');
+        console.log(localize(
+          `Scanned ${files.length} files. Found ${allIssues.length} issues.`,
+          `扫描了 ${files.length} 个文件，发现 ${allIssues.length} 个问题。`,
+          opts.lang,
+        ));
+        console.log('');
+        if (allIssues.length > 0) {
+          const headers = [
+            localize('Rule', '规则', opts.lang),
+            localize('Severity', '级别', opts.lang),
+            localize('Message', '信息', opts.lang),
+            localize('File', '文件', opts.lang),
+          ];
+          const rows = allIssues.map((i) => [i.rule, i.severity, i.message, `${i.file}:${i.line}`]);
+          console.log(formatTable(headers, rows, 'markdown'));
+        }
+        if (skippedFiles.length > 0) {
+          console.log('');
+          console.log(`### ${localize('Skipped Files', '跳过文件', opts.lang)}`);
+          console.log('');
+          console.log(formatTable(
+            [
+              localize('Reason', '原因', opts.lang),
+              localize('Message', '信息', opts.lang),
+              localize('File', '文件', opts.lang),
+            ],
+            skippedFiles.map((file) => [file.reason, file.message, file.file]),
+            'markdown',
+          ));
+        }
+        console.log('');
+        console.log(`**${localize('Summary:', '摘要：', opts.lang)}** ${summaryParts}`);
         return;
       }
 
@@ -535,35 +613,14 @@ export function registerLintCommand(program: Command): void {
           `扫描了 ${files.length} 个文件，未发现问题。`,
           opts.lang,
         ));
-        return;
-      }
-
-      const summaryParts = [
-        localize(`${summary.deprecated} deprecated`, `${summary.deprecated} 已废弃`, opts.lang),
-        localize(`${summary.a11y} a11y`, `${summary.a11y} 无障碍`, opts.lang),
-        localize(`${summary.usage} usage`, `${summary.usage} 用法`, opts.lang),
-        localize(`${summary.performance} performance`, `${summary.performance} 性能`, opts.lang),
-      ].join(', ');
-
-      if (opts.format === 'markdown') {
-        console.log(`## ${localize('Lint Results', 'Lint 结果', opts.lang)}`);
-        console.log('');
-        console.log(localize(
-          `Scanned ${files.length} files. Found ${allIssues.length} issues.`,
-          `扫描了 ${files.length} 个文件，发现 ${allIssues.length} 个问题。`,
-          opts.lang,
-        ));
-        console.log('');
-        const headers = [
-          localize('Rule', '规则', opts.lang),
-          localize('Severity', '级别', opts.lang),
-          localize('Message', '信息', opts.lang),
-          localize('File', '文件', opts.lang),
-        ];
-        const rows = allIssues.map((i) => [i.rule, i.severity, i.message, `${i.file}:${i.line}`]);
-        console.log(formatTable(headers, rows, 'markdown'));
-        console.log('');
-        console.log(`**${localize('Summary:', '摘要：', opts.lang)}** ${summaryParts}`);
+        if (skippedFiles.length > 0) {
+          console.log(localize(
+            `Skipped ${skippedFiles.length} file${skippedFiles.length > 1 ? 's' : ''}:`,
+            `跳过 ${skippedFiles.length} 个文件：`,
+            opts.lang,
+          ));
+          printSkippedFiles(skippedFiles);
+        }
         return;
       }
 
@@ -577,6 +634,11 @@ export function registerLintCommand(program: Command): void {
         const icon = issue.severity === 'error' ? '✗' : '⚠';
         console.log(`  ${icon} ${issue.file}:${issue.line} [${issue.rule}]`);
         console.log(`    ${issue.message}`);
+      }
+
+      if (skippedFiles.length > 0) {
+        console.log(`\n${localize('Skipped files:', '跳过文件：', opts.lang)}`);
+        printSkippedFiles(skippedFiles);
       }
 
       console.log(`\n${localize('Summary:', '摘要：', opts.lang)} ${summaryParts}`);
