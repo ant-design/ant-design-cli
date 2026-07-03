@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
 import type { LintIssue } from '../../commands/lint.js';
 import { run, runCLI } from '../helper.js';
 
@@ -23,6 +24,17 @@ describe('lint', () => {
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
     }
+  }
+
+  function gitFixture(name: string): string {
+    const dir = join(__dirname, `__tmp_lint_git_${name}__`);
+    rmSync(dir, { recursive: true, force: true });
+    mkdirSync(dir, { recursive: true });
+    execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: dir });
+    execFileSync('git', ['config', 'user.name', 'Test User'], { cwd: dir });
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ dependencies: { antd: '6.3.1' } }));
+    return dir;
   }
 
   it('lint deprecated message includes replacement hint from description', async () => {
@@ -136,6 +148,48 @@ const App = () => (
     );
     const data = JSON.parse(out);
     expect(data.issues.some((i: LintIssue) => i.rule === 'usage')).toBe(true);
+  });
+
+  it('should lint only files changed from the diff base with --diff', async () => {
+    const dir = gitFixture('diff');
+    try {
+      writeFileSync(join(dir, 'changed.tsx'), `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;\n`);
+      writeFileSync(join(dir, 'unchanged.tsx'), `import { Image } from 'antd';\nconst App = () => <Image src="x.png" />;\n`);
+      execFileSync('git', ['add', '.'], { cwd: dir });
+      execFileSync('git', ['commit', '-m', 'initial'], { cwd: dir, stdio: 'ignore' });
+
+      writeFileSync(join(dir, 'changed.tsx'), `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+
+      const result = await runCLI('lint', dir, '--diff', 'HEAD', '--format', 'json');
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(1);
+      expect(data.issues[0].file).toBe(join(dir, 'changed.tsx'));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('should lint only staged files with --staged', async () => {
+    const dir = gitFixture('staged');
+    try {
+      writeFileSync(join(dir, 'staged.tsx'), `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;\n`);
+      writeFileSync(join(dir, 'unstaged.tsx'), `import { Image } from 'antd';\nconst App = () => <Image src="x.png" />;\n`);
+      execFileSync('git', ['add', '.'], { cwd: dir });
+      execFileSync('git', ['commit', '-m', 'initial'], { cwd: dir, stdio: 'ignore' });
+
+      writeFileSync(join(dir, 'staged.tsx'), `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+      writeFileSync(join(dir, 'unstaged.tsx'), `import { Image } from 'antd';\nconst App = () => <Image src="x.png" />;\n`);
+      execFileSync('git', ['add', 'staged.tsx'], { cwd: dir });
+
+      const result = await runCLI('lint', dir, '--staged', '--format', 'json');
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(1);
+      expect(data.issues[0].file).toBe(join(dir, 'staged.tsx'));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
   it('should detect namespace import performance issues', async () => {

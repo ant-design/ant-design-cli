@@ -381,10 +381,14 @@ Four rule categories: `deprecated`, `a11y`, `performance`, `best-practice`. Depr
 antd lint ./src
 antd lint ./src --only deprecated
 antd lint ./src --only a11y
+antd lint ./src --diff              # check changed files only
+antd lint --staged                  # check staged files only
 antd lint ./src --only deprecated --format json --antd-alias @shared-components
 ```
 
 Use `--antd-alias <source>` to treat additional package names as aliases of `antd`. Repeat the flag for multiple wrapper packages; `antd` remains enabled by default.
+
+Use `--diff [base]` to lint changed git files only. By default it compares with `origin/main`'s merge-base, falling back to `HEAD`; pass a base ref such as `main` to override it. Use `--staged` to lint only staged files.
 
 ### `antd migrate <from> <to>`
 

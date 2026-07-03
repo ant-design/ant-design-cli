@@ -1,12 +1,14 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { localize } from '../types.js';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { dirname, extname, join, relative, resolve } from 'node:path';
 import { parseSync, Visitor } from 'oxc-parser';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { formatTable, output } from '../output/formatter.js';
-import { collectFiles, getJSXElementName } from '../utils/scan.js';
+import { collectFiles, getJSXElementName, SCAN_EXTENSIONS, SKIP_DIRS } from '../utils/scan.js';
 
 export interface LintIssue {
   file: string;
@@ -17,6 +19,7 @@ export interface LintIssue {
 }
 
 type DeprecatedInfo = { prop: string; since: string; message: string };
+type LintCommandOptions = { only?: string; antdAlias?: string[]; diff?: boolean | string; staged?: boolean };
 
 function getDeprecatedProps(store: ReturnType<typeof loadMetadataForVersion>): Map<string, DeprecatedInfo[]> {
   const result = new Map<string, DeprecatedInfo[]>();
@@ -150,6 +153,66 @@ function mayContainAntdAlias(content: string, antdAliases: string[]): boolean {
 
 function collectAntdAlias(source: string, previous: string[]): string[] {
   return [...previous, source];
+}
+
+function execGit(cwd: string, args: string[]): string {
+  return execFileSync('git', args, { cwd, encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'] });
+}
+
+function getGitRoot(targetPath: string): string {
+  const absoluteTarget = resolve(targetPath);
+  const gitCwd = existsSync(absoluteTarget) && statSync(absoluteTarget).isFile()
+    ? dirname(absoluteTarget)
+    : absoluteTarget;
+  return execGit(gitCwd, ['rev-parse', '--show-toplevel']).trim();
+}
+
+function getPathspec(repoRoot: string, targetPath: string): string {
+  const rel = relative(repoRoot, resolve(targetPath));
+  return rel === '' ? '.' : rel;
+}
+
+function isLintableSource(filePath: string): boolean {
+  if (!existsSync(filePath)) return false;
+  try {
+    if (!statSync(filePath).isFile()) return false;
+  } catch {
+    return false;
+  }
+  if (!SCAN_EXTENSIONS.has(extname(filePath))) return false;
+  return !filePath.split(/[\\/]/).some((segment) => SKIP_DIRS.has(segment) || segment.startsWith('.umi'));
+}
+
+function resolveDiffBase(repoRoot: string, diff: boolean | string | undefined): string {
+  if (typeof diff === 'string' && diff.trim()) {
+    const requested = diff.trim();
+    try {
+      return execGit(repoRoot, ['merge-base', requested, 'HEAD']).trim() || requested;
+    } catch {
+      return requested;
+    }
+  }
+
+  try {
+    return execGit(repoRoot, ['merge-base', 'origin/main', 'HEAD']).trim();
+  } catch {
+    return 'HEAD';
+  }
+}
+
+function collectGitFiles(targetPath: string, mode: 'diff' | 'staged', diff?: boolean | string): string[] {
+  const repoRoot = getGitRoot(targetPath);
+  const pathspec = getPathspec(repoRoot, targetPath);
+  const args = mode === 'staged'
+    ? ['diff', '--name-only', '--cached', '--diff-filter=ACMR', '--', pathspec]
+    : ['diff', '--name-only', '--diff-filter=ACMR', resolveDiffBase(repoRoot, diff), '--', pathspec];
+
+  return execGit(repoRoot, args)
+    .split('\n')
+    .map((file) => file.trim())
+    .filter(Boolean)
+    .map((file) => join(repoRoot, file))
+    .filter(isLintableSource);
 }
 
 function lintFile(
@@ -404,15 +467,29 @@ export function registerLintCommand(program: Command): void {
     .description('Check antd usage against best practices')
     .option('--only <category>', 'Only check specific category (deprecated, a11y, usage, performance)')
     .option('--antd-alias <source>', 'Treat additional package names as aliases of antd imports', collectAntdAlias, [])
-    .action((target: string | undefined, cmdOpts: { only?: string; antdAlias?: string[] }) => {
+    .option('--diff [base]', 'Only lint files changed from a git diff base (default: origin/main, fallback: HEAD)')
+    .option('--staged', 'Only lint staged git files')
+    .action((target: string | undefined, cmdOpts: LintCommandOptions) => {
       const opts = program.opts<GlobalOptions>();
       const targetPath = target || '.';
+      if (cmdOpts.diff && cmdOpts.staged) {
+        program.error('Error: --diff and --staged cannot be used together');
+      }
       const versionInfo = detectVersion(opts.version);
       const store = loadMetadataForVersion(versionInfo.version);
       const deprecatedMap = getDeprecatedProps(store);
       const antdAliases = normalizeAntdAliases(cmdOpts.antdAlias);
 
-      const files = collectFiles(targetPath);
+      let files: string[];
+      try {
+        files = cmdOpts.staged
+          ? collectGitFiles(targetPath, 'staged')
+          : cmdOpts.diff
+            ? collectGitFiles(targetPath, 'diff', cmdOpts.diff)
+            : collectFiles(targetPath);
+      } catch (error) {
+        program.error(`Error: ${error instanceof Error ? error.message : String(error)}`);
+      }
       const allIssues: LintIssue[] = [];
 
       for (const file of files) {
