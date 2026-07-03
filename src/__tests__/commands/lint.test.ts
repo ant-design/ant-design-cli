@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { writeFileSync, mkdirSync, rmSync, symlinkSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import type { LintIssue } from '../../commands/lint.js';
@@ -223,6 +223,31 @@ const App = () => (
       execFileSync('git', ['commit', '-m', 'initial'], { cwd: dir, stdio: 'ignore' });
 
       writeFileSync(join(dir, 'notes.md'), '# changed notes\n');
+
+      const result = await runCLI('lint', dir, '--diff', 'HEAD', '--format', 'json');
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(0);
+      expect(data.issues).toEqual([]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it.skipIf(process.platform === 'win32')('should ignore changed git symlinks that do not resolve to files', async () => {
+    const dir = gitFixture('diff-symlink-filters');
+    try {
+      mkdirSync(join(dir, 'target-a'));
+      mkdirSync(join(dir, 'target-b'));
+      symlinkSync('target-a', join(dir, 'linked-dir.tsx'), 'dir');
+      symlinkSync('missing-a', join(dir, 'missing-link.tsx'));
+      execFileSync('git', ['add', '.'], { cwd: dir });
+      execFileSync('git', ['commit', '-m', 'initial'], { cwd: dir, stdio: 'ignore' });
+
+      rmSync(join(dir, 'linked-dir.tsx'), { force: true });
+      rmSync(join(dir, 'missing-link.tsx'), { force: true });
+      symlinkSync('target-b', join(dir, 'linked-dir.tsx'), 'dir');
+      symlinkSync('missing-b', join(dir, 'missing-link.tsx'));
 
       const result = await runCLI('lint', dir, '--diff', 'HEAD', '--format', 'json');
       const data = JSON.parse(result.stdout);
