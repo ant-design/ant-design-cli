@@ -514,6 +514,7 @@ const App = () => (
     );
     expect(out).toContain('## Lint Results');
     expect(out).toContain('### Skipped Files');
+    expect(out).not.toContain('| Rule | Severity | Message | File |');
     expect(out).toContain('parse-error');
     expect(out).toContain('unparseable-markdown.tsx');
   });

@@ -420,6 +420,12 @@ function lintFile(
   return { issues };
 }
 
+function printSkippedFiles(skippedFiles: SkippedFile[]): void {
+  for (const skipped of skippedFiles) {
+    console.log(`  - ${skipped.file} [${skipped.reason}] ${skipped.message}`);
+  }
+}
+
 export function registerLintCommand(program: Command): void {
   program
     .command('lint [target]')
@@ -475,14 +481,16 @@ export function registerLintCommand(program: Command): void {
           opts.lang,
         ));
         console.log('');
-        const headers = [
-          localize('Rule', '规则', opts.lang),
-          localize('Severity', '级别', opts.lang),
-          localize('Message', '信息', opts.lang),
-          localize('File', '文件', opts.lang),
-        ];
-        const rows = allIssues.map((i) => [i.rule, i.severity, i.message, `${i.file}:${i.line}`]);
-        console.log(formatTable(headers, rows, 'markdown'));
+        if (allIssues.length > 0) {
+          const headers = [
+            localize('Rule', '规则', opts.lang),
+            localize('Severity', '级别', opts.lang),
+            localize('Message', '信息', opts.lang),
+            localize('File', '文件', opts.lang),
+          ];
+          const rows = allIssues.map((i) => [i.rule, i.severity, i.message, `${i.file}:${i.line}`]);
+          console.log(formatTable(headers, rows, 'markdown'));
+        }
         if (skippedFiles.length > 0) {
           console.log('');
           console.log(`### ${localize('Skipped Files', '跳过文件', opts.lang)}`);
@@ -514,9 +522,7 @@ export function registerLintCommand(program: Command): void {
             `跳过 ${skippedFiles.length} 个文件：`,
             opts.lang,
           ));
-          for (const skipped of skippedFiles) {
-            console.log(`  - ${skipped.file} [${skipped.reason}] ${skipped.message}`);
-          }
+          printSkippedFiles(skippedFiles);
         }
         return;
       }
@@ -535,9 +541,7 @@ export function registerLintCommand(program: Command): void {
 
       if (skippedFiles.length > 0) {
         console.log(`\n${localize('Skipped files:', '跳过文件：', opts.lang)}`);
-        for (const skipped of skippedFiles) {
-          console.log(`  - ${skipped.file} [${skipped.reason}] ${skipped.message}`);
-        }
+        printSkippedFiles(skippedFiles);
       }
 
       console.log(`\n${localize('Summary:', '摘要：', opts.lang)} ${summaryParts}`);
