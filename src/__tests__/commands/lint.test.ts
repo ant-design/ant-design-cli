@@ -13,13 +13,13 @@ describe('lint', () => {
   });
 
   /** Create a temp fixture, run lint, and clean up. */
-  async function lintFixture(name: string, content: string, extraArgs: string[] = []): Promise<string> {
+  async function lintFixture(name: string, content: string, extraArgs: string[] = [], version = '6.3.1'): Promise<string> {
     const tmpDir = join(__dirname, `__tmp_lint_${name}__`);
     const fixture = join(tmpDir, `${name}.tsx`);
     try {
       mkdirSync(tmpDir, { recursive: true });
       writeFileSync(fixture, content);
-      const result = await runCLI('lint', fixture, '--version', '6.3.1', ...extraArgs);
+      const result = await runCLI('lint', fixture, '--version', version, ...extraArgs);
       return result.stdout;
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -551,6 +551,45 @@ class Demo {
     );
     const data = JSON.parse(out);
     expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('feedback API'))).toHaveLength(0);
+  });
+
+  it('should not warn on App.useApp feedback instances shadowing static imports', async () => {
+    const out = await lintFixture(
+      'static-feedback-shadowed',
+      `import { App, message, notification, Modal } from 'antd';
+function Demo({ message: propMessage }) {
+  const { message, notification, modal: Modal } = App.useApp();
+  message.success('Saved');
+  notification.open({ message: 'Saved' });
+  Modal.confirm({ title: 'Confirm' });
+  propMessage.success('Saved');
+}
+`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('feedback API'))).toHaveLength(0);
+  });
+
+  it('should not run v5 usage rules for antd v4', async () => {
+    const out = await lintFixture(
+      'v4-usage-rules',
+      `import { message, notification, Modal, Select, Upload } from 'antd';
+message.success('Saved');
+notification.open({ message: 'Saved' });
+Modal.confirm({ title: 'Confirm' });
+const App = () => (
+  <>
+    <Upload fileList={[]} defaultFileList={[]} />
+    <Select><Select.Option value="a">A</Select.Option></Select>
+  </>
+);
+`,
+      ['--only', 'usage', '--format', 'json'],
+      '4.24.16',
+    );
+    const data = JSON.parse(out);
+    expect(data.issues).toHaveLength(0);
   });
 
   it('should warn on Upload controlled value conflicts', async () => {

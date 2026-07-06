@@ -119,6 +119,32 @@ function getMemberPath(node: any): string[] {
   return [];
 }
 
+function collectPatternNames(pattern: any, names: string[] = []): string[] {
+  if (!pattern) return names;
+  if (pattern.type === 'Identifier') {
+    names.push(pattern.name);
+  /* v8 ignore start -- defensive support for uncommon binding patterns */
+  } else if (pattern.type === 'AssignmentPattern') {
+    collectPatternNames(pattern.left, names);
+  } else if (pattern.type === 'RestElement') {
+    collectPatternNames(pattern.argument, names);
+  } else if (pattern.type === 'ArrayPattern') {
+    for (const element of pattern.elements ?? []) collectPatternNames(element, names);
+  } else if (pattern.type === 'ObjectPattern') {
+    for (const property of pattern.properties ?? []) {
+      if (property.type === 'Property') {
+        collectPatternNames(property.value, names);
+      } else if (property.type === 'RestElement') {
+        collectPatternNames(property.argument, names);
+      }
+    }
+  } else if (pattern.pattern) {
+    collectPatternNames(pattern.pattern, names);
+  }
+  /* v8 ignore stop */
+  return names;
+}
+
 const STATIC_FEEDBACK_METHODS: Record<string, string[]> = {
   message: ['open', 'success', 'error', 'info', 'warning', 'warn', 'loading'],
   notification: ['open', 'success', 'error', 'info', 'warning', 'warn'],
@@ -326,9 +352,52 @@ function lintFile(
   // Track namespace/default import usage for performance rule suggestions
   const pendingPerformanceIssues: { line: number; source: string; localName: string; kind: 'namespace' | 'default' }[] = [];
   const namespaceMemberUsage = new Map<string, Set<string>>();
+  const scopeStack: Set<string>[] = [new Set()];
+
+  const declarePattern = (pattern: any) => {
+    const currentScope = scopeStack[scopeStack.length - 1];
+    for (const name of collectPatternNames(pattern)) {
+      currentScope.add(name);
+    }
+  };
+
+  const isShadowed = (name: string): boolean => scopeStack.some((scope) => scope.has(name));
+
+  const pushFunctionScope = (node: any) => {
+    scopeStack.push(new Set());
+    for (const param of node.params ?? []) declarePattern(param);
+  };
 
   // Single pass: collect imports and check all rules
   const visitor = new Visitor({
+    BlockStatement() {
+      scopeStack.push(new Set());
+    },
+    'BlockStatement:exit'() {
+      scopeStack.pop();
+    },
+    FunctionDeclaration: pushFunctionScope,
+    'FunctionDeclaration:exit'() {
+      scopeStack.pop();
+    },
+    FunctionExpression: pushFunctionScope,
+    'FunctionExpression:exit'() {
+      scopeStack.pop();
+    },
+    ArrowFunctionExpression: pushFunctionScope,
+    'ArrowFunctionExpression:exit'() {
+      scopeStack.pop();
+    },
+    CatchClause(node: any) {
+      scopeStack.push(new Set());
+      if (node.param) declarePattern(node.param);
+    },
+    'CatchClause:exit'() {
+      scopeStack.pop();
+    },
+    VariableDeclarator(node: any) {
+      declarePattern(node.id);
+    },
     JSXElement(node: any) {
       const elName = getJSXElementName(node.openingElement?.name);
       jsxAncestorStack.push(elName);
@@ -378,7 +447,7 @@ function lintFile(
       const callName = path.join('.');
       const line = lineOf(node);
 
-      if (importedName && STATIC_FEEDBACK_METHODS[importedName]?.includes(method)) {
+      if (importedName && !isShadowed(path[0]) && STATIC_FEEDBACK_METHODS[importedName]?.includes(method)) {
         report('usage', 'warning', line, `Static antd feedback API \`${callName}\` cannot consume ConfigProvider context. Use App.useApp() instead.`);
       }
     },
