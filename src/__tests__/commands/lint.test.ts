@@ -13,13 +13,13 @@ describe('lint', () => {
   });
 
   /** Create a temp fixture, run lint, and clean up. */
-  async function lintFixture(name: string, content: string, extraArgs: string[] = []): Promise<string> {
+  async function lintFixture(name: string, content: string, extraArgs: string[] = [], version = '6.3.1'): Promise<string> {
     const tmpDir = join(__dirname, `__tmp_lint_${name}__`);
     const fixture = join(tmpDir, `${name}.tsx`);
     try {
       mkdirSync(tmpDir, { recursive: true });
       writeFileSync(fixture, content);
-      const result = await runCLI('lint', fixture, '--version', '6.3.1', ...extraArgs);
+      const result = await runCLI('lint', fixture, '--version', version, ...extraArgs);
       return result.stdout;
     } finally {
       rmSync(tmpDir, { recursive: true, force: true });
@@ -513,6 +513,122 @@ const App = () => (
     );
     const data = JSON.parse(out);
     expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('shouldUpdate'))).toBe(true);
+  });
+
+  it('should warn on static feedback APIs in antd v5+', async () => {
+    const out = await lintFixture(
+      'static-feedback',
+      `import { message, notification, Modal } from 'antd';
+message.success('Saved');
+message['success']('Saved');
+notification.open({ message: 'Saved' });
+Modal.confirm({ title: 'Confirm' });
+`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('message.success'))).toHaveLength(2);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('notification.open'))).toBe(true);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Modal.confirm'))).toBe(true);
+  });
+
+  it('should not warn on dynamic or non-imported feedback member calls', async () => {
+    const out = await lintFixture(
+      'static-feedback-false-positives',
+      `import { message } from 'antd';
+const method = 'success';
+message[method]('Saved');
+const [api] = message.useMessage();
+api.success('Saved');
+getFeedback().message.success('Saved');
+class Demo {
+  run() {
+    this.message.success('Saved');
+  }
+}
+`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('feedback API'))).toHaveLength(0);
+  });
+
+  it('should not warn on App.useApp feedback instances shadowing static imports', async () => {
+    const out = await lintFixture(
+      'static-feedback-shadowed',
+      `import { App, message, notification, Modal } from 'antd';
+function Demo({ message: propMessage }) {
+  const { message, notification, modal: Modal } = App.useApp();
+  message.success('Saved');
+  notification.open({ message: 'Saved' });
+  Modal.confirm({ title: 'Confirm' });
+  propMessage.success('Saved');
+}
+`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('feedback API'))).toHaveLength(0);
+  });
+
+  it('should not run v5 usage rules for antd v4', async () => {
+    const out = await lintFixture(
+      'v4-usage-rules',
+      `import { message, notification, Modal, Select, Upload } from 'antd';
+message.success('Saved');
+notification.open({ message: 'Saved' });
+Modal.confirm({ title: 'Confirm' });
+const App = () => (
+  <>
+    <Upload fileList={[]} defaultFileList={[]} />
+    <Select><Select.Option value="a">A</Select.Option></Select>
+  </>
+);
+`,
+      ['--only', 'usage', '--format', 'json'],
+      '4.24.16',
+    );
+    const data = JSON.parse(out);
+    expect(data.issues).toHaveLength(0);
+  });
+
+  it('should warn on Upload controlled value conflicts', async () => {
+    const out = await lintFixture(
+      'upload-control',
+      `import { Upload } from 'antd';
+const App = () => (
+  <>
+    <Upload fileList={[]} defaultFileList={[]} />
+    <Upload fileList={[]} />
+    <Upload.Dragger fileList={[]} defaultFileList={[]} />
+    <Upload.Dragger fileList={[]} />
+  </>
+);
+`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('Upload'))).toHaveLength(4);
+  });
+
+  it('should warn on Select.Option children in antd v5+', async () => {
+    const out = await lintFixture(
+      'select-option-children',
+      `import { Select } from 'antd';
+const App = () => (
+  <Select>
+    <Select.Option value="a">A</Select.Option>
+    <Select.OptGroup label="Group">
+      <Select.Option value="b">B</Select.Option>
+    </Select.OptGroup>
+  </Select>
+);
+`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Select.Option'))).toBe(true);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Select.OptGroup'))).toBe(true);
   });
 
   it('should warn on icon onClick without aria-label', async () => {

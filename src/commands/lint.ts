@@ -101,6 +101,56 @@ function getObjectExpressionKeys(attrs: any[], name: string): string[] {
 }
 /* v8 ignore stop */
 
+function getMemberPath(node: any): string[] {
+  if (!node) return [];
+  if (node.type === 'Identifier') return [node.name];
+  if (node.type === 'ChainExpression') return getMemberPath(node.expression);
+  if (node.type === 'MemberExpression' || node.type === 'OptionalMemberExpression') {
+    const objectPath = getMemberPath(node.object);
+    if (objectPath.length === 0) return [];
+    let propertyName: string | undefined;
+    if (node.property?.type === 'Identifier' && !node.computed) {
+      propertyName = node.property.name;
+    } else if (node.property?.type === 'Literal' && typeof node.property.value === 'string') {
+      propertyName = node.property.value;
+    }
+    return propertyName ? [...objectPath, propertyName] : [];
+  }
+  return [];
+}
+
+function collectPatternNames(pattern: any, names: string[] = []): string[] {
+  if (!pattern) return names;
+  if (pattern.type === 'Identifier') {
+    names.push(pattern.name);
+  /* v8 ignore start -- defensive support for uncommon binding patterns */
+  } else if (pattern.type === 'AssignmentPattern') {
+    collectPatternNames(pattern.left, names);
+  } else if (pattern.type === 'RestElement') {
+    collectPatternNames(pattern.argument, names);
+  } else if (pattern.type === 'ArrayPattern') {
+    for (const element of pattern.elements ?? []) collectPatternNames(element, names);
+  } else if (pattern.type === 'ObjectPattern') {
+    for (const property of pattern.properties ?? []) {
+      if (property.type === 'Property') {
+        collectPatternNames(property.value, names);
+      } else if (property.type === 'RestElement') {
+        collectPatternNames(property.argument, names);
+      }
+    }
+  } else if (pattern.pattern) {
+    collectPatternNames(pattern.pattern, names);
+  }
+  /* v8 ignore stop */
+  return names;
+}
+
+const STATIC_FEEDBACK_METHODS: Record<string, string[]> = {
+  message: ['open', 'success', 'error', 'info', 'warning', 'warn', 'loading'],
+  notification: ['open', 'success', 'error', 'info', 'warning', 'warn'],
+  Modal: ['confirm', 'info', 'success', 'error', 'warning', 'warn'],
+};
+
 /** Create a stateful offset-to-line converter that exploits monotonically increasing offsets. */
 function createLineMapper(source: string): (offset: number) => number {
   let lastOffset = 0;
@@ -245,6 +295,7 @@ function lintFile(
   filePath: string,
   deprecatedMap: Map<string, DeprecatedInfo[]>,
   antdAliases: string[],
+  antdMajor: number,
   only?: string,
 ): { issues: LintIssue[]; skipped?: SkippedFile } {
   let content: string;
@@ -280,7 +331,9 @@ function lintFile(
 
   const issues: LintIssue[] = [];
   const importedComponents = new Set<string>();
+  const antdImportLocals = new Map<string, string>();
   const offsetToLine = createLineMapper(content);
+  const enableV5UsageRules = antdMajor >= 5;
 
   const lineOf = (node: any): number => {
     if (typeof node.start === 'number') return offsetToLine(node.start);
@@ -299,9 +352,52 @@ function lintFile(
   // Track namespace/default import usage for performance rule suggestions
   const pendingPerformanceIssues: { line: number; source: string; localName: string; kind: 'namespace' | 'default' }[] = [];
   const namespaceMemberUsage = new Map<string, Set<string>>();
+  const scopeStack: Set<string>[] = [new Set()];
+
+  const declarePattern = (pattern: any) => {
+    const currentScope = scopeStack[scopeStack.length - 1];
+    for (const name of collectPatternNames(pattern)) {
+      currentScope.add(name);
+    }
+  };
+
+  const isShadowed = (name: string): boolean => scopeStack.some((scope) => scope.has(name));
+
+  const pushFunctionScope = (node: any) => {
+    scopeStack.push(new Set());
+    for (const param of node.params ?? []) declarePattern(param);
+  };
 
   // Single pass: collect imports and check all rules
   const visitor = new Visitor({
+    BlockStatement() {
+      scopeStack.push(new Set());
+    },
+    'BlockStatement:exit'() {
+      scopeStack.pop();
+    },
+    FunctionDeclaration: pushFunctionScope,
+    'FunctionDeclaration:exit'() {
+      scopeStack.pop();
+    },
+    FunctionExpression: pushFunctionScope,
+    'FunctionExpression:exit'() {
+      scopeStack.pop();
+    },
+    ArrowFunctionExpression: pushFunctionScope,
+    'ArrowFunctionExpression:exit'() {
+      scopeStack.pop();
+    },
+    CatchClause(node: any) {
+      scopeStack.push(new Set());
+      if (node.param) declarePattern(node.param);
+    },
+    'CatchClause:exit'() {
+      scopeStack.pop();
+    },
+    VariableDeclarator(node: any) {
+      declarePattern(node.id);
+    },
     JSXElement(node: any) {
       const elName = getJSXElementName(node.openingElement?.name);
       jsxAncestorStack.push(elName);
@@ -320,7 +416,9 @@ function lintFile(
         if (spec.type === 'ImportSpecifier') {
           if (spec.importKind === 'type') continue;
           const name = spec.imported?.name || spec.local?.name;
+          const localName = spec.local?.name || name;
           if (name) importedComponents.add(name);
+          if (name && localName) antdImportLocals.set(localName, name);
         }
 
         if (!only || only === 'performance') {
@@ -335,6 +433,22 @@ function lintFile(
             namespaceMemberUsage.set(localName, new Set());
           }
         }
+      }
+    },
+
+    CallExpression(node: any) {
+      if (only && only !== 'usage') return;
+      if (!enableV5UsageRules) return;
+
+      const path = getMemberPath(node.callee);
+      if (path.length < 2) return;
+      const importedName = antdImportLocals.get(path[0]);
+      const method = path[1];
+      const callName = path.join('.');
+      const line = lineOf(node);
+
+      if (importedName && !isShadowed(path[0]) && STATIC_FEEDBACK_METHODS[importedName]?.includes(method)) {
+        report('usage', 'warning', line, `Static antd feedback API \`${callName}\` cannot consume ConfigProvider context. Use App.useApp() instead.`);
       }
     },
 
@@ -474,6 +588,23 @@ function lintFile(
             report('usage', 'warning', line, 'TreeSelect `multiple={false}` is ignored when `treeCheckable` is true');
           }
         }
+
+        if (enableV5UsageRules && (compName === 'Upload' || compName === 'Upload.Dragger') && importedComponents.has('Upload')) {
+          if (hasAttr(attrs, 'fileList') && hasAttr(attrs, 'defaultFileList')) {
+            report('usage', 'warning', line, 'Upload should not use both controlled `fileList` and uncontrolled `defaultFileList`');
+          } else if (hasAttr(attrs, 'fileList') && !hasAttr(attrs, 'onChange')) {
+            report('usage', 'warning', line, 'Upload with controlled `fileList` should provide `onChange`');
+          }
+        }
+
+        if (enableV5UsageRules && importedComponents.has('Select')) {
+          if (compName === 'Select.Option') {
+            report('usage', 'warning', line, 'Select.Option children are not recommended in antd v5+. Use the `options` prop instead.');
+          }
+          if (compName === 'Select.OptGroup') {
+            report('usage', 'warning', line, 'Select.OptGroup children are not recommended in antd v5+. Use grouped `options` instead.');
+          }
+        }
       }
 
       // --- Performance checks ---
@@ -542,7 +673,7 @@ export function registerLintCommand(program: Command): void {
       const skippedFiles: SkippedFile[] = [];
 
       for (const file of files) {
-        const result = lintFile(file, deprecatedMap, antdAliases, cmdOpts.only);
+        const result = lintFile(file, deprecatedMap, antdAliases, parseInt(versionInfo.majorVersion.slice(1), 10), cmdOpts.only);
         allIssues.push(...result.issues);
         if (result.skipped) skippedFiles.push(result.skipped);
       }
