@@ -375,16 +375,19 @@ antd usage -f Button                # filter to one component
 
 ### `antd lint [target]`
 
-Four rule categories: `deprecated`, `a11y`, `performance`, `best-practice`. Deprecation rules are derived from metadata at runtime, so they're always version-accurate.
+Four rule categories: `deprecated`, `a11y`, `usage`, `performance`. Deprecation rules are derived from metadata at runtime, so they're always version-accurate.
 
 ```bash
 antd lint ./src
 antd lint ./src --only deprecated
 antd lint ./src --only a11y
+antd lint ./src --only usage
 antd lint ./src --diff              # check changed files only
 antd lint --staged                  # check staged files only
 antd lint ./src --only deprecated --format json --antd-alias @shared-components
 ```
+
+`usage` checks include antd-specific prop/API mistakes such as Form.Item conflicts, Upload controlled value conflicts, static feedback APIs that should use `App.useApp()` in v5+, and v5+ Select children APIs that should use `options`.
 
 Use `--antd-alias <source>` to treat additional package names as aliases of `antd`. Repeat the flag for multiple wrapper packages; `antd` remains enabled by default.
 

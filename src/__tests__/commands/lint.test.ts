@@ -515,6 +515,59 @@ const App = () => (
     expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('shouldUpdate'))).toBe(true);
   });
 
+  it('should warn on static feedback APIs in antd v5+', async () => {
+    const out = await lintFixture(
+      'static-feedback',
+      `import { message, notification, Modal } from 'antd';
+message.success('Saved');
+notification.open({ message: 'Saved' });
+Modal.confirm({ title: 'Confirm' });
+`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('message.success'))).toBe(true);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('notification.open'))).toBe(true);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Modal.confirm'))).toBe(true);
+  });
+
+  it('should warn on Upload controlled value conflicts', async () => {
+    const out = await lintFixture(
+      'upload-control',
+      `import { Upload } from 'antd';
+const App = () => (
+  <>
+    <Upload fileList={[]} defaultFileList={[]} />
+    <Upload fileList={[]} />
+  </>
+);
+`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('Upload'))).toHaveLength(2);
+  });
+
+  it('should warn on Select.Option children in antd v5+', async () => {
+    const out = await lintFixture(
+      'select-option-children',
+      `import { Select } from 'antd';
+const App = () => (
+  <Select>
+    <Select.Option value="a">A</Select.Option>
+    <Select.OptGroup label="Group">
+      <Select.Option value="b">B</Select.Option>
+    </Select.OptGroup>
+  </Select>
+);
+`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Select.Option'))).toBe(true);
+    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Select.OptGroup'))).toBe(true);
+  });
+
   it('should warn on icon onClick without aria-label', async () => {
     const out = await lintFixture(
       'icon-aria',

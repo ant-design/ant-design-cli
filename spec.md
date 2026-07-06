@@ -644,6 +644,9 @@ Note: This is complementary to ESLint. `antd lint` focuses on antd-specific know
   - Typography.Text `ellipsis` with `expandable` / `rows` (not supported)
   - Radio `optionType` outside Radio.Group (only valid inside Radio.Group)
   - TreeSelect `multiple={false}` + `treeCheckable` conflict
+  - antd v5+ static feedback APIs (`message.*`, `notification.*`, `Modal.confirm` / `Modal.info` / `Modal.success` / `Modal.error` / `Modal.warning`) that cannot consume `ConfigProvider` context; use `App.useApp()` instead
+  - antd v5+ Upload controlled/uncontrolled conflicts: using both `fileList` and `defaultFileList`, or using controlled `fileList` without `onChange`
+  - antd v5+ Select children APIs (`Select.Option`, `Select.OptGroup`); use the `options` prop instead
 - **performance** — Wildcard imports (`import * as`) from `antd`, configured `--antd-alias` packages, or their subpaths; default imports; disabling virtual scroll on Select. Locale paths (`antd/locale/*`, `antd/es/locale/*`, `antd/lib/locale/*`) are excluded since their default import is the documented pattern and there is no tree-shaking benefit to be gained. Non-module asset sources (any extension other than `.js/.jsx/.ts/.tsx/.mjs/.cjs/.mts/.cts`, e.g. `.css/.svg/.ttf/.woff2/.png`) are also excluded, since they resolve to a bundler asset with only a default export and have no named exports.
 
 #### `antd migrate <from> <to>`
