@@ -520,13 +520,14 @@ const App = () => (
       'static-feedback',
       `import { message, notification, Modal } from 'antd';
 message.success('Saved');
+message['success']('Saved');
 notification.open({ message: 'Saved' });
 Modal.confirm({ title: 'Confirm' });
 `,
       ['--only', 'usage', '--format', 'json'],
     );
     const data = JSON.parse(out);
-    expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('message.success'))).toBe(true);
+    expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('message.success'))).toHaveLength(2);
     expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('notification.open'))).toBe(true);
     expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Modal.confirm'))).toBe(true);
   });
