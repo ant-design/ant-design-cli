@@ -51,7 +51,7 @@
     "cfonts": "^3.3.1",
     "fast-glob": "^3.3.3",
     "fast-levenshtein": "^3.0.0",
-    "oxc-parser": "^0.137.0",
+    "oxc-parser": "^0.138.0",
     "semver": "^7.8.0",
     "string-width": "^8.2.1"
   },
