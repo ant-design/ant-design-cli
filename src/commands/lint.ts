@@ -107,16 +107,23 @@ function getMemberPath(node: any): string[] {
   if (node.type === 'ChainExpression') return getMemberPath(node.expression);
   if (node.type === 'MemberExpression' || node.type === 'OptionalMemberExpression') {
     const objectPath = getMemberPath(node.object);
+    if (objectPath.length === 0) return [];
     let propertyName: string | undefined;
-    if (node.property?.type === 'Identifier') {
+    if (node.property?.type === 'Identifier' && !node.computed) {
       propertyName = node.property.name;
     } else if (node.property?.type === 'Literal' && typeof node.property.value === 'string') {
       propertyName = node.property.value;
     }
-    return propertyName ? [...objectPath, propertyName] : objectPath;
+    return propertyName ? [...objectPath, propertyName] : [];
   }
   return [];
 }
+
+const STATIC_FEEDBACK_METHODS: Record<string, string[]> = {
+  message: ['open', 'success', 'error', 'info', 'warning', 'warn', 'loading'],
+  notification: ['open', 'success', 'error', 'info', 'warning', 'warn'],
+  Modal: ['confirm', 'info', 'success', 'error', 'warning', 'warn'],
+};
 
 /** Create a stateful offset-to-line converter that exploits monotonically increasing offsets. */
 function createLineMapper(source: string): (offset: number) => number {
@@ -371,24 +378,7 @@ function lintFile(
       const callName = path.join('.');
       const line = lineOf(node);
 
-      if (
-        importedName === 'message' &&
-        ['open', 'success', 'error', 'info', 'warning', 'warn', 'loading'].includes(method)
-      ) {
-        report('usage', 'warning', line, `Static antd feedback API \`${callName}\` cannot consume ConfigProvider context. Use App.useApp() instead.`);
-      }
-
-      if (
-        importedName === 'notification' &&
-        ['open', 'success', 'error', 'info', 'warning', 'warn'].includes(method)
-      ) {
-        report('usage', 'warning', line, `Static antd feedback API \`${callName}\` cannot consume ConfigProvider context. Use App.useApp() instead.`);
-      }
-
-      if (
-        importedName === 'Modal' &&
-        ['confirm', 'info', 'success', 'error', 'warning', 'warn'].includes(method)
-      ) {
+      if (importedName && STATIC_FEEDBACK_METHODS[importedName]?.includes(method)) {
         report('usage', 'warning', line, `Static antd feedback API \`${callName}\` cannot consume ConfigProvider context. Use App.useApp() instead.`);
       }
     },
@@ -530,7 +520,7 @@ function lintFile(
           }
         }
 
-        if (enableV5UsageRules && compName === 'Upload' && importedComponents.has('Upload')) {
+        if (enableV5UsageRules && (compName === 'Upload' || compName === 'Upload.Dragger') && importedComponents.has('Upload')) {
           if (hasAttr(attrs, 'fileList') && hasAttr(attrs, 'defaultFileList')) {
             report('usage', 'warning', line, 'Upload should not use both controlled `fileList` and uncontrolled `defaultFileList`');
           } else if (hasAttr(attrs, 'fileList') && !hasAttr(attrs, 'onChange')) {

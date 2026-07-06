@@ -531,6 +531,27 @@ Modal.confirm({ title: 'Confirm' });
     expect(data.issues.some((i: LintIssue) => i.rule === 'usage' && i.message.includes('Modal.confirm'))).toBe(true);
   });
 
+  it('should not warn on dynamic or non-imported feedback member calls', async () => {
+    const out = await lintFixture(
+      'static-feedback-false-positives',
+      `import { message } from 'antd';
+const method = 'success';
+message[method]('Saved');
+const [api] = message.useMessage();
+api.success('Saved');
+getFeedback().message.success('Saved');
+class Demo {
+  run() {
+    this.message.success('Saved');
+  }
+}
+`,
+      ['--only', 'usage', '--format', 'json'],
+    );
+    const data = JSON.parse(out);
+    expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('feedback API'))).toHaveLength(0);
+  });
+
   it('should warn on Upload controlled value conflicts', async () => {
     const out = await lintFixture(
       'upload-control',
@@ -539,13 +560,15 @@ const App = () => (
   <>
     <Upload fileList={[]} defaultFileList={[]} />
     <Upload fileList={[]} />
+    <Upload.Dragger fileList={[]} defaultFileList={[]} />
+    <Upload.Dragger fileList={[]} />
   </>
 );
 `,
       ['--only', 'usage', '--format', 'json'],
     );
     const data = JSON.parse(out);
-    expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('Upload'))).toHaveLength(2);
+    expect(data.issues.filter((i: LintIssue) => i.rule === 'usage' && i.message.includes('Upload'))).toHaveLength(4);
   });
 
   it('should warn on Select.Option children in antd v5+', async () => {
