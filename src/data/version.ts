@@ -149,8 +149,8 @@ function toMajor(version: string): string {
 
 /** Semver comparison using the `semver` package. Returns -1, 0, or 1, or null if either version is unparseable. */
 export function compare(a: string, b: string): number | null {
-  const sa = semver.parse(a) ?? semver.coerce(a, { includePrerelease: true });
-  const sb = semver.parse(b) ?? semver.coerce(b, { includePrerelease: true });
+  const sa = semver.coerce(a);
+  const sb = semver.coerce(b);
   if (!sa || !sb) return null;
   return semver.compare(sa, sb);
 }

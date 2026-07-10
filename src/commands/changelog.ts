@@ -65,7 +65,7 @@ export interface DiffResult {
   component?: string;
 }
 
-export function diffProps(
+function diffProps(
   oldProps: PropData[],
   newProps: PropData[],
 ): { added: PropDiff[]; removed: PropDiff[]; changed: PropDiff[] } {
@@ -89,7 +89,10 @@ export function diffProps(
 
   for (const [name, prop] of oldMap) {
     if (!newMap.has(name)) {
-      removed.push({ name, type: prop.type });
+      const possibleRename = [...newMap.values()].find(
+        (p) => p.type === prop.type && !oldMap.has(p.name),
+      );
+      removed.push({ name, type: prop.type, replacement: possibleRename?.name });
     }
   }
 
