@@ -91,10 +91,10 @@ function buildMinorMap(tags: string[]): Map<string, string> {
   return map;
 }
 
-function checkout(antdDir: string, tag: string): boolean {
+export function checkout(antdDir: string, tag: string): boolean {
   console.log(`  git checkout ${tag}`);
   try {
-    execSync(`git checkout ${tag}`, { cwd: antdDir, stdio: 'pipe' });
+    execFileSync('git', ['checkout', tag], { cwd: antdDir, stdio: 'pipe' });
     return true;
   } catch (err) {
     console.error(`  Error checking out ${tag}: ${err instanceof Error ? err.message : err}`);
@@ -169,7 +169,7 @@ export function fetchTokenMeta(antdDir: string, tag: string) {
   try {
     fs.mkdirSync(tmpDir, { recursive: true });
     console.log(`  Fetching token-meta.json from antd@${tag}...`);
-    execSync(`npm pack antd@${tag} --quiet 2>/dev/null`, { cwd: tmpDir, stdio: 'pipe' });
+    execFileSync('npm', ['pack', `antd@${tag}`, '--quiet'], { cwd: tmpDir, stdio: 'pipe' });
     const tarball = fs.readdirSync(tmpDir).find((f) => f.endsWith('.tgz'));
     if (!tarball) throw new Error('tarball not found');
     // Try package/es/version/ (v5+) first, then package/lib/version/ (v4)
