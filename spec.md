@@ -68,7 +68,7 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 - On load, component props are deduplicated by name (first entry wins).
 - The extraction script handles `\|` (escaped pipes in markdown table cells) by replacing them with a placeholder before splitting. This ensures multi-value union types like `` `primary` \| `dashed` \| `link` `` are stored correctly as `` `primary` | `dashed` | `link` `` instead of being split across wrong columns.
 - Each version file contains both `en` and `zh` descriptions, keyed by language
-- `semantic` data extracted from `components/*/demo/_semantic.tsx` files
+- `semantic` data extracted from `components/*/demo/_semantic.tsx` files, including dotted nested keys such as `popup.root` from quoted locale properties and bracket access (`locale['popup.root']`)
 - Data is auto-extracted from antd source via `scripts/extract.ts`
 - `data/design-v{major}.md` (the design-language document served by `antd design.md`) is **not** extracted but **copied verbatim** from antd's repo-root `DESIGN.md` during sync, since it is hand-curated prose, not derivable data. It is major-grained, so `scripts/sync.ts` checks out each major's latest tag and copies the file to `data/design-v{major}.md` (only `design-v6.md` exists today; antd has not published `DESIGN.md` for v3/v4/v5). If the source `DESIGN.md` is absent for a major, the existing bundled copy is kept rather than deleted.
 - For v5+ design tokens, `scripts/sync.ts` fetches `token-meta.json` from the matching published `antd@{version}` tarball for each extracted tag and replaces any previous checkout copy before extraction, so token data cannot be reused across versions.
@@ -975,7 +975,7 @@ Extraction sources:
 | Props | `index.{en-US,zh-CN}.md` `## API` tables | Markdown table parsing |
 | Demos | `components/*/demo/*.tsx` + `*.md` | File read + bilingual md parsing |
 | Tokens | `components/version/token-meta.json` | Direct JSON read |
-| Semantic | `components/*/demo/_semantic.tsx` | Regex extraction of locales + semantics |
+| Semantic | `components/*/demo/_semantic.tsx` | Regex extraction of identifier or quoted/dotted locale keys and dot/bracket semantic references |
 | Changelog | `CHANGELOG.{en-US,zh-CN}.md` | Markdown heading/emoji parsing |
 | FAQ | `index.{en-US,zh-CN}.md` `## FAQ` section | Markdown section extraction |
 
