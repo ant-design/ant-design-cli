@@ -94,6 +94,7 @@ export function loadMetadata(majorVersion: string): MetadataStore {
  * 2. Nearest earlier minor               (e.g. requested 4.2.5 but only 4.1.x exists → use 4.1.x)
  * 3. Fall back to loadMetadata(majorVersion) (i.e. data/v4.json)
  */
+const MAX_METADATA_CACHE_ENTRIES = 32;
 const metadataCache = new Map<string, MetadataStore>();
 
 export function loadMetadataForVersion(version: string): MetadataStore {
@@ -102,6 +103,11 @@ export function loadMetadataForVersion(version: string): MetadataStore {
 
   const result = loadMetadataForVersionUncached(version);
   metadataCache.set(version, result);
+  while (metadataCache.size > MAX_METADATA_CACHE_ENTRIES) {
+    const oldestKey = metadataCache.keys().next().value;
+    if (oldestKey === undefined) break;
+    metadataCache.delete(oldestKey);
+  }
   return result;
 }
 

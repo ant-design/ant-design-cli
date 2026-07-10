@@ -237,6 +237,19 @@ describe('data/loader', () => {
     expect(a).toBe(b);
   });
 
+  it('evicts the oldest metadata cache entry after 32 unique versions', () => {
+    const versions = Array.from({ length: 33 }, (_, index) => `98.${1000 + index}.0`);
+    const oldest = loadMetadataForVersion(versions[0]);
+
+    for (const version of versions.slice(1, 32)) {
+      loadMetadataForVersion(version);
+    }
+    expect(loadMetadataForVersion(versions[0])).toBe(oldest);
+
+    loadMetadataForVersion(versions[32]);
+    expect(loadMetadataForVersion(versions[0])).not.toBe(oldest);
+  });
+
   it('findComponent is case-insensitive', () => {
     const store = loadMetadata('v5');
     expect(findComponent(store, 'BUTTON')?.name).toBe('Button');

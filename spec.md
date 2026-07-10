@@ -66,6 +66,7 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 ### Data Layer Notes
 
 - On load, component props are deduplicated by name (first entry wins).
+- Historical metadata is cached for up to 32 requested version keys per process; inserting another version evicts the oldest cached entry.
 - The extraction script handles `\|` (escaped pipes in markdown table cells) by replacing them with a placeholder before splitting. This ensures multi-value union types like `` `primary` \| `dashed` \| `link` `` are stored correctly as `` `primary` | `dashed` | `link` `` instead of being split across wrong columns.
 - Each version file contains both `en` and `zh` descriptions, keyed by language
 - `semantic` data extracted from `components/*/demo/_semantic.tsx` files
