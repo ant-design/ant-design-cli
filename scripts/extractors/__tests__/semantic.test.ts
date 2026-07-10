@@ -15,20 +15,28 @@ describe('extractSemantic', () => {
         path.join(demoDir, '_semantic.tsx'),
         `const locales = {
   en: {
+    root: 'Root',
     'popup.root': 'Preview root',
   },
   cn: {
+    root: '根节点',
     'popup.root': '预览根节点',
   },
 };
 
 const semantics = [
+  { name: 'root', desc: locale.root },
   { name: 'popup.root', desc: locale['popup.root'] },
 ];
 `,
       );
 
       expect(extractSemantic(antdDir, 'select')).toEqual([
+        {
+          key: 'root',
+          description: 'Root',
+          descriptionZh: '根节点',
+        },
         {
           key: 'popup.root',
           description: 'Preview root',
