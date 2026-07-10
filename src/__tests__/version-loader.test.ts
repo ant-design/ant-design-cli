@@ -180,6 +180,12 @@ describe('data/version', () => {
     it('returns 0 when equal', () => {
       expect(compare('5.0.0', '5.0.0')).toBe(0);
     });
+    it('orders prerelease identifiers', () => {
+      expect(compare('5.0.0-beta.1', '5.0.0-beta.2')).toBeLessThan(0);
+    });
+    it('orders a prerelease before its final release', () => {
+      expect(compare('5.0.0-beta.2', '5.0.0')).toBeLessThan(0);
+    });
     it('returns null when unparseable', () => {
       expect(compare('not-a-version', 'also-not')).toBeNull();
     });
