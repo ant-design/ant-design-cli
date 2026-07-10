@@ -63,6 +63,8 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 2. **Nearest earlier minor** — if `"4.3"` is absent, find the largest available minor ≤ 4.3 (e.g. `"4.1"`) → load that snapshot
 3. **Fallback** — load `data/v4.json` (latest)
 
+Version ordering uses semver precedence, including prerelease identifiers. For example, `6.0.0-beta.1 < 6.0.0-beta.2 < 6.0.0`.
+
 ### Data Layer Notes
 
 - On load, component props are deduplicated by name (first entry wins).
