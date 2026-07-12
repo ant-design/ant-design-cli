@@ -51,7 +51,7 @@
     "cfonts": "^3.3.1",
     "fast-glob": "^3.3.3",
     "fast-levenshtein": "^3.0.0",
-    "oxc-parser": "^0.138.0",
+    "oxc-parser": "^0.139.0",
     "semver": "^7.8.0",
     "string-width": "^8.2.1"
   },
@@ -67,7 +67,7 @@
     "envinfo": "^7.21.0",
     "tsup": "^8.4.0",
     "tsx": "^4.19.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vitest": "^4.1.2",
     "yaml": "^2.9.0"
   }
