@@ -71,7 +71,7 @@ Version ordering uses semver precedence, including prerelease identifiers. For e
 - Historical component API data comes only from the selected snapshot and that snapshot's own documentation. Missing English or Chinese descriptions may fall back to the latest major snapshot, but props and sub-component props never do. Runtime documentation backfill works on a shallow copy of the stored component, so resolving one component does not mutate the cached snapshot.
 - The extraction script handles `\|` (escaped pipes in markdown table cells) by replacing them with a placeholder before splitting. This ensures multi-value union types like `` `primary` \| `dashed` \| `link` `` are stored correctly as `` `primary` | `dashed` | `link` `` instead of being split across wrong columns.
 - Each version file contains both `en` and `zh` descriptions, keyed by language
-- `semantic` data extracted from `components/*/demo/_semantic.tsx` files
+- `semantic` data extracted from `components/*/demo/_semantic.tsx` files, including dotted nested keys such as `popup.root` from quoted locale properties and bracket access (`locale['popup.root']`); escaped quotes and backslashes in localized descriptions are decoded from their source literals.
 - Changelog extraction recognizes Unicode emoji prefixes (including country flags); only indented change bullets inherit the preceding component group, while top-level bullets resolve their own component context.
 - Data is auto-extracted from antd source via `scripts/extract.ts`
 - `data/design-v{major}.md` (the design-language document served by `antd design.md`) is **not** extracted but **copied verbatim** from antd's repo-root `DESIGN.md` during sync, since it is hand-curated prose, not derivable data. It is major-grained, so `scripts/sync.ts` checks out each major's latest tag and copies the file to `data/design-v{major}.md` (only `design-v6.md` exists today; antd has not published `DESIGN.md` for v3/v4/v5). If the source `DESIGN.md` is absent for a major, the existing bundled copy is kept rather than deleted.
@@ -979,7 +979,7 @@ Extraction sources:
 | Props | `index.{en-US,zh-CN}.md` `## API` tables | Markdown table parsing |
 | Demos | `components/*/demo/*.tsx` + `*.md` | File read + bilingual md parsing |
 | Tokens | `components/version/token-meta.json` | Direct JSON read |
-| Semantic | `components/*/demo/_semantic.tsx` | Regex extraction of locales + semantics |
+| Semantic | `components/*/demo/_semantic.tsx` | Regex extraction of identifier or quoted/dotted locale keys and dot/bracket semantic references |
 | Changelog | `CHANGELOG.{en-US,zh-CN}.md` | Markdown heading, Unicode emoji, and indentation-aware component parsing |
 | FAQ | `index.{en-US,zh-CN}.md` `## FAQ` section | Markdown section extraction |
 
