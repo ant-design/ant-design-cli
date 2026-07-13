@@ -42,7 +42,6 @@ const EMOJI_MAP: Record<string, string> = {
 export interface PropDiff {
   name: string;
   type?: string;
-  replacement?: string;
   change?: string;
 }
 
@@ -65,7 +64,7 @@ export interface DiffResult {
   component?: string;
 }
 
-function diffProps(
+export function diffProps(
   oldProps: PropData[],
   newProps: PropData[],
 ): { added: PropDiff[]; removed: PropDiff[]; changed: PropDiff[] } {
@@ -89,10 +88,7 @@ function diffProps(
 
   for (const [name, prop] of oldMap) {
     if (!newMap.has(name)) {
-      const possibleRename = [...newMap.values()].find(
-        (p) => p.type === prop.type && !oldMap.has(p.name),
-      );
-      removed.push({ name, type: prop.type, replacement: possibleRename?.name });
+      removed.push({ name, type: prop.type });
     }
   }
 
@@ -285,10 +281,7 @@ function printApiDiff(result: DiffResult, format: string, lang: string = 'en'): 
   for (const diff of result.diffs) {
     console.log(`  ${diff.component}:`);
     for (const p of diff.added) console.log(`    + ${p.name}: ${p.type}`);
-    for (const p of diff.removed) {
-      const note = p.replacement ? ` (replaced by ${p.replacement})` : '';
-      console.log(`    - ${p.name}: ${p.type}${note}`);
-    }
+    for (const p of diff.removed) console.log(`    - ${p.name}: ${p.type}`);
     for (const p of diff.changed) console.log(`    ~ ${p.name}: ${p.change}`);
     console.log('');
   }

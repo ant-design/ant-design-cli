@@ -307,7 +307,7 @@ antd changelog 4.24.0 5.0.0 Select      # Select-specific changes
 
 Version range uses `<from>..<to>` syntax (inclusive on both ends). Both `from` and `to` must be full semver (e.g. `5.10.0`, not `5.10`). Single version returns only that exact version's entries.
 
-API diff mode (`changelog <v1> <v2>`) output includes: added props, removed props, changed types, renamed props. Cross-major-version diffing (e.g. v4 vs v5) is supported because the components schema is consistent across versions.
+API diff mode (`changelog <v1> <v2>`) output includes added props, removed props, and changed types. It does not infer renames solely from matching prop types. Cross-major-version diffing (e.g. v4 vs v5) is supported because the components schema is consistent across versions.
 
 ### Agent Integration
 
@@ -1075,10 +1075,8 @@ GitHub Releases are created only after npm publish succeeds, so public release n
     {"name": "popupClassName", "type": "string"}
   ],
   "removed": [
-    {"name": "dropdownClassName", "replacement": "popupClassName"}
+    {"name": "dropdownClassName", "type": "string"}
   ],
-  "changed": [
-    {"name": "dropdownMatchSelectWidth", "renamed": "popupMatchSelectWidth"}
-  ]
+  "changed": []
 }
 ```
