@@ -63,12 +63,15 @@ When `--version 4.3.5` is requested, `loadMetadataForVersion("4.3.5")` resolves 
 2. **Nearest earlier minor** — if `"4.3"` is absent, find the largest available minor ≤ 4.3 (e.g. `"4.1"`) → load that snapshot
 3. **Fallback** — load `data/v4.json` (latest)
 
+Version ordering uses semver precedence, including prerelease identifiers. For example, `6.0.0-beta.1 < 6.0.0-beta.2 < 6.0.0`.
+
 ### Data Layer Notes
 
 - On load, component props are deduplicated by name (first entry wins).
 - The extraction script handles `\|` (escaped pipes in markdown table cells) by replacing them with a placeholder before splitting. This ensures multi-value union types like `` `primary` \| `dashed` \| `link` `` are stored correctly as `` `primary` | `dashed` | `link` `` instead of being split across wrong columns.
 - Each version file contains both `en` and `zh` descriptions, keyed by language
 - `semantic` data extracted from `components/*/demo/_semantic.tsx` files, including dotted nested keys such as `popup.root` from quoted locale properties and bracket access (`locale['popup.root']`)
+- Changelog extraction recognizes Unicode emoji prefixes (including country flags); only indented change bullets inherit the preceding component group, while top-level bullets resolve their own component context.
 - Data is auto-extracted from antd source via `scripts/extract.ts`
 - `data/design-v{major}.md` (the design-language document served by `antd design.md`) is **not** extracted but **copied verbatim** from antd's repo-root `DESIGN.md` during sync, since it is hand-curated prose, not derivable data. It is major-grained, so `scripts/sync.ts` checks out each major's latest tag and copies the file to `data/design-v{major}.md` (only `design-v6.md` exists today; antd has not published `DESIGN.md` for v3/v4/v5). If the source `DESIGN.md` is absent for a major, the existing bundled copy is kept rather than deleted.
 - For v5+ design tokens, `scripts/sync.ts` fetches `token-meta.json` from the matching published `antd@{version}` tarball for each extracted tag and replaces any previous checkout copy before extraction, so token data cannot be reused across versions.
@@ -976,7 +979,7 @@ Extraction sources:
 | Demos | `components/*/demo/*.tsx` + `*.md` | File read + bilingual md parsing |
 | Tokens | `components/version/token-meta.json` | Direct JSON read |
 | Semantic | `components/*/demo/_semantic.tsx` | Regex extraction of identifier or quoted/dotted locale keys and dot/bracket semantic references |
-| Changelog | `CHANGELOG.{en-US,zh-CN}.md` | Markdown heading/emoji parsing |
+| Changelog | `CHANGELOG.{en-US,zh-CN}.md` | Markdown heading, Unicode emoji, and indentation-aware component parsing |
 | FAQ | `index.{en-US,zh-CN}.md` `## FAQ` section | Markdown section extraction |
 
 Extractors are organized as `scripts/extractors/*.ts` modules (components, props, demos, tokens, semantic, changelog, faq).

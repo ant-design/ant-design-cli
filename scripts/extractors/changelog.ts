@@ -4,7 +4,7 @@ import type { ChangelogEntry } from '../../src/types.js';
 
 /** Map emoji prefixes to change types */
 function classifyChange(line: string): ChangelogEntry['changes'][0]['type'] {
-  if (line.includes('🆕') || line.includes('🛠')) return 'feature';
+  if (line.includes('🆕') || line.includes('🛠') || line.includes('🔥')) return 'feature';
   if (line.includes('🐞')) return 'fix';
   if (line.includes('💄')) return 'style';
   if (line.includes('⚡️') || line.includes('🗑')) return 'deprecation';
@@ -24,7 +24,7 @@ function extractComponent(line: string): string {
 /** Clean a changelog line: remove emojis, PR links, contributor mentions */
 function cleanDescription(line: string): string {
   return line
-    .replace(/^-\s*/, '')
+    .replace(/^\s*-\s*/, '')
     .replace(/\[#\d+\]\([^)]+\)/g, '')
     .replace(/\[@?\w+\]\(https?:\/\/github\.com\/[^)]+\)/g, '')
     .replace(/@\w+/g, '')
@@ -71,11 +71,15 @@ function parseChangelog(content: string): ChangelogEntry[] {
     }
 
     // Change line with emoji
-    const changeMatch = line.match(/^\s*-\s+[🐞🆕💄⚡️🗑💥🌐🛠⌨️🤖♿️]/u);
+    const changeMatch = line.match(
+      /^(\s*)-\s+(?:\p{Extended_Pictographic}|\p{Regional_Indicator}{2})/u,
+    );
     if (changeMatch && currentVersion) {
+      const isIndented = changeMatch[1].length > 0;
+      if (!isIndented) currentComponent = '';
       const type = classifyChange(line);
       const desc = cleanDescription(line);
-      const component = currentComponent || extractComponent(line);
+      const component = isIndented && currentComponent ? currentComponent : extractComponent(line);
 
       if (desc) {
         currentChanges.push({ component, type, description: desc });
