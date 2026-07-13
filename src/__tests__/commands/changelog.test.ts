@@ -5,11 +5,21 @@ import { diffProps } from '../../commands/changelog.js';
 describe('changelog', () => {
   it('does not guess a rename from an unrelated prop with the same type', () => {
     const result = diffProps(
-      [{ name: 'autoFocus', type: 'boolean', default: '-' }],
-      [{ name: 'disabled', type: 'boolean', default: '-' }],
+      [
+        { name: 'autoFocus', type: 'boolean', default: '-' },
+        { name: 'value', type: 'string', default: '-' },
+      ],
+      [
+        { name: 'disabled', type: 'boolean', default: '-' },
+        { name: 'value', type: 'number', default: '-' },
+      ],
     );
 
-    expect(result.removed).toEqual([{ name: 'autoFocus', type: 'boolean' }]);
+    expect(result).toEqual({
+      added: [{ name: 'disabled', type: 'boolean' }],
+      removed: [{ name: 'autoFocus', type: 'boolean' }],
+      changed: [{ name: 'value', change: 'string → number' }],
+    });
   });
 
   it('should show changelog', async () => {
