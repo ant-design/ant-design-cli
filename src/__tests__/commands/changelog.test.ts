@@ -1,7 +1,27 @@
 import { describe, it, expect } from 'vitest';
 import { run, runCLI } from '../helper.js';
+import { diffProps } from '../../commands/changelog.js';
 
 describe('changelog', () => {
+  it('does not guess a rename from an unrelated prop with the same type', () => {
+    const result = diffProps(
+      [
+        { name: 'autoFocus', type: 'boolean', default: '-' },
+        { name: 'value', type: 'string', default: '-' },
+      ],
+      [
+        { name: 'disabled', type: 'boolean', default: '-' },
+        { name: 'value', type: 'number', default: '-' },
+      ],
+    );
+
+    expect(result).toEqual({
+      added: [{ name: 'disabled', type: 'boolean' }],
+      removed: [{ name: 'autoFocus', type: 'boolean' }],
+      changed: [{ name: 'value', change: 'string → number' }],
+    });
+  });
+
   it('should show changelog', async () => {
     const out = await run('changelog', '5.21.0');
     expect(out).toContain('5.21.0');

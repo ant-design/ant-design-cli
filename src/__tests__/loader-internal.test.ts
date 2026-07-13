@@ -317,7 +317,7 @@ describe('parsePropsFromDoc', () => {
 });
 
 describe('backfillFromMajor', () => {
-  it('copies props and subComponentProps from major version', () => {
+  it('backfills descriptions without copying major-version API data', () => {
     const comp: ComponentData = { name: 'TestComp', category: 'test', description: '', props: [] };
     const majorStore: MetadataStore = {
       version: '5', majorVersion: 'v5',
@@ -329,16 +329,10 @@ describe('backfillFromMajor', () => {
     };
 
     backfillFromMajor(comp, majorStore);
-    expect(comp.props.length).toBe(1);
-    expect(comp.props[0].name).toBe('alpha');
+    expect(comp.props).toEqual([]);
+    expect(comp.subComponentProps).toBeUndefined();
     expect(comp.description).toBe('Test');
     expect(comp.descriptionZh).toBe('测试');
-    expect(comp.subComponentProps).toBeDefined();
-    expect('TestComp.Sub' in comp.subComponentProps!).toBe(true);
-    // Shallow copy: arrays are independent
-    expect(comp.subComponentProps!['TestComp.Sub']).not.toBe(
-      majorStore.components[0].subComponentProps!['TestComp.Sub'],
-    );
   });
 
   it('does not overwrite existing props', () => {

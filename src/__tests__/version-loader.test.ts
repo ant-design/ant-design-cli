@@ -243,6 +243,19 @@ describe('data/loader', () => {
     expect(a).toBe(b);
   });
 
+  it('evicts the oldest metadata cache entry after 32 unique versions', () => {
+    const versions = Array.from({ length: 33 }, (_, index) => `98.${1000 + index}.0`);
+    const oldest = loadMetadataForVersion(versions[0]);
+
+    for (const version of versions.slice(1, 32)) {
+      loadMetadataForVersion(version);
+    }
+    expect(loadMetadataForVersion(versions[0])).toBe(oldest);
+
+    loadMetadataForVersion(versions[32]);
+    expect(loadMetadataForVersion(versions[0])).not.toBe(oldest);
+  });
+
   it('findComponent is case-insensitive', () => {
     const store = loadMetadata('v5');
     expect(findComponent(store, 'BUTTON')?.name).toBe('Button');
@@ -323,8 +336,8 @@ describe('data/loader', () => {
     }
   });
 
-  it('resolveComponent backfills props from major version when doc has no API section', () => {
-    // Some components may have empty props and no ## API in doc — fall back to major
+  it('resolveComponent parses Popover props from its historical doc', () => {
+    // Popover has empty extracted props in this snapshot, but its own doc has an API table
     const result = resolveComponent('Popover', '5.0.0');
     expect('error' in result).toBe(false);
     if (!('error' in result)) {
@@ -343,18 +356,18 @@ describe('data/loader', () => {
     }
   });
 
-  it('backfillFromMajor uses shallow copy to avoid shared references', () => {
-    // Popconfirm in snapshot has empty props — backfilled from major should not share array
-    const result = resolveComponent('Popconfirm', '5.0.0');
+  it('resolveComponent does not mutate the cached historical snapshot', () => {
+    const version = '5.0.0-cache-integrity';
+    const store = loadMetadataForVersion(version);
+    const cachedComp = findComponent(store, 'Popconfirm')!;
+    expect(cachedComp.props).toEqual([]);
+
+    const result = resolveComponent('Popconfirm', version);
     expect('error' in result).toBe(false);
     if (!('error' in result)) {
-      const props1 = result.comp.props;
-      // Resolving same component from major version should return different array
-      const major = resolveComponent('Popconfirm', '5');
-      if (!('error' in major)) {
-        // If both routes return data, arrays should be independent
-        expect(props1).not.toBe(major.comp.props);
-      }
+      expect(result.comp).not.toBe(cachedComp);
+      expect(result.comp.props.some((prop) => prop.name === 'title')).toBe(true);
+      expect(cachedComp.props).toEqual([]);
     }
   });
 

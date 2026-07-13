@@ -68,13 +68,15 @@ Version ordering uses semver precedence, including prerelease identifiers. For e
 ### Data Layer Notes
 
 - On load, component props are deduplicated by name (first entry wins).
+- Historical metadata is cached for up to 32 requested version keys per process; inserting another version evicts the oldest cached entry.
+- Historical component API data comes only from the selected snapshot and that snapshot's own documentation. Missing English or Chinese descriptions may fall back to the latest major snapshot, but props and sub-component props never do. Runtime documentation backfill works on a shallow copy of the stored component, so resolving one component does not mutate the cached snapshot.
 - The extraction script handles `\|` (escaped pipes in markdown table cells) by replacing them with a placeholder before splitting. This ensures multi-value union types like `` `primary` \| `dashed` \| `link` `` are stored correctly as `` `primary` | `dashed` | `link` `` instead of being split across wrong columns.
 - Each version file contains both `en` and `zh` descriptions, keyed by language
-- `semantic` data extracted from `components/*/demo/_semantic.tsx` files
+- `semantic` data extracted from `components/*/demo/_semantic.tsx` files, including dotted nested keys such as `popup.root` from quoted locale properties and bracket access (`locale['popup.root']`); escaped quotes and backslashes in localized descriptions are decoded from their source literals.
 - Changelog extraction recognizes Unicode emoji prefixes (including country flags); only indented change bullets inherit the preceding component group. A top-level bullet is assigned to a component only when its verb-adjacent candidate matches a real public component directory; internal, overview, and infrastructure folders such as `style`, `locale`, `theme`, and `version` are excluded. Prose such as “Add the…” otherwise remains under `General`.
 - Data is auto-extracted from antd source via `scripts/extract.ts`
 - `data/design-v{major}.md` (the design-language document served by `antd design.md`) is **not** extracted but **copied verbatim** from antd's repo-root `DESIGN.md` during sync, since it is hand-curated prose, not derivable data. It is major-grained, so `scripts/sync.ts` checks out each major's latest tag and copies the file to `data/design-v{major}.md` (only `design-v6.md` exists today; antd has not published `DESIGN.md` for v3/v4/v5). If the source `DESIGN.md` is absent for a major, the existing bundled copy is kept rather than deleted.
-- For v5+ design tokens, `scripts/sync.ts` fetches `token-meta.json` from the matching published `antd@{version}` tarball for each extracted tag and replaces any previous checkout copy before extraction, so token data cannot be reused across versions.
+- For v5+ design tokens, `scripts/sync.ts` fetches `token-meta.json` from the matching published `antd@{version}` tarball for each extracted tag and replaces any previous checkout copy before extraction, so token data cannot be reused across versions. Release values are passed as isolated process arguments rather than shell text; on Windows, npm is invoked through Node's `npm-cli.js` instead of the non-executable `npm.cmd` shim.
 - A GitHub Actions workflow (`sync.yml`) runs hourly: for each major version it extracts the latest snapshot and any new minor-series snapshots, then updates `versions.json`
 - Sync fails closed if release tags cannot be fetched for any configured major line, instead of publishing partially refreshed data.
 - Stale snapshots (files not referenced by `versions.json`) are cleaned up automatically: when a new patch replaces an old one for the same minor series, the old file is removed inline; a final sweep after sync removes any orphaned snapshot files. `versions.json` is the source of truth — the cleanup scope derives from its contents, not from a hardcoded major-version list
@@ -306,7 +308,7 @@ antd changelog 4.24.0 5.0.0 Select      # Select-specific changes
 
 Version range uses `<from>..<to>` syntax (inclusive on both ends). Both `from` and `to` must be full semver (e.g. `5.10.0`, not `5.10`). Single version returns only that exact version's entries.
 
-API diff mode (`changelog <v1> <v2>`) output includes: added props, removed props, changed types, renamed props. Cross-major-version diffing (e.g. v4 vs v5) is supported because the components schema is consistent across versions.
+API diff mode (`changelog <v1> <v2>`) output includes added props, removed props, and changed types. It does not infer renames solely from matching prop types. Cross-major-version diffing (e.g. v4 vs v5) is supported because the components schema is consistent across versions.
 
 ### Agent Integration
 
@@ -978,7 +980,7 @@ Extraction sources:
 | Props | `index.{en-US,zh-CN}.md` `## API` tables | Markdown table parsing |
 | Demos | `components/*/demo/*.tsx` + `*.md` | File read + bilingual md parsing |
 | Tokens | `components/version/token-meta.json` | Direct JSON read |
-| Semantic | `components/*/demo/_semantic.tsx` | Regex extraction of locales + semantics |
+| Semantic | `components/*/demo/_semantic.tsx` | Regex extraction of identifier or quoted/dotted locale keys and dot/bracket semantic references |
 | Changelog | `CHANGELOG.{en-US,zh-CN}.md` | Markdown heading, Unicode emoji, and indentation-aware component parsing |
 | FAQ | `index.{en-US,zh-CN}.md` `## FAQ` section | Markdown section extraction |
 
@@ -1074,10 +1076,8 @@ GitHub Releases are created only after npm publish succeeds, so public release n
     {"name": "popupClassName", "type": "string"}
   ],
   "removed": [
-    {"name": "dropdownClassName", "replacement": "popupClassName"}
+    {"name": "dropdownClassName", "type": "string"}
   ],
-  "changed": [
-    {"name": "dropdownMatchSelectWidth", "renamed": "popupMatchSelectWidth"}
-  ]
+  "changed": []
 }
 ```

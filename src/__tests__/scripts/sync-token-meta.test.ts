@@ -10,10 +10,15 @@ const execSyncMock = vi.fn((cmd: string, options?: { cwd?: string }) => {
   return '';
 });
 
-const execFileSyncMock = vi.fn((_cmd: string, _args: string[], options?: { cwd?: string }) => {
-  const tokenPath = join(options!.cwd!, 'package', 'es', 'version', 'token-meta.json');
-  mkdirSync(join(options!.cwd!, 'package', 'es', 'version'), { recursive: true });
-  writeFileSync(tokenPath, '{"version":"fresh"}');
+const execFileSyncMock = vi.fn((cmd: string, args: string[], options?: { cwd?: string }) => {
+  if (cmd === 'npm' && args[0] === 'pack') {
+    writeFileSync(join(options!.cwd!, 'antd-package.tgz'), '');
+  }
+  if (cmd === 'tar') {
+    const tokenPath = join(options!.cwd!, 'package', 'es', 'version', 'token-meta.json');
+    mkdirSync(join(options!.cwd!, 'package', 'es', 'version'), { recursive: true });
+    writeFileSync(tokenPath, '{"version":"fresh"}');
+  }
 });
 
 vi.mock('node:child_process', () => ({
@@ -41,5 +46,27 @@ describe('sync token metadata', () => {
     fetchTokenMeta(workdir, '6.4.4');
 
     expect(readFileSync(join(workdir, 'components', 'version', 'token-meta.json'), 'utf8')).toBe('{"version":"fresh"}');
+  });
+
+  it('passes the package spec as a single argv entry', async () => {
+    const { fetchTokenMeta } = await import('../../../scripts/sync.js');
+    const tag = '6.5.0; touch /tmp/antd-cli-pwned';
+
+    fetchTokenMeta(workdir, tag);
+
+    expect(execFileSyncMock).toHaveBeenCalledWith(
+      'npm',
+      ['pack', `antd@${tag}`, '--quiet'],
+      expect.objectContaining({ cwd: expect.any(String) }),
+    );
+  });
+
+  it('runs npm through Node on Windows instead of executing the npm.cmd shim', async () => {
+    const { getNpmInvocation } = await import('../../../scripts/sync.js');
+
+    expect(getNpmInvocation('win32', 'C:\\Program Files\\nodejs\\node.exe', '')).toEqual({
+      command: 'C:\\Program Files\\nodejs\\node.exe',
+      args: ['C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js'],
+    });
   });
 });
