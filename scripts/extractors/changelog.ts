@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { ChangelogEntry } from '../../src/types.js';
 
-const NON_COMPONENT_DIRS = new Set(['locale', 'style', 'theme', 'version']);
+const NON_COMPONENT_DIRS = new Set(['locale', 'overview', 'style', 'theme', 'version']);
 
 /** Map emoji prefixes to change types */
 function classifyChange(line: string): ChangelogEntry['changes'][0]['type'] {
