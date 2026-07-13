@@ -68,6 +68,7 @@ Version ordering uses semver precedence, including prerelease identifiers. For e
 ### Data Layer Notes
 
 - On load, component props are deduplicated by name (first entry wins).
+- Historical component API data comes only from the selected snapshot and that snapshot's own documentation. Missing English or Chinese descriptions may fall back to the latest major snapshot, but props and sub-component props never do. Runtime documentation backfill works on a shallow copy of the stored component, so resolving one component does not mutate the cached snapshot.
 - The extraction script handles `\|` (escaped pipes in markdown table cells) by replacing them with a placeholder before splitting. This ensures multi-value union types like `` `primary` \| `dashed` \| `link` `` are stored correctly as `` `primary` | `dashed` | `link` `` instead of being split across wrong columns.
 - Each version file contains both `en` and `zh` descriptions, keyed by language
 - `semantic` data extracted from `components/*/demo/_semantic.tsx` files

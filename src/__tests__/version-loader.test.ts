@@ -323,8 +323,8 @@ describe('data/loader', () => {
     }
   });
 
-  it('resolveComponent backfills props from major version when doc has no API section', () => {
-    // Some components may have empty props and no ## API in doc — fall back to major
+  it('resolveComponent parses Popover props from its historical doc', () => {
+    // Popover has empty extracted props in this snapshot, but its own doc has an API table
     const result = resolveComponent('Popover', '5.0.0');
     expect('error' in result).toBe(false);
     if (!('error' in result)) {
@@ -343,18 +343,18 @@ describe('data/loader', () => {
     }
   });
 
-  it('backfillFromMajor uses shallow copy to avoid shared references', () => {
-    // Popconfirm in snapshot has empty props — backfilled from major should not share array
-    const result = resolveComponent('Popconfirm', '5.0.0');
+  it('resolveComponent does not mutate the cached historical snapshot', () => {
+    const version = '5.0.0-cache-integrity';
+    const store = loadMetadataForVersion(version);
+    const cachedComp = findComponent(store, 'Popconfirm')!;
+    expect(cachedComp.props).toEqual([]);
+
+    const result = resolveComponent('Popconfirm', version);
     expect('error' in result).toBe(false);
     if (!('error' in result)) {
-      const props1 = result.comp.props;
-      // Resolving same component from major version should return different array
-      const major = resolveComponent('Popconfirm', '5');
-      if (!('error' in major)) {
-        // If both routes return data, arrays should be independent
-        expect(props1).not.toBe(major.comp.props);
-      }
+      expect(result.comp).not.toBe(cachedComp);
+      expect(result.comp.props.some((prop) => prop.name === 'title')).toBe(true);
+      expect(cachedComp.props).toEqual([]);
     }
   });
 
