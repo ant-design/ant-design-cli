@@ -2,6 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { SemanticKey } from '../../src/types.js';
 
+function unescapeQuoted(value: string): string {
+  return value.replace(/\\([\\'"`])/g, '$1');
+}
+
 /** Extract semantic keys from _semantic.tsx file using regex */
 export function extractSemantic(antdDir: string, dirName: string): SemanticKey[] {
   const semanticPath = path.join(antdDir, 'components', dirName, 'demo', '_semantic.tsx');
@@ -20,20 +24,20 @@ export function extractSemantic(antdDir: string, dirName: string): SemanticKey[]
     const enBlock = localesBlock.match(/en:\s*\{([\s\S]*?)\}/);
     if (enBlock) {
       const entries = enBlock[1].matchAll(
-        /(?:([A-Za-z_$][\w$]*)|(['"`])([^'"`]+)\2)\s*:\s*(['"`])([\s\S]*?)\4/g,
+        /(?:([A-Za-z_$][\w$]*)|(['"`])((?:\\.|(?!\2)[^\\])*)\2)\s*:\s*(['"`])((?:\\.|(?!\4)[^\\])*)\4/g,
       );
       for (const entry of entries) {
-        enDescs.set(entry[1] ?? entry[3], entry[5]);
+        enDescs.set(unescapeQuoted(entry[1] ?? entry[3]), unescapeQuoted(entry[5]));
       }
     }
     // Parse cn/zh block
     const zhBlock = localesBlock.match(/cn:\s*\{([\s\S]*?)\}/);
     if (zhBlock) {
       const entries = zhBlock[1].matchAll(
-        /(?:([A-Za-z_$][\w$]*)|(['"`])([^'"`]+)\2)\s*:\s*(['"`])([\s\S]*?)\4/g,
+        /(?:([A-Za-z_$][\w$]*)|(['"`])((?:\\.|(?!\2)[^\\])*)\2)\s*:\s*(['"`])((?:\\.|(?!\4)[^\\])*)\4/g,
       );
       for (const entry of entries) {
-        zhDescs.set(entry[1] ?? entry[3], entry[5]);
+        zhDescs.set(unescapeQuoted(entry[1] ?? entry[3]), unescapeQuoted(entry[5]));
       }
     }
   }
