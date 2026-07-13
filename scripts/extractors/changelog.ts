@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { ChangelogEntry } from '../../src/types.js';
 
+const NON_COMPONENT_DIRS = new Set(['locale', 'style', 'theme', 'version']);
+
 /** Map emoji prefixes to change types */
 function classifyChange(line: string): ChangelogEntry['changes'][0]['type'] {
   if (line.includes('🆕') || line.includes('🛠') || line.includes('🔥')) return 'feature';
@@ -115,7 +117,12 @@ export function extractChangelog(antdDir: string): ChangelogEntry[] {
   const componentNames = new Set(
     fs.existsSync(componentsDir)
       ? fs.readdirSync(componentsDir, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory())
+        .filter((entry) => (
+          entry.isDirectory()
+          && !entry.name.startsWith('_')
+          && !entry.name.startsWith('.')
+          && !NON_COMPONENT_DIRS.has(entry.name)
+        ))
         .map((entry) => normalizeComponentName(entry.name))
       : [],
   );

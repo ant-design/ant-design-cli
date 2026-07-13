@@ -10,6 +10,7 @@ describe('extractChangelog', () => {
 
     try {
       mkdirSync(path.join(antdDir, 'components', 'alert'), { recursive: true });
+      mkdirSync(path.join(antdDir, 'components', 'style'), { recursive: true });
       writeFileSync(
         path.join(antdDir, 'CHANGELOG.en-US.md'),
         `## 6.5.0
@@ -22,6 +23,7 @@ describe('extractChangelog', () => {
 - 🔥 Add the antd DESIGN.md document
 - 📖 Update Ant Design CLI docs
 - 🐞 Fix disabled FloatButton.Group style
+- 🐞 Fix style of Button
 - Button
   - 🐞 Fix focus handling
   - 🆕 Add loading state
@@ -41,6 +43,7 @@ describe('extractChangelog', () => {
             { component: 'General', type: 'feature', description: '🔥 Add the antd DESIGN.md document' },
             { component: 'General', type: 'other', description: '📖 Update Ant Design CLI docs' },
             { component: 'General', type: 'fix', description: '🐞 Fix disabled FloatButton.Group style' },
+            { component: 'General', type: 'fix', description: '🐞 Fix style of Button' },
             { component: 'Button', type: 'fix', description: '🐞 Fix focus handling' },
             { component: 'Button', type: 'feature', description: '🆕 Add loading state' },
             { component: 'Alert', type: 'feature', description: '🔥 Add Alert hot-path support' },
