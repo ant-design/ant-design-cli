@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -9,6 +9,9 @@ describe('extractChangelog', () => {
     const antdDir = mkdtempSync(path.join(tmpdir(), 'antd-cli-changelog-'));
 
     try {
+      mkdirSync(path.join(antdDir, 'components', 'alert'), { recursive: true });
+      mkdirSync(path.join(antdDir, 'components', 'style'), { recursive: true });
+      mkdirSync(path.join(antdDir, 'components', 'overview'), { recursive: true });
       writeFileSync(
         path.join(antdDir, 'CHANGELOG.en-US.md'),
         `## 6.5.0
@@ -18,6 +21,11 @@ describe('extractChangelog', () => {
 - 📖 Documentation refresh
 - ⌨️ Keyboard navigation improvements
 - 🇳🇴 Norwegian locale update
+- 🔥 Add the antd DESIGN.md document
+- 📖 Update Ant Design CLI docs
+- 🐞 Fix disabled FloatButton.Group style
+- 🐞 Fix style of Button
+- 📖 Update Overview documentation
 - Button
   - 🐞 Fix focus handling
   - 🆕 Add loading state
@@ -34,6 +42,11 @@ describe('extractChangelog', () => {
             { component: 'General', type: 'other', description: '📖 Documentation refresh' },
             { component: 'General', type: 'other', description: '⌨️ Keyboard navigation improvements' },
             { component: 'General', type: 'other', description: '🇳🇴 Norwegian locale update' },
+            { component: 'General', type: 'feature', description: '🔥 Add the antd DESIGN.md document' },
+            { component: 'General', type: 'other', description: '📖 Update Ant Design CLI docs' },
+            { component: 'General', type: 'fix', description: '🐞 Fix disabled FloatButton.Group style' },
+            { component: 'General', type: 'fix', description: '🐞 Fix style of Button' },
+            { component: 'General', type: 'other', description: '📖 Update Overview documentation' },
             { component: 'Button', type: 'fix', description: '🐞 Fix focus handling' },
             { component: 'Button', type: 'feature', description: '🆕 Add loading state' },
             { component: 'Alert', type: 'feature', description: '🔥 Add Alert hot-path support' },

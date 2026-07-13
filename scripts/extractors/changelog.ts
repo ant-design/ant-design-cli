@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { ChangelogEntry } from '../../src/types.js';
 
+const NON_COMPONENT_DIRS = new Set(['locale', 'overview', 'style', 'theme', 'version']);
+
 /** Map emoji prefixes to change types */
 function classifyChange(line: string): ChangelogEntry['changes'][0]['type'] {
   if (line.includes('🆕') || line.includes('🛠') || line.includes('🔥')) return 'feature';
@@ -12,12 +14,16 @@ function classifyChange(line: string): ChangelogEntry['changes'][0]['type'] {
   return 'other';
 }
 
-/** Extract component name from a changelog line */
-function extractComponent(line: string): string {
+function normalizeComponentName(name: string): string {
+  return name.split('.')[0].replace(/[^A-Za-z0-9]/g, '').toLowerCase();
+}
+
+/** Extract a component name only when it matches a real component directory. */
+function extractComponent(line: string, componentNames: Set<string>): string {
   // Lines like "- 🐞 Fix Button xxx" → "Button"
   // Lines under a component heading like "- Button\n  - 🐞 Fix xxx" are handled by context
   const match = line.match(/(?:Fix|Improve|Add|Update|Refactor|Revert|Support)\s+(\w+[\w.]*)/i);
-  if (match) return match[1];
+  if (match && componentNames.has(normalizeComponentName(match[1]))) return match[1];
   return 'General';
 }
 
@@ -33,7 +39,7 @@ function cleanDescription(line: string): string {
 }
 
 /** Parse a changelog markdown file into ChangelogEntry[] */
-function parseChangelog(content: string): ChangelogEntry[] {
+function parseChangelog(content: string, componentNames: Set<string>): ChangelogEntry[] {
   const entries: ChangelogEntry[] = [];
   const lines = content.split('\n');
 
@@ -79,7 +85,7 @@ function parseChangelog(content: string): ChangelogEntry[] {
       if (!isIndented) currentComponent = '';
       const type = classifyChange(line);
       const desc = cleanDescription(line);
-      const component = isIndented && currentComponent ? currentComponent : extractComponent(line);
+      const component = isIndented && currentComponent ? currentComponent : extractComponent(line, componentNames);
 
       if (desc) {
         currentChanges.push({ component, type, description: desc });
@@ -107,5 +113,18 @@ export function extractChangelog(antdDir: string): ChangelogEntry[] {
   if (!fs.existsSync(enPath)) return [];
 
   const enContent = fs.readFileSync(enPath, 'utf-8');
-  return parseChangelog(enContent);
+  const componentsDir = path.join(antdDir, 'components');
+  const componentNames = new Set(
+    fs.existsSync(componentsDir)
+      ? fs.readdirSync(componentsDir, { withFileTypes: true })
+        .filter((entry) => (
+          entry.isDirectory()
+          && !entry.name.startsWith('_')
+          && !entry.name.startsWith('.')
+          && !NON_COMPONENT_DIRS.has(entry.name)
+        ))
+        .map((entry) => normalizeComponentName(entry.name))
+      : [],
+  );
+  return parseChangelog(enContent, componentNames);
 }
