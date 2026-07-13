@@ -32,6 +32,21 @@ const BUG_VERSIONS_SOURCE = 'BUG_VERSIONS.json';
 const designTarget = (major: number) => path.join(DATA_DIR, `design-v${major}.md`);
 const bugVersionsTarget = () => path.join(DATA_DIR, 'bug-versions.json');
 
+export function getNpmInvocation(
+  platform = process.platform,
+  nodeExecutable = process.execPath,
+  npmExecPath = process.env.npm_execpath,
+): { command: string; args: string[] } {
+  if (platform !== 'win32') {
+    return { command: 'npm', args: [] };
+  }
+
+  const npmCli = npmExecPath && !npmExecPath.toLowerCase().endsWith('.cmd')
+    ? npmExecPath
+    : path.win32.join(path.win32.dirname(nodeExecutable), 'node_modules', 'npm', 'bin', 'npm-cli.js');
+  return { command: nodeExecutable, args: [npmCli] };
+}
+
 function parseArgs(args: string[]): { antdDir: string } {
   let antdDir = '';
   for (let i = 0; i < args.length; i++) {
@@ -169,7 +184,8 @@ export function fetchTokenMeta(antdDir: string, tag: string) {
   try {
     fs.mkdirSync(tmpDir, { recursive: true });
     console.log(`  Fetching token-meta.json from antd@${tag}...`);
-    execFileSync('npm', ['pack', `antd@${tag}`, '--quiet'], { cwd: tmpDir, stdio: 'pipe' });
+    const npm = getNpmInvocation();
+    execFileSync(npm.command, [...npm.args, 'pack', `antd@${tag}`, '--quiet'], { cwd: tmpDir, stdio: 'pipe' });
     const tarball = fs.readdirSync(tmpDir).find((f) => f.endsWith('.tgz'));
     if (!tarball) throw new Error('tarball not found');
     // Try package/es/version/ (v5+) first, then package/lib/version/ (v4)

@@ -60,4 +60,13 @@ describe('sync token metadata', () => {
       expect.objectContaining({ cwd: expect.any(String) }),
     );
   });
+
+  it('runs npm through Node on Windows instead of executing the npm.cmd shim', async () => {
+    const { getNpmInvocation } = await import('../../../scripts/sync.js');
+
+    expect(getNpmInvocation('win32', 'C:\\Program Files\\nodejs\\node.exe', '')).toEqual({
+      command: 'C:\\Program Files\\nodejs\\node.exe',
+      args: ['C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js'],
+    });
+  });
 });
