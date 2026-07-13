@@ -416,12 +416,8 @@ export function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; sub
 }
 
 /**
- * Backfill a component's empty fields from the major-version data.
- * Called only when doc-based backfill was insufficient.
- *
- * ⚠️ Mutates `comp` in place — the component object comes from metadataCache,
- * so this intentionally updates cached data. The mutation is idempotent
- * (only fills empty props/description/subComponentProps).
+ * Backfill a component's missing descriptions from the major-version data.
+ * Historical API data must come only from the requested snapshot's own docs.
  *
  * Exported for testing. Not part of the public CLI API.
  */
@@ -429,18 +425,7 @@ export function backfillFromMajor(comp: ComponentData, majorStore: MetadataStore
   const majorComp = findComponent(majorStore, comp.name);
   if (!majorComp) return;
 
-  // 1. If still empty after doc parsing, fall back to major version props
-  if (comp.props.length === 0 && majorComp.props.length > 0) {
-    comp.props = [...majorComp.props];
-    if (!comp.subComponentProps && majorComp.subComponentProps) {
-      comp.subComponentProps = { ...majorComp.subComponentProps };
-      for (const key of Object.keys(comp.subComponentProps)) {
-        comp.subComponentProps[key] = [...majorComp.subComponentProps[key]];
-      }
-    }
-  }
-
-  // 2. Backfill descriptions independently (en may exist without zh)
+  // Backfill descriptions independently (en may exist without zh)
   if (!comp.description && majorComp.description) {
     comp.description = majorComp.description;
   }
@@ -458,8 +443,8 @@ export function resolveComponent(
   version: string,
 ): { store: MetadataStore; comp: ComponentData } | CLIError {
   const store = loadMetadataForVersion(version);
-  const comp = findComponent(store, component);
-  if (!comp) {
+  const storedComp = findComponent(store, component);
+  if (!storedComp) {
     const names = getAllComponentNames(store);
     const suggestion = fuzzyMatch(component, names);
     return createError(
@@ -468,6 +453,7 @@ export function resolveComponent(
       suggestion ? `Did you mean '${suggestion}'?` : undefined,
     );
   }
+  const comp = { ...storedComp };
 
   // Backfill empty fields from doc and/or major version data
   const majorVersion = `v${version.split('.')[0]}`;
@@ -483,8 +469,8 @@ export function resolveComponent(
     }
   }
 
-  // 2. Only load major store if props or localized descriptions are still missing
-  const needsMajorBackfill = comp.props.length === 0 || !comp.description || !comp.descriptionZh;
+  // 2. Only descriptions may fall back to the major snapshot
+  const needsMajorBackfill = !comp.description || !comp.descriptionZh;
   if (needsMajorBackfill) {
     const majorStore = loadMetadata(majorVersion);
     backfillFromMajor(comp, majorStore);
