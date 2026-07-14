@@ -2,10 +2,36 @@
 
 ## [6.5.1](https://github.com/ant-design/ant-design-cli/compare/v6.5.0...v6.5.1) (2026-07-13)
 
+### 新功能
+
+- 为根帮助信息新增品牌化 Banner ([#184](https://github.com/ant-design/ant-design-cli/pull/184))
+- 新增 `antd lint --diff [base]` 和 `--staged`，报告跳过的文件，并覆盖 Ant Design v5 使用规则 ([#188](https://github.com/ant-design/ant-design-cli/pull/188), [#189](https://github.com/ant-design/ant-design-cli/pull/189), [#192](https://github.com/ant-design/ant-design-cli/pull/192))
+- 扩展 `antd setup`，支持配置 GitHub Actions CI ([#190](https://github.com/ant-design/ant-design-cli/pull/190))
+
+### Bug 修复
+
+- lint 性能规则不再误报非 JavaScript 资源导入 ([#186](https://github.com/ant-design/ant-design-cli/pull/186))
+- 保留历史元数据、点号语义键和预发布版本顺序，并限制元数据缓存大小 ([#194](https://github.com/ant-design/ant-design-cli/pull/194), [#195](https://github.com/ant-design/ant-design-cli/pull/195), [#198](https://github.com/ant-design/ant-design-cli/pull/198), [#199](https://github.com/ant-design/ant-design-cli/pull/199))
+- 改进 changelog 提取，保留 emoji 与归属关系，不再猜测属性重命名，并校验推断出的组件名 ([#196](https://github.com/ant-design/ant-design-cli/pull/196), [#197](https://github.com/ant-design/ant-design-cli/pull/197), [#201](https://github.com/ant-design/ant-design-cli/pull/201))
+
+### 安全
+
+- 防止发布 tag 处理中的 shell 注入，同时保持同步命令在 Windows 上可用 ([#193](https://github.com/ant-design/ant-design-cli/pull/193))
+
+### 其他变更
+
+- GitHub 评论权限不可用时，包体积报告流程仍可继续 ([#187](https://github.com/ant-design/ant-design-cli/pull/187))
+- 升级依赖 ([#183](https://github.com/ant-design/ant-design-cli/pull/183), [#191](https://github.com/ant-design/ant-design-cli/pull/191))
 - 同步 antd 元数据 ([v6@6.5.1](https://github.com/ant-design/ant-design-cli/compare/v6.5.0...v6.5.1#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
 
 ## [6.5.0](https://github.com/ant-design/ant-design-cli/compare/v6.4.5...v6.5.0) (2026-06-27)
+
+### 文档
+
+- 补充 v6.4.5 发布说明 ([#181](https://github.com/ant-design/ant-design-cli/pull/181))
+
+### 其他变更
 
 - 同步 antd 元数据 ([v6@6.5.0](https://github.com/ant-design/ant-design-cli/compare/v6.4.5...v6.5.0#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
