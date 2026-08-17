@@ -58,8 +58,20 @@ Commands:
   mcp                              Start MCP server for AI assistant integration
   setup [options]                  Set up Ant Design MCP/Skill for AI agents or
                                    GitHub Actions
-  upgrade                          Upgrade the CLI to the latest version
+  upgrade [options]                Upgrade the CLI to the latest version
   bug [options]                    Report a bug to the antd repository
   bug-cli [options]                Report a bug to the ant-design-cli repository
   help [command]                   display help for command"
+`;
+
+exports[`help > upgrade --help 1`] = `
+"Usage: antd upgrade [options]
+
+Upgrade the CLI to the latest version
+
+Options:
+  --package-manager <manager>  Package manager to use and remember for future
+                               upgrades (choices: "npm", "yarn", "pnpm", "bun",
+                               "cnpm", "utoo")
+  -h, --help                   display help for command"
 `;

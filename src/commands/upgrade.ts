@@ -1,12 +1,19 @@
-import type { Command } from 'commander';
+import { Option, type Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { localize } from '../types.js';
 import { execFile, spawn } from 'node:child_process';
 import { compare, valid } from '../data/version.js';
 import { output } from '../output/formatter.js';
 import { createError, printError, ErrorCodes } from '../output/error.js';
-import { detectPackageManager, UPGRADE_COMMANDS } from '../utils/detect-pm.js';
+import {
+  detectPackageManager,
+  isPackageManager,
+  PACKAGE_MANAGERS,
+  UPGRADE_COMMANDS,
+  type PackageManager,
+} from '../utils/detect-pm.js';
 import { fetchLatestVersion } from '../utils/update-check.js';
+import { configStore } from '../utils/store.js';
 
 declare const __CLI_VERSION__: string;
 
@@ -22,6 +29,10 @@ interface UpgradeSuccessResult {
 }
 
 type UpgradeResult = AlreadyUpToDateResult | UpgradeSuccessResult;
+
+interface UpgradeCommandOptions {
+  packageManager?: PackageManager;
+}
 
 function formatUpgradeMarkdown(data: UpgradeResult, lang: string): string {
   const lines = [`## ${localize('Upgrade', '升级', lang)}`, ''];
@@ -64,9 +75,16 @@ export function registerUpgradeCommand(program: Command): void {
   program
     .command('upgrade')
     .description('Upgrade the CLI to the latest version')
-    .action(async () => {
+    .addOption(
+      new Option('--package-manager <manager>', 'Package manager to use and remember for future upgrades')
+        .choices(PACKAGE_MANAGERS),
+    )
+    .action(async (cmdOpts: UpgradeCommandOptions) => {
       const opts = program.opts<GlobalOptions>();
       const currentVersion = __CLI_VERSION__;
+      if (cmdOpts.packageManager) {
+        configStore.set('packageManager', cmdOpts.packageManager);
+      }
 
       // Step 1: Fetch latest version
       let latestVersion: string | null;
@@ -129,7 +147,9 @@ export function registerUpgradeCommand(program: Command): void {
       }
 
       // Step 3: Detect package manager
-      const pm = detectPackageManager();
+      const savedPackageManager: unknown = configStore.get('packageManager');
+      const pm = cmdOpts.packageManager
+        ?? (isPackageManager(savedPackageManager) ? savedPackageManager : detectPackageManager());
       if (!pm) {
         const err = createError(
           ErrorCodes.PM_NOT_FOUND,

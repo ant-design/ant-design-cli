@@ -1,5 +1,6 @@
 import Conf, { type Options } from 'conf';
 import envPaths from 'env-paths';
+import type { PackageManager } from './detect-pm.js';
 
 const paths = envPaths('antd-cli');
 
@@ -12,7 +13,7 @@ const sharedConfig: Options<any> = {
 // 1. User config store (stored in config dir)
 // ==========================================
 export interface AppConfig {
-  // Add other user preferences here
+  packageManager?: PackageManager;
 }
 
 export const configStore = new Conf<AppConfig>({

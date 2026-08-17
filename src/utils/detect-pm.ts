@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 
-export type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun' | 'cnpm' | 'utoo';
+export const PACKAGE_MANAGERS = ['npm', 'yarn', 'pnpm', 'bun', 'cnpm', 'utoo'] as const;
+export type PackageManager = (typeof PACKAGE_MANAGERS)[number];
 
 interface PMRule {
   pm: PackageManager;
@@ -23,6 +24,10 @@ export const UPGRADE_COMMANDS: Record<PackageManager, { cmd: string; args: strin
   cnpm: { cmd: 'cnpm', args: ['install', '-g', '@ant-design/cli@latest'] },
   utoo: { cmd: 'ut', args: ['install', '-g', '@ant-design/cli@latest'] },
 };
+
+export function isPackageManager(value: unknown): value is PackageManager {
+  return typeof value === 'string' && PACKAGE_MANAGERS.includes(value as PackageManager);
+}
 
 export function inferPackageManagerFromPath(binPath: string): PackageManager {
   const normalized = binPath.replace(/\\/g, '/');

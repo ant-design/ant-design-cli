@@ -821,11 +821,12 @@ Upgrade the CLI itself to the latest version published on npm.
 
 ```bash
 antd upgrade                        # upgrade to latest version
+antd upgrade --package-manager pnpm # select and remember the package manager
 antd upgrade --format json          # structured JSON output
 antd upgrade --lang zh              # Chinese output
 ```
 
-The command automatically detects which package manager was used to install the CLI by resolving the binary path (`which antd` on Unix, `where antd` on Windows) and matching path keywords:
+The command accepts `--package-manager npm|yarn|pnpm|bun|cnpm|utoo`. An explicit selection is saved in the user config and reused by later upgrades. Without a saved selection, the command detects which package manager was used to install the CLI by resolving the binary path (`which antd` on Unix, `where antd` on Windows) and matching path keywords:
 
 | Path Keyword | Package Manager |
 |---|---|
@@ -854,7 +855,7 @@ Each package manager uses its own global upgrade command:
 1. Fetch the latest version from npm (reuses the existing `fetchLatestVersion()` with 3-mirror race: npmjs, npmmirror, unpkg)
 2. Compare with current CLI version (`__CLI_VERSION__`)
 3. If already up to date, output and exit 0
-4. Detect the package manager from the binary path; if detection fails, print error with manual command suggestion and exit 1
+4. Resolve the package manager from an explicit option, then saved user config, then the binary path; if all methods fail, print an error with a manual command suggestion and exit 1
 5. Execute the corresponding upgrade command via `child_process.spawn` (120s timeout, `stdio: 'inherit'` for passthrough, `shell: true` on Windows for `.cmd` compatibility)
 6. Verify the upgraded version by running `antd --cli-version`; if version unchanged, warn and exit 2
 

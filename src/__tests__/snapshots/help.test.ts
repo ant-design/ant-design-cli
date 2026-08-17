@@ -5,4 +5,8 @@ describe('help', () => {
   it('--help', async () => {
     expect(await run('--help')).toMatchSnapshot();
   });
+
+  it('upgrade --help', async () => {
+    expect(await run('upgrade', '--help')).toMatchSnapshot();
+  });
 });
