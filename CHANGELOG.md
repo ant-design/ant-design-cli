@@ -2,22 +2,80 @@
 
 ## [6.6.0](https://github.com/ant-design/ant-design-cli/compare/v6.5.4...v6.6.0) (2026-08-10)
 
+### Security
+
+- Resolve the remaining dependency security alerts by upgrading `@modelcontextprotocol/sdk`, `@hono/node-server`, `postcss`, and `body-parser` ([#208](https://github.com/ant-design/ant-design-cli/pull/208))
+
+### Other Changes
+
 - Update antd metadata ([v6@6.6.0](https://github.com/ant-design/ant-design-cli/compare/v6.5.4...v6.6.0#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+
+---
+
+### 安全
+
+- 升级 `@modelcontextprotocol/sdk`、`@hono/node-server`、`postcss` 和 `body-parser`，修复剩余的依赖安全告警 ([#208](https://github.com/ant-design/ant-design-cli/pull/208))
+
+### 其他变更
+
+- 同步 antd 元数据 ([v6@6.6.0](https://github.com/ant-design/ant-design-cli/compare/v6.5.4...v6.6.0#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
 
 ## [6.5.4](https://github.com/ant-design/ant-design-cli/compare/v6.5.3...v6.5.4) (2026-08-07)
 
+### Other Changes
+
 - Update antd metadata ([v6@6.5.4](https://github.com/ant-design/ant-design-cli/compare/v6.5.3...v6.5.4#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+
+---
+
+### 其他变更
+
+- 同步 antd 元数据 ([v6@6.5.4](https://github.com/ant-design/ant-design-cli/compare/v6.5.3...v6.5.4#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
 
 ## [6.5.3](https://github.com/ant-design/ant-design-cli/compare/v6.5.2...v6.5.3) (2026-07-31)
 
+### Security
+
+- Upgrade `fast-uri` from 3.1.2 to 3.1.4 to include its latest security fixes ([#206](https://github.com/ant-design/ant-design-cli/pull/206))
+
+### Other Changes
+
+- Upgrade `hono` from 4.12.26 to 4.12.32 ([#207](https://github.com/ant-design/ant-design-cli/pull/207))
 - Update antd metadata ([v6@6.5.3](https://github.com/ant-design/ant-design-cli/compare/v6.5.2...v6.5.3#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+
+---
+
+### 安全
+
+- 将 `fast-uri` 从 3.1.2 升级至 3.1.4，纳入最新安全修复 ([#206](https://github.com/ant-design/ant-design-cli/pull/206))
+
+### 其他变更
+
+- 将 `hono` 从 4.12.26 升级至 4.12.32 ([#207](https://github.com/ant-design/ant-design-cli/pull/207))
+- 同步 antd 元数据 ([v6@6.5.3](https://github.com/ant-design/ant-design-cli/compare/v6.5.2...v6.5.3#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
 
 ## [6.5.2](https://github.com/ant-design/ant-design-cli/compare/v6.5.1...v6.5.2) (2026-07-24)
 
+### Documentation
+
+- Expand the v6.5.0 and v6.5.1 release notes and align the English and Chinese changelogs ([#202](https://github.com/ant-design/ant-design-cli/pull/202))
+
+### Other Changes
+
 - Update antd metadata ([v6@6.5.2](https://github.com/ant-design/ant-design-cli/compare/v6.5.1...v6.5.2#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+
+---
+
+### 文档
+
+- 补充 v6.5.0 和 v6.5.1 发布说明，并对齐中英文 changelog ([#202](https://github.com/ant-design/ant-design-cli/pull/202))
+
+### 其他变更
+
+- 同步 antd 元数据 ([v6@6.5.2](https://github.com/ant-design/ant-design-cli/compare/v6.5.1...v6.5.2#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
 
 
 ## [6.5.1](https://github.com/ant-design/ant-design-cli/compare/v6.5.0...v6.5.1) (2026-07-13)
