@@ -13879,7 +13879,234 @@
       "descriptionZh": "点击元素，弹出气泡式的确认框。",
       "whenToUse": "A simple and compact dialog used for asking for user confirmation.\n\nThe difference with the `confirm` modal dialog is that it's more lightweight than the static popped full-screen confirm modal.",
       "whenToUseZh": "目标元素的操作需要用户进一步的确认时，在目标元素附近弹出浮层提示，询问用户。\n\n和 `confirm` 弹出的全屏居中模态对话框相比，交互形式更轻量。",
-      "props": [],
+      "props": [
+        {
+          "name": "cancelButtonProps",
+          "type": "[ButtonProps](/components/button/#api)",
+          "default": "-",
+          "description": "The cancel button props",
+          "descriptionZh": "cancel 按钮 props"
+        },
+        {
+          "name": "cancelText",
+          "type": "string",
+          "default": "`Cancel`",
+          "description": "The text of the Cancel button",
+          "descriptionZh": "取消按钮文字"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether show popconfirm when click its childrenNode",
+          "descriptionZh": "阻止点击 Popconfirm 子元素时弹出确认框"
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "default": "<ExclamationCircle />",
+          "description": "Customize icon of confirmation",
+          "descriptionZh": "自定义弹出气泡 Icon 图标"
+        },
+        {
+          "name": "okButtonProps",
+          "type": "[ButtonProps](/components/button/#api)",
+          "default": "-",
+          "description": "The ok button props",
+          "descriptionZh": "ok 按钮 props"
+        },
+        {
+          "name": "okText",
+          "type": "string",
+          "default": "`OK`",
+          "description": "The text of the Confirm button",
+          "descriptionZh": "确认按钮文字"
+        },
+        {
+          "name": "okType",
+          "type": "string",
+          "default": "`primary`",
+          "description": "Button `type` of the Confirm button",
+          "descriptionZh": "确认按钮类型"
+        },
+        {
+          "name": "showCancel",
+          "type": "boolean",
+          "default": "true",
+          "description": "Show cancel button",
+          "since": "4.18.0",
+          "descriptionZh": "是否显示取消按钮"
+        },
+        {
+          "name": "title",
+          "type": "ReactNode | () => ReactNode",
+          "default": "-",
+          "description": "The title of the confirmation box",
+          "descriptionZh": "确认框标题"
+        },
+        {
+          "name": "description",
+          "type": "ReactNode | () => ReactNode",
+          "default": "-",
+          "description": "The description of the confirmation box title",
+          "since": "5.1.0",
+          "descriptionZh": "确认内容的详细描述"
+        },
+        {
+          "name": "onCancel",
+          "type": "function(e)",
+          "default": "-",
+          "description": "A callback of cancel",
+          "descriptionZh": "点击取消的回调"
+        },
+        {
+          "name": "onConfirm",
+          "type": "function(e)",
+          "default": "-",
+          "description": "A callback of confirmation",
+          "descriptionZh": "点击确认的回调"
+        },
+        {
+          "name": "onPopupClick",
+          "type": "function(e)",
+          "default": "-",
+          "description": "A callback of popup click",
+          "since": "5.5.0",
+          "descriptionZh": "弹出气泡点击事件"
+        },
+        {
+          "name": "align",
+          "type": "object",
+          "default": "-",
+          "description": "This value will be merged into placement's config, please refer to the settings [dom-align](https://github.com/yiminghe/dom-align)",
+          "descriptionZh": "该值将合并到 placement 的配置中，设置参考 [dom-align](https://github.com/yiminghe/dom-align)"
+        },
+        {
+          "name": "arrow",
+          "type": "boolean | { pointAtCenter: boolean }",
+          "default": "true",
+          "description": "Change arrow's visible state and change whether the arrow is pointed at the center of target.",
+          "since": "5.2.0",
+          "descriptionZh": "修改箭头的显示状态以及修改箭头是否指向目标元素中心"
+        },
+        {
+          "name": "autoAdjustOverflow",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to adjust popup placement automatically when popup is off screen",
+          "descriptionZh": "气泡被遮挡时自动调整位置"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "default": "-",
+          "description": "The background color",
+          "since": "4.3.0",
+          "descriptionZh": "背景颜色"
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the floating tooltip card is open by default",
+          "since": "4.23.0",
+          "descriptionZh": "默认是否显隐"
+        },
+        {
+          "name": "destroyTooltipOnHide",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether destroy tooltip when hidden",
+          "descriptionZh": "关闭后是否销毁 Tooltip"
+        },
+        {
+          "name": "fresh",
+          "type": "boolean",
+          "default": "false",
+          "description": "Tooltip will cache content when it is closed by default. Setting this property will always keep updating",
+          "since": "5.10.0",
+          "descriptionZh": "默认情况下，Tooltip 在关闭时会缓存内容。设置该属性后会始终保持更新"
+        },
+        {
+          "name": "getPopupContainer",
+          "type": "(triggerNode: HTMLElement) => HTMLElement",
+          "default": "() => document.body",
+          "description": "The DOM container of the tip, the default behavior is to create a `div` element in `body`",
+          "descriptionZh": "浮层渲染父节点，默认渲染到 body 上"
+        },
+        {
+          "name": "mouseEnterDelay",
+          "type": "number",
+          "default": "0.1",
+          "description": "Delay in seconds, before tooltip is shown on mouse enter",
+          "descriptionZh": "鼠标移入后延时多少才显示 Tooltip，单位：秒"
+        },
+        {
+          "name": "mouseLeaveDelay",
+          "type": "number",
+          "default": "0.1",
+          "description": "Delay in seconds, before tooltip is hidden on mouse leave",
+          "descriptionZh": "鼠标移出后延时多少才隐藏 Tooltip，单位：秒"
+        },
+        {
+          "name": "overlayClassName",
+          "type": "string",
+          "default": "-",
+          "description": "Class name of the tooltip card",
+          "descriptionZh": "卡片类名"
+        },
+        {
+          "name": "overlayStyle",
+          "type": "React.CSSProperties",
+          "default": "-",
+          "description": "Style of the tooltip card",
+          "descriptionZh": "卡片样式"
+        },
+        {
+          "name": "overlayInnerStyle",
+          "type": "React.CSSProperties",
+          "default": "-",
+          "description": "Style of the tooltip inner content",
+          "descriptionZh": "卡片内容区域的样式对象"
+        },
+        {
+          "name": "placement",
+          "type": "string",
+          "default": "`top`",
+          "description": "The position of the tooltip relative to the target, which can be one of `top` `left` `right` `bottom` `topLeft` `topRight` `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`",
+          "descriptionZh": "气泡框位置，可选 `top` `left` `right` `bottom` `topLeft` `topRight` `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`"
+        },
+        {
+          "name": "trigger",
+          "type": "`hover` | `focus` | `click` | `contextMenu` | Array<string>",
+          "default": "`hover`",
+          "description": "Tooltip trigger mode. Could be multiple by passing an array",
+          "descriptionZh": "触发行为，可选 `hover` | `focus` | `click` | `contextMenu`，可使用数组设置多个触发行为"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the floating tooltip card is open or not. Use `visible` under 4.23.0 ([why?](/docs/react/faq#why-open))",
+          "since": "4.23.0",
+          "descriptionZh": "用于手动控制浮层显隐，小于 4.23.0 使用 `visible`（[为什么?](/docs/react/faq#弹层类组件为什么要统一至-open-属性)）"
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "default": "-",
+          "description": "Config `z-index` of Tooltip",
+          "descriptionZh": "设置 Tooltip 的 `z-index`"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "default": "-",
+          "description": "Callback executed when visibility of the tooltip card is changed",
+          "since": "4.23.0",
+          "descriptionZh": "显示隐藏的回调"
+        }
+      ],
       "demos": [
         {
           "name": "async",
@@ -13986,7 +14213,154 @@
       "descriptionZh": "点击/鼠标移入元素，弹出气泡式的卡片浮层。",
       "whenToUse": "A simple popup menu to provide extra information or operations.\n\nComparing with `Tooltip`, besides information `Popover` card can also provide action elements like links and buttons.",
       "whenToUseZh": "当目标元素有进一步的描述和相关操作时，可以收纳到卡片中，根据用户的操作行为进行展现。\n\n和 `Tooltip` 的区别是，用户可以对浮层上的元素进行操作，因此它可以承载更复杂的内容，比如链接或按钮等。",
-      "props": [],
+      "props": [
+        {
+          "name": "content",
+          "type": "ReactNode | () => ReactNode",
+          "default": "-",
+          "description": "Content of the card",
+          "descriptionZh": "卡片内容"
+        },
+        {
+          "name": "title",
+          "type": "ReactNode | () => ReactNode",
+          "default": "-",
+          "description": "Title of the card",
+          "descriptionZh": "卡片标题"
+        },
+        {
+          "name": "align",
+          "type": "object",
+          "default": "-",
+          "description": "This value will be merged into placement's config, please refer to the settings [dom-align](https://github.com/yiminghe/dom-align)",
+          "descriptionZh": "该值将合并到 placement 的配置中，设置参考 [dom-align](https://github.com/yiminghe/dom-align)"
+        },
+        {
+          "name": "arrow",
+          "type": "boolean | { pointAtCenter: boolean }",
+          "default": "true",
+          "description": "Change arrow's visible state and change whether the arrow is pointed at the center of target.",
+          "since": "5.2.0",
+          "descriptionZh": "修改箭头的显示状态以及修改箭头是否指向目标元素中心"
+        },
+        {
+          "name": "autoAdjustOverflow",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to adjust popup placement automatically when popup is off screen",
+          "descriptionZh": "气泡被遮挡时自动调整位置"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "default": "-",
+          "description": "The background color",
+          "since": "4.3.0",
+          "descriptionZh": "背景颜色"
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the floating tooltip card is open by default",
+          "since": "4.23.0",
+          "descriptionZh": "默认是否显隐"
+        },
+        {
+          "name": "destroyTooltipOnHide",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether destroy tooltip when hidden",
+          "descriptionZh": "关闭后是否销毁 Tooltip"
+        },
+        {
+          "name": "fresh",
+          "type": "boolean",
+          "default": "false",
+          "description": "Tooltip will cache content when it is closed by default. Setting this property will always keep updating",
+          "since": "5.10.0",
+          "descriptionZh": "默认情况下，Tooltip 在关闭时会缓存内容。设置该属性后会始终保持更新"
+        },
+        {
+          "name": "getPopupContainer",
+          "type": "(triggerNode: HTMLElement) => HTMLElement",
+          "default": "() => document.body",
+          "description": "The DOM container of the tip, the default behavior is to create a `div` element in `body`",
+          "descriptionZh": "浮层渲染父节点，默认渲染到 body 上"
+        },
+        {
+          "name": "mouseEnterDelay",
+          "type": "number",
+          "default": "0.1",
+          "description": "Delay in seconds, before tooltip is shown on mouse enter",
+          "descriptionZh": "鼠标移入后延时多少才显示 Tooltip，单位：秒"
+        },
+        {
+          "name": "mouseLeaveDelay",
+          "type": "number",
+          "default": "0.1",
+          "description": "Delay in seconds, before tooltip is hidden on mouse leave",
+          "descriptionZh": "鼠标移出后延时多少才隐藏 Tooltip，单位：秒"
+        },
+        {
+          "name": "overlayClassName",
+          "type": "string",
+          "default": "-",
+          "description": "Class name of the tooltip card",
+          "descriptionZh": "卡片类名"
+        },
+        {
+          "name": "overlayStyle",
+          "type": "React.CSSProperties",
+          "default": "-",
+          "description": "Style of the tooltip card",
+          "descriptionZh": "卡片样式"
+        },
+        {
+          "name": "overlayInnerStyle",
+          "type": "React.CSSProperties",
+          "default": "-",
+          "description": "Style of the tooltip inner content",
+          "descriptionZh": "卡片内容区域的样式对象"
+        },
+        {
+          "name": "placement",
+          "type": "string",
+          "default": "`top`",
+          "description": "The position of the tooltip relative to the target, which can be one of `top` `left` `right` `bottom` `topLeft` `topRight` `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`",
+          "descriptionZh": "气泡框位置，可选 `top` `left` `right` `bottom` `topLeft` `topRight` `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`"
+        },
+        {
+          "name": "trigger",
+          "type": "`hover` | `focus` | `click` | `contextMenu` | Array<string>",
+          "default": "`hover`",
+          "description": "Tooltip trigger mode. Could be multiple by passing an array",
+          "descriptionZh": "触发行为，可选 `hover` | `focus` | `click` | `contextMenu`，可使用数组设置多个触发行为"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the floating tooltip card is open or not. Use `visible` under 4.23.0 ([why?](/docs/react/faq#why-open))",
+          "since": "4.23.0",
+          "descriptionZh": "用于手动控制浮层显隐，小于 4.23.0 使用 `visible`（[为什么?](/docs/react/faq#弹层类组件为什么要统一至-open-属性)）"
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "default": "-",
+          "description": "Config `z-index` of Tooltip",
+          "descriptionZh": "设置 Tooltip 的 `z-index`"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "default": "-",
+          "description": "Callback executed when visibility of the tooltip card is changed",
+          "since": "4.23.0",
+          "descriptionZh": "显示隐藏的回调"
+        }
+      ],
       "demos": [
         {
           "name": "arrow",
@@ -21311,6 +21685,138 @@
           "default": "-",
           "description": "The text shown in the tooltip",
           "descriptionZh": "提示文字"
+        },
+        {
+          "name": "align",
+          "type": "object",
+          "default": "-",
+          "description": "This value will be merged into placement's config, please refer to the settings [dom-align](https://github.com/yiminghe/dom-align)",
+          "descriptionZh": "该值将合并到 placement 的配置中，设置参考 [dom-align](https://github.com/yiminghe/dom-align)"
+        },
+        {
+          "name": "arrow",
+          "type": "boolean | { pointAtCenter: boolean }",
+          "default": "true",
+          "description": "Change arrow's visible state and change whether the arrow is pointed at the center of target.",
+          "since": "5.2.0",
+          "descriptionZh": "修改箭头的显示状态以及修改箭头是否指向目标元素中心"
+        },
+        {
+          "name": "autoAdjustOverflow",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to adjust popup placement automatically when popup is off screen",
+          "descriptionZh": "气泡被遮挡时自动调整位置"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "default": "-",
+          "description": "The background color",
+          "since": "4.3.0",
+          "descriptionZh": "背景颜色"
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the floating tooltip card is open by default",
+          "since": "4.23.0",
+          "descriptionZh": "默认是否显隐"
+        },
+        {
+          "name": "destroyTooltipOnHide",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether destroy tooltip when hidden",
+          "descriptionZh": "关闭后是否销毁 Tooltip"
+        },
+        {
+          "name": "fresh",
+          "type": "boolean",
+          "default": "false",
+          "description": "Tooltip will cache content when it is closed by default. Setting this property will always keep updating",
+          "since": "5.10.0",
+          "descriptionZh": "默认情况下，Tooltip 在关闭时会缓存内容。设置该属性后会始终保持更新"
+        },
+        {
+          "name": "getPopupContainer",
+          "type": "(triggerNode: HTMLElement) => HTMLElement",
+          "default": "() => document.body",
+          "description": "The DOM container of the tip, the default behavior is to create a `div` element in `body`",
+          "descriptionZh": "浮层渲染父节点，默认渲染到 body 上"
+        },
+        {
+          "name": "mouseEnterDelay",
+          "type": "number",
+          "default": "0.1",
+          "description": "Delay in seconds, before tooltip is shown on mouse enter",
+          "descriptionZh": "鼠标移入后延时多少才显示 Tooltip，单位：秒"
+        },
+        {
+          "name": "mouseLeaveDelay",
+          "type": "number",
+          "default": "0.1",
+          "description": "Delay in seconds, before tooltip is hidden on mouse leave",
+          "descriptionZh": "鼠标移出后延时多少才隐藏 Tooltip，单位：秒"
+        },
+        {
+          "name": "overlayClassName",
+          "type": "string",
+          "default": "-",
+          "description": "Class name of the tooltip card",
+          "descriptionZh": "卡片类名"
+        },
+        {
+          "name": "overlayStyle",
+          "type": "React.CSSProperties",
+          "default": "-",
+          "description": "Style of the tooltip card",
+          "descriptionZh": "卡片样式"
+        },
+        {
+          "name": "overlayInnerStyle",
+          "type": "React.CSSProperties",
+          "default": "-",
+          "description": "Style of the tooltip inner content",
+          "descriptionZh": "卡片内容区域的样式对象"
+        },
+        {
+          "name": "placement",
+          "type": "string",
+          "default": "`top`",
+          "description": "The position of the tooltip relative to the target, which can be one of `top` `left` `right` `bottom` `topLeft` `topRight` `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`",
+          "descriptionZh": "气泡框位置，可选 `top` `left` `right` `bottom` `topLeft` `topRight` `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`"
+        },
+        {
+          "name": "trigger",
+          "type": "`hover` | `focus` | `click` | `contextMenu` | Array<string>",
+          "default": "`hover`",
+          "description": "Tooltip trigger mode. Could be multiple by passing an array",
+          "descriptionZh": "触发行为，可选 `hover` | `focus` | `click` | `contextMenu`，可使用数组设置多个触发行为"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the floating tooltip card is open or not. Use `visible` under 4.23.0 ([why?](/docs/react/faq#why-open))",
+          "since": "4.23.0",
+          "descriptionZh": "用于手动控制浮层显隐，小于 4.23.0 使用 `visible`（[为什么?](/docs/react/faq#弹层类组件为什么要统一至-open-属性)）"
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "default": "-",
+          "description": "Config `z-index` of Tooltip",
+          "descriptionZh": "设置 Tooltip 的 `z-index`"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "default": "-",
+          "description": "Callback executed when visibility of the tooltip card is changed",
+          "since": "4.23.0",
+          "descriptionZh": "显示隐藏的回调"
         }
       ],
       "demos": [

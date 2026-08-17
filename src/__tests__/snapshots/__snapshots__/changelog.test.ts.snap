@@ -228,6 +228,224 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
       ]
     },
     {
+      "component": "Popconfirm",
+      "added": [
+        {
+          "name": "cancelButtonProps",
+          "type": "[ButtonProps](/components/button/#api)"
+        },
+        {
+          "name": "cancelText",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean"
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode"
+        },
+        {
+          "name": "okButtonProps",
+          "type": "[ButtonProps](/components/button/#api)"
+        },
+        {
+          "name": "okText",
+          "type": "string"
+        },
+        {
+          "name": "okType",
+          "type": "string"
+        },
+        {
+          "name": "showCancel",
+          "type": "boolean"
+        },
+        {
+          "name": "title",
+          "type": "ReactNode | () => ReactNode"
+        },
+        {
+          "name": "description",
+          "type": "ReactNode | () => ReactNode"
+        },
+        {
+          "name": "onCancel",
+          "type": "function(e)"
+        },
+        {
+          "name": "onConfirm",
+          "type": "function(e)"
+        },
+        {
+          "name": "onPopupClick",
+          "type": "function(e)"
+        },
+        {
+          "name": "align",
+          "type": "object"
+        },
+        {
+          "name": "arrow",
+          "type": "boolean | { pointAtCenter: boolean }"
+        },
+        {
+          "name": "autoAdjustOverflow",
+          "type": "boolean"
+        },
+        {
+          "name": "color",
+          "type": "string"
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean"
+        },
+        {
+          "name": "destroyTooltipOnHide",
+          "type": "boolean"
+        },
+        {
+          "name": "fresh",
+          "type": "boolean"
+        },
+        {
+          "name": "getPopupContainer",
+          "type": "(triggerNode: HTMLElement) => HTMLElement"
+        },
+        {
+          "name": "mouseEnterDelay",
+          "type": "number"
+        },
+        {
+          "name": "mouseLeaveDelay",
+          "type": "number"
+        },
+        {
+          "name": "overlayClassName",
+          "type": "string"
+        },
+        {
+          "name": "overlayStyle",
+          "type": "React.CSSProperties"
+        },
+        {
+          "name": "overlayInnerStyle",
+          "type": "React.CSSProperties"
+        },
+        {
+          "name": "placement",
+          "type": "string"
+        },
+        {
+          "name": "trigger",
+          "type": "\`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array<string>"
+        },
+        {
+          "name": "open",
+          "type": "boolean"
+        },
+        {
+          "name": "zIndex",
+          "type": "number"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "component": "Popover",
+      "added": [
+        {
+          "name": "content",
+          "type": "ReactNode | () => ReactNode"
+        },
+        {
+          "name": "title",
+          "type": "ReactNode | () => ReactNode"
+        },
+        {
+          "name": "align",
+          "type": "object"
+        },
+        {
+          "name": "arrow",
+          "type": "boolean | { pointAtCenter: boolean }"
+        },
+        {
+          "name": "autoAdjustOverflow",
+          "type": "boolean"
+        },
+        {
+          "name": "color",
+          "type": "string"
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean"
+        },
+        {
+          "name": "destroyTooltipOnHide",
+          "type": "boolean"
+        },
+        {
+          "name": "fresh",
+          "type": "boolean"
+        },
+        {
+          "name": "getPopupContainer",
+          "type": "(triggerNode: HTMLElement) => HTMLElement"
+        },
+        {
+          "name": "mouseEnterDelay",
+          "type": "number"
+        },
+        {
+          "name": "mouseLeaveDelay",
+          "type": "number"
+        },
+        {
+          "name": "overlayClassName",
+          "type": "string"
+        },
+        {
+          "name": "overlayStyle",
+          "type": "React.CSSProperties"
+        },
+        {
+          "name": "overlayInnerStyle",
+          "type": "React.CSSProperties"
+        },
+        {
+          "name": "placement",
+          "type": "string"
+        },
+        {
+          "name": "trigger",
+          "type": "\`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array<string>"
+        },
+        {
+          "name": "open",
+          "type": "boolean"
+        },
+        {
+          "name": "zIndex",
+          "type": "number"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    {
       "component": "Radio",
       "added": [
         {
@@ -318,81 +536,17 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format json 1`] = `
     {
       "component": "Tooltip",
       "added": [],
-      "removed": [
-        {
-          "name": "align",
-          "type": "object"
-        },
-        {
-          "name": "arrow",
-          "type": "boolean | { pointAtCenter: boolean }"
-        },
-        {
-          "name": "autoAdjustOverflow",
-          "type": "boolean"
-        },
-        {
-          "name": "color",
-          "type": "string"
-        },
-        {
-          "name": "defaultOpen",
-          "type": "boolean"
-        },
-        {
-          "name": "destroyTooltipOnHide",
-          "type": "boolean"
-        },
-        {
-          "name": "fresh",
-          "type": "boolean"
-        },
-        {
-          "name": "getPopupContainer",
-          "type": "(triggerNode: HTMLElement) => HTMLElement"
-        },
-        {
-          "name": "mouseEnterDelay",
-          "type": "number"
-        },
-        {
-          "name": "mouseLeaveDelay",
-          "type": "number"
-        },
-        {
-          "name": "overlayClassName",
-          "type": "string"
-        },
+      "removed": [],
+      "changed": [
         {
           "name": "overlayStyle",
-          "type": "object"
+          "change": "object → React.CSSProperties"
         },
         {
           "name": "overlayInnerStyle",
-          "type": "object"
-        },
-        {
-          "name": "placement",
-          "type": "string"
-        },
-        {
-          "name": "trigger",
-          "type": "\`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array<string>"
-        },
-        {
-          "name": "open",
-          "type": "boolean"
-        },
-        {
-          "name": "zIndex",
-          "type": "number"
-        },
-        {
-          "name": "onOpenChange",
-          "type": "(open: boolean) => void"
+          "change": "object → React.CSSProperties"
         }
-      ],
-      "changed": []
+      ]
     },
     {
       "component": "TreeSelect",
@@ -597,6 +751,71 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format markdown 1`] = `
 | pageSizeOptions | string[] \\| number[] → number[] |
 | showSizeChanger | boolean → boolean \\| [SelectProps](/components/select#api) |
 
+### Popconfirm
+
+**Added:**
+
+| Prop | Type |
+| --- | --- |
+| cancelButtonProps | [ButtonProps](/components/button/#api) |
+| cancelText | string |
+| disabled | boolean |
+| icon | ReactNode |
+| okButtonProps | [ButtonProps](/components/button/#api) |
+| okText | string |
+| okType | string |
+| showCancel | boolean |
+| title | ReactNode \\| () => ReactNode |
+| description | ReactNode \\| () => ReactNode |
+| onCancel | function(e) |
+| onConfirm | function(e) |
+| onPopupClick | function(e) |
+| align | object |
+| arrow | boolean \\| { pointAtCenter: boolean } |
+| autoAdjustOverflow | boolean |
+| color | string |
+| defaultOpen | boolean |
+| destroyTooltipOnHide | boolean |
+| fresh | boolean |
+| getPopupContainer | (triggerNode: HTMLElement) => HTMLElement |
+| mouseEnterDelay | number |
+| mouseLeaveDelay | number |
+| overlayClassName | string |
+| overlayStyle | React.CSSProperties |
+| overlayInnerStyle | React.CSSProperties |
+| placement | string |
+| trigger | \`hover\` \\| \`focus\` \\| \`click\` \\| \`contextMenu\` \\| Array<string> |
+| open | boolean |
+| zIndex | number |
+| onOpenChange | (open: boolean) => void |
+
+### Popover
+
+**Added:**
+
+| Prop | Type |
+| --- | --- |
+| content | ReactNode \\| () => ReactNode |
+| title | ReactNode \\| () => ReactNode |
+| align | object |
+| arrow | boolean \\| { pointAtCenter: boolean } |
+| autoAdjustOverflow | boolean |
+| color | string |
+| defaultOpen | boolean |
+| destroyTooltipOnHide | boolean |
+| fresh | boolean |
+| getPopupContainer | (triggerNode: HTMLElement) => HTMLElement |
+| mouseEnterDelay | number |
+| mouseLeaveDelay | number |
+| overlayClassName | string |
+| overlayStyle | React.CSSProperties |
+| overlayInnerStyle | React.CSSProperties |
+| placement | string |
+| trigger | \`hover\` \\| \`focus\` \\| \`click\` \\| \`contextMenu\` \\| Array<string> |
+| open | boolean |
+| zIndex | number |
+| onOpenChange | (open: boolean) => void |
+
 ### Radio
 
 **Added:**
@@ -662,28 +881,12 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format markdown 1`] = `
 
 ### Tooltip
 
-**Removed:**
+**Changed:**
 
-| Prop | Type |
+| Prop | Change |
 | --- | --- |
-| align | object |
-| arrow | boolean \\| { pointAtCenter: boolean } |
-| autoAdjustOverflow | boolean |
-| color | string |
-| defaultOpen | boolean |
-| destroyTooltipOnHide | boolean |
-| fresh | boolean |
-| getPopupContainer | (triggerNode: HTMLElement) => HTMLElement |
-| mouseEnterDelay | number |
-| mouseLeaveDelay | number |
-| overlayClassName | string |
-| overlayStyle | object |
-| overlayInnerStyle | object |
-| placement | string |
-| trigger | \`hover\` \\| \`focus\` \\| \`click\` \\| \`contextMenu\` \\| Array<string> |
-| open | boolean |
-| zIndex | number |
-| onOpenChange | (open: boolean) => void |
+| overlayStyle | object → React.CSSProperties |
+| overlayInnerStyle | object → React.CSSProperties |
 
 ### TreeSelect
 
@@ -772,6 +975,61 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format text 1`] = `
     ~ pageSizeOptions: string[] | number[] → number[]
     ~ showSizeChanger: boolean → boolean | [SelectProps](/components/select#api)
 
+  Popconfirm:
+    + cancelButtonProps: [ButtonProps](/components/button/#api)
+    + cancelText: string
+    + disabled: boolean
+    + icon: ReactNode
+    + okButtonProps: [ButtonProps](/components/button/#api)
+    + okText: string
+    + okType: string
+    + showCancel: boolean
+    + title: ReactNode | () => ReactNode
+    + description: ReactNode | () => ReactNode
+    + onCancel: function(e)
+    + onConfirm: function(e)
+    + onPopupClick: function(e)
+    + align: object
+    + arrow: boolean | { pointAtCenter: boolean }
+    + autoAdjustOverflow: boolean
+    + color: string
+    + defaultOpen: boolean
+    + destroyTooltipOnHide: boolean
+    + fresh: boolean
+    + getPopupContainer: (triggerNode: HTMLElement) => HTMLElement
+    + mouseEnterDelay: number
+    + mouseLeaveDelay: number
+    + overlayClassName: string
+    + overlayStyle: React.CSSProperties
+    + overlayInnerStyle: React.CSSProperties
+    + placement: string
+    + trigger: \`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array<string>
+    + open: boolean
+    + zIndex: number
+    + onOpenChange: (open: boolean) => void
+
+  Popover:
+    + content: ReactNode | () => ReactNode
+    + title: ReactNode | () => ReactNode
+    + align: object
+    + arrow: boolean | { pointAtCenter: boolean }
+    + autoAdjustOverflow: boolean
+    + color: string
+    + defaultOpen: boolean
+    + destroyTooltipOnHide: boolean
+    + fresh: boolean
+    + getPopupContainer: (triggerNode: HTMLElement) => HTMLElement
+    + mouseEnterDelay: number
+    + mouseLeaveDelay: number
+    + overlayClassName: string
+    + overlayStyle: React.CSSProperties
+    + overlayInnerStyle: React.CSSProperties
+    + placement: string
+    + trigger: \`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array<string>
+    + open: boolean
+    + zIndex: number
+    + onOpenChange: (open: boolean) => void
+
   Radio:
     + block: boolean
 
@@ -796,24 +1054,8 @@ exports[`changelog > changelog 5.20.0 5.22.0 --format text 1`] = `
     + prefix: ReactNode
 
   Tooltip:
-    - align: object
-    - arrow: boolean | { pointAtCenter: boolean }
-    - autoAdjustOverflow: boolean
-    - color: string
-    - defaultOpen: boolean
-    - destroyTooltipOnHide: boolean
-    - fresh: boolean
-    - getPopupContainer: (triggerNode: HTMLElement) => HTMLElement
-    - mouseEnterDelay: number
-    - mouseLeaveDelay: number
-    - overlayClassName: string
-    - overlayStyle: object
-    - overlayInnerStyle: object
-    - placement: string
-    - trigger: \`hover\` | \`focus\` | \`click\` | \`contextMenu\` | Array<string>
-    - open: boolean
-    - zIndex: number
-    - onOpenChange: (open: boolean) => void
+    ~ overlayStyle: object → React.CSSProperties
+    ~ overlayInnerStyle: object → React.CSSProperties
 
   TreeSelect:
     + prefix: ReactNode
