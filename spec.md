@@ -637,7 +637,7 @@ Note: This is complementary to ESLint. `antd lint` focuses on antd-specific know
 
 **Rule categories:**
 
-- **deprecated** — Deprecated props (with replacement info from metadata) and deprecated components (`BackTop` → `FloatButton.BackTop`, `Button.Group` / `Input.Group` → `Space.Compact`). Deprecated prop detection uses AST traversal to precisely match props to their owning JSX element, eliminating false positives from sibling components.
+- **deprecated** — Deprecated props (with replacement info from metadata) and deprecated components. Component-level `Deprecated Notice` blocks in bundled metadata are reported automatically and localized by `--lang` (for example, `List` in antd v6); named aliases, root namespace/default imports, component subpath imports, and member usage resolve to their canonical antd component. Legacy structural rules include `BackTop` → `FloatButton.BackTop` and `Button.Group` / `Input.Group` → `Space.Compact`. Deprecated prop detection uses AST traversal to precisely match props to their owning JSX element, eliminating false positives from sibling components.
 - **a11y** — Accessibility: missing `alt` on Image, missing `aria-label` on clickable icons
 - **usage** — Prop combination mistakes detected from antd runtime warnings:
   - Form.Item `shouldUpdate` + `dependencies` conflict

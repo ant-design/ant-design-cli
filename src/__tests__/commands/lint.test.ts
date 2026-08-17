@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { chmodSync, writeFileSync, mkdirSync, rmSync, symlinkSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import type { LintIssue } from '../../commands/lint.js';
+import { getDeprecatedComponents, type LintIssue } from '../../commands/lint.js';
 import { run, runCLI } from '../helper.js';
 
 describe('lint', () => {
@@ -463,6 +463,206 @@ const App = () => (
     );
     const data = JSON.parse(out);
     expect(data.issues.some((i: LintIssue) => i.rule === 'deprecated' && i.message.includes('BackTop'))).toBe(true);
+  });
+
+  it('should report components marked by a metadata deprecation notice', async () => {
+    const out = await lintFixture(
+      'deprecated-list-v6',
+      `import { List } from 'antd';\nconst App = () => <List />;`,
+      ['--only', 'deprecated', '--format', 'json'],
+      '6.5.3',
+    );
+    const data = JSON.parse(out);
+    const issue = data.issues.find(
+      (item: LintIssue) => item.rule === 'deprecated' && item.message.includes('List'),
+    );
+    expect(issue).toBeDefined();
+    expect(issue.message).toContain('removed in the next major version');
+  });
+
+  it.each([
+    {
+      name: 'named-alias',
+      code: `import { List as AntList } from 'antd';\nconst App = () => <AntList />;`,
+    },
+    {
+      name: 'namespace',
+      code: `import * as Antd from 'antd';\nconst App = () => <Antd.List />;`,
+    },
+    {
+      name: 'default-root',
+      code: `import Antd from 'antd';\nconst App = () => <Antd.List />;`,
+    },
+    {
+      name: 'default-subpath',
+      code: `import AntList from 'antd/es/list';\nconst App = () => <AntList />;`,
+    },
+    {
+      name: 'member',
+      code: `import { List } from 'antd';\nconst App = () => <List.Item />;`,
+    },
+  ])('should resolve deprecated components through $name imports', async ({ name, code }) => {
+    const out = await lintFixture(
+      `deprecated-list-${name}`,
+      code,
+      ['--only', 'deprecated', '--format', 'json'],
+      '6.5.3',
+    );
+    const data = JSON.parse(out);
+    const listIssues = data.issues.filter(
+      (item: LintIssue) => item.rule === 'deprecated' && item.message.includes('List'),
+    );
+    expect(listIssues).toHaveLength(1);
+  });
+
+  it('should resolve a deprecated component from a custom alias subpath', async () => {
+    const out = await lintFixture(
+      'deprecated-list-custom-subpath',
+      `import AntList from '@my/antd/es/list';\nconst App = () => <AntList />;`,
+      ['--antd-alias', '@my/antd', '--only', 'deprecated', '--format', 'json'],
+      '6.5.3',
+    );
+    const data = JSON.parse(out);
+    expect(data.issues).toHaveLength(1);
+    expect(data.issues[0].message).toContain('List');
+  });
+
+  it('should not treat a component style subpath as the component', async () => {
+    const out = await lintFixture(
+      'deprecated-list-style-subpath',
+      `import ListStyles from 'antd/es/list/style';\nconst App = () => <ListStyles />;`,
+      ['--only', 'deprecated', '--format', 'json'],
+      '6.5.3',
+    );
+    const data = JSON.parse(out);
+    expect(data.issues).toHaveLength(0);
+  });
+
+  it('should not report a shadowing local List component as deprecated', async () => {
+    const out = await lintFixture(
+      'deprecated-list-shadowed',
+      `import { List } from 'antd';\nconst App = ({ List }: { List: React.ComponentType }) => <List />;`,
+      ['--only', 'deprecated', '--format', 'json'],
+      '6.5.3',
+    );
+    const data = JSON.parse(out);
+    expect(data.issues).toHaveLength(0);
+  });
+
+  it.each([
+    {
+      name: 'function',
+      code: `import { List } from 'antd';\nconst App = () => { function List() { return null; } return <List />; };`,
+    },
+    {
+      name: 'class',
+      code: `import { List } from 'antd';\nconst App = () => { class List {} return <List />; };`,
+    },
+    {
+      name: 'namespace-function',
+      code: `import * as Antd from 'antd';\nconst App = () => { function Antd() { return null; } return <Antd.List />; };`,
+    },
+    {
+      name: 'hoisted-function-after-jsx',
+      code: `import { List } from 'antd';\nconst App = () => { const node = <List />; function List() { return null; } return node; };`,
+    },
+    {
+      name: 'function-scoped-var',
+      code: `import { List } from 'antd';\nconst App = () => { if (true) { var List = () => null; } return <List />; };`,
+    },
+    {
+      name: 'named-function-expression',
+      code: `import { List } from 'antd';\nconst App = function List() { return <List />; };`,
+    },
+    {
+      name: 'named-class-expression',
+      code: `import { List } from 'antd';\nconst App = class List { render() { return <List />; } };`,
+    },
+  ])('should not report components shadowed by a $name declaration', async ({ name, code }) => {
+    const out = await lintFixture(
+      `deprecated-list-shadowed-${name}`,
+      code,
+      ['--only', 'deprecated', '--format', 'json'],
+      '6.5.3',
+    );
+    const data = JSON.parse(out);
+    expect(data.issues).toHaveLength(0);
+  });
+
+  it.each([
+    {
+      name: 'for-loop',
+      code: `import { List } from 'antd';\nconst App = ({ items }: any) => { for (let List of items) {} return <List />; };`,
+    },
+    {
+      name: 'for-in-loop',
+      code: `import { List } from 'antd';\nconst App = ({ items }: any) => { for (let List in items) {} return <List />; };`,
+    },
+    {
+      name: 'switch',
+      code: `import { List } from 'antd';\nconst App = () => { switch (1) { case 1: let List = 1; break; } return <List />; };`,
+    },
+    {
+      name: 'static-block',
+      code: `import { List } from 'antd';\nclass Holder { static { let List = 1; } }\nconst App = () => <List />;`,
+    },
+    {
+      name: 'import-after-jsx',
+      code: `const App = () => <List />;\nimport { List } from 'antd';`,
+    },
+  ])('should keep antd imports visible outside a $name scope', async ({ name, code }) => {
+    const out = await lintFixture(
+      `deprecated-list-scope-${name}`,
+      code,
+      ['--only', 'deprecated', '--format', 'json'],
+      '6.5.3',
+    );
+    const data = JSON.parse(out);
+    expect(data.issues).toHaveLength(1);
+    expect(data.issues[0].message).toContain('List');
+  });
+
+  it('should localize metadata component deprecation notices', async () => {
+    const out = await lintFixture(
+      'deprecated-list-zh',
+      `import { List } from 'antd';\nconst App = () => <List />;`,
+      ['--only', 'deprecated', '--format', 'json', '--lang', 'zh'],
+      '6.5.3',
+    );
+    const data = JSON.parse(out);
+    expect(data.issues).toHaveLength(1);
+    expect(data.issues[0].message).toContain('List 组件已经进入废弃阶段');
+  });
+
+  it('should keep fallback component deprecation messages in one language', () => {
+    const englishOnly = {
+      components: [{
+        name: 'Legacy',
+        whenToUse: ':::warning{ title = "Deprecated Notice" }\nEnglish detail.\n:::',
+      }],
+    } as any;
+    const chineseOnly = {
+      components: [{
+        name: 'Legacy',
+        whenToUseZh: ':::warning{title=废弃提示}\n中文详情。\n:::',
+      }],
+    } as any;
+
+    expect(getDeprecatedComponents(englishOnly, 'zh').get('Legacy'))
+      .toBe('`Legacy` is deprecated. English detail.');
+    expect(getDeprecatedComponents(chineseOnly, 'en').get('Legacy'))
+      .toBe('`Legacy` 已废弃。中文详情。');
+  });
+
+  it('should not report List as deprecated when its metadata has no deprecation notice', async () => {
+    const out = await lintFixture(
+      'list-v5',
+      `import { List } from 'antd';\nconst App = () => <List />;`,
+      ['--only', 'deprecated', '--format', 'json'],
+      '5.29.3',
+    );
+    const data = JSON.parse(out);
+    expect(data.issues).toHaveLength(0);
   });
 
   it('should warn on Button.Group deprecation', async () => {
