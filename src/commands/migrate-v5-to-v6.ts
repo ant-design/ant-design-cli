@@ -64,32 +64,6 @@ export const V5_TO_V6_STEPS: MigrationStep[] = [
   },
   {
     component: 'Button',
-    breaking: true,
-    description: 'Prop `danger` removed. Use `color="danger"` instead.',
-    autoFixable: true,
-    codemod: 'v6-danger-migration',
-    searchPattern: `<Button[^>]*\\bdanger\\b`,
-    before: `<Button danger>Delete</Button>
-<Button type="primary" danger>Delete</Button>`,
-    after: `<Button color="danger">Delete</Button>
-<Button color="danger" variant="solid">Delete</Button>`,
-    migrationGuide: `Search for all Button components with \`danger\` prop. Replace with \`color="danger"\`. If the button also had \`type="primary"\`, add \`variant="solid"\`.`,
-  },
-  {
-    component: 'Button',
-    breaking: true,
-    description: 'Prop `ghost` removed. Use `variant="outlined"` instead.',
-    autoFixable: true,
-    codemod: 'v6-ghost-migration',
-    searchPattern: `<Button[^>]*\\bghost\\b`,
-    before: `<Button ghost>Ghost</Button>
-<Button type="primary" ghost>Ghost Primary</Button>`,
-    after: `<Button variant="outlined">Ghost</Button>
-<Button color="primary" variant="outlined">Ghost Primary</Button>`,
-    migrationGuide: `Search for all Button components with \`ghost\` prop. Replace with \`variant="outlined"\`. Preserve the color from the original \`type\` prop.`,
-  },
-  {
-    component: 'Button',
     breaking: false,
     description: '`iconPosition` deprecated, use `iconPlacement` instead.',
     autoFixable: true,

@@ -1398,28 +1398,6 @@ exports[`migrate > migrate 5 6 --format json 1`] = `
     },
     {
       "component": "Button",
-      "breaking": true,
-      "description": "Prop \`danger\` removed. Use \`color=\\"danger\\"\` instead.",
-      "autoFixable": true,
-      "codemod": "v6-danger-migration",
-      "searchPattern": "<Button[^>]*\\\\bdanger\\\\b",
-      "before": "<Button danger>Delete</Button>\\n<Button type=\\"primary\\" danger>Delete</Button>",
-      "after": "<Button color=\\"danger\\">Delete</Button>\\n<Button color=\\"danger\\" variant=\\"solid\\">Delete</Button>",
-      "migrationGuide": "Search for all Button components with \`danger\` prop. Replace with \`color=\\"danger\\"\`. If the button also had \`type=\\"primary\\"\`, add \`variant=\\"solid\\"\`."
-    },
-    {
-      "component": "Button",
-      "breaking": true,
-      "description": "Prop \`ghost\` removed. Use \`variant=\\"outlined\\"\` instead.",
-      "autoFixable": true,
-      "codemod": "v6-ghost-migration",
-      "searchPattern": "<Button[^>]*\\\\bghost\\\\b",
-      "before": "<Button ghost>Ghost</Button>\\n<Button type=\\"primary\\" ghost>Ghost Primary</Button>",
-      "after": "<Button variant=\\"outlined\\">Ghost</Button>\\n<Button color=\\"primary\\" variant=\\"outlined\\">Ghost Primary</Button>",
-      "migrationGuide": "Search for all Button components with \`ghost\` prop. Replace with \`variant=\\"outlined\\"\`. Preserve the color from the original \`type\` prop."
-    },
-    {
-      "component": "Button",
       "breaking": false,
       "description": "\`iconPosition\` deprecated, use \`iconPlacement\` instead.",
       "autoFixable": true,
@@ -1683,8 +1661,8 @@ exports[`migrate > migrate 5 6 --format json 1`] = `
     }
   ],
   "summary": {
-    "total": 42,
-    "autoFixable": 4,
+    "total": 40,
+    "autoFixable": 2,
     "manual": 38
   }
 }"
@@ -1693,7 +1671,7 @@ exports[`migrate > migrate 5 6 --format json 1`] = `
 exports[`migrate > migrate 5 6 --format markdown 1`] = `
 "# Migration Guide: antd v5 → v6
 
-> 42 total steps: 4 auto-fixable, 38 manual
+> 40 total steps: 2 auto-fixable, 38 manual
 
 ## Global
 
@@ -1775,46 +1753,6 @@ Button type prop is decomposed:
 \`\`\`
 
 **Search pattern:** \`<Button[^>]*\\btype\\s*=\\s*['"](?:primary|dashed|link|text)['"]\`
-
-### Prop \`danger\` removed. Use \`color="danger"\` instead.
-
-**BREAKING** | 🔧 auto-fixable
-
-Search for all Button components with \`danger\` prop. Replace with \`color="danger"\`. If the button also had \`type="primary"\`, add \`variant="solid"\`.
-
-**Before:**
-\`\`\`tsx
-<Button danger>Delete</Button>
-<Button type="primary" danger>Delete</Button>
-\`\`\`
-
-**After:**
-\`\`\`tsx
-<Button color="danger">Delete</Button>
-<Button color="danger" variant="solid">Delete</Button>
-\`\`\`
-
-**Search pattern:** \`<Button[^>]*\\bdanger\\b\`
-
-### Prop \`ghost\` removed. Use \`variant="outlined"\` instead.
-
-**BREAKING** | 🔧 auto-fixable
-
-Search for all Button components with \`ghost\` prop. Replace with \`variant="outlined"\`. Preserve the color from the original \`type\` prop.
-
-**Before:**
-\`\`\`tsx
-<Button ghost>Ghost</Button>
-<Button type="primary" ghost>Ghost Primary</Button>
-\`\`\`
-
-**After:**
-\`\`\`tsx
-<Button variant="outlined">Ghost</Button>
-<Button color="primary" variant="outlined">Ghost Primary</Button>
-\`\`\`
-
-**Search pattern:** \`<Button[^>]*\\bghost\\b\`
 
 ### \`iconPosition\` deprecated, use \`iconPlacement\` instead.
 
@@ -2186,8 +2124,6 @@ exports[`migrate > migrate 5 6 --format text 1`] = `
 
   Button:
     🔧 [BREAKING] Prop \`type\` split into \`color\` and \`variant\` for styling. \`type="primary"\` → \`color="primary" variant="solid"\`.
-    🔧 [BREAKING] Prop \`danger\` removed. Use \`color="danger"\` instead.
-    🔧 [BREAKING] Prop \`ghost\` removed. Use \`variant="outlined"\` instead.
     🔧 \`iconPosition\` deprecated, use \`iconPlacement\` instead.
 
   Button.Group:
@@ -2289,5 +2225,5 @@ exports[`migrate > migrate 5 6 --format text 1`] = `
   TreeSelect:
     📝 Multiple deprecated props: \`dropdownClassName\` → \`classNames.popup.root\`, \`dropdownRender\` → \`popupRender\`, \`bordered\` → \`variant\`, \`onDropdownVisibleChange\` → \`onOpenChange\`.
 
-Total: 42 steps (4 auto-fixable, 38 manual)"
+Total: 40 steps (2 auto-fixable, 38 manual)"
 `;

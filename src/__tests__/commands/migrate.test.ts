@@ -86,6 +86,27 @@ describe('migrate', () => {
     expect(out).toContain('variant');
   });
 
+  it('should not report supported Button props as removed in v6', async () => {
+    const info = JSON.parse(await run('info', 'Button', '--version', '6', '--detail', '--format', 'json'));
+    for (const propName of ['danger', 'ghost']) {
+      const prop = info.props.find((item: any) => item.name === propName);
+      expect(prop, `${propName} should remain in the v6 Button metadata`).toBeDefined();
+      expect(prop.deprecated, `${propName} should not be deprecated`).toBeFalsy();
+    }
+
+    const migration = JSON.parse(
+      await run('migrate', '5', '6', '--component', 'Button', '--format', 'json'),
+    );
+    const invalidSteps = migration.steps.filter(
+      (step: any) => {
+        const guidance = `${step.description ?? ''} ${step.migrationGuide ?? ''}`;
+        return /\b(?:danger|ghost)\b/i.test(guidance)
+          && (step.breaking || /\b(?:removed|unsupported|no longer supported)\b/i.test(guidance));
+      },
+    );
+    expect(invalidSteps).toEqual([]);
+  });
+
   it('should handle invalid migration path', async () => {
     const result = await runCLI('migrate', '3', '6');
     expect(result.exitCode).toBe(1);

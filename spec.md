@@ -672,6 +672,8 @@ antd migrate --format json
 
 **Available migration paths:** v3→v4, v4→v5, v5→v6. Multi-version migrations (e.g., v3→v6) are not supported directly — migrate step by step.
 
+The v5→v6 Button guidance keeps `danger` and `ghost` as supported syntactic-sugar props. It may recommend the newer `color` and `variant` APIs through the general `type` migration, but must not report `danger` or `ghost` as removed breaking changes.
+
 Behavior of `--apply <dir>`:
 - Scans the target directory for antd component imports (reuses the `usage` scanning logic)
 - Filters migration steps to only those relevant to the project's actual component usage
