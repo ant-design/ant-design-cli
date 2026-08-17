@@ -1001,11 +1001,12 @@ After each command completes, the CLI silently checks whether a newer version is
 **Notice format (stderr only):**
 
 ```
-╭────────────────────────────────────────╮
-│  Update available: 0.1.1 → 0.2.0       │
-│  Run: antd upgrade                      │
-│  Or:  npm i -g @ant-design/cli          │
-╰────────────────────────────────────────╯
+╭─────────────────────────────────────────────╮
+│  Update available: 0.1.1 → 0.2.0            │
+│  Running: /path/to/antd                      │
+│  Run: antd upgrade                           │
+│  Or: npm install -g @ant-design/cli@latest  │
+╰─────────────────────────────────────────────╯
 ```
 
 **Behavior details:**
@@ -1014,7 +1015,8 @@ After each command completes, the CLI silently checks whether a newer version is
 - Bug-reporting suggestions in SKILL.md and MCP prompts are skipped when `ANTD_NO_AUTO_REPORT=1` is set
 - Uses `registry.npmjs.org` with a 3 s timeout; failures are silent
 - Output goes to **stderr**, so `--format json` stdout is never polluted
-- No new production dependencies — uses only built-in Node modules (`node:https`, `node:fs`, `node:os`, `node:path`)
+- The notice shows the active `antd` binary path when it can be resolved and derives the manual install command from that path, making stale PATH entries and mixed global package-manager installs visible
+- No new production dependencies — uses the existing `string-width` package and built-in Node modules (`node:child_process`, `node:https`, `node:fs`, `node:os`, `node:path`)
 
 ### Self-Upgrade
 
