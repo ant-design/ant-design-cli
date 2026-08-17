@@ -11,8 +11,11 @@ interface PMRule {
 const PM_RULES: PMRule[] = [
   { pm: 'utoo', keywords: ['.utoo', 'utoo/global'] },
   { pm: 'cnpm', keywords: ['.cnpm', 'cnpm/global'] },
-  { pm: 'yarn', keywords: ['yarn/global'] },
-  { pm: 'pnpm', keywords: ['.pnpm-global', 'pnpm/global'] },
+  {
+    pm: 'yarn',
+    keywords: ['yarn/global', '/.yarn/bin/', '/yarn/bin/', '/yarn/data/global/', '/yarn/config/global/'],
+  },
+  { pm: 'pnpm', keywords: ['.pnpm-global', 'pnpm/global', '/pnpm/'] },
   { pm: 'bun', keywords: ['.bun', 'bun/install/global'] },
 ];
 
@@ -30,7 +33,7 @@ export function isPackageManager(value: unknown): value is PackageManager {
 }
 
 export function inferPackageManagerFromPath(binPath: string): PackageManager {
-  const normalized = binPath.replace(/\\/g, '/');
+  const normalized = binPath.replace(/\\/g, '/').toLowerCase();
   for (const rule of PM_RULES) {
     for (const keyword of rule.keywords) {
       if (normalized.includes(keyword)) return rule.pm;
@@ -39,7 +42,20 @@ export function inferPackageManagerFromPath(binPath: string): PackageManager {
   return 'npm';
 }
 
-export function detectPackageManager(): PackageManager | null {
+function isAntdCliPath(entryPath: string): boolean {
+  const normalized = entryPath.replace(/\\/g, '/').toLowerCase();
+  const fileName = normalized.split('/').pop();
+  return fileName === 'antd'
+    || fileName === 'antd.cmd'
+    || fileName === 'antd.exe'
+    || normalized.endsWith('/@ant-design/cli/dist/index.js');
+}
+
+export function findAntdBinaryPath(invocationPath: string | undefined = process.argv[1]): string | null {
+  if (invocationPath && isAntdCliPath(invocationPath)) {
+    return invocationPath;
+  }
+
   const isWin = process.platform === 'win32';
   try {
     const binPath = execFileSync(isWin ? 'where' : 'which', ['antd'], {
@@ -48,9 +64,13 @@ export function detectPackageManager(): PackageManager | null {
     }).trim();
     if (!binPath) return null;
     // Take first line in case of multiple matches
-    const firstPath = binPath.split('\n')[0].trim();
-    return inferPackageManagerFromPath(firstPath);
+    return binPath.split(/\r?\n/)[0].trim() || null;
   } catch {
     return null;
   }
+}
+
+export function detectPackageManager(): PackageManager | null {
+  const binPath = findAntdBinaryPath();
+  return binPath ? inferPackageManagerFromPath(binPath) : null;
 }

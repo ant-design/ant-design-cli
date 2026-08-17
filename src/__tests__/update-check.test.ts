@@ -1,7 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import stringWidth from 'string-width';
 import { checkForUpdate } from '../utils/update-check.js';
 import { cacheStore } from '../utils/store.js';
 import * as fetchModule from '../utils/fetch.js';
+
+vi.mock('node:child_process', () => ({
+  execFileSync: vi.fn(() => '/home/测试/.pnpm-global/bin/antd\n'),
+}));
 
 // Replace the Conf-backed store with an in-memory shim to avoid cross-test on-disk races.
 let memStore: Record<string, unknown> = {};
@@ -72,6 +77,19 @@ describe('update-check', () => {
     expect(calls).toContain('Update available');
     expect(calls).toContain('99.0.0');
     fetchSpy.mockRestore();
+  });
+
+  it('shows the active CLI path and matching install command in the update notice', async () => {
+    stripCI();
+    vi.spyOn(fetchModule, 'fetchFirstJson').mockResolvedValue({ version: '99.0.0' });
+
+    await checkForUpdate();
+
+    const notice = stderrSpy.mock.calls.map((call) => String(call[0])).join('');
+    expect(notice).toContain('Running: /home/测试/.pnpm-global/bin/antd');
+    expect(notice).toContain('pnpm add -g @ant-design/cli@latest');
+    const boxLines = notice.trim().split('\n');
+    expect(new Set(boxLines.map((boxLine) => stringWidth(boxLine))).size).toBe(1);
   });
 
   it('does not print notice when fetched version is older or equal', async () => {

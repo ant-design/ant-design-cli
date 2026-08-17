@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   detectPackageManager,
+  findAntdBinaryPath,
   inferPackageManagerFromPath,
   isPackageManager,
   PACKAGE_MANAGERS,
@@ -54,6 +55,23 @@ describe('inferPackageManagerFromPath', () => {
 
   it('detects pnpm from pnpm/global path', () => {
     expect(inferPackageManagerFromPath('/home/user/pnpm/global/bin/antd')).toBe('pnpm');
+  });
+
+  it.each([
+    '/Users/user/Library/pnpm/antd',
+    '/home/user/.local/share/pnpm/antd',
+    'C:\\Users\\user\\AppData\\Local\\pnpm\\antd.cmd',
+  ])('detects pnpm from a standard global bin path: %s', (binPath) => {
+    expect(inferPackageManagerFromPath(binPath)).toBe('pnpm');
+  });
+
+  it.each([
+    '/home/user/.yarn/bin/antd',
+    'C:\\Users\\user\\AppData\\Local\\Yarn\\bin\\antd.cmd',
+    'C:\\Users\\user\\AppData\\Local\\Yarn\\Data\\global\\node_modules\\@ant-design\\cli\\dist\\index.js',
+    'C:\\Users\\user\\AppData\\Local\\Yarn\\config\\global\\node_modules\\@ant-design\\cli\\dist\\index.js',
+  ])('detects yarn from a standard global bin path: %s', (binPath) => {
+    expect(inferPackageManagerFromPath(binPath)).toBe('yarn');
   });
 
   it('detects bun from .bun path', () => {
@@ -154,6 +172,13 @@ describe('detectPackageManager', () => {
   function mockPlatform(platform: string) {
     Object.defineProperty(process, 'platform', { value: platform });
   }
+
+  it('prefers the current CLI invocation path over a different PATH entry', () => {
+    mockExecFileSync.mockReturnValue('/usr/local/bin/antd\n');
+
+    expect(findAntdBinaryPath('/home/user/.local/share/pnpm/antd')).toBe('/home/user/.local/share/pnpm/antd');
+    expect(mockExecFileSync).not.toHaveBeenCalled();
+  });
 
   it('returns npm when which returns an npm-style path (Unix)', () => {
     mockPlatform('darwin');

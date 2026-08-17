@@ -27,21 +27,24 @@ vi.mock('../../utils/store.js', () => ({
 }));
 
 // Mock detect-pm module
-vi.mock('../../utils/detect-pm.js', () => ({
-  detectPackageManager: vi.fn(() => null),
-  PACKAGE_MANAGERS: ['npm', 'yarn', 'pnpm', 'bun', 'cnpm', 'utoo'],
-  isPackageManager: (value: unknown) =>
-    typeof value === 'string' && ['npm', 'yarn', 'pnpm', 'bun', 'cnpm', 'utoo'].includes(value),
-  UPGRADE_COMMANDS: {
-    npm: { cmd: 'npm', args: ['install', '-g', '@ant-design/cli@latest'] },
-    yarn: { cmd: 'yarn', args: ['global', 'add', '@ant-design/cli@latest'] },
-    pnpm: { cmd: 'pnpm', args: ['add', '-g', '@ant-design/cli@latest'] },
-    bun: { cmd: 'bun', args: ['add', '-g', '@ant-design/cli@latest'] },
-    cnpm: { cmd: 'cnpm', args: ['install', '-g', '@ant-design/cli@latest'] },
-    utoo: { cmd: 'ut', args: ['install', '-g', '@ant-design/cli@latest'] },
-  },
-  inferPackageManagerFromPath: vi.fn(),
-}));
+vi.mock('../../utils/detect-pm.js', () => {
+  const packageManagers = ['npm', 'yarn', 'pnpm', 'bun', 'cnpm', 'utoo'];
+  return {
+    detectPackageManager: vi.fn(() => null),
+    PACKAGE_MANAGERS: packageManagers,
+    isPackageManager: (value: unknown) =>
+      typeof value === 'string' && packageManagers.includes(value),
+    UPGRADE_COMMANDS: {
+      npm: { cmd: 'npm', args: ['install', '-g', '@ant-design/cli@latest'] },
+      yarn: { cmd: 'yarn', args: ['global', 'add', '@ant-design/cli@latest'] },
+      pnpm: { cmd: 'pnpm', args: ['add', '-g', '@ant-design/cli@latest'] },
+      bun: { cmd: 'bun', args: ['add', '-g', '@ant-design/cli@latest'] },
+      cnpm: { cmd: 'cnpm', args: ['install', '-g', '@ant-design/cli@latest'] },
+      utoo: { cmd: 'ut', args: ['install', '-g', '@ant-design/cli@latest'] },
+    },
+    inferPackageManagerFromPath: vi.fn(),
+  };
+});
 
 // Mock version module so we can control compare() return value
 vi.mock('../../data/version.js', async (importOriginal) => {
@@ -154,6 +157,7 @@ describe('upgrade command', () => {
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toContain('pnpm add -g @ant-design/cli@latest');
     expect(mockConfigSet).toHaveBeenCalledWith('packageManager', 'pnpm');
+    expect(mockConfigGet).not.toHaveBeenCalled();
   });
 
   it('prefers the saved package manager over path detection', async () => {

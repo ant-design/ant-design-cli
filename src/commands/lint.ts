@@ -8,7 +8,13 @@ import { parseSync, Visitor } from 'oxc-parser';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { formatTable, output } from '../output/formatter.js';
-import { collectFiles, getJSXElementName, SCAN_EXTENSIONS, SKIP_DIRS } from '../utils/scan.js';
+import {
+  collectFiles,
+  getJSXElementName,
+  normalizeComponentKey,
+  SCAN_EXTENSIONS,
+  SKIP_DIRS,
+} from '../utils/scan.js';
 
 export interface LintIssue {
   file: string;
@@ -42,6 +48,33 @@ function getDeprecatedProps(store: ReturnType<typeof loadMetadataForVersion>): M
         };
       }));
     }
+  }
+  return result;
+}
+
+function extractDeprecatedNotice(source: string | undefined): string | undefined {
+  const notice = source?.match(
+    /:::warning\{\s*title\s*=\s*["']?(?:Deprecated Notice|废弃提示)["']?\s*\}\s*([\s\S]*?)\s*:::/,
+  );
+  return notice?.[1]?.replace(/\s+/g, ' ').trim();
+}
+
+export function getDeprecatedComponents(
+  store: ReturnType<typeof loadMetadataForVersion>,
+  lang: string,
+): Map<string, string> {
+  const result = new Map<string, string>();
+  for (const comp of store.components) {
+    const englishDetail = extractDeprecatedNotice(comp.whenToUse);
+    const chineseDetail = extractDeprecatedNotice(comp.whenToUseZh);
+    const englishMessage = englishDetail && `\`${comp.name}\` is deprecated. ${englishDetail}`;
+    const chineseMessage = chineseDetail && `\`${comp.name}\` 已废弃。${chineseDetail}`;
+    const fallbackMessage = englishMessage ?? chineseMessage;
+    if (!fallbackMessage) continue;
+    result.set(
+      comp.name,
+      localize(englishMessage ?? fallbackMessage, chineseMessage ?? fallbackMessage, lang),
+    );
   }
   return result;
 }
@@ -145,6 +178,115 @@ function collectPatternNames(pattern: any, names: string[] = []): string[] {
   return names;
 }
 
+type BindingScopeKind = 'program' | 'function' | 'block' | 'catch' | 'class' | 'loop' | 'switch' | 'static';
+
+function collectScopeBindings(program: any): Map<any, Set<string>> {
+  const bindings = new Map<any, Set<string>>();
+  const scopeStack: { node: any; kind: BindingScopeKind }[] = [];
+
+  const pushScope = (node: any, kind: BindingScopeKind) => {
+    bindings.set(node, new Set());
+    scopeStack.push({ node, kind });
+  };
+  const declareIn = (scope: { node: any }, pattern: any) => {
+    const names = bindings.get(scope.node)!;
+    for (const name of collectPatternNames(pattern)) names.add(name);
+  };
+  const currentScope = () => scopeStack[scopeStack.length - 1];
+  const nearestFunctionScope = () => [...scopeStack].reverse().find(
+    ({ kind }) => kind === 'function' || kind === 'program' || kind === 'static',
+  )!;
+  const pushFunctionScope = (node: any) => {
+    pushScope(node, 'function');
+    if (node.type === 'FunctionExpression' && node.id) declareIn(currentScope(), node.id);
+    for (const param of node.params ?? []) declareIn(currentScope(), param);
+  };
+
+  pushScope(program, 'program');
+  const visitor = new Visitor({
+    BlockStatement(node: any) {
+      pushScope(node, 'block');
+    },
+    'BlockStatement:exit'() {
+      scopeStack.pop();
+    },
+    FunctionDeclaration(node: any) {
+      declareIn(currentScope(), node.id);
+      pushFunctionScope(node);
+    },
+    'FunctionDeclaration:exit'() {
+      scopeStack.pop();
+    },
+    FunctionExpression: pushFunctionScope,
+    'FunctionExpression:exit'() {
+      scopeStack.pop();
+    },
+    ArrowFunctionExpression: pushFunctionScope,
+    'ArrowFunctionExpression:exit'() {
+      scopeStack.pop();
+    },
+    ClassDeclaration(node: any) {
+      declareIn(currentScope(), node.id);
+      pushScope(node, 'class');
+      declareIn(currentScope(), node.id);
+    },
+    'ClassDeclaration:exit'() {
+      scopeStack.pop();
+    },
+    ClassExpression(node: any) {
+      pushScope(node, 'class');
+      if (node.id) declareIn(currentScope(), node.id);
+    },
+    'ClassExpression:exit'() {
+      scopeStack.pop();
+    },
+    ForStatement(node: any) {
+      pushScope(node, 'loop');
+    },
+    'ForStatement:exit'() {
+      scopeStack.pop();
+    },
+    ForInStatement(node: any) {
+      pushScope(node, 'loop');
+    },
+    'ForInStatement:exit'() {
+      scopeStack.pop();
+    },
+    ForOfStatement(node: any) {
+      pushScope(node, 'loop');
+    },
+    'ForOfStatement:exit'() {
+      scopeStack.pop();
+    },
+    SwitchStatement(node: any) {
+      pushScope(node, 'switch');
+    },
+    'SwitchStatement:exit'() {
+      scopeStack.pop();
+    },
+    StaticBlock(node: any) {
+      pushScope(node, 'static');
+    },
+    'StaticBlock:exit'() {
+      scopeStack.pop();
+    },
+    CatchClause(node: any) {
+      pushScope(node, 'catch');
+      if (node.param) declareIn(currentScope(), node.param);
+    },
+    'CatchClause:exit'() {
+      scopeStack.pop();
+    },
+    VariableDeclaration(node: any) {
+      const target = node.kind === 'var' ? nearestFunctionScope() : currentScope();
+      for (const declaration of node.declarations ?? []) declareIn(target, declaration.id);
+    },
+  });
+  visitor.visit(program);
+  scopeStack.pop();
+  return bindings;
+}
+
 const STATIC_FEEDBACK_METHODS: Record<string, string[]> = {
   message: ['open', 'success', 'error', 'info', 'warning', 'warn', 'loading'],
   notification: ['open', 'success', 'error', 'info', 'warning', 'warn'],
@@ -182,6 +324,26 @@ function matchesAntdAlias(source: string, antdAliases: string[]): boolean {
   return antdAliases.some((antdAlias) => source === antdAlias || source.startsWith(`${antdAlias}/`));
 }
 
+function getComponentFromSubpath(
+  source: string,
+  antdAliases: string[],
+  componentBySubpath: Map<string, string>,
+): string | undefined {
+  const matchedAlias = [...antdAliases]
+    .sort((a, b) => b.length - a.length)
+    .find((antdAlias) => source.startsWith(`${antdAlias}/`))!;
+
+  const parts = source.slice(matchedAlias.length + 1).split('/');
+  const componentParts = parts[0] === 'es' || parts[0] === 'lib' ? parts.slice(1) : parts;
+  if (componentParts.includes('style') || componentParts.includes('locale')) return undefined;
+
+  for (let i = componentParts.length - 1; i >= 0; i--) {
+    const componentName = componentBySubpath.get(normalizeComponentKey(componentParts[i]));
+    if (componentName) return componentName;
+  }
+  return undefined;
+}
+
 function isLocalePath(source: string, antdAliases: string[]): boolean {
   return antdAliases.some(
     (alias) =>
@@ -201,6 +363,77 @@ function isNonModuleSource(source: string): boolean {
   const match = /\.([^./]+)$/.exec(source);
   if (!match) return false;
   return !MODULE_EXTENSIONS.has(match[1].toLowerCase());
+}
+
+interface CollectedAntdImports {
+  importedComponents: Set<string>;
+  antdImportLocals: Map<string, string>;
+  antdRootImportLocals: Set<string>;
+  performanceImports: {
+    node: any;
+    source: string;
+    localName: string;
+    kind: 'namespace' | 'default';
+  }[];
+}
+
+function collectAntdImports(
+  program: any,
+  antdAliases: string[],
+  componentBySubpath: Map<string, string>,
+): CollectedAntdImports {
+  const importedComponents = new Set<string>();
+  const antdImportLocals = new Map<string, string>();
+  const antdRootImportLocals = new Set<string>();
+  const performanceImports: CollectedAntdImports['performanceImports'] = [];
+
+  const visitor = new Visitor({
+    ImportDeclaration(node: any) {
+      const source = node.source.value;
+      if (!matchesAntdAlias(source, antdAliases) || node.importKind === 'type') return;
+
+      const isRootImport = antdAliases.includes(source);
+      for (const spec of node.specifiers) {
+        if (spec.type === 'ImportSpecifier' && spec.importKind !== 'type') {
+          const name = spec.imported?.name || spec.local?.name;
+          const localName = spec.local?.name || name;
+          if (name) importedComponents.add(name);
+          if (name && localName) antdImportLocals.set(localName, name);
+        }
+
+        if (spec.type === 'ImportNamespaceSpecifier' && isRootImport) {
+          antdRootImportLocals.add(spec.local?.name ?? '');
+        }
+
+        if (spec.type === 'ImportDefaultSpecifier') {
+          const localName = spec.local?.name;
+          if (localName && isRootImport) {
+            antdRootImportLocals.add(localName);
+          } else if (localName) {
+            const componentName = getComponentFromSubpath(source, antdAliases, componentBySubpath);
+            if (componentName) {
+              importedComponents.add(componentName);
+              antdImportLocals.set(localName, componentName);
+            }
+          }
+        }
+
+        const isNamespace = spec.type === 'ImportNamespaceSpecifier';
+        const isDefault = spec.type === 'ImportDefaultSpecifier';
+        if ((isNamespace || isDefault) && !isLocalePath(source, antdAliases) && !isNonModuleSource(source)) {
+          performanceImports.push({
+            node,
+            source,
+            localName: spec.local?.name ?? '',
+            kind: isNamespace ? 'namespace' : 'default',
+          });
+        }
+      }
+    },
+  });
+  visitor.visit(program);
+
+  return { importedComponents, antdImportLocals, antdRootImportLocals, performanceImports };
 }
 
 function mayContainAntdAlias(content: string, antdAliases: string[]): boolean {
@@ -294,6 +527,8 @@ function collectGitFiles(targetPath: string, mode: 'diff' | 'staged', diff?: boo
 function lintFile(
   filePath: string,
   deprecatedMap: Map<string, DeprecatedInfo[]>,
+  deprecatedComponents: Map<string, string>,
+  componentBySubpath: Map<string, string>,
   antdAliases: string[],
   antdMajor: number,
   only?: string,
@@ -330,8 +565,12 @@ function lintFile(
   }
 
   const issues: LintIssue[] = [];
-  const importedComponents = new Set<string>();
-  const antdImportLocals = new Map<string, string>();
+  const {
+    importedComponents,
+    antdImportLocals,
+    antdRootImportLocals,
+    performanceImports,
+  } = collectAntdImports(result.program, antdAliases, componentBySubpath);
   const offsetToLine = createLineMapper(content);
   const enableV5UsageRules = antdMajor >= 5;
 
@@ -350,53 +589,83 @@ function lintFile(
   const isInsideComponent = (name: string): boolean => jsxAncestorStack.includes(name);
 
   // Track namespace/default import usage for performance rule suggestions
-  const pendingPerformanceIssues: { line: number; source: string; localName: string; kind: 'namespace' | 'default' }[] = [];
-  const namespaceMemberUsage = new Map<string, Set<string>>();
-  const scopeStack: Set<string>[] = [new Set()];
-
-  const declarePattern = (pattern: any) => {
-    const currentScope = scopeStack[scopeStack.length - 1];
-    for (const name of collectPatternNames(pattern)) {
-      currentScope.add(name);
-    }
-  };
+  const pendingPerformanceIssues = (!only || only === 'performance')
+    ? performanceImports.map(({ node, ...item }) => ({ line: lineOf(node), ...item }))
+    : [];
+  const namespaceMemberUsage = new Map(
+    pendingPerformanceIssues.map((item) => [item.localName, new Set<string>()]),
+  );
+  const scopeBindings = collectScopeBindings(result.program);
+  const scopeStack: Set<string>[] = [scopeBindings.get(result.program) ?? new Set()];
+  const pushScope = (node: any) => scopeStack.push(scopeBindings.get(node) ?? new Set());
 
   const isShadowed = (name: string): boolean => scopeStack.some((scope) => scope.has(name));
 
-  const pushFunctionScope = (node: any) => {
-    scopeStack.push(new Set());
-    for (const param of node.params ?? []) declarePattern(param);
+  const resolveCanonicalComponent = (
+    compName: string,
+  ): { root: string; full: string } | null => {
+    const [localRoot, ...members] = compName.split('.');
+    if (!localRoot || isShadowed(localRoot)) return null;
+
+    const importedRoot = antdImportLocals.get(localRoot);
+    if (importedRoot) {
+      return { root: importedRoot, full: [importedRoot, ...members].join('.') };
+    }
+    if (antdRootImportLocals.has(localRoot) && members.length > 0) {
+      return { root: members[0], full: members.join('.') };
+    }
+    return null;
   };
 
   // Single pass: collect imports and check all rules
   const visitor = new Visitor({
-    BlockStatement() {
-      scopeStack.push(new Set());
-    },
+    BlockStatement: pushScope,
     'BlockStatement:exit'() {
       scopeStack.pop();
     },
-    FunctionDeclaration: pushFunctionScope,
+    FunctionDeclaration: pushScope,
     'FunctionDeclaration:exit'() {
       scopeStack.pop();
     },
-    FunctionExpression: pushFunctionScope,
+    FunctionExpression: pushScope,
     'FunctionExpression:exit'() {
       scopeStack.pop();
     },
-    ArrowFunctionExpression: pushFunctionScope,
+    ArrowFunctionExpression: pushScope,
     'ArrowFunctionExpression:exit'() {
       scopeStack.pop();
     },
-    CatchClause(node: any) {
-      scopeStack.push(new Set());
-      if (node.param) declarePattern(node.param);
-    },
-    'CatchClause:exit'() {
+    ClassDeclaration: pushScope,
+    'ClassDeclaration:exit'() {
       scopeStack.pop();
     },
-    VariableDeclarator(node: any) {
-      declarePattern(node.id);
+    ClassExpression: pushScope,
+    'ClassExpression:exit'() {
+      scopeStack.pop();
+    },
+    ForStatement: pushScope,
+    'ForStatement:exit'() {
+      scopeStack.pop();
+    },
+    ForInStatement: pushScope,
+    'ForInStatement:exit'() {
+      scopeStack.pop();
+    },
+    ForOfStatement: pushScope,
+    'ForOfStatement:exit'() {
+      scopeStack.pop();
+    },
+    SwitchStatement: pushScope,
+    'SwitchStatement:exit'() {
+      scopeStack.pop();
+    },
+    StaticBlock: pushScope,
+    'StaticBlock:exit'() {
+      scopeStack.pop();
+    },
+    CatchClause: pushScope,
+    'CatchClause:exit'() {
+      scopeStack.pop();
     },
     JSXElement(node: any) {
       const elName = getJSXElementName(node.openingElement?.name);
@@ -404,36 +673,6 @@ function lintFile(
     },
     'JSXElement:exit'() {
       jsxAncestorStack.pop();
-    },
-
-    ImportDeclaration(node: any) {
-      const source = node.source.value;
-      if (!matchesAntdAlias(source, antdAliases)) return;
-
-      if (node.importKind === 'type') return;
-
-      for (const spec of node.specifiers) {
-        if (spec.type === 'ImportSpecifier') {
-          if (spec.importKind === 'type') continue;
-          const name = spec.imported?.name || spec.local?.name;
-          const localName = spec.local?.name || name;
-          if (name) importedComponents.add(name);
-          if (name && localName) antdImportLocals.set(localName, name);
-        }
-
-        if (!only || only === 'performance') {
-          const isNamespace = spec.type === 'ImportNamespaceSpecifier';
-          const isDefault = spec.type === 'ImportDefaultSpecifier';
-          if ((isNamespace || isDefault) && !isLocalePath(source, antdAliases) && !isNonModuleSource(source)) {
-            const localName = spec.local?.name ?? '';
-            pendingPerformanceIssues.push({
-              line: lineOf(node), source, localName,
-              kind: isNamespace ? 'namespace' : 'default',
-            });
-            namespaceMemberUsage.set(localName, new Set());
-          }
-        }
-      }
     },
 
     CallExpression(node: any) {
@@ -469,26 +708,30 @@ function lintFile(
 
       // --- Deprecated checks ---
       if (!only || only === 'deprecated') {
-        if (compName === 'BackTop' && importedComponents.has('BackTop')) {
+        const canonicalComponent = resolveCanonicalComponent(compName);
+        if (canonicalComponent?.full === 'BackTop') {
           report('deprecated', 'warning', line, '`BackTop` is deprecated, use `FloatButton.BackTop` instead');
         }
-        if (compName === 'Button.Group' && importedComponents.has('Button')) {
+        if (canonicalComponent?.full === 'Button.Group') {
           report('deprecated', 'warning', line, '`Button.Group` is deprecated, use `Space.Compact` instead');
         }
-        if (compName === 'Input.Group' && importedComponents.has('Input')) {
+        if (canonicalComponent?.full === 'Input.Group') {
           report('deprecated', 'warning', line, '`Input.Group` is deprecated, use `Space.Compact` instead');
         }
 
-        const baseName = compName.includes('.') ? compName.split('.')[0] : compName;
-        if (importedComponents.has(baseName) || importedComponents.has(compName)) {
-          const deprecations = deprecatedMap.get(compName);
+        if (canonicalComponent) {
+          const componentNotice = deprecatedComponents.get(canonicalComponent.root);
+          if (componentNotice) {
+            report('deprecated', 'warning', line, componentNotice);
+          }
+          const deprecations = deprecatedMap.get(canonicalComponent.full);
           if (deprecations) {
             for (const attr of attrs) {
               if (attr.type !== 'JSXAttribute') continue;
               const propName = attr.name?.name;
               const dep = deprecations.find((d) => d.prop === propName);
               if (dep) {
-                report('deprecated', 'warning', lineOf(attr) || line, `${compName} ${dep.message}`);
+                report('deprecated', 'warning', lineOf(attr) || line, `${canonicalComponent.full} ${dep.message}`);
               }
             }
           }
@@ -657,6 +900,10 @@ export function registerLintCommand(program: Command): void {
       const versionInfo = detectVersion(opts.version);
       const store = loadMetadataForVersion(versionInfo.version);
       const deprecatedMap = getDeprecatedProps(store);
+      const deprecatedComponents = getDeprecatedComponents(store, opts.lang);
+      const componentBySubpath = new Map(
+        store.components.map((component) => [normalizeComponentKey(component.name), component.name]),
+      );
       const antdAliases = normalizeAntdAliases(cmdOpts.antdAlias);
 
       let files: string[];
@@ -673,7 +920,7 @@ export function registerLintCommand(program: Command): void {
       const skippedFiles: SkippedFile[] = [];
 
       for (const file of files) {
-        const result = lintFile(file, deprecatedMap, antdAliases, parseInt(versionInfo.majorVersion.slice(1), 10), cmdOpts.only);
+        const result = lintFile(file, deprecatedMap, deprecatedComponents, componentBySubpath, antdAliases, parseInt(versionInfo.majorVersion.slice(1), 10), cmdOpts.only);
         allIssues.push(...result.issues);
         if (result.skipped) skippedFiles.push(result.skipped);
       }

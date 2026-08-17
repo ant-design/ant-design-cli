@@ -637,7 +637,7 @@ Note: This is complementary to ESLint. `antd lint` focuses on antd-specific know
 
 **Rule categories:**
 
-- **deprecated** — Deprecated props (with replacement info from metadata) and deprecated components (`BackTop` → `FloatButton.BackTop`, `Button.Group` / `Input.Group` → `Space.Compact`). Deprecated prop detection uses AST traversal to precisely match props to their owning JSX element, eliminating false positives from sibling components.
+- **deprecated** — Deprecated props (with replacement info from metadata) and deprecated components. Component-level `Deprecated Notice` blocks in bundled metadata are reported automatically and localized by `--lang` (for example, `List` in antd v6); named aliases, root namespace/default imports, component subpath imports, and member usage resolve to their canonical antd component. Legacy structural rules include `BackTop` → `FloatButton.BackTop` and `Button.Group` / `Input.Group` → `Space.Compact`. Deprecated prop detection uses AST traversal to precisely match props to their owning JSX element, eliminating false positives from sibling components.
 - **a11y** — Accessibility: missing `alt` on Image, missing `aria-label` on clickable icons
 - **usage** — Prop combination mistakes detected from antd runtime warnings:
   - Form.Item `shouldUpdate` + `dependencies` conflict
@@ -1002,11 +1002,12 @@ After each command completes, the CLI silently checks whether a newer version is
 **Notice format (stderr only):**
 
 ```
-╭────────────────────────────────────────╮
-│  Update available: 0.1.1 → 0.2.0       │
-│  Run: antd upgrade                      │
-│  Or:  npm i -g @ant-design/cli          │
-╰────────────────────────────────────────╯
+╭─────────────────────────────────────────────╮
+│  Update available: 0.1.1 → 0.2.0            │
+│  Running: /path/to/antd                      │
+│  Run: antd upgrade                           │
+│  Or: npm install -g @ant-design/cli@latest  │
+╰─────────────────────────────────────────────╯
 ```
 
 **Behavior details:**
@@ -1015,7 +1016,8 @@ After each command completes, the CLI silently checks whether a newer version is
 - Bug-reporting suggestions in SKILL.md and MCP prompts are skipped when `ANTD_NO_AUTO_REPORT=1` is set
 - Uses `registry.npmjs.org` with a 3 s timeout; failures are silent
 - Output goes to **stderr**, so `--format json` stdout is never polluted
-- No new production dependencies — uses only built-in Node modules (`node:https`, `node:fs`, `node:os`, `node:path`)
+- The notice shows the active `antd` binary path when it can be resolved and derives the manual install command from that path, making stale PATH entries and mixed global package-manager installs visible
+- No new production dependencies — uses the existing `string-width` package and built-in Node modules (`node:child_process`, `node:https`, `node:fs`, `node:os`, `node:path`)
 
 ### Self-Upgrade
 

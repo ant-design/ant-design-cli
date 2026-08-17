@@ -147,9 +147,11 @@ export function registerUpgradeCommand(program: Command): void {
       }
 
       // Step 3: Detect package manager
-      const savedPackageManager: unknown = configStore.get('packageManager');
-      const pm = cmdOpts.packageManager
-        ?? (isPackageManager(savedPackageManager) ? savedPackageManager : detectPackageManager());
+      let pm = cmdOpts.packageManager;
+      if (!pm) {
+        const savedPackageManager: unknown = configStore.get('packageManager');
+        pm = isPackageManager(savedPackageManager) ? savedPackageManager : detectPackageManager() ?? undefined;
+      }
       if (!pm) {
         const err = createError(
           ErrorCodes.PM_NOT_FOUND,

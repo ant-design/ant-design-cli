@@ -1,6 +1,8 @@
 import { compare, valid } from '../data/version.js';
+import stringWidth from 'string-width';
 import { cacheStore } from './store.js';
 import { fetchFirstJson } from './fetch.js';
+import { findAntdBinaryPath, inferPackageManagerFromPath, UPGRADE_COMMANDS } from './detect-pm.js';
 
 declare const __CLI_VERSION__: string;
 
@@ -19,16 +21,21 @@ export async function fetchLatestVersion(): Promise<string | null> {
 
 function printUpdateNotice(currentVersion: string, latestVersion: string): void {
   const line = `  Update available: ${currentVersion} → ${latestVersion}  `;
+  const binPath = findAntdBinaryPath();
+  const packageManager = binPath ? inferPackageManagerFromPath(binPath) : 'npm';
+  const upgrade = UPGRADE_COMMANDS[packageManager];
+  const running = binPath ? `  Running: ${binPath}  ` : null;
   const cmd = '  Run: antd upgrade  ';
-  const install = '  Or: npm i -g @ant-design/cli  ';
-  const width = Math.max(line.length, cmd.length, install.length);
-  const pad = (s: string) => s + ' '.repeat(width - s.length);
+  const install = `  Or: ${upgrade.cmd} ${upgrade.args.join(' ')}  `;
+  const lines = [line, running, cmd, install].filter((item): item is string => item !== null);
+  const width = Math.max(...lines.map((item) => stringWidth(item)));
+  const pad = (s: string) => s + ' '.repeat(width - stringWidth(s));
   const bar = '─'.repeat(width);
 
   process.stderr.write(`\n╭${bar}╮\n`);
-  process.stderr.write(`│${pad(line)}│\n`);
-  process.stderr.write(`│${pad(cmd)}│\n`);
-  process.stderr.write(`│${pad(install)}│\n`);
+  for (const item of lines) {
+    process.stderr.write(`│${pad(item)}│\n`);
+  }
   process.stderr.write(`╰${bar}╯\n`);
 }
 
