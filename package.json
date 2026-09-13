@@ -51,7 +51,7 @@
     "cfonts": "^3.3.1",
     "fast-glob": "^3.3.3",
     "fast-levenshtein": "^3.0.0",
-    "oxc-parser": "^0.144.0",
+    "oxc-parser": "^0.149.0",
     "semver": "^7.8.0",
     "string-width": "^8.2.1"
   },
@@ -60,15 +60,15 @@
     "@types/fast-levenshtein": "^0.0.4",
     "@types/node": "^26.0.0",
     "@types/semver": "^7.7.1",
-    "@vitest/coverage-v8": "^4.1.2",
+    "@vitest/coverage-v8": "^5.0.0",
     "commander": "^15.0.0",
     "conf": "^15.1.0",
     "env-paths": "^4.0.0",
     "envinfo": "^7.21.0",
     "tsup": "^8.4.0",
     "tsx": "^4.19.0",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0",
     "yaml": "^2.9.0"
   }
 }
