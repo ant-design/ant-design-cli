@@ -1163,7 +1163,7 @@ exports[`list > list --format json --lang zh 1`] = `
 `;
 
 exports[`list > list --format markdown --lang en 1`] = `
-"# antd Components (6.6.3)
+"# antd Components (6.6.4)
 
 | Component | Name (zh) | Description | Since |
 | --- | --- | --- | --- |
@@ -1242,7 +1242,7 @@ exports[`list > list --format markdown --lang en 1`] = `
 `;
 
 exports[`list > list --format markdown --lang zh 1`] = `
-"# antd Components (6.6.3)
+"# antd Components (6.6.4)
 
 | 组件 | 中文名 | 描述 | 版本 |
 | --- | --- | --- | --- |
