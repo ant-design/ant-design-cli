@@ -13,9 +13,15 @@ describe('lint', () => {
   });
 
   /** Create a temp fixture, run lint, and clean up. */
-  async function lintFixture(name: string, content: string, extraArgs: string[] = [], version = '6.3.1'): Promise<string> {
+  async function lintFixture(
+    name: string,
+    content: string,
+    extraArgs: string[] = [],
+    version = '6.3.1',
+    extension = 'tsx',
+  ): Promise<string> {
     const tmpDir = join(__dirname, `__tmp_lint_${name}__`);
-    const fixture = join(tmpDir, `${name}.tsx`);
+    const fixture = join(tmpDir, `${name}.${extension}`);
     try {
       mkdirSync(tmpDir, { recursive: true });
       writeFileSync(fixture, content);
@@ -976,6 +982,45 @@ const App = () => (
     );
     const data = JSON.parse(out);
     expect(Array.isArray(data.issues)).toBe(true);
+  });
+
+  it('should lint JSX in .js files', async () => {
+    const out = await lintFixture(
+      'jsx-in-js',
+      `import { Image } from 'antd';\nexport const App = () => <Image src="x.png" />;`,
+      ['--only', 'a11y', '--format', 'json'],
+      '6.3.1',
+      'js',
+    );
+    const data = JSON.parse(out);
+
+    expect(data.summary.skipped).toBe(0);
+    expect(data.skippedFiles).toEqual([]);
+    expect(
+      data.issues.some(
+        (issue: LintIssue) =>
+          issue.rule === 'a11y' && issue.message.includes('alt'),
+      ),
+    ).toBe(true);
+  });
+
+  it('should still report genuine syntax errors in .js files', async () => {
+    const out = await lintFixture(
+      'unparseable-js',
+      `import { Button } from 'antd';\nconst App = () => { broken( <Button };`,
+      ['--format', 'json'],
+      '6.3.1',
+      'js',
+    );
+    const data = JSON.parse(out);
+
+    expect(data.summary.skipped).toBe(1);
+    expect(data.skippedFiles).toEqual([
+      expect.objectContaining({
+        reason: 'parse-error',
+        file: expect.stringContaining('unparseable-js.js'),
+      }),
+    ]);
   });
 
   it('should skip files that cannot be parsed (syntax error)', async () => {
