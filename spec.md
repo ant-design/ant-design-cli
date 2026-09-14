@@ -562,7 +562,7 @@ antd usage ./src -f Form            # combine directory and filter
 antd usage --format json
 ```
 
-Imports are cross-referenced against the antd metadata for the detected version. Known antd component exports (e.g. `Button`, `Form`, `Row`, `Col`) appear in `components`. Non-component antd exports (e.g. `message`, `notification`, `theme`) are reported separately in `nonComponents`. TypeScript `import { type X }` syntax is handled — type-only imports are excluded entirely (they are not runtime values and have no component usage to track). Sub-component usage detection uses AST traversal to precisely identify JSX elements (e.g. `<Form.Item>`, `<Table.Column>`), automatically excluding method or hook calls (e.g. `Form.useForm()`, `Modal.confirm()`).
+Imports are cross-referenced against the antd metadata for the detected version. Known antd component exports (e.g. `Button`, `Form`, `Row`, `Col`) appear in `components`. Non-component antd exports (e.g. `message`, `notification`, `theme`) are reported separately in `nonComponents`. TypeScript `import { type X }` syntax is handled — type-only imports are excluded entirely (they are not runtime values and have no component usage to track). Sub-component usage detection uses AST traversal to precisely identify JSX elements (e.g. `<Form.Item>`, `<Table.Column>`), automatically excluding method or hook calls (e.g. `Form.useForm()`, `Modal.confirm()`). Files ending in `.js` are first parsed as standard JavaScript and retried in JSX mode only when that parse fails, supporting projects that intentionally use JSX in `.js` files without changing normal JavaScript parsing.
 
 The scanner skips directories named `node_modules`, `dist`, `build`, `.next`, `.git`, and any directory whose name starts with `.umi` (covers `.umi`, `.umi-production`, `.umi-test`, etc.).
 
@@ -585,7 +585,7 @@ JSON output:
 
 #### `antd lint [file/dir]`
 
-Check antd usage against best practices. Uses AST-based analysis (powered by `oxc-parser`) on source files for precise detection.
+Check antd usage against best practices. Uses AST-based analysis (powered by `oxc-parser`) on source files for precise detection. It uses the same JSX-in-`.js` fallback as `antd usage`; files that remain invalid in JSX mode are still reported in `skippedFiles` as parse errors.
 
 ```bash
 antd lint ./src

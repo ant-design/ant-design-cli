@@ -4,7 +4,7 @@ import { localize } from '../types.js';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { execFileSync, type ExecFileSyncOptionsWithStringEncoding } from 'node:child_process';
 import { dirname, extname, join, relative, resolve } from 'node:path';
-import { parseSync, Visitor } from 'oxc-parser';
+import { Visitor } from 'oxc-parser';
 import { loadMetadataForVersion } from '../data/loader.js';
 import { detectVersion } from '../data/version.js';
 import { formatTable, output } from '../output/formatter.js';
@@ -12,6 +12,7 @@ import {
   collectFiles,
   getJSXElementName,
   normalizeComponentKey,
+  parseSourceFile,
   SCAN_EXTENSIONS,
   SKIP_DIRS,
 } from '../utils/scan.js';
@@ -552,7 +553,7 @@ function lintFile(
   // Fast pre-check: skip files that don't reference configured antd aliases
   if (!mayContainAntdAlias(content, antdAliases)) return { issues: [] };
 
-  const result = parseSync(filePath, content);
+  const result = parseSourceFile(filePath, content);
   if (result.errors.length > 0) {
     return {
       issues: [],
