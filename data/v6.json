@@ -1,5 +1,5 @@
 {
-  "version": "6.6.6",
+  "version": "6.6.7",
   "majorVersion": "v6",
   "components": [
     {
@@ -33222,6 +33222,117 @@
     }
   ],
   "changelog": [
+    {
+      "version": "6.6.7",
+      "date": "2026-10-19",
+      "changes": [
+        {
+          "component": "General",
+          "type": "fix",
+          "description": "🐞 Fix antd failing to load in some production builds when the React version export is unavailable. [react-component/util#810](https://github.com/react-component/util/pull/810) [-actions](https://github.com/apps/github-actions)"
+        },
+        {
+          "component": "Button",
+          "type": "fix",
+          "description": "🐞 Fix Button, Form, Slider, Typography, and Upload triggering delayed state updates after unmounting. [react-component/util#806](https://github.com/react-component/util/pull/806) [-actions](https://github.com/apps/github-actions)"
+        },
+        {
+          "component": "Select",
+          "type": "fix",
+          "description": "🐞 Fix Select, TreeSelect, Cascader, and Mentions `popupRender` content inheriting Form.Item validation status and feedback icons."
+        },
+        {
+          "component": "Popover",
+          "type": "fix",
+          "description": "🐞 Fix Popover and Popconfirm preset `color` not applying to the panel background."
+        },
+        {
+          "component": "Form",
+          "type": "fix",
+          "description": "🐞 Fix Form custom `shouldUpdate` comparisons missing updates when nested fields with `preserve={false}` are unmounted. [react-component/util#807](https://github.com/react-component/util/pull/807) [-actions](https://github.com/apps/github-actions)"
+        },
+        {
+          "component": "Form",
+          "type": "fix",
+          "description": "🐞 Fix Form.Item incorrectly removing a trailing `|` from a string `label` when displaying a colon."
+        },
+        {
+          "component": "Form",
+          "type": "other",
+          "description": "⌨️ Fix Form.Item not associating warning-only messages with the control through `aria-describedby`."
+        },
+        {
+          "component": "Input",
+          "type": "fix",
+          "description": "🐞 Fix Input.OTP losing valid characters when pasting text with a filtering `formatter`."
+        },
+        {
+          "component": "Input",
+          "type": "fix",
+          "description": "🐞 Fix Input.OTP ignoring `rootClassName` on the root element."
+        },
+        {
+          "component": "Input",
+          "type": "fix",
+          "description": "🐞 Fix Input.OTP not rendering a numeric `0` as the `separator`. [-YiChen](https://github.com/Ye-YiChen)"
+        },
+        {
+          "component": "Table",
+          "type": "fix",
+          "description": "🐞 Fix Table selection menu skipping current-page tree descendants when inverting selection and deselecting disabled rows on other pages when clearing selections."
+        },
+        {
+          "component": "Table",
+          "type": "fix",
+          "description": "🐞 Fix Table sorted fixed header hover background and the `fixedHeaderSortActiveBg` token not taking effect."
+        },
+        {
+          "component": "ColorPicker",
+          "type": "fix",
+          "description": "🐞 Fix ColorPicker applying RTL styles when ConfigProvider `direction` is `ltr`."
+        },
+        {
+          "component": "ColorPicker",
+          "type": "fix",
+          "description": "🐞 Fix ColorPicker number input control button width."
+        },
+        {
+          "component": "General",
+          "type": "fix",
+          "description": "🐞 Fix nested Descriptions being affected by the outer component's borders, spacing, and cell layout."
+        },
+        {
+          "component": "Progress",
+          "type": "fix",
+          "description": "🐞 Fix Progress line ignoring string widths in `size`, such as `['50%', 20]`, and always filling the container."
+        },
+        {
+          "component": "Tooltip",
+          "type": "fix",
+          "description": "🐞 Fix Tooltip failing to limit panel corner radius to 8px for left and right placements when the `borderRadius` token exceeds 8."
+        },
+        {
+          "component": "Popconfirm",
+          "type": "fix",
+          "description": "🐞 Fix Popconfirm `onPopupClick` firing twice for a single click inside the popup content."
+        },
+        {
+          "component": "Upload",
+          "type": "fix",
+          "description": "🐞 Fix Upload extra content styles when `showUploadList.extra` is `0` or returns `0`."
+        },
+        {
+          "component": "Typography",
+          "type": "other",
+          "description": "♿ Fix Typography duplicate button semantics for the default edit icon."
+        },
+        {
+          "component": "Transfer",
+          "type": "deprecation",
+          "description": "⚡️ Improve Transfer source list rendering performance."
+        }
+      ]
+    },
     {
       "version": "6.6.6",
       "date": "2026-10-12",

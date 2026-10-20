@@ -1,5 +1,10 @@
 # Changelog
 
+## [6.6.7](https://github.com/ant-design/ant-design-cli/compare/v6.6.6...v6.6.7) (2026-10-20)
+
+- Update antd metadata ([v6@6.6.7](https://github.com/ant-design/ant-design-cli/compare/v6.6.6...v6.6.7#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))
+
+
 ## [6.6.6](https://github.com/ant-design/ant-design-cli/compare/v6.6.5...v6.6.6) (2026-10-12)
 
 - Update antd metadata ([v6@6.6.6](https://github.com/ant-design/ant-design-cli/compare/v6.6.5...v6.6.6#diff-ebaa5874f72b5c0a62edf9d98d6ae55fffc16dc881ade7a697e589c8614c7436))

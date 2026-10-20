@@ -14,7 +14,7 @@ exports[`help > --help 1`] = `
 ▄▀█ █▄ █ ▀█▀   █▀▄ █▀▀ █▀▀ █ █▀▀ █▄ █   █▀▀ █   █
 █▀█ █ ▀█  █    █▄▀ ██▄ ▄▄█ █ █▄█ █ ▀█   █▄▄ █▄▄ █
 
-@ant-design/cli v6.6.6
+@ant-design/cli v6.6.7
 ──────────────────────
 
 Usage: antd [options] [command]
