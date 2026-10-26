@@ -1,5 +1,5 @@
 {
-  "version": "6.6.7",
+  "version": "6.6.8",
   "majorVersion": "v6",
   "components": [
     {
@@ -33223,8 +33223,64 @@
   ],
   "changelog": [
     {
+      "version": "6.6.8",
+      "date": "2026-10-25",
+      "changes": [
+        {
+          "component": "Modal",
+          "type": "fix",
+          "description": "🐞 Fix Modal and Popconfirm custom button `onClick` handlers preventing confirmation or cancellation callbacks from running."
+        },
+        {
+          "component": "Modal",
+          "type": "fix",
+          "description": "🐞 Fix Modal confirmation content styles not applying the `colorText`, `fontSize`, and `lineHeight` tokens."
+        },
+        {
+          "component": "Pagination",
+          "type": "other",
+          "description": "⌨️ Fix Pagination focus indicators and jump icons not appearing when an inner link or button receives keyboard focus."
+        },
+        {
+          "component": "Pagination",
+          "type": "fix",
+          "description": "🐞 Fix Pagination accidentally selecting text or blank areas after repeatedly clicking jump buttons. [-YiChen](https://github.com/Ye-YiChen)"
+        },
+        {
+          "component": "Message",
+          "type": "fix",
+          "description": "🐞 Fix Message blocking pointer events on underlying elements outside the message content."
+        },
+        {
+          "component": "Upload",
+          "type": "fix",
+          "description": "🐞 Fix Upload preview tasks remaining pending and leaking memory when images fail to decode."
+        },
+        {
+          "component": "Card",
+          "type": "fix",
+          "description": "🐞 Fix Card title margins not being reset when using Typography.Title as the title."
+        },
+        {
+          "component": "Listy",
+          "type": "style",
+          "description": "💄 Fix Listy virtual scrollbars not using the `colorSplit` token for their background color."
+        },
+        {
+          "component": "Progress",
+          "type": "other",
+          "description": "♿ Fix Progress `aria-valuenow` reporting `success.percent` instead of the overall `percent` and exceeding the 0–100 range."
+        },
+        {
+          "component": "List",
+          "type": "other",
+          "description": "🤖 Fix List `dataSource` types not accepting readonly arrays."
+        }
+      ]
+    },
+    {
       "version": "6.6.7",
-      "date": "2026-10-19",
+      "date": "2026-10-20",
       "changes": [
         {
           "component": "General",
