@@ -1,4 +1,5 @@
 import { statSync, readFileSync } from 'node:fs';
+import { extname } from 'node:path';
 import fg from 'fast-glob';
 import { parseSync, Visitor } from 'oxc-parser';
 
@@ -59,6 +60,15 @@ export function normalizeComponentKey(name: string): string {
   return name.replace(/[^a-z0-9]/gi, '').toLowerCase();
 }
 
+/** Parse source files, retrying .js files as JSX when standard JavaScript parsing fails. */
+export function parseSourceFile(filePath: string, content: string) {
+  const parsed = parseSync(filePath, content);
+  if (parsed.errors.length === 0 || extname(filePath).toLowerCase() !== '.js') {
+    return parsed;
+  }
+  return parseSync(filePath, content, { lang: 'jsx' });
+}
+
 function getSubpathComponentName(source: string, componentBySubpath?: Map<string, string>): string | undefined {
   if (!componentBySubpath) return undefined;
 
@@ -94,7 +104,7 @@ export function scanFile(filePath: string, opts?: ScanFileOptions): ScanFileResu
 
   if (!content.includes('antd')) return { usage, content: opts?.returnContent ? content : undefined };
 
-  const parsed = parseSync(filePath, content);
+  const parsed = parseSourceFile(filePath, content);
   if (parsed.errors.length > 0) return { usage, content: opts?.returnContent ? content : undefined };
 
   const importedNames = new Set<string>();

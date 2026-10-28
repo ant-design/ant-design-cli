@@ -106,6 +106,27 @@ describe('usage', () => {
     }
   });
 
+  it('should scan JSX in .js files', async () => {
+    const tmpDir = join(__dirname, '__tmp_usage_jsx_in_js__');
+    const fixture = join(tmpDir, 'component.js');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(
+        fixture,
+        `import { Button } from 'antd';\nexport const App = () => <Button>Test</Button>;`,
+      );
+      const out = await run('usage', tmpDir, '--format', 'json');
+      const data = JSON.parse(out);
+
+      expect(data.components).toEqual([
+        expect.objectContaining({ name: 'Button', imports: 1 }),
+      ]);
+      expect(data.summary.totalImports).toBe(1);
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('should skip files with parse errors', async () => {
     const tmpDir = join(__dirname, '__tmp_usage_broken__');
     const fixture = join(tmpDir, 'test.tsx');
