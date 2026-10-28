@@ -309,24 +309,20 @@ function isMainSection(label: string, componentName: string): boolean {
 }
 
 /**
- * Parse props from the `doc`/`docZh` markdown fields of a component.
- * Returns { props, subComponentProps } or null if no API section found.
- *
- * Exported for testing. Not part of the public CLI API.
+ * Parse API sections from a markdown doc string.
+ * Extracted to avoid duplicating the EN/ZH parsing logic (~40 lines each).
+ * Returns a Map of section label to props, or an empty Map if no API section found.
  */
-export function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; subComponentProps: Record<string, PropData[]> } | null {
-  if (!comp.doc) return null;
+function parseApiSections(doc: string, lang: 'en' | 'zh'): Map<string, PropData[]> {
+  const apiMatch = doc.match(/^## API\b/m);
+  if (!apiMatch || apiMatch.index === undefined) return new Map();
 
-  const apiMatch = comp.doc.match(/^## API\b/m);
-  if (!apiMatch || apiMatch.index === undefined) return null;
-
-  const afterApi = comp.doc.slice(apiMatch.index);
+  const afterApi = doc.slice(apiMatch.index);
   const terminalRe = /^## (?:Design Token|FAQ|Note|Examples?|When To Use|When to use|Best Practices?|Semantic DOM)\b/im;
   const terminalMatch = afterApi.match(terminalRe);
   const apiBlock = terminalMatch?.index !== undefined ? afterApi.slice(0, terminalMatch.index) : afterApi;
 
-  // Parse English props
-  const enSections = new Map<string, PropData[]>();
+  const sections = new Map<string, PropData[]>();
   const tableRegex = /\|(.+)\|\n\|[\s:|-]+\|\n((?:\|.+\|\n?)*)/g;
   const h2Chunks = apiBlock.split(/^(?=## )/m).filter(Boolean);
 
@@ -345,50 +341,29 @@ export function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; sub
       let m: RegExpExecArray | null;
       tableRegex.lastIndex = 0;
       while ((m = tableRegex.exec(part)) !== null) {
-        const parsed = parseTableProps(m[0], 'en');
+        const parsed = parseTableProps(m[0], lang);
         if (parsed.length > 0) {
-          const existing = enSections.get(sectionLabel) || [];
-          enSections.set(sectionLabel, [...existing, ...parsed]);
+          const existing = sections.get(sectionLabel) || [];
+          sections.set(sectionLabel, [...existing, ...parsed]);
         }
       }
     }
   }
 
-  // Parse Chinese props
-  const zhSections = new Map<string, PropData[]>();
-  if (comp.docZh) {
-    const zhApiMatch = comp.docZh.match(/^## API\b/m);
-    if (zhApiMatch?.index !== undefined) {
-      const zhAfterApi = comp.docZh.slice(zhApiMatch.index);
-      const zhTerminal = zhAfterApi.match(terminalRe);
-      const zhBlock = zhTerminal?.index !== undefined ? zhAfterApi.slice(0, zhTerminal.index) : zhAfterApi;
-      const zhH2Chunks = zhBlock.split(/^(?=## )/m).filter(Boolean);
+  return sections;
+}
 
-      for (const chunk of zhH2Chunks) {
-        const h2Match = chunk.match(/^## (.+)$/m);
-        const rawH2 = h2Match ? h2Match[1].trim() : 'API';
-        const h2Label = rawH2 === 'API' ? '__api_root__' : cleanLabel(rawH2);
-        const h3Parts = chunk.split(/^(?=### )/m);
+/**
+ * Parse props from the `doc`/`docZh` markdown fields of a component.
+ * Returns { props, subComponentProps } or null if no API section found.
+ *
+ * Exported for testing. Not part of the public CLI API.
+ */
+export function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; subComponentProps: Record<string, PropData[]> } | null {
+  if (!comp.doc) return null;
 
-        for (const part of h3Parts) {
-          const h3Match = part.match(/^### (.+)$/m);
-          const sectionLabel = !h3Match
-            ? h2Label === '__api_root__' ? '__main__' : h2Label
-            : cleanLabel(h3Match[1].trim());
-
-          let m: RegExpExecArray | null;
-          tableRegex.lastIndex = 0;
-          while ((m = tableRegex.exec(part)) !== null) {
-            const parsed = parseTableProps(m[0], 'zh');
-            if (parsed.length > 0) {
-              const existing = zhSections.get(sectionLabel) || [];
-              zhSections.set(sectionLabel, [...existing, ...parsed]);
-            }
-          }
-        }
-      }
-    }
-  }
+  const enSections = parseApiSections(comp.doc, 'en');
+  const zhSections = comp.docZh ? parseApiSections(comp.docZh, 'zh') : new Map();
 
   if (enSections.size === 0) return null;
 
@@ -398,7 +373,7 @@ export function parsePropsFromDoc(comp: ComponentData): { props: PropData[]; sub
 
   for (const [label, enProps] of enSections) {
     const zhProps = zhSections.get(label) || [];
-    const zhMap = new Map(zhProps.map((p) => [p.name, p]));
+    const zhMap = new Map<string, PropData>(zhProps.map((p: PropData) => [p.name, p]));
     const merged = enProps.map((enProp) => ({
       ...enProp,
       descriptionZh: zhMap.get(enProp.name)?.descriptionZh || zhMap.get(enProp.name)?.description || '',
