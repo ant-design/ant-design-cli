@@ -912,6 +912,10 @@ export function registerLintCommand(program: Command): void {
       try {
         const collected: string[] = [];
         for (const targetPath of resolvedTargets) {
+          const useGit = Boolean(cmdOpts.staged || cmdOpts.diff);
+          if (!useGit && !existsSync(resolve(targetPath))) {
+            throw new Error(`Lint target not found: ${targetPath}`);
+          }
           const next = cmdOpts.staged
             ? collectGitFiles(targetPath, 'staged')
             : cmdOpts.diff
@@ -919,7 +923,7 @@ export function registerLintCommand(program: Command): void {
               : collectFiles(targetPath);
           collected.push(...next);
         }
-        files = Array.from(new Set(collected));
+        files = Array.from(new Set(collected.map((file) => resolve(file))));
       } catch (error) {
         program.error(error instanceof Error ? error.message : String(error));
       }

@@ -172,6 +172,37 @@ const App = () => (
     }
   });
 
+  it('should error when a normal-mode lint target does not exist', async () => {
+    const missing = join(__dirname, '__tmp_lint_missing_target__');
+    rmSync(missing, { recursive: true, force: true });
+
+    const result = await runCLI('lint', missing);
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('Lint target not found');
+    expect(result.stderr).not.toContain('at ');
+  });
+
+  it('should dedupe overlapping directory and file targets before linting', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_dedupe_paths__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      const file = join(tmpDir, 'dup.tsx');
+      writeFileSync(file, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+
+      const result = await runCLI('lint', tmpDir, file, '--format', 'json');
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(1);
+      expect(data.issues).toHaveLength(1);
+      expect(data.issues[0].file).toBe(file);
+      expect(data.issues[0].rule).toBe('usage');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('should support --antd-alias flag for custom import paths', async () => {
     const out = await lintFixture(
       'alias',
