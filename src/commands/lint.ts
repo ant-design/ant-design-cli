@@ -886,15 +886,16 @@ function printSkippedFiles(skippedFiles: SkippedFile[]): void {
 
 export function registerLintCommand(program: Command): void {
   program
-    .command('lint [target]')
+    .command('lint [targets...]')
     .description('Check antd usage against best practices')
     .option('--only <category>', 'Only check specific category (deprecated, a11y, usage, performance)')
     .option('--antd-alias <source>', 'Treat additional package names as aliases of antd imports', collectAntdAlias, [])
     .option('--diff [base]', 'Only lint files changed from a git diff base (default: origin/main, fallback: HEAD)')
     .option('--staged', 'Only lint staged git files')
-    .action((target: string | undefined, cmdOpts: LintCommandOptions) => {
+    .action((targets: string | string[] | undefined, cmdOpts: LintCommandOptions) => {
       const opts = program.opts<GlobalOptions>();
-      const targetPath = target || '.';
+      const targetPaths = (Array.isArray(targets) ? targets : targets ? [targets] : []).filter(Boolean);
+      const resolvedTargets = targetPaths.length > 0 ? targetPaths : ['.'];
       if (cmdOpts.diff && cmdOpts.staged) {
         program.error('--diff and --staged cannot be used together');
       }
@@ -909,11 +910,16 @@ export function registerLintCommand(program: Command): void {
 
       let files: string[];
       try {
-        files = cmdOpts.staged
-          ? collectGitFiles(targetPath, 'staged')
-          : cmdOpts.diff
-            ? collectGitFiles(targetPath, 'diff', cmdOpts.diff)
-            : collectFiles(targetPath);
+        const collected: string[] = [];
+        for (const targetPath of resolvedTargets) {
+          const next = cmdOpts.staged
+            ? collectGitFiles(targetPath, 'staged')
+            : cmdOpts.diff
+              ? collectGitFiles(targetPath, 'diff', cmdOpts.diff)
+              : collectFiles(targetPath);
+          collected.push(...next);
+        }
+        files = Array.from(new Set(collected));
       } catch (error) {
         program.error(error instanceof Error ? error.message : String(error));
       }

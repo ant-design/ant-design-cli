@@ -152,6 +152,26 @@ const App = () => (
     expect(out).toContain('No issues found');
   });
 
+  it('should accept multiple file path arguments (#236)', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_multiple_paths__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      const fileA = join(tmpDir, 'a.tsx');
+      const fileB = join(tmpDir, 'b.tsx');
+      writeFileSync(fileA, `import { Image } from 'antd';\nconst App = () => <Image src="a.png" />;\n`);
+      writeFileSync(fileB, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+
+      const result = await runCLI('lint', fileA, fileB, '--format', 'json');
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+
+      expect(data.issues.some((i: LintIssue) => i.file === fileA && i.rule === 'a11y')).toBe(true);
+      expect(data.issues.some((i: LintIssue) => i.file === fileB && i.rule === 'usage')).toBe(true);
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('should support --antd-alias flag for custom import paths', async () => {
     const out = await lintFixture(
       'alias',
