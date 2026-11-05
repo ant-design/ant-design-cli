@@ -255,11 +255,16 @@ const App = () => (
       chmodSync(bad, 0o000);
       // chmod(0o000) does not remove read access on Windows, and may be ignored for
       // privileged processes — skip when unreadability cannot be guaranteed.
+      // Vitest implements ctx.skip() by throwing; keep that throw outside try/catch.
+      let stillReadable = false;
       try {
         readFileSync(bad);
-        ctx.skip();
+        stillReadable = true;
       } catch {
         // File is unreadable as required for this regression.
+      }
+      if (stillReadable) {
+        ctx.skip();
       }
 
       const result = await runCLI('lint', bad, good, '--format', 'json');
@@ -1224,11 +1229,16 @@ const App = () => (
       writeFileSync(fixture, `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;\n`);
       chmodSync(fixture, 0o000);
       // chmod(0o000) is unreliable on Windows / privileged processes — skip then.
+      // Vitest implements ctx.skip() by throwing; keep that throw outside try/catch.
+      let stillReadable = false;
       try {
         readFileSync(fixture);
-        ctx.skip();
+        stillReadable = true;
       } catch {
         // File is unreadable as required for this regression.
+      }
+      if (stillReadable) {
+        ctx.skip();
       }
 
       const result = await runCLI('lint', fixture, '--format', 'json');
