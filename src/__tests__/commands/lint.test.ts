@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { chmodSync, writeFileSync, mkdirSync, rmSync, symlinkSync } from 'node:fs';
+import { chmodSync, writeFileSync, mkdirSync, rmSync, symlinkSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { getDeprecatedComponents, realpathOrResolve, type LintIssue } from '../../commands/lint.js';
@@ -244,7 +244,7 @@ const App = () => (
     }
   });
 
-  it('should keep linting other files when one path is unreadable', async () => {
+  it('should keep linting other files when one path is unreadable', async (ctx) => {
     const tmpDir = join(__dirname, '__tmp_lint_realpath_skip_unread__');
     const good = join(tmpDir, 'good.tsx');
     const bad = join(tmpDir, 'bad.tsx');
@@ -253,6 +253,14 @@ const App = () => (
       writeFileSync(good, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
       writeFileSync(bad, `import { Image } from 'antd';\nconst App = () => <Image src="x.png" />;\n`);
       chmodSync(bad, 0o000);
+      // chmod(0o000) does not remove read access on Windows, and may be ignored for
+      // privileged processes — skip when unreadability cannot be guaranteed.
+      try {
+        readFileSync(bad);
+        ctx.skip();
+      } catch {
+        // File is unreadable as required for this regression.
+      }
 
       const result = await runCLI('lint', bad, good, '--format', 'json');
       expect(result.exitCode).toBe(0);
@@ -1208,13 +1216,20 @@ const App = () => (
     }
   });
 
-  it('should report files that cannot be read as skipped', async () => {
+  it('should report files that cannot be read as skipped', async (ctx) => {
     const tmpDir = join(__dirname, '__tmp_lint_unreadable__');
     const fixture = join(tmpDir, 'unreadable.tsx');
     try {
       mkdirSync(tmpDir, { recursive: true });
       writeFileSync(fixture, `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;\n`);
       chmodSync(fixture, 0o000);
+      // chmod(0o000) is unreliable on Windows / privileged processes — skip then.
+      try {
+        readFileSync(fixture);
+        ctx.skip();
+      } catch {
+        // File is unreadable as required for this regression.
+      }
 
       const result = await runCLI('lint', fixture, '--format', 'json');
       const data = JSON.parse(result.stdout);
