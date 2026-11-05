@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { chmodSync, writeFileSync, mkdirSync, rmSync, symlinkSync } from 'node:fs';
-import { join } from 'node:path';
+import { chmodSync, writeFileSync, mkdirSync, rmSync, symlinkSync, readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { getDeprecatedComponents, type LintIssue } from '../../commands/lint.js';
+import { getDeprecatedComponents, realpathOrResolve, type LintIssue } from '../../commands/lint.js';
 import { run, runCLI } from '../helper.js';
 
 describe('lint', () => {
@@ -150,6 +150,160 @@ const App = () => (
       `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;`,
     );
     expect(out).toContain('No issues found');
+  });
+
+  it('should accept multiple file path arguments (#236)', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_multiple_paths__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      const fileA = join(tmpDir, 'a.tsx');
+      const fileB = join(tmpDir, 'b.tsx');
+      writeFileSync(fileA, `import { Image } from 'antd';\nconst App = () => <Image src="a.png" />;\n`);
+      writeFileSync(fileB, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+
+      const result = await runCLI('lint', fileA, fileB, '--format', 'json');
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+
+      expect(data.issues.some((i: LintIssue) => i.file === fileA && i.rule === 'a11y')).toBe(true);
+      expect(data.issues.some((i: LintIssue) => i.file === fileB && i.rule === 'usage')).toBe(true);
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should error when a normal-mode lint target does not exist', async () => {
+    const missing = join(__dirname, '__tmp_lint_missing_target__');
+    rmSync(missing, { recursive: true, force: true });
+
+    const result = await runCLI('lint', missing);
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain('Lint target not found');
+    expect(result.stderr).not.toContain('at ');
+  });
+
+  it.skipIf(process.platform === 'win32')('should dedupe symlink and real path targets via realpath', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_dedupe_symlink__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      const file = join(tmpDir, 'real.tsx');
+      const link = join(tmpDir, 'link.tsx');
+      writeFileSync(file, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+      symlinkSync(file, link);
+
+      const result = await runCLI('lint', file, link, '--format', 'json');
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(1);
+      expect(data.issues).toHaveLength(1);
+      expect(data.issues[0].file).toBe(file);
+      expect(data.issues[0].rule).toBe('usage');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it.skipIf(process.platform === 'win32')('should keep first symlink path but parse with real file extension', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_symlink_ext__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      const real = join(tmpDir, 'real.tsx');
+      const alias = join(tmpDir, 'alias.ts');
+      writeFileSync(real, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+      symlinkSync(real, alias);
+
+      // First path is .ts alias; real file is .tsx with JSX. Output keeps alias, parse uses real ext.
+      const result = await runCLI('lint', alias, real, '--format', 'json');
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(1);
+      expect(data.summary.skipped).toBe(0);
+      expect(data.issues).toHaveLength(1);
+      expect(data.issues[0].file).toBe(alias);
+      expect(data.issues[0].rule).toBe('usage');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it.skipIf(process.platform === 'win32')('should fall back to resolve when realpathSync fails', () => {
+    const tmpDir = join(__dirname, '__tmp_lint_realpath_fallback__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      const a = join(tmpDir, 'a.tsx');
+      const b = join(tmpDir, 'b.tsx');
+      symlinkSync(b, a);
+      symlinkSync(a, b);
+
+      expect(realpathOrResolve(a)).toBe(resolve(a));
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should keep linting other files when one path is unreadable', async (ctx) => {
+    const tmpDir = join(__dirname, '__tmp_lint_realpath_skip_unread__');
+    const good = join(tmpDir, 'good.tsx');
+    const bad = join(tmpDir, 'bad.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(good, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+      writeFileSync(bad, `import { Image } from 'antd';\nconst App = () => <Image src="x.png" />;\n`);
+      chmodSync(bad, 0o000);
+      // chmod(0o000) does not remove read access on Windows, and may be ignored for
+      // privileged processes — skip when unreadability cannot be guaranteed.
+      // Vitest implements ctx.skip() by throwing; keep that throw outside try/catch.
+      let stillReadable = false;
+      try {
+        readFileSync(bad);
+        stillReadable = true;
+      } catch {
+        // File is unreadable as required for this regression.
+      }
+      if (stillReadable) {
+        ctx.skip();
+      }
+
+      const result = await runCLI('lint', bad, good, '--format', 'json');
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+
+      expect(data.partial).toBe(true);
+      expect(data.skippedFiles).toEqual(expect.arrayContaining([
+        expect.objectContaining({ file: bad, reason: 'read-error' }),
+      ]));
+      expect(data.issues.some((i: LintIssue) => i.file === good && i.rule === 'usage')).toBe(true);
+    } finally {
+      try {
+        chmodSync(bad, 0o600);
+      } catch {
+        // ignore restore failures during cleanup
+      }
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should dedupe overlapping directory and file targets before linting', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_dedupe_paths__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      const file = join(tmpDir, 'dup.tsx');
+      writeFileSync(file, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+
+      const result = await runCLI('lint', tmpDir, file, '--format', 'json');
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(1);
+      expect(data.issues).toHaveLength(1);
+      expect(data.issues[0].file).toBe(file);
+      expect(data.issues[0].rule).toBe('usage');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
   });
 
   it('should support --antd-alias flag for custom import paths', async () => {
@@ -1067,13 +1221,25 @@ const App = () => (
     }
   });
 
-  it('should report files that cannot be read as skipped', async () => {
+  it('should report files that cannot be read as skipped', async (ctx) => {
     const tmpDir = join(__dirname, '__tmp_lint_unreadable__');
     const fixture = join(tmpDir, 'unreadable.tsx');
     try {
       mkdirSync(tmpDir, { recursive: true });
       writeFileSync(fixture, `import { Button } from 'antd';\nconst App = () => <Button>OK</Button>;\n`);
       chmodSync(fixture, 0o000);
+      // chmod(0o000) is unreliable on Windows / privileged processes — skip then.
+      // Vitest implements ctx.skip() by throwing; keep that throw outside try/catch.
+      let stillReadable = false;
+      try {
+        readFileSync(fixture);
+        stillReadable = true;
+      } catch {
+        // File is unreadable as required for this regression.
+      }
+      if (stillReadable) {
+        ctx.skip();
+      }
 
       const result = await runCLI('lint', fixture, '--format', 'json');
       const data = JSON.parse(result.stdout);
