@@ -22,6 +22,29 @@ describe('demo', () => {
     expect(data.code).toContain('import');
   });
 
+  it('should warn on stderr but still output when --version falls back', async () => {
+    const result = await runCLI('demo', 'Button', 'basic', '--version', '5.3.4', '--format', 'json');
+    expect(result.exitCode).toBe(0);
+    expect(result.stderr).toContain('5.3.4');
+    expect(result.stderr).toContain('5.3.3');
+    const data = JSON.parse(result.stdout);
+    expect(data.component).toBe('Button');
+    expect(data.demo).toBe('basic');
+  });
+
+  it('should not warn on a later command without --version in the same process', async () => {
+    await runCLI('demo', 'Button', 'basic', '--version', '5.3.4');
+    const result = await runCLI('demo', 'Button', 'basic', '--format', 'json');
+    expect(result.stderr).not.toContain('using bundled snapshot');
+  });
+
+  it('should warn again on each CLI invocation with the same fallback version', async () => {
+    const first = await runCLI('demo', 'Button', 'basic', '--version', '5.3.4', '--format', 'json');
+    const second = await runCLI('demo', 'Button', 'basic', '--version', '5.3.4', '--format', 'json');
+    expect(first.stderr).toContain('using bundled snapshot 5.3.3');
+    expect(second.stderr).toContain('using bundled snapshot 5.3.3');
+  });
+
   it('should handle demo not found', async () => {
     const result = await runCLI('demo', 'Button', 'nonexistent');
     expect(result.exitCode).toBe(1);
