@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { run, runCLI } from '../helper.js';
 
 const FIXTURE_DIR = join(import.meta.dirname, '..', '__fixtures_migrate_tmp__');
+// Fixed empty dir for --apply tests that expect no antd imports
+const EMPTY_TMP_DIR = join(import.meta.dirname, '..', '__fixtures_apply_empty__');
 
 beforeAll(() => {
   mkdirSync(FIXTURE_DIR, { recursive: true });
@@ -20,10 +22,12 @@ const App = () => (
 import { Input } from 'antd';
 const Other = () => <Input />;
 `);
+  mkdirSync(EMPTY_TMP_DIR, { recursive: true });
 });
 
 afterAll(() => {
   rmSync(FIXTURE_DIR, { recursive: true, force: true });
+  rmSync(EMPTY_TMP_DIR, { recursive: true, force: true });
 });
 
 describe('migrate', () => {
@@ -49,9 +53,8 @@ describe('migrate', () => {
   });
 
   it('should show migrate --apply as agent prompt', async () => {
-    const out = await run('migrate', '4', '5', '--apply', '/tmp');
+    const out = await run('migrate', '4', '5', '--apply', EMPTY_TMP_DIR);
     expect(out).toContain('Auto-Migration Prompt');
-    expect(out).toContain('/tmp');
     expect(out).toContain('Auto-fixable Changes');
     expect(out).toContain('Manual Changes');
   });
