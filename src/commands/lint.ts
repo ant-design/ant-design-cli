@@ -525,6 +525,15 @@ function collectGitFiles(targetPath: string, mode: 'diff' | 'staged', diff?: boo
     .map((file) => join(repoRoot, file));
 }
 
+/** Resolve a stable real path for dedupe; fall back to resolve() when realpath fails. */
+export function realpathOrResolve(file: string): string {
+  try {
+    return realpathSync(file);
+  } catch {
+    return resolve(file);
+  }
+}
+
 function lintFile(
   filePath: string,
   deprecatedMap: Map<string, DeprecatedInfo[]>,
@@ -533,6 +542,7 @@ function lintFile(
   antdAliases: string[],
   antdMajor: number,
   only?: string,
+  parseFilePath = filePath,
 ): { issues: LintIssue[]; skipped?: SkippedFile } {
   let content: string;
   try {
@@ -553,7 +563,8 @@ function lintFile(
   // Fast pre-check: skip files that don't reference configured antd aliases
   if (!mayContainAntdAlias(content, antdAliases)) return { issues: [] };
 
-  const result = parseSourceFile(filePath, content);
+  // parseFilePath keeps the real extension when filePath is a differently-named symlink
+  const result = parseSourceFile(parseFilePath, content);
   if (result.errors.length > 0) {
     return {
       issues: [],
@@ -908,7 +919,7 @@ export function registerLintCommand(program: Command): void {
       );
       const antdAliases = normalizeAntdAliases(cmdOpts.antdAlias);
 
-      let files: string[];
+      let files: { displayPath: string; parsePath: string }[];
       try {
         const collected: string[] = [];
         for (const targetPath of resolvedTargets) {
@@ -923,10 +934,11 @@ export function registerLintCommand(program: Command): void {
               : collectFiles(targetPath);
           collected.push(...next);
         }
-        const seen = new Map<string, string>();
+        const seen = new Map<string, { displayPath: string; parsePath: string }>();
         for (const file of collected) {
-          const key = realpathSync(file);
-          if (!seen.has(key)) seen.set(key, resolve(file));
+          const displayPath = resolve(file);
+          const parsePath = realpathOrResolve(file);
+          if (!seen.has(parsePath)) seen.set(parsePath, { displayPath, parsePath });
         }
         files = Array.from(seen.values());
       } catch (error) {
@@ -936,7 +948,16 @@ export function registerLintCommand(program: Command): void {
       const skippedFiles: SkippedFile[] = [];
 
       for (const file of files) {
-        const result = lintFile(file, deprecatedMap, deprecatedComponents, componentBySubpath, antdAliases, parseInt(versionInfo.majorVersion.slice(1), 10), cmdOpts.only);
+        const result = lintFile(
+          file.displayPath,
+          deprecatedMap,
+          deprecatedComponents,
+          componentBySubpath,
+          antdAliases,
+          parseInt(versionInfo.majorVersion.slice(1), 10),
+          cmdOpts.only,
+          file.parsePath,
+        );
         allIssues.push(...result.issues);
         if (result.skipped) skippedFiles.push(result.skipped);
       }

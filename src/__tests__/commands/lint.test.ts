@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { chmodSync, writeFileSync, mkdirSync, rmSync, symlinkSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { getDeprecatedComponents, type LintIssue } from '../../commands/lint.js';
+import { getDeprecatedComponents, realpathOrResolve, type LintIssue } from '../../commands/lint.js';
 import { run, runCLI } from '../helper.js';
 
 describe('lint', () => {
@@ -201,6 +201,74 @@ const App = () => (
       expect(data.issues[0].file).toBe(file);
       expect(data.issues[0].rule).toBe('usage');
     } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it.skipIf(process.platform === 'win32')('should keep first symlink path but parse with real file extension', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_symlink_ext__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      const real = join(tmpDir, 'real.tsx');
+      const alias = join(tmpDir, 'alias.ts');
+      writeFileSync(real, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+      symlinkSync(real, alias);
+
+      // First path is .ts alias; real file is .tsx with JSX. Output keeps alias, parse uses real ext.
+      const result = await runCLI('lint', alias, real, '--format', 'json');
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(1);
+      expect(data.summary.skipped).toBe(0);
+      expect(data.issues).toHaveLength(1);
+      expect(data.issues[0].file).toBe(alias);
+      expect(data.issues[0].rule).toBe('usage');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it.skipIf(process.platform === 'win32')('should fall back to resolve when realpathSync fails', () => {
+    const tmpDir = join(__dirname, '__tmp_lint_realpath_fallback__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      const a = join(tmpDir, 'a.tsx');
+      const b = join(tmpDir, 'b.tsx');
+      symlinkSync(b, a);
+      symlinkSync(a, b);
+
+      expect(realpathOrResolve(a)).toBe(resolve(a));
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should keep linting other files when one path is unreadable', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_realpath_skip_unread__');
+    const good = join(tmpDir, 'good.tsx');
+    const bad = join(tmpDir, 'bad.tsx');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      writeFileSync(good, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+      writeFileSync(bad, `import { Image } from 'antd';\nconst App = () => <Image src="x.png" />;\n`);
+      chmodSync(bad, 0o000);
+
+      const result = await runCLI('lint', bad, good, '--format', 'json');
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+
+      expect(data.partial).toBe(true);
+      expect(data.skippedFiles).toEqual(expect.arrayContaining([
+        expect.objectContaining({ file: bad, reason: 'read-error' }),
+      ]));
+      expect(data.issues.some((i: LintIssue) => i.file === good && i.rule === 'usage')).toBe(true);
+    } finally {
+      try {
+        chmodSync(bad, 0o600);
+      } catch {
+        // ignore restore failures during cleanup
+      }
       rmSync(tmpDir, { recursive: true, force: true });
     }
   });
