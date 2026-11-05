@@ -183,6 +183,28 @@ const App = () => (
     expect(result.stderr).not.toContain('at ');
   });
 
+  it.skipIf(process.platform === 'win32')('should dedupe symlink and real path targets via realpath', async () => {
+    const tmpDir = join(__dirname, '__tmp_lint_dedupe_symlink__');
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+      const file = join(tmpDir, 'real.tsx');
+      const link = join(tmpDir, 'link.tsx');
+      writeFileSync(file, `import { Button } from 'antd';\nconst App = () => <Button ghost type="link" />;\n`);
+      symlinkSync(file, link);
+
+      const result = await runCLI('lint', file, link, '--format', 'json');
+      expect(result.exitCode).toBe(0);
+      const data = JSON.parse(result.stdout);
+
+      expect(data.summary.total).toBe(1);
+      expect(data.issues).toHaveLength(1);
+      expect(data.issues[0].file).toBe(file);
+      expect(data.issues[0].rule).toBe('usage');
+    } finally {
+      rmSync(tmpDir, { recursive: true, force: true });
+    }
+  });
+
   it('should dedupe overlapping directory and file targets before linting', async () => {
     const tmpDir = join(__dirname, '__tmp_lint_dedupe_paths__');
     try {

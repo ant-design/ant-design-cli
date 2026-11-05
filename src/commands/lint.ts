@@ -1,7 +1,7 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { localize } from '../types.js';
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { execFileSync, type ExecFileSyncOptionsWithStringEncoding } from 'node:child_process';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 import { Visitor } from 'oxc-parser';
@@ -923,7 +923,12 @@ export function registerLintCommand(program: Command): void {
               : collectFiles(targetPath);
           collected.push(...next);
         }
-        files = Array.from(new Set(collected.map((file) => resolve(file))));
+        const seen = new Map<string, string>();
+        for (const file of collected) {
+          const key = realpathSync(file);
+          if (!seen.has(key)) seen.set(key, resolve(file));
+        }
+        files = Array.from(seen.values());
       } catch (error) {
         program.error(error instanceof Error ? error.message : String(error));
       }
