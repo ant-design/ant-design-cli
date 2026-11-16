@@ -1,5 +1,5 @@
 {
-  "version": "6.7.0",
+  "version": "6.7.1",
   "majorVersion": "v6",
   "components": [
     {
@@ -14260,11 +14260,11 @@
       "props": [
         {
           "name": "classNames",
-          "type": "`{ root?, item?, groupHeader? }`",
+          "type": "Record<[SemanticDOM](#semantic-dom), string> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), string>",
           "default": "-",
-          "description": "Semantic class names",
+          "description": "Customize class for each semantic structure inside the component. Supports object or function.",
           "since": "6.6.0",
-          "descriptionZh": "语义化结构 class"
+          "descriptionZh": "用于自定义组件内部各语义化结构的 class，支持对象或函数"
         },
         {
           "name": "group",
@@ -14332,11 +14332,11 @@
         },
         {
           "name": "styles",
-          "type": "`{ root?, item?, groupHeader? }`",
+          "type": "Record<[SemanticDOM](#semantic-dom), CSSProperties> | (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties>",
           "default": "-",
-          "description": "Semantic inline styles",
+          "description": "Customize inline style for each semantic structure inside the component. Supports object or function.",
           "since": "6.6.0",
-          "descriptionZh": "语义化结构 style"
+          "descriptionZh": "用于自定义组件内部各语义化结构的行内 style，支持对象或函数"
         },
         {
           "name": "virtual",
@@ -14509,8 +14509,8 @@
           }
         ]
       },
-      "doc": "\n## When To Use\n\n- When you need to render a long list without paying the cost of mounting every row — enable `virtual` to render only the rows in view.\n- When the list needs grouped sections with sticky headers.\n- When you need imperative control over scroll position (jump to an item, a group, or a pixel offset).\n\n## Examples\n\n<!-- prettier-ignore -->\n<code src=\"./demo/basic.tsx\">Basic</code>\n<code src=\"./demo/row-hoverable-debug.tsx\" version=\"6.7.0\" debug>Disable row hover</code>\n<code src=\"./demo/virtual.tsx\">Virtual scrolling</code>\n<code src=\"./demo/horizontal.tsx\" version=\"6.7.0\">Horizontal scrolling</code>\n<code src=\"./demo/group.tsx\">Grouping and sticky headers</code>\n<code src=\"./demo/rich.tsx\">Rich content</code>\n<code src=\"./demo/drag-sorting.tsx\">Drag sorting</code>\n<code src=\"./demo/infinite.tsx\">Infinite loading</code>\n<code src=\"./demo/style-class.tsx\">Custom semantic dom styling</code>\n<code src=\"./demo/scroll-to.tsx\" debug>Scroll control</code>\n\n## API\n\n> Listy component is available since `antd@6.6.0`.\n\nCommon props ref: [Common props](/docs/react/common-props)\n\n| Property | Description | Type | Default | Version | [Global Config](/components/config-provider#component-config) |\n| --- | --- | --- | --- | --- | --- |\n| classNames | Semantic class names | `{ root?, item?, groupHeader? }` | - | 6.6.0 | 6.6.0 |\n| group | Grouping config, see [Group](#group) below | `Group<T, K>` | - | 6.6.0 | × |\n| height | Height of the scroll container; content scrolls when it overflows | number | - | 6.6.0 | × |\n| itemRender | Render a single row | `(item: T, index: number) => ReactNode` | - | 6.6.0 | × |\n| items | Data source of the list | `T[]` | `[]` | 6.6.0 | × |\n| rowHoverable | Whether rows are hoverable | boolean | true | 6.7.0 | × |\n| rowKey | Unique key of an item, a field name or a getter | `keyof T \\| (item: T, index: number) => Key` | - | 6.6.0 | × |\n| scrollWidth | Horizontal scroll width of the content; scrolls horizontally when it exceeds the container, only works with `virtual` | number | - | 6.7.0 | × |\n| sticky | Whether group headers stick to the top | boolean | false | 6.6.0 | × |\n| styles | Semantic inline styles | `{ root?, item?, groupHeader? }` | - | 6.6.0 | 6.6.0 |\n| virtual | Whether to enable virtual scrolling, rendering only rows in view, requires `height` | boolean | false | 6.6.0 | × |\n| onScroll | Native scroll event handler | `React.UIEventHandler<HTMLElement>` | - | 6.6.0 | × |\n\n### Group\n\n| Property | Description | Type |\n| --- | --- | --- |\n| key | Compute the group key an item belongs to; items with the same key are grouped together | `(item: T) => K` |\n| title | Render the group header; receives the group key and its items | `(groupKey: K, items: T[]) => ReactNode` |\n\n### Ref\n\n| Name     | Description                               | Type                                     |\n| -------- | ----------------------------------------- | ---------------------------------------- |\n| scrollTo | Scroll to a position, an item, or a group | `(config?: ListyScrollToConfig) => void` |\n\n`ListyScrollToConfig` is one of:\n\n| Shape                           | Description                                     |\n| ------------------------------- | ----------------------------------------------- |\n| number                          | Scroll to a pixel offset (scrollTop)            |\n| `{ top?, left? }`               | Scroll to an absolute pixel position            |\n| `{ key, align?, offset? }`      | Scroll to the item whose `rowKey` matches `key` |\n| `{ groupKey, align?, offset? }` | Scroll to a group header                        |\n\n`align` is `'top' | 'bottom' | 'auto'`; `offset` is an extra pixel offset applied after alignment.\n\n## Semantic DOM\n\n<code src=\"./demo/_semantic.tsx\" simplify=\"true\"></code>\n\n## Design Token\n\n<ComponentTokenTable component=\"Listy\"></ComponentTokenTable>\n",
-      "docZh": "\n## 何时使用 {#when-to-use}\n\n- 需要渲染长列表，又不想为每一行都付出挂载成本时 —— 开启 `virtual` 后只渲染视口内的行。\n- 列表需要分组，并让分组标题吸顶时。\n- 需要以命令式方式控制滚动位置（跳到某一项、某个分组或某个像素位置）时。\n\n## 代码演示 {#examples}\n\n<!-- prettier-ignore -->\n<code src=\"./demo/basic.tsx\">基础用法</code>\n<code src=\"./demo/row-hoverable-debug.tsx\" version=\"6.7.0\" debug>关闭行悬浮效果</code>\n<code src=\"./demo/virtual.tsx\">虚拟滚动</code>\n<code src=\"./demo/horizontal.tsx\" version=\"6.7.0\">横向滚动</code>\n<code src=\"./demo/group.tsx\">分组与吸顶</code>\n<code src=\"./demo/rich.tsx\">复杂内容</code>\n<code src=\"./demo/drag-sorting.tsx\">拖拽排序</code>\n<code src=\"./demo/infinite.tsx\">无限加载</code>\n<code src=\"./demo/style-class.tsx\">自定义语义结构的样式和类</code>\n<code src=\"./demo/scroll-to.tsx\" debug>滚动控制</code>\n\n## API\n\n> 自 `antd@6.6.0` 版本开始提供该组件。\n\n通用属性参考：[通用属性](/docs/react/common-props)\n\n| 参数 | 说明 | 类型 | 默认值 | 版本 | [全局配置](/components/config-provider#component-config) |\n| --- | --- | --- | --- | --- | --- |\n| classNames | 语义化结构 class | `{ root?, item?, groupHeader? }` | - | 6.6.0 | 6.6.0 |\n| group | 分组配置，见下方 [Group](#group) | `Group<T, K>` | - | 6.6.0 | × |\n| height | 滚动容器高度，内容超出后滚动 | number | - | 6.6.0 | × |\n| itemRender | 渲染单行 | `(item: T, index: number) => ReactNode` | - | 6.6.0 | × |\n| items | 列表数据源 | `T[]` | `[]` | 6.6.0 | × |\n| rowHoverable | 列表行是否开启 hover 交互 | boolean | true | 6.7.0 | × |\n| rowKey | 每一项的唯一键，字段名或取值函数 | `keyof T \\| (item: T, index: number) => Key` | - | 6.6.0 | × |\n| scrollWidth | 内容的横向滚动宽度，超出容器宽度时可横向滚动，仅在 `virtual` 下生效 | number | - | 6.7.0 | × |\n| sticky | 分组标题是否吸顶 | boolean | false | 6.6.0 | × |\n| styles | 语义化结构 style | `{ root?, item?, groupHeader? }` | - | 6.6.0 | 6.6.0 |\n| virtual | 是否开启虚拟滚动，仅渲染视口内的行，需配合 `height` 使用 | boolean | false | 6.6.0 | × |\n| onScroll | 原生滚动事件回调 | `React.UIEventHandler<HTMLElement>` | - | 6.6.0 | × |\n\n### Group\n\n| 参数 | 说明 | 类型 |\n| --- | --- | --- |\n| key | 计算每条数据所属的分组键，返回值相同的数据归为一组 | `(item: T) => K` |\n| title | 渲染分组标题，入参为分组键与该组数据 | `(groupKey: K, items: T[]) => ReactNode` |\n\n### Ref\n\n| 名称     | 说明                             | 类型                                     |\n| -------- | -------------------------------- | ---------------------------------------- |\n| scrollTo | 滚动到某个位置、某一项或某个分组 | `(config?: ListyScrollToConfig) => void` |\n\n`ListyScrollToConfig` 为以下之一：\n\n| 形态                            | 说明                                |\n| ------------------------------- | ----------------------------------- |\n| number                          | 滚动到某个像素位置（scrollTop）     |\n| `{ top?, left? }`               | 滚动到绝对像素坐标                  |\n| `{ key, align?, offset? }`      | 滚动到 `rowKey` 等于 `key` 的数据项 |\n| `{ groupKey, align?, offset? }` | 滚动到某个分组标题                  |\n\n`align` 可选 `'top' | 'bottom' | 'auto'`；`offset` 为对齐后额外的像素偏移。\n\n## Semantic DOM\n\n<code src=\"./demo/_semantic.tsx\" simplify=\"true\"></code>\n\n## 主题变量（Design Token）{#design-token}\n\n<ComponentTokenTable component=\"Listy\"></ComponentTokenTable>\n"
+      "doc": "\n## When To Use\n\n- When you need to render a long list without paying the cost of mounting every row — enable `virtual` to render only the rows in view.\n- When the list needs grouped sections with sticky headers.\n- When you need imperative control over scroll position (jump to an item, a group, or a pixel offset).\n\n## Examples\n\n<!-- prettier-ignore -->\n<code src=\"./demo/basic.tsx\">Basic</code>\n<code src=\"./demo/row-hoverable-debug.tsx\" version=\"6.7.0\" debug>Disable row hover</code>\n<code src=\"./demo/virtual.tsx\">Virtual scrolling</code>\n<code src=\"./demo/horizontal.tsx\" version=\"6.7.0\">Horizontal scrolling</code>\n<code src=\"./demo/group.tsx\">Grouping and sticky headers</code>\n<code src=\"./demo/rich.tsx\">Rich content</code>\n<code src=\"./demo/drag-sorting.tsx\">Drag sorting</code>\n<code src=\"./demo/infinite.tsx\">Infinite loading</code>\n<code src=\"./demo/style-class.tsx\">Custom semantic dom styling</code>\n<code src=\"./demo/scroll-to.tsx\" debug>Scroll control</code>\n\n## API\n\n> Listy component is available since `antd@6.6.0`.\n\nCommon props ref: [Common props](/docs/react/common-props)\n\n| Property | Description | Type | Default | Version | [Global Config](/components/config-provider#component-config) |\n| --- | --- | --- | --- | --- | --- |\n| classNames | Customize class for each semantic structure inside the component. Supports object or function. | Record<[SemanticDOM](#semantic-dom), string> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), string> | - | 6.6.0 | 6.6.0 |\n| group | Grouping config, see [Group](#group) below | `Group<T, K>` | - | 6.6.0 | × |\n| height | Height of the scroll container; content scrolls when it overflows | number | - | 6.6.0 | × |\n| itemRender | Render a single row | `(item: T, index: number) => ReactNode` | - | 6.6.0 | × |\n| items | Data source of the list | `T[]` | `[]` | 6.6.0 | × |\n| rowHoverable | Whether rows are hoverable | boolean | true | 6.7.0 | × |\n| rowKey | Unique key of an item, a field name or a getter | `keyof T \\| (item: T, index: number) => Key` | - | 6.6.0 | × |\n| scrollWidth | Horizontal scroll width of the content; scrolls horizontally when it exceeds the container, only works with `virtual` | number | - | 6.7.0 | × |\n| sticky | Whether group headers stick to the top | boolean | false | 6.6.0 | × |\n| styles | Customize inline style for each semantic structure inside the component. Supports object or function. | Record<[SemanticDOM](#semantic-dom), CSSProperties> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties> | - | 6.6.0 | 6.6.0 |\n| virtual | Whether to enable virtual scrolling, rendering only rows in view, requires `height` | boolean | false | 6.6.0 | × |\n| onScroll | Native scroll event handler | `React.UIEventHandler<HTMLElement>` | - | 6.6.0 | × |\n\n### Group\n\n| Property | Description | Type |\n| --- | --- | --- |\n| key | Compute the group key an item belongs to; items with the same key are grouped together | `(item: T) => K` |\n| title | Render the group header; receives the group key and its items | `(groupKey: K, items: T[]) => ReactNode` |\n\n### Ref\n\n| Name     | Description                               | Type                                     |\n| -------- | ----------------------------------------- | ---------------------------------------- |\n| scrollTo | Scroll to a position, an item, or a group | `(config?: ListyScrollToConfig) => void` |\n\n`ListyScrollToConfig` is one of:\n\n| Shape                           | Description                                     |\n| ------------------------------- | ----------------------------------------------- |\n| number                          | Scroll to a pixel offset (scrollTop)            |\n| `{ top?, left? }`               | Scroll to an absolute pixel position            |\n| `{ key, align?, offset? }`      | Scroll to the item whose `rowKey` matches `key` |\n| `{ groupKey, align?, offset? }` | Scroll to a group header                        |\n\n`align` is `'top' | 'bottom' | 'auto'`; `offset` is an extra pixel offset applied after alignment.\n\n## Semantic DOM\n\n<code src=\"./demo/_semantic.tsx\" simplify=\"true\"></code>\n\n## Design Token\n\n<ComponentTokenTable component=\"Listy\"></ComponentTokenTable>\n",
+      "docZh": "\n## 何时使用 {#when-to-use}\n\n- 需要渲染长列表，又不想为每一行都付出挂载成本时 —— 开启 `virtual` 后只渲染视口内的行。\n- 列表需要分组，并让分组标题吸顶时。\n- 需要以命令式方式控制滚动位置（跳到某一项、某个分组或某个像素位置）时。\n\n## 代码演示 {#examples}\n\n<!-- prettier-ignore -->\n<code src=\"./demo/basic.tsx\">基础用法</code>\n<code src=\"./demo/row-hoverable-debug.tsx\" version=\"6.7.0\" debug>关闭行悬浮效果</code>\n<code src=\"./demo/virtual.tsx\">虚拟滚动</code>\n<code src=\"./demo/horizontal.tsx\" version=\"6.7.0\">横向滚动</code>\n<code src=\"./demo/group.tsx\">分组与吸顶</code>\n<code src=\"./demo/rich.tsx\">复杂内容</code>\n<code src=\"./demo/drag-sorting.tsx\">拖拽排序</code>\n<code src=\"./demo/infinite.tsx\">无限加载</code>\n<code src=\"./demo/style-class.tsx\">自定义语义结构的样式和类</code>\n<code src=\"./demo/scroll-to.tsx\" debug>滚动控制</code>\n\n## API\n\n> 自 `antd@6.6.0` 版本开始提供该组件。\n\n通用属性参考：[通用属性](/docs/react/common-props)\n\n| 参数 | 说明 | 类型 | 默认值 | 版本 | [全局配置](/components/config-provider#component-config) |\n| --- | --- | --- | --- | --- | --- |\n| classNames | 用于自定义组件内部各语义化结构的 class，支持对象或函数 | Record<[SemanticDOM](#semantic-dom), string> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), string> | - | 6.6.0 | 6.6.0 |\n| group | 分组配置，见下方 [Group](#group) | `Group<T, K>` | - | 6.6.0 | × |\n| height | 滚动容器高度，内容超出后滚动 | number | - | 6.6.0 | × |\n| itemRender | 渲染单行 | `(item: T, index: number) => ReactNode` | - | 6.6.0 | × |\n| items | 列表数据源 | `T[]` | `[]` | 6.6.0 | × |\n| rowHoverable | 列表行是否开启 hover 交互 | boolean | true | 6.7.0 | × |\n| rowKey | 每一项的唯一键，字段名或取值函数 | `keyof T \\| (item: T, index: number) => Key` | - | 6.6.0 | × |\n| scrollWidth | 内容的横向滚动宽度，超出容器宽度时可横向滚动，仅在 `virtual` 下生效 | number | - | 6.7.0 | × |\n| sticky | 分组标题是否吸顶 | boolean | false | 6.6.0 | × |\n| styles | 用于自定义组件内部各语义化结构的行内 style，支持对象或函数 | Record<[SemanticDOM](#semantic-dom), CSSProperties> \\| (info: { props })=> Record<[SemanticDOM](#semantic-dom), CSSProperties> | - | 6.6.0 | 6.6.0 |\n| virtual | 是否开启虚拟滚动，仅渲染视口内的行，需配合 `height` 使用 | boolean | false | 6.6.0 | × |\n| onScroll | 原生滚动事件回调 | `React.UIEventHandler<HTMLElement>` | - | 6.6.0 | × |\n\n### Group\n\n| 参数 | 说明 | 类型 |\n| --- | --- | --- |\n| key | 计算每条数据所属的分组键，返回值相同的数据归为一组 | `(item: T) => K` |\n| title | 渲染分组标题，入参为分组键与该组数据 | `(groupKey: K, items: T[]) => ReactNode` |\n\n### Ref\n\n| 名称     | 说明                             | 类型                                     |\n| -------- | -------------------------------- | ---------------------------------------- |\n| scrollTo | 滚动到某个位置、某一项或某个分组 | `(config?: ListyScrollToConfig) => void` |\n\n`ListyScrollToConfig` 为以下之一：\n\n| 形态                            | 说明                                |\n| ------------------------------- | ----------------------------------- |\n| number                          | 滚动到某个像素位置（scrollTop）     |\n| `{ top?, left? }`               | 滚动到绝对像素坐标                  |\n| `{ key, align?, offset? }`      | 滚动到 `rowKey` 等于 `key` 的数据项 |\n| `{ groupKey, align?, offset? }` | 滚动到某个分组标题                  |\n\n`align` 可选 `'top' | 'bottom' | 'auto'`；`offset` 为对齐后额外的像素偏移。\n\n## Semantic DOM\n\n<code src=\"./demo/_semantic.tsx\" simplify=\"true\"></code>\n\n## 主题变量（Design Token）{#design-token}\n\n<ComponentTokenTable component=\"Listy\"></ComponentTokenTable>\n"
     },
     {
       "name": "Masonry",
@@ -33833,6 +33833,77 @@
     }
   ],
   "changelog": [
+    {
+      "version": "6.7.1",
+      "date": "2026-11-16",
+      "changes": [
+        {
+          "component": "Table",
+          "type": "fix",
+          "description": "🐞 Fix Table continuing to apply outdated sorters after column configuration changes."
+        },
+        {
+          "component": "Table",
+          "type": "fix",
+          "description": "🐞 Fix Table expand-all icon alignment with row expand icons in small and middle sizes."
+        },
+        {
+          "component": "Table",
+          "type": "other",
+          "description": "⌨️ Fix Table ignoring the reduced motion preference when scrolling to the top after pagination, sorting, or filtering. [-jia-nan](https://github.com/li-jia-nan)"
+        },
+        {
+          "component": "Modal",
+          "type": "fix",
+          "description": "🐞 Fix Modal focus errors and duplicate `afterOpenChange` calls when React `Activity` reveals a hidden Modal."
+        },
+        {
+          "component": "Modal",
+          "type": "fix",
+          "description": "🐞 Fix Modal leave-completion callbacks firing before DOM removal when leave motion is disabled mid-transition."
+        },
+        {
+          "component": "Card",
+          "type": "fix",
+          "description": "🐞 Fix Card action buttons with `href` displaying incorrect icon spacing."
+        },
+        {
+          "component": "Input.OTP",
+          "type": "fix",
+          "description": "🐞 Fix Input.OTP treating intermediate IME composition text as committed input."
+        },
+        {
+          "component": "DatePicker",
+          "type": "fix",
+          "description": "🐞 Fix DatePicker and TimePicker time panel cell alignment and content clipping by scrollbars."
+        },
+        {
+          "component": "Dropdown",
+          "type": "fix",
+          "description": "🐞 Fix Dropdown menu items in disabled submenus not displaying their disabled state correctly."
+        },
+        {
+          "component": "Anchor",
+          "type": "other",
+          "description": "⌨️ Fix Anchor ignoring the reduced motion preference when scrolling to a link. [-jia-nan](https://github.com/li-jia-nan)"
+        },
+        {
+          "component": "BackTop",
+          "type": "other",
+          "description": "⌨️ Fix BackTop ignoring the reduced motion preference when returning to the top. [-jia-nan](https://github.com/li-jia-nan)"
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "other",
+          "description": "🇮🇩 Improve ConfigProvider Indonesian (`id_ID`) translations."
+        },
+        {
+          "component": "ConfigProvider",
+          "type": "other",
+          "description": "🇨🇿 Improve ConfigProvider Czech (`cs_CZ`) translations. [-alt](https://github.com/kojdad-alt)"
+        }
+      ]
+    },
     {
       "version": "6.7.0",
       "date": "2026-11-04",
