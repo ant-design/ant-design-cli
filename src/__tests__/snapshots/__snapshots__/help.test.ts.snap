@@ -50,7 +50,7 @@ Commands:
                                    issues
   usage [options] [dir]            Scan project for antd component/API usage
                                    statistics
-  lint [options] [target]          Check antd usage against best practices
+  lint [options] [targets...]      Check antd usage against best practices
   migrate [options] <from> <to>    Version migration guide with optional
                                    auto-fix
   env [dir]                        Collect antd-related environment information

@@ -1,7 +1,7 @@
 import type { Command } from 'commander';
 import type { GlobalOptions } from '../types.js';
 import { localize } from '../types.js';
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { execFileSync, type ExecFileSyncOptionsWithStringEncoding } from 'node:child_process';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 import { Visitor } from 'oxc-parser';
@@ -525,6 +525,15 @@ function collectGitFiles(targetPath: string, mode: 'diff' | 'staged', diff?: boo
     .map((file) => join(repoRoot, file));
 }
 
+/** Resolve a stable real path for dedupe; fall back to resolve() when realpath fails. */
+export function realpathOrResolve(file: string): string {
+  try {
+    return realpathSync(file);
+  } catch {
+    return resolve(file);
+  }
+}
+
 function lintFile(
   filePath: string,
   deprecatedMap: Map<string, DeprecatedInfo[]>,
@@ -533,6 +542,7 @@ function lintFile(
   antdAliases: string[],
   antdMajor: number,
   only?: string,
+  parseFilePath = filePath,
 ): { issues: LintIssue[]; skipped?: SkippedFile } {
   let content: string;
   try {
@@ -553,7 +563,8 @@ function lintFile(
   // Fast pre-check: skip files that don't reference configured antd aliases
   if (!mayContainAntdAlias(content, antdAliases)) return { issues: [] };
 
-  const result = parseSourceFile(filePath, content);
+  // parseFilePath keeps the real extension when filePath is a differently-named symlink
+  const result = parseSourceFile(parseFilePath, content);
   if (result.errors.length > 0) {
     return {
       issues: [],
@@ -886,15 +897,16 @@ function printSkippedFiles(skippedFiles: SkippedFile[]): void {
 
 export function registerLintCommand(program: Command): void {
   program
-    .command('lint [target]')
+    .command('lint [targets...]')
     .description('Check antd usage against best practices')
     .option('--only <category>', 'Only check specific category (deprecated, a11y, usage, performance)')
     .option('--antd-alias <source>', 'Treat additional package names as aliases of antd imports', collectAntdAlias, [])
     .option('--diff [base]', 'Only lint files changed from a git diff base (default: origin/main, fallback: HEAD)')
     .option('--staged', 'Only lint staged git files')
-    .action((target: string | undefined, cmdOpts: LintCommandOptions) => {
+    .action((targets: string | string[] | undefined, cmdOpts: LintCommandOptions) => {
       const opts = program.opts<GlobalOptions>();
-      const targetPath = target || '.';
+      const targetPaths = (Array.isArray(targets) ? targets : targets ? [targets] : []).filter(Boolean);
+      const resolvedTargets = targetPaths.length > 0 ? targetPaths : ['.'];
       if (cmdOpts.diff && cmdOpts.staged) {
         program.error('--diff and --staged cannot be used together');
       }
@@ -907,13 +919,28 @@ export function registerLintCommand(program: Command): void {
       );
       const antdAliases = normalizeAntdAliases(cmdOpts.antdAlias);
 
-      let files: string[];
+      let files: { displayPath: string; parsePath: string }[];
       try {
-        files = cmdOpts.staged
-          ? collectGitFiles(targetPath, 'staged')
-          : cmdOpts.diff
-            ? collectGitFiles(targetPath, 'diff', cmdOpts.diff)
-            : collectFiles(targetPath);
+        const collected: string[] = [];
+        for (const targetPath of resolvedTargets) {
+          const useGit = Boolean(cmdOpts.staged || cmdOpts.diff);
+          if (!useGit && !existsSync(resolve(targetPath))) {
+            throw new Error(`Lint target not found: ${targetPath}`);
+          }
+          const next = cmdOpts.staged
+            ? collectGitFiles(targetPath, 'staged')
+            : cmdOpts.diff
+              ? collectGitFiles(targetPath, 'diff', cmdOpts.diff)
+              : collectFiles(targetPath);
+          collected.push(...next);
+        }
+        const seen = new Map<string, { displayPath: string; parsePath: string }>();
+        for (const file of collected) {
+          const displayPath = resolve(file);
+          const parsePath = realpathOrResolve(file);
+          if (!seen.has(parsePath)) seen.set(parsePath, { displayPath, parsePath });
+        }
+        files = Array.from(seen.values());
       } catch (error) {
         program.error(error instanceof Error ? error.message : String(error));
       }
@@ -921,7 +948,16 @@ export function registerLintCommand(program: Command): void {
       const skippedFiles: SkippedFile[] = [];
 
       for (const file of files) {
-        const result = lintFile(file, deprecatedMap, deprecatedComponents, componentBySubpath, antdAliases, parseInt(versionInfo.majorVersion.slice(1), 10), cmdOpts.only);
+        const result = lintFile(
+          file.displayPath,
+          deprecatedMap,
+          deprecatedComponents,
+          componentBySubpath,
+          antdAliases,
+          parseInt(versionInfo.majorVersion.slice(1), 10),
+          cmdOpts.only,
+          file.parsePath,
+        );
         allIssues.push(...result.issues);
         if (result.skipped) skippedFiles.push(result.skipped);
       }
