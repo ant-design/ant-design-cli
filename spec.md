@@ -583,12 +583,13 @@ JSON output:
 }
 ```
 
-#### `antd lint [file/dir]`
+#### `antd lint [targets...]`
 
 Check antd usage against best practices. Uses AST-based analysis (powered by `oxc-parser`) on source files for precise detection. It uses the same JSX-in-`.js` fallback as `antd usage`; files that remain invalid in JSX mode are still reported in `skippedFiles` as parse errors.
 
 ```bash
 antd lint ./src
+antd lint ./src ./scripts
 antd lint ./src/pages/home.tsx
 antd lint --only deprecated         # only check deprecated APIs
 antd lint --only a11y               # only check accessibility
